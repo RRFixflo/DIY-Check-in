@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Self Check-In Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #EEEEE7; --panel: #F7F7F2; --ink: #16232E; --ink-soft: #52606B; --ink-faint: #8B9299;
+    --line: #CBCCC1; --line-strong: #A9ABA0; --accent: #8C3B2B; --accent-soft: #F1E1DA;
+    --ok: #3E6B4B; --ok-soft: #E2EBE2; --warn: #A8701F; --warn-soft: #F3E7D2; --white: #FFFFFF;
+    --radius: 3px;
+    --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12181D; --panel: #1A2128; --ink: #ECEAE2; --ink-soft: #AEB6BC; --ink-faint: #737C82;
+      --line: #303A41; --line-strong: #47525A; --accent: #D08265; --accent-soft: #2E211C;
+      --ok: #86B594; --ok-soft: #1E2B22; --warn: #D6A24E; --warn-soft: #2E2618; --white: #1A2128;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12181D; --panel: #1A2128; --ink: #ECEAE2; --ink-soft: #AEB6BC; --ink-faint: #737C82;
+    --line: #303A41; --line-strong: #47525A; --accent: #D08265; --accent-soft: #2E211C;
+    --ok: #86B594; --ok-soft: #1E2B22; --warn: #D6A24E; --warn-soft: #2E2618; --white: #1A2128;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.5;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  h1, h2, h3 { font-family: var(--font-serif); font-weight: 600; color: var(--ink); margin: 0; }
+  p { margin: 0; }
+  button { font-family: var(--font-sans); cursor: pointer; }
+  input, select, textarea { font-family: var(--font-sans); color: var(--ink); }
+  .hidden { display: none !important; }
+
+  #app { max-width: 780px; margin: 0 auto; padding: 24px 16px 64px; }
+  @media (min-width: 560px) { #app { padding: 28px 20px 64px; } }
+
+  .btn {
+    appearance: none; border: 1px solid var(--line-strong); background: var(--panel); color: var(--ink);
+    font-size: 14.5px; font-weight: 600; padding: 12px 18px; border-radius: var(--radius);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+    transition: background .12s ease, border-color .12s ease, opacity .12s ease;
+  }
+  .btn:hover { border-color: var(--ink-soft); }
+  .btn:disabled { opacity: .42; cursor: not-allowed; }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+  .btn-accent { background: var(--accent); color: var(--white); border-color: var(--accent); }
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--ink-soft); font-weight: 500; padding: 8px 6px; min-height: auto; }
+  .btn-ghost:hover { color: var(--ink); }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 8px 12px; font-size: 12.5px; min-height: 38px; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .masthead { text-align: left; margin-bottom: 24px; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .masthead .kicker { font-size: 12.5px; color: var(--ink-faint); font-weight: 500; }
+  .masthead h1 { font-size: 24px; letter-spacing: .1px; margin-top: 2px; }
+  .masthead .sub { color: var(--ink-soft); font-size: 13.5px; margin-top: 4px; }
+  .autosave-note { font-size: 11.5px; color: var(--ink-faint); margin-top: 6px; }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 18px; }
+  @media (min-width: 560px) { .panel { padding: 26px; } }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+  .input, .select, .textarea {
+    width: 100%; border: none; border-bottom: 1.5px solid var(--line-strong); background: transparent;
+    padding: 10px 2px; font-size: 16px; color: var(--ink); border-radius: 0;
+  }
+  .input:focus, .select:focus, .textarea:focus { outline: none; border-bottom-color: var(--accent); }
+  .textarea { border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 10px 12px; resize: vertical; min-height: 64px; }
+  .textarea:focus { border-color: var(--accent); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+
+  .section-title { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); letter-spacing: .2px; margin: 26px 0 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .checklist { display: flex; flex-direction: column; }
+  .check-row { display: flex; align-items: center; gap: 11px; padding: 11px 2px; border-bottom: 1px solid var(--line); }
+  .check-row:last-child { border-bottom: none; }
+  .check-row input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--accent); }
+  .check-row label { font-size: 14.5px; color: var(--ink); }
+
+  .custom-room-add { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .custom-room-add .input { border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 10px; flex: 1 1 160px; }
+  .custom-room-list { list-style: none; margin: 10px 0 0; padding: 0; }
+  .custom-room-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 2px; font-size: 14px; border-bottom: 1px solid var(--line); }
+  .custom-room-list li:last-child { border-bottom: none; }
+
+  .hint-banner { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--ink); border-radius: var(--radius); padding: 12px 14px; font-size: 13.5px; margin-bottom: 22px; }
+  .hint-banner strong { color: var(--accent); }
+  .required-tag { color: var(--accent); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; }
+  .cond-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .cond-select { flex:0 0 150px; max-width:150px; }
+  .cond-select.unset { border-color: var(--accent); }
+  .cond-note { flex:1 1 200px; min-width:160px; }
+  .cond-help { font-size:11.5px; color: var(--ink-faint, #8B9299); margin-top:6px; line-height:1.45; }
+  .photo-tip { margin-top:10px; background: var(--accent-soft, #EEF2F6); border-left:2px solid var(--accent, #3E6690); border-radius:4px; padding:7px 10px; font-size:12px; line-height:1.45; color: var(--ink, #1B242C); }
+  .ai-verdict { margin-top:10px; display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; font-size:12.5px; line-height:1.5; }
+  .verdict-badge { flex:0 0 auto; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:3px 8px; border-radius:99px; background:#E7EDF3; color:#2F4E6E; }
+  .ai-verdict.fair .verdict-badge { background:#F3E7D2; color:#8A5A16; }
+  .ai-verdict.poor .verdict-badge { background:#F6DDD9; color:#8A2A26; }
+  .ai-verdict.new .verdict-badge, .ai-verdict.good .verdict-badge { background:#E1EFE5; color:#3E6B4B; }
+  .verdict-text { flex:1 1 180px; color: var(--ink-soft, #52606B); }
+  .ai-verdict.pending .verdict-text { font-style:italic; }
+  .verdict-redo { flex:0 0 auto; font-size:11.5px; padding:0; }
+  .ai-status { font-size:12.5px; padding:9px 12px; border-radius:var(--radius); background:#F3E7D2; color:#8A5A16; margin-bottom:14px; }
+  .ai-status { font-size:12.5px; padding:9px 12px; border-radius:var(--radius); background:#EEF2F6; color:#2F4E6E; margin-bottom:14px; }
+  .ai-status.off { background:#F3E7D2; color:#8A5A16; }
+  .meter-block { border-top:1px solid var(--line, #D9DEE3); padding:12px 0 4px; }
+  .decl-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--line, #D9DEE3); font-size:13.5px; }
+  .decl-row select { flex:0 0 110px; }
+  .addr-options { display:flex; flex-direction:column; gap:6px; margin:10px 0 16px; }
+  .addr-option { text-align:left; background: var(--surface, #fff); border:1px solid var(--line, #D9DEE3); border-radius: var(--radius); padding:10px 12px; font: inherit; font-size:13.5px; color: var(--ink); cursor:pointer; }
+  .addr-option:hover { border-color: var(--accent); }
+  .setup-error { margin-top:20px; background:#FDECEC; border:1px solid #D9534F; color:#8A2A26; border-radius: var(--radius); padding:12px 14px; font-size:13.5px; font-weight:500; }
+  .room-count-hint { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+  .move-in-hint.ok { color: var(--ok); font-weight: 600; }
+  .move-in-hint.warn { color: var(--warn); font-weight: 600; }
+  .move-in-hint.neutral { color: var(--ink-faint); }
+
+  .progress-bar-shell { height: 5px; background: var(--line); border-radius: 4px; overflow: hidden; margin: 12px 0 18px; }
+  .progress-bar-fill { height: 100%; background: var(--accent); transition: width .25s ease; }
+  .capture-layout { display: grid; grid-template-columns: 210px 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 680px) { .capture-layout { grid-template-columns: 1fr; } }
+
+  .room-nav { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); overflow: hidden; }
+  @media (max-width: 680px) { .room-nav { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  .room-nav-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;
+    padding: 12px 13px; border: none; background: transparent; border-bottom: 1px solid var(--line);
+    text-align: left; font-size: 13.5px; color: var(--ink-soft); font-weight: 500; min-height: 44px;
+  }
+  .room-nav-item:last-child { border-bottom: none; }
+  @media (max-width: 680px) { .room-nav-item { border-bottom: none; border-right: 1px solid var(--line); flex: 0 0 auto; min-width: 132px; } }
+  .room-nav-item.active { background: var(--accent-soft); color: var(--ink); font-weight: 700; }
+  .room-nav-item .rn-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .status-dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; border: 1.5px solid var(--line-strong); background: transparent; }
+  .status-dot.warn { background: var(--warn); border-color: var(--warn); }
+  .status-dot.ok { background: var(--ok); border-color: var(--ok); }
+  .rn-count { font-size: 11.5px; color: var(--ink-faint); flex: 0 0 auto; }
+
+  .room-panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 16px; }
+  @media (min-width: 560px) { .room-panel { padding: 22px; } }
+  .room-panel h2 { font-size: 20px; }
+  .room-panel .req-line { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+  .req-line.ok { color: var(--ok); }
+  .req-line.warn { color: var(--warn); }
+
+  .item-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); padding: 14px; margin-top: 12px; }
+  .item-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .item-title-wrap { display: flex; align-items: center; gap: 9px; }
+  .item-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--line-strong); flex: 0 0 auto; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
+  .item-check.done { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .item-check.na { background: var(--ink-faint); border-color: var(--ink-faint); color: #fff; }
+  .item-title { font-size: 15px; font-weight: 600; }
+  .item-title.na-label { color: var(--ink-faint); text-decoration: line-through; }
+  .na-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+  .na-toggle input { width: 16px; height: 16px; accent-color: var(--ink-faint); }
+  .na-reason { margin-top: 10px; }
+  .na-reason input { width: 100%; border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 8px 9px; font-size: 14px; }
+  .remove-item-btn { font-size: 11.5px; color: var(--accent); background: none; border: none; padding: 4px 0; margin-top: 6px; }
+
+  .item-photo-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .item-thumb { position: relative; width: 74px; height: 74px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+  .item-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; display: block; }
+  .item-thumb .del-btn {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(10,14,18,.7); color: #fff; border: none; font-size: 12px; line-height: 1; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ai-badge { position: absolute; bottom: 2px; left: 2px; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px; line-height: 1.5; }
+  .ai-badge.checking { background: rgba(255,255,255,.9); color: #555; }
+  .ai-badge.ok { background: var(--ok); color: #fff; }
+  .ai-badge.warn { background: var(--warn); color: #fff; }
+  .ai-badge.error { background: var(--ink-faint); color: #fff; }
+  .ai-warn-note { font-size: 12px; color: var(--warn); margin-top: 8px; }
+  .add-item-photo { width: 74px; height: 74px; border: 1.5px dashed var(--line-strong); border-radius: var(--radius); background: transparent; color: var(--ink-soft); font-size: 22px; display: flex; align-items: center; justify-content: center; }
+  .add-item-photo:hover { border-color: var(--accent); color: var(--accent); }
+
+  .add-checklist-item { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .add-checklist-item .input { border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 10px; flex: 1 1 160px; }
+
+  .condition-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .condition-section .sec-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 10px; display: block; }
+  .toggle-btn { flex: 1; padding: 11px 8px; border: 1px solid var(--line-strong); background: var(--panel); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--ink-soft); min-height: 44px; }
+  .toggle-btn.active { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
+  .toggle-btn.active.damage { background: var(--warn-soft); border-color: var(--warn); }
+
+  .extra-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .extra-section .sec-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; display: block; }
+  .extra-section .sec-hint { font-size: 12.5px; color: var(--ink-faint); margin-bottom: 8px; display: block; }
+
+  .room-footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); gap: 10px; flex-wrap: wrap; }
+
+  .summary-table { width: 100%; border-collapse: collapse; margin: 14px 0 4px; font-size: 13.5px; }
+  .summary-table th { text-align: left; font-size: 11px; color: var(--ink-faint); font-weight: 600; padding: 6px; border-bottom: 1px solid var(--line-strong); }
+  .summary-table td { padding: 10px 6px; border-bottom: 1px solid var(--line); }
+  .summary-table tr.row-click { cursor: pointer; }
+  .summary-table tr.row-click:hover td { background: var(--accent-soft); }
+  .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .status-pill.ok { background: var(--ok-soft); color: var(--ok); }
+  .status-pill.warn { background: var(--warn-soft); color: var(--warn); }
+
+  .declaration-box { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius); padding: 16px; margin: 22px 0; }
+  .declaration-box p { font-size: 14px; line-height: 1.6; }
+  .declaration-check { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; }
+  .declaration-check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); flex: 0 0 auto; }
+  .declaration-check label { font-size: 13.5px; }
+
+  .sig-wrap { position: relative; border: 1.5px solid var(--line-strong); border-radius: var(--radius); background: var(--white); margin-top: 8px; }
+  #sigCanvas { display: block; width: 100%; height: 160px; touch-action: none; border-radius: var(--radius); }
+  .sig-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-size: 13.5px; pointer-events: none; font-family: var(--font-serif); font-style: italic; }
+
+  .finish-help { font-size: 13px; color: var(--ink-soft); margin: 10px 0 14px; }
+  .reset-confirm { margin-top: 14px; padding: 14px; border: 1px solid var(--accent); background: var(--accent-soft); border-radius: var(--radius); font-size: 13.5px; }
+  .reset-confirm .btn-row { margin-top: 10px; }
+
+  .done-banner { display: flex; gap: 12px; align-items: flex-start; background: var(--ok-soft); border: 1px solid var(--ok); color: var(--ink); border-radius: var(--radius); padding: 16px; margin-bottom: 22px; }
+  .done-banner .mark { color: var(--ok); font-size: 22px; line-height: 1; }
+  #downloadStatus { font-size: 13px; color: var(--ink-soft); margin-top: 8px; }
+
+  .report-doc { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 16px; margin-top: 4px; }
+  @media (min-width: 560px) { .report-doc { padding: 26px; } }
+  .report-doc h2 { font-size: 19px; margin-bottom: 2px; }
+  .report-meta { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .report-room { padding: 16px 0; border-top: 1px solid var(--line); }
+  .report-room:first-of-type { border-top: none; }
+  .report-room h3 { font-size: 16px; margin-bottom: 6px; }
+  .report-room .notes { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 10px; }
+  .report-condition { font-size: 13px; margin-bottom: 10px; padding: 8px 10px; border-radius: var(--radius); background: var(--paper); }
+  .report-condition.damage { background: var(--warn-soft); color: var(--ink); }
+  .report-item { margin-top: 10px; }
+  .report-item .il { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 5px; }
+  .report-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+  .report-photo-grid img { width: 100%; border-radius: 3px; border: 1px solid var(--line); }
+  .sig-preview { max-width: 240px; border-bottom: 1px solid var(--line-strong); }
+
+  .resume-card { text-align: center; padding: 40px 20px; }
+  .resume-card .icon { font-size: 30px; margin-bottom: 10px; }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(8,10,12,.92); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 24px; }
+  .lightbox img { max-width: 100%; max-height: 82vh; border-radius: 3px; }
+  .lightbox-close { position: absolute; top: env(safe-area-inset-top, 16px); right: 16px; background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 20px; padding: 9px 16px; font-size: 13px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div id="app"><p style="padding:40px 20px;color:#52606B;font-family:'Inter',sans-serif;text-align:center;">Loading Self Check-In…</p></div>
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
+  <img id="lightboxImg" src="" alt="Enlarged photo">
+  <button class="lightbox-close" onclick="closeLightbox(event)">Close</button>
+</div>
+
+<script>
+/* ============================= constants ============================= */
+const MIN_PHOTOS = 8;
+const DB_NAME = 'inventoryAppDB';
+const STORE = 'reports';
+
+const ROOM_TYPE_ITEMS = {
+  bedroom:  ['Door','Window','Bed','Wardrobe','Desk','Flooring','Walls & ceiling','Light fittings & sockets'],
+  bathroom: ['Toilet','Sink & taps','Bath / shower','Tiles & walls','Flooring','Extractor fan','Mirror / cabinet','Door'],
+  kitchen:  ['Cooker / hob','Oven','Fridge','Freezer','Sink & taps','Worktops','Cupboards & units','Flooring','Extractor fan'],
+  living:   ['Sofa(s)','Window','Table','Door','Flooring','Walls & ceiling','Curtains / blinds','Light fittings & sockets'],
+  hallway:  ['Front door (photographed from inside and out)','Flooring','Walls & ceiling','Light fitting','Smoke alarm','Meter cupboard','Stairs (if any)','Storage / coat area'],
+  garden:   ['Boundary / fencing','Patio / paving','Lawn / planting','Shed / outbuilding','Outdoor lighting','Bin storage area','Gate / access','General condition'],
+  utility:  ['Washing machine','Sink & taps','Worktops','Cupboards','Flooring','Walls & ceiling','Boiler (if present)','Extractor / ventilation'],
+  wc:       ['Toilet','Sink & taps','Tiles & walls','Flooring','Extractor fan','Light fitting','Door','Mirror / cabinet'],
+  other:    ['Door','Window','Flooring','Walls & ceiling','Light fittings & sockets','General condition (wide shot)','General condition (close-up)','Any damage or marks']
+};
+const CONDITION_OPTIONS = [
+  ['new',  'New condition'],
+  ['good', 'Good condition'],
+  ['fair', 'Fair condition'],
+  ['poor', 'Poor condition']
+];
+const CONDITION_HELP = {
+  new:  'Newly built or refurbished. Fresh paintwork, new fixtures, appliances and floors, no usage marks.',
+  good: 'Good overall condition with ordinary, minimal usage marks such as light scuffs or surface scratches.',
+  fair: 'Extended fair wear and tear: faded or chipped paintwork, worn carpets, scuffed woodwork, aged furnishings.',
+  poor: 'Heavy wear throughout: peeling or cracked paint, heavily aged floors, or hazards such as mould or water damage.'
+};
+const CLEANLINESS_OPTIONS = [
+  ['excellent', 'Excellent — professionally cleaned'],
+  ['good', 'Good'],
+  ['fair', 'Fair — some cleaning needed'],
+  ['poor', 'Poor — requires attention']
+];
+
+/* ============================= state ============================= */
+function defaultProperty(){
+  return {
+    keys: [{ desc:'', action:'Released to tenant', photos: [] }],
+    meters: {
+      electric: { na:false, reading:'', photos: [] },
+      gas:      { na:false, reading:'', photos: [] },
+      water:    { na:false, reading:'', photos: [] }
+    },
+    floors: '1',
+    detectorsAllFloors: 'Yes',
+    heatingSource: 'Gas boiler',
+    detectors: [{ category:'Smoke detector', location:'', tested:'Yes' }],
+    declaration: {
+      cleaning: '', propertyCondition: '', decorative: '',
+      metersRecorded: 'Yes', additional: ''
+    }
+  };
+}
+const METER_LABELS = { electric:'Electricity meter', gas:'Gas meter', water:'Water meter' };
+const YESNO = ['Yes','No','N/A'];
+
+function defaultState(){
+  return {
+    meta: { address:'', inspectionType:'Check-In', inspectorName:'', signedBy:'', moveInDateTime:'', date:'', createdAt:'' },
+    rooms: [],
+    property: defaultProperty(),
+    activeRoomId: null,
+    view: 'setup',
+    signatureDataUrl: null,
+    declarationAccepted: false,
+    finalizedAt: null
+  };
+}
+function defaultPendingSetup(){
+  return {
+    address: '', postcode: '', unit: '', lookup: { status:'idle', message:'', options:[] },
+    inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
+    bedrooms: 1, bathrooms: 1,
+    common: { kitchen: true, living: true, hallway: true, garden: false, utility: false, wc: false },
+    customRooms: []
+  };
+}
+let state = defaultState();
+let pendingSetup = defaultPendingSetup();
+let savedDraft = null;
+let saveTimer = null;
+let pendingPhotoTarget = null; // { roomId, itemId } — itemId null = extra/general bucket
+let sigCtx = null;
+let setupError = '';
+let addressBook = [];
+
+function makeItems(type){
+  const labels = ROOM_TYPE_ITEMS[type] || ROOM_TYPE_ITEMS.other;
+  return labels.map((label, i) => ({ id: 'it' + i + '_' + Math.random().toString(36).slice(2,6), label, notApplicable: false, naReason: '', photos: [], custom: false, mandatory: /front door/i.test(label), condition: '', aiObservation: '', conditionNote: '' }));
+}
+function makeRoom(name, type){
+  return { id: 'r' + Math.random().toString(36).slice(2,8), name, type, items: makeItems(type), extraPhotos: [], notes: '', condition: { cleanliness: '', hasDamage: false, damageNotes: '' } };
+}
+
+/* ============================= IndexedDB persistence ============================= */
+function openDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => { const db = e.target.result; if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE); };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e.target.error);
+  });
+}
+async function idbGet(key){
+  try{
+    const db = await openDB();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const r = tx.objectStore(STORE).get(key);
+      r.onsuccess = () => res(r.result || null);
+      r.onerror = () => rej(r.error);
+    });
+  }catch(e){ return null; }
+}
+async function idbSet(key, val){
+  try{
+    const db = await openDB();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).put(val, key);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => rej(tx.error);
+    });
+  }catch(e){ return false; }
+}
+async function idbClear(key){
+  try{
+    const db = await openDB();
+    return await new Promise((res) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).delete(key);
+      tx.oncomplete = () => res(true);
+    });
+  }catch(e){ return false; }
+}
+function persist(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => { idbSet('current', state); }, 250); }
+
+/* ============================= helpers ============================= */
+function escapeHtml(str){
+  return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function todayDisplay(){ return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }); }
+function formatTimestamp(date){ return date.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+function formatDateTimeLocal(val){
+  if (!val) return '';
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return val;
+  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function sanitizeFilename(str){ return (str || 'Property').trim().replace(/[^a-z0-9\-]+/gi, '-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,80) || 'Property'; }
+function getActiveRoom(){ return state.rooms.find(r => r.id === state.activeRoomId) || state.rooms[0] || null; }
+
+function activeItems(room){ return (room.items || []).filter(i => !i.notApplicable); }
+function roomTotalPhotos(room){ return (room.items || []).reduce((s,i) => s + (i.photos ? i.photos.length : 0), 0) + (room.extraPhotos ? room.extraPhotos.length : 0); }
+function naCount(room){ return (room.items || []).filter(i => i.notApplicable).length; }
+function roomRequiredTotal(room){ return Math.max(activeItems(room).length, Math.max(1, MIN_PHOTOS - naCount(room))); }
+function roomMissingItems(room){ return activeItems(room).filter(i => !i.photos || i.photos.length === 0); }
+function roomItemsMissingCondition(room){ return activeItems(room).filter(i => !i.condition); }
+function roomConditionComplete(room){ const c = room.condition || {}; return !!c.cleanliness && (!c.hasDamage || (c.damageNotes||'').trim() !== ''); }
+function roomIsComplete(room){ return roomMissingItems(room).length === 0 && roomItemsMissingCondition(room).length === 0 && roomTotalPhotos(room) >= roomRequiredTotal(room) && roomConditionComplete(room); }
+
+function totalCaptured(){ return state.rooms.reduce((s,r) => s + roomTotalPhotos(r), 0); }
+function totalRequired(){ return state.rooms.reduce((s,r) => s + roomRequiredTotal(r), 0); }
+function roomsComplete(){ return state.rooms.filter(roomIsComplete).length; }
+function countAiWarnings(){
+  let c = 0;
+  state.rooms.forEach(r => r.items.forEach(i => i.photos.forEach(p => { if (p.aiCheck && p.aiCheck.status === 'warn') c++; })));
+  return c;
+}
+
+/* ============================= photo guidance (offline, no AI) ============================= */
+const TIP_RULES = [
+  [/front door/i, 'Stand back for the whole door, then close in on the lock, hinges and any marks.'],
+  [/\bdoor\b/i, 'Photograph the full door open, then the handle and frame close up.'],
+  [/window/i, 'Shoot the whole window from inside, then the frame, catch and sill.'],
+  [/wall/i, 'Take each wall square-on from a few feet back so marks and paint finish show.'],
+  [/ceiling/i, 'Point straight up and include the corners, where staining and cracks show first.'],
+  [/floor|carpet|laminate|rug/i, 'Crouch low and shoot along the floor so scuffs, stains and edges catch the light.'],
+  [/skirting/i, 'Photograph along the run at floor level, close enough to show chips and paintwork.'],
+  [/radiator|heater|boiler/i, 'Whole unit, then a close-up of the valves and any rust or leaks.'],
+  [/socket|switch|light|lamp/i, 'Close up and straight on, showing the faceplate and any cracks or scorching.'],
+  [/smoke|alarm|detector|carbon/i, 'Photograph the unit in place, then close enough to show the test light.'],
+  [/worktop|counter|surface/i, 'Shoot along the surface at a low angle so scratches, chips and burns show.'],
+  [/cupboard|cabinet|unit|wardrobe|shelf|drawer/i, 'One shot closed, one with doors open showing shelves and hinges.'],
+  [/oven|hob|cooker|grill|microwave/i, 'Front of the appliance, then open it and shoot the inside and the racks.'],
+  [/extractor|hood|fan/i, 'Underside of the unit showing the filter and any grease build-up.'],
+  [/fridge|freezer|washing|dishwasher|dryer|appliance/i, 'Front of the appliance, then the inside with the door open.'],
+  [/sink|basin/i, 'Look down into the bowl, then close up on the taps and the sealant around it.'],
+  [/shower/i, 'Whole shower, then the head, hose, screen and sealant close up.'],
+  [/bath\b|bathtub/i, 'Shoot the full length of the bath, then the taps, plug and sealant line.'],
+  [/toilet|\bwc\b|cistern/i, 'Full unit including cistern, then the seat and the base where leaks show.'],
+  [/tile|grout|sealant/i, 'Close up along the joints so cracked grout, mould and gaps are visible.'],
+  [/mirror|glass/i, 'Stand to one side to avoid your reflection, and catch the edges and backing.'],
+  [/bed\b|mattress/i, 'Whole bed, then the mattress surface uncovered and the frame joints.'],
+  [/sofa|chair|seat|stool/i, 'Full piece from the front, then the cushions and arms close up.'],
+  [/table|desk/i, 'Shoot the top at a low angle for scratches, then the legs and fixings.'],
+  [/blind|curtain/i, 'Fully closed, then fully open, including the fixings and any safety cleat.'],
+  [/garden|patio|balcony|yard|fence|shed/i, 'Wide shot of the whole space, then fences, gates and anything left behind.'],
+  [/meter/i, 'Straight on and close enough that every digit of the reading is readable.'],
+  [/key/i, 'Lay all the keys out flat on a plain surface so each one can be counted.'],
+  [/bin|waste/i, 'Whole bin inside and out, including the lid and any damage.']
+];
+function photoTipFor(label){
+  const hit = TIP_RULES.find(([re]) => re.test(label));
+  return hit ? hit[1] : 'One wide shot showing the whole item, then a close-up of any wear, marks or damage.';
+}
+
+/* ============================= AI condition assessment (server-backed) ============================= */
+let aiEnabled = null;        // null unknown, true/false once checked
+let aiStatusNote = '';
+async function initAI(){
+  try{
+    const res = await fetch('/api/status');
+    const data = await res.json();
+    aiEnabled = !!data.ai;
+    aiStatusNote = data.ai ? '' : (data.reason || 'no API key configured on the server');
+  }catch(e){ aiEnabled = false; aiStatusNote = 'server unreachable'; }
+  render();
+}
+
+const AI_RANK = { new:0, good:1, fair:2, poor:3 };
+function applyAiCondition(item){
+  let worst = '', obs = '';
+  (item.photos || []).forEach(p => {
+    const c = p.aiCheck && p.aiCheck.condition;
+    if (!c) return;
+    if (!worst || AI_RANK[c] > AI_RANK[worst]){ worst = c; obs = p.aiCheck.observation || ''; }
+  });
+  if (worst){ item.condition = worst; item.aiObservation = obs; }
+}
+
+async function assessItemPhoto(roomId, itemId, photoId){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  const photo = item.photos.find(p => p.id === photoId); if (!photo) return;
+  if (aiEnabled === false) return;
+  photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'checking' });
+  render();
+  try{
+    const res = await fetch('/api/assess', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ label: item.label, room: room.name, image: photo.dataUrl })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error){
+      photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'error', note: data.error || 'assessment failed' });
+    } else {
+      const cond = ['new','good','fair','poor'].includes(data.condition) ? data.condition : '';
+      photo.aiCheck = {
+        status: data.matches === false ? 'warn' : 'ok',
+        note: data.note || (photo.aiCheck ? photo.aiCheck.note : '') || '',
+        condition: cond,
+        observation: data.observation || ''
+      };
+      applyAiCondition(item);
+    }
+  }catch(err){
+    photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'error', note:'could not reach the server' });
+  }
+  persist(); render();
+}
+
+/* ============================= photo quality check (local, instant) ============================= */
+function assessPhotoQuality(dataUrl){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      try{
+        const W = 240, H = Math.max(1, Math.round(W * img.naturalHeight / img.naturalWidth));
+        const c = document.createElement('canvas');
+        c.width = W; c.height = H;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, W, H);
+        const d = ctx.getImageData(0, 0, W, H).data;
+        const grey = new Float32Array(W * H);
+        let sum = 0;
+        for (let i = 0; i < W * H; i++){
+          const g = 0.299 * d[i*4] + 0.587 * d[i*4+1] + 0.114 * d[i*4+2];
+          grey[i] = g; sum += g;
+        }
+        const mean = sum / (W * H);
+        let lsum = 0, lsq = 0, n = 0;
+        for (let y = 1; y < H - 1; y++){
+          for (let x = 1; x < W - 1; x++){
+            const i = y * W + x;
+            const lap = 4 * grey[i] - grey[i-1] - grey[i+1] - grey[i-W] - grey[i+W];
+            lsum += lap; lsq += lap * lap; n++;
+          }
+        }
+        const variance = n ? (lsq / n) - Math.pow(lsum / n, 2) : 0;
+        let status = 'ok', note = '';
+        if (mean < 45){ status = 'warn'; note = 'Very dark. Put the light on and take it again.'; }
+        else if (mean > 228){ status = 'warn'; note = 'Badly overexposed. Move away from the window or light.'; }
+        else if (variance < 45){ status = 'warn'; note = 'Looks soft or out of focus. Tap to focus and retake.'; }
+        resolve({ status, note });
+      }catch(e){ resolve({ status:'ok', note:'' }); }
+    };
+    img.onerror = () => resolve({ status:'ok', note:'' });
+    img.src = dataUrl;
+  });
+}
+
+/* ============================= photo capture + timestamp burn-in ============================= */
+function stampPhoto(file, captionLabel, roomName){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const maxDim = 1600;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      if (Math.max(w, h) > maxDim) { const scale = maxDim / Math.max(w, h); w = Math.round(w * scale); h = Math.round(h * scale); }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const now = new Date();
+      const stampText = formatTimestamp(now);
+      const barHeight = Math.max(30, Math.round(h * 0.065));
+      ctx.fillStyle = 'rgba(10,14,18,0.70)';
+      ctx.fillRect(0, h - barHeight, w, barHeight);
+      const fontSize = Math.max(13, Math.round(barHeight * 0.4));
+      ctx.fillStyle = '#FFFFFF';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      ctx.font = `600 ${fontSize}px Inter, sans-serif`;
+      ctx.fillText(stampText, 12, h - barHeight / 2);
+      ctx.textAlign = 'right';
+      ctx.font = `500 ${Math.round(fontSize * 0.86)}px Inter, sans-serif`;
+      const label = captionLabel + ' — ' + roomName;
+      ctx.fillText(label.length > 46 ? label.slice(0,44) + '…' : label, w - 12, h - barHeight / 2);
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      canvas.toBlob(blob => resolve({ dataUrl, ts: now.toISOString(), blob }), 'image/jpeg', 0.82);
+    };
+    img.onerror = () => reject(new Error('image_load_failed'));
+    img.src = url;
+  });
+}
+
+function triggerItemFileInput(roomId, itemId){ pendingPhotoTarget = { roomId, itemId }; document.getElementById('photoInput').click(); }
+function triggerExtraFileInput(roomId){ pendingPhotoTarget = { roomId, itemId: null }; document.getElementById('photoInput').click(); }
+
+function triggerMeterFileInput(key){ pendingPhotoTarget = { kind:'meter', key }; document.getElementById('photoInput').click(); }
+function triggerKeyFileInput(index){ pendingPhotoTarget = { kind:'keys', index }; document.getElementById('photoInput').click(); }
+function deletePropPhoto(kind, key, photoId){
+  const arr = kind === 'meter' ? state.property.meters[key].photos : state.property.keys[key].photos;
+  const i = arr.findIndex(p => p.id === photoId);
+  if (i > -1) arr.splice(i, 1);
+  persist(); render();
+}
+function handlePhotoInputChange(event){
+  const files = Array.from(event.target.files || []);
+  if (!files.length || !pendingPhotoTarget) return;
+
+  if (pendingPhotoTarget.kind === 'meter' || pendingPhotoTarget.kind === 'keys'){
+    const t = pendingPhotoTarget;
+    const isMeter = t.kind === 'meter';
+    const arr = isMeter ? state.property.meters[t.key].photos : state.property.keys[t.index].photos;
+    const caption = isMeter ? METER_LABELS[t.key] : 'Keys';
+    (async () => {
+      for (const f of files){
+        try {
+          const { dataUrl, ts } = await stampPhoto(f, caption, isMeter ? 'Meter reading' : 'Handover');
+          const q = await assessPhotoQuality(dataUrl);
+          arr.push({ id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: q });
+        } catch (e) { console.error('photo failed', e); }
+      }
+      event.target.value = '';
+      pendingPhotoTarget = null;
+      persist(); render();
+    })();
+    return;
+  }
+
+  const room = state.rooms.find(r => r.id === pendingPhotoTarget.roomId);
+  if (!room) return;
+  const item = pendingPhotoTarget.itemId ? room.items.find(i => i.id === pendingPhotoTarget.itemId) : null;
+  const captionLabel = item ? item.label : 'Additional';
+  const targetArray = item ? item.photos : room.extraPhotos;
+  const toAssess = [];
+  (async () => {
+    for (const f of files) {
+      try {
+        const { dataUrl, ts, blob } = await stampPhoto(f, captionLabel, room.name);
+        const photo = { id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: null };
+        photo.aiCheck = await assessPhotoQuality(dataUrl);
+        targetArray.push(photo);
+        if (item) toAssess.push({ roomId: room.id, itemId: item.id, photoId: photo.id });
+      } catch (e) { console.error('photo failed', e); }
+    }
+    event.target.value = '';
+    pendingPhotoTarget = null;
+    persist();
+    render();
+    toAssess.forEach(t => assessItemPhoto(t.roomId, t.itemId, t.photoId));
+  })();
+}
+function deleteItemPhoto(roomId, itemId, photoId){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.photos = item.photos.filter(p => p.id !== photoId);
+  applyAiCondition(item);
+  persist(); render();
+}
+function deleteExtraPhoto(roomId, photoId){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.extraPhotos = room.extraPhotos.filter(p => p.id !== photoId);
+  persist(); render();
+}
+function toggleNA(roomId, itemId, checked){
+  { const rm = state.rooms.find(r => r.id === roomId); const it = rm && rm.items.find(i => i.id === itemId); if (it && it.mandatory) { render(); return; } }
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.notApplicable = checked;
+  persist(); render();
+}
+function overrideCondition(roomId, itemId){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.aiObservation = '';
+  persist(); render();
+}
+function updateItemCondition(roomId, itemId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.condition = value; persist(); render();
+}
+function updateItemNote(roomId, itemId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.conditionNote = value; persist();
+}
+function updateNAReason(roomId, itemId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const item = room.items.find(i => i.id === itemId); if (!item) return;
+  item.naReason = value;
+  persist();
+}
+function addChecklistItem(roomId){
+  const input = document.getElementById('addItemInput_' + roomId);
+  const val = (input.value || '').trim();
+  if (!val) return;
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.items.push({ id: 'it' + Math.random().toString(36).slice(2,8), label: val, notApplicable: false, naReason: '', photos: [], custom: true });
+  input.value = '';
+  persist(); render();
+}
+function removeChecklistItem(roomId, itemId){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.items = room.items.filter(i => i.id !== itemId);
+  persist(); render();
+}
+function updateRoomNotes(roomId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.notes = value; persist();
+}
+function updateCleanliness(roomId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.condition.cleanliness = value; persist(); render();
+}
+function setDamageFlag(roomId, hasDamage){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.condition.hasDamage = hasDamage;
+  if (!hasDamage) room.condition.damageNotes = '';
+  persist(); render();
+}
+function updateDamageNotes(roomId, value){
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  room.condition.damageNotes = value; persist();
+}
+function openPhotoPreview(dataUrl){ document.getElementById('lightboxImg').src = dataUrl; document.getElementById('lightbox').classList.remove('hidden'); }
+function closeLightbox(e){ if (e) e.stopPropagation(); document.getElementById('lightbox').classList.add('hidden'); }
+
+/* ============================= navigation ============================= */
+function setActiveRoom(id){ state.activeRoomId = id; render(); window.scrollTo({top:0, behavior:'instant'}); }
+function stepRoom(delta){
+  const idx = state.rooms.findIndex(r => r.id === state.activeRoomId);
+  const next = state.rooms[idx + delta];
+  if (next) { state.activeRoomId = next.id; render(); window.scrollTo({top:0, behavior:'instant'}); }
+}
+function goToDetails(){ state.view = 'details'; render(); window.scrollTo({top:0, behavior:'instant'}); }
+function goToReview(){ state.view = 'review'; render(); window.scrollTo({top:0, behavior:'instant'}); }
+function backToCapture(roomId){ state.view = 'capture'; if (roomId) state.activeRoomId = roomId; render(); window.scrollTo({top:0, behavior:'instant'}); }
+
+function normalizeItem(i){
+  if (i && i.mandatory === undefined) i.mandatory = /front door/i.test(i.label || '');
+  if (i && i.condition === undefined) i.condition = '';
+  if (i && i.conditionNote === undefined) i.conditionNote = '';
+  if (i && i.aiObservation === undefined) i.aiObservation = '';
+  return { id: i.id || ('it' + Math.random().toString(36).slice(2,8)), label: i.label || 'Item', notApplicable: !!i.notApplicable, naReason: i.naReason || '', photos: Array.isArray(i.photos) ? i.photos : [], custom: !!i.custom };
+}
+function normalizeRoom(r){
+  const hasItems = Array.isArray(r.items) && r.items.length;
+  return {
+    id: r.id || ('r' + Math.random().toString(36).slice(2,8)),
+    name: r.name || 'Room',
+    type: r.type || 'other',
+    items: hasItems ? r.items.map(normalizeItem) : makeItems(r.type || 'other'),
+    extraPhotos: Array.isArray(r.extraPhotos) ? r.extraPhotos : (Array.isArray(r.photos) ? r.photos : []),
+    notes: r.notes || '',
+    condition: (r.condition && typeof r.condition === 'object')
+      ? { cleanliness: r.condition.cleanliness || '', hasDamage: !!r.condition.hasDamage, damageNotes: r.condition.damageNotes || '' }
+      : { cleanliness: '', hasDamage: false, damageNotes: '' }
+  };
+}
+function normalizeProperty(saved){
+  const pr = Object.assign(defaultProperty(), saved || {});
+  pr.keys = (Array.isArray(pr.keys) && pr.keys.length ? pr.keys : [{ desc:'', action:'Released to tenant' }])
+    .map(k => Object.assign({ desc:'', action:'Released to tenant', photos: [] }, k, { photos: Array.isArray(k.photos) ? k.photos : [] }));
+  const base = defaultProperty().meters;
+  Object.keys(base).forEach(key => {
+    pr.meters[key] = Object.assign({}, base[key], pr.meters[key] || {});
+    if (!Array.isArray(pr.meters[key].photos)) pr.meters[key].photos = [];
+  });
+  return pr;
+}
+function normalizeState(saved){
+  const rooms = Array.isArray(saved.rooms) ? saved.rooms.map(normalizeRoom) : [];
+  return {
+    meta: Object.assign({ address:'', inspectionType:'Check-In', inspectorName:'', signedBy:'', moveInDateTime:'', date:'', createdAt:'', ref: 'SC-' + Math.random().toString(36).slice(2,9).toUpperCase() }, saved.meta || {}),
+    rooms,
+    property: normalizeProperty(saved.property),
+    activeRoomId: (rooms.find(r => r.id === saved.activeRoomId) ? saved.activeRoomId : (rooms[0] ? rooms[0].id : null)),
+    view: ['details','review','done'].includes(saved.view) ? saved.view : 'capture',
+    signatureDataUrl: saved.signatureDataUrl || null,
+    declarationAccepted: !!saved.declarationAccepted,
+    finalizedAt: saved.finalizedAt || null
+  };
+}
+
+/* ============================= resume screen ============================= */
+function resumeDraft(){ state = savedDraft; savedDraft = null; render(); window.scrollTo({top:0, behavior:'instant'}); }
+async function discardDraft(){ await idbClear('current'); savedDraft = null; state = defaultState(); pendingSetup = defaultPendingSetup(); render(); }
+
+/* ============================= setup view logic ============================= */
+function computeMoveInStatus(){
+  if (pendingSetup.inspectionType !== 'Check-In') {
+    return { status: 'neutral', message: 'Shown on the report for reference.' };
+  }
+  if (!pendingSetup.moveInDateTime) {
+    return { status: 'warn', message: 'Required for check-in reports — must be completed within 7 days of move-in.' };
+  }
+  const moveIn = new Date(pendingSetup.moveInDateTime);
+  if (isNaN(moveIn.getTime())) return { status: 'warn', message: 'Enter a valid move-in date and time.' };
+  const diffMs = new Date() - moveIn;
+  const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+  if (diffMs < 0) return { status: 'warn', message: 'This move-in date is in the future — start the check-in on or after the move-in date.' };
+  if (diffMs > sevenDaysMs) return { status: 'warn', message: 'More than 7 days have passed since move-in — a check-in report can no longer be started for this move-in date.' };
+  const daysLeft = Math.max(0, Math.ceil((sevenDaysMs - diffMs) / (24 * 60 * 60 * 1000)));
+  return { status: 'ok', message: `Within the 7-day check-in window (${daysLeft} day${daysLeft===1?'':'s'} remaining).` };
+}
+function updateMoveInHint(){
+  const el = document.getElementById('moveInHint');
+  if (!el) return;
+  const { status, message } = computeMoveInStatus();
+  el.textContent = message;
+  el.className = 'room-count-hint move-in-hint ' + status;
+}
+function updateRoomCountHint(){
+  const common = Object.values(pendingSetup.common).filter(Boolean).length;
+  const total = Math.max(0, pendingSetup.bedrooms||0) + Math.max(0, pendingSetup.bathrooms||0) + common + pendingSetup.customRooms.length;
+  const el = document.getElementById('roomCountHint');
+  if (el) el.textContent = total > 0
+    ? `${total} room${total===1?'':'s'} to inspect, each with its own photo checklist (minimum ${MIN_PHOTOS} photos).`
+    : 'Add at least one room to continue.';
+}
+function renderCustomRoomsListHTML(){
+  if (!pendingSetup.customRooms.length) return '';
+  return '<ul class="custom-room-list">' + pendingSetup.customRooms.map((name, i) =>
+    `<li><span>${escapeHtml(name)}</span><button type="button" class="btn-ghost" onclick="removeCustomRoom(${i})">Remove</button></li>`
+  ).join('') + '</ul>';
+}
+function addCustomRoom(){
+  const input = document.getElementById('customRoomInput');
+  const val = (input.value || '').trim();
+  if (!val) return;
+  pendingSetup.customRooms.push(val);
+  input.value = '';
+  document.getElementById('customRoomsList').innerHTML = renderCustomRoomsListHTML();
+  updateRoomCountHint();
+  input.focus();
+}
+function removeCustomRoom(index){
+  pendingSetup.customRooms.splice(index, 1);
+  document.getElementById('customRoomsList').innerHTML = renderCustomRoomsListHTML();
+  updateRoomCountHint();
+}
+/* ============================= address lookup (server-backed) ============================= */
+const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+function normalisePostcode(pc){
+  const raw = (pc || '').toUpperCase().replace(/\s+/g, '');
+  if (raw.length < 5) return raw;
+  return raw.slice(0, raw.length - 3) + ' ' + raw.slice(-3);
+}
+function composeAddress(){
+  const ps = pendingSetup;
+  const street = (ps.unit || '').trim();
+  const pc = normalisePostcode(ps.postcode);
+  const tail = POSTCODE_RE.test(pc) ? pc : (ps.postcode || '').trim();
+  ps.address = street && tail ? street + ' ' + tail : (street || tail);
+  const el = document.getElementById('addressInput');
+  if (el) el.value = ps.address;
+}
+function onPostcodeBlur(){
+  pendingSetup.postcode = normalisePostcode(pendingSetup.postcode);
+  composeAddress();
+  render();
+}
+function setLookup(patch){
+  pendingSetup.lookup = Object.assign({ status:'idle', message:'', options:[] }, pendingSetup.lookup || {}, patch);
+  render();
+}
+async function lookupPostcode(){
+  const pc = normalisePostcode(pendingSetup.postcode);
+  pendingSetup.postcode = pc;
+  if (!POSTCODE_RE.test(pc)){
+    setLookup({ status:'error', message:'Enter a full UK postcode, e.g. SE16 4JU.', options:[] });
+    return;
+  }
+  setLookup({ status:'loading', message:'Looking up ' + pc + '…', options:[] });
+  try{
+    const res = await fetch('/api/postcode/' + encodeURIComponent(pc));
+    const data = await res.json();
+    if (!res.ok || data.error){
+      setLookup({ status:'error', message: data.error || 'That postcode was not found.', options:[] });
+      return;
+    }
+    if (Array.isArray(data.addresses) && data.addresses.length){
+      setLookup({ status:'done', message:'Pick the property.', options: data.addresses.slice(0, 60) });
+      return;
+    }
+    const area = [data.ward, data.district].filter(Boolean).join(', ');
+    pendingSetup.unit = (pendingSetup.unit || '').trim();
+    composeAddress();
+    setLookup({ status:'partial', message: area ? ('Postcode confirmed: ' + area + '. Type the building and street above.') : 'Postcode confirmed. Type the building and street above.', options:[] });
+  }catch(err){
+    setLookup({ status:'error', message:'Address lookup is unavailable. Type the address in full.', options:[] });
+  }
+}
+function chooseLookupAddress(line){
+  const m = line.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i);
+  pendingSetup.unit = m ? line.slice(0, m.index).replace(/[,\s]+$/, '') : line;
+  if (m) pendingSetup.postcode = normalisePostcode(m[1]);
+  composeAddress();
+  setLookup({ status:'chosen', message:'Check it reads exactly as it does on the tenancy agreement.', options:[] });
+}
+function useSavedAddress(line){
+  pendingSetup.address = line;
+  const m = line.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i);
+  pendingSetup.postcode = m ? normalisePostcode(m[1]) : '';
+  pendingSetup.unit = m ? line.slice(0, m.index).replace(/[,\s]+$/, '') : line;
+  render();
+}
+async function rememberAddress(line){
+  try{
+    const book = (await idbGet('addressBook')) || [];
+    const next = [line].concat(book.filter(a => a.toLowerCase() !== line.toLowerCase())).slice(0, 12);
+    await idbSet('addressBook', next);
+    addressBook = next;
+  }catch(e){ /* non-critical */ }
+}
+
+function showSetupError(msg){
+  setupError = msg;
+  render();
+  const el = document.getElementById('setupError');
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function submitSetup(){
+  const address = (pendingSetup.address || '').trim();
+  const inspectorName = (pendingSetup.inspectorName || '').trim();
+  const bedrooms = Math.max(0, parseInt(pendingSetup.bedrooms, 10) || 0);
+  const bathrooms = Math.max(0, parseInt(pendingSetup.bathrooms, 10) || 0);
+
+  if (!(pendingSetup.unit || '').trim()) { showSetupError('Enter the property address before starting.'); return; }
+  if (!address) { showSetupError('Enter the property address before starting.'); return; }
+  if (!inspectorName) { showSetupError('Enter the name of the person carrying out the inspection.'); return; }
+
+  if (pendingSetup.inspectionType === 'Check-In') {
+    if (!pendingSetup.moveInDateTime) { showSetupError('Enter the tenancy move-in date and time — check-in reports must be completed within 7 days of move-in.'); return; }
+    const moveIn = new Date(pendingSetup.moveInDateTime);
+    if (isNaN(moveIn.getTime())) { showSetupError('Enter a valid move-in date and time.'); return; }
+    const diffMs = new Date() - moveIn;
+    if (diffMs < 0) { showSetupError('The move-in date is in the future. Start the check-in on or after the move-in date.'); return; }
+    if (diffMs > 7 * 24 * 60 * 60 * 1000) { showSetupError('More than 7 days have passed since the move-in date. A check-in report can no longer be started for this move-in date.'); return; }
+  }
+
+  const rooms = [];
+  for (let i = 1; i <= bedrooms; i++) rooms.push(makeRoom(bedrooms > 1 ? `Bedroom ${i}` : 'Bedroom', 'bedroom'));
+  for (let i = 1; i <= bathrooms; i++) rooms.push(makeRoom(bathrooms > 1 ? `Bathroom ${i}` : 'Bathroom', 'bathroom'));
+  if (pendingSetup.common.kitchen) rooms.push(makeRoom('Kitchen', 'kitchen'));
+  if (pendingSetup.common.living) rooms.push(makeRoom('Living / Reception Room', 'living'));
+  if (pendingSetup.common.hallway) rooms.push(makeRoom('Hallway / Entrance', 'hallway'));
+  if (pendingSetup.common.garden) rooms.push(makeRoom('Garden / Outdoor Space', 'garden'));
+  if (pendingSetup.common.utility) rooms.push(makeRoom('Utility Room', 'utility'));
+  if (pendingSetup.common.wc) rooms.push(makeRoom('Separate WC', 'wc'));
+  pendingSetup.customRooms.forEach(name => rooms.push(makeRoom(name, 'other')));
+
+  if (!rooms.length) { showSetupError('Add at least one room before starting.'); return; }
+
+  state.meta = {
+    address, inspectionType: pendingSetup.inspectionType, inspectorName, signedBy: '',
+    moveInDateTime: pendingSetup.moveInDateTime || '', date: todayDisplay(), createdAt: new Date().toISOString(),
+    ref: 'SC-' + Math.random().toString(36).slice(2,9).toUpperCase()
+  };
+  setupError = '';
+  rememberAddress(address);
+  state.rooms = rooms;
+  state.activeRoomId = rooms[0].id;
+  state.view = 'capture';
+  persist(); render();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ============================= review / signature ============================= */
+/* ============================= property details ============================= */
+function setProp(path, value){
+  const parts = path.split('.');
+  let node = state.property;
+  for (let i = 0; i < parts.length - 1; i++) node = node[parts[i]];
+  node[parts[parts.length - 1]] = value;
+  persist();
+}
+function setPropAndRender(path, value){ setProp(path, value); render(); }
+function addKeyRow(){ state.property.keys.push({ desc:'', action:'Released to tenant', photos: [] }); persist(); render(); }
+function removeKeyRow(i){ state.property.keys.splice(i,1); if (!state.property.keys.length) addKeyRow(); persist(); render(); }
+function setKey(i, field, value){ state.property.keys[i][field] = value; persist(); }
+function addDetectorRow(){ state.property.detectors.push({ category:'Smoke detector', location:'', tested:'Yes' }); persist(); render(); }
+function removeDetectorRow(i){ state.property.detectors.splice(i,1); if (!state.property.detectors.length) addDetectorRow(); persist(); render(); }
+function setDetector(i, field, value){ state.property.detectors[i][field] = value; persist(); }
+function toggleMeterNA(key, checked){ state.property.meters[key].na = checked; persist(); render(); }
+function detailsMissing(){
+  const pr = state.property, d = pr.declaration, missing = [];
+  if (!d.cleaning) missing.push('the general cleaning condition');
+  Object.keys(pr.meters).forEach(k => {
+    const m = pr.meters[k];
+    if (m.na) return;
+    if (!(m.reading || '').trim()) missing.push('a reading for the ' + METER_LABELS[k].toLowerCase());
+    else if (!(m.photos || []).length) missing.push('a photo of the ' + METER_LABELS[k].toLowerCase());
+  });
+  const namedKeys = pr.keys.filter(k => (k.desc || '').trim());
+  if (!namedKeys.length) missing.push('at least one set of keys');
+  else if (!namedKeys.some(k => (k.photos || []).length)) missing.push('a photo of the keys');
+  return missing;
+}
+function detailsComplete(){ return detailsMissing().length === 0; }
+function continueFromDetails(){
+  if (!detailsComplete()){ alertDetails(); return; }
+  detailsError = '';
+  goToReview();
+}
+let detailsError = '';
+function alertDetails(){
+  detailsError = 'Still needed before continuing: ' + detailsMissing().join(', ') + '.';
+  render();
+  const el = document.getElementById('detailsError');
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function onDeclarationChange(checked){ state.declarationAccepted = checked; persist(); updateFinishButtonState(); }
+function onSignedByChange(value){ state.meta.signedBy = value; persist(); }
+
+function initSignaturePad(){
+  const canvas = document.getElementById('sigCanvas');
+  if (!canvas) return;
+  const ratio = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * ratio);
+  canvas.height = Math.round(rect.height * ratio);
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#16232E';
+  sigCtx = ctx;
+  let drawing = false, last = null;
+  function pos(e){ const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  function start(e){ drawing = true; last = pos(e); const ph = document.getElementById('sigPlaceholder'); if (ph) ph.classList.add('hidden'); e.preventDefault(); }
+  function move(e){ if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p; e.preventDefault(); }
+  function end(){ if (!drawing) return; drawing = false; state.signatureDataUrl = canvas.toDataURL('image/png'); persist(); updateFinishButtonState(); }
+  canvas.addEventListener('pointerdown', start);
+  canvas.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', end);
+  canvas.addEventListener('pointerleave', () => { if (drawing) end(); });
+  if (state.signatureDataUrl) {
+    const img = new Image();
+    img.onload = () => { ctx.clearRect(0,0,canvas.width/ratio, canvas.height/ratio); ctx.drawImage(img, 0, 0, rect.width, rect.height); const ph = document.getElementById('sigPlaceholder'); if (ph) ph.classList.add('hidden'); };
+    img.src = state.signatureDataUrl;
+  }
+}
+function clearSignature(){
+  const canvas = document.getElementById('sigCanvas');
+  if (!canvas || !sigCtx) return;
+  sigCtx.clearRect(0, 0, canvas.width, canvas.height);
+  state.signatureDataUrl = null; persist();
+  const ph = document.getElementById('sigPlaceholder'); if (ph) ph.classList.remove('hidden');
+  updateFinishButtonState();
+}
+function updateFinishButtonState(){
+  const btn = document.getElementById('finishBtn');
+  const help = document.getElementById('finishHelp');
+  if (!btn) return;
+  const missing = [];
+  const incomplete = state.rooms.filter(r => !roomIsComplete(r)).length;
+  if (incomplete) missing.push(`${incomplete} room${incomplete===1?'':'s'} still need${incomplete===1?'s':''} attention`);
+  if (!state.declarationAccepted) missing.push('the declaration needs to be confirmed');
+  if (!state.signatureDataUrl) missing.push('a signature is needed');
+  btn.disabled = missing.length > 0;
+  if (help) help.textContent = missing.length ? 'Before finishing: ' + missing.join(', ') + '.' : 'Everything is complete — ready to finish.';
+}
+
+/* ============================= finishing & export ============================= */
+async function completeReport(){
+  updateFinishButtonState();
+  const btn = document.getElementById('finishBtn');
+  if (btn.disabled) return;
+  const signedByInput = document.getElementById('signedByInput');
+  state.meta.signedBy = (signedByInput && signedByInput.value.trim()) || state.meta.inspectorName;
+  state.finalizedAt = new Date().toISOString();
+  persist();
+  state.view = 'done';
+  render();
+  window.scrollTo({top:0, behavior:'instant'});
+  attemptDownload();
+}
+const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
+const RANK_KEY = ['new','good','fair','poor'];
+const DECORATIVE_RE = /wall|ceiling|paint|skirting|decor|door|window|frame|tile/i;
+function summariseCondition(filterFn){
+  const ranks = [];
+  state.rooms.forEach(r => r.items.forEach(i => {
+    if (i.notApplicable || !i.condition) return;
+    if (filterFn && !filterFn(i)) return;
+    ranks.push(CONDITION_RANK[i.condition]);
+  }));
+  if (!ranks.length) return null;
+  const avg = ranks.reduce((a,b) => a + b, 0) / ranks.length;
+  const worst = Math.max.apply(null, ranks);
+  let rank = Math.round(avg);
+  if (worst === 3 && rank < 2) rank = 2;          // heavy damage anywhere pulls the summary down
+  return { key: RANK_KEY[rank], counted: ranks.length, worst: RANK_KEY[worst] };
+}
+function derivedPropertyCondition(){ return summariseCondition(null); }
+function derivedDecorativeCondition(){ return summariseCondition(i => DECORATIVE_RE.test(i.label)); }
+function derivedLabel(sum){
+  if (!sum) return 'Not enough data';
+  const base = conditionLabel(sum.key);
+  return base + ' (from ' + sum.counted + ' rated item' + (sum.counted === 1 ? '' : 's') + (sum.worst === 'poor' && sum.key !== 'poor' ? ', worst rated poor' : '') + ')';
+}
+function conditionLabel(val){ const f = CONDITION_OPTIONS.find(o => o[0] === val); return f ? f[1] : 'Not recorded'; }
+function cleanlinessLabel(val){ const f = CLEANLINESS_OPTIONS.find(o => o[0] === val); return f ? f[1] : 'Not recorded'; }
+function conditionBlockHTML(room, forExport){
+  const cls = room.condition.hasDamage ? (forExport ? 'report-condition damage' : 'report-condition damage') : 'report-condition';
+  return `<div class="${cls}"><strong>Cleanliness:</strong> ${escapeHtml(cleanlinessLabel(room.condition.cleanliness))}<br><strong>Damage / defects:</strong> ${room.condition.hasDamage ? escapeHtml(room.condition.damageNotes || 'Noted, no detail given.') : 'None noted'}</div>`;
+}
+function itemBlockHTML(item){
+  if (item.notApplicable) {
+    return `<div class="report-item"><div class="il">${escapeHtml(item.label)} — Not applicable</div><div style="font-size:12.5px;color:#8B9299;">${escapeHtml(item.naReason || 'No reason given.')}</div></div>`;
+  }
+  return `<div class="report-item"><div class="il">${escapeHtml(item.label)}</div><div class="report-photo-grid">${item.photos.map(p => `<img src="${p.dataUrl}" alt="${escapeHtml(item.label)}">`).join('')}</div></div>`;
+}
+function buildReportHTML(s){
+  const roomsHtml = s.rooms.map(r => `
+    <section class="report-room">
+      <h3>${escapeHtml(r.name)} <span style="font-weight:400;font-size:12.5px;color:#8B9299;">(${roomTotalPhotos(r)} photos)</span></h3>
+      ${conditionBlockHTML(r, true)}
+      <p class="notes">${r.notes ? escapeHtml(r.notes) : 'No additional notes recorded.'}</p>
+      ${r.items.map(itemBlockHTML).join('')}
+      ${r.extraPhotos.length ? `<div class="report-item"><div class="il">Additional photos</div><div class="report-photo-grid">${r.extraPhotos.map(p => `<img src="${p.dataUrl}" alt="Additional photo">`).join('')}</div></div>` : ''}
+    </section>
+  `).join('');
+  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Self Check-In Report — ${escapeHtml(s.meta.address)}</title>
+<style>
+  body{font-family:Georgia,'Times New Roman',serif;color:#16232E;max-width:820px;margin:0 auto;padding:36px 28px;line-height:1.55;background:#fff;}
+  h1{font-size:24px;margin:0 0 4px;} h3{font-size:16px;margin:0 0 6px;font-family:Georgia,serif;}
+  .meta-block{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#52606B;margin-bottom:22px;border-bottom:1px solid #CBCCC1;padding-bottom:16px;}
+  .meta-block div{margin-top:3px;}
+  .declaration{background:#F1E1DA;border:1px solid #8C3B2B;padding:14px 16px;border-radius:3px;margin:22px 0;font-family:Arial,Helvetica,sans-serif;font-size:13.5px;}
+  .sig-block{margin-top:14px;font-family:Arial,Helvetica,sans-serif;font-size:13px;}
+  .sig-block img{max-width:220px;display:block;border-bottom:1px solid #A9ABA0;margin-bottom:6px;}
+  .report-room{padding:18px 0;border-top:1px solid #CBCCC1;font-family:Arial,Helvetica,sans-serif;}
+  .report-room:first-of-type{border-top:none;}
+  .notes{font-size:13.5px;color:#3a444d;margin-bottom:10px;}
+  .report-condition{font-size:13px;margin-bottom:10px;padding:8px 10px;border-radius:3px;background:#EEEEE7;}
+  .report-condition.damage{background:#F3E7D2;}
+  .report-item{margin-top:12px;}
+  .report-item .il{font-size:13px;font-weight:700;color:#52606B;margin-bottom:5px;}
+  .report-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+  .report-photo-grid img{width:100%;border-radius:3px;border:1px solid #CBCCC1;}
+  @media print { .report-room{break-inside:avoid;} }
+</style>
+</head><body>
+  <h1>Self Check-In Report</h1>
+  <div class="meta-block">
+    <div><strong>Address:</strong> ${escapeHtml(s.meta.address)}</div>
+    <div><strong>Inspection type:</strong> ${escapeHtml(s.meta.inspectionType)}</div>
+    <div><strong>Date:</strong> ${escapeHtml(s.meta.date)}</div>
+    ${s.meta.moveInDateTime ? `<div><strong>Tenancy move-in:</strong> ${escapeHtml(formatDateTimeLocal(s.meta.moveInDateTime))}</div>` : ''}
+    <div><strong>Inspector:</strong> ${escapeHtml(s.meta.inspectorName)}</div>
+    <div><strong>Rooms inspected:</strong> ${s.rooms.length} &nbsp;•&nbsp; <strong>Total photos:</strong> ${s.rooms.reduce((sum,r)=>sum+roomTotalPhotos(r),0)}</div>
+  </div>
+  <div class="declaration">
+    I, ${escapeHtml(s.meta.signedBy || s.meta.inspectorName)}, confirm that this inventory report has been completed honestly and thoroughly, and represents an accurate and truthful record of the property's condition at the date and time shown above.
+    <div class="sig-block">
+      ${s.signatureDataUrl ? `<img src="${s.signatureDataUrl}" alt="Signature">` : ''}
+      <div><strong>Signed by:</strong> ${escapeHtml(s.meta.signedBy || s.meta.inspectorName)}</div>
+      <div><strong>Signed on:</strong> ${escapeHtml(signedDate)}</div>
+    </div>
+  </div>
+  ${roomsHtml}
+</body></html>`;
+}
+/* ============================= PDF generation ============================= */
+const PDF_C = {
+  banner:[62,102,144], bannerLight:[124,147,168], rowAlt:[245,246,244], line:[216,218,210],
+  ink:[27,36,44], inkSoft:[82,96,107], warnBg:[243,231,210], warnText:[138,90,22], okText:[62,107,75], white:[255,255,255]
+};
+
+/* crop to 4:3 like the on-screen grid, then downscale */
+function prepPhoto(dataUrl, targetW, ratio){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const targetH = Math.round(targetW / ratio);
+      const c = document.createElement('canvas');
+      c.width = targetW; c.height = targetH;
+      const ctx = c.getContext('2d');
+      const srcRatio = img.naturalWidth / img.naturalHeight;
+      let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+      if (srcRatio > ratio) { sw = img.naturalHeight * ratio; sx = (img.naturalWidth - sw) / 2; }
+      else { sh = img.naturalWidth / ratio; sy = (img.naturalHeight - sh) / 2; }
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,targetW,targetH);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+      resolve(c.toDataURL('image/jpeg', 0.75));
+    };
+    img.onerror = () => resolve(null);
+    img.src = dataUrl;
+  });
+}
+function photoStamp(iso){
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) + ' at ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+
+async function buildPdfBlob(s, onProgress){
+  const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+  if (!JsPDF) throw new Error('pdf_library_unavailable');
+  const doc = new JsPDF({ unit:'mm', format:'a4', compress:true });
+  const PW = 210, PH = 297, M = 14, CW = PW - M * 2, BOTTOM = PH - 16;
+  let y = M;
+  const ref = s.meta.ref || '';
+  const set = (font, size, colour) => { doc.setFont('helvetica', font); doc.setFontSize(size); doc.setTextColor(colour[0], colour[1], colour[2]); };
+
+  function pageFooter(){
+    set('normal', 8, [139,146,153]);
+    const left = [s.meta.address, ref].filter(Boolean).join('  ·  ');
+    doc.text(left, M, PH - 9);
+    doc.text('Page ' + doc.internal.getNumberOfPages(), PW - M, PH - 9, { align:'right' });
+  }
+  function newPage(){ pageFooter(); doc.addPage(); y = M; }
+  function need(h){ if (y + h > BOTTOM) newPage(); }
+
+  function banner(text, light){
+    need(12);
+    const c = light ? PDF_C.bannerLight : PDF_C.banner;
+    doc.setFillColor(c[0], c[1], c[2]);
+    doc.rect(M, y, CW, 8.5, 'F');
+    set('bold', 9.5, PDF_C.white);
+    doc.text(String(text).toUpperCase(), M + 3.5, y + 5.8);
+    y += 8.5 + 4;
+  }
+  function labelValueRows(rows, labelW){
+    rows.forEach(([k, v]) => {
+      const lines = doc.splitTextToSize(String(v == null ? '' : v), CW - labelW - 4);
+      need(Math.max(6, lines.length * 4.6 + 2));
+      set('normal', 9.5, PDF_C.inkSoft); doc.text(k, M, y + 3.4);
+      set('normal', 9.5, PDF_C.ink); doc.text(lines, M + labelW, y + 3.4);
+      y += Math.max(6, lines.length * 4.6 + 1.6);
+    });
+  }
+
+  async function photoStrip(shots, cols, onEach){
+    if (!shots.length) return;
+    const gap = 4;
+    const cw = (CW - gap * (cols - 1)) / cols;
+    const ih = cw * 0.75;
+    for (let i = 0; i < shots.length; i += cols){
+      const row = shots.slice(i, i + cols);
+      need(ih + 12);
+      const top = y;
+      for (let c = 0; c < row.length; c++){
+        const shot = row[c];
+        const x = M + c * (cw + gap);
+        const img = await prepPhoto(shot.dataUrl, 900, 4/3);
+        if (onEach) onEach();
+        if (img){
+          doc.addImage(img, 'JPEG', x, top, cw, ih);
+          doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]);
+          doc.rect(x, top, cw, ih);
+        }
+        set('normal', 7.5, PDF_C.inkSoft);
+        doc.text(doc.splitTextToSize(shot.label, cw)[0], x + cw / 2, top + ih + 3.4, { align:'center' });
+        set('normal', 6.5, [139,146,153]);
+        doc.text(photoStamp(shot.ts), x + cw / 2, top + ih + 7, { align:'center' });
+      }
+      y = top + ih + 12;
+    }
+  }
+
+  /* ---------- cover ---------- */
+  set('bold', 17, PDF_C.ink);
+  doc.text('SELF', M, y + 6);
+  const wSelf = doc.getTextWidth('SELF ');
+  set('bold', 17, PDF_C.banner);
+  doc.text('CHECK-IN', M + wSelf + 1.5, y + 6);
+  y += 11;
+  set('bold', 9, PDF_C.banner);
+  doc.text(String(s.meta.inspectionType || 'Check-In').toUpperCase() + ' INVENTORY REPORT', M, y);
+  y += 4;
+  doc.setDrawColor(PDF_C.banner[0], PDF_C.banner[1], PDF_C.banner[2]); doc.setLineWidth(0.7);
+  doc.line(M, y, M + 30, y); doc.setLineWidth(0.2);
+  y += 10;
+
+  const totalPhotos = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0);
+  labelValueRows([
+    ['Property Address', s.meta.address],
+    ['Inspection Type', s.meta.inspectionType],
+    ['Date', s.meta.date],
+    s.meta.moveInDateTime ? ['Tenancy Move-in', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
+    ['Compiled By', s.meta.inspectorName],
+    ['Report Reference', ref],
+    ['Rooms / Photos', s.rooms.length + ' rooms  ·  ' + totalPhotos + ' photos']
+  ].filter(Boolean), 42);
+
+  y += 3;
+  doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]); doc.line(M, y, PW - M, y); y += 5;
+  set('normal', 8.5, PDF_C.inkSoft);
+  const contents = 'Contents: Condition key  ·  Keys  ·  Utility meters  ·  Detectors  ·  ' + s.rooms.map(r => r.name).join('  ·  ') + '  ·  Declaration form';
+  doc.text(doc.splitTextToSize(contents, CW), M, y);
+  y += doc.splitTextToSize(contents, CW).length * 4 + 6;
+
+  /* ---------- condition key ---------- */
+  banner('Condition explained');
+  CONDITION_OPTIONS.forEach(([v, l]) => {
+    const lines = doc.splitTextToSize(CONDITION_HELP[v], CW - 34);
+    need(lines.length * 4.4 + 5);
+    set('bold', 8.5, PDF_C.ink); doc.text(l.toUpperCase(), M, y + 3.2);
+    set('normal', 8.5, PDF_C.inkSoft); doc.text(lines, M + 34, y + 3.2);
+    y += lines.length * 4.4 + 3;
+  });
+  y += 4;
+
+  const pr = s.property || {};
+  const dec = pr.declaration || {};
+
+  /* ---------- keys ---------- */
+  banner('Keys at check-in');
+  const keys = (pr.keys || []).filter(k => (k.desc || '').trim());
+  if (keys.length) labelValueRows(keys.map(k => [k.desc, k.action]), 90);
+  else { set('italic', 9, PDF_C.inkSoft); need(8); doc.text('No keys recorded.', M, y + 3); y += 8; }
+  y += 2;
+  const keyShots = [];
+  keys.forEach(k => (k.photos || []).forEach(ph => keyShots.push({ label: k.desc, ts: ph.ts, dataUrl: ph.dataUrl })));
+  await photoStrip(keyShots, 4);
+  y += 2;
+
+  /* ---------- meters ---------- */
+  banner('Utility meters');
+  const meterRows = [];
+  Object.keys(pr.meters || {}).forEach(key => {
+    const m = pr.meters[key];
+    if (m.na) { meterRows.push([METER_LABELS[key], 'Not present']); return; }
+    meterRows.push([METER_LABELS[key], (m.reading || '').trim() ? 'Reading: ' + m.reading : 'Not recorded']);
+  });
+  labelValueRows(meterRows, 46);
+  y += 2;
+  const meterShots = [];
+  Object.keys(pr.meters || {}).forEach(key => {
+    const m = pr.meters[key];
+    if (m.na) return;
+    (m.photos || []).forEach(ph => meterShots.push({ label: METER_LABELS[key], ts: ph.ts, dataUrl: ph.dataUrl }));
+  });
+  await photoStrip(meterShots, 4);
+  y += 3;
+
+  /* ---------- detectors ---------- */
+  banner('Smoke, heat & CO detectors');
+  labelValueRows([
+    ['Floors in property', pr.floors || ''],
+    ['Detector on every floor', pr.detectorsAllFloors || ''],
+    ['Heating source', pr.heatingSource || '']
+  ], 52);
+  (pr.detectors || []).filter(dt => (dt.location || '').trim() || dt.category).forEach(dt => {
+    need(7);
+    set('normal', 9, PDF_C.ink);
+    doc.text(dt.category + (dt.location ? '  —  ' + dt.location : ''), M, y + 3.2);
+    set('normal', 9, dt.tested === 'Yes' ? PDF_C.okText : PDF_C.warnText);
+    doc.text('Tested & audible: ' + dt.tested, M + CW * 0.62, y + 3.2);
+    y += 6.5;
+  });
+  y += 3;
+
+  /* ---------- rooms ---------- */
+  let done = 0;
+  const progressTotal = Math.max(1, totalPhotos);
+  for (const room of s.rooms){
+    newPage();
+    banner(room.name);
+
+    /* item table */
+    const headH = 7;
+    need(headH + 8);
+    set('bold', 7.5, PDF_C.inkSoft);
+    doc.text('REF', M + 2, y + 4.8);
+    doc.text('ITEM', M + 12, y + 4.8);
+    doc.text('CONDITION & DESCRIPTION', M + CW * 0.34, y + 4.8);
+    doc.text('PHOTOS', M + CW * 0.87, y + 4.8);
+    doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]); doc.setLineWidth(0.45);
+    doc.line(M, y + headH, PW - M, y + headH); doc.setLineWidth(0.2);
+    y += headH + 0.5;
+
+    room.items.forEach((item, idx) => {
+      const nameLines = doc.splitTextToSize(item.label, CW * 0.2);
+      let desc, colour;
+      if (item.notApplicable){ desc = 'Not applicable' + (item.naReason ? ' — ' + item.naReason : ''); colour = PDF_C.inkSoft; }
+      else {
+        const bits = [];
+        bits.push(item.condition ? conditionLabel(item.condition) : 'Condition not recorded');
+        if ((item.aiObservation || '').trim()) bits.push(item.aiObservation.trim());
+        if ((item.conditionNote || '').trim()) bits.push('Tenant note: ' + item.conditionNote.trim());
+        desc = bits.join(' — ');
+        colour = item.condition === 'poor' ? PDF_C.warnText : (item.condition ? PDF_C.ink : PDF_C.warnText);
+      }
+      const descLines = doc.splitTextToSize(desc, CW * 0.5);
+      const rowH = Math.max(7, Math.max(nameLines.length, descLines.length) * 4.2 + 3);
+      if (y + rowH > BOTTOM){ newPage(); }
+      if (idx % 2 === 1){ doc.setFillColor(PDF_C.rowAlt[0], PDF_C.rowAlt[1], PDF_C.rowAlt[2]); doc.rect(M, y, CW, rowH, 'F'); }
+      set('normal', 8.5, PDF_C.inkSoft); doc.text(String(idx + 1), M + 2, y + 4.6);
+      set('bold', 8.8, PDF_C.ink); doc.text(nameLines, M + 12, y + 4.6);
+      set('normal', 8.3, colour); doc.text(descLines, M + CW * 0.34, y + 4.6);
+      const n = item.photos.length;
+      set('normal', 8.3, item.notApplicable ? PDF_C.inkSoft : (n ? PDF_C.okText : PDF_C.warnText));
+      doc.text(item.notApplicable ? '—' : String(n), M + CW * 0.89, y + 4.6);
+      doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]);
+      doc.line(M, y + rowH, PW - M, y + rowH);
+      y += rowH;
+    });
+    y += 6;
+
+    /* condition */
+    const condW = Math.min(CW, 120);
+    const damage = room.condition.hasDamage;
+    const condRows = [
+      ['Cleanliness', cleanlinessLabel(room.condition.cleanliness), false],
+      ['Damage / defects', damage ? (room.condition.damageNotes || 'Noted, no detail given.') : 'None noted', damage]
+    ];
+    condRows.forEach(([k, v, warn]) => {
+      const lines = doc.splitTextToSize(String(v), condW - 42);
+      const h = Math.max(8, lines.length * 4.4 + 3.5);
+      need(h + 2);
+      doc.setFillColor(PDF_C.rowAlt[0], PDF_C.rowAlt[1], PDF_C.rowAlt[2]);
+      doc.rect(M, y, condW, h, 'F');
+      if (warn){ doc.setFillColor(PDF_C.warnBg[0], PDF_C.warnBg[1], PDF_C.warnBg[2]); doc.rect(M + 40, y, condW - 40, h, 'F'); }
+      set('bold', 8.5, PDF_C.inkSoft); doc.text(k, M + 3, y + 5.4);
+      set('normal', 8.5, warn ? PDF_C.warnText : PDF_C.ink); doc.text(lines, M + 42, y + 5.4);
+      y += h + 1;
+    });
+    y += 5;
+
+    if ((room.notes || '').trim()){
+      const lines = doc.splitTextToSize('Notes: ' + room.notes, CW);
+      need(lines.length * 4.4 + 4);
+      set('normal', 8.8, PDF_C.inkSoft); doc.text(lines, M, y + 3);
+      y += lines.length * 4.4 + 5;
+    }
+
+    /* photos, four across with captions */
+    banner(room.name + ' — Photos', true);
+    const shots = [];
+    room.items.forEach(i => i.photos.forEach(p => shots.push({ label: i.label, ts: p.ts, dataUrl: p.dataUrl })));
+    room.extraPhotos.forEach(p => shots.push({ label: 'Additional photo', ts: p.ts, dataUrl: p.dataUrl }));
+
+    if (!shots.length){
+      set('italic', 9, PDF_C.inkSoft);
+      doc.text('No photos captured for this room.', M, y + 3);
+      y += 8;
+      continue;
+    }
+
+    const cols = 4, gap = 4;
+    const cw = (CW - gap * (cols - 1)) / cols;
+    const ih = cw * 0.75;
+    const capH = 9;
+    for (let i = 0; i < shots.length; i += cols){
+      const row = shots.slice(i, i + cols);
+      need(ih + capH + 4);
+      const top = y;
+      for (let c = 0; c < row.length; c++){
+        const shot = row[c];
+        const x = M + c * (cw + gap);
+        const img = await prepPhoto(shot.dataUrl, 900, 4/3);
+        done++; if (onProgress) onProgress(Math.min(99, Math.round((done / progressTotal) * 100)));
+        if (img){
+          doc.addImage(img, 'JPEG', x, top, cw, ih);
+          doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]);
+          doc.rect(x, top, cw, ih);
+        }
+        set('normal', 7.5, PDF_C.inkSoft);
+        doc.text(doc.splitTextToSize(shot.label, cw)[0], x + cw / 2, top + ih + 3.4, { align:'center' });
+        set('normal', 6.5, [139,146,153]);
+        doc.text(photoStamp(shot.ts), x + cw / 2, top + ih + 7, { align:'center' });
+      }
+      y = top + ih + capH + 3;
+    }
+  }
+
+  /* ---------- declaration ---------- */
+  need(70);
+  y += 4;
+  banner('Declaration');
+  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+  const dcl = (s.property && s.property.declaration) || {};
+  labelValueRows([
+    ['General cleaning condition', dcl.cleaning || 'Not recorded'],
+    ['General property condition', derivedLabel(derivedPropertyCondition())],
+    ['General decorative condition', derivedLabel(derivedDecorativeCondition())],
+    ['All utility meters recorded', dcl.metersRecorded || ''],
+    ['Additional information', (dcl.additional || '').trim() || 'None'],
+    ['Declaration', 'I, ' + (s.meta.signedBy || s.meta.inspectorName) + ", confirm that this inventory report has been completed honestly and thoroughly, and represents an accurate and truthful record of the property's condition at the date and time shown above."],
+    ['Signed by', s.meta.signedBy || s.meta.inspectorName],
+    ['Signed on', signedDate]
+  ], 52);
+  y += 2;
+  set('normal', 9.5, PDF_C.inkSoft); need(30); doc.text('Signature', M, y + 3.4);
+  if (s.signatureDataUrl){
+    const sig = await prepPhoto(s.signatureDataUrl, 700, 3/1);
+    if (sig) doc.addImage(sig, 'JPEG', M + 42, y - 2, 50, 16.6);
+    y += 17;
+    doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]);
+    doc.line(M + 42, y, M + 92, y);
+  }
+  y += 8;
+  doc.setDrawColor(PDF_C.line[0], PDF_C.line[1], PDF_C.line[2]); doc.line(M, y, PW - M, y); y += 4;
+  set('normal', 7.5, PDF_C.inkSoft);
+  doc.text(doc.splitTextToSize('Self Check-In Report  ·  ' + s.meta.address + '  ·  Ref ' + ref + '  ·  Generated ' + todayDisplay() + '  ·  Every photograph carries the date and time it was taken. Condition ratings and observations were assessed automatically from the photographs; notes marked "Tenant note" were added by the person completing the report.', CW), M, y + 2);
+  pageFooter();
+  return doc.output('blob');
+}
+
+async function attemptDownload(){
+  const statusEl = document.getElementById('downloadStatus');
+  const setStatus = (t) => { if (statusEl) statusEl.textContent = t; };
+  try{
+    setStatus('Building your PDF…');
+    const blob = await buildPdfBlob(state, (pct) => setStatus('Building your PDF… ' + pct + '%'));
+    const fname = sanitizeFilename(state.meta.address) + ' - ' + sanitizeFilename(state.meta.inspectionType) + ' - ' + sanitizeFilename(state.meta.date) + ' - ' + sanitizeFilename(state.meta.ref || '') + '.pdf';
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    setStatus('PDF ready. Check your downloads.');
+  }catch(err){
+    console.error('pdf failed', err);
+    setStatus("Couldn't build the PDF just now. Try the button again. The full report is shown below.");
+  }
+}
+function startNewInspection(){ const p = document.getElementById('resetConfirm'); if (p) p.classList.remove('hidden'); }
+function cancelReset(){ const p = document.getElementById('resetConfirm'); if (p) p.classList.add('hidden'); }
+async function confirmReset(){ await idbClear('current'); state = defaultState(); pendingSetup = defaultPendingSetup(); render(); window.scrollTo({top:0, behavior:'instant'}); }
+
+/* ============================= view templates ============================= */
+function renderResume(){
+  const d = savedDraft;
+  const photoCount = d.rooms.reduce((s,r) => s + (r.items || []).reduce((a,i) => a + (i.photos ? i.photos.length : 0), 0) + (r.extraPhotos ? r.extraPhotos.length : 0), 0);
+  return `
+    <div class="panel resume-card">
+      <div class="icon">📋</div>
+      <h1 style="font-size:22px;">Continue where you left off?</h1>
+      <div class="sub" style="color:var(--ink-soft); margin-top:8px; font-size:14px;">
+        A saved inspection was found for<br><strong>${escapeHtml(d.meta.address || 'an unnamed property')}</strong><br>
+        ${d.rooms.length} room${d.rooms.length===1?'':'s'} · ${photoCount} photo${photoCount===1?'':'s'} saved
+      </div>
+      <div class="btn-row" style="margin-top:22px; justify-content:center;">
+        <button type="button" class="btn btn-primary" onclick="resumeDraft()">Continue this inspection</button>
+        <button type="button" class="btn-ghost" onclick="discardDraft()">Discard &amp; start new</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderSetup(){
+  const ps = pendingSetup;
+  return `
+    <div class="masthead">
+      <div class="kicker">New inspection</div>
+      <h1>Self Check-In Report</h1>
+      <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
+    </div>
+    <div class="hint-banner"><strong>Before you start:</strong> every room comes with a checklist of specific items to photograph (bed, wardrobe, cooker, sofa and so on) and needs a minimum of ${MIN_PHOTOS} clear photos in total, reduced by one for each item marked not applicable. The front door must always be photographed. Every photo — camera or gallery — is timestamped automatically the moment it's added, and checked to help confirm it shows the right item. <strong>Check-in reports must be started within 7 days of the tenancy move-in date</strong> or they can't be created. The finished report is signed off by the person carrying out the inspection.</div>
+    <div class="panel">
+      ${addressBook.length ? `
+        <div class="field">
+          <label>Saved properties on this device</label>
+          <div class="addr-options">
+            ${addressBook.map(a => `<button type="button" class="addr-option" onclick="useSavedAddress(${JSON.stringify(a).replace(/"/g,'&quot;')})">${escapeHtml(a)}</button>`).join('')}
+          </div>
+        </div>` : ''}
+      <div class="field">
+        <label for="unitInput">Property address</label>
+        <input class="input" id="unitInput" type="text" placeholder="e.g. Flat 4, 12 Brownlow House, London" value="${escapeHtml(ps.unit)}" oninput="pendingSetup.unit=this.value; composeAddress();">
+      </div>
+      <div class="field">
+        <label for="postcodeInput">Postcode</label>
+        <div class="cond-row">
+          <input class="input cond-note" id="postcodeInput" type="text" autocapitalize="characters" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="pendingSetup.postcode=this.value; composeAddress();" onblur="onPostcodeBlur()" onkeydown="if(event.key==='Enter'){event.preventDefault(); lookupPostcode();}">
+          <button type="button" class="btn btn-sm" onclick="lookupPostcode()" ${ps.lookup.status==='loading'?'disabled':''}>${ps.lookup.status==='loading'?'Searching…':'Find address'}</button>
+        </div>
+        ${ps.lookup.message ? `<div class="room-count-hint">${escapeHtml(ps.lookup.message)}</div>` : ''}
+        ${ps.lookup.options.length ? `<div class="addr-options">${ps.lookup.options.map(o => `<button type="button" class="addr-option" onclick="chooseLookupAddress(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
+        <div class="room-count-hint">Check the address reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="typeInput">Inspection type</label>
+          <select class="select" id="typeInput" onchange="pendingSetup.inspectionType=this.value; render();">
+            ${['Check-In','Check-Out','Interim Inspection','Renewal Inspection'].map(t => `<option value="${t}" ${ps.inspectionType===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field">
+          <label for="inspectorInput">Person carrying out the inspection</label>
+          <input class="input" id="inspectorInput" type="text" value="${escapeHtml(ps.inspectorName)}" oninput="pendingSetup.inspectorName=this.value">
+        </div>
+      </div>
+      <div class="field">
+        <label for="moveInInput">Tenancy move-in date &amp; time${ps.inspectionType==='Check-In' ? ' (required)' : ' (if known)'}</label>
+        <input class="input" id="moveInInput" type="datetime-local" value="${escapeHtml(ps.moveInDateTime)}" oninput="pendingSetup.moveInDateTime=this.value; updateMoveInHint();">
+        <div class="room-count-hint move-in-hint" id="moveInHint"></div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="bedroomsInput">Number of bedrooms</label>
+          <input class="input" id="bedroomsInput" type="number" min="0" max="20" value="${ps.bedrooms}" oninput="pendingSetup.bedrooms=parseInt(this.value,10)||0; updateRoomCountHint();">
+        </div>
+        <div class="field">
+          <label for="bathroomsInput">Number of bathrooms</label>
+          <input class="input" id="bathroomsInput" type="number" min="0" max="20" value="${ps.bathrooms}" oninput="pendingSetup.bathrooms=parseInt(this.value,10)||0; updateRoomCountHint();">
+        </div>
+      </div>
+
+      <div class="section-title">Other rooms to include</div>
+      <div class="checklist">
+        ${[['kitchen','Kitchen'],['living','Living / Reception Room'],['hallway','Hallway / Entrance'],['garden','Garden / Outdoor Space'],['utility','Utility Room'],['wc','Separate WC']].map(([key,label]) => `
+          <div class="check-row">
+            <input type="checkbox" id="common_${key}" ${ps.common[key] ? 'checked' : ''} onchange="pendingSetup.common.${key}=this.checked; updateRoomCountHint();">
+            <label for="common_${key}">${label}</label>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="section-title">Add any other room</div>
+      <div class="custom-room-add">
+        <input class="input" id="customRoomInput" type="text" placeholder="e.g. Loft, Study, Balcony" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomRoom();}">
+        <button type="button" class="btn" onclick="addCustomRoom()">Add room</button>
+      </div>
+      <div id="customRoomsList">${renderCustomRoomsListHTML()}</div>
+
+      <div class="room-count-hint" id="roomCountHint"></div>
+
+      ${setupError ? `<div class="setup-error" id="setupError">${escapeHtml(setupError)}</div>` : ''}
+
+      <div class="btn-row" style="margin-top:24px;">
+        <button type="button" class="btn btn-primary btn-block" onclick="submitSetup()">Begin inspection</button>
+      </div>
+    </div>
+  `;
+}
+
+function aiBadgeHTML(photo){
+  if (!photo.aiCheck) return '';
+  const st = photo.aiCheck.status;
+  if (st === 'unavailable') return '';
+  const label = st === 'checking' ? '…' : st === 'ok' ? '✓' : st === 'warn' ? '!' : '?';
+  return `<span class="ai-badge ${st}" title="${escapeHtml(photo.aiCheck.note || '')}">${label}</span>`;
+}
+function itemCardHTML(room, item){
+  const hasPhoto = item.photos.length > 0;
+  const checkClass = item.notApplicable ? 'na' : (hasPhoto ? 'done' : '');
+  const checkMark = item.notApplicable ? '–' : (hasPhoto ? '✓' : '');
+  const warnPhoto = item.photos.find(p => p.aiCheck && p.aiCheck.status === 'warn');
+  return `
+    <div class="item-card">
+      <div class="item-head">
+        <div class="item-title-wrap">
+          <span class="item-check ${checkClass}">${checkMark}</span>
+          <span class="item-title ${item.notApplicable ? 'na-label' : ''}">${escapeHtml(item.label)}</span>
+        </div>
+        ${item.mandatory ? `<span class="na-toggle required-tag">Required</span>` : `<label class="na-toggle">
+          <input type="checkbox" ${item.notApplicable ? 'checked' : ''} onchange="toggleNA('${room.id}','${item.id}', this.checked)">
+          Not applicable
+        </label>`}
+      </div>
+      ${item.notApplicable ? `
+        <div class="na-reason">
+          <input type="text" placeholder="Why doesn't this apply? e.g. 'No desk in this room'" value="${escapeHtml(item.naReason)}" oninput="updateNAReason('${room.id}','${item.id}', this.value)">
+        </div>
+      ` : `
+        <div class="item-photo-row">
+          <button type="button" class="add-item-photo" onclick="triggerItemFileInput('${room.id}','${item.id}')">+</button>
+          ${item.photos.map(p => `
+            <div class="item-thumb">
+              <img src="${p.dataUrl}" onclick="openPhotoPreview('${p.dataUrl}')" alt="${escapeHtml(item.label)}">
+              ${aiBadgeHTML(p)}
+              <button type="button" class="del-btn" onclick="deleteItemPhoto('${room.id}','${item.id}','${p.id}')" aria-label="Delete photo">×</button>
+            </div>
+          `).join('')}
+        </div>
+        ${warnPhoto ? `<div class="ai-warn-note">⚠ ${escapeHtml(warnPhoto.aiCheck.note || 'This photo may not clearly show ' + item.label + '.')} Worth a quick check.</div>` : ''}
+        <div class="photo-tip">📷 ${escapeHtml(photoTipFor(item.label))}</div>
+        ${(() => {
+          if (!item.photos.length) return '';
+          const assessing = item.photos.some(p => p.aiCheck && p.aiCheck.status === 'checking');
+          if (aiEnabled !== false){
+            if (item.condition && item.aiObservation) return `<div class="ai-verdict ${item.condition}">
+                <span class="verdict-badge">${escapeHtml(conditionLabel(item.condition))}</span>
+                <span class="verdict-text">${escapeHtml(item.aiObservation)}</span>
+                <button type="button" class="btn-ghost verdict-redo" onclick="overrideCondition('${room.id}','${item.id}')">Change</button>
+              </div>`;
+            if (assessing) return `<div class="ai-verdict pending"><span class="verdict-text">Assessing the photo…</span></div>`;
+          }
+          return `<div class="cond-row">
+            <select class="select cond-select ${item.condition ? '' : 'unset'}" onchange="updateItemCondition('${room.id}','${item.id}', this.value)">
+              <option value="">Condition…</option>
+              ${CONDITION_OPTIONS.map(([v,l]) => `<option value="${v}" ${item.condition===v?'selected':''}>${l}</option>`).join('')}
+            </select>
+          </div>
+          ${item.condition ? `<div class="cond-help">${escapeHtml(CONDITION_HELP[item.condition] || '')}</div>` : ''}`;
+        })()}
+        ${item.photos.length ? `<div class="cond-row">
+          <input class="input cond-note" type="text" placeholder="Your note, e.g. 'stiff handle' or 'I think this is worse than shown'" value="${escapeHtml(item.conditionNote || '')}" oninput="updateItemNote('${room.id}','${item.id}', this.value)">
+        </div>` : ''}
+      `}
+      ${item.custom ? `<button type="button" class="remove-item-btn" onclick="removeChecklistItem('${room.id}','${item.id}')">Remove this item</button>` : ''}
+    </div>
+  `;
+}
+
+function renderCapture(){
+  const room = getActiveRoom();
+  if (!room) return renderSetup();
+  const idx = state.rooms.findIndex(r => r.id === room.id);
+  const isFirst = idx === 0, isLast = idx === state.rooms.length - 1;
+  const pct = Math.min(100, Math.round((totalCaptured() / Math.max(1,totalRequired())) * 100));
+  const complete = roomIsComplete(room);
+  const missing = roomMissingItems(room);
+  const shortfall = Math.max(0, roomRequiredTotal(room) - roomTotalPhotos(room));
+
+  let reqParts = [];
+  if (missing.length) reqParts.push(`${missing.length} item${missing.length===1?'':'s'} still need${missing.length===1?'s':''} a photo`);
+  if (shortfall > 0) reqParts.push(`${shortfall} more photo${shortfall===1?'':'s'} needed to reach this room's ${roomRequiredTotal(room)}-photo minimum`);
+  const noCond = roomItemsMissingCondition(room).length;
+  if (noCond) reqParts.push(`${noCond} item${noCond===1?'':'s'} still need${noCond===1?'s':''} a condition`);
+  if (!roomConditionComplete(room)) reqParts.push('room condition needs completing below');
+  const reqMsg = complete ? 'All required photos and condition details captured for this room.' : reqParts.join(' · ');
+  return `
+    <div class="masthead">
+      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <h1>${escapeHtml(state.meta.address)}</h1>
+      <div class="sub">${roomsComplete()} of ${state.rooms.length} rooms complete · ${totalCaptured()} of ${totalRequired()} photos captured</div>
+      <div class="progress-bar-shell"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="autosave-note">Your progress is saved automatically on this device — safe to close and come back later.</div>
+    </div>
+    <div class="capture-layout">
+      <nav class="room-nav">
+        ${state.rooms.map(r => {
+          const dotClass = roomIsComplete(r) ? 'ok' : (roomTotalPhotos(r) > 0 ? 'warn' : '');
+          return `<button type="button" class="room-nav-item ${r.id===room.id?'active':''}" onclick="setActiveRoom('${r.id}')">
+            <span class="status-dot ${dotClass}"></span>
+            <span class="rn-name">${escapeHtml(r.name)}</span>
+            <span class="rn-count">${roomTotalPhotos(r)}/${roomRequiredTotal(r)}</span>
+          </button>`;
+        }).join('')}
+      </nav>
+      <div class="room-panel">
+        <h2>${escapeHtml(room.name)}</h2>
+        <div class="req-line ${complete ? 'ok' : 'warn'}">${reqMsg}</div>
+
+        <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none" onchange="handlePhotoInputChange(event)">
+
+        ${room.items.map(item => itemCardHTML(room, item)).join('')}
+
+        <div class="add-checklist-item">
+          <input class="input" id="addItemInput_${room.id}" type="text" placeholder="Add another item to check, e.g. 'En-suite shower'" onkeydown="if(event.key==='Enter'){event.preventDefault(); addChecklistItem('${room.id}');}">
+          <button type="button" class="btn btn-sm" onclick="addChecklistItem('${room.id}')">Add item</button>
+        </div>
+
+        <div class="extra-section">
+          <span class="sec-label">Additional photos</span>
+          <span class="sec-hint">${shortfall > 0 ? `${shortfall} more needed to reach this room's ${roomRequiredTotal(room)}-photo minimum${naCount(room) ? ` (reduced from ${MIN_PHOTOS} because ${naCount(room)} item${naCount(room)===1?' is':'s are'} marked not applicable)` : ''}.` : 'Optional — add more general condition photos if useful.'}</span>
+          <div class="item-photo-row">
+            <button type="button" class="add-item-photo" onclick="triggerExtraFileInput('${room.id}')">+</button>
+            ${room.extraPhotos.map(p => `
+              <div class="item-thumb">
+                <img src="${p.dataUrl}" onclick="openPhotoPreview('${p.dataUrl}')" alt="Additional photo">
+                <button type="button" class="del-btn" onclick="deleteExtraPhoto('${room.id}','${p.id}')" aria-label="Delete photo">×</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="condition-section">
+          <span class="sec-label">Room condition</span>
+          <div class="field">
+            <label for="cleanlinessInput">Cleanliness</label>
+            <select class="select" id="cleanlinessInput" onchange="updateCleanliness('${room.id}', this.value)">
+              <option value="">Select…</option>
+              ${CLEANLINESS_OPTIONS.map(([val,label]) => `<option value="${val}" ${room.condition.cleanliness===val?'selected':''}>${label}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Damage or defects</label>
+            <div class="btn-row">
+              <button type="button" class="toggle-btn ${!room.condition.hasDamage?'active':''}" onclick="setDamageFlag('${room.id}', false)">None noted</button>
+              <button type="button" class="toggle-btn damage ${room.condition.hasDamage?'active':''}" onclick="setDamageFlag('${room.id}', true)">Damage / defect found</button>
+            </div>
+            ${room.condition.hasDamage ? `<textarea class="textarea" style="margin-top:10px;" placeholder="Describe the damage or defect — location, size, likely cause…" oninput="updateDamageNotes('${room.id}', this.value)">${escapeHtml(room.condition.damageNotes)}</textarea>` : ''}
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:6px;">
+          <label for="notesInput">Additional notes (optional)</label>
+          <textarea class="textarea" id="notesInput" placeholder="Anything else worth flagging — meter readings, keys, appliance manuals…" oninput="updateRoomNotes('${room.id}', this.value)">${escapeHtml(room.notes)}</textarea>
+        </div>
+
+        <div class="room-footer-nav">
+          <button type="button" class="btn" onclick="stepRoom(-1)" ${isFirst ? 'disabled' : ''}>← Previous room</button>
+          ${isLast
+            ? `<button type="button" class="btn btn-accent" onclick="goToDetails()">Keys, meters &amp; sign-off</button>`
+            : `<button type="button" class="btn" onclick="stepRoom(1)">Next room →</button>`
+          }
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:18px; justify-content:center;">
+      <button type="button" class="btn-ghost" onclick="goToDetails()">Skip to keys, meters &amp; sign-off</button>
+    </div>
+  `;
+}
+
+function selectHTML(path, value, options){
+  return `<select class="select" onchange="setPropAndRender('${path}', this.value)">${options.map(o => `<option value="${escapeHtml(o)}" ${value===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+}
+function renderDetails(){
+  const pr = state.property;
+  const d = pr.declaration;
+  return `
+    <div class="masthead">
+      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <h1>Keys, meters &amp; sign-off</h1>
+      <div class="sub">${escapeHtml(state.meta.address)}</div>
+    </div>
+
+    <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none" onchange="handlePhotoInputChange(event)">
+
+    <div class="panel">
+      <span class="sec-label">Keys handed over</span>
+      <span class="sec-hint">One line per set, e.g. "3x Yale, front door". Photograph the keys laid out before handing them over.</span>
+      ${pr.keys.map((k, i) => `
+        <div class="cond-row">
+          <input class="input cond-note" type="text" placeholder="e.g. 2x Yale, front door" value="${escapeHtml(k.desc)}" oninput="setKey(${i},'desc',this.value)">
+          <select class="select cond-select" onchange="setKey(${i},'action',this.value)">
+            ${['Released to tenant','Held by agent','Held by landlord','Not provided'].map(o => `<option value="${o}" ${k.action===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+          ${pr.keys.length > 1 ? `<button type="button" class="btn-ghost" onclick="removeKeyRow(${i})">Remove</button>` : ''}
+        </div>
+        <div class="item-photo-row">
+          <button type="button" class="add-item-photo" onclick="triggerKeyFileInput(${i})">+</button>
+          ${(k.photos || []).map(ph => `
+            <div class="item-thumb">
+              <img src="${ph.dataUrl}" onclick="openPhotoPreview('${ph.dataUrl}')" alt="Keys">
+              <button type="button" class="del-btn" onclick="deletePropPhoto('keys', ${i}, '${ph.id}')" aria-label="Delete photo">×</button>
+            </div>`).join('')}
+        </div>
+      `).join('')}
+      <div class="btn-row" style="margin-top:10px;"><button type="button" class="btn btn-sm" onclick="addKeyRow()">Add another set</button></div>
+    </div>
+
+    <div class="panel">
+      <span class="sec-label">Utility meters</span>
+      <span class="sec-hint">Readings taken on the day protect against later billing disputes.</span>
+      ${Object.keys(pr.meters).map(key => {
+        const m = pr.meters[key];
+        return `
+        <div class="meter-block">
+          <label class="na-toggle" style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" ${m.na ? 'checked' : ''} onchange="toggleMeterNA('${key}', this.checked)">
+            <strong style="font-size:13px;color:var(--ink);">${METER_LABELS[key]}</strong> <span style="font-size:12px;">not present</span>
+          </label>
+          ${m.na ? '' : `
+            <div class="cond-row">
+              <input class="input" type="text" inputmode="decimal" placeholder="Meter reading" value="${escapeHtml(m.reading)}" oninput="setProp('meters.${key}.reading', this.value)">
+            </div>
+            <div class="item-photo-row">
+              <button type="button" class="add-item-photo" onclick="triggerMeterFileInput('${key}')">+</button>
+              ${(m.photos || []).map(ph => `
+                <div class="item-thumb">
+                  <img src="${ph.dataUrl}" onclick="openPhotoPreview('${ph.dataUrl}')" alt="${METER_LABELS[key]}">
+                  <button type="button" class="del-btn" onclick="deletePropPhoto('meter', '${key}', '${ph.id}')" aria-label="Delete photo">×</button>
+                </div>`).join('')}
+            </div>
+            <div class="cond-help">${(m.photos || []).length ? 'Reading photographed.' : 'Photograph the meter face showing the reading.'}</div>`}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="panel">
+      <span class="sec-label">Smoke, heat &amp; CO detectors</span>
+      <div class="row2">
+        <div class="field">
+          <label>Floors in the property</label>
+          <input class="input" type="number" min="1" max="10" value="${escapeHtml(pr.floors)}" oninput="setProp('floors', this.value)">
+        </div>
+        <div class="field">
+          <label>Detector on every floor</label>
+          ${selectHTML('detectorsAllFloors', pr.detectorsAllFloors, YESNO)}
+        </div>
+      </div>
+      <div class="field">
+        <label>Heating source</label>
+        ${selectHTML('heatingSource', pr.heatingSource, ['Gas boiler','Electric','Central heating','Wood','Other'])}
+      </div>
+      ${pr.detectors.map((dt, i) => `
+        <div class="cond-row">
+          <select class="select cond-select" onchange="setDetector(${i},'category',this.value)">
+            ${['Smoke detector','Heat detector','CO detector','CO &amp; heat detector'].map(o => `<option value="${o}" ${dt.category===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+          <input class="input cond-note" type="text" placeholder="Location, e.g. hallway" value="${escapeHtml(dt.location)}" oninput="setDetector(${i},'location',this.value)">
+          <select class="select cond-select" onchange="setDetector(${i},'tested',this.value)">
+            ${YESNO.map(o => `<option value="${o}" ${dt.tested===o?'selected':''}>Tested: ${o}</option>`).join('')}
+          </select>
+          ${pr.detectors.length > 1 ? `<button type="button" class="btn-ghost" onclick="removeDetectorRow(${i})">Remove</button>` : ''}
+        </div>
+      `).join('')}
+      <div class="btn-row" style="margin-top:10px;"><button type="button" class="btn btn-sm" onclick="addDetectorRow()">Add another detector</button></div>
+    </div>
+
+    <div class="panel">
+      <span class="sec-label">Declaration form</span>
+      <div class="field">
+        <label>General cleaning condition</label>
+        <select class="select" onchange="setPropAndRender('declaration.cleaning', this.value)">
+          <option value="">Select…</option>
+          ${['Professionally cleaned','Clean','Further cleaning required','Not cleaned'].map(o => `<option value="${o}" ${d.cleaning===o?'selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div class="decl-row">
+        <span>General property condition</span>
+        <strong style="font-size:13px;">${escapeHtml(derivedLabel(derivedPropertyCondition()))}</strong>
+      </div>
+      <div class="decl-row">
+        <span>General decorative condition</span>
+        <strong style="font-size:13px;">${escapeHtml(derivedLabel(derivedDecorativeCondition()))}</strong>
+      </div>
+      <div class="cond-help">Both are worked out from the condition you recorded against each item, so they cannot be set by hand.</div>
+      <div class="decl-row">
+        <span>All utility meters recorded</span>
+        ${selectHTML('declaration.metersRecorded', d.metersRecorded, YESNO)}
+      </div>
+      <div class="field" style="margin-top:12px;">
+        <label>Additional information</label>
+        <textarea class="textarea" placeholder="Anything else the landlord or tenant should have on record." oninput="setProp('declaration.additional', this.value)">${escapeHtml(d.additional)}</textarea>
+      </div>
+    </div>
+
+    ${detailsError ? `<div class="setup-error" id="detailsError">${escapeHtml(detailsError)}</div>` : ''}
+
+    <div class="btn-row" style="margin-top:18px;">
+      <button type="button" class="btn" onclick="backToCapture()">← Back to rooms</button>
+      <button type="button" class="btn btn-primary" onclick="continueFromDetails()">Continue to review &amp; sign →</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const allOk = state.rooms.every(roomIsComplete);
+  const aiWarnings = countAiWarnings();
+  return `
+    <div class="masthead">
+      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <h1>Review &amp; sign</h1>
+      <div class="sub">${escapeHtml(state.meta.address)}</div>
+    </div>
+    <div class="panel">
+      <table class="summary-table">
+        <thead><tr><th>Room</th><th>Photos</th><th>Status</th></tr></thead>
+        <tbody>
+          ${state.rooms.map(r => {
+            const ok = roomIsComplete(r);
+            return `<tr class="row-click" onclick="backToCapture('${r.id}')">
+              <td>${escapeHtml(r.name)}</td>
+              <td>${roomTotalPhotos(r)} / ${roomRequiredTotal(r)}</td>
+              <td><span class="status-pill ${ok ? 'ok' : 'warn'}">${ok ? 'Complete' : 'Needs attention'}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+
+      ${aiWarnings > 0 ? `<div class="hint-banner">The AI photo check flagged ${aiWarnings} photo${aiWarnings===1?'':'s'} that may not clearly match its checklist item. Tap into the relevant room to take a quick look — it's a helpful check, not always right.</div>` : ''}
+
+      <div class="declaration-box">
+        <p>I confirm that this inventory report has been completed honestly and thoroughly, and represents an accurate and truthful record of the property's condition at the date and time shown above.</p>
+        <div class="declaration-check">
+          <input type="checkbox" id="declarationCheck" ${state.declarationAccepted ? 'checked' : ''} onchange="onDeclarationChange(this.checked)">
+          <label for="declarationCheck">I confirm the above is true, to the best of my knowledge.</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="signedByInput">Signed by</label>
+        <input class="input" id="signedByInput" type="text" value="${escapeHtml(state.meta.inspectorName)}" oninput="onSignedByChange(this.value)">
+      </div>
+
+      <div class="field">
+        <label>Signature</label>
+        <div class="sig-wrap">
+          <canvas id="sigCanvas"></canvas>
+          <div class="sig-placeholder" id="sigPlaceholder">Sign here</div>
+        </div>
+        <div class="btn-row" style="margin-top:8px;">
+          <button type="button" class="btn-ghost" onclick="clearSignature()">Clear signature</button>
+        </div>
+      </div>
+
+      ${!allOk ? `<div class="hint-banner">Some rooms still need attention (photos or condition details) before the report can be finished. Tap a room above to go back.</div>` : ''}
+
+      <p class="finish-help" id="finishHelp"></p>
+      <button type="button" class="btn btn-primary btn-block" id="finishBtn" onclick="completeReport()">Finish &amp; generate report</button>
+    </div>
+  `;
+}
+
+function renderDone(){
+  return `
+    <div class="masthead">
+      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <h1>Report complete</h1>
+      <div class="sub">${escapeHtml(state.meta.address)}</div>
+    </div>
+    <div class="done-banner">
+      <span class="mark">✓</span>
+      <div>
+        <div style="font-weight:700;">Signed off by ${escapeHtml(state.meta.signedBy || state.meta.inspectorName)}</div>
+        <div id="downloadStatus">Preparing your PDF…</div>
+        <div class="btn-row" style="margin-top:10px;">
+          <button type="button" class="btn" onclick="attemptDownload()">Download report (PDF)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-doc">
+      <h2>Self Check-In Report</h2>
+      <div class="report-meta">
+        ${escapeHtml(state.meta.address)}<br>
+        ${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}<br>
+        ${state.meta.moveInDateTime ? `Move-in: ${escapeHtml(formatDateTimeLocal(state.meta.moveInDateTime))}<br>` : ''}
+        Inspector: ${escapeHtml(state.meta.inspectorName)} · Rooms: ${state.rooms.length} · Photos: ${totalCaptured()}
+      </div>
+      ${state.signatureDataUrl ? `<img class="sig-preview" src="${state.signatureDataUrl}" alt="Signature">` : ''}
+      ${state.rooms.map(r => `
+        <div class="report-room">
+          <h3>${escapeHtml(r.name)} <span style="font-weight:400; color:var(--ink-faint); font-size:13px;">(${roomTotalPhotos(r)} photos)</span></h3>
+          ${conditionBlockHTML(r, false)}
+          <p class="notes">${r.notes ? escapeHtml(r.notes) : 'No additional notes recorded.'}</p>
+          ${r.items.map(itemBlockHTML).join('')}
+          ${r.extraPhotos.length ? `<div class="report-item"><div class="il">Additional photos</div><div class="report-photo-grid">${r.extraPhotos.map(p => `<img src="${p.dataUrl}" alt="Additional photo">`).join('')}</div></div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="btn-row" style="margin-top:24px; justify-content:center;">
+      <button type="button" class="btn-ghost" onclick="startNewInspection()">Start a new inspection</button>
+    </div>
+    <div class="hidden reset-confirm" id="resetConfirm">
+      This clears the current report from this device. Make sure you've downloaded it first.
+      <div class="btn-row">
+        <button type="button" class="btn" onclick="cancelReset()">Cancel</button>
+        <button type="button" class="btn btn-accent" onclick="confirmReset()">Yes, start new</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================= render dispatcher ============================= */
+function render(){
+  const app = document.getElementById('app');
+  try {
+    if (state.view === 'resume') { app.innerHTML = renderResume(); return; }
+    if (state.view === 'setup') { app.innerHTML = renderSetup(); updateRoomCountHint(); updateMoveInHint(); }
+    else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
+    else if (state.view === 'details') { app.innerHTML = renderDetails(); }
+    else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); }
+  } catch (err) {
+    console.error('Render failed:', err);
+    app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';
+  }
+}
+
+/* ============================= boot ============================= */
+render(); // paint instantly with no dependency on storage or network
+(async () => {
+  try {
+    try { addressBook = (await idbGet('addressBook')) || []; if (addressBook.length && state.view === 'setup') render(); } catch(e){}
+    const saved = await idbGet('current');
+    if (saved && Array.isArray(saved.rooms) && saved.rooms.length && !saved.finalizedAt) {
+      savedDraft = normalizeState(saved);
+      state = defaultState();
+      state.view = 'resume';
+      render();
+    }
+  } catch (err) {
+    console.error('Inventory app failed to check for a saved draft:', err);
+  }
+  initAI();
+})();
+</script>
+</body>
+</html>
