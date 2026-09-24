@@ -2,15 +2,13 @@
   "name": "self-check-in-report",
   "version": "1.0.0",
   "private": true,
-  "description": "Tenant self check-in inventory report with photo evidence, condition assessment and signed PDF output",
+  "description": "DIY tenant check-in / inventory report with compulsory timestamped photos and signed declaration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   },
-  "dependencies": {
-    "express": "^4.21.2"
-  }
+  "dependencies": {}
 }
