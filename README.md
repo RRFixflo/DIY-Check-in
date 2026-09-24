@@ -75,8 +75,8 @@ inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms
 plus common areas, which generates one checklist per room.
 
 **Rooms.** Each room has a checklist tailored to its type, at least 8 photos
-required, dropping by one for each item marked not applicable. Every item needs a
-photo. The front door is mandatory and cannot be skipped. Each item shows guidance
+required. Marking an item not applicable never takes a room below 8. Every item
+needs a photo. The front door is mandatory and cannot be skipped. Each item shows guidance
 on how to take the photo before it is taken, and the photo is checked in the
 browser for focus and exposure the moment it is added.
 

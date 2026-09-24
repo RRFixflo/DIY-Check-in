@@ -10,5 +10,8 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "express": "^5.2.1"
+  }
 }
