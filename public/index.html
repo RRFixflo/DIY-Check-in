@@ -1089,7 +1089,7 @@ function renderAddressSuggestions(q){
   if (!addrSuggestions.length){
     box.innerHTML = q.length >= 6 ? '<div class="addr-suggest-empty">No matches. Type the address and postcode below.</div>' : '';
   } else {
-    box.innerHTML = addrSuggestions.map((r, i) => `<button type="button" role="option" id="addrOpt${i}" aria-selected="${i === addrActive}" class="addr-suggest-item${i === addrActive ? ' active' : ''}" onmousedown="event.preventDefault()" onclick="pickAddressSuggestion(${i})"><span class="as-line">${escapeHtml(r.line)}</span><span class="as-pc">${escapeHtml(r.postcode)}</span></button>`).join('');
+    box.innerHTML = addrSuggestions.map((r, i) => `<button type="button" role="option" id="addrOpt${i}" aria-selected="${i === addrActive}" class="addr-suggest-item${i === addrActive ? ' active' : ''}" onmousedown="event.preventDefault()" onclick="pickAddressSuggestion(${i})"><span class="as-line">${escapeHtml(r.line)}</span>${r.postcode ? `<span class="as-pc">${escapeHtml(r.postcode)}</span>` : ''}</button>`).join('');
   }
   const open = box.innerHTML !== '';
   box.classList.toggle('hidden', !open);
@@ -1120,9 +1120,23 @@ function onAddressKeydown(e){
     hideAddressSuggestions();
   }
 }
-function pickAddressSuggestion(i){
-  const r = addrSuggestions[i]; if (!r) return;
+async function pickAddressSuggestion(i){
+  let r = addrSuggestions[i]; if (!r) return;
   const m = (pendingSetup.unit || '').match(FLAT_PREFIX_RE);
+  if (!r.postcode && r.id){
+    // getAddress.io suggestions carry no postcode until resolved (one look-up, only for the one picked)
+    hideAddressSuggestions();
+    setLookup({ status:'loading', message:'Getting the full address…', options:[] });
+    try{
+      const res = await fetch('/api/address/' + encodeURIComponent(r.id));
+      const data = await res.json();
+      if (!res.ok || !data.postcode) throw new Error(data.error || 'lookup failed');
+      r = { line: data.line, postcode: data.postcode };
+    }catch(e){
+      setLookup({ status:'error', message:"Couldn't get that address. Type the postcode above to pick it from the list.", options:[] });
+      return;
+    }
+  }
   const prefix = m ? m[1].replace(/^\w/, c => c.toUpperCase()) : '';
   const lineHasPrefix = prefix && r.line.toLowerCase().startsWith(prefix.toLowerCase());
   pendingSetup.unit = (prefix && !lineHasPrefix ? prefix + ', ' : '') + r.line;
