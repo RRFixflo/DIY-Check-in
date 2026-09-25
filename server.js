@@ -31,6 +31,9 @@ app.get('/api/status', (req, res) => {
 
 /* ----------------------------- /api/assess ----------------------------- */
 const CONDITIONS = ['new', 'good', 'fair', 'poor'];
+// Must match DEFECT_OPTIONS in public/index.html.
+const DEFECTS = ['Scuffs', 'Scratches', 'Marks', 'Stains', 'Chips', 'Cracks', 'Holes', 'Dents', 'Fading', 'Worn', 'Loose', 'Broken', 'Missing parts', 'Damp / mould', 'Limescale', 'Rust'];
+const CLEANLINESS = ['clean', 'needs', 'dirty'];
 
 const ASSESS_SYSTEM = [
   'You assess photographs taken by a tenant for a UK residential inventory and check-in report.',
@@ -39,7 +42,10 @@ const ASSESS_SYSTEM = [
   '  "matches": true if the photo plausibly shows the named item, false if it clearly shows something else or is unusable,',
   '  "note": if matches is false, one short sentence telling the tenant what to retake, otherwise an empty string,',
   '  "condition": one of "new", "good", "fair", "poor",',
-  '  "observation": one factual sentence describing the visible condition (marks, scuffs, stains, damage, wear), written for an inventory clerk.',
+  '  "observation": one factual sentence describing the visible condition (marks, scuffs, stains, damage, wear), written for an inventory clerk,',
+  '  "description": a short inventory description of the item itself: colour, material, type and visible features, comma separated, at most 12 words (e.g. "White painted timber door, chrome lever handle, door stop"),',
+  '  "defects": an array of the defects clearly visible, using only these words: ' + DEFECTS.map(d => JSON.stringify(d)).join(', ') + '; use ["None"] if none are visible,',
+  '  "cleanliness": "clean", "needs" (dust, smears or light dirt) or "dirty" (clearly dirty, grease, grime).',
   'Condition scale: new = unused, no marks; good = clean with only minimal wear; fair = noticeable wear, marks or minor damage; poor = significant damage, staining or disrepair.',
   'Describe only what is visible. Ignore the date and time stamp burned into the corner of the photo.'
 ].join('\n');
@@ -66,7 +72,7 @@ app.post('/api/assess', async (req, res) => {
   try {
     const response = await anthropic.messages.create({
       model: ANTHROPIC_MODEL,
-      max_tokens: 400,
+      max_tokens: 600,
       system: ASSESS_SYSTEM,
       messages: [{
         role: 'user',
@@ -87,7 +93,10 @@ app.post('/api/assess', async (req, res) => {
       matches: out.matches !== false,
       note: typeof out.note === 'string' ? out.note.slice(0, 300) : '',
       condition: CONDITIONS.includes(out.condition) ? out.condition : '',
-      observation: typeof out.observation === 'string' ? out.observation.slice(0, 500) : ''
+      observation: typeof out.observation === 'string' ? out.observation.slice(0, 500) : '',
+      description: typeof out.description === 'string' ? out.description.slice(0, 200) : '',
+      defects: Array.isArray(out.defects) ? out.defects.filter(d => d === 'None' || DEFECTS.includes(d)) : [],
+      cleanliness: CLEANLINESS.includes(out.cleanliness) ? out.cleanliness : ''
     });
   } catch (err) {
     if (err instanceof Anthropic.RateLimitError) return res.status(429).json({ error: 'Too many photos at once. Try again in a moment.' });

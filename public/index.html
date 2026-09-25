@@ -165,6 +165,21 @@
   .cond-select.unset { border-color: var(--warn); }
   .cond-note { flex: 1 1 200px; min-width: 160px; }
   .cond-help { font-size: 12px; color: var(--ink-faint); margin-top: 6px; line-height: 1.45; }
+  .item-details { margin-top: 12px; border-top: 1px dashed var(--line-strong); padding-top: 2px; }
+  .det-label { font-size: 11.5px; font-weight: 700; color: var(--ink); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .det-label span { font-weight: 500; color: var(--ink-faint); text-transform: none; letter-spacing: 0; margin-left: 8px; font-size: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { font-size: 12.5px; padding: 6px 11px; min-height: 32px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--panel); color: var(--ink-soft); line-height: 1.2; }
+  .chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .chip.bad.on { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+  .chip.ok.on { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+  .det-grid { display: grid; grid-template-columns: 1fr; gap: 0 18px; }
+  @media (min-width: 640px) { .det-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); } }
+  .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); overflow: hidden; max-width: 100%; }
+  .seg button { border: 0; border-right: 1px solid var(--line-strong); background: var(--panel); color: var(--ink-soft); font-size: 12.5px; padding: 8px 11px; min-height: 36px; }
+  .seg button:last-child { border-right: 0; }
+  .seg button.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .qty-input { width: 96px; }
   .photo-tip { display: flex; gap: 8px; align-items: flex-start; margin-top: 12px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12.5px; line-height: 1.45; color: var(--ink-soft); }
   .photo-tip svg.ic { width: 16px; height: 16px; margin-top: 1px; color: var(--accent); }
   .ai-verdict { margin-top: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; line-height: 1.5; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); }
@@ -518,10 +533,56 @@ const CLEANLINESS_OPTIONS = [
   ['poor', 'Poor — requires attention']
 ];
 
+/* Item detail: quick-tap descriptions per kind of item, marks/defects, cleanliness, working test, quantity. */
+const DETAIL_HINTS = {
+  door:      ['White painted','Natural wood','Glazed panel','Fire door','Chrome handle','Brass handle','Lock fitted','Door stop'],
+  window:    ['uPVC','Timber frame','Double glazed','Single glazed','Window restrictor','Locks fitted','Keys present','Sill'],
+  wall:      ['White emulsion','Magnolia','Grey','Feature wall','Wallpaper','Skirting boards','Picture hooks','Coving'],
+  ceiling:   ['White emulsion','Smooth','Textured / Artex','Coving','Pendant light','Spotlights'],
+  tiles:     ['White tiles','Grey tiles','Patterned tiles','Grout clean','Sealant intact','Splashback'],
+  floor:     ['Carpet','Laminate','Wooden floor','Vinyl','Tiled','Beige','Grey','Brown','Threshold strip'],
+  radiator:  ['White','Thermostatic valve','Towel rail','Wall mounted','Combi boiler','Storage heater'],
+  smoke:     ['Ceiling mounted','Mains wired','Battery','Test button works'],
+  socket:    ['White plastic','Chrome / metal','Pendant light','Spotlights','Double socket','USB socket','Dimmer switch','All bulbs working'],
+  worktop:   ['Laminate','Wood','Granite / stone','Quartz','Upstand','Splashback'],
+  extractor: ['Stainless steel','White','Glass','Filter fitted','Light fitted'],
+  cooker:    ['Gas hob','Electric hob','Induction hob','Ceramic hob','Single oven','Double oven','Integrated','Stainless steel','Oven shelves','Grill pan'],
+  fridge:    ['Integrated','Freestanding','White','Stainless steel','Shelves present','Drawers present','Ice box'],
+  cupboard:  ['White gloss','Wood effect','Painted','Handles present','Shelves present','Hanging rail','Drawers','Hangers'],
+  sink:      ['Stainless steel','Ceramic','Mixer tap','Separate taps','Plug present','Drainer','Pedestal','Vanity unit'],
+  bath:      ['White acrylic','Shower over bath','Shower cubicle','Glass screen','Shower curtain','Mixer tap','Bath panel','Sealant intact'],
+  toilet:    ['White ceramic','Close-coupled','Wall hung','Seat & lid','Dual flush','Toilet roll holder'],
+  mirror:    ['Wall mounted','Cabinet','Illuminated','Shaver socket','Shelves'],
+  bed:       ['Double','Single','King size','Divan base','Wooden frame','Metal frame','Mattress','Headboard','Mattress protector'],
+  sofa:      ['Fabric','Leather','Grey','Brown','2-seater','3-seater','Corner sofa','Cushions','Fire label seen'],
+  table:     ['Wood','Glass top','White','Chairs','Extendable','Desk chair'],
+  blind:     ['Roller blind','Venetian blind','Curtains','Curtain pole','Curtain track','Voiles','Blackout'],
+  garden:    ['Fence panels','Brick wall','Paving slabs','Decking','Gravel','Lawn','Shrubs','Shed','Gate lock'],
+  generic:   ['White','Wood','Metal','Plastic','Painted','Fitted','Freestanding']
+};
+const DEFECT_OPTIONS = ['Scuffs','Scratches','Marks','Stains','Chips','Cracks','Holes','Dents','Fading','Worn','Loose','Broken','Missing parts','Damp / mould','Limescale','Rust'];
+const ITEM_CLEAN = [['clean','Clean'],['needs','Needs a clean'],['dirty','Dirty']];
+const ITEM_WORKING = [['yes','Working'],['no','Not working'],['untested','Not tested']];
+const WORKING_KEYS = ['door','window','radiator','smoke','socket','extractor','cooker','fridge','sink','bath','toilet'];
+const QTY_KEYS = ['bed','sofa','table','blind','cupboard','mirror'];
+const PROPERTY_TYPES = ['Flat','Studio flat','Maisonette','Terraced house','Semi-detached house','Detached house','Bungalow','Room in a shared house'];
+const DOC_LIST = [
+  ['tenancy','Tenancy agreement'],
+  ['deposit','Deposit protection certificate'],
+  ['howToRent','How to Rent guide'],
+  ['gas','Gas safety certificate'],
+  ['epc','Energy Performance Certificate (EPC)'],
+  ['eicr','Electrical safety report (EICR)'],
+  ['manuals','Appliance manuals / instructions']
+];
+const DOC_OPTIONS = ['Received','Not received','Not applicable'];
+
 /* ============================= state ============================= */
 function defaultProperty(){
   return {
     exterior: { photos: [] },
+    propertyType: '',
+    documents: {},
     keys: [{ desc:'', action:'Released to tenant', photos: [] }],
     meters: {
       electric: { na:false, reading:'', serial:'', location:'', photos: [] },
@@ -577,7 +638,7 @@ let addressBook = [];
 
 function makeItems(type){
   const labels = ROOM_TYPE_ITEMS[type] || ROOM_TYPE_ITEMS.other;
-  return labels.map((label, i) => ({ id: 'it' + i + '_' + Math.random().toString(36).slice(2,6), label, notApplicable: false, naReason: '', photos: [], custom: false, mandatory: /front door/i.test(label), condition: '', conditionNote: '' }));
+  return labels.map((label, i) => ({ id: 'it' + i + '_' + Math.random().toString(36).slice(2,6), label, notApplicable: false, naReason: '', photos: [], custom: false, mandatory: /front door/i.test(label), condition: '', conditionNote: '', desc: '', defects: [], clean: '', working: '', qty: '' }));
 }
 function makeRoom(name, type){
   return { id: 'r' + Math.random().toString(36).slice(2,8), name, type, items: makeItems(type), extraPhotos: [], notes: '', condition: { cleanliness: '', hasDamage: false, damageNotes: '' } };
@@ -929,6 +990,12 @@ async function assessItemPhoto(roomId, itemId, photoId){
         observation: data.observation || ''
       };
       applyAiCondition(item);
+      if (data.description && !(item.desc || '').trim()) item.desc = String(data.description).slice(0, 200);
+      if (Array.isArray(data.defects) && !(item.defects || []).length){
+        const ok = data.defects.filter(d => d === 'None' || DEFECT_OPTIONS.includes(d));
+        if (ok.length) item.defects = ok.includes('None') && ok.length > 1 ? ok.filter(d => d !== 'None') : ok;
+      }
+      if (['clean','needs','dirty'].includes(data.cleanliness) && !item.clean) item.clean = data.cleanliness;
     }
   }catch(err){
     photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'error', note:'could not reach the server' });
@@ -1212,6 +1279,61 @@ function updateItemNote(roomId, itemId, value){
   const item = room.items.find(i => i.id === itemId); if (!item) return;
   item.conditionNote = value; persist();
 }
+function findItem(roomId, itemId){
+  const room = state.rooms.find(r => r.id === roomId);
+  return room ? room.items.find(i => i.id === itemId) : null;
+}
+function setItemField(roomId, itemId, field, value, rerender){
+  const item = findItem(roomId, itemId); if (!item) return;
+  item[field] = value; persist();
+  if (rerender) render();
+}
+function descParts(desc){ return String(desc || '').split(/\s*,\s*/).map(t => t.trim()).filter(Boolean); }
+function toggleDescChip(roomId, itemId, phrase){
+  const item = findItem(roomId, itemId); if (!item) return;
+  const parts = descParts(item.desc);
+  const at = parts.findIndex(t => t.toLowerCase() === phrase.toLowerCase());
+  if (at >= 0) parts.splice(at, 1); else parts.push(phrase);
+  item.desc = parts.join(', ');
+  persist(); render();
+}
+function toggleDefect(roomId, itemId, name){
+  const item = findItem(roomId, itemId); if (!item) return;
+  let list = Array.isArray(item.defects) ? item.defects.slice() : [];
+  if (list.includes(name)) list = list.filter(d => d !== name);
+  else list = name === 'None' ? ['None'] : list.filter(d => d !== 'None').concat(name);
+  item.defects = list;
+  persist(); render();
+}
+function toggleItemChoice(roomId, itemId, field, value){
+  const item = findItem(roomId, itemId); if (!item) return;
+  item[field] = item[field] === value ? '' : value;
+  persist(); render();
+}
+function itemNotWorking(item){ return item.working === 'no' && WORKING_KEYS.includes(exampleKeyFor(item.label)); }
+function itemDefects(item){ return (item.defects || []).filter(d => d !== 'None'); }
+function workingQuestion(key){ return key === 'door' || key === 'window' ? 'Opens, closes & locks' : key === 'smoke' ? 'Tested' : key === 'sink' || key === 'bath' ? 'Taps & drainage' : key === 'toilet' ? 'Flush' : 'Working'; }
+function itemDetailsHTML(room, item){
+  const key = exampleKeyFor(item.label);
+  const hints = DETAIL_HINTS[key] || DETAIL_HINTS.generic;
+  const parts = descParts(item.desc).map(t => t.toLowerCase());
+  const defects = item.defects || [];
+  const call = (fn, arg) => escapeHtml(`${fn}('${room.id}','${item.id}',${JSON.stringify(arg)})`);
+  const chip = (text, on, onclick, tone) => `<button type="button" class="chip ${tone || ''} ${on ? 'on' : ''}" aria-pressed="${on}" onclick="${onclick}">${escapeHtml(text)}</button>`;
+  const seg = (field, opts) => `<div class="seg">${opts.map(([v, l]) => `<button type="button" class="${item[field] === v ? 'on' : ''}" aria-pressed="${item[field] === v}" onclick="${escapeHtml(`toggleItemChoice('${room.id}','${item.id}','${field}','${v}')`)}">${l}</button>`).join('')}</div>`;
+  return `<div class="item-details">
+      <div class="det-label">Describe it<span>colour, material, what's there</span></div>
+      <input class="input" type="text" placeholder="e.g. ${escapeHtml(hints.slice(0, 2).join(', '))}" value="${escapeHtml(item.desc || '')}" oninput="setItemField('${room.id}','${item.id}','desc', this.value)">
+      <div class="chips">${hints.map(h => chip(h, parts.includes(h.toLowerCase()), call('toggleDescChip', h))).join('')}</div>
+      <div class="det-label">Marks or damage<span>tap all that apply</span></div>
+      <div class="chips">${chip('None seen', defects.includes('None'), call('toggleDefect', 'None'), 'ok')}${DEFECT_OPTIONS.map(d => chip(d, defects.includes(d), call('toggleDefect', d), 'bad')).join('')}</div>
+      <div class="det-grid">
+        <div><div class="det-label">Cleanliness</div>${seg('clean', ITEM_CLEAN)}</div>
+        ${WORKING_KEYS.includes(key) ? `<div><div class="det-label">${escapeHtml(workingQuestion(key))}</div>${seg('working', ITEM_WORKING)}</div>` : ''}
+        ${QTY_KEYS.includes(key) || item.custom ? `<div><div class="det-label">How many</div><input class="input qty-input" type="number" min="0" max="99" inputmode="numeric" placeholder="1" value="${escapeHtml(item.qty || '')}" oninput="setItemField('${room.id}','${item.id}','qty', this.value)"></div>` : ''}
+      </div>
+    </div>`;
+}
 function updateNAReason(roomId, itemId, value){
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
   const item = room.items.find(i => i.id === itemId); if (!item) return;
@@ -1223,7 +1345,7 @@ function addChecklistItem(roomId){
   const val = (input.value || '').trim();
   if (!val) return;
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
-  room.items.push({ id: 'it' + Math.random().toString(36).slice(2,8), label: val, notApplicable: false, naReason: '', photos: [], custom: true });
+  room.items.push({ id: 'it' + Math.random().toString(36).slice(2,8), label: val, notApplicable: false, naReason: '', photos: [], custom: true, condition: '', conditionNote: '', desc: '', defects: [], clean: '', working: '', qty: '' });
   input.value = '';
   persist(); render();
 }
@@ -1269,7 +1391,7 @@ function normalizeItem(i){
   if (i && i.condition === undefined) i.condition = '';
   if (i && i.conditionNote === undefined) i.conditionNote = '';
   if (i && i.aiObservation === undefined) i.aiObservation = '';
-  return { id: i.id || ('it' + Math.random().toString(36).slice(2,8)), label: i.label || 'Item', notApplicable: !!i.notApplicable, naReason: i.naReason || '', photos: Array.isArray(i.photos) ? i.photos : [], custom: !!i.custom, mandatory: !!i.mandatory, condition: i.condition || '', conditionNote: i.conditionNote || '', aiObservation: i.aiObservation || '' };
+  return { id: i.id || ('it' + Math.random().toString(36).slice(2,8)), label: i.label || 'Item', notApplicable: !!i.notApplicable, naReason: i.naReason || '', photos: Array.isArray(i.photos) ? i.photos : [], custom: !!i.custom, mandatory: !!i.mandatory, condition: i.condition || '', conditionNote: i.conditionNote || '', aiObservation: i.aiObservation || '', desc: i.desc || '', defects: Array.isArray(i.defects) ? i.defects : [], clean: i.clean || '', working: i.working || '', qty: i.qty || '' };
 }
 function normalizeRoom(r){
   const hasItems = Array.isArray(r.items) && r.items.length;
@@ -1290,6 +1412,8 @@ function normalizeProperty(saved){
   pr.keys = (Array.isArray(pr.keys) && pr.keys.length ? pr.keys : [{ desc:'', action:'Released to tenant' }])
     .map(k => Object.assign({ desc:'', action:'Released to tenant', photos: [] }, k, { photos: Array.isArray(k.photos) ? k.photos : [] }));
   pr.exterior = { photos: Array.isArray(pr.exterior && pr.exterior.photos) ? pr.exterior.photos : [] };
+  pr.documents = (pr.documents && typeof pr.documents === 'object') ? pr.documents : {};
+  pr.propertyType = pr.propertyType || '';
   const base = defaultProperty().meters;
   Object.keys(base).forEach(key => {
     pr.meters[key] = Object.assign({}, base[key], pr.meters[key] || {});
@@ -1763,7 +1887,10 @@ function summariseItems(items){
   let rank = Math.round(avg);
   if (worst === 3 && rank < 2) rank = 2;
   const notes = [];
-  rated.forEach(i => { const n = (i.conditionNote || '').trim(); if (n && notes.indexOf(n) === -1) notes.push(n); });
+  rated.forEach(i => {
+    itemDefects(i).forEach(d => { const t = d.toLowerCase(); if (notes.indexOf(t) === -1) notes.push(t); });
+    const n = (i.conditionNote || '').trim(); if (n && notes.indexOf(n) === -1) notes.push(n);
+  });
   return { key: RANK_KEY[rank], notes };
 }
 function scheduleRows(s){
@@ -1792,15 +1919,59 @@ function photoRefsForRoom(room){
   return { byItem, extras };
 }
 function sentence(t){ t = String(t || '').trim(); return !t ? '' : /[.!?]$/.test(t) ? t : t + '.'; }
+function itemCleanText(v){ return v === 'clean' ? 'Clean.' : v === 'needs' ? 'Needs a clean.' : v === 'dirty' ? 'Dirty – cleaning required.' : ''; }
+function itemWorkingText(item){
+  const key = exampleKeyFor(item.label);
+  if (!WORKING_KEYS.includes(key) || !item.working) return '';
+  const what = workingQuestion(key).toLowerCase();
+  return item.working === 'yes' ? (what === 'working' ? 'Tested and working.' : 'Tested: ' + what + ' – working.')
+    : item.working === 'no' ? (what === 'working' ? 'Not working.' : 'Tested: ' + what + ' – NOT working.') : 'Not tested.';
+}
+function itemMarksText(item){
+  const d = itemDefects(item);
+  if (d.length) return 'Marks / defects: ' + d.join(', ').toLowerCase() + '.';
+  return (item.defects || []).includes('None') ? 'No marks or damage seen.' : '';
+}
+function itemDescriptionText(item){
+  const bits = [];
+  if ((item.desc || '').trim()) bits.push(sentence(item.desc.trim()));
+  if (String(item.qty || '').trim() && (item.custom || QTY_KEYS.includes(exampleKeyFor(item.label)))) bits.push('Quantity: ' + String(item.qty).trim() + '.');
+  return bits.join(' ');
+}
 function reportConditionText(item, refs){
   if (item.notApplicable) return 'Not applicable' + ((item.naReason || '').trim() ? ' – ' + item.naReason.trim() : '') + '.';
   const bits = [sentence(item.condition ? conditionLabel(item.condition) : 'Condition not recorded')];
+  [itemMarksText(item), itemCleanText(item.clean), itemWorkingText(item)].forEach(t => { if (t) bits.push(t); });
   const obs = sentence(item.aiObservation);
   if (obs) bits.push(obs);
   const note = sentence(item.conditionNote);
   if (note) bits.push("Tenant's note: " + note);
   bits.push(refs && refs.length ? (refs.length > 1 ? 'Photos ' : 'Photo ') + refs.join(', ') : 'No photograph.');
   return bits.join(' ');
+}
+function photoTimes(list){ return list.map(p => new Date(p.ts).getTime()).filter(t => !isNaN(t)); }
+function roomPhotoList(room){ const out = []; room.items.forEach(i => (i.photos || []).forEach(p => out.push(p))); (room.extraPhotos || []).forEach(p => out.push(p)); return out; }
+function timeHM(t){ const d = new Date(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function roomInspectedText(room){
+  const ts = photoTimes(roomPhotoList(room));
+  if (!ts.length) return '—';
+  const a = Math.min.apply(null, ts), b = Math.max.apply(null, ts);
+  return timeHM(a) === timeHM(b) ? timeHM(a) : timeHM(a) + ' – ' + timeHM(b);
+}
+function roomStats(room){
+  const active = room.items.filter(i => !i.notApplicable);
+  const count = k => active.filter(i => i.condition === k).length;
+  const sum = summariseItems(room.items);
+  return {
+    items: active.length, na: room.items.length - active.length,
+    new: count('new'), good: count('good'), fair: count('fair'), poor: count('poor'),
+    marks: active.filter(i => itemDefects(i).length).length,
+    needsClean: active.filter(i => i.clean === 'needs' || i.clean === 'dirty').length,
+    notWorking: active.filter(itemNotWorking).length,
+    overall: sum ? conditionLabel(sum.key).replace(' condition', '') : 'Not recorded',
+    photos: roomTotalPhotos(room),
+    inspected: roomInspectedText(room)
+  };
 }
 // Everything a reader of a deposit dispute would look for first.
 function issuesNoted(s){
@@ -1812,8 +1983,8 @@ function issuesNoted(s){
       const note = (item.conditionNote || '').trim(), obs = (item.aiObservation || '').trim();
       if (item.notApplicable){
         rows.push([room.name, String(ref.n), item.label, 'Not applicable', (item.naReason || '').trim() || 'No reason given']);
-      } else if (item.condition === 'fair' || item.condition === 'poor' || note){
-        const details = [obs ? sentence(obs) : '', note ? "Tenant's note: " + sentence(note) : ''].filter(Boolean).join(' ') || '—';
+      } else if (item.condition === 'fair' || item.condition === 'poor' || note || itemDefects(item).length || item.clean === 'needs' || item.clean === 'dirty' || itemNotWorking(item)){
+        const details = [itemMarksText(item), item.clean === 'needs' || item.clean === 'dirty' ? itemCleanText(item.clean) : '', itemNotWorking(item) ? itemWorkingText(item) : '', obs ? sentence(obs) : '', note ? "Tenant's note: " + sentence(note) : ''].filter(Boolean).join(' ') || '—';
         rows.push([room.name, ref.refs.length ? ref.refs.join(', ') : String(ref.n), item.label, item.condition ? conditionLabel(item.condition) : 'Not recorded', details]);
       }
     });
@@ -1844,7 +2015,7 @@ async function buildPdfBlob(s, onProgress){
   const fullSize = [];   // { dataUrl, alias, title, ts, backPage, page }
   const thumbLinks = []; // { page, x, y, w, h, idx }
   function registerFullSize(shot, alias){
-    fullSize.push({ dataUrl: shot.dataUrl, alias, title: shot.fullTitle || shot.label || 'Photograph', ts: shot.ts, backPage: pageNow() });
+    fullSize.push({ dataUrl: shot.dataUrl, alias, title: shot.fullTitle || shot.label || 'Photograph', ts: shot.ts, backPage: pageNow(), area: shot.area || '', ref: shot.ref || '', what: shot.label || '' });
     return fullSize.length - 1;
   }
   // Draws the photo uncropped, centred in the box (so portrait photos and their stamp are never cut off).
@@ -1932,7 +2103,9 @@ async function buildPdfBlob(s, onProgress){
   doc.text('SCHEDULE OF CONDITION', M, 86);
 
   const bedrooms = parseInt(s.meta.bedrooms, 10) || s.rooms.filter(r => r.type === 'bedroom').length;
-  const description = [bedrooms ? bedrooms + ' Bedroom' : '', (s.meta.furnishing || '').trim(), 'Property'].filter(Boolean).join(' – ').replace(' – Property', ' Property');
+  const bathrooms = parseInt(s.meta.bathrooms, 10) || s.rooms.filter(r => r.type === 'bathroom').length;
+  const propType = ((s.property && s.property.propertyType) || '').trim();
+  const description = [[bedrooms ? bedrooms + ' Bedroom' : '', bathrooms ? bathrooms + ' Bathroom' : ''].filter(Boolean).join(', '), [(s.meta.furnishing || '').trim(), propType || 'Property'].filter(Boolean).join(' ')].filter(Boolean).join(' – ');
   const exteriorPhotos = (s.property && s.property.exterior && s.property.exterior.photos) || [];
   const photoTotal = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0) + exteriorPhotos.length;
 
@@ -1940,7 +2113,7 @@ async function buildPdfBlob(s, onProgress){
   let coverTextW = CW - 64;
   if (exteriorPhotos.length){
     const cw = 104, ch = 78, cx = PW - M - cw, cy = 44;
-    const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
+    const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', area: 'Outside', ref: 'X1', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
     const exAlias = 'photo-exterior-0';
     if (drawFitted(exShot.dataUrl, exAlias, cx, cy, cw, ch)){
       thumbLinks.push({ page: pageNow(), x: cx, y: cy, w: cw, h: ch, idx: registerFullSize(exShot, exAlias) });
@@ -1981,6 +2154,7 @@ async function buildPdfBlob(s, onProgress){
     'This report records the condition, cleanliness and contents of the property at the date and time of the inspection. It is intended as a fair and accurate record for both landlord and tenant, and it is the document the two parties compare against at the end of the tenancy.',
     'Every room in this report carries a minimum of eight photographs taken on the day of the inspection. Each photograph is date and time stamped at the moment it is captured, and the stamp is written into the image itself so it cannot be separated from the picture.',
     'The person compiling this report is not a qualified surveyor. Descriptions of woods, fabrics, plant life and colours are for identification only and should not be read as an expert assessment. An item is only described as new where it is still in its original packaging or an invoice has been provided.',
+    'Each item is described by its colour, material and main features, with any marks or damage seen, its cleanliness and, where it can be tested (doors, windows, taps, appliances, lights, detectors), whether it was working. Each room opens with a summary of its overall condition, cleanliness and the times it was photographed.',
     'Items are numbered within each room, and each item\u2019s photographs carry the same number: item 3 is shown in photograph 3, or 3a, 3b and so on where there are several. General photographs of a room are numbered G1, G2 and so on. Every entry in the schedule lists the photographs that show it.',
     'Photographs may not be exhaustive of every item and area of the property. Where an item is not photographed, the written description stands as the record of its condition.',
     'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
@@ -2036,6 +2210,43 @@ async function buildPdfBlob(s, onProgress){
   ].concat(scheduleRows(s));
   labelRows(schedule, 62, 9);
 
+  /* ------------------------------------------------- property overview */
+  newSection('Room by room overview – ' + stage.toLowerCase());
+  {
+    const cols = [['ROOM', 52], ['ITEMS', 16], ['NEW', 14], ['GOOD', 14], ['FAIR', 14], ['POOR', 14], ['N/A', 13], ['OVERALL', 26], ['CLEANLINESS', 40], ['MARKS', 17], ['PHOTOS', 17], ['PHOTOGRAPHED', CW - 237]];
+    const head = () => {
+      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F');
+      set('bold', 7.4, C.inkSoft);
+      let x = M; cols.forEach(([t, w]) => { doc.text(t, x + 2, y + 5.3); x += w; });
+      y += 8;
+    };
+    head();
+    const tot = { items:0, new:0, good:0, fair:0, poor:0, na:0, marks:0, photos:0 };
+    const row = (cells, bold) => {
+      const cl = cells.map((v, i) => lines(String(v), cols[i][1] - 3));
+      const h = Math.max(8, Math.max.apply(null, cl.map(c => c.length)) * 3.9 + 4.2);
+      if (y + h > BOTTOM){ newPage(); head(); }
+      let x = M;
+      cl.forEach((c, i) => {
+        set(bold || i === 0 ? 'bold' : 'normal', 8, (i === 5 && cells[5] > 0) || (i === 9 && cells[9] > 0) ? C.banner : (i === 0 ? C.ink : C.inkSoft));
+        doc.text(c, x + 2, y + 5.2); x += cols[i][1];
+      });
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + h, PW - M, y + h);
+      y += h;
+    };
+    s.rooms.forEach(room => {
+      const st = roomStats(room);
+      Object.keys(tot).forEach(k => { tot[k] += st[k]; });
+      row([room.name, st.items, st.new, st.good, st.fair, st.poor, st.na, st.overall, cleanlinessLabel(room.condition.cleanliness).split(' — ')[0], st.marks, st.photos, st.inspected]);
+    });
+    const exN = exteriorPhotos.length;
+    row(['All rooms', tot.items, tot.new, tot.good, tot.fair, tot.poor, tot.na, conditionLabel((derivedPropertyCondition(s.rooms) || {}).key).replace(' condition', ''), (dcl.cleaning || '—'), tot.marks, tot.photos + exN, s.meta.createdAt ? formatTimestamp(new Date(s.meta.createdAt)).split(', ').pop() + (s.finalizedAt ? ' – ' + timeHM(s.finalizedAt) : '') : '—'], true);
+    y += 3;
+    set('normal', 7.8, C.faint);
+    const nl = lines('MARKS is the number of items with marks or damage noted. PHOTOGRAPHED is the time of the first and last photograph in each room. The totals include ' + exN + ' photograph' + (exN === 1 ? '' : 's') + ' of the outside of the property.', CW);
+    need(nl.length * 3.8 + 2); doc.text(nl, M, y + 3); y += nl.length * 3.8 + 4;
+  }
+
   /* ------------------------------------------------- summary of items noted */
   newSection('Summary of items noted – ' + stage.toLowerCase());
   const issues = issuesNoted(s);
@@ -2090,7 +2301,7 @@ async function buildPdfBlob(s, onProgress){
   });
   y += 5;
   const keyShots = [];
-  keys.forEach(k => (k.photos || []).forEach(p => keyShots.push({ label:'Keys – ' + k.desc, fullTitle:'KEYS  ·  ' + String(k.desc || '').toUpperCase(), ts:p.ts, dataUrl:p.dataUrl })));
+  keys.forEach(k => (k.photos || []).forEach(p => keyShots.push({ area:'Keys', ref:'K' + (keyShots.length + 1), label:'Keys – ' + k.desc, fullTitle:'KEYS  ·  ' + String(k.desc || '').toUpperCase(), ts:p.ts, dataUrl:p.dataUrl })));
   await photoGrid(keyShots, 4);
 
   /* ------------------------------------------------------- utility meters */
@@ -2127,7 +2338,7 @@ async function buildPdfBlob(s, onProgress){
   meterKeys.forEach(key => {
     const m = s.property.meters[key];
     if (m.na) return;
-    (m.photos || []).forEach(p => meterShots.push({ label: METER_LABELS[key], fullTitle:'UTILITY METERS  ·  ' + METER_LABELS[key].toUpperCase() + (m.reading ? '  ·  READING ' + m.reading : ''), ts:p.ts, dataUrl:p.dataUrl }));
+    (m.photos || []).forEach(p => meterShots.push({ area:'Meters', ref:'M' + (meterShots.length + 1), label: METER_LABELS[key], fullTitle:'UTILITY METERS  ·  ' + METER_LABELS[key].toUpperCase() + (m.reading ? '  ·  READING ' + m.reading : ''), ts:p.ts, dataUrl:p.dataUrl }));
   });
   await photoGrid(meterShots, 4);
 
@@ -2161,6 +2372,22 @@ async function buildPdfBlob(s, onProgress){
     y = dTop + 30;
   }
 
+  /* ------------------------------------------------- property details & documents */
+  newSection('Property details & documents');
+  labelRows([
+    ['Type of property', (pr.propertyType || '').trim() || 'Not recorded'],
+    ['Bedrooms / bathrooms', (bedrooms || '—') + ' / ' + (bathrooms || '—')],
+    ['Furnishing', (s.meta.furnishing || '').trim() || 'Not recorded'],
+    ['Rooms inspected', s.rooms.map(r => r.name).join(', ')],
+    ['Floors', pr.floors || '—'],
+    ['Heating source', pr.heatingSource || '—'],
+    ['Inspection type', s.meta.inspectionType || '—'],
+    ['Compiled by', s.meta.inspectorName || '—']
+  ], 74, 9);
+  need(20);
+  set('bold', 9.5, C.banner); doc.text('DOCUMENTS GIVEN TO THE TENANT', M, y + 3); y += 7;
+  labelRows(DOC_LIST.map(([k, l]) => [l, ((pr.documents || {})[k]) || 'Not recorded']), 96, 9);
+
   /* ---------------------------------------------------------------- rooms */
   let done = 0;
   const progressTotal = Math.max(1, photoTotal);
@@ -2187,6 +2414,27 @@ async function buildPdfBlob(s, onProgress){
     newPage();
     toc.push([room.name, pageNow()]);
     banner(room.name);
+    {
+      const st = roomStats(room);
+      const cells = [
+        ['OVERALL CONDITION', st.overall],
+        ['CLEANLINESS', cleanlinessLabel(room.condition.cleanliness).split(' — ')[0]],
+        ['ITEMS', st.items + ' recorded' + (st.na ? ', ' + st.na + ' n/a' : '')],
+        ['MARKS / DAMAGE', st.marks ? st.marks + ' item' + (st.marks === 1 ? '' : 's') : 'None noted'],
+        ['NEEDS ATTENTION', [st.needsClean ? st.needsClean + ' to clean' : '', st.notWorking ? st.notWorking + ' not working' : ''].filter(Boolean).join(', ') || 'Nothing'],
+        ['PHOTOGRAPHS', st.photos + '  ·  ' + st.inspected]
+      ];
+      const cw6 = CW / cells.length;
+      doc.setFillColor(248, 249, 251); doc.rect(M, y, CW, 13, 'F');
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.rect(M, y, CW, 13);
+      cells.forEach(([k, v], i) => {
+        const x = M + i * cw6;
+        if (i) doc.line(x, y, x, y + 13);
+        set('bold', 6.6, C.faint); doc.text(k, x + 2.5, y + 4.6);
+        set('bold', 8.4, k === 'MARKS / DAMAGE' && st.marks ? C.banner : C.ink); doc.text(lines(v, cw6 - 4)[0], x + 2.5, y + 10);
+      });
+      y += 17;
+    }
     tableHead(room.name);
 
     const roomRefs = photoRefsForRoom(room);
@@ -2203,12 +2451,16 @@ async function buildPdfBlob(s, onProgress){
       n++;
       set('bold', 8.2, C.ink);
       const dLines = lines(item.label, wDesc - 6);
+      set('normal', 7.8, C.inkSoft);
+      const descText = item.notApplicable ? '' : itemDescriptionText(item);
+      const ddLines = descText ? lines(descText, wDesc - 6) : [];
       set('normal', 8, C.inkSoft);
-      const cLines = lines(reportConditionText(item, roomRefs.byItem.get(item.id).refs), wIn - 6);
-      const h = Math.max(9, Math.max(dLines.length, cLines.length) * 4.1 + 4.2);
+      const cLines = lines(reportConditionText(item, roomRefs.byItem.get(item.id).refs), (isOut ? wOut : wIn) - 6);
+      const h = Math.max(9, Math.max(dLines.length + ddLines.length, cLines.length) * 4.1 + 4.2);
       if (y + h > BOTTOM){ newPage(); banner(room.name); tableHead(room.name); lastCat = ''; }
       set('normal', 8, C.inkSoft); doc.text(String(n) + '.', xRef + 2, y + 5.2);
       set('bold', 8.2, C.ink); doc.text(dLines, xDesc + 2, y + 5.2);
+      if (ddLines.length){ set('normal', 7.8, C.inkSoft); doc.text(ddLines, xDesc + 2, y + 5.2 + dLines.length * 4.1); }
       set('normal', 8, item.notApplicable ? C.faint : C.inkSoft);
       if (isOut) doc.text(cLines, xOut + 2, y + 5.2);
       else doc.text(cLines, xIn + 2, y + 5.2);
@@ -2239,8 +2491,8 @@ async function buildPdfBlob(s, onProgress){
 
     /* photo pages, eight to a page */
     const shots = [];
-    room.items.forEach(i => (i.photos || []).forEach((p, k) => { const ref = roomRefs.byItem.get(i.id).refs[k]; shots.push({ label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  ' + i.label).toUpperCase() }); }));
-    (room.extraPhotos || []).forEach((p, k) => { const ref = roomRefs.extras[k]; shots.push({ label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  General view').toUpperCase() }); });
+    room.items.forEach(i => (i.photos || []).forEach((p, k) => { const ref = roomRefs.byItem.get(i.id).refs[k]; shots.push({ area: room.name, label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  ' + i.label).toUpperCase() }); }));
+    (room.extraPhotos || []).forEach((p, k) => { const ref = roomRefs.extras[k]; shots.push({ area: room.name, label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  General view').toUpperCase() }); });
 
     for (let i = 0; i < shots.length; i += 8){
       newPage();
@@ -2326,8 +2578,40 @@ async function buildPdfBlob(s, onProgress){
   if (fullSize.length){
     newSection('Photographs – full size');
     set('normal', 9, C.ink);
-    const fl = lines('Every photograph in this report follows at full size, one to a page, uncropped and exactly as taken, with the date and time stamp written into the image. Tap or click any photograph earlier in the report to jump to it here, and use Back to return.', CW);
+    const fl = lines('Every photograph in this report follows at full size, one to a page, uncropped and exactly as taken, with the date and time stamp written into the image. Tap or click any photograph earlier in the report to jump to it here, and use Back to return. The index below lists every photograph with the time it was taken and its page.', CW);
     doc.text(fl, M, y + 3);
+    y += fl.length * 4.2 + 5;
+    // Index of photographs, two columns; page numbers and links are filled in once the pages exist.
+    const idxRows = [];
+    {
+      const colW = (CW - 8) / 2, rowH = 5.4;
+      const ic = [['REF', 13], ['AREA / ITEM', colW - 13 - 30 - 13], ['TAKEN', 30], ['PAGE', 13]];
+      const headAt = (x) => {
+        doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(x, y, colW, 6.5, 'F');
+        set('bold', 7, C.inkSoft); let xx = x; ic.forEach(([t, w]) => { doc.text(t, xx + 1.5, y + 4.4); xx += w; });
+      };
+      let i = 0;
+      while (i < fullSize.length){
+        if (y + 6.5 + rowH > BOTTOM) newPage();
+        const perCol = Math.max(1, Math.floor((BOTTOM - y - 6.5) / rowH));
+        const top = y;
+        for (let c = 0; c < 2 && i < fullSize.length; c++){
+          const x = M + c * (colW + 8);
+          y = top; headAt(x); y += 6.5;
+          for (let r = 0; r < perCol && i < fullSize.length; r++, i++){
+            const f = fullSize[i];
+            set('bold', 7, C.ink); doc.text(String(f.ref || i + 1), x + 1.5, y + 3.9);
+            set('normal', 7, C.inkSoft);
+            doc.text(lines((f.area ? f.area + ' – ' : '') + (f.what || ''), ic[1][1] - 3)[0], x + 1.5 + ic[0][1], y + 3.9);
+            doc.text(photoStamp(f.ts) || '—', x + 1.5 + ic[0][1] + ic[1][1], y + 3.9);
+            idxRows.push({ page: pageNow(), x: x + ic[0][1] + ic[1][1] + ic[2][1], y, w: ic[3][1], h: rowH, idx: i });
+            doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(x, y + rowH, x + colW, y + rowH);
+            y += rowH;
+          }
+        }
+        y = BOTTOM + 1;
+      }
+    }
     for (const f of fullSize){
       newPage();
       f.page = pageNow();
@@ -2341,6 +2625,11 @@ async function buildPdfBlob(s, onProgress){
       drawFitted(f.dataUrl, f.alias, M, top, CW, BOTTOM - top);
     }
     thumbLinks.forEach(t => { doc.setPage(t.page); doc.link(t.x, t.y, t.w, t.h, { pageNumber: fullSize[t.idx].page }); });
+    idxRows.forEach(r => {
+      doc.setPage(r.page);
+      set('bold', 7, C.banner);
+      doc.textWithLink(String(fullSize[r.idx].page - 1), r.x + 1.5, r.y + 3.9, { pageNumber: fullSize[r.idx].page });
+    });
   }
 
   /* ------------------------------------------------------- contents page */
@@ -2740,6 +3029,7 @@ function itemCardHTML(room, item){
         ${item.photos.length ? `<div class="cond-row">
           <input class="input cond-note" type="text" placeholder="Your note, e.g. 'stiff handle' or 'I think this is worse than shown'" value="${escapeHtml(item.conditionNote || '')}" oninput="updateItemNote('${room.id}','${item.id}', this.value)">
         </div>` : ''}
+        ${item.photos.length || aiEnabled === false ? itemDetailsHTML(room, item) : ''}
       `}
       ${item.custom ? `<button type="button" class="remove-item-btn" onclick="removeChecklistItem('${room.id}','${item.id}')">Remove this item</button>` : ''}
     </div>
@@ -2948,6 +3238,26 @@ function renderDetails(){
             <div class="cond-help">${(m.photos || []).length ? 'Reading photographed.' : 'Photograph the meter face showing the reading.'}</div>`}
         </div>`;
       }).join('')}
+    </div>
+
+    <div class="panel">
+      <span class="sec-label">Property details &amp; documents</span>
+      <div class="field">
+        <label>Type of property</label>
+        <select class="select" onchange="setPropAndRender('propertyType', this.value)">
+          <option value="">Select…</option>
+          ${PROPERTY_TYPES.map(o => `<option value="${escapeHtml(o)}" ${pr.propertyType===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="cond-help" style="margin-bottom:6px;">Which of these were you given? They are listed in the report.</div>
+      ${DOC_LIST.map(([k, l]) => `
+        <div class="decl-row">
+          <span>${escapeHtml(l)}</span>
+          <select class="select cond-select" onchange="setPropAndRender('documents.${k}', this.value)">
+            <option value="">Select…</option>
+            ${DOC_OPTIONS.map(o => `<option value="${o}" ${(pr.documents || {})[k]===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>`).join('')}
     </div>
 
     <div class="panel">
