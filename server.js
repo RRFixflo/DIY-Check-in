@@ -336,18 +336,26 @@ app.get('/api/diag/address', async (req, res) => {
   const pc = tidyPostcode(req.query.pc || 'SE1 6AD') || 'SE1 6AD';
   const out = { key_set: !!GETADDRESS_API_KEY, key_length: GETADDRESS_API_KEY.length, postcode: pc, attempts: [] };
   if (!GETADDRESS_API_KEY) return res.json(out);
-  const tries = gaPostcodeUrls(pc).concat(`${GA}/find/${encodeURIComponent(pc)}?${gaKey()}`);
-  for (const url of tries) {
-    const name = url.split('?')[0].replace(GA, '') + (url.includes('template=') ? ' (with template)' : '');
+  // Each variant is tried in turn (the partial-address search costs no look-ups), so the first working form shows up.
+  const tries = gaPostcodeUrls(pc).map(url => ({ url, name: '/autocomplete/{postcode}' + (url.includes('template=') ? ' all=true + template' : ' all=true') }))
+    .concat([
+      { url: `${GA}/autocomplete/${encodeURIComponent(pc)}?${gaKey()}`, name: '/autocomplete/{postcode} (no options)' },
+      { url: `${GA}/autocomplete/${encodeURIComponent('10 Downing Street')}?${gaKey()}`, name: '/autocomplete/10 Downing Street (free search)' },
+      { url: `${GA}/autocomplete/${encodeURIComponent(pc)}?${gaKey()}`, name: 'POST /autocomplete/{postcode} {all:true}', method: 'POST', body: JSON.stringify({ all: true }) },
+      { url: `${GA}/find/${encodeURIComponent(pc)}?${gaKey()}`, name: '/find/{postcode}' }
+    ]);
+  out.key_starts = GETADDRESS_API_KEY.slice(0, 2);
+  out.server_region = process.env.RAILWAY_REPLICA_REGION || '';
+  for (const { url, name, method, body: reqBody } of tries) {
     try {
-      const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(6000) });
+      const r = await fetch(url, { method: method || 'GET', headers: { ...UA, ...(reqBody ? { 'Content-Type': 'application/json' } : {}) }, body: reqBody, signal: AbortSignal.timeout(6000) });
       const text = await r.text();
       let body; try { body = JSON.parse(text); } catch (e) { body = null; }
       const list = body && (body.suggestions || body.addresses);
       out.attempts.push({ call: name, http_status: r.status, results: Array.isArray(list) ? list.length : null,
         sample: Array.isArray(list) ? list.slice(0, 3).map(x => x.address || x) : undefined,
         message: r.ok ? undefined : (body && (body.Message || body.message)) || text.slice(0, 200) });
-      if (r.ok && Array.isArray(list) && list.length) break;
+
     } catch (err) {
       out.attempts.push({ call: name, error: err.name === 'TimeoutError' ? 'timeout' : err.message });
     }
