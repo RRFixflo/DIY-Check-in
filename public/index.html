@@ -367,6 +367,45 @@
   .lightbox img { max-width: 100%; max-height: 82vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
   .lightbox-close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 16px); right: 16px; background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; }
 
+  /* ---------- example pictures ---------- */
+  .ex { --ex-bg:#EEF2FA; --ex-line:#4B5B77; --ex-fill:#FFFFFF; --ex-acc:#3257C8; --ex-soft:#DCE4F7; --ex-mark:#E0663A; display:block; width:100%; height:auto; }
+  .ex .bg { fill: var(--ex-bg); }
+  .ex .l { fill: none; stroke: var(--ex-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ex .f { fill: var(--ex-fill); stroke: var(--ex-line); stroke-width: 2; stroke-linejoin: round; }
+  .ex .s { fill: var(--ex-soft); }
+  .ex .a { fill: var(--ex-acc); }
+  .ex .al { fill: none; stroke: var(--ex-acc); stroke-width: 2.5; stroke-linecap: round; }
+  .ex .m { fill: var(--ex-mark); }
+  .ex .t { fill: var(--ex-line); font: 600 9.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; } }
+  :root[data-theme="dark"] .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; }
+  .ex-thumb { flex: 0 0 auto; width: 132px; padding: 0; border: none; background: none; cursor: zoom-in; border-radius: 10px; }
+  .ex-thumb:has(.ex-single) { width: 66px; }
+  .ex-thumb:focus-visible { box-shadow: var(--ring); }
+  .photo-tip .tip-kicker { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); margin-bottom: 2px; }
+  .photo-tip { align-items: center; gap: 12px; }
+  .exterior-tip { background: none; padding: 0; margin-top: 10px; }
+  .exterior-tip .exterior-help { margin-top: 0; }
+  .photo-guide { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 4px 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .photo-guide summary { cursor: pointer; font-weight: 700; font-size: 15px; padding: 12px 0; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+  .photo-guide summary::-webkit-details-marker { display: none; }
+  .photo-guide summary::after { content: 'Show'; font-size: 12.5px; font-weight: 600; color: var(--accent); }
+  .photo-guide[open] summary::after { content: 'Hide'; }
+  .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; padding-bottom: 6px; }
+  .guide-grid figure { margin: 0; }
+  .guide-grid .ex { max-width: 300px; }
+  .guide-grid figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.45; }
+  .guide-grid figcaption strong { color: var(--ink); }
+  .guide-foot { font-size: 12.5px; color: var(--ink-faint); margin: 8px 0 12px; }
+  .example-box { position: fixed; inset: 0; z-index: 1100; background: rgba(5,8,15,.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .example-card { background: var(--panel); border-radius: var(--radius-lg); padding: 16px 18px 18px; width: 100%; max-width: 560px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .example-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; font-size: 15px; }
+  #exampleArt .ex-single { max-width: 240px; margin: 0 auto; }
+  #exampleTip { font-size: 14px; color: var(--ink-soft); margin-top: 12px; line-height: 1.5; }
+  .cam-tip { display: flex; align-items: center; gap: 10px; }
+  .cam-example { flex: 0 0 auto; width: 132px; background: #fff; border-radius: 10px; padding: 3px; }
+  .cam-example:has(.ex-single) { width: 70px; }
+  .cam-example .ex { --ex-bg:#EEF2FA; --ex-line:#4B5B77; --ex-fill:#FFFFFF; --ex-acc:#3257C8; --ex-soft:#DCE4F7; --ex-mark:#E0663A; }
   /* ---------- in-app camera ---------- */
   .camera { position: fixed; inset: 0; z-index: 1000; background: #000; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
   .camera video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
@@ -430,6 +469,13 @@
     <button type="button" class="cam-gallery" onclick="cameraGallery()">Choose from gallery</button>
   </div>
   <input type="file" id="cameraGalleryInput" accept="image/*" multiple style="display:none" onchange="handlePhotoInputChange(event)">
+</div>
+<div id="exampleBox" class="example-box hidden" onclick="if (event.target === this) closeExample(event)" role="dialog" aria-modal="true" aria-labelledby="exampleTitle">
+  <div class="example-card">
+    <div class="example-head"><strong id="exampleTitle"></strong><button type="button" class="btn-ghost" onclick="closeExample(event)" aria-label="Close">✕</button></div>
+    <div id="exampleArt"></div>
+    <p id="exampleTip"></p>
+  </div>
 </div>
 <div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
   <img id="lightboxImg" src="" alt="Enlarged photo">
@@ -657,6 +703,180 @@ const TIP_RULES = [
 function photoTipFor(label){
   const hit = TIP_RULES.find(([re]) => re.test(label));
   return hit ? hit[1] : 'One wide shot showing the whole item, then a close-up of any wear, marks or damage.';
+}
+/* ============================= example pictures ============================= */
+/* Simple drawings of how to frame each photo: the whole item, then a close-up of any wear.
+   Each scene is drawn in a 120 x 90 frame. Classes: l line, f filled shape, s soft fill, a accent,
+   al accent line, m wear mark, t text. Colours come from CSS variables so they work in dark mode. */
+const EX_SCENES = {
+  door: {
+    wide: `<rect class="s" x="0" y="80" width="120" height="10"/><rect class="f" x="44" y="10" width="36" height="70"/><path class="f" d="M44 10 L30 16 L30 76 L44 80 Z"/><circle class="a" cx="34" cy="47" r="2.2"/><path class="l" d="M0 80 H120"/>`,
+    close: `<rect class="f" x="24" y="8" width="56" height="82"/><rect class="f" x="46" y="22" width="14" height="46" rx="4"/><path class="al" d="M53 36 H92" style="stroke-width:5"/><circle class="a" cx="53" cy="36" r="4"/><rect class="a" x="51" y="52" width="4" height="9" rx="2"/><ellipse class="m" cx="72" cy="72" rx="7" ry="3"/>`
+  },
+  window: {
+    wide: `<rect class="f" x="24" y="10" width="72" height="56"/><path class="l" d="M60 10 V66 M24 38 H96"/><path class="s" d="M28 14 h28 v20 h-28z M64 14 h28 v20 h-28z M28 42 h28 v20 h-28z M64 42 h28 v20 h-28z"/><rect class="f" x="18" y="66" width="84" height="7"/>`,
+    close: `<rect class="f" x="10" y="6" width="100" height="62"/><path class="s" d="M18 14 h84 v46 h-84z"/><path class="l" d="M60 14 V60"/><rect class="a" x="54" y="30" width="12" height="16" rx="3"/><path class="al" d="M60 38 H78"/><rect class="f" x="0" y="68" width="120" height="12"/><ellipse class="m" cx="30" cy="74" rx="8" ry="2.5"/>`
+  },
+  wall: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="78"/><rect class="s" x="0" y="78" width="120" height="12"/><path class="l" d="M0 78 H120"/><circle class="a" cx="42" cy="26" r="2"/><ellipse class="m" cx="84" cy="54" rx="6" ry="3"/><path class="l" d="M8 8 L20 8 M8 8 L8 20 M112 8 L100 8 M112 8 L112 20" style="opacity:.5"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><ellipse class="m" cx="60" cy="46" rx="22" ry="8" style="opacity:.85"/><path class="l" d="M44 40 L52 44 M60 38 L64 50 M70 42 L78 48" style="opacity:.6"/>`
+  },
+  ceiling: {
+    wide: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="f" d="M24 18 H96 V72 H24 Z"/><path class="l" d="M0 0 L24 18 M120 0 L96 18 M0 90 L24 72 M120 90 L96 72"/><circle class="a" cx="60" cy="45" r="5"/><path class="m" d="M78 22 q4 8 -2 14 q-4 6 2 12" style="fill:none;stroke:var(--ex-mark);stroke-width:2"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><path class="l" d="M0 0 L40 30 L120 30" style="opacity:.5"/><path d="M50 36 q10 10 2 20 q-8 10 4 24" style="fill:none;stroke:var(--ex-mark);stroke-width:3"/><ellipse class="m" cx="86" cy="52" rx="12" ry="7" style="opacity:.5"/>`
+  },
+  floor: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="40"/><path class="s" d="M0 40 H120 L120 90 L0 90 Z"/><path class="l" d="M0 40 H120 M30 40 L10 90 M60 40 L60 90 M90 40 L110 90"/><ellipse class="m" cx="72" cy="66" rx="9" ry="4"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M0 22 H120 M0 46 H120 M0 70 H120 M40 0 V22 M80 22 V46 M30 46 V70 M90 70 V90"/><ellipse class="m" cx="58" cy="56" rx="18" ry="8"/>`
+  },
+  radiator: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="80"/><rect class="f" x="22" y="30" width="76" height="36" rx="3"/><path class="l" d="M32 34 V62 M42 34 V62 M52 34 V62 M62 34 V62 M72 34 V62 M82 34 V62 M92 34 V62"/><rect class="a" x="16" y="58" width="6" height="12" rx="2"/><path class="l" d="M0 80 H120"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="54" y="0" width="60" height="56" rx="3"/><path class="l" d="M66 4 V52 M80 4 V52 M94 4 V52"/><rect class="a" x="30" y="44" width="16" height="26" rx="4"/><rect class="f" x="26" y="36" width="24" height="10" rx="4"/><path class="l" d="M38 70 V90"/><ellipse class="m" cx="46" cy="66" rx="5" ry="3"/>`
+  },
+  socket: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="18" y="34" width="26" height="26" rx="3"/><rect class="a" x="27" y="40" width="8" height="14" rx="2"/><rect class="f" x="62" y="34" width="44" height="26" rx="3"/><path class="l" d="M72 42 v6 M82 42 v6 M77 52 h0"/><path class="l" d="M88 42 v6 M98 42 v6 M93 52 h0"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><rect class="f" x="18" y="10" width="84" height="70" rx="6"/><path class="l" d="M44 30 v14 M76 30 v14 M60 54 v10" style="stroke-width:5"/><ellipse class="m" cx="86" cy="24" rx="9" ry="5" style="opacity:.8"/>`
+  },
+  smoke: {
+    wide: `<rect class="s" x="0" y="0" width="120" height="30"/><rect class="f" x="0" y="30" width="120" height="60"/><path class="l" d="M0 30 H120"/><ellipse class="f" cx="60" cy="34" rx="16" ry="5"/><circle class="m" cx="66" cy="34" r="1.8"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><circle class="f" cx="60" cy="45" r="34"/><circle class="l" cx="60" cy="45" r="24"/><path class="l" d="M48 45 H72 M60 33 V57" style="opacity:.4"/><circle class="m" cx="78" cy="30" r="4.5"/><path d="M78 30 m-9 0 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0" style="fill:none;stroke:var(--ex-mark);stroke-width:1.5;opacity:.5"/>`
+  },
+  worktop: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="44"/><path class="s" d="M0 44 H120 L120 58 L0 58 Z"/><path class="l" d="M0 44 H120 M0 58 H120"/><rect class="f" x="0" y="58" width="120" height="32"/><path class="l" d="M40 58 V90 M80 58 V90"/><path d="M70 48 L90 52" style="stroke:var(--ex-mark);stroke-width:2"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path d="M20 30 L96 52 M28 42 L80 58 M60 22 L100 34" style="stroke:var(--ex-mark);stroke-width:2.5;stroke-linecap:round"/><ellipse class="m" cx="40" cy="66" rx="10" ry="5" style="opacity:.6"/>`
+  },
+  cupboard: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="30" y="10" width="60" height="72"/><path class="l" d="M60 10 V82 M30 46 H60"/><path class="f" d="M60 10 L80 14 L80 78 L60 82 Z" style="fill:var(--ex-soft)"/><path class="f" d="M90 10 L104 16 L104 76 L90 82 Z"/><circle class="a" cx="56" cy="46" r="2"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="0" y="0" width="56" height="90"/><rect class="f" x="56" y="0" width="64" height="90"/><rect class="a" x="48" y="24" width="16" height="30" rx="3"/><circle class="f" cx="56" cy="32" r="2.5"/><circle class="f" cx="56" cy="46" r="2.5"/><ellipse class="m" cx="84" cy="70" rx="8" ry="4"/>`
+  },
+  cooker: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="32" y="20" width="56" height="64"/><path class="s" d="M32 20 L40 12 H80 L88 20 Z"/><ellipse class="l" cx="50" cy="16" rx="6" ry="2"/><ellipse class="l" cx="70" cy="16" rx="6" ry="2"/><rect class="s" x="40" y="36" width="40" height="30" rx="3"/><path class="al" d="M42 30 H78"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><rect class="f" x="10" y="6" width="100" height="78" rx="4"/><circle class="l" cx="38" cy="28" r="12"/><circle class="l" cx="82" cy="28" r="9"/><circle class="l" cx="38" cy="62" r="9"/><circle class="l" cx="82" cy="62" r="12"/><ellipse class="m" cx="58" cy="46" rx="8" ry="4"/>`
+  },
+  extractor: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="52" y="0" width="16" height="24"/><path class="f" d="M30 24 H90 L100 44 H20 Z"/><rect class="s" x="32" y="44" width="56" height="6"/><rect class="f" x="24" y="72" width="72" height="18"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><rect class="f" x="10" y="12" width="100" height="66" rx="4"/><path class="l" d="M18 22 H102 M18 32 H102 M18 42 H102 M18 52 H102 M18 62 H102" style="opacity:.6"/><ellipse class="m" cx="72" cy="44" rx="16" ry="9" style="opacity:.55"/>`
+  },
+  fridge: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="40" y="6" width="40" height="80" rx="4"/><path class="l" d="M40 36 H80"/><path class="al" d="M74 14 V28 M74 44 V60"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="22" y="6" width="54" height="80" rx="3"/><path class="l" d="M22 28 H76 M22 50 H76 M22 70 H76"/><path class="f" d="M76 6 L100 14 L100 82 L76 86 Z"/><path class="l" d="M80 30 H96 M80 54 H96"/><ellipse class="m" cx="44" cy="46" rx="7" ry="3"/>`
+  },
+  sink: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="50"/><rect class="s" x="0" y="50" width="120" height="10"/><path class="l" d="M0 50 H120"/><path class="f" d="M34 50 H86 L80 66 H40 Z"/><path class="l" d="M60 50 V34 H70" style="stroke-width:3"/><rect class="f" x="0" y="60" width="120" height="30"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M50 70 V30 Q50 18 64 18 H86" style="stroke-width:6"/><rect class="a" x="42" y="54" width="16" height="8" rx="3"/><path class="l" d="M0 76 H120"/><path d="M0 79 H120" style="stroke:var(--ex-acc);stroke-width:3;opacity:.5"/><ellipse class="m" cx="90" cy="78" rx="10" ry="3"/>`
+  },
+  bath: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="0" y="0" width="120" height="44"/><path class="f" d="M10 50 H110 L104 76 H16 Z"/><path class="l" d="M86 50 V40 H96" style="stroke-width:3"/><path class="l" d="M18 76 V84 M102 76 V84"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M0 56 H120"/><path d="M0 60 H120" style="stroke:var(--ex-acc);stroke-width:3;opacity:.5"/><rect class="f" x="0" y="62" width="120" height="28"/><rect class="f" x="36" y="26" width="12" height="30" rx="3"/><rect class="f" x="72" y="26" width="12" height="30" rx="3"/><ellipse class="m" cx="60" cy="60" rx="10" ry="3"/>`
+  },
+  toilet: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="42" y="14" width="36" height="24" rx="3"/><path class="f" d="M36 44 H84 Q84 64 64 66 L66 82 H54 L56 66 Q36 64 36 44 Z"/><path class="l" d="M0 82 H120"/>`,
+    close: `<rect class="s" x="0" y="64" width="120" height="26"/><rect class="f" x="0" y="0" width="120" height="64"/><path class="f" d="M36 0 L42 64 H78 L84 0 Z"/><path class="l" d="M0 64 H120"/><ellipse class="m" cx="86" cy="68" rx="10" ry="3.5"/>`
+  },
+  tiles: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><path class="l" d="M0 18 H120 M0 36 H120 M0 54 H120 M0 72 H120 M20 0 V90 M40 0 V90 M60 0 V90 M80 0 V90 M100 0 V90" style="opacity:.55"/><path d="M60 36 l6 8 -4 6 6 4" style="fill:none;stroke:var(--ex-mark);stroke-width:2"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><path class="l" d="M0 44 H120 M58 0 V90" style="stroke-width:4;opacity:.5"/><circle class="m" cx="52" cy="40" r="2"/><circle class="m" cx="64" cy="48" r="2.5"/><circle class="m" cx="70" cy="42" r="1.8"/><circle class="m" cx="56" cy="52" r="1.6"/>`
+  },
+  mirror: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="36" y="10" width="48" height="62" rx="3"/><path class="l" d="M36 10 h48 v62 h-48z"/><path d="M44 22 L56 14 M44 36 L70 18" style="stroke:#fff;stroke-width:2;opacity:.8"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="20" y="10" width="100" height="80"/><path class="l" d="M20 10 H120 M20 10 V90"/><path class="m" d="M20 10 l10 0 -4 6 -6 -2 z"/><ellipse class="m" cx="60" cy="50" rx="12" ry="5" style="opacity:.4"/>`
+  },
+  bed: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="18" y="22" width="84" height="18" rx="4"/><rect class="s" x="18" y="40" width="84" height="26"/><path class="l" d="M18 40 H102 V66 H18 Z"/><rect class="f" x="26" y="42" width="20" height="8" rx="3"/><path class="l" d="M22 66 V76 M98 66 V76"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M0 30 H120 M0 60 H120" style="opacity:.3"/><circle class="l" cx="30" cy="20" r="1.5"/><circle class="l" cx="70" cy="20" r="1.5"/><circle class="l" cx="50" cy="45" r="1.5"/><circle class="l" cx="90" cy="45" r="1.5"/><ellipse class="m" cx="64" cy="66" rx="18" ry="9" style="opacity:.7"/>`
+  },
+  sofa: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="24" y="30" width="72" height="22" rx="6"/><rect class="s" x="24" y="50" width="72" height="16" rx="4"/><rect class="f" x="16" y="40" width="12" height="30" rx="5"/><rect class="f" x="92" y="40" width="12" height="30" rx="5"/><path class="l" d="M60 50 V66"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="8" y="18" width="104" height="60" rx="12"/><path class="l" d="M8 48 H112" style="opacity:.3"/><ellipse class="m" cx="70" cy="58" rx="14" ry="6" style="opacity:.8"/>`
+  },
+  table: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><path class="f" d="M22 40 H98 L108 52 H12 Z"/><path class="l" d="M18 52 V80 M102 52 V80 M30 52 V72 M90 52 V72"/><path d="M50 45 L68 47" style="stroke:var(--ex-mark);stroke-width:2"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M0 20 Q60 26 120 20 M0 48 Q60 54 120 48 M0 74 Q60 80 120 74" style="opacity:.3"/><path d="M26 40 L94 56 M40 30 L70 36" style="stroke:var(--ex-mark);stroke-width:2.5;stroke-linecap:round"/><circle class="m" cx="86" cy="30" r="5" style="opacity:.6"/>`
+  },
+  blind: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="s" x="30" y="12" width="60" height="56"/><path class="l" d="M30 12 h60 v56 h-60z"/><rect class="f" x="30" y="12" width="60" height="30"/><path class="l" d="M30 18 H90 M30 24 H90 M30 30 H90 M30 36 H90" style="opacity:.5"/><path class="al" d="M92 16 V60"/>`,
+    close: `<rect class="f" x="0" y="0" width="120" height="90"/><path class="al" d="M48 0 V60 M56 0 V60"/><path class="l" d="M40 70 H64 M44 62 V78 M60 62 V78" style="stroke-width:4"/><circle class="a" cx="52" cy="60" r="4"/>`
+  },
+  garden: {
+    wide: `<rect class="s" x="0" y="0" width="120" height="40"/><path class="l" d="M0 40 H120"/><path class="l" d="M4 40 V22 M16 40 V22 M28 40 V22 M40 40 V22 M52 40 V22 M64 40 V22 M76 40 V22 M88 40 V22 M100 40 V22 M112 40 V22 M0 28 H120"/><path class="a" d="M0 40 H120 V90 H0 Z" style="opacity:.25"/><rect class="f" x="80" y="56" width="26" height="16" rx="2"/><path class="l" d="M84 56 L93 48 L102 56"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="l" d="M10 0 V90 M34 0 V90 M58 0 V90 M82 0 V90 M106 0 V90 M0 22 H120 M0 66 H120" style="stroke-width:3"/><rect class="a" x="62" y="38" width="22" height="12" rx="3"/><path class="m" d="M30 70 l8 6 -6 8 -6 -4z"/>`
+  },
+  meter: {
+    single: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="14" y="10" width="92" height="70" rx="6"/><rect class="s" x="24" y="24" width="72" height="22" rx="3"/><text class="t" x="60" y="40" text-anchor="middle" style="font-size:14px;letter-spacing:2px">37033</text><circle class="a" cx="60" cy="62" r="5"/>`
+  },
+  keys: {
+    single: `<rect class="s" x="0" y="0" width="120" height="90"/><g class="l" style="stroke-width:2.5"><circle cx="24" cy="30" r="8"/><path d="M32 30 H62 M50 30 v7 M56 30 v5"/><circle cx="24" cy="60" r="8"/><path d="M32 60 H62 M50 60 v7 M56 60 v5"/></g><rect class="a" x="76" y="22" width="26" height="16" rx="8"/><rect class="f" x="78" y="50" width="22" height="28" rx="4"/><circle class="a" cx="89" cy="60" r="4"/>`
+  },
+  exterior: {
+    single: `<rect class="s" x="0" y="0" width="120" height="90"/><path class="f" d="M20 40 L60 12 L100 40 Z"/><rect class="f" x="26" y="40" width="68" height="44"/><rect class="a" x="52" y="56" width="16" height="28" rx="2"/><rect class="s" x="32" y="48" width="14" height="12"/><rect class="s" x="74" y="48" width="14" height="12"/><rect class="f" x="54" y="46" width="12" height="7" rx="1"/><text class="t" x="60" y="51.5" text-anchor="middle" style="font-size:6px">12</text><path class="l" d="M0 84 H120"/>`
+  },
+  generic: {
+    wide: `<rect class="f" x="0" y="0" width="120" height="90"/><rect class="f" x="34" y="18" width="52" height="56" rx="4"/><path class="l" d="M34 36 H86" style="opacity:.4"/><ellipse class="m" cx="72" cy="58" rx="5" ry="3"/>`,
+    close: `<rect class="s" x="0" y="0" width="120" height="90"/><ellipse class="m" cx="60" cy="45" rx="22" ry="11"/>`
+  }
+};
+const EX_RULES = [
+  [/front of the property|outside/i, 'exterior'], [/meter/i, 'meter'], [/^keys?\b/i, 'keys'],
+  [/door/i, 'door'], [/window/i, 'window'], [/tile|grout/i, 'tiles'], [/wall/i, 'wall'], [/ceiling/i, 'ceiling'], [/mirror|glass/i, 'mirror'],
+  [/floor|carpet|laminate|rug|stairs/i, 'floor'], [/radiator|heater|boiler/i, 'radiator'], [/smoke|alarm|detector|carbon/i, 'smoke'],
+  [/socket|switch|light|lamp/i, 'socket'], [/worktop|counter|surface/i, 'worktop'], [/extractor|hood|fan|ventilation/i, 'extractor'],
+  [/oven|hob|cooker|grill|microwave/i, 'cooker'], [/fridge|freezer|washing|dishwasher|dryer|appliance/i, 'fridge'],
+  [/cupboard|cabinet|unit|wardrobe|shelf|drawer|storage/i, 'cupboard'], [/sink|basin/i, 'sink'], [/bath|shower/i, 'bath'],
+  [/toilet|\bwc\b|cistern/i, 'toilet'], [/bed\b|mattress/i, 'bed'], [/sofa|chair|seat|stool/i, 'sofa'],
+  [/table|desk/i, 'table'], [/blind|curtain/i, 'blind'], [/garden|patio|balcony|yard|fenc|shed|gate|lawn|bin|outdoor|boundary/i, 'garden']
+];
+function exampleKeyFor(label){ const hit = EX_RULES.find(([re]) => re.test(label || '')); return hit ? hit[1] : 'generic'; }
+function exFrame(x, inner, label, badge){
+  return `<g transform="translate(${x},0)"><rect class="bg" width="120" height="90" rx="9"/><svg width="120" height="90" viewBox="0 0 120 90">${inner}</svg>`
+    + `<rect width="120" height="90" rx="9" style="fill:none;stroke:var(--ex-line);stroke-width:1.5;opacity:.35"/>`
+    + `<path class="l" d="M6 16 V6 H16 M104 6 H114 V16 M114 74 V84 H104 M16 84 H6 V74" style="stroke:var(--ex-acc);stroke-width:2.5"/>`
+    + (badge || '') + `<text class="t" x="60" y="106" text-anchor="middle">${label}</text></g>`;
+}
+const EX_ZOOM = `<g transform="translate(96,66)"><circle r="9" style="fill:var(--ex-acc)"/><circle cx="-1.5" cy="-1.5" r="4" style="fill:none;stroke:#fff;stroke-width:2"/><path d="M1.5 1.5 L5 5" style="stroke:#fff;stroke-width:2.2;stroke-linecap:round"/></g>`;
+function exampleSVG(label){
+  const key = exampleKeyFor(label), sc = EX_SCENES[key];
+  if (sc.single) return `<svg class="ex ex-single" viewBox="0 0 120 112" role="img" aria-label="Example photo">${exFrame(0, sc.single, key === 'meter' ? 'Reading readable' : key === 'keys' ? 'All laid out' : 'Whole front')}</svg>`;
+  return `<svg class="ex" viewBox="0 0 260 112" role="img" aria-label="Example photos: the whole item, then a close-up">${exFrame(0, sc.wide, '1  Whole item')}${exFrame(140, sc.close, '2  Close-up', EX_ZOOM)}</svg>`;
+}
+/* Do / don't pairs for the photo guide */
+const EX_OK = `<g transform="translate(106,14)"><circle r="10" style="fill:#15803D"/><path d="M-4.5 0 L-1 3.5 L5 -3.5" style="fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"/></g>`;
+const EX_NO = `<g transform="translate(106,14)"><circle r="10" style="fill:#B42318"/><path d="M-4 -4 L4 4 M4 -4 L-4 4" style="stroke:#fff;stroke-width:2.6;stroke-linecap:round"/></g>`;
+function guidePairSVG(kind){
+  const sofa = EX_SCENES.sofa.wide, wardrobe = EX_SCENES.cupboard.wide;
+  const pairs = {
+    light: [sofa, 'Bright', sofa + '<rect width="120" height="90" style="fill:#0B1020;opacity:.72"/>', 'Too dark'],
+    whole: [wardrobe, 'Whole item', `<g transform="translate(-10,-6) scale(1.9)">${wardrobe}</g>`, 'Cut off'],
+    steady: [sofa, 'Sharp', `<filter id="exblur"><feGaussianBlur stdDeviation="2.2"/></filter><g filter="url(#exblur)">${sofa}</g>`, 'Blurred']
+  };
+  const [a, al, b, bl] = pairs[kind];
+  return `<svg class="ex" viewBox="0 0 260 112" role="img" aria-label="${al} versus ${bl}">${exFrame(0, a, al, EX_OK)}${exFrame(140, b, bl, EX_NO)}</svg>`;
+}
+
+/* Tap an example to see it large, with the tip */
+function showExample(label, tip){
+  document.getElementById('exampleTitle').textContent = 'How to photograph: ' + label;
+  document.getElementById('exampleArt').innerHTML = exampleSVG(label);
+  document.getElementById('exampleTip').textContent = tip || photoTipFor(label);
+  document.getElementById('exampleBox').classList.remove('hidden');
+}
+function closeExample(e){ if (e) e.stopPropagation(); document.getElementById('exampleBox').classList.add('hidden'); }
+function exampleThumbHTML(label, tip){
+  return `<button type="button" class="ex-thumb" onclick="showExample(${escapeHtml(JSON.stringify(String(label)))}, ${escapeHtml(JSON.stringify(String(tip || '')))})" aria-label="See an example of how to photograph ${escapeHtml(label)}">${exampleSVG(label)}</button>`;
+}
+/* Photo guide at the top of the rooms screen; stays collapsed once closed (per device) */
+function guideOpen(){ try { return localStorage.getItem('photoGuideClosed') !== '1'; } catch (e) { return true; } }
+function rememberGuide(el){ try { localStorage.setItem('photoGuideClosed', el.open ? '0' : '1'); } catch (e) {} }
+function photoGuideHTML(){
+  return `<details class="photo-guide" ${guideOpen() ? 'open' : ''} ontoggle="rememberGuide(this)">
+    <summary>How to take good photos</summary>
+    <div class="guide-grid">
+      <figure>${guidePairSVG('light')}<figcaption><strong>Lights on, curtains open.</strong> Dark photos hide marks and damage.</figcaption></figure>
+      <figure>${guidePairSVG('whole')}<figcaption><strong>Get the whole item in.</strong> Step back until nothing is cut off.</figcaption></figure>
+      <figure>${guidePairSVG('steady')}<figcaption><strong>Hold still.</strong> Brace your arms and wait for the camera to focus.</figcaption></figure>
+      <figure>${exampleSVG('Door')}<figcaption><strong>Two photos per item.</strong> The whole item first, then a close-up of any marks, wear or damage.</figcaption></figure>
+    </div>
+    <p class="guide-foot">Each item shows an example like these: tap it to see it larger. The date and time are added to every photo automatically.</p>
+  </details>`;
 }
 
 /* ============================= AI condition assessment (server-backed) ============================= */
@@ -951,7 +1171,7 @@ function updateCameraUi(){
   document.getElementById('camTitle').textContent = r.title;
   document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
   document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
-  document.getElementById('camTip').textContent = r.tip || '';
+  document.getElementById('camTip').innerHTML = `<div class="cam-example">${exampleSVG(r.caption)}</div><span>${escapeHtml(r.tip || '')}</span>`;
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
   prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
@@ -2496,7 +2716,7 @@ function itemCardHTML(room, item){
           `).join('')}
         </div>
         ${warnPhoto ? `<div class="ai-warn-note">⚠ ${escapeHtml(warnPhoto.aiCheck.note || 'This photo may not clearly show ' + item.label + '.')} Worth a quick check.</div>` : ''}
-        <div class="photo-tip">${ICONS.camera}<span>${escapeHtml(photoTipFor(item.label))}</span></div>
+        <div class="photo-tip">${exampleThumbHTML(item.label, photoTipFor(item.label))}<span><span class="tip-kicker">How to photograph it</span>${escapeHtml(photoTipFor(item.label))}</span></div>
         ${(() => {
           // With automatic assessment off the tenant sets every condition, so the choice is shown from the start.
           if (!item.photos.length && aiEnabled !== false) return '';
@@ -2538,9 +2758,9 @@ function exteriorCardHTML(){
         </div>
         <span class="na-toggle required-tag">${done ? 'Done' : 'First photo'}</span>
       </div>
-      <div class="exterior-help">${done
+      <div class="photo-tip exterior-tip">${exampleThumbHTML('Front of the property', 'Stand outside and photograph the front of the property, showing the entrance and the house or flat number.')}<div class="exterior-help">${done
         ? 'The front of the property is photographed. It goes on the cover of the report.'
-        : 'Start here. Stand outside and photograph the front of the property, showing the entrance and the house or flat number. The rooms can be photographed once this is done.'}</div>
+        : 'Start here. Stand outside and photograph the front of the property, showing the entrance and the house or flat number. The rooms can be photographed once this is done.'}</div></div>
       ${exteriorNudge && !done ? '<div class="ai-warn-note">Take the photo of the front of the property first.</div>' : ''}
       <div class="item-photo-row">
         <button type="button" class="add-item-photo" onclick="triggerExteriorFileInput()" aria-label="Add photo of the front of the property">${ICONS.camera}<span>Add</span></button>
@@ -2581,6 +2801,7 @@ function renderCapture(){
       <div class="progress-bar-shell"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
       <div class="autosave-note">Your progress is saved automatically on this device — safe to close and come back later.</div>
     </div>
+    ${photoGuideHTML()}
     ${exteriorCardHTML()}
     <div class="capture-layout">
       <nav class="room-nav">
@@ -2676,7 +2897,7 @@ function renderDetails(){
 
     <div class="panel">
       <span class="sec-label">Keys handed over</span>
-      <span class="sec-hint">One line per set, e.g. "3x Yale, front door". Photograph the keys laid out before handing them over.</span>
+      <div class="photo-tip">${exampleThumbHTML('Keys', 'Lay all the keys out flat on a plain surface so each one can be counted.')}<span>One line per set, e.g. "3x Yale, front door". Photograph the keys laid out before handing them over.</span></div>
       ${pr.keys.map((k, i) => `
         <div class="cond-row">
           <input class="input cond-note" type="text" placeholder="e.g. 2x Yale, front door" value="${escapeHtml(k.desc)}" oninput="setKey(${i},'desc',this.value)">
@@ -2699,7 +2920,7 @@ function renderDetails(){
 
     <div class="panel">
       <span class="sec-label">Utility meters</span>
-      <span class="sec-hint">Readings taken on the day protect against later billing disputes.</span>
+      <div class="photo-tip">${exampleThumbHTML('Electricity meter', 'Straight on and close enough that every digit of the reading is readable.')}<span>Readings taken on the day protect against later billing disputes. Photograph each meter face so every digit is readable.</span></div>
       ${Object.keys(pr.meters).map(key => {
         const m = pr.meters[key];
         return `
