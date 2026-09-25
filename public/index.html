@@ -191,6 +191,8 @@
   .addr-option { display: flex; align-items: center; gap: 10px; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; font: inherit; font-size: 14px; color: var(--ink); cursor: pointer; transition: all .15s ease; }
   .addr-option::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--line-strong); flex: 0 0 auto; }
   .addr-option:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .addr-group-label { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin: 12px 0 -4px; }
+  .addr-option.street::after { content: '+ number'; margin-left: auto; font-size: 11.5px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 999px; flex: 0 0 auto; }
   .addr-option:hover::before { border-color: var(--accent); background: var(--accent); }
   .addr-wrap { position: relative; }
   .addr-suggest { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; background: var(--panel); border: 1px solid var(--line-strong); border-radius: var(--radius); box-shadow: 0 12px 32px rgba(15,23,42,.16); padding: 6px; max-height: 320px; overflow-y: auto; }
@@ -996,7 +998,7 @@ function onPostcodeBlur(){
   composeAddress();
 }
 function setLookup(patch){
-  pendingSetup.lookup = Object.assign({ status:'idle', message:'', options:[] }, pendingSetup.lookup || {}, patch);
+  pendingSetup.lookup = Object.assign({ status:'idle', message:'', options:[] }, pendingSetup.lookup || {}, { streets: [] }, patch);
   render();
 }
 let postcodeTimer = null;
@@ -1024,9 +1026,10 @@ async function lookupPostcode(){
       setLookup({ status:'error', message: data.error || 'That postcode was not found.', options:[] });
       return;
     }
-    if (Array.isArray(data.addresses) && data.addresses.length){
-      const osm = data.source === 'openstreetmap';
-      setLookup({ status:'done', message: osm ? 'Pick the property. If yours is not listed, type it in the address box below.' : 'Pick the property.', options: data.addresses.slice(0, 60) });
+    const addresses = Array.isArray(data.addresses) ? data.addresses.slice(0, 60) : [];
+    const streets = Array.isArray(data.streets) ? data.streets : [];
+    if (addresses.length || streets.length){
+      setLookup({ status:'done', message: addresses.length ? 'Pick the property.' : '', options: addresses, streets });
       return;
     }
     const area = [data.ward, data.district].filter(Boolean).join(', ');
@@ -1036,6 +1039,15 @@ async function lookupPostcode(){
   }catch(err){
     setLookup({ status:'error', message:'Address lookup is unavailable. Type the address in full.', options:[] });
   }
+}
+function chooseLookupStreet(line){
+  const m = line.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i);
+  pendingSetup.unit = m ? line.slice(0, m.index).replace(/[,\s]+$/, '') : line;
+  if (m) pendingSetup.postcode = normalisePostcode(m[1]);
+  composeAddress();
+  setLookup({ status:'chosen', message:'Now type your house or flat number at the start of the address below.', options:[] });
+  const el = document.getElementById('unitInput');
+  if (el){ el.focus(); el.setSelectionRange(0, 0); }
 }
 function chooseLookupAddress(line){
   const m = line.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i);
@@ -2051,6 +2063,7 @@ function renderSetup(){
         </div>
         ${ps.lookup.message ? `<div class="room-count-hint">${escapeHtml(ps.lookup.message)}</div>` : ''}
         ${ps.lookup.options.length ? `<div class="addr-options">${ps.lookup.options.map(o => `<button type="button" class="addr-option" onclick="chooseLookupAddress(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
+        ${(ps.lookup.streets || []).length ? `<div class="addr-group-label">${ps.lookup.options.length ? 'Not listed? Pick your street, then type the house number' : 'Pick your street, then type the house or flat number'}</div><div class="addr-options">${ps.lookup.streets.map(o => `<button type="button" class="addr-option street" onclick="chooseLookupStreet(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
       </div>
       <div class="field">
         <label for="unitInput">Property address</label>

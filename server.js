@@ -119,7 +119,8 @@ function tidyPostcode(pc){
 }
 
 async function getJson(url, opts = {}){
-  const r = await fetch(url, { ...opts, headers: { ...UA, ...(opts.headers || {}) }, signal: AbortSignal.timeout(5000) });
+  const { timeout = 5000, ...rest } = opts;
+  const r = await fetch(url, { ...rest, headers: { ...UA, ...(rest.headers || {}) }, signal: AbortSignal.timeout(timeout) });
   if (!r.ok) { const e = new Error(`${url.split('?')[0]} returned ${r.status}`); e.status = r.status; throw e; }
   return r.json();
 }
@@ -148,55 +149,53 @@ function formatAddress(a){
   return lines.join(', ');
 }
 
-// Street addresses near a postcode from OpenStreetMap. Addresses tagged with this exact postcode come
-// first; untagged neighbours are included because OSM rarely tags UK addresses with a postcode.
-// Overpass lists every addressed building in the radius; Photon reverse is the fallback.
+// Addresses and streets near a postcode from OpenStreetMap, via Overpass (both public mirrors are asked
+// at once and the first answer wins). Only houses tagged with this exact postcode are listed: untagged
+// neighbours are often in a different postcode, and a wrong address must not reach a signed report.
+// OSM tags few UK houses with a postcode, so the streets around the postcode are returned for
+// "pick your street, then type the number".
 const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const STREET_TYPES = new Set(['residential', 'primary', 'secondary', 'tertiary', 'unclassified', 'living_street', 'pedestrian', 'trunk', 'road']);
+const postcodeCache = new Map();
 
-async function overpassAddresses(lat, lon){
-  const query = `[out:json][timeout:8];nwr(around:120,${lat},${lon})["addr:housenumber"];out tags center 300;`;
-  let lastErr;
-  for (const url of OVERPASS) {
-    try {
-      const data = await getJson(url, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(query) });
-      return (data.elements || []).map(e => {
-        const t = e.tags || {};
-        return { housenumber: t['addr:housenumber'], street: t['addr:street'] || t['addr:place'], name: t['addr:housename'] || '', city: t['addr:city'] || '', postcode: t['addr:postcode'] || '' };
-      });
-    } catch (err) { lastErr = err; }
+async function overpass(query){
+  const body = 'data=' + encodeURIComponent(query);
+  return Promise.any(OVERPASS.map(url => getJson(url, { method: 'POST', timeout: 9000, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })));
+}
+
+async function osmNearPostcode(lat, lon, pc){
+  if (postcodeCache.has(pc)) return postcodeCache.get(pc);
+  const query = `[out:json][timeout:8];(nwr(around:150,${lat},${lon})["addr:housenumber"];way(around:120,${lat},${lon})["highway"]["name"];);out tags center 400;`;
+  let data;
+  try { data = await overpass(query); }
+  catch (err) {
+    console.error(`overpass failed for ${pc}:`, (err.errors || [err]).map(e => e.name === 'TimeoutError' ? 'timeout' : e.message).join('; '));
+    return { addresses: [], streets: [] };
   }
-  throw lastErr;
-}
-
-async function photonAddresses(lat, lon){
-  const data = await getJson(`${PHOTON}/reverse?lat=${lat}&lon=${lon}&radius=0.12&limit=50&lang=en`);
-  return (data.features || []).filter(f => !f.properties || !f.properties.countrycode || f.properties.countrycode.toUpperCase() === 'GB')
-    .map(f => { const p = f.properties || {}; return { housenumber: p.housenumber, street: p.street, name: p.name && p.name !== p.street ? p.name : '', city: p.city || '', postcode: p.postcode || '' }; });
-}
-
-async function osmAddressesNear(lat, lon, pc){
-  let raw, source = 'overpass';
-  try { raw = await overpassAddresses(lat, lon); }
-  catch (err) { console.error('overpass failed:', err.message); source = 'photon'; raw = await photonAddresses(lat, lon); }
 
   const seen = new Set();
-  const exact = [], near = [];
+  const exact = [], near = [], streetNames = new Set();
   let otherPostcode = 0, noStreet = 0;
-  for (const a of raw) {
-    if (!a.housenumber || !a.street) { noStreet++; continue; }
-    const apc = tidyPostcode(a.postcode);
+  for (const e of data.elements || []) {
+    const t = e.tags || {};
+    if (t.highway) { if (STREET_TYPES.has(t.highway)) streetNames.add(t.name); continue; }
+    const num = t['addr:housenumber'], street = t['addr:street'] || t['addr:place'];
+    if (!num || !street) { noStreet++; continue; }
+    const apc = tidyPostcode(t['addr:postcode']);
     if (apc && apc !== pc) { otherPostcode++; continue; }
-    const parts = [a.name, `${a.housenumber} ${a.street}`, a.city].map(x => (x || '').trim()).filter(Boolean);
-    const line = parts.join(', ');
-    const id = line.toLowerCase();
-    if (seen.has(id)) continue;
-    seen.add(id);
-    (apc === pc ? exact : near).push({ line, street: a.street, num: String(a.housenumber) });
+    const line = [t['addr:housename'], `${num} ${street}`, t['addr:city']].map(x => (x || '').trim()).filter(Boolean).join(', ');
+    if (seen.has(line.toLowerCase())) continue;
+    seen.add(line.toLowerCase());
+    (apc === pc ? exact : near).push({ line, street, num: String(num) });
   }
   const byStreetThenNumber = (x, y) => x.street.localeCompare(y.street) || ((parseInt(x.num, 10) || 0) - (parseInt(y.num, 10) || 0)) || x.num.localeCompare(y.num);
-  const list = exact.sort(byStreetThenNumber).concat(near.sort(byStreetThenNumber)).slice(0, 40).map(x => `${x.line}, ${pc}`);
-  console.log(`postcode ${pc} via ${source}: ${raw.length} addressed objects, ${exact.length} tagged with this postcode, ${near.length} untagged, ${otherPostcode} other postcodes, ${noStreet} without street -> ${list.length} listed`);
-  return list;
+  const addresses = exact.sort(byStreetThenNumber).slice(0, 40).map(x => `${x.line}, ${pc}`);
+  const streets = [...streetNames].sort().slice(0, 12).map(n => `${n}, ${pc}`);
+  console.log(`postcode ${pc}: ${exact.length} addresses tagged with it (listed), ${near.length} untagged nearby and ${otherPostcode} with other postcodes (not listed), ${noStreet} without street; ${streets.length} streets`);
+  const result = { addresses, streets };
+  if (postcodeCache.size > 1000) postcodeCache.delete(postcodeCache.keys().next().value);
+  postcodeCache.set(pc, result);
+  return result;
 }
 
 app.get('/api/postcode/:pc', async (req, res) => {
@@ -221,17 +220,16 @@ app.get('/api/postcode/:pc', async (req, res) => {
     if (r.status === 404) return res.status(404).json({ error: 'That postcode was not found.' });
     if (!r.ok) return res.status(502).json({ error: 'Address lookup is unavailable.' });
     const { result } = await r.json();
-    let addresses = [];
-    if (result.latitude != null && result.longitude != null) {
-      try { addresses = await osmAddressesNear(result.latitude, result.longitude, result.postcode); }
-      catch (err) { console.error('osm addresses near', result.postcode, 'failed:', err.message); }
-    }
+    const osm = result.latitude != null && result.longitude != null
+      ? await osmNearPostcode(result.latitude, result.longitude, result.postcode)
+      : { addresses: [], streets: [] };
     res.json({
       postcode: result.postcode,
       ward: result.admin_ward || '',
       district: result.admin_district || '',
-      addresses,
-      source: addresses.length ? 'openstreetmap' : ''
+      addresses: osm.addresses,
+      streets: osm.streets,
+      source: osm.addresses.length || osm.streets.length ? 'openstreetmap' : ''
     });
   } catch (err) {
     console.error('postcode lookup failed', err.name === 'TimeoutError' ? 'timeout' : err);
