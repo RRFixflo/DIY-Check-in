@@ -105,13 +105,69 @@ app.post('/api/assess', async (req, res) => {
   }
 });
 
-/* ----------------------------- /api/postcode ----------------------------- */
+/* ----------------------------- address data helpers ----------------------------- */
 const POSTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/;
+const FULL_PC_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/;
+// OpenStreetMap data via Photon (free, no key) and postcodes.io (free, no key).
+const PHOTON = 'https://photon.komoot.io';
+const UK_BBOX = '-8.7,49.8,1.9,60.9';
+const UA = { 'User-Agent': 'self-check-in-report (address lookup)' };
 
+function tidyPostcode(pc){
+  const s = String(pc || '').toUpperCase().replace(/\s+/g, '');
+  return FULL_PC_RE.test(s) ? s.slice(0, -3) + ' ' + s.slice(-3) : '';
+}
+
+async function getJson(url, opts = {}){
+  const r = await fetch(url, { ...opts, headers: { ...UA, ...(opts.headers || {}) }, signal: AbortSignal.timeout(5000) });
+  if (!r.ok) { const e = new Error(`${url.split('?')[0]} returned ${r.status}`); e.status = r.status; throw e; }
+  return r.json();
+}
+
+function photonLine(p){
+  const street = p.street && p.housenumber ? `${p.housenumber} ${p.street}` : (p.street || '');
+  const name = p.name && p.name !== p.street ? p.name : '';
+  const parts = [name, street, p.locality || p.district, p.city].map(s => (s || '').trim()).filter(Boolean);
+  return parts.filter((s, i) => parts.indexOf(s) === i).join(', ');
+}
+
+// Nearest postcode for each [lon, lat], one postcodes.io call for the lot. Missing entries come back ''.
+async function nearestPostcodes(points){
+  if (!points.length) return [];
+  const data = await getJson('https://api.postcodes.io/postcodes', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ geolocations: points.map(([lon, lat]) => ({ longitude: lon, latitude: lat, radius: 500, limit: 1 })) })
+  });
+  return (data.result || []).map(x => (x && x.result && x.result[0] && tidyPostcode(x.result[0].postcode)) || '');
+}
+
+/* ----------------------------- /api/postcode ----------------------------- */
 function formatAddress(a){
   const lines = [a.sub_building_name, a.building_name, a.building_number && a.thoroughfare ? `${a.building_number} ${a.thoroughfare}` : (a.building_number || a.thoroughfare), a.line_3, a.locality, a.town_or_city]
     .map(s => (s || '').trim()).filter(Boolean);
   return lines.join(', ');
+}
+
+// Street addresses near a postcode from OpenStreetMap. Addresses tagged with this exact postcode come
+// first; untagged neighbours are included because OSM rarely tags UK addresses with a postcode.
+async function osmAddressesNear(lat, lon, pc){
+  const data = await getJson(`${PHOTON}/reverse?lat=${lat}&lon=${lon}&radius=0.2&limit=50&lang=en`);
+  const seen = new Set();
+  const exact = [], near = [];
+  for (const f of data.features || []) {
+    const p = f.properties || {};
+    if (!p.housenumber || !p.street) continue;
+    if (p.countrycode && p.countrycode.toUpperCase() !== 'GB') continue;
+    const fpc = tidyPostcode(p.postcode);
+    if (fpc && fpc !== pc) continue;
+    const line = photonLine(p);
+    const id = line.toLowerCase();
+    if (seen.has(id)) continue;
+    seen.add(id);
+    (fpc === pc ? exact : near).push({ line, street: p.street, num: p.housenumber });
+  }
+  const byStreetThenNumber = (a, b) => a.street.localeCompare(b.street) || (parseInt(a.num, 10) - parseInt(b.num, 10)) || a.num.localeCompare(b.num);
+  return exact.sort(byStreetThenNumber).concat(near.sort(byStreetThenNumber)).slice(0, 40).map(a => `${a.line}, ${pc}`);
 }
 
 app.get('/api/postcode/:pc', async (req, res) => {
@@ -125,42 +181,40 @@ app.get('/api/postcode/:pc', async (req, res) => {
       if (r.ok) {
         const data = await r.json();
         const addresses = (data.addresses || []).map(a => formatAddress(a) + ', ' + (data.postcode || pc)).filter(Boolean);
-        if (addresses.length) return res.json({ postcode: data.postcode || pc, addresses });
+        if (addresses.length) return res.json({ postcode: data.postcode || pc, addresses, source: 'getaddress' });
       } else if (r.status !== 404) {
         console.error('getAddress.io returned', r.status);
       }
     }
 
-    // Fallback: postcodes.io confirms the postcode exists and gives the area.
-    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`);
+    // Free route: postcodes.io confirms the postcode and gives its position, then OpenStreetMap lists nearby addresses.
+    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`, { signal: AbortSignal.timeout(5000) });
     if (r.status === 404) return res.status(404).json({ error: 'That postcode was not found.' });
     if (!r.ok) return res.status(502).json({ error: 'Address lookup is unavailable.' });
     const { result } = await r.json();
+    let addresses = [];
+    if (result.latitude != null && result.longitude != null) {
+      try { addresses = await osmAddressesNear(result.latitude, result.longitude, result.postcode); }
+      catch (err) { console.error('osm addresses near', result.postcode, 'failed:', err.message); }
+    }
+    console.log(`postcode ${result.postcode}: ${addresses.length} OpenStreetMap addresses`);
     res.json({
       postcode: result.postcode,
       ward: result.admin_ward || '',
       district: result.admin_district || '',
-      addresses: []
+      addresses,
+      source: addresses.length ? 'openstreetmap' : ''
     });
   } catch (err) {
-    console.error('postcode lookup failed', err);
+    console.error('postcode lookup failed', err.name === 'TimeoutError' ? 'timeout' : err);
     res.status(502).json({ error: 'Address lookup is unavailable.' });
   }
 });
 
 /* ----------------------------- /api/address-search ----------------------------- */
-// Address suggestions as the tenant types, from OpenStreetMap via Photon (free, no key).
-// Only UK results that carry a full postcode are returned.
-const PHOTON_URL = 'https://photon.komoot.io/api/';
-const UK_BBOX = '-8.7,49.8,1.9,60.9';
+// Address suggestions as the tenant types, from OpenStreetMap via Photon. UK only. Results without a
+// postcode (most UK OSM data) get the nearest postcode to their position from postcodes.io.
 const searchCache = new Map();
-
-function photonLine(p){
-  const street = p.street && p.housenumber ? `${p.housenumber} ${p.street}` : (p.street || '');
-  const name = p.name && p.name !== p.street ? p.name : '';
-  const parts = [name, street, p.locality || p.district, p.city].map(s => (s || '').trim()).filter(Boolean);
-  return parts.filter((s, i) => parts.indexOf(s) === i).join(', ');
-}
 
 app.get('/api/address-search', async (req, res) => {
   const q = String(req.query.q || '').replace(/\s+/g, ' ').trim().slice(0, 120);
@@ -170,37 +224,43 @@ app.get('/api/address-search', async (req, res) => {
   if (searchCache.has(key)) return res.json({ results: searchCache.get(key) });
 
   try {
-    const url = `${PHOTON_URL}?q=${encodeURIComponent(q)}&limit=10&lang=en&bbox=${UK_BBOX}`;
-    const r = await fetch(url, {
-      headers: { 'User-Agent': 'self-check-in-report (address autocomplete)' },
-      signal: AbortSignal.timeout(5000)
-    });
-    if (!r.ok) {
-      console.error('photon returned', r.status);
-      return res.status(502).json({ error: 'Address search is unavailable.' });
-    }
-    const data = await r.json();
-    const seen = new Set();
-    const results = [];
+    const data = await getJson(`${PHOTON}/api/?q=${encodeURIComponent(q)}&limit=10&lang=en&bbox=${UK_BBOX}`);
+    const candidates = [];
     for (const f of data.features || []) {
       const p = f.properties || {};
       if (p.countrycode && p.countrycode.toUpperCase() !== 'GB') continue;
-      const postcode = String(p.postcode || '').toUpperCase().replace(/\s+/g, '');
-      if (!/^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(postcode)) continue;
-      const pc = postcode.slice(0, -3) + ' ' + postcode.slice(-3);
+      if (['country', 'state', 'county', 'city', 'district'].includes(p.type)) continue;
       const line = photonLine(p);
+      const coords = f.geometry && f.geometry.coordinates;
       if (!line) continue;
-      const id = (line + '|' + pc).toLowerCase();
+      candidates.push({ line, postcode: tidyPostcode(p.postcode), coords: Array.isArray(coords) ? coords : null });
+    }
+
+    const missing = candidates.filter(c => !c.postcode && c.coords);
+    let filled = 0;
+    if (missing.length) {
+      try {
+        const pcs = await nearestPostcodes(missing.map(c => c.coords));
+        missing.forEach((c, i) => { if (pcs[i]) { c.postcode = pcs[i]; filled++; } });
+      } catch (err) { console.error('nearest postcodes failed:', err.message); }
+    }
+
+    const seen = new Set();
+    const results = [];
+    for (const c of candidates) {
+      if (!c.postcode) continue;
+      const id = (c.line + '|' + c.postcode).toLowerCase();
       if (seen.has(id)) continue;
       seen.add(id);
-      results.push({ line, postcode: pc });
+      results.push({ line: c.line, postcode: c.postcode });
       if (results.length === 6) break;
     }
+    console.log(`address search "${q}": ${(data.features || []).length} OSM matches, ${candidates.length} usable, ${filled} postcodes from position, ${results.length} returned`);
     if (searchCache.size > 500) searchCache.delete(searchCache.keys().next().value);
     searchCache.set(key, results);
     res.json({ results });
   } catch (err) {
-    console.error('address search failed', err.name === 'TimeoutError' ? 'timeout' : err);
+    console.error('address search failed:', err.name === 'TimeoutError' ? 'timeout' : err.message);
     res.status(502).json({ error: 'Address search is unavailable.' });
   }
 });

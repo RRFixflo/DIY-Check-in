@@ -16,8 +16,8 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 |---|---|---|
 | `GET /api/status` | `initAI()` on boot | `{ ai, reason, addressLookup }`, where `addressLookup` is `"full"` or `"postcode-only"` |
 | `POST /api/assess` with `{ label, room, image }` (JPEG data URL) | `assessItemPhoto()` after each item photo | `{ matches, note, condition, observation }`, with `condition` one of `new/good/fair/poor` |
-| `GET /api/postcode/:postcode` | `lookupPostcode()` | `{ postcode, addresses[] }` with getAddress.io, otherwise `{ postcode, ward, district, addresses: [] }` from postcodes.io |
-| `GET /api/address-search?q=` | `onAddressInput()` as the address is typed (debounced; a leading "Flat 4," is stripped from the query and kept on the chosen address) | `{ results: [{ line, postcode }] }`: up to 6 UK matches with a full postcode, from OpenStreetMap via Photon (no key), cached in memory |
+| `GET /api/postcode/:postcode` | `lookupPostcode()`, run automatically once a full postcode is typed (and by the Find address button) | `{ postcode, addresses[], source }`: Royal Mail addresses from getAddress.io when `GETADDRESS_API_KEY` is set; otherwise postcodes.io confirms the postcode (`ward`, `district`) and `addresses` are house addresses within 200 m from OpenStreetMap (Photon reverse), ones tagged with this postcode first |
+| `GET /api/address-search?q=` | `onAddressInput()` as the address is typed (debounced; a leading "Flat 4," is stripped from the query and kept on the chosen address) | `{ results: [{ line, postcode }] }`: up to 6 UK matches from OpenStreetMap via Photon (no key); matches without a postcode get the nearest one to their position from postcodes.io; cached in memory |
 
 `/health` and `/healthz` return `{ ok: true }`.
 

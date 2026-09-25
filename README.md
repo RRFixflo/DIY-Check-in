@@ -41,7 +41,7 @@ In the Railway project, open **Variables** and add:
 | Variable | Required | What it does |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | yes, for condition assessment | Lets the server assess each photo. Get one at console.anthropic.com → API keys. |
-| `GETADDRESS_API_KEY` | optional | Full street-level address lookup from Royal Mail PAF data. Sign up at getaddress.io. Without it, postcodes are validated but addresses are typed by hand. |
+| `GETADDRESS_API_KEY` | optional | Exact address lists from Royal Mail PAF data. Sign up at getaddress.io. Without it, the address list comes from OpenStreetMap, which is free but misses some addresses. |
 | `ANTHROPIC_MODEL` | optional | Defaults to `claude-haiku-4-5-20251001`, the cheapest capable model. |
 
 `PORT` is set by Railway automatically. Do not add it.
@@ -70,7 +70,7 @@ Visit `/api/status` on your deployed URL. You should see:
 
 ## What the app does
 
-**Setup.** Address and postcode. Suggestions with postcodes appear as the address is typed (OpenStreetMap, no key needed), and there is also a "Find address" lookup by postcode. Inspection type,
+**Setup.** Postcode first: once a full postcode is typed, the addresses there are listed to pick from (Royal Mail data with a getAddress.io key, otherwise nearby addresses from OpenStreetMap). The address box also suggests matches, with postcodes, as it is typed. Inspection type,
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 

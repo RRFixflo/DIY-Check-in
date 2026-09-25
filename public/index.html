@@ -117,6 +117,7 @@
   .panel > .sec-label + .row2, .panel > .sec-label + .field { margin-top: 14px; }
   .field { margin-bottom: 18px; }
   .field > label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+  .field > .field-help { font-size: 12.5px; color: var(--ink-soft); margin: -3px 0 8px; }
   .input, .select, .textarea {
     width: 100%; border: 1px solid var(--line-strong); background: var(--panel); border-radius: var(--radius-sm);
     padding: 11px 13px; font-size: 16px; color: var(--ink); min-height: 46px; box-shadow: var(--shadow-sm);
@@ -988,13 +989,23 @@ function composeAddress(){
   if (el) el.value = ps.address;
 }
 function onPostcodeBlur(){
+  // Update the field in place: a full re-render here would swap out the "Find address" button mid-tap.
   pendingSetup.postcode = normalisePostcode(pendingSetup.postcode);
+  const el = document.getElementById('postcodeInput');
+  if (el && el.value !== pendingSetup.postcode) el.value = pendingSetup.postcode;
   composeAddress();
-  render();
 }
 function setLookup(patch){
   pendingSetup.lookup = Object.assign({ status:'idle', message:'', options:[] }, pendingSetup.lookup || {}, patch);
   render();
+}
+let postcodeTimer = null;
+let lastLookedUp = '';
+function onPostcodeInput(value){
+  clearTimeout(postcodeTimer);
+  const pc = normalisePostcode(value);
+  if (!POSTCODE_RE.test(pc) || pc === lastLookedUp) return;
+  postcodeTimer = setTimeout(() => lookupPostcode(), 450);
 }
 async function lookupPostcode(){
   const pc = normalisePostcode(pendingSetup.postcode);
@@ -1003,6 +1014,8 @@ async function lookupPostcode(){
     setLookup({ status:'error', message:'Enter a full UK postcode, e.g. SE16 4JU.', options:[] });
     return;
   }
+  clearTimeout(postcodeTimer);
+  lastLookedUp = pc;
   setLookup({ status:'loading', message:'Looking up ' + pc + '…', options:[] });
   try{
     const res = await fetch('/api/postcode/' + encodeURIComponent(pc));
@@ -1012,13 +1025,14 @@ async function lookupPostcode(){
       return;
     }
     if (Array.isArray(data.addresses) && data.addresses.length){
-      setLookup({ status:'done', message:'Pick the property.', options: data.addresses.slice(0, 60) });
+      const osm = data.source === 'openstreetmap';
+      setLookup({ status:'done', message: osm ? 'Pick the property. If yours is not listed, type it in the address box below.' : 'Pick the property.', options: data.addresses.slice(0, 60) });
       return;
     }
     const area = [data.ward, data.district].filter(Boolean).join(', ');
     pendingSetup.unit = (pendingSetup.unit || '').trim();
     composeAddress();
-    setLookup({ status:'partial', message: area ? ('Postcode confirmed: ' + area + '. Type the building and street above.') : 'Postcode confirmed. Type the building and street above.', options:[] });
+    setLookup({ status:'partial', message: area ? ('Postcode confirmed: ' + area + '. Type the building and street below.') : 'Postcode confirmed. Type the building and street below.', options:[] });
   }catch(err){
     setLookup({ status:'error', message:'Address lookup is unavailable. Type the address in full.', options:[] });
   }
@@ -1028,7 +1042,7 @@ function chooseLookupAddress(line){
   pendingSetup.unit = m ? line.slice(0, m.index).replace(/[,\s]+$/, '') : line;
   if (m) pendingSetup.postcode = normalisePostcode(m[1]);
   composeAddress();
-  setLookup({ status:'chosen', message:'Check it reads exactly as it does on the tenancy agreement.', options:[] });
+  setLookup({ status:'chosen', message:'Address filled in below. Add the flat number if it is missing.', options:[] });
 }
 /* address autocomplete: suggestions (with postcodes) as the address is typed */
 const FLAT_PREFIX_RE = /^\s*((?:flat|apartment|apt|unit|studio|room)\s*(?:\d+[a-z]?|[a-z])\b)\s*,?\s*/i;
@@ -2029,22 +2043,22 @@ function renderSetup(){
           </div>
         </div>` : ''}
       <div class="field">
+        <label for="postcodeInput">Postcode</label>
+        <div class="field-help">Enter the postcode and the addresses there will appear to pick from.</div>
+        <div class="cond-row">
+          <input class="input cond-note" id="postcodeInput" type="text" autocapitalize="characters" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="pendingSetup.postcode=this.value; composeAddress(); onPostcodeInput(this.value);" onblur="onPostcodeBlur()" onkeydown="if(event.key==='Enter'){event.preventDefault(); lookupPostcode();}">
+          <button type="button" class="btn btn-sm" onclick="lookupPostcode()" ${ps.lookup.status==='loading'?'disabled':''}>${ps.lookup.status==='loading'?'Searching…':'Find address'}</button>
+        </div>
+        ${ps.lookup.message ? `<div class="room-count-hint">${escapeHtml(ps.lookup.message)}</div>` : ''}
+        ${ps.lookup.options.length ? `<div class="addr-options">${ps.lookup.options.map(o => `<button type="button" class="addr-option" onclick="chooseLookupAddress(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
+      </div>
+      <div class="field">
         <label for="unitInput">Property address</label>
         <div class="addr-wrap">
           <input class="input" id="unitInput" type="text" placeholder="e.g. Flat 4, 12 Brownlow House, London" value="${escapeHtml(ps.unit)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="addrSuggest" aria-expanded="false" oninput="pendingSetup.unit=this.value; composeAddress(); onAddressInput(this.value);" onkeydown="onAddressKeydown(event)" onfocus="onAddressFocus(this)" onblur="setTimeout(hideAddressSuggestions, 150)">
           <div class="addr-suggest hidden" id="addrSuggest" role="listbox" aria-label="Matching addresses"></div>
         </div>
-        <div class="room-count-hint">Start typing the building or street name and pick a match to fill in the postcode.</div>
-      </div>
-      <div class="field">
-        <label for="postcodeInput">Postcode</label>
-        <div class="cond-row">
-          <input class="input cond-note" id="postcodeInput" type="text" autocapitalize="characters" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="pendingSetup.postcode=this.value; composeAddress();" onblur="onPostcodeBlur()" onkeydown="if(event.key==='Enter'){event.preventDefault(); lookupPostcode();}">
-          <button type="button" class="btn btn-sm" onclick="lookupPostcode()" ${ps.lookup.status==='loading'?'disabled':''}>${ps.lookup.status==='loading'?'Searching…':'Find address'}</button>
-        </div>
-        ${ps.lookup.message ? `<div class="room-count-hint">${escapeHtml(ps.lookup.message)}</div>` : ''}
-        ${ps.lookup.options.length ? `<div class="addr-options">${ps.lookup.options.map(o => `<button type="button" class="addr-option" onclick="chooseLookupAddress(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
-        <div class="room-count-hint">Check the address reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>
+        <div class="room-count-hint">Picked from the list above, or type it. Check it reads exactly as it does on the tenancy agreement, as it goes on the signed report.</div>
       </div>
       <div class="row2">
         <div class="field">
