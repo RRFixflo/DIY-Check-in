@@ -191,6 +191,14 @@
   .addr-option::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--line-strong); flex: 0 0 auto; }
   .addr-option:hover { border-color: var(--accent); background: var(--accent-soft); }
   .addr-option:hover::before { border-color: var(--accent); background: var(--accent); }
+  .addr-wrap { position: relative; }
+  .addr-suggest { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; background: var(--panel); border: 1px solid var(--line-strong); border-radius: var(--radius); box-shadow: 0 12px 32px rgba(15,23,42,.16); padding: 6px; max-height: 320px; overflow-y: auto; }
+  .addr-suggest-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; border-radius: var(--radius-sm); padding: 11px 12px; font: inherit; font-size: 14px; color: var(--ink); cursor: pointer; }
+  .addr-suggest-item:hover, .addr-suggest-item.active { background: var(--accent-soft); }
+  .addr-suggest-item .as-line { flex: 1 1 auto; min-width: 0; }
+  .addr-suggest-item .as-pc { flex: 0 0 auto; font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .addr-suggest-item:hover .as-pc, .addr-suggest-item.active .as-pc { background: var(--panel); }
+  .addr-suggest-empty { padding: 10px 12px; font-size: 13px; color: var(--ink-faint); }
   .setup-error { margin-top: 18px; background: var(--danger-soft); border: 1px solid transparent; color: var(--danger); border-radius: var(--radius); padding: 12px 14px; font-size: 13.5px; font-weight: 500; }
   .room-count-hint { font-size: 12.5px; color: var(--ink-soft); margin-top: 7px; }
   #roomCountHint { margin-top: 16px; padding: 12px 14px; background: var(--surface-2); border-radius: var(--radius-sm); font-size: 13px; }
@@ -1021,6 +1029,81 @@ function chooseLookupAddress(line){
   if (m) pendingSetup.postcode = normalisePostcode(m[1]);
   composeAddress();
   setLookup({ status:'chosen', message:'Check it reads exactly as it does on the tenancy agreement.', options:[] });
+}
+/* address autocomplete: suggestions (with postcodes) as the address is typed */
+const FLAT_PREFIX_RE = /^\s*((?:flat|apartment|apt|unit|studio|room)\s*(?:\d+[a-z]?|[a-z])\b)\s*,?\s*/i;
+let addrSuggestions = [];
+let addrActive = -1;
+let addrTimer = null;
+let addrSeq = 0;
+function onAddressInput(value){
+  clearTimeout(addrTimer);
+  const q = (value || '').replace(FLAT_PREFIX_RE, '').trim();
+  if (q.length < 3){ hideAddressSuggestions(); return; }
+  addrTimer = setTimeout(() => searchAddresses(q), 280);
+}
+async function searchAddresses(q){
+  const seq = ++addrSeq;
+  try{
+    const res = await fetch('/api/address-search?q=' + encodeURIComponent(q));
+    const data = await res.json();
+    if (seq !== addrSeq) return;
+    if (!res.ok || !Array.isArray(data.results)){ hideAddressSuggestions(); return; }
+    addrSuggestions = data.results;
+    addrActive = -1;
+    renderAddressSuggestions(q);
+  }catch(e){
+    if (seq === addrSeq) hideAddressSuggestions();
+  }
+}
+function renderAddressSuggestions(q){
+  const box = document.getElementById('addrSuggest');
+  const input = document.getElementById('unitInput');
+  if (!box || !input || document.activeElement !== input) return;
+  if (!addrSuggestions.length){
+    box.innerHTML = q.length >= 6 ? '<div class="addr-suggest-empty">No matches. Type the address and postcode below.</div>' : '';
+  } else {
+    box.innerHTML = addrSuggestions.map((r, i) => `<button type="button" role="option" id="addrOpt${i}" aria-selected="${i === addrActive}" class="addr-suggest-item${i === addrActive ? ' active' : ''}" onmousedown="event.preventDefault()" onclick="pickAddressSuggestion(${i})"><span class="as-line">${escapeHtml(r.line)}</span><span class="as-pc">${escapeHtml(r.postcode)}</span></button>`).join('');
+  }
+  const open = box.innerHTML !== '';
+  box.classList.toggle('hidden', !open);
+  input.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (addrActive >= 0) input.setAttribute('aria-activedescendant', 'addrOpt' + addrActive); else input.removeAttribute('aria-activedescendant');
+}
+function onAddressFocus(input){
+  // On phones, lift the field towards the top so the suggestions are not hidden behind the keyboard.
+  if (window.innerWidth < 700) setTimeout(() => (input.closest('.field') || input).scrollIntoView({ block: 'start', behavior: 'smooth' }), 250);
+}
+function hideAddressSuggestions(){
+  const box = document.getElementById('addrSuggest');
+  if (box){ box.classList.add('hidden'); box.innerHTML = ''; }
+  const input = document.getElementById('unitInput');
+  if (input){ input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); }
+  addrSuggestions = []; addrActive = -1;
+}
+function onAddressKeydown(e){
+  if (!addrSuggestions.length) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+    e.preventDefault();
+    const n = addrSuggestions.length;
+    addrActive = e.key === 'ArrowDown' ? (addrActive + 1) % n : (addrActive - 1 + n) % n;
+    renderAddressSuggestions('');
+  } else if (e.key === 'Enter' && addrActive >= 0){
+    e.preventDefault(); pickAddressSuggestion(addrActive);
+  } else if (e.key === 'Escape'){
+    hideAddressSuggestions();
+  }
+}
+function pickAddressSuggestion(i){
+  const r = addrSuggestions[i]; if (!r) return;
+  const m = (pendingSetup.unit || '').match(FLAT_PREFIX_RE);
+  const prefix = m ? m[1].replace(/^\w/, c => c.toUpperCase()) : '';
+  const lineHasPrefix = prefix && r.line.toLowerCase().startsWith(prefix.toLowerCase());
+  pendingSetup.unit = (prefix && !lineHasPrefix ? prefix + ', ' : '') + r.line;
+  pendingSetup.postcode = normalisePostcode(r.postcode);
+  composeAddress();
+  hideAddressSuggestions();
+  setLookup({ status:'chosen', message:'Postcode filled in from the address you picked. Add the flat number if it is missing.', options:[] });
 }
 function useSavedAddress(line){
   pendingSetup.address = line;
@@ -1947,7 +2030,11 @@ function renderSetup(){
         </div>` : ''}
       <div class="field">
         <label for="unitInput">Property address</label>
-        <input class="input" id="unitInput" type="text" placeholder="e.g. Flat 4, 12 Brownlow House, London" value="${escapeHtml(ps.unit)}" oninput="pendingSetup.unit=this.value; composeAddress();">
+        <div class="addr-wrap">
+          <input class="input" id="unitInput" type="text" placeholder="e.g. Flat 4, 12 Brownlow House, London" value="${escapeHtml(ps.unit)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="addrSuggest" aria-expanded="false" oninput="pendingSetup.unit=this.value; composeAddress(); onAddressInput(this.value);" onkeydown="onAddressKeydown(event)" onfocus="onAddressFocus(this)" onblur="setTimeout(hideAddressSuggestions, 150)">
+          <div class="addr-suggest hidden" id="addrSuggest" role="listbox" aria-label="Matching addresses"></div>
+        </div>
+        <div class="room-count-hint">Start typing the building or street name and pick a match to fill in the postcode.</div>
       </div>
       <div class="field">
         <label for="postcodeInput">Postcode</label>

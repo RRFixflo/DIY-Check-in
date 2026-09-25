@@ -70,7 +70,7 @@ Visit `/api/status` on your deployed URL. You should see:
 
 ## What the app does
 
-**Setup.** Address and postcode, with a "Find address" lookup. Inspection type,
+**Setup.** Address and postcode. Suggestions with postcodes appear as the address is typed (OpenStreetMap, no key needed), and there is also a "Find address" lookup by postcode. Inspection type,
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 

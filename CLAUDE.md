@@ -17,6 +17,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 | `GET /api/status` | `initAI()` on boot | `{ ai, reason, addressLookup }`, where `addressLookup` is `"full"` or `"postcode-only"` |
 | `POST /api/assess` with `{ label, room, image }` (JPEG data URL) | `assessItemPhoto()` after each item photo | `{ matches, note, condition, observation }`, with `condition` one of `new/good/fair/poor` |
 | `GET /api/postcode/:postcode` | `lookupPostcode()` | `{ postcode, addresses[] }` with getAddress.io, otherwise `{ postcode, ward, district, addresses: [] }` from postcodes.io |
+| `GET /api/address-search?q=` | `onAddressInput()` as the address is typed (debounced; a leading "Flat 4," is stripped from the query and kept on the chosen address) | `{ results: [{ line, postcode }] }`: up to 6 UK matches with a full postcode, from OpenStreetMap via Photon (no key), cached in memory |
 
 `/health` and `/healthz` return `{ ok: true }`.
 
@@ -42,6 +43,6 @@ Any change to `public/index.html` must pass both of these before it is committed
    ```sh
    node -e "const h=require('fs').readFileSync('public/index.html','utf8');require('fs').writeFileSync('/tmp/a.js',[...h.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n'))" && node --check /tmp/a.js
    ```
-2. **PDF:** a jsdom run of `buildPdfBlob`. Load `public/index.html` in jsdom with the jsPDF UMD inlined in place of the CDN tag, stub `fetch` for the three `/api/*` endpoints and stub canvas/Image, fill every room with photos and conditions, add the declaration and signature, then call `buildPdfBlob(state)`. Confirm it resolves, every page is A4 landscape (841.89 × 595.28 pt), and the rules above still hold.
+2. **PDF:** a jsdom run of `buildPdfBlob`. Load `public/index.html` in jsdom with the jsPDF UMD inlined in place of the CDN tag, stub `fetch` for the `/api/*` endpoints and stub canvas/Image, fill every room with photos and conditions, add the declaration and signature, then call `buildPdfBlob(state)`. Confirm it resolves, every page is A4 landscape (841.89 × 595.28 pt), and the rules above still hold.
 
 For server changes: `npm install && npm start`, then `curl` `/`, `/healthz` and `/api/status`.

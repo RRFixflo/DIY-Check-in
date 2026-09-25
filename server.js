@@ -148,6 +148,63 @@ app.get('/api/postcode/:pc', async (req, res) => {
   }
 });
 
+/* ----------------------------- /api/address-search ----------------------------- */
+// Address suggestions as the tenant types, from OpenStreetMap via Photon (free, no key).
+// Only UK results that carry a full postcode are returned.
+const PHOTON_URL = 'https://photon.komoot.io/api/';
+const UK_BBOX = '-8.7,49.8,1.9,60.9';
+const searchCache = new Map();
+
+function photonLine(p){
+  const street = p.street && p.housenumber ? `${p.housenumber} ${p.street}` : (p.street || '');
+  const name = p.name && p.name !== p.street ? p.name : '';
+  const parts = [name, street, p.locality || p.district, p.city].map(s => (s || '').trim()).filter(Boolean);
+  return parts.filter((s, i) => parts.indexOf(s) === i).join(', ');
+}
+
+app.get('/api/address-search', async (req, res) => {
+  const q = String(req.query.q || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+  if (q.length < 3) return res.json({ results: [] });
+
+  const key = q.toLowerCase();
+  if (searchCache.has(key)) return res.json({ results: searchCache.get(key) });
+
+  try {
+    const url = `${PHOTON_URL}?q=${encodeURIComponent(q)}&limit=10&lang=en&bbox=${UK_BBOX}`;
+    const r = await fetch(url, {
+      headers: { 'User-Agent': 'self-check-in-report (address autocomplete)' },
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!r.ok) {
+      console.error('photon returned', r.status);
+      return res.status(502).json({ error: 'Address search is unavailable.' });
+    }
+    const data = await r.json();
+    const seen = new Set();
+    const results = [];
+    for (const f of data.features || []) {
+      const p = f.properties || {};
+      if (p.countrycode && p.countrycode.toUpperCase() !== 'GB') continue;
+      const postcode = String(p.postcode || '').toUpperCase().replace(/\s+/g, '');
+      if (!/^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(postcode)) continue;
+      const pc = postcode.slice(0, -3) + ' ' + postcode.slice(-3);
+      const line = photonLine(p);
+      if (!line) continue;
+      const id = (line + '|' + pc).toLowerCase();
+      if (seen.has(id)) continue;
+      seen.add(id);
+      results.push({ line, postcode: pc });
+      if (results.length === 6) break;
+    }
+    if (searchCache.size > 500) searchCache.delete(searchCache.keys().next().value);
+    searchCache.set(key, results);
+    res.json({ results });
+  } catch (err) {
+    console.error('address search failed', err.name === 'TimeoutError' ? 'timeout' : err);
+    res.status(502).json({ error: 'Address search is unavailable.' });
+  }
+});
+
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 
 /* ----------------------------- client ----------------------------- */
