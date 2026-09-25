@@ -108,9 +108,7 @@ app.post('/api/assess', async (req, res) => {
 /* ----------------------------- address data helpers ----------------------------- */
 const POSTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/;
 const FULL_PC_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/;
-// OpenStreetMap data via Photon (free, no key) and postcodes.io (free, no key).
-const PHOTON = 'https://photon.komoot.io';
-const UK_BBOX = '-8.7,49.8,1.9,60.9';
+// Free fallbacks: postcodes.io (postcode check) and OpenStreetMap via Overpass (streets).
 const UA = { 'User-Agent': 'self-check-in-report (address lookup)' };
 
 function tidyPostcode(pc){
@@ -123,23 +121,6 @@ async function getJson(url, opts = {}){
   const r = await fetch(url, { ...rest, headers: { ...UA, ...(rest.headers || {}) }, signal: AbortSignal.timeout(timeout) });
   if (!r.ok) { const e = new Error(`${url.split('?')[0]} returned ${r.status}`); e.status = r.status; throw e; }
   return r.json();
-}
-
-function photonLine(p){
-  const street = p.street && p.housenumber ? `${p.housenumber} ${p.street}` : (p.street || '');
-  const name = p.name && p.name !== p.street ? p.name : '';
-  const parts = [name, street, p.locality || p.district, p.city].map(s => (s || '').trim()).filter(Boolean);
-  return parts.filter((s, i) => parts.indexOf(s) === i).join(', ');
-}
-
-// Nearest postcode for each [lon, lat], one postcodes.io call for the lot. Missing entries come back ''.
-async function nearestPostcodes(points){
-  if (!points.length) return [];
-  const data = await getJson('https://api.postcodes.io/postcodes', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ geolocations: points.map(([lon, lat]) => ({ longitude: lon, latitude: lat, radius: 500, limit: 1 })) })
-  });
-  return (data.result || []).map(x => (x && x.result && x.result[0] && tidyPostcode(x.result[0].postcode)) || '');
 }
 
 /* ----------------------------- /api/postcode ----------------------------- */
@@ -203,12 +184,6 @@ const GA = 'https://api.getAddress.io';
 const GA_TEMPLATE = '{formatted_address}{postcode,, }{postcode}';
 const gaKey = () => 'api-key=' + encodeURIComponent(GETADDRESS_API_KEY);
 
-function joinAddress(parts){
-  const out = [];
-  for (const p of parts.map(x => String(x || '').trim()).filter(Boolean)) if (!out.includes(p)) out.push(p);
-  return out.join(', ');
-}
-
 // Every address at a postcode: Autocomplete with the postcode as the term and all=true (1 look-up).
 // The older Find endpoint is tried if Autocomplete fails, for accounts that still have it.
 const gaPostcodeUrls = pc => [
@@ -265,70 +240,6 @@ app.get('/api/postcode/:pc', async (req, res) => {
   }
 });
 
-/* ----------------------------- /api/address-search ----------------------------- */
-// Address suggestions as the tenant types, from OpenStreetMap via Photon. UK only. Results without a
-// postcode (most UK OSM data) get the nearest postcode to their position from postcodes.io.
-const searchCache = new Map();
-
-app.get('/api/address-search', async (req, res) => {
-  const q = String(req.query.q || '').replace(/\s+/g, ' ').trim().slice(0, 120);
-  if (q.length < 3) return res.json({ results: [] });
-
-  const key = q.toLowerCase();
-  if (searchCache.has(key)) return res.json({ results: searchCache.get(key) });
-
-  // getAddress.io suggestions are free to query; the postcode is fetched when one is picked (/api/address/:id).
-  if (GETADDRESS_API_KEY) {
-    try {
-      const data = await getJson(`${GA}/autocomplete/${encodeURIComponent(q)}?${gaKey()}&top=6`, { timeout: 5000 });
-      const results = (data.suggestions || []).filter(x => x.id && x.address).map(x => ({ line: String(x.address).trim(), id: String(x.id) }));
-      console.log(`address search "${q}": ${results.length} getAddress.io suggestions`);
-      if (results.length) { searchCache.set(key, results); return res.json({ results }); }
-    } catch (err) { console.error('getAddress autocomplete failed:', err.message); }
-  }
-
-  try {
-    const data = await getJson(`${PHOTON}/api/?q=${encodeURIComponent(q)}&limit=10&lang=en&bbox=${UK_BBOX}`);
-    const candidates = [];
-    for (const f of data.features || []) {
-      const p = f.properties || {};
-      if (p.countrycode && p.countrycode.toUpperCase() !== 'GB') continue;
-      if (['country', 'state', 'county', 'city', 'district'].includes(p.type)) continue;
-      const line = photonLine(p);
-      const coords = f.geometry && f.geometry.coordinates;
-      if (!line) continue;
-      candidates.push({ line, postcode: tidyPostcode(p.postcode), coords: Array.isArray(coords) ? coords : null });
-    }
-
-    const missing = candidates.filter(c => !c.postcode && c.coords);
-    let filled = 0;
-    if (missing.length) {
-      try {
-        const pcs = await nearestPostcodes(missing.map(c => c.coords));
-        missing.forEach((c, i) => { if (pcs[i]) { c.postcode = pcs[i]; filled++; } });
-      } catch (err) { console.error('nearest postcodes failed:', err.message); }
-    }
-
-    const seen = new Set();
-    const results = [];
-    for (const c of candidates) {
-      if (!c.postcode) continue;
-      const id = (c.line + '|' + c.postcode).toLowerCase();
-      if (seen.has(id)) continue;
-      seen.add(id);
-      results.push({ line: c.line, postcode: c.postcode });
-      if (results.length === 6) break;
-    }
-    console.log(`address search "${q}": ${(data.features || []).length} OSM matches, ${candidates.length} usable, ${filled} postcodes from position, ${results.length} returned`);
-    if (searchCache.size > 500) searchCache.delete(searchCache.keys().next().value);
-    searchCache.set(key, results);
-    res.json({ results });
-  } catch (err) {
-    console.error('address search failed:', err.name === 'TimeoutError' ? 'timeout' : err.message);
-    res.status(502).json({ error: 'Address search is unavailable.' });
-  }
-});
-
 /* ----------------------------- /api/diag/address ----------------------------- */
 // Shows what getAddress.io returns for a postcode, to diagnose the lookup without server logs.
 // Never includes the key. Costs up to 2 look-ups, so it only runs when opened.
@@ -361,24 +272,6 @@ app.get('/api/diag/address', async (req, res) => {
     }
   }
   res.json(out);
-});
-
-/* ----------------------------- /api/address/:id ----------------------------- */
-// Full address for a getAddress.io suggestion the tenant picked (1 look-up).
-app.get('/api/address/:id', async (req, res) => {
-  if (!GETADDRESS_API_KEY) return res.status(404).json({ error: 'Not found' });
-  const id = String(req.params.id || '');
-  if (!/^[A-Za-z0-9=_-]{8,200}$/.test(id)) return res.status(400).json({ error: 'Bad address id.' });
-  try {
-    const a = await getJson(`${GA}/get/${encodeURIComponent(id)}?${gaKey()}`, { timeout: 6000 });
-    const postcode = tidyPostcode(a.postcode);
-    const line = joinAddress([a.line_1, a.line_2, a.line_3, a.line_4, a.locality, a.town_or_city]);
-    if (!line || !postcode) return res.status(502).json({ error: 'Address lookup is unavailable.' });
-    res.json({ line, postcode });
-  } catch (err) {
-    console.error('getAddress get failed:', err.message);
-    res.status(err.status === 404 ? 404 : 502).json({ error: 'Address lookup is unavailable.' });
-  }
 });
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));

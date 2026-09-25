@@ -70,7 +70,7 @@ Visit `/api/status` on your deployed URL. You should see:
 
 ## What the app does
 
-**Setup.** Postcode first: once a full postcode is typed, the addresses there are listed to pick from (Royal Mail data with a getAddress.io key, otherwise nearby addresses from OpenStreetMap). The address box also suggests matches, with postcodes, as it is typed. Inspection type,
+**Setup.** Postcode first: once a full postcode is typed, the addresses there are listed to pick from when they can be found (Royal Mail data with a getAddress.io key, otherwise the streets from OpenStreetMap). The address itself is entered as separate fields (flat, house/door number, building name, road, town), which a pick fills in and the tenant can always edit; a preview shows exactly how it will read on the report.
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 
