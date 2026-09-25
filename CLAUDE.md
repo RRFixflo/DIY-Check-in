@@ -23,7 +23,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 | `GET /api/status` | `initAI()` on boot | `{ ai, reason }` |
 | `POST /api/assess` with `{ label, room, image }` (JPEG data URL) | `assessItemPhoto()` after each item photo | `{ matches, note, condition, observation }`, with `condition` one of `new/good/fair/poor` |
 | `POST /api/reports`, body = the PDF (`application/pdf`), details in the `X-Report-Meta` header (URI-encoded JSON) | `submitReport()` when a report is finished | `201 { id }`, or `200 { id, duplicate: true }` for a repeat |
-| `GET /admin`, `GET /admin/reports/:id.pdf[?download=1]`, `POST /admin/reports/:id/delete` | the owner, in a browser | the private report list, the PDF, delete (all require `ADMIN_PASSWORD`) |
+| `GET /admin`, `GET /admin/reports/:id.pdf[?download=1]`, `POST /admin/reports/:id/delete`, `POST /admin/upload` (PDF body, `X-Report-Meta`) | the owner, in a browser | the private report list, the PDF, delete, and adding a PDF they already have (details read from the app's file name `Address - Type - Date - Ref.pdf`; de-duplicated by file contents). All require `ADMIN_PASSWORD`; delete and upload also require the same origin |
 
 `/health` and `/healthz` return `{ ok: true }`.
 

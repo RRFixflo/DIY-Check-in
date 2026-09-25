@@ -42,23 +42,21 @@ function listReports(){
 
 function mount(app){
   /* ---------- tenant side: send a copy of the finished report ---------- */
-  app.post('/api/reports', express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
-    if (!uploadAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many reports sent from here. Try again later.' });
-    const pdf = req.body;
-    if (!Buffer.isBuffer(pdf) || pdf.length < 1000 || pdf.slice(0, 5).toString() !== '%PDF-') return res.status(400).json({ error: 'Expected the report PDF.' });
-
-    let m = {};
-    try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || '%7B%7D'))); } catch (e) { m = {}; }
+  // Saves one report PDF with its details. Returns [httpStatus, jsonBody].
+  function storeReport(pdf, m, source){
+    if (!Buffer.isBuffer(pdf) || pdf.length < 1000 || pdf.slice(0, 5).toString() !== '%PDF-') return [400, { error: 'Expected the report PDF.' }];
     const meta = {
       address: clip(m.address, 200), inspectionType: clip(m.inspectionType, 40), ref: clip(m.ref, 40),
       inspectorName: clip(m.inspectorName, 120), signedBy: clip(m.signedBy, 120), createdAt: clip(m.createdAt, 40),
       finalizedAt: clip(m.finalizedAt, 40), rooms: Math.max(0, Math.min(99, parseInt(m.rooms, 10) || 0)),
-      photos: Math.max(0, Math.min(9999, parseInt(m.photos, 10) || 0)), fileName: clip(m.fileName, 200).replace(/[\\/"]/g, '-')
+      photos: Math.max(0, Math.min(9999, parseInt(m.photos, 10) || 0)), fileName: clip(m.fileName, 200).replace(/[\\/"]/g, '-'),
+      source
     };
-    // The same finished report (reference + finish time) is only ever stored once.
-    const key = crypto.createHash('sha256').update(meta.ref + '|' + meta.finalizedAt).digest('hex').slice(0, 12);
-    const existing = listReports().find(r => r.key === key && meta.finalizedAt);
-    if (existing) return res.json({ id: existing.id, duplicate: true });
+    // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
+    const basis = meta.finalizedAt ? meta.ref + '|' + meta.finalizedAt : 'file|' + crypto.createHash('sha256').update(pdf).digest('hex');
+    const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
+    const existing = listReports().find(r => r.key === key);
+    if (existing) return [200, { id: existing.id, duplicate: true }];
 
     const stamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '-').slice(0, 15);
     const id = `${stamp}-${key}`;
@@ -68,10 +66,20 @@ function mount(app){
       fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(record, null, 2));
     } catch (err) {
       console.error('report save failed', err);
-      return res.status(500).json({ error: 'The report could not be saved.' });
+      return [500, { error: 'The report could not be saved.' }];
     }
-    console.log(`report stored: ${id} (${meta.ref}, ${meta.address}, ${Math.round(pdf.length / 1024)} KB)`);
-    res.status(201).json({ id });
+    console.log(`report stored (${source}): ${id} (${meta.ref}, ${meta.address}, ${Math.round(pdf.length / 1024)} KB)`);
+    return [201, { id }];
+  }
+  function metaHeader(req){
+    try { return JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || '%7B%7D'))) || {}; } catch (e) { return {}; }
+  }
+
+  /* ---------- tenant side: send a copy of the finished report ---------- */
+  app.post('/api/reports', express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
+    if (!uploadAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many reports sent from here. Try again later.' });
+    const [status, body] = storeReport(req.body, metaHeader(req), 'app');
+    res.status(status).json(body);
   });
 
   /* ---------- owner side: /admin, behind ADMIN_PASSWORD ---------- */
@@ -98,9 +106,9 @@ function mount(app){
     const rows = reports.map(r => `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
-        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc(r.inspectionType)} · ${esc(r.ref)}</div></td>
+        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}</td>
-        <td class="num">${r.rooms} rooms · ${r.photos} photos<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
+        <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
@@ -123,15 +131,41 @@ function mount(app){
   .actions { white-space:nowrap; } .actions form { display:inline; }
   .btn { display:inline-block; font:inherit; font-size:13px; font-weight:600; padding:7px 11px; border-radius:8px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); text-decoration:none; cursor:pointer; margin:2px 4px 2px 0; }
   .btn:hover { border-color: var(--accent); color: var(--accent); } .btn.danger { color: var(--danger); } .btn.danger:hover { border-color: var(--danger); }
+  .upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; } #upStatus { font-size:14px; color:var(--soft); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; padding:10px 14px; font-size:14px; } .btn.primary:hover { color:#fff; opacity:.92; }
   .empty { padding: 40px 16px; text-align:center; color: var(--soft); }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
 <h1>Submitted reports</h1>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
+<div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
 ${reports.length ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
 <div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by</th><th>Contents</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
+<script>
+// Details come from the app's file names: "Address - Type - Date - Ref.pdf"; anything else keeps its file name.
+function metaFromName(name){
+  const base = name.replace(/\.pdf$/i, ''), parts = base.split(' - ');
+  if (parts.length >= 4) return { address: parts[0].replace(/-/g, ' ').trim(), inspectionType: parts[1].trim(), ref: parts[parts.length - 1].trim(), fileName: name };
+  return { address: base, fileName: name };
+}
+async function uploadPdfs(input){
+  const files = Array.from(input.files || []), st = document.getElementById('upStatus');
+  let added = 0, dup = 0, failed = [];
+  for (const [i, f] of files.entries()){
+    st.textContent = 'Uploading ' + (i + 1) + ' of ' + files.length + '…';
+    try {
+      const res = await fetch('/admin/upload', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': encodeURIComponent(JSON.stringify(metaFromName(f.name))) }, body: f });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+      data.duplicate ? dup++ : added++;
+    } catch (e) { failed.push(f.name + ' (' + e.message + ')'); }
+  }
+  st.textContent = added + ' added' + (dup ? ', ' + dup + ' already here' : '') + (failed.length ? '. Not added: ' + failed.join(', ') : '');
+  if (added) setTimeout(() => location.reload(), 900);
+}
+</script>
 </main></body></html>`);
   });
 
@@ -142,6 +176,13 @@ ${reports.length ? `<input type="search" placeholder="Search by address, referen
     const name = (meta.fileName || (id + '.pdf')).replace(/[^\w .,()-]/g, '-');
     res.set('Content-Disposition', `${req.query.download ? 'attachment' : 'inline'}; filename="${name}"`);
     res.type('application/pdf').sendFile(path.join(REPORTS_DIR, id + '.pdf'));
+  });
+
+  // The owner adds a report PDF they already have (for example one finished before reports were stored).
+  app.post('/admin/upload', requireAdmin, express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).json({ error: 'Upload from the reports page.' });
+    const [status, body] = storeReport(req.body, metaHeader(req), 'uploaded');
+    res.status(status).json(body);
   });
 
   app.post('/admin/reports/:id/delete', requireAdmin, (req, res) => {
