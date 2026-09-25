@@ -117,7 +117,6 @@
   .panel > .sec-label + .row2, .panel > .sec-label + .field { margin-top: 14px; }
   .field { margin-bottom: 18px; }
   .field > label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
-  .field > .field-help { font-size: 12.5px; color: var(--ink-soft); margin: -3px 0 8px; }
   .input, .select, .textarea {
     width: 100%; border: 1px solid var(--line-strong); background: var(--panel); border-radius: var(--radius-sm);
     padding: 11px 13px; font-size: 16px; color: var(--ink); min-height: 46px; box-shadow: var(--shadow-sm);
@@ -191,8 +190,6 @@
   .addr-option { display: flex; align-items: center; gap: 10px; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; font: inherit; font-size: 14px; color: var(--ink); cursor: pointer; transition: all .15s ease; }
   .addr-option::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--line-strong); flex: 0 0 auto; }
   .addr-option:hover { border-color: var(--accent); background: var(--accent-soft); }
-  .addr-group-label { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin: 12px 0 -4px; }
-  .addr-option.street::after { content: '+ number'; margin-left: auto; font-size: 11.5px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 999px; flex: 0 0 auto; }
   .addr-option:hover::before { border-color: var(--accent); background: var(--accent); }
   .addr-fields { margin: 4px 0 18px; padding: 18px 16px 6px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
   .addr-fields-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
@@ -449,7 +446,7 @@ function defaultState(){
 }
 function defaultPendingSetup(){
   return {
-    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '', lookup: { status:'idle', message:'', options:[] },
+    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '',
     inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
     managingAgent: 'Residential Realtors', furnishing: 'Furnished',
     bedrooms: 1, bathrooms: 1,
@@ -993,7 +990,7 @@ function removeCustomRoom(index){
   document.getElementById('customRoomsList').innerHTML = renderCustomRoomsListHTML();
   updateRoomCountHint();
 }
-/* ============================= address lookup (server-backed) ============================= */
+/* ============================= property address ============================= */
 const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 function normalisePostcode(pc){
   const raw = (pc || '').toUpperCase().replace(/\s+/g, '');
@@ -1057,64 +1054,11 @@ function missingAddressParts(){
   return out;
 }
 function onPostcodeBlur(){
-  // Update the field in place: a full re-render here would swap out the "Find address" button mid-tap.
+  // Tidy the field in place ("se16ad" -> "SE1 6AD") without re-rendering the form.
   pendingSetup.postcode = normalisePostcode(pendingSetup.postcode);
   const el = document.getElementById('postcodeInput');
   if (el && el.value !== pendingSetup.postcode) el.value = pendingSetup.postcode;
   composeAddress();
-}
-function setLookup(patch){
-  pendingSetup.lookup = Object.assign({ status:'idle', message:'', options:[] }, pendingSetup.lookup || {}, { streets: [] }, patch);
-  render();
-}
-let postcodeTimer = null;
-let lastLookedUp = '';
-function onPostcodeInput(value){
-  clearTimeout(postcodeTimer);
-  const pc = normalisePostcode(value);
-  if (!POSTCODE_RE.test(pc) || pc === lastLookedUp) return;
-  postcodeTimer = setTimeout(() => lookupPostcode(), 450);
-}
-async function lookupPostcode(){
-  const pc = normalisePostcode(pendingSetup.postcode);
-  pendingSetup.postcode = pc;
-  if (!POSTCODE_RE.test(pc)){
-    setLookup({ status:'error', message:'Enter a full UK postcode, e.g. SE16 4JU.', options:[] });
-    return;
-  }
-  clearTimeout(postcodeTimer);
-  lastLookedUp = pc;
-  setLookup({ status:'loading', message:'Looking up ' + pc + '…', options:[] });
-  try{
-    const res = await fetch('/api/postcode/' + encodeURIComponent(pc));
-    const data = await res.json();
-    if (!res.ok || data.error){
-      setLookup({ status:'error', message: data.error || 'That postcode was not found.', options:[] });
-      return;
-    }
-    const addresses = Array.isArray(data.addresses) ? data.addresses.slice(0, 60) : [];
-    const streets = Array.isArray(data.streets) ? data.streets : [];
-    if (addresses.length || streets.length){
-      setLookup({ status:'done', message: addresses.length ? 'Pick the property.' : '', options: addresses, streets });
-      return;
-    }
-    const area = [data.ward, data.district].filter(Boolean).join(', ');
-    composeAddress();
-    setLookup({ status:'partial', message: area ? ('Postcode confirmed: ' + area + '. Fill in the address below.') : 'Postcode confirmed. Fill in the address below.', options:[] });
-  }catch(err){
-    setLookup({ status:'error', message:'Address lookup is unavailable. Fill in the address below.', options:[] });
-  }
-}
-function chooseLookupStreet(line){
-  const f = splitAddressLine(line);
-  setAddressFields({ flat: pendingSetup.flat, houseNo: '', building: pendingSetup.building, road: f.road, town: f.town || pendingSetup.town, postcode: f.postcode });
-  setLookup({ status:'chosen', message:'Road filled in below. Now add the house or door number (and flat, if any).', options:[] });
-  const el = document.getElementById('houseNoInput');
-  if (el) el.focus();
-}
-function chooseLookupAddress(line){
-  setAddressFields(splitAddressLine(line));
-  setLookup({ status:'chosen', message:'Address filled in below. Check each part, and add the flat number if it is missing.', options:[] });
 }
 function useSavedAddress(line){
   setAddressFields(splitAddressLine(line));
@@ -2052,17 +1996,6 @@ function renderSetup(){
             ${addressBook.map(a => `<button type="button" class="addr-option" onclick="useSavedAddress(${JSON.stringify(a).replace(/"/g,'&quot;')})">${escapeHtml(a)}</button>`).join('')}
           </div>
         </div>` : ''}
-      <div class="field">
-        <label for="postcodeInput">Postcode</label>
-        <div class="field-help">Enter the postcode first. If the addresses there can be found, pick yours to fill in the fields below.</div>
-        <div class="cond-row">
-          <input class="input cond-note" id="postcodeInput" type="text" autocapitalize="characters" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="pendingSetup.postcode=this.value; composeAddress(); onPostcodeInput(this.value);" onblur="onPostcodeBlur()" onkeydown="if(event.key==='Enter'){event.preventDefault(); lookupPostcode();}">
-          <button type="button" class="btn btn-sm" onclick="lookupPostcode()" ${ps.lookup.status==='loading'?'disabled':''}>${ps.lookup.status==='loading'?'Searching…':'Find address'}</button>
-        </div>
-        ${ps.lookup.message ? `<div class="room-count-hint">${escapeHtml(ps.lookup.message)}</div>` : ''}
-        ${ps.lookup.options.length ? `<div class="addr-options">${ps.lookup.options.map(o => `<button type="button" class="addr-option" onclick="chooseLookupAddress(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
-        ${(ps.lookup.streets || []).length ? `<div class="addr-group-label">${ps.lookup.options.length ? 'Not listed? Pick your street, then type the house number' : 'Pick your street, then type the house or flat number'}</div><div class="addr-options">${ps.lookup.streets.map(o => `<button type="button" class="addr-option street" onclick="chooseLookupStreet(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escapeHtml(o)}</button>`).join('')}</div>` : ''}
-      </div>
       <div class="addr-fields">
         <div class="addr-fields-title">Property address</div>
         <div class="row2 keep-2">
@@ -2086,6 +2019,10 @@ function renderSetup(){
         <div class="field">
           <label for="townInput">Town or city <span class="opt">optional</span></label>
           <input class="input" id="townInput" type="text" placeholder="e.g. London" value="${escapeHtml(ps.town)}" oninput="setAddrField('town', this.value)">
+        </div>
+        <div class="field">
+          <label for="postcodeInput">Postcode</label>
+          <input class="input" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="postal-code" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)" onblur="onPostcodeBlur()">
         </div>
         <div class="addr-preview"><span>On the report</span><strong id="addressPreview">${escapeHtml(ps.address || 'Fill in the fields above')}</strong></div>
         <div class="room-count-hint">Check it reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>

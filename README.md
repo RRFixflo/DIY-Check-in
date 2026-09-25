@@ -41,7 +41,6 @@ In the Railway project, open **Variables** and add:
 | Variable | Required | What it does |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | yes, for condition assessment | Lets the server assess each photo. Get one at console.anthropic.com → API keys. |
-| `GETADDRESS_API_KEY` | optional | Exact address lists from Royal Mail PAF data. Sign up at getaddress.io. Without it, the address list comes from OpenStreetMap, which is free but misses some addresses. |
 | `ANTHROPIC_MODEL` | optional | Defaults to `claude-haiku-4-5-20251001`, the cheapest capable model. |
 
 `PORT` is set by Railway automatically. Do not add it.
@@ -58,19 +57,17 @@ Under **Settings → Domains** you can point your own domain at it instead.
 Visit `/api/status` on your deployed URL. You should see:
 
 ```json
-{"ai":true,"reason":"","addressLookup":"full"}
+{"ai":true,"reason":""}
 ```
 
 - `"ai": false` means `ANTHROPIC_API_KEY` is missing or misspelled. The app still
   works; the tenant sets each condition by hand instead.
-- `"addressLookup": "postcode-only"` means no getAddress.io key. Postcodes are
-  validated against a live database, but the tenant types the address.
 
 ---
 
 ## What the app does
 
-**Setup.** Postcode first: once a full postcode is typed, the addresses there are listed to pick from when they can be found (Royal Mail data with a getAddress.io key, otherwise the streets from OpenStreetMap). The address itself is entered as separate fields (flat, house/door number, building name, road, town), which a pick fills in and the tenant can always edit; a preview shows exactly how it will read on the report.
+**Setup.** The tenant types the address as separate fields (flat, house/door number, building name, road, town, postcode), with a preview of exactly how it will read on the report.
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 
@@ -107,7 +104,6 @@ photographs four across with their capture times, and the signed declaration.
 - **Railway**: the Hobby plan covers a tool at this scale. Usage-based beyond that.
 - **Anthropic**: roughly a fifth of a penny per photo on Haiku. A 50-photo
   check-in costs around 10p.
-- **getAddress.io**: free tier covers low volumes; paid plans start around £20/year.
 
 ---
 

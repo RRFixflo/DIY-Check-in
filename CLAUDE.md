@@ -9,23 +9,21 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
   - The draft is kept in IndexedDB on the tenant's device. Nothing is stored on the server.
   - The PDF is delivered as a plain browser download (object URL + `<a download>`). Do not add `claude.*` / `window.claude` calls. The client only talks to this server's `/api/*` endpoints.
 - `server.js` is an Express app that serves `public/` and the API below. Any other path falls back to `public/index.html`.
-- The setup form takes the address as separate fields (flat, house/door number, building name, road, town, postcode) and joins them in UK order with `streetLineFrom()`; a postcode (valid UK format), a flat or house/door number, and a road or building name are required. Picking a postcode lookup result fills the fields via `splitAddressLine()`, and every field stays editable.
+- The setup form takes the address as separate fields (flat, house/door number, building name, road, town, postcode), typed by the tenant, and joins them in UK order with `streetLineFrom()`; a postcode (valid UK format), a flat or house/door number, and a road or building name are required. There is no postcode lookup. Saved addresses on the device are split back into the fields with `splitAddressLine()`.
 - The first photo of every inspection is the outside/front of the property (`state.property.exterior.photos`, shown first on the rooms screen). `exteriorFirst()` blocks room, key and meter photos until it exists, `updateFinishButtonState()` requires it, and it goes on the PDF cover page.
 
 ## API
 
 | Endpoint | Used by | Returns |
 |---|---|---|
-| `GET /api/status` | `initAI()` on boot | `{ ai, reason, addressLookup }`, where `addressLookup` is `"full"` or `"postcode-only"` |
+| `GET /api/status` | `initAI()` on boot | `{ ai, reason }` |
 | `POST /api/assess` with `{ label, room, image }` (JPEG data URL) | `assessItemPhoto()` after each item photo | `{ matches, note, condition, observation }`, with `condition` one of `new/good/fair/poor` |
-| `GET /api/postcode/:postcode` | `lookupPostcode()`, run automatically once a full postcode is typed (and by the Find address button) | `{ postcode, addresses[], streets[], source }`: with `GETADDRESS_API_KEY`, every Royal Mail address at the postcode from getAddress.io Autocomplete (`all=true`, 1 look-up; the older Find endpoint is the fallback); otherwise postcodes.io confirms the postcode (`ward`, `district`) and OpenStreetMap (Overpass, both mirrors raced, cached) gives `addresses` tagged with exactly this postcode plus `streets` around it, for "pick your street, type the number". Untagged nearby houses are deliberately not listed: they are often in another postcode |
 
 `/health` and `/healthz` return `{ ok: true }`.
 
 ## Environment variables (set in Railway → Variables)
 
 - `ANTHROPIC_API_KEY`: enables `/api/assess`. Without it `/api/status` reports `ai:false` and the tenant picks each condition by hand.
-- `GETADDRESS_API_KEY`: optional, server-side only (never sent to the browser). Exact Royal Mail addresses from getAddress.io. Without it, or if getAddress.io fails, the free OpenStreetMap route is used. `GET /api/diag/address?pc=` shows what getAddress.io returns for each request form (never the key).
 - `ANTHROPIC_MODEL`: optional. Defaults to `claude-haiku-4-5-20251001`.
 - `PORT` is set by Railway. Do not set it.
 
