@@ -291,6 +291,11 @@
   .toggle-btn.active { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
   .toggle-btn.active.damage { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
 
+  .exterior-card { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 18px 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .exterior-card.done { border-left-color: var(--ok); }
+  .exterior-card.nudge { border-color: var(--warn); border-left-color: var(--warn); box-shadow: 0 0 0 4px var(--warn-soft); }
+  .exterior-card .item-check:not(.done) { color: var(--accent); border-color: var(--accent); font-size: 12px; }
+  .exterior-help { font-size: 13.5px; color: var(--ink-soft); margin-top: 8px; line-height: 1.5; }
   .room-footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); gap: 10px; flex-wrap: wrap; }
 
   /* ---------- review ---------- */
@@ -407,6 +412,7 @@ const CLEANLINESS_OPTIONS = [
 /* ============================= state ============================= */
 function defaultProperty(){
   return {
+    exterior: { photos: [] },
     keys: [{ desc:'', action:'Released to tenant', photos: [] }],
     meters: {
       electric: { na:false, reading:'', serial:'', location:'', photos: [] },
@@ -726,13 +732,24 @@ function stampPhoto(file, captionLabel, roomName){
   });
 }
 
-function triggerItemFileInput(roomId, itemId){ pendingPhotoTarget = { roomId, itemId }; document.getElementById('photoInput').click(); }
-function triggerExtraFileInput(roomId){ pendingPhotoTarget = { roomId, itemId: null }; document.getElementById('photoInput').click(); }
+/* The first photo of every inspection is the outside of the property. Nothing else can be photographed before it. */
+let exteriorNudge = false;
+function hasExteriorPhoto(){ return !!(state.property.exterior && state.property.exterior.photos.length); }
+function exteriorFirst(){
+  if (hasExteriorPhoto()) return true;
+  exteriorNudge = true; render();
+  const el = document.getElementById('exteriorCard');
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  return false;
+}
+function triggerExteriorFileInput(){ pendingPhotoTarget = { kind:'exterior' }; document.getElementById('photoInput').click(); }
+function triggerItemFileInput(roomId, itemId){ if (!exteriorFirst()) return; pendingPhotoTarget = { roomId, itemId }; document.getElementById('photoInput').click(); }
+function triggerExtraFileInput(roomId){ if (!exteriorFirst()) return; pendingPhotoTarget = { roomId, itemId: null }; document.getElementById('photoInput').click(); }
 
-function triggerMeterFileInput(key){ pendingPhotoTarget = { kind:'meter', key }; document.getElementById('photoInput').click(); }
-function triggerKeyFileInput(index){ pendingPhotoTarget = { kind:'keys', index }; document.getElementById('photoInput').click(); }
+function triggerMeterFileInput(key){ if (!exteriorFirst()) return; pendingPhotoTarget = { kind:'meter', key }; document.getElementById('photoInput').click(); }
+function triggerKeyFileInput(index){ if (!exteriorFirst()) return; pendingPhotoTarget = { kind:'keys', index }; document.getElementById('photoInput').click(); }
 function deletePropPhoto(kind, key, photoId){
-  const arr = kind === 'meter' ? state.property.meters[key].photos : state.property.keys[key].photos;
+  const arr = kind === 'exterior' ? state.property.exterior.photos : kind === 'meter' ? state.property.meters[key].photos : state.property.keys[key].photos;
   const i = arr.findIndex(p => p.id === photoId);
   if (i > -1) arr.splice(i, 1);
   persist(); render();
@@ -741,15 +758,16 @@ function handlePhotoInputChange(event){
   const files = Array.from(event.target.files || []);
   if (!files.length || !pendingPhotoTarget) return;
 
-  if (pendingPhotoTarget.kind === 'meter' || pendingPhotoTarget.kind === 'keys'){
+  if (pendingPhotoTarget.kind === 'meter' || pendingPhotoTarget.kind === 'keys' || pendingPhotoTarget.kind === 'exterior'){
     const t = pendingPhotoTarget;
-    const isMeter = t.kind === 'meter';
-    const arr = isMeter ? state.property.meters[t.key].photos : state.property.keys[t.index].photos;
-    const caption = isMeter ? METER_LABELS[t.key] : 'Keys';
+    const isMeter = t.kind === 'meter', isExterior = t.kind === 'exterior';
+    const arr = isExterior ? state.property.exterior.photos : isMeter ? state.property.meters[t.key].photos : state.property.keys[t.index].photos;
+    const caption = isExterior ? 'Front of the property' : isMeter ? METER_LABELS[t.key] : 'Keys';
+    if (isExterior) exteriorNudge = false;
     (async () => {
       for (const f of files){
         try {
-          const { dataUrl, ts } = await stampPhoto(f, caption, isMeter ? 'Meter reading' : 'Handover');
+          const { dataUrl, ts } = await stampPhoto(f, caption, isExterior ? 'Outside' : isMeter ? 'Meter reading' : 'Handover');
           const q = await assessPhotoQuality(dataUrl);
           arr.push({ id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: q });
         } catch (e) { console.error('photo failed', e); }
@@ -896,6 +914,7 @@ function normalizeProperty(saved){
   const pr = Object.assign(defaultProperty(), saved || {});
   pr.keys = (Array.isArray(pr.keys) && pr.keys.length ? pr.keys : [{ desc:'', action:'Released to tenant' }])
     .map(k => Object.assign({ desc:'', action:'Released to tenant', photos: [] }, k, { photos: Array.isArray(k.photos) ? k.photos : [] }));
+  pr.exterior = { photos: Array.isArray(pr.exterior && pr.exterior.photos) ? pr.exterior.photos : [] };
   const base = defaultProperty().meters;
   Object.keys(base).forEach(key => {
     pr.meters[key] = Object.assign({}, base[key], pr.meters[key] || {});
@@ -1255,6 +1274,7 @@ function updateFinishButtonState(){
   const missing = [];
   const incomplete = state.rooms.filter(r => !roomIsComplete(r)).length;
   if (incomplete) missing.push(`${incomplete} room${incomplete===1?'':'s'} still need${incomplete===1?'s':''} attention`);
+  if (!hasExteriorPhoto()) missing.push('a photo of the front of the property is needed');
   if (!state.declarationAccepted) missing.push('the declaration needs to be confirmed');
   if (!state.signatureDataUrl) missing.push('a signature is needed');
   btn.disabled = missing.length > 0;
@@ -1541,7 +1561,22 @@ async function buildPdfBlob(s, onProgress){
 
   const bedrooms = parseInt(s.meta.bedrooms, 10) || s.rooms.filter(r => r.type === 'bedroom').length;
   const description = [bedrooms ? bedrooms + ' Bedroom' : '', (s.meta.furnishing || '').trim(), 'Property'].filter(Boolean).join(' – ').replace(' – Property', ' Property');
-  const photoTotal = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0);
+  const exteriorPhotos = (s.property && s.property.exterior && s.property.exterior.photos) || [];
+  const photoTotal = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0) + exteriorPhotos.length;
+
+  // Front of the property on the right of the cover
+  let coverTextW = CW - 64;
+  if (exteriorPhotos.length){
+    const cw = 104, ch = 78, cx = PW - M - cw, cy = 44;
+    const img = await prepPhoto(exteriorPhotos[0].dataUrl, 1000, 4/3);
+    if (img){
+      doc.addImage(img, 'JPEG', cx, cy, cw, ch);
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.rect(cx, cy, cw, ch);
+      set('normal', 8, C.inkSoft);
+      doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts), cx, cy + ch + 5);
+      coverTextW = cx - 8 - (M + 61);
+    }
+  }
 
   y = 98;
   [
@@ -1557,7 +1592,7 @@ async function buildPdfBlob(s, onProgress){
     set('normal', 9.5, C.banner); doc.text(String(k), M, y);
     set('normal', 9.5, C.inkSoft); doc.text('|', M + 56, y);
     set('normal', 9.5, C.ink);
-    const ls = lines(v, CW - 64);
+    const ls = lines(v, coverTextW);
     doc.text(ls, M + 61, y);
     y += Math.max(8, ls.length * 4.6 + 3.4);
   });
@@ -2193,6 +2228,32 @@ function itemCardHTML(room, item){
   `;
 }
 
+function exteriorCardHTML(){
+  const photos = state.property.exterior.photos;
+  const done = photos.length > 0;
+  return `
+    <div class="exterior-card ${done ? 'done' : ''} ${exteriorNudge && !done ? 'nudge' : ''}" id="exteriorCard">
+      <div class="item-head">
+        <div class="item-title-wrap">
+          <span class="item-check ${done ? 'done' : ''}">${done ? '✓' : '1'}</span>
+          <span class="item-title">Outside the property</span>
+        </div>
+        <span class="na-toggle required-tag">${done ? 'Done' : 'First photo'}</span>
+      </div>
+      <div class="exterior-help">${done
+        ? 'The front of the property is photographed. It goes on the cover of the report.'
+        : 'Start here. Stand outside and photograph the front of the property, showing the entrance and the house or flat number. The rooms can be photographed once this is done.'}</div>
+      ${exteriorNudge && !done ? '<div class="ai-warn-note">Take the photo of the front of the property first.</div>' : ''}
+      <div class="item-photo-row">
+        <button type="button" class="add-item-photo" onclick="triggerExteriorFileInput()" aria-label="Add photo of the front of the property">${ICONS.camera}<span>Add</span></button>
+        ${photos.map(ph => `
+          <div class="item-thumb">
+            <img src="${ph.dataUrl}" onclick="openPhotoPreview('${ph.dataUrl}')" alt="Front of the property">
+            <button type="button" class="del-btn" onclick="deletePropPhoto('exterior', null, '${ph.id}')" aria-label="Delete photo">×</button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
 function renderCapture(){
   const room = getActiveRoom();
   if (!room) return renderSetup();
@@ -2222,6 +2283,7 @@ function renderCapture(){
       <div class="progress-bar-shell"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
       <div class="autosave-note">Your progress is saved automatically on this device — safe to close and come back later.</div>
     </div>
+    ${exteriorCardHTML()}
     <div class="capture-layout">
       <nav class="room-nav">
         ${state.rooms.map(r => {
@@ -2521,6 +2583,7 @@ function renderDone(){
         ${state.meta.moveInDateTime ? `Move-in: ${escapeHtml(formatDateTimeLocal(state.meta.moveInDateTime))}<br>` : ''}
         Inspector: ${escapeHtml(state.meta.inspectorName)} · Rooms: ${state.rooms.length} · Photos: ${totalCaptured()}
       </div>
+      ${hasExteriorPhoto() ? `<div class="report-item"><div class="il">Front of the property</div><div class="report-photo-grid">${state.property.exterior.photos.map(p => `<img src="${p.dataUrl}" alt="Front of the property">`).join('')}</div></div>` : ''}
       ${state.signatureDataUrl ? `<img class="sig-preview" src="${state.signatureDataUrl}" alt="Signature">` : ''}
       ${state.rooms.map(r => `
         <div class="report-room">

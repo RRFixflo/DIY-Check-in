@@ -74,6 +74,8 @@ Visit `/api/status` on your deployed URL. You should see:
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 
+**Outside first.** The first photo is the front of the property from outside, showing the entrance and number. Nothing else can be photographed until it is taken, and it goes on the report cover.
+
 **Rooms.** Each room has a checklist tailored to its type, at least 8 photos
 required. Marking an item not applicable never takes a room below 8. Every item
 needs a photo. The front door is mandatory and cannot be skipped. Each item shows guidance

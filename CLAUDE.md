@@ -10,6 +10,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
   - The PDF is delivered as a plain browser download (object URL + `<a download>`). Do not add `claude.*` / `window.claude` calls. The client only talks to this server's `/api/*` endpoints.
 - `server.js` is an Express app that serves `public/` and the API below. Any other path falls back to `public/index.html`.
 - The setup form takes the address as separate fields (flat, house/door number, building name, road, town, postcode) and joins them in UK order with `streetLineFrom()`; a postcode (valid UK format), a flat or house/door number, and a road or building name are required. Picking a postcode lookup result fills the fields via `splitAddressLine()`, and every field stays editable.
+- The first photo of every inspection is the outside/front of the property (`state.property.exterior.photos`, shown first on the rooms screen). `exteriorFirst()` blocks room, key and meter photos until it exists, `updateFinishButtonState()` requires it, and it goes on the PDF cover page.
 
 ## API
 
