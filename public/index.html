@@ -1400,17 +1400,48 @@ function itemCategory(label){
   for (const [name, re] of SCHEDULE_GROUPS) if (re.test(label)) return name;
   return 'GENERAL';
 }
-function conditionSentence(item){
-  if (item.notApplicable) return 'Not applicable' + ((item.naReason || '').trim() ? ' – ' + item.naReason.trim() : '');
-  const bits = [];
-  bits.push(item.condition ? 'In ' + conditionLabel(item.condition).toLowerCase() : 'Condition not recorded');
-  const obs = (item.aiObservation || '').trim();
+/* Items are numbered within each room; their photos are referenced 3a, 3b... (or just 3 when there is one),
+   and general room photos G1, G2... The schedule and the photo captions use the same references. */
+function photoRefsForRoom(room){
+  const byItem = new Map();
+  room.items.forEach((item, idx) => {
+    const n = idx + 1, count = (item.photos || []).length;
+    byItem.set(item.id, { n, refs: (item.photos || []).map((p, i) => count > 1 ? n + String.fromCharCode(97 + (i % 26)) : String(n)) });
+  });
+  const extras = (room.extraPhotos || []).map((p, i) => 'G' + (i + 1));
+  return { byItem, extras };
+}
+function sentence(t){ t = String(t || '').trim(); return !t ? '' : /[.!?]$/.test(t) ? t : t + '.'; }
+function reportConditionText(item, refs){
+  if (item.notApplicable) return 'Not applicable' + ((item.naReason || '').trim() ? ' – ' + item.naReason.trim() : '') + '.';
+  const bits = [sentence(item.condition ? conditionLabel(item.condition) : 'Condition not recorded')];
+  const obs = sentence(item.aiObservation);
   if (obs) bits.push(obs);
-  const note = (item.conditionNote || '').trim();
-  if (note) bits.push('Tenant note: ' + note);
-  const n = item.photos ? item.photos.length : 0;
-  bits.push(n === 1 ? '1 photograph' : n + ' photographs');
-  return bits.join(', ');
+  const note = sentence(item.conditionNote);
+  if (note) bits.push("Tenant's note: " + note);
+  bits.push(refs && refs.length ? (refs.length > 1 ? 'Photos ' : 'Photo ') + refs.join(', ') : 'No photograph.');
+  return bits.join(' ');
+}
+// Everything a reader of a deposit dispute would look for first.
+function issuesNoted(s){
+  const rows = [];
+  s.rooms.forEach(room => {
+    const { byItem } = photoRefsForRoom(room);
+    room.items.forEach(item => {
+      const ref = byItem.get(item.id);
+      const note = (item.conditionNote || '').trim(), obs = (item.aiObservation || '').trim();
+      if (item.notApplicable){
+        rows.push([room.name, String(ref.n), item.label, 'Not applicable', (item.naReason || '').trim() || 'No reason given']);
+      } else if (item.condition === 'fair' || item.condition === 'poor' || note){
+        const details = [obs ? sentence(obs) : '', note ? "Tenant's note: " + sentence(note) : ''].filter(Boolean).join(' ') || '—';
+        rows.push([room.name, ref.refs.length ? ref.refs.join(', ') : String(ref.n), item.label, item.condition ? conditionLabel(item.condition) : 'Not recorded', details]);
+      }
+    });
+    const c = room.condition || {};
+    if (c.hasDamage) rows.push([room.name, '', 'Damage / defects', 'Reported', (c.damageNotes || '').trim() || 'Noted, no detail given.']);
+    if (c.cleanliness === 'fair' || c.cleanliness === 'poor') rows.push([room.name, '', 'Room cleanliness', cleanlinessLabel(c.cleanliness), '']);
+  });
+  return rows;
 }
 
 /* ============================= PDF generation ============================= */
@@ -1529,6 +1560,7 @@ async function buildPdfBlob(s, onProgress){
     ['Managing Agent', (s.meta.managingAgent || '').trim() || '—'],
     [isOut ? 'Date Of Check Out' : 'Date Of Check In', dateLong],
     s.meta.moveInDateTime ? ['Tenancy Move-In', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
+    s.meta.createdAt ? ['Inspection', 'Started ' + formatTimestamp(new Date(s.meta.createdAt)) + (s.finalizedAt ? '  ·  completed ' + formatTimestamp(new Date(s.finalizedAt)) : '')] : null,
     ['Compiled By', s.meta.inspectorName],
     ['Report Reference', ref],
     ['Photographic Record', s.rooms.length + ' rooms  ·  ' + photoTotal + ' date and time stamped photographs']
@@ -1551,6 +1583,7 @@ async function buildPdfBlob(s, onProgress){
     'This report records the condition, cleanliness and contents of the property at the date and time of the inspection. It is intended as a fair and accurate record for both landlord and tenant, and it is the document the two parties compare against at the end of the tenancy.',
     'Every room in this report carries a minimum of eight photographs taken on the day of the inspection. Each photograph is date and time stamped at the moment it is captured, and the stamp is written into the image itself so it cannot be separated from the picture.',
     'The person compiling this report is not a qualified surveyor. Descriptions of woods, fabrics, plant life and colours are for identification only and should not be read as an expert assessment. An item is only described as new where it is still in its original packaging or an invoice has been provided.',
+    'Items are numbered within each room, and each item\u2019s photographs carry the same number: item 3 is shown in photograph 3, or 3a, 3b and so on where there are several. General photographs of a room are numbered G1, G2 and so on. Every entry in the schedule lists the photographs that show it.',
     'Photographs may not be exhaustive of every item and area of the property. Where an item is not photographed, the written description stands as the record of its condition.',
     'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
     'A signature on the declaration form applies to the whole report: the schedule of condition, the general condition and cleanliness of the property, the meter readings, and the handover or hand back of keys.',
@@ -1603,6 +1636,38 @@ async function buildPdfBlob(s, onProgress){
     ['GENERAL DECORATIVE ORDER', derivedLabel(derivedDecorativeCondition(s.rooms))]
   ].concat(scheduleRows(s));
   labelRows(schedule, 62, 9);
+
+  /* ------------------------------------------------- summary of items noted */
+  newSection('Summary of items noted – ' + stage.toLowerCase());
+  const issues = issuesNoted(s);
+  set('normal', 8.6, C.inkSoft);
+  const introLines = lines(issues.length
+    ? 'Every item recorded in fair or poor condition, every note added by the tenant, any damage or defects reported, room cleanliness below a good standard, and every item marked not applicable. Full details are in the room schedules that follow.'
+    : 'No items were recorded in fair or poor condition, no damage or defects were reported, and no notes were added. Full details are in the room schedules that follow.', CW);
+  doc.text(introLines, M, y + 3);
+  y += introLines.length * 4.1 + 5;
+  if (issues.length){
+    const cols = [[ 'ROOM', 46 ], [ 'REF', 16 ], [ 'ITEM', 52 ], [ 'CONDITION', 34 ], [ 'DETAILS', CW - 148 ]];
+    const head = () => {
+      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F');
+      set('bold', 7.8, C.inkSoft);
+      let x = M; cols.forEach(([t, w]) => { doc.text(t, x + 2, y + 5.3); x += w; });
+      y += 8;
+    };
+    head();
+    issues.forEach(row => {
+      const cells = row.map((v, i) => lines(v || '', cols[i][1] - 4));
+      const h = Math.max(8.5, Math.max.apply(null, cells.map(c => c.length)) * 4 + 4.4);
+      if (y + h > BOTTOM){ newPage(); head(); }
+      let x = M;
+      cells.forEach((c, i) => {
+        set(i === 2 ? 'bold' : 'normal', 8, i === 3 && /poor|reported/i.test(row[3]) ? C.banner : (i === 2 ? C.ink : C.inkSoft));
+        doc.text(c, x + 2, y + 5.2); x += cols[i][1];
+      });
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + h, PW - M, y + h);
+      y += h;
+    });
+  }
 
   /* -------------------------------------------------------------- the keys */
   newSection('Keys – ' + stage.toLowerCase());
@@ -1725,6 +1790,7 @@ async function buildPdfBlob(s, onProgress){
     banner(room.name);
     tableHead(room.name);
 
+    const roomRefs = photoRefsForRoom(room);
     let n = 0, lastCat = '';
     for (const item of room.items){
       const cat = itemCategory(item.label);
@@ -1739,7 +1805,7 @@ async function buildPdfBlob(s, onProgress){
       set('bold', 8.2, C.ink);
       const dLines = lines(item.label, wDesc - 6);
       set('normal', 8, C.inkSoft);
-      const cLines = lines(conditionSentence(item), wIn - 6);
+      const cLines = lines(reportConditionText(item, roomRefs.byItem.get(item.id).refs), wIn - 6);
       const h = Math.max(9, Math.max(dLines.length, cLines.length) * 4.1 + 4.2);
       if (y + h > BOTTOM){ newPage(); banner(room.name); tableHead(room.name); lastCat = ''; }
       set('normal', 8, C.inkSoft); doc.text(String(n) + '.', xRef + 2, y + 5.2);
@@ -1762,6 +1828,9 @@ async function buildPdfBlob(s, onProgress){
     set('normal', 8.4, C.ink);
     doc.text(lines(room.condition.hasDamage ? (room.condition.damageNotes || 'Noted, no detail given.') : 'None noted', CW * 0.32), M + CW * 0.5 + 44, y + 4);
     y += 10;
+    set('normal', 8, C.inkSoft);
+    doc.text(roomTotalPhotos(room) + ' date and time stamped photographs  ·  ' + room.items.filter(i => !i.notApplicable).length + ' items recorded' + (naCount(room) ? ', ' + naCount(room) + ' not applicable' : ''), M + 2, y);
+    y += 6;
     if ((room.notes || '').trim()){
       const ls = lines('Notes: ' + room.notes, CW);
       need(ls.length * 4.2 + 4);
@@ -1771,8 +1840,8 @@ async function buildPdfBlob(s, onProgress){
 
     /* photo pages, eight to a page */
     const shots = [];
-    room.items.forEach(i => (i.photos || []).forEach(p => shots.push({ label:i.label, ts:p.ts, dataUrl:p.dataUrl })));
-    (room.extraPhotos || []).forEach(p => shots.push({ label:'General view', ts:p.ts, dataUrl:p.dataUrl }));
+    room.items.forEach(i => (i.photos || []).forEach((p, k) => shots.push({ label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref: roomRefs.byItem.get(i.id).refs[k] })));
+    (room.extraPhotos || []).forEach((p, k) => shots.push({ label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref: roomRefs.extras[k] }));
 
     for (let i = 0; i < shots.length; i += 8){
       newPage();
@@ -1901,7 +1970,7 @@ async function buildPdfBlob(s, onProgress){
           doc.rect(x, top, cw, ih);
         }
         set('normal', 7.6, C.inkSoft);
-        doc.text(lines(String(shot.label || '').toUpperCase(), cw)[0], x + cw / 2, top + ih + 4, { align:'center' });
+        doc.text(lines((shot.ref ? shot.ref + '  ·  ' : '') + String(shot.label || '').toUpperCase(), cw)[0], x + cw / 2, top + ih + 4, { align:'center' });
         set('normal', 6.8, C.faint);
         doc.text(photoStamp(shot.ts), x + cw / 2, top + ih + 8, { align:'center' });
       }
