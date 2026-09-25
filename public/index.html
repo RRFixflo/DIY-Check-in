@@ -349,7 +349,7 @@
   .report-item { margin-top: 12px; }
   .report-item .il { font-size: 13px; font-weight: 650; color: var(--ink); margin-bottom: 6px; }
   .report-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
-  .report-photo-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); }
+  .report-photo-grid img { cursor: zoom-in; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; box-shadow: 0 0 0 1px var(--line); }
   .sig-preview { max-width: 240px; background: #fff; border-radius: 8px; padding: 6px; border: 1px solid var(--line); }
 
   .resume-card { text-align: center; padding: 44px 22px; max-width: 520px; margin: 24px auto 0; }
@@ -1467,6 +1467,23 @@ async function buildPdfBlob(s, onProgress){
   const ref = s.meta.ref || '';
   const dateLong = s.meta.createdAt ? ordinalDate(new Date(s.meta.createdAt)) : ordinalDate(new Date());
   const toc = [];
+  // Every photo gets a full-size page at the end; each thumbnail links to it and it links back.
+  const fullSize = [];   // { dataUrl, alias, title, ts, backPage, page }
+  const thumbLinks = []; // { page, x, y, w, h, idx }
+  function registerFullSize(shot, alias){
+    fullSize.push({ dataUrl: shot.dataUrl, alias, title: shot.fullTitle || shot.label || 'Photograph', ts: shot.ts, backPage: pageNow() });
+    return fullSize.length - 1;
+  }
+  // Draws the photo uncropped, centred in the box (so portrait photos and their stamp are never cut off).
+  function drawFitted(dataUrl, alias, x, yy, w, h){
+    let props;
+    try { props = doc.getImageProperties(dataUrl); } catch (e) { return false; }
+    const r = Math.min(w / props.width, h / props.height);
+    const dw = props.width * r, dh = props.height * r;
+    doc.setFillColor(244, 245, 247); doc.rect(x, yy, w, h, 'F');
+    doc.addImage(dataUrl, 'JPEG', x + (w - dw) / 2, yy + (h - dh) / 2, dw, dh, alias, 'FAST');
+    return true;
+  }
 
   const set = (font, size, colour) => { doc.setFont('helvetica', font); doc.setFontSize(size); doc.setTextColor(colour[0], colour[1], colour[2]); };
   const pageNow = () => doc.internal.getNumberOfPages();
@@ -1550,9 +1567,10 @@ async function buildPdfBlob(s, onProgress){
   let coverTextW = CW - 64;
   if (exteriorPhotos.length){
     const cw = 104, ch = 78, cx = PW - M - cw, cy = 44;
-    const img = await prepPhoto(exteriorPhotos[0].dataUrl, 1000, 4/3);
-    if (img){
-      doc.addImage(img, 'JPEG', cx, cy, cw, ch);
+    const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
+    const exAlias = 'photo-exterior-0';
+    if (drawFitted(exShot.dataUrl, exAlias, cx, cy, cw, ch)){
+      thumbLinks.push({ page: pageNow(), x: cx, y: cy, w: cw, h: ch, idx: registerFullSize(exShot, exAlias) });
       doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.rect(cx, cy, cw, ch);
       set('normal', 8, C.inkSoft);
       doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts), cx, cy + ch + 5);
@@ -1698,7 +1716,7 @@ async function buildPdfBlob(s, onProgress){
   });
   y += 5;
   const keyShots = [];
-  keys.forEach(k => (k.photos || []).forEach(p => keyShots.push({ label:'Keys – ' + k.desc, ts:p.ts, dataUrl:p.dataUrl })));
+  keys.forEach(k => (k.photos || []).forEach(p => keyShots.push({ label:'Keys – ' + k.desc, fullTitle:'KEYS  ·  ' + String(k.desc || '').toUpperCase(), ts:p.ts, dataUrl:p.dataUrl })));
   await photoGrid(keyShots, 4);
 
   /* ------------------------------------------------------- utility meters */
@@ -1735,7 +1753,7 @@ async function buildPdfBlob(s, onProgress){
   meterKeys.forEach(key => {
     const m = s.property.meters[key];
     if (m.na) return;
-    (m.photos || []).forEach(p => meterShots.push({ label: METER_LABELS[key], ts:p.ts, dataUrl:p.dataUrl }));
+    (m.photos || []).forEach(p => meterShots.push({ label: METER_LABELS[key], fullTitle:'UTILITY METERS  ·  ' + METER_LABELS[key].toUpperCase() + (m.reading ? '  ·  READING ' + m.reading : ''), ts:p.ts, dataUrl:p.dataUrl }));
   });
   await photoGrid(meterShots, 4);
 
@@ -1847,8 +1865,8 @@ async function buildPdfBlob(s, onProgress){
 
     /* photo pages, eight to a page */
     const shots = [];
-    room.items.forEach(i => (i.photos || []).forEach((p, k) => shots.push({ label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref: roomRefs.byItem.get(i.id).refs[k] })));
-    (room.extraPhotos || []).forEach((p, k) => shots.push({ label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref: roomRefs.extras[k] }));
+    room.items.forEach(i => (i.photos || []).forEach((p, k) => { const ref = roomRefs.byItem.get(i.id).refs[k]; shots.push({ label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  ' + i.label).toUpperCase() }); }));
+    (room.extraPhotos || []).forEach((p, k) => { const ref = roomRefs.extras[k]; shots.push({ label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  General view').toUpperCase() }); });
 
     for (let i = 0; i < shots.length; i += 8){
       newPage();
@@ -1930,6 +1948,27 @@ async function buildPdfBlob(s, onProgress){
   doc.text('TENANT(S) SIGNATURE(S)', M + sigW + 10, y + 32);
   doc.line(M + sigW + 10, y + 42, PW - M, y + 42);
 
+  /* --------------------------------------------------- full-size photographs */
+  if (fullSize.length){
+    newSection('Photographs – full size');
+    set('normal', 9, C.ink);
+    const fl = lines('Every photograph in this report follows at full size, one to a page, uncropped and exactly as taken, with the date and time stamp written into the image. Tap or click any photograph earlier in the report to jump to it here, and use Back to return.', CW);
+    doc.text(fl, M, y + 3);
+    for (const f of fullSize){
+      newPage();
+      f.page = pageNow();
+      set('bold', 10, C.banner);
+      doc.text(lines(f.title, CW - 40)[0], M, y + 2);
+      set('normal', 8.5, C.inkSoft);
+      doc.text('Taken ' + (photoStamp(f.ts) || 'time not recorded'), M, y + 7.5);
+      set('bold', 9, C.banner);
+      doc.textWithLink('\u00ab Back', PW - M - doc.getTextWidth('\u00ab Back'), y + 2, { pageNumber: f.backPage });
+      const top = y + 11;
+      drawFitted(f.dataUrl, f.alias, M, top, CW, BOTTOM - top);
+    }
+    thumbLinks.forEach(t => { doc.setPage(t.page); doc.link(t.x, t.y, t.w, t.h, { pageNumber: fullSize[t.idx].page }); });
+  }
+
   /* ------------------------------------------------------- contents page */
   doc.setPage(tocPage);
   y = TOP;
@@ -1969,12 +2008,12 @@ async function buildPdfBlob(s, onProgress){
       for (let c = 0; c < row.length; c++){
         const shot = row[c];
         const x = M + c * (cw + gap);
-        const img = await prepPhoto(shot.dataUrl, 1000, 4/3);
         if (onEach) onEach();
-        if (img){
-          doc.addImage(img, 'JPEG', x, top, cw, ih);
+        const alias = 'photo-' + fullSize.length;
+        if (drawFitted(shot.dataUrl, alias, x, top, cw, ih)){
           doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
           doc.rect(x, top, cw, ih);
+          thumbLinks.push({ page: pageNow(), x, y: top, w: cw, h: ih, idx: registerFullSize(shot, alias) });
         }
         set('normal', 7.6, C.inkSoft);
         doc.text(lines((shot.ref ? shot.ref + '  ·  ' : '') + String(shot.label || '').toUpperCase(), cw)[0], x + cw / 2, top + ih + 4, { align:'center' });
@@ -2641,7 +2680,7 @@ function renderDone(){
       </div>
     </div>
 
-    <div class="report-doc">
+    <div class="report-doc" onclick="if (event.target.tagName === 'IMG' && !event.target.classList.contains('sig-preview')) openPhotoPreview(event.target.src)">
       <h2>Self Check-In Report</h2>
       <div class="report-meta">
         ${escapeHtml(state.meta.address)}<br>
