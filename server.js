@@ -10,7 +10,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
-const GETADDRESS_API_KEY = (process.env.GETADDRESS_API_KEY || '').trim();
+const GETADDRESS_API_KEY = (process.env.GETADDRESS_API_KEY || '').trim().replace(/^["']+|["']+$/g, '').trim();
 const ANTHROPIC_MODEL = (process.env.ANTHROPIC_MODEL || '').trim() || 'claude-haiku-4-5-20251001';
 
 const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null;
@@ -211,13 +211,19 @@ function joinAddress(parts){
 
 // Every address at a postcode: Autocomplete with the postcode as the term and all=true (1 look-up).
 // The older Find endpoint is tried if Autocomplete fails, for accounts that still have it.
+const gaPostcodeUrls = pc => [
+  `${GA}/autocomplete/${encodeURIComponent(pc)}?${gaKey()}&all=true&show-postcode=true&template=${encodeURIComponent(GA_TEMPLATE)}`,
+  `${GA}/autocomplete/${encodeURIComponent(pc)}?${gaKey()}&all=true`
+];
 async function getAddressPostcode(pc){
-  try {
-    const data = await getJson(`${GA}/autocomplete/${encodeURIComponent(pc)}?${gaKey()}&all=true&show-postcode=true&template=${encodeURIComponent(GA_TEMPLATE)}`, { timeout: 6000 });
-    const addresses = (data.suggestions || []).map(x => String(x.address || '').trim()).filter(Boolean)
-      .map(a => tidyPostcode((a.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i) || [])[1]) ? a : `${a}, ${pc}`);
-    if (addresses.length) return addresses;
-  } catch (err) { console.error('getAddress autocomplete failed:', err.message); }
+  for (const url of gaPostcodeUrls(pc)) {
+    try {
+      const data = await getJson(url, { timeout: 6000 });
+      const addresses = (data.suggestions || []).map(x => String(x.address || '').trim()).filter(Boolean)
+        .map(a => tidyPostcode((a.match(/([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\s*$/i) || [])[1]) ? a : `${a}, ${pc}`);
+      if (addresses.length) return addresses;
+    } catch (err) { console.error('getAddress autocomplete failed:', err.message); }
+  }
   try {
     const data = await getJson(`${GA}/find/${encodeURIComponent(pc)}?expand=true&${gaKey()}`, { timeout: 6000 });
     return (data.addresses || []).map(a => formatAddress(a) + ', ' + (data.postcode || pc));
@@ -321,6 +327,32 @@ app.get('/api/address-search', async (req, res) => {
     console.error('address search failed:', err.name === 'TimeoutError' ? 'timeout' : err.message);
     res.status(502).json({ error: 'Address search is unavailable.' });
   }
+});
+
+/* ----------------------------- /api/diag/address ----------------------------- */
+// Shows what getAddress.io returns for a postcode, to diagnose the lookup without server logs.
+// Never includes the key. Costs up to 2 look-ups, so it only runs when opened.
+app.get('/api/diag/address', async (req, res) => {
+  const pc = tidyPostcode(req.query.pc || 'SE1 6AD') || 'SE1 6AD';
+  const out = { key_set: !!GETADDRESS_API_KEY, key_length: GETADDRESS_API_KEY.length, postcode: pc, attempts: [] };
+  if (!GETADDRESS_API_KEY) return res.json(out);
+  const tries = gaPostcodeUrls(pc).concat(`${GA}/find/${encodeURIComponent(pc)}?${gaKey()}`);
+  for (const url of tries) {
+    const name = url.split('?')[0].replace(GA, '') + (url.includes('template=') ? ' (with template)' : '');
+    try {
+      const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(6000) });
+      const text = await r.text();
+      let body; try { body = JSON.parse(text); } catch (e) { body = null; }
+      const list = body && (body.suggestions || body.addresses);
+      out.attempts.push({ call: name, http_status: r.status, results: Array.isArray(list) ? list.length : null,
+        sample: Array.isArray(list) ? list.slice(0, 3).map(x => x.address || x) : undefined,
+        message: r.ok ? undefined : (body && (body.Message || body.message)) || text.slice(0, 200) });
+      if (r.ok && Array.isArray(list) && list.length) break;
+    } catch (err) {
+      out.attempts.push({ call: name, error: err.name === 'TimeoutError' ? 'timeout' : err.message });
+    }
+  }
+  res.json(out);
 });
 
 /* ----------------------------- /api/address/:id ----------------------------- */
