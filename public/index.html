@@ -360,6 +360,34 @@
   .lightbox img { max-width: 100%; max-height: 82vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
   .lightbox-close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 16px); right: 16px; background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; }
 
+  /* ---------- in-app camera ---------- */
+  .camera { position: fixed; inset: 0; z-index: 1000; background: #000; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+  .camera video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+  .cam-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .cam-flash.go { animation: camflash .28s ease-out; }
+  @keyframes camflash { from { opacity: .85; } to { opacity: 0; } }
+  .cam-top, .cam-bottom, .cam-tip, .cam-error { position: relative; z-index: 1; }
+  .cam-top { display: flex; align-items: center; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 14px; background: linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,0)); }
+  .cam-round { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,.18); color: #fff; font-size: 17px; }
+  .cam-titles { flex: 1 1 auto; min-width: 0; }
+  #camTitle { font-size: 16px; font-weight: 700; }
+  #camSub { font-size: 13px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cam-step { flex: 0 0 auto; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,.18); padding: 5px 10px; border-radius: 999px; }
+  .cam-step:empty { display: none; }
+  .cam-tip { margin: 0 16px auto; align-self: flex-start; max-width: 520px; font-size: 13px; line-height: 1.45; background: rgba(0,0,0,.5); padding: 8px 12px; border-radius: 10px; }
+  .cam-tip:empty { display: none; }
+  .cam-error { margin: 0 20px; padding: 18px; border-radius: 14px; background: rgba(20,24,35,.95); text-align: center; }
+  .cam-error p { font-size: 14px; line-height: 1.5; margin-bottom: 14px; }
+  .cam-bottom { padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 16px); background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.7)); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .cam-thumbs { display: flex; gap: 6px; min-height: 44px; }
+  .cam-thumbs img { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 2px solid rgba(255,255,255,.85); }
+  .cam-controls { width: 100%; max-width: 520px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+  .cam-side { background: rgba(255,255,255,.16); border: none; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 14px; border-radius: 999px; justify-self: start; min-width: 92px; }
+  #camNext { justify-self: end; background: #fff; color: #111; }
+  .cam-side:disabled { opacity: .35; }
+  .cam-shutter { width: 76px; height: 76px; border-radius: 50%; border: 5px solid #fff; background: rgba(255,255,255,.92); box-shadow: 0 0 0 3px rgba(0,0,0,.25); }
+  .cam-shutter:active { transform: scale(.93); background: #fff; }
+  .cam-gallery { background: none; border: none; color: #fff; opacity: .85; font-size: 13.5px; font-weight: 600; text-decoration: underline; padding: 4px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -372,6 +400,30 @@
   </div>
 </header>
 <div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading Self Check-In…</p></div>
+<div id="camera" class="camera hidden" role="dialog" aria-modal="true" aria-label="Camera">
+  <video id="cameraVideo" playsinline muted autoplay></video>
+  <div class="cam-flash" id="camFlash"></div>
+  <div class="cam-top">
+    <button type="button" class="cam-round" onclick="closeCamera()" aria-label="Close camera">✕</button>
+    <div class="cam-titles"><div id="camTitle"></div><div id="camSub"></div></div>
+    <div class="cam-step" id="camStep"></div>
+  </div>
+  <div class="cam-tip" id="camTip"></div>
+  <div class="cam-error hidden" id="camError">
+    <p>The camera couldn't be opened here. Allow camera access for this site, or use the phone's camera instead.</p>
+    <button type="button" class="btn btn-primary" onclick="cameraFallback()">Use the phone's camera</button>
+  </div>
+  <div class="cam-bottom">
+    <div class="cam-thumbs" id="camThumbs"></div>
+    <div class="cam-controls">
+      <button type="button" class="cam-side" id="camPrev" onclick="cameraStep(-1)">‹ Back</button>
+      <button type="button" class="cam-shutter" id="camShutter" onclick="cameraShutter()" aria-label="Take photo"></button>
+      <button type="button" class="cam-side" id="camNext" onclick="cameraStep(1)">Next ›</button>
+    </div>
+    <button type="button" class="cam-gallery" onclick="cameraGallery()">Choose from gallery</button>
+  </div>
+  <input type="file" id="cameraGalleryInput" accept="image/*" multiple style="display:none" onchange="handlePhotoInputChange(event)">
+</div>
 <div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
   <img id="lightboxImg" src="" alt="Enlarged photo">
   <button class="lightbox-close" onclick="closeLightbox(event)">Close</button>
@@ -746,65 +798,157 @@ function exteriorFirst(){
   if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
   return false;
 }
-function triggerExteriorFileInput(){ pendingPhotoTarget = { kind:'exterior' }; document.getElementById('photoInput').click(); }
-function triggerItemFileInput(roomId, itemId){ if (!exteriorFirst()) return; pendingPhotoTarget = { roomId, itemId }; document.getElementById('photoInput').click(); }
-function triggerExtraFileInput(roomId){ if (!exteriorFirst()) return; pendingPhotoTarget = { roomId, itemId: null }; document.getElementById('photoInput').click(); }
+function triggerExteriorFileInput(){ openPhotoTargets([{ kind:'exterior' }], 0); }
+function triggerItemFileInput(roomId, itemId){
+  if (!exteriorFirst()) return;
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const targets = roomTargets(room);
+  const i = targets.findIndex(t => t.itemId === itemId);
+  openPhotoTargets(i >= 0 ? targets : [{ roomId, itemId }], Math.max(0, i));
+}
+function triggerExtraFileInput(roomId){
+  if (!exteriorFirst()) return;
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const targets = roomTargets(room);
+  openPhotoTargets(targets, targets.length - 1);
+}
 
-function triggerMeterFileInput(key){ if (!exteriorFirst()) return; pendingPhotoTarget = { kind:'meter', key }; document.getElementById('photoInput').click(); }
-function triggerKeyFileInput(index){ if (!exteriorFirst()) return; pendingPhotoTarget = { kind:'keys', index }; document.getElementById('photoInput').click(); }
+function triggerMeterFileInput(key){ if (!exteriorFirst()) return; openPhotoTargets([{ kind:'meter', key }], 0); }
+function triggerKeyFileInput(index){ if (!exteriorFirst()) return; openPhotoTargets([{ kind:'keys', index }], 0); }
 function deletePropPhoto(kind, key, photoId){
   const arr = kind === 'exterior' ? state.property.exterior.photos : kind === 'meter' ? state.property.meters[key].photos : state.property.keys[key].photos;
   const i = arr.findIndex(p => p.id === photoId);
   if (i > -1) arr.splice(i, 1);
   persist(); render();
 }
+/* Adds photo files to a target, through the same stamping and checks whichever way they were taken.
+   Targets: { roomId, itemId } (item), { roomId, itemId:null } (general views), { kind:'meter', key },
+   { kind:'keys', index }, { kind:'exterior' }. */
+function targetKind(t){ return t.kind || (t.itemId ? 'item' : 'extra'); }
+function resolveTarget(t){
+  const kind = targetKind(t);
+  if (kind === 'exterior') return { arr: state.property.exterior.photos, caption: 'Front of the property', place: 'Outside', title: 'Outside the property', label: 'Front of the property', tip: 'Stand outside and photograph the front of the property, showing the entrance and the house or flat number.' };
+  if (kind === 'meter') return { arr: state.property.meters[t.key].photos, caption: METER_LABELS[t.key], place: 'Meter reading', title: 'Utility meters', label: METER_LABELS[t.key], tip: 'Photograph the meter face so the reading is clear.' };
+  if (kind === 'keys') return { arr: state.property.keys[t.index].photos, caption: 'Keys', place: 'Handover', title: 'Keys', label: (state.property.keys[t.index].desc || 'Keys'), tip: 'Lay the keys out together and photograph them.' };
+  const room = state.rooms.find(r => r.id === t.roomId); if (!room) return null;
+  const item = t.itemId ? room.items.find(i => i.id === t.itemId) : null;
+  if (t.itemId && !item) return null;
+  return { arr: item ? item.photos : room.extraPhotos, caption: item ? item.label : 'Additional', place: room.name, title: room.name, label: item ? item.label : 'General views', room, item,
+           tip: item ? photoTipFor(item.label) : 'Any other views of the room: each corner, the ceiling, anything worth recording.' };
+}
+async function addPhotoFiles(files, t){
+  const r = resolveTarget(t); if (!r) return 0;
+  if (targetKind(t) === 'exterior') exteriorNudge = false;
+  const toAssess = [];
+  let added = 0;
+  for (const f of files){
+    try {
+      const { dataUrl, ts } = await stampPhoto(f, r.caption, r.place);
+      const photo = { id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: null };
+      photo.aiCheck = await assessPhotoQuality(dataUrl);
+      r.arr.push(photo); added++;
+      if (r.item) toAssess.push({ roomId: r.room.id, itemId: r.item.id, photoId: photo.id });
+    } catch (e) { console.error('photo failed', e); }
+  }
+  persist();
+  toAssess.forEach(a => assessItemPhoto(a.roomId, a.itemId, a.photoId));
+  return added;
+}
 function handlePhotoInputChange(event){
   const files = Array.from(event.target.files || []);
-  if (!files.length || !pendingPhotoTarget) return;
-
-  if (pendingPhotoTarget.kind === 'meter' || pendingPhotoTarget.kind === 'keys' || pendingPhotoTarget.kind === 'exterior'){
-    const t = pendingPhotoTarget;
-    const isMeter = t.kind === 'meter', isExterior = t.kind === 'exterior';
-    const arr = isExterior ? state.property.exterior.photos : isMeter ? state.property.meters[t.key].photos : state.property.keys[t.index].photos;
-    const caption = isExterior ? 'Front of the property' : isMeter ? METER_LABELS[t.key] : 'Keys';
-    if (isExterior) exteriorNudge = false;
-    (async () => {
-      for (const f of files){
-        try {
-          const { dataUrl, ts } = await stampPhoto(f, caption, isExterior ? 'Outside' : isMeter ? 'Meter reading' : 'Handover');
-          const q = await assessPhotoQuality(dataUrl);
-          arr.push({ id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: q });
-        } catch (e) { console.error('photo failed', e); }
-      }
-      event.target.value = '';
-      pendingPhotoTarget = null;
-      persist(); render();
-    })();
-    return;
-  }
-
-  const room = state.rooms.find(r => r.id === pendingPhotoTarget.roomId);
-  if (!room) return;
-  const item = pendingPhotoTarget.itemId ? room.items.find(i => i.id === pendingPhotoTarget.itemId) : null;
-  const captionLabel = item ? item.label : 'Additional';
-  const targetArray = item ? item.photos : room.extraPhotos;
-  const toAssess = [];
+  const t = pendingPhotoTarget;
+  if (!files.length || !t) return;
   (async () => {
-    for (const f of files) {
-      try {
-        const { dataUrl, ts, blob } = await stampPhoto(f, captionLabel, room.name);
-        const photo = { id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: null };
-        photo.aiCheck = await assessPhotoQuality(dataUrl);
-        targetArray.push(photo);
-        if (item) toAssess.push({ roomId: room.id, itemId: item.id, photoId: photo.id });
-      } catch (e) { console.error('photo failed', e); }
-    }
+    await addPhotoFiles(files, t);
     event.target.value = '';
-    pendingPhotoTarget = null;
-    persist();
-    render();
-    toAssess.forEach(t => assessItemPhoto(t.roomId, t.itemId, t.photoId));
+    if (camera.open) updateCameraUi();
+    else { pendingPhotoTarget = null; render(); }
   })();
+}
+
+/* In-app camera: stays open between shots and steps through a room's checklist, so photos can be
+   taken one after another. Falls back to the phone's own camera where it can't be used. */
+const camera = { open: false, stream: null, targets: [], idx: 0, saving: 0 };
+function cameraSupported(){ return !!(window.isSecureContext && navigator.mediaDevices && navigator.mediaDevices.getUserMedia); }
+function roomTargets(room){
+  return room.items.filter(i => !i.notApplicable).map(i => ({ roomId: room.id, itemId: i.id })).concat([{ roomId: room.id, itemId: null }]);
+}
+function openPhotoTargets(targets, idx){
+  pendingPhotoTarget = targets[idx];
+  if (!cameraSupported()){ document.getElementById('photoInput').click(); return; }
+  openCamera(targets, idx);
+}
+async function openCamera(targets, idx){
+  Object.assign(camera, { open: true, targets, idx });
+  const el = document.getElementById('camera');
+  el.classList.remove('hidden');
+  document.getElementById('camError').classList.add('hidden');
+  document.body.style.overflow = 'hidden';
+  updateCameraUi();
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1440 } } });
+    if (!camera.open){ stream.getTracks().forEach(tr => tr.stop()); return; }
+    camera.stream = stream;
+    const v = document.getElementById('cameraVideo');
+    v.srcObject = stream;
+    await v.play().catch(() => {});
+  } catch (err) {
+    console.error('camera unavailable', err);
+    document.getElementById('camError').classList.remove('hidden');
+  }
+}
+function closeCamera(){
+  if (camera.stream) camera.stream.getTracks().forEach(tr => tr.stop());
+  const v = document.getElementById('cameraVideo'); if (v) v.srcObject = null;
+  Object.assign(camera, { open: false, stream: null });
+  document.getElementById('camera').classList.add('hidden');
+  document.body.style.overflow = '';
+  pendingPhotoTarget = null;
+  render();
+}
+function cameraTarget(){ return camera.targets[camera.idx]; }
+function cameraStep(d){
+  const n = camera.idx + d;
+  if (n >= camera.targets.length){ closeCamera(); return; }
+  if (n < 0) return;
+  camera.idx = n; pendingPhotoTarget = cameraTarget(); updateCameraUi();
+}
+function cameraShutter(){
+  const v = document.getElementById('cameraVideo');
+  if (!camera.stream || !v.videoWidth) return;
+  const t = cameraTarget();
+  const c = document.createElement('canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+  const flash = document.getElementById('camFlash');
+  flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
+  camera.saving++; updateCameraUi();
+  c.toBlob(async blob => {
+    try { if (blob) await addPhotoFiles([new File([blob], 'photo.jpg', { type: 'image/jpeg' })], t); }
+    finally { camera.saving--; if (camera.open) updateCameraUi(); }
+  }, 'image/jpeg', 0.92);
+}
+function cameraGallery(){ pendingPhotoTarget = cameraTarget(); document.getElementById('cameraGalleryInput').click(); }
+function cameraFallback(){
+  const t = cameraTarget();
+  closeCamera();
+  pendingPhotoTarget = t;
+  const input = document.getElementById('photoInput');
+  if (input) input.click();
+}
+function updateCameraUi(){
+  if (!camera.open) return;
+  const t = cameraTarget(), r = resolveTarget(t);
+  if (!r){ closeCamera(); return; }
+  const n = r.arr.length, multi = camera.targets.length > 1, last = camera.idx === camera.targets.length - 1;
+  document.getElementById('camTitle').textContent = r.title;
+  document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
+  document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
+  document.getElementById('camTip').textContent = r.tip || '';
+  document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
+  const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
+  prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
+  next.textContent = last ? 'Done' : 'Next ›';
 }
 function deleteItemPhoto(roomId, itemId, photoId){
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
