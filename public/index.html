@@ -2197,7 +2197,8 @@ function itemCardHTML(room, item){
         ${warnPhoto ? `<div class="ai-warn-note">⚠ ${escapeHtml(warnPhoto.aiCheck.note || 'This photo may not clearly show ' + item.label + '.')} Worth a quick check.</div>` : ''}
         <div class="photo-tip">${ICONS.camera}<span>${escapeHtml(photoTipFor(item.label))}</span></div>
         ${(() => {
-          if (!item.photos.length) return '';
+          // With automatic assessment off the tenant sets every condition, so the choice is shown from the start.
+          if (!item.photos.length && aiEnabled !== false) return '';
           const assessing = item.photos.some(p => p.aiCheck && p.aiCheck.status === 'checking');
           if (aiEnabled !== false){
             if (item.condition && item.aiObservation) return `<div class="ai-verdict ${item.condition}">
