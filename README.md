@@ -109,7 +109,8 @@ photographs four across with their capture times, and the signed declaration.
 
 ## Notes
 
-- Reports are held in the browser on the tenant's own device until the PDF is
-  downloaded. Nothing is stored on the server, and no database is needed.
+- The tenant's draft is held in the browser on their own device. When a report is
+  finished, a copy of the PDF is sent to the server and stored on a Railway volume;
+  the owner sees every report at `/admin`, protected by `ADMIN_PASSWORD`.
 - Photos are sent to the assessment endpoint one at a time and are not retained.
 - An unfinished report survives closing the browser and offers to resume.

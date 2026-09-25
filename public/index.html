@@ -334,6 +334,13 @@
   .pdf-meta span { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
   .pdf-download { min-height: 52px; font-size: 16px; }
   .pdf-more { margin-top: 10px; }
+  .submit-status { font-size: 13px; margin-top: 10px; padding: 9px 12px; border-radius: var(--radius-sm); }
+  .submit-status:empty { display: none; }
+  .submit-status.sending { background: var(--surface-2); color: var(--ink-soft); }
+  .submit-status.sent { background: var(--ok-soft); color: var(--ok); font-weight: 600; }
+  .submit-status.error { background: var(--warn-soft); color: var(--warn); }
+  .submit-status .btn-ghost { padding: 2px 6px; font-size: 13px; color: inherit; text-decoration: underline; }
+  .finish-note { font-size: 12.5px; color: var(--ink-faint); text-align: center; margin-top: 10px; }
   .pdf-more .btn { flex: 1 1 auto; }
 
   .report-doc { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 18px; margin-top: 4px; box-shadow: var(--shadow); }
@@ -1080,7 +1087,9 @@ function normalizeState(saved){
     view: ['details','review','done'].includes(saved.view) ? saved.view : 'capture',
     signatureDataUrl: saved.signatureDataUrl || null,
     declarationAccepted: !!saved.declarationAccepted,
-    finalizedAt: saved.finalizedAt || null
+    finalizedAt: saved.finalizedAt || null,
+    submittedId: saved.submittedId || null,
+    submittedAt: saved.submittedAt || null
   };
 }
 
@@ -1388,7 +1397,7 @@ async function completeReport(){
   state.view = 'done';
   render();
   window.scrollTo({top:0, behavior:'instant'});
-  preparePdf().then(r => { if (r) savePdf(); });
+  preparePdf().then(r => { if (r) savePdf(); submitReport(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
 const RANK_KEY = ['new','good','fair','poor'];
@@ -1757,6 +1766,7 @@ async function buildPdfBlob(s, onProgress){
     'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
     'A signature on the declaration form applies to the whole report: the schedule of condition, the general condition and cleanliness of the property, the meter readings, and the handover or hand back of keys.',
     'Items left for the tenant\u2019s use are recorded and counted. Items stored in the property in bags or boxes are not opened or inspected; a note is made that they are present. Where furniture can safely be moved, the area behind and beneath it is inspected.',
+    'A copy of this report is sent to the managing agent when it is completed, and kept securely by them as the record of the inspection.',
     'Fire safety labels are recorded where they are seen. That is not a statement that the item complies with current fire safety regulations. Keeping smoke, heat and CO detectors in working order during the tenancy is the tenant\u2019s responsibility.'
   ];
   set('normal', 9, C.ink);
@@ -2222,6 +2232,50 @@ function savePdf(){
   setPdfUi('ready', 0, 'Saved to your Downloads · ' + formatBytes(pdfReady.blob.size) + '. On iPhone: Files app → Downloads.');
 }
 function openPdf(){ if (pdfReady) window.open(pdfReady.url, '_blank'); }
+
+/* A copy of every finished report is sent to the server, where only the owner can open it (/admin).
+   Sent once per report (the server also ignores repeats); retried when the connection comes back. */
+let submitting = false;
+let submitUi = { phase: 'idle', msg: '' };
+function setSubmitUi(phase, msg){
+  submitUi = { phase, msg: msg || '' };
+  const el = document.getElementById('submitStatus');
+  if (!el) return;
+  el.className = 'submit-status ' + phase;
+  el.innerHTML = phase === 'sent' ? '✓ A copy has been sent to the managing agent.'
+    : phase === 'sending' ? 'Sending a copy to the managing agent…'
+    : phase === 'error' ? "Couldn't send a copy to the managing agent yet. " + escapeHtml(msg || '') + ' <button type="button" class="btn-ghost" onclick="submitReport()">Try again</button>'
+    : '';
+}
+async function submitReport(){
+  if (!state.finalizedAt) return;
+  if (state.submittedId){ setSubmitUi('sent'); return; }
+  if (submitting) return;
+  submitting = true;
+  setSubmitUi('sending');
+  try {
+    const r = await preparePdf();
+    if (!r) throw new Error('The PDF could not be built.');
+    const pr = state.property || {};
+    const meta = {
+      address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref,
+      inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt,
+      finalizedAt: state.finalizedAt, rooms: state.rooms.length,
+      photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname
+    };
+    const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.id) throw new Error(data.error || '');
+    state.submittedId = data.id;
+    state.submittedAt = new Date().toISOString();
+    persist();
+    setSubmitUi('sent');
+  } catch (err) {
+    console.error('report submit failed', err);
+    setSubmitUi('error', navigator.onLine === false ? 'You appear to be offline; it will be sent when the connection is back.' : (err && err.message) || '');
+  } finally { submitting = false; }
+}
+window.addEventListener('online', () => { if (state.view === 'done' && state.finalizedAt && !state.submittedId) submitReport(); });
 function canSharePdf(){
   try { return !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob(['%PDF'])], 'r.pdf', { type: 'application/pdf' })] })); }
   catch (e) { return false; }
@@ -2797,6 +2851,7 @@ function renderReview(){
 
       <p class="finish-help" id="finishHelp"></p>
       <button type="button" class="btn btn-primary btn-block" id="finishBtn" onclick="completeReport()">Finish &amp; generate report</button>
+      <p class="finish-note">When you finish, you get the report as a PDF and a copy is sent to the managing agent.</p>
     </div>
   `;
 }
@@ -2817,6 +2872,7 @@ function renderDone(){
           <div class="pdf-meta"><strong>${escapeHtml(pdfFileName(state))}</strong><span id="pdfStatus">Preparing your PDF…</span></div>
         </div>
         <button type="button" class="btn btn-primary btn-block pdf-download" id="pdfDownloadBtn" onclick="savePdf()">Download PDF</button>
+        <div class="submit-status" id="submitStatus"></div>
         <div class="btn-row pdf-more">
           <button type="button" class="btn btn-sm pdf-secondary" onclick="openPdf()" disabled>Open</button>
           ${canSharePdf() ? '<button type="button" class="btn btn-sm pdf-secondary" onclick="sharePdf()" disabled>Share or save to Files</button>' : ''}
@@ -2849,7 +2905,7 @@ function renderDone(){
       <button type="button" class="btn-ghost" onclick="startNewInspection()">Start a new inspection</button>
     </div>
     <div class="hidden reset-confirm" id="resetConfirm">
-      This clears the current report from this device. Make sure you've downloaded it first.
+      This clears the current report from this device. Make sure you've downloaded it first.${state.submittedId ? '' : ' <strong>It has not been sent to the managing agent yet.</strong>'}
       <div class="btn-row">
         <button type="button" class="btn" onclick="cancelReset()">Cancel</button>
         <button type="button" class="btn btn-accent" onclick="confirmReset()">Yes, start new</button>
@@ -2868,7 +2924,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); preparePdf(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSubmitUi(state.submittedId ? 'sent' : submitUi.phase, submitUi.msg); preparePdf(); if (!state.submittedId) submitReport(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';

@@ -1,11 +1,13 @@
 // Self check-in report server.
-// Serves the single-file client in public/ and two small API endpoints:
+// Serves the single-file client in public/ and a small API:
 //   GET  /api/status          what the server can do (AI assessment)
-//   POST /api/assess          rate one photo of a checklist item
-// Nothing is stored on the server. Photos are assessed and discarded.
+//   POST /api/assess          rate one photo of a checklist item (assessed and discarded)
+//   POST /api/reports         receive a copy of a finished report PDF (see reports.js)
+//   /admin                    the owner's private list of submitted reports (ADMIN_PASSWORD)
 const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
+const reports = require('./reports');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -101,6 +103,8 @@ app.post('/api/assess', async (req, res) => {
     res.status(500).json({ error: 'Assessment failed.' });
   }
 });
+
+reports.mount(app);
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 
