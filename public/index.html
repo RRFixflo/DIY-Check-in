@@ -327,7 +327,14 @@
   /* ---------- done ---------- */
   .done-banner { display: flex; gap: 16px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); color: var(--ink); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .done-banner .mark { width: 44px; height: 44px; border-radius: 50%; background: var(--ok-soft); color: var(--ok); font-size: 22px; font-weight: 700; line-height: 1; display: grid; place-items: center; flex: 0 0 auto; }
-  #downloadStatus { font-size: 13.5px; color: var(--ink-soft); margin-top: 4px; }
+  .pdf-file { display: flex; align-items: center; gap: 12px; margin: 14px 0 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+  .pdf-badge { flex: 0 0 auto; width: 42px; height: 50px; border-radius: 6px; background: #D93A2B; color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; letter-spacing: .04em; }
+  .pdf-meta { display: flex; flex-direction: column; min-width: 0; }
+  .pdf-meta strong { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pdf-meta span { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .pdf-download { min-height: 52px; font-size: 16px; }
+  .pdf-more { margin-top: 10px; }
+  .pdf-more .btn { flex: 1 1 auto; }
 
   .report-doc { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 18px; margin-top: 4px; box-shadow: var(--shadow); }
   @media (min-width: 560px) { .report-doc { padding: 28px; } }
@@ -1237,7 +1244,7 @@ async function completeReport(){
   state.view = 'done';
   render();
   window.scrollTo({top:0, behavior:'instant'});
-  attemptDownload();
+  preparePdf().then(r => { if (r) savePdf(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
 const RANK_KEY = ['new','good','fair','poor'];
@@ -1979,21 +1986,69 @@ async function buildPdfBlob(s, onProgress){
   }
 }
 
-async function attemptDownload(){
-  const statusEl = document.getElementById('downloadStatus');
-  const setStatus = (t) => { if (statusEl) statusEl.textContent = t; };
-  try{
-    setStatus('Building your PDF…');
-    const blob = await buildPdfBlob(state, (pct) => setStatus('Building your PDF… ' + pct + '%'));
-    const fname = sanitizeFilename(state.meta.address) + ' - ' + sanitizeFilename(state.meta.inspectionType) + ' - ' + sanitizeFilename(state.meta.date) + ' - ' + sanitizeFilename(state.meta.ref || '') + '.pdf';
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
-    setStatus('PDF ready. Check your downloads.');
-  }catch(err){
-    console.error('pdf failed', err);
-    setStatus("Couldn't build the PDF just now. Try the button again. The full report is shown below.");
+/* PDF download. The PDF is built once per finished report and kept, so Download, Open and Share run
+   straight from the tap: phones block downloads that only start after a long build. */
+let pdfReady = null;      // { key, blob, url, fname }
+let pdfBuilding = null;
+let pdfUi = { phase: 'idle', pct: 0, msg: '' };
+function pdfFileName(s){
+  return sanitizeFilename(s.meta.address) + ' - ' + sanitizeFilename(s.meta.inspectionType) + ' - ' + sanitizeFilename(s.meta.date) + ' - ' + sanitizeFilename(s.meta.ref || '') + '.pdf';
+}
+function formatBytes(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+function setPdfUi(phase, pct, msg){
+  pdfUi = { phase, pct: pct || 0, msg: msg || '' };
+  const status = document.getElementById('pdfStatus');
+  const dl = document.getElementById('pdfDownloadBtn');
+  const extra = document.querySelectorAll('.pdf-secondary');
+  if (!status || !dl) return;
+  const ready = phase === 'ready' && pdfReady;
+  status.textContent = msg || (phase === 'building' ? 'Preparing your PDF… ' + (pct ? pct + '%' : '')
+    : ready ? 'Ready · ' + formatBytes(pdfReady.blob.size)
+    : phase === 'error' ? "Couldn't build the PDF. Tap Try again." : '');
+  dl.disabled = phase === 'building';
+  dl.textContent = phase === 'building' ? 'Preparing…' : phase === 'error' ? 'Try again' : 'Download PDF';
+  extra.forEach(b => { b.disabled = !ready; });
+}
+function preparePdf(){
+  if (pdfReady && pdfReady.key === state.finalizedAt) { setPdfUi('ready'); return Promise.resolve(pdfReady); }
+  if (pdfBuilding) return pdfBuilding;
+  setPdfUi('building', 0);
+  pdfBuilding = (async () => {
+    try {
+      const blob = await buildPdfBlob(state, pct => setPdfUi('building', pct));
+      if (pdfReady && pdfReady.url) URL.revokeObjectURL(pdfReady.url);
+      pdfReady = { key: state.finalizedAt, blob, url: URL.createObjectURL(blob), fname: pdfFileName(state) };
+      setPdfUi('ready');
+      return pdfReady;
+    } catch (err) {
+      console.error('pdf failed', err);
+      setPdfUi('error');
+      return null;
+    } finally { pdfBuilding = null; }
+  })();
+  return pdfBuilding;
+}
+function savePdf(){
+  if (!pdfReady || pdfReady.key !== state.finalizedAt){
+    preparePdf().then(r => { if (r) setPdfUi('ready', 0, 'Your PDF is ready. Tap Download PDF.'); });
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = pdfReady.url; a.download = pdfReady.fname;
+  document.body.appendChild(a); a.click(); a.remove();
+  setPdfUi('ready', 0, 'Saved to your Downloads · ' + formatBytes(pdfReady.blob.size) + '. On iPhone: Files app → Downloads.');
+}
+function openPdf(){ if (pdfReady) window.open(pdfReady.url, '_blank'); }
+function canSharePdf(){
+  try { return !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob(['%PDF'])], 'r.pdf', { type: 'application/pdf' })] })); }
+  catch (e) { return false; }
+}
+async function sharePdf(){
+  if (!pdfReady) return;
+  try {
+    await navigator.share({ files: [new File([pdfReady.blob], pdfReady.fname, { type: 'application/pdf' })], title: state.meta.inspectionType + ' report' });
+  } catch (e) {
+    if (!e || e.name !== 'AbortError') setPdfUi('ready', 0, "Sharing didn't work here. Use Download PDF instead.");
   }
 }
 function startNewInspection(){ const p = document.getElementById('resetConfirm'); if (p) p.classList.remove('hidden'); }
@@ -2572,11 +2627,16 @@ function renderDone(){
     </div>
     <div class="done-banner">
       <span class="mark">✓</span>
-      <div>
+      <div style="flex:1; min-width:0;">
         <div style="font-weight:700;">Signed off by ${escapeHtml(state.meta.signedBy || state.meta.inspectorName)}</div>
-        <div id="downloadStatus">Preparing your PDF…</div>
-        <div class="btn-row" style="margin-top:10px;">
-          <button type="button" class="btn" onclick="attemptDownload()">Download report (PDF)</button>
+        <div class="pdf-file">
+          <span class="pdf-badge">PDF</span>
+          <div class="pdf-meta"><strong>${escapeHtml(pdfFileName(state))}</strong><span id="pdfStatus">Preparing your PDF…</span></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-block pdf-download" id="pdfDownloadBtn" onclick="savePdf()">Download PDF</button>
+        <div class="btn-row pdf-more">
+          <button type="button" class="btn btn-sm pdf-secondary" onclick="openPdf()" disabled>Open</button>
+          ${canSharePdf() ? '<button type="button" class="btn btn-sm pdf-secondary" onclick="sharePdf()" disabled>Share or save to Files</button>' : ''}
         </div>
       </div>
     </div>
@@ -2625,7 +2685,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); preparePdf(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';
@@ -2638,7 +2698,12 @@ render(); // paint instantly with no dependency on storage or network
   try {
     try { addressBook = (await idbGet('addressBook')) || []; if (addressBook.length && state.view === 'setup') render(); } catch(e){}
     const saved = await idbGet('current');
-    if (saved && Array.isArray(saved.rooms) && saved.rooms.length && !saved.finalizedAt) {
+    if (saved && Array.isArray(saved.rooms) && saved.rooms.length && saved.finalizedAt && state.view === 'setup') {
+      // A finished report stays on this device, ready to download again, until a new inspection is started.
+      state = normalizeState(saved);
+      state.view = 'done';
+      render();
+    } else if (saved && Array.isArray(saved.rooms) && saved.rooms.length && !saved.finalizedAt) {
       savedDraft = normalizeState(saved);
       state = defaultState();
       state.view = 'resume';
