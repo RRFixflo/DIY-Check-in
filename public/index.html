@@ -584,8 +584,7 @@ function defaultProperty(){
     meters: {
       electric: { na:false, reading:'', serial:'', location:'', photos: [] },
       gas:      { na:false, reading:'', serial:'', location:'', photos: [] },
-      water:    { na:false, reading:'', serial:'', location:'', photos: [] },
-      heat:     { na:true,  reading:'', serial:'', location:'', photos: [] }
+      water:    { na:false, reading:'', serial:'', location:'', photos: [] }
     },
     floors: '1',
     detectorsAllFloors: 'Yes',
@@ -597,9 +596,9 @@ function defaultProperty(){
     }
   };
 }
-const METER_LABELS = { electric:'Electricity meter', gas:'Gas meter', water:'Water meter', heat:'Heat / cooling meter' };
-const METER_SHORT = { electric:'ELECTRIC METER', gas:'GAS METER', water:'WATER METER', heat:'HEAT/COOLING METER' };
-const METER_UNITS = { electric:'kWh', gas:'m³', water:'m³', heat:'kWh' };
+const METER_LABELS = { electric:'Electricity meter', gas:'Gas meter', water:'Water meter' };
+const METER_SHORT = { electric:'ELECTRIC METER', gas:'GAS METER', water:'WATER METER' };
+const METER_UNITS = { electric:'kWh', gas:'m³', water:'m³' };
 const YESNO = ['Yes','No','N/A'];
 
 function defaultState(){
@@ -1412,6 +1411,8 @@ function normalizeProperty(saved){
   pr.documents = (pr.documents && typeof pr.documents === 'object') ? pr.documents : {};
   pr.propertyType = pr.propertyType || '';
   const base = defaultProperty().meters;
+  pr.meters = Object.assign({}, pr.meters);
+  Object.keys(pr.meters).forEach(key => { if (!base[key]) delete pr.meters[key]; }); // e.g. the old heat/cooling meter
   Object.keys(base).forEach(key => {
     pr.meters[key] = Object.assign({}, base[key], pr.meters[key] || {});
     if (!Array.isArray(pr.meters[key].photos)) pr.meters[key].photos = [];
@@ -2303,11 +2304,11 @@ async function buildPdfBlob(s, onProgress){
 
   /* ------------------------------------------------------- utility meters */
   newSection('Utility meters – ' + stage.toLowerCase());
-  const meterKeys = Object.keys((s.property && s.property.meters) || {});
-  const mw = (CW - 9) / 4;
+  const meterKeys = Object.keys((s.property && s.property.meters) || {}).filter(k => METER_LABELS[k]);
+  const mw = (CW - 3 * (meterKeys.length - 1)) / Math.max(1, meterKeys.length);
   let mx = M;
   const mTop = y;
-  meterKeys.slice(0, 4).forEach(key => {
+  meterKeys.forEach(key => {
     const m = s.property.meters[key];
     doc.setFillColor(C.head[0], C.head[1], C.head[2]);
     doc.rect(mx, mTop, mw, 8, 'F');
