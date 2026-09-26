@@ -394,9 +394,9 @@
   .ex .t { fill: var(--ex-line); font: 600 9.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; } }
   :root[data-theme="dark"] .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; }
-  .ex-thumb { flex: 0 0 auto; width: 132px; padding: 0; border: none; background: none; cursor: zoom-in; border-radius: 10px; }
-  .ex-thumb:has(.ex-single) { width: 66px; }
-  .ex-thumb:focus-visible { box-shadow: var(--ring); }
+  .ex-link { order: 2; flex: 0 0 auto; align-self: center; margin-left: auto; padding: 5px 10px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--panel); color: var(--accent); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .ex-link:hover { border-color: var(--accent); }
+  .photo-tip > span, .photo-tip > .exterior-help { flex: 1 1 auto; }
   .photo-tip .tip-kicker { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); margin-bottom: 2px; }
   .photo-tip { align-items: center; gap: 12px; }
   .exterior-tip { background: none; padding: 0; margin-top: 10px; }
@@ -418,9 +418,6 @@
   #exampleArt .ex-single { max-width: 240px; margin: 0 auto; }
   #exampleTip { font-size: 14px; color: var(--ink-soft); margin-top: 12px; line-height: 1.5; }
   .cam-tip { display: flex; align-items: center; gap: 10px; }
-  .cam-example { flex: 0 0 auto; width: 132px; background: #fff; border-radius: 10px; padding: 3px; }
-  .cam-example:has(.ex-single) { width: 70px; }
-  .cam-example .ex { --ex-bg:#EEF2FA; --ex-line:#4B5B77; --ex-fill:#FFFFFF; --ex-acc:#3257C8; --ex-soft:#DCE4F7; --ex-mark:#E0663A; }
   /* ---------- in-app camera ---------- */
   .camera { position: fixed; inset: 0; z-index: 1000; background: #000; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
   .camera video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
@@ -922,10 +919,10 @@ function showExample(label, tip){
 }
 function closeExample(e){ if (e) e.stopPropagation(); document.getElementById('exampleBox').classList.add('hidden'); }
 function exampleThumbHTML(label, tip){
-  return `<button type="button" class="ex-thumb" onclick="showExample(${escapeHtml(JSON.stringify(String(label)))}, ${escapeHtml(JSON.stringify(String(tip || '')))})" aria-label="See an example of how to photograph ${escapeHtml(label)}">${exampleSVG(label)}</button>`;
+  return `<button type="button" class="ex-link" onclick="showExample(${escapeHtml(JSON.stringify(String(label)))}, ${escapeHtml(JSON.stringify(String(tip || '')))})" aria-label="See an example of how to photograph ${escapeHtml(label)}">See example</button>`;
 }
-/* Photo guide at the top of the rooms screen; stays collapsed once closed (per device) */
-function guideOpen(){ try { return localStorage.getItem('photoGuideClosed') !== '1'; } catch (e) { return true; } }
+/* Photo guide at the top of the rooms screen; closed until opened, and remembered per device */
+function guideOpen(){ try { return localStorage.getItem('photoGuideClosed') === '0'; } catch (e) { return false; } }
 function rememberGuide(el){ try { localStorage.setItem('photoGuideClosed', el.open ? '0' : '1'); } catch (e) {} }
 function photoGuideHTML(){
   return `<details class="photo-guide" ${guideOpen() ? 'open' : ''} ontoggle="rememberGuide(this)">
@@ -1238,7 +1235,7 @@ function updateCameraUi(){
   document.getElementById('camTitle').textContent = r.title;
   document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
   document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
-  document.getElementById('camTip').innerHTML = `<div class="cam-example">${exampleSVG(r.caption)}</div><span>${escapeHtml(r.tip || '')}</span>`;
+  document.getElementById('camTip').innerHTML = `<span>${escapeHtml(r.tip || '')}</span>`;
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
   prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
