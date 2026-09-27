@@ -1450,6 +1450,8 @@ function normalizeState(saved){
     finalizedAt: saved.finalizedAt || null,
     submittedId: saved.submittedId || null,
     sentAt: saved.sentAt || null,
+    photoKey: /^[a-f0-9]{32}$/.test(saved.photoKey || '') ? saved.photoKey : null,
+    photosUploaded: !!saved.photosUploaded,
     submittedAt: saved.submittedAt || null
   };
 }
@@ -2013,7 +2015,40 @@ function issuesNoted(s){
 }
 
 /* ============================= PDF generation ============================= */
-async function buildPdfBlob(s, onProgress){
+/* Photos in the PDF link to their full-size copy on this server (/p/<photoKey>/<n>), uploaded with the
+   report, so the PDF itself carries smaller pictures and no full-size pages. The key is random and private
+   to the report. */
+function ensurePhotoKey(s){
+  if (!s.photoKey){
+    const b = new Uint8Array(16); (window.crypto || window.msCrypto).getRandomValues(b);
+    s.photoKey = Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
+  }
+  return s.photoKey;
+}
+function photoLinkBase(s){
+  const origin = (location && /^https?:/.test(location.origin || '')) ? location.origin : '';
+  return origin ? origin + '/p/' + ensurePhotoKey(s) + '/' : '';
+}
+// A smaller copy of a photo for the PDF (the full-size photo is what the link opens).
+function shrinkPhoto(dataUrl, maxPx){
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        if (!w || !h || Math.max(w, h) <= maxPx) return resolve(dataUrl);
+        const k = maxPx / Math.max(w, h), c = document.createElement('canvas');
+        c.width = Math.round(w * k); c.height = Math.round(h * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        const out = c.toDataURL('image/jpeg', 0.82);
+        resolve(/^data:image\/jpeg;base64,/.test(out) && out.length > 1000 ? out : dataUrl);
+      } catch (e) { resolve(dataUrl); }
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+async function buildPdfBlob(s, onProgress, out){
   const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
   if (!JsPDF) throw new Error('pdf_library_unavailable');
   const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'landscape', compress:true });
@@ -2028,13 +2063,14 @@ async function buildPdfBlob(s, onProgress){
   const ref = s.meta.ref || '';
   const dateLong = s.meta.createdAt ? ordinalDate(new Date(s.meta.createdAt)) : ordinalDate(new Date());
   const toc = [];
-  // Every photo gets a full-size page at the end; each thumbnail links to it and it links back.
-  const fullSize = [];   // { dataUrl, alias, title, ts, backPage, page }
-  const thumbLinks = []; // { page, x, y, w, h, idx }
-  function registerFullSize(shot, alias){
-    fullSize.push({ dataUrl: shot.dataUrl, alias, title: shot.fullTitle || shot.label || 'Photograph', ts: shot.ts, backPage: pageNow(), area: shot.area || '', ref: shot.ref || '', what: shot.label || '' });
-    return fullSize.length - 1;
+  // Every photo is numbered in the order it appears; tapping it opens photo n at full size (photoBase + n).
+  const photoBase = photoLinkBase(s);
+  const fullSize = [];   // { dataUrl, title, ts, area, ref, what }
+  function registerFullSize(shot){
+    fullSize.push({ dataUrl: shot.dataUrl, title: shot.fullTitle || shot.label || 'Photograph', ts: shot.ts, area: shot.area || '', ref: shot.ref || '', what: shot.label || '' });
+    return fullSize.length;
   }
+  function linkPhoto(n, x, yy, w, h){ if (photoBase) doc.link(x, yy, w, h, { url: photoBase + n }); }
   // Draws the photo uncropped, centred in the box (so portrait photos and their stamp are never cut off).
   function drawFitted(dataUrl, alias, x, yy, w, h){
     let props;
@@ -2132,8 +2168,8 @@ async function buildPdfBlob(s, onProgress){
     const cw = 104, ch = 78, cx = PW - M - cw, cy = 44;
     const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', area: 'Outside', ref: 'X1', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
     const exAlias = 'photo-exterior-0';
-    if (drawFitted(exShot.dataUrl, exAlias, cx, cy, cw, ch)){
-      thumbLinks.push({ page: pageNow(), x: cx, y: cy, w: cw, h: ch, idx: registerFullSize(exShot, exAlias) });
+    if (drawFitted(await shrinkPhoto(exShot.dataUrl, 1400), exAlias, cx, cy, cw, ch)){
+      linkPhoto(registerFullSize(exShot), cx, cy, cw, ch);
       doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.rect(cx, cy, cw, ch);
       set('normal', 8, C.inkSoft);
       doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts), cx, cy + ch + 5);
@@ -2591,63 +2627,43 @@ async function buildPdfBlob(s, onProgress){
   doc.text('TENANT(S) SIGNATURE(S)', M + sigW + 10, y + 32);
   doc.line(M + sigW + 10, y + 42, PW - M, y + 42);
 
-  /* --------------------------------------------------- full-size photographs */
+  /* --------------------------------------------------- index of photographs */
   if (fullSize.length){
-    newSection('Photographs – full size');
+    newSection('Index of photographs');
     set('normal', 9, C.ink);
-    const fl = lines('Every photograph in this report follows at full size, one to a page, uncropped and exactly as taken, with the date and time stamp written into the image. Tap or click any photograph earlier in the report to jump to it here, and use Back to return. The index below lists every photograph with the time it was taken and its page.', CW);
+    const fl = lines('Every photograph in this report is listed below with the time it was taken. The photographs are shown smaller in the report to keep it a manageable size. ' +
+      (photoBase ? 'Tap or click any photograph, or View below, to open it at full size, uncropped and exactly as taken, with the date and time stamp written into the image (this needs an internet connection).' : ''), CW);
     doc.text(fl, M, y + 3);
     y += fl.length * 4.2 + 5;
-    // Index of photographs, two columns; page numbers and links are filled in once the pages exist.
-    const idxRows = [];
-    {
-      const colW = (CW - 8) / 2, rowH = 5.4;
-      const ic = [['REF', 13], ['AREA / ITEM', colW - 13 - 30 - 13], ['TAKEN', 30], ['PAGE', 13]];
-      const headAt = (x) => {
-        doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(x, y, colW, 6.5, 'F');
-        set('bold', 7, C.inkSoft); let xx = x; ic.forEach(([t, w]) => { doc.text(t, xx + 1.5, y + 4.4); xx += w; });
-      };
-      let i = 0;
-      while (i < fullSize.length){
-        if (y + 6.5 + rowH > BOTTOM) newPage();
-        const perCol = Math.max(1, Math.floor((BOTTOM - y - 6.5) / rowH));
-        const top = y;
-        for (let c = 0; c < 2 && i < fullSize.length; c++){
-          const x = M + c * (colW + 8);
-          y = top; headAt(x); y += 6.5;
-          for (let r = 0; r < perCol && i < fullSize.length; r++, i++){
-            const f = fullSize[i];
-            set('bold', 7, C.ink); doc.text(String(f.ref || i + 1), x + 1.5, y + 3.9);
-            set('normal', 7, C.inkSoft);
-            doc.text(lines((f.area ? f.area + ' – ' : '') + (f.what || ''), ic[1][1] - 3)[0], x + 1.5 + ic[0][1], y + 3.9);
-            doc.text(photoStamp(f.ts) || '—', x + 1.5 + ic[0][1] + ic[1][1], y + 3.9);
-            idxRows.push({ page: pageNow(), x: x + ic[0][1] + ic[1][1] + ic[2][1], y, w: ic[3][1], h: rowH, idx: i });
-            doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(x, y + rowH, x + colW, y + rowH);
-            y += rowH;
-          }
+    const colW = (CW - 8) / 2, rowH = 5.4;
+    const ic = [['REF', 13], ['AREA / ITEM', colW - 13 - 30 - 14], ['TAKEN', 30], ['', 14]];
+    const headAt = (x) => {
+      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(x, y, colW, 6.5, 'F');
+      set('bold', 7, C.inkSoft); let xx = x; ic.forEach(([t, w]) => { doc.text(t, xx + 1.5, y + 4.4); xx += w; });
+    };
+    let i = 0;
+    while (i < fullSize.length){
+      if (y + 6.5 + rowH > BOTTOM) newPage();
+      const perCol = Math.max(1, Math.floor((BOTTOM - y - 6.5) / rowH));
+      const top = y;
+      for (let c = 0; c < 2 && i < fullSize.length; c++){
+        const x = M + c * (colW + 8);
+        y = top; headAt(x); y += 6.5;
+        for (let r = 0; r < perCol && i < fullSize.length; r++, i++){
+          const f = fullSize[i];
+          set('bold', 7, C.ink); doc.text(String(f.ref || i + 1), x + 1.5, y + 3.9);
+          set('normal', 7, C.inkSoft);
+          doc.text(lines((f.area ? f.area + ' – ' : '') + (f.what || ''), ic[1][1] - 3)[0], x + 1.5 + ic[0][1], y + 3.9);
+          doc.text(photoStamp(f.ts) || '—', x + 1.5 + ic[0][1] + ic[1][1], y + 3.9);
+          if (photoBase){ set('bold', 7, C.banner); doc.textWithLink('View', x + 1.5 + ic[0][1] + ic[1][1] + ic[2][1], y + 3.9, { url: photoBase + (i + 1) }); }
+          doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(x, y + rowH, x + colW, y + rowH);
+          y += rowH;
         }
-        y = BOTTOM + 1;
       }
+      y = BOTTOM + 1;
     }
-    for (const f of fullSize){
-      newPage();
-      f.page = pageNow();
-      set('bold', 10, C.banner);
-      doc.text(lines(f.title, CW - 40)[0], M, y + 2);
-      set('normal', 8.5, C.inkSoft);
-      doc.text('Taken ' + (photoStamp(f.ts) || 'time not recorded'), M, y + 7.5);
-      set('bold', 9, C.banner);
-      doc.textWithLink('\u00ab Back', PW - M - doc.getTextWidth('\u00ab Back'), y + 2, { pageNumber: f.backPage });
-      const top = y + 11;
-      drawFitted(f.dataUrl, f.alias, M, top, CW, BOTTOM - top);
-    }
-    thumbLinks.forEach(t => { doc.setPage(t.page); doc.link(t.x, t.y, t.w, t.h, { pageNumber: fullSize[t.idx].page }); });
-    idxRows.forEach(r => {
-      doc.setPage(r.page);
-      set('bold', 7, C.banner);
-      doc.textWithLink(String(fullSize[r.idx].page - 1), r.x + 1.5, r.y + 3.9, { pageNumber: fullSize[r.idx].page });
-    });
   }
+  if (out) out.photos = fullSize.map((f, k) => ({ n: k + 1, dataUrl: f.dataUrl, title: f.title, ts: f.ts || '' }));
 
   /* ------------------------------------------------------- contents page */
   doc.setPage(tocPage);
@@ -2690,10 +2706,10 @@ async function buildPdfBlob(s, onProgress){
         const x = M + c * (cw + gap);
         if (onEach) onEach();
         const alias = 'photo-' + fullSize.length;
-        if (drawFitted(shot.dataUrl, alias, x, top, cw, ih)){
+        if (drawFitted(await shrinkPhoto(shot.dataUrl, 900), alias, x, top, cw, ih)){
           doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
           doc.rect(x, top, cw, ih);
-          thumbLinks.push({ page: pageNow(), x, y: top, w: cw, h: ih, idx: registerFullSize(shot, alias) });
+          linkPhoto(registerFullSize(shot), x, top, cw, ih);
         }
         set('normal', 7.6, C.inkSoft);
         doc.text(lines((shot.ref ? shot.ref + '  ·  ' : '') + String(shot.label || '').toUpperCase(), cw)[0], x + cw / 2, top + ih + 4, { align:'center' });
@@ -2734,9 +2750,11 @@ function preparePdf(){
   setPdfUi('building', 0);
   pdfBuilding = (async () => {
     try {
-      const blob = await buildPdfBlob(state, pct => setPdfUi('building', pct));
+      const extra = {};
+      const blob = await buildPdfBlob(state, pct => setPdfUi('building', pct), extra);
       if (pdfReady && pdfReady.url) URL.revokeObjectURL(pdfReady.url);
-      pdfReady = { key: state.finalizedAt, blob, url: URL.createObjectURL(blob), fname: pdfFileName(state) };
+      pdfReady = { key: state.finalizedAt, blob, url: URL.createObjectURL(blob), fname: pdfFileName(state), photos: extra.photos || [] };
+      persist(); // keeps the photo key the PDF's links were made with
       setPdfUi('ready');
       return pdfReady;
     } catch (err) {
@@ -2785,7 +2803,7 @@ async function sendToAgent(){
   if (state.sentAt || sendUi.phase === 'sending') return;
   setSendUi('sending');
   try {
-    if (!state.submittedId) await submitReport();
+    if (!(state.submittedId && state.photosUploaded)) await submitReport();
     if (!state.submittedId) throw new Error(submitUi.msg || 'The report could not be uploaded.');
     const res = await fetch('/api/reports/' + encodeURIComponent(state.submittedId) + '/send', { method: 'POST' });
     const data = await res.json().catch(() => ({}));
@@ -2807,18 +2825,20 @@ function submitReport(){
 }
 async function submitReportOnce(){
   if (!state.finalizedAt) return;
-  if (state.submittedId){ setSubmitUi('sent'); return; }
+  if (state.submittedId && state.photosUploaded){ setSubmitUi('sent'); return; }
   submitting = true;
   setSubmitUi('sending');
   try {
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
+    if (!state.submittedId){
     const pr = state.property || {};
     const meta = {
       address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref,
       inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt,
       finalizedAt: state.finalizedAt, rooms: state.rooms.length,
-      photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname
+      photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname,
+      photoKey: state.photoKey || ''
     };
     const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
     const data = await res.json().catch(() => ({}));
@@ -2826,13 +2846,28 @@ async function submitReportOnce(){
     state.submittedId = data.id;
     state.submittedAt = new Date().toISOString();
     persist();
+    }
+    await uploadPhotos(state.submittedId, r.photos || []);
     setSubmitUi('sent');
   } catch (err) {
     console.error('report submit failed', err);
     setSubmitUi('error', navigator.onLine === false ? 'You appear to be offline; it will be sent when the connection is back.' : (err && err.message) || '');
   } finally { submitting = false; }
 }
-window.addEventListener('online', () => { if (state.view === 'done' && state.finalizedAt && !state.submittedId) submitReport(); });
+// The full-size photos the PDF links to, a few at a time; the server keeps any it already has.
+async function uploadPhotos(id, photos){
+  if (state.photosUploaded || !state.photoKey || !photos.length) { state.photosUploaded = true; return; }
+  for (let i = 0; i < photos.length; i += 6){
+    const res = await fetch('/api/reports/' + encodeURIComponent(id) + '/photos', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: state.photoKey, photos: photos.slice(i, i + 6) })
+    });
+    if (!res.ok){ const d = await res.json().catch(() => ({})); throw new Error(d.error || 'The photos could not be uploaded.'); }
+  }
+  state.photosUploaded = true;
+  persist();
+}
+window.addEventListener('online', () => { if (state.view === 'done' && state.finalizedAt && !(state.submittedId && state.photosUploaded)) submitReport(); });
 function canSharePdf(){
   try { return !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob(['%PDF'])], 'r.pdf', { type: 'application/pdf' })] })); }
   catch (e) { return false; }
@@ -3513,7 +3548,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!state.submittedId) submitReport(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!(state.submittedId && state.photosUploaded)) submitReport(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';

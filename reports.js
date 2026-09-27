@@ -12,6 +12,8 @@ const REPORTS_DIR = (process.env.REPORTS_DIR || '').trim() || (VOLUME ? path.joi
 const PERSISTENT = !!(process.env.REPORTS_DIR || VOLUME) || !process.env.RAILWAY_ENVIRONMENT;
 const MAX_PDF = 80 * 1024 * 1024;
 const ID_RE = /^[A-Za-z0-9-]{8,80}$/;
+const KEY_RE = /^[a-f0-9]{32}$/;       // a report's private photo key (random, made on the tenant's phone)
+const photoDir = id => path.join(REPORTS_DIR, id + '.photos');
 // Email to Residential Realtors when a tenant taps "Send" (via Resend, resend.com). Without
 // RESEND_API_KEY the report is still marked as sent and waits on /admin.
 const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
@@ -92,6 +94,7 @@ function mount(app){
       inspectorName: clip(m.inspectorName, 120), signedBy: clip(m.signedBy, 120), createdAt: clip(m.createdAt, 40),
       finalizedAt: clip(m.finalizedAt, 40), rooms: Math.max(0, Math.min(99, parseInt(m.rooms, 10) || 0)),
       photos: Math.max(0, Math.min(9999, parseInt(m.photos, 10) || 0)), fileName: clip(m.fileName, 200).replace(/[\\/"]/g, '-'),
+      photoKey: KEY_RE.test(String(m.photoKey || '')) ? String(m.photoKey) : '',
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -146,6 +149,84 @@ function mount(app){
       console.log('report sent: ' + id + (r.emailedAt ? ' (emailed to ' + REPORT_TO_EMAIL + ')' : ' (email not set up)'));
       res.json({ ok: true, sentAt: r.sentAt, emailed: !!r.emailedAt });
     } finally { sending.delete(id); }
+  });
+
+  /* ---------- full-size photos: the PDF shows smaller pictures that link here ---------- */
+  // Uploaded after the report, a few at a time, with the report's photo key. A report sent before photo
+  // links existed takes the key the first time its photos arrive.
+  const photoUploads = limiter(600, 60 * 60 * 1000);
+  const keyToId = new Map();
+  function findByKey(key){
+    const hit = keyToId.get(key);
+    if (hit && readMeta(hit)) return hit;
+    const r = listReports().find(x => x.photoKey === key);
+    if (r) keyToId.set(key, r.id);
+    return r ? r.id : null;
+  }
+  app.post('/api/reports/:id/photos', (req, res) => {
+    if (!photoUploads(clientIp(req))) return res.status(429).json({ error: 'Too many uploads. Try again later.' });
+    const id = String(req.params.id), b = req.body || {}, key = String(b.key || '');
+    const r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    if (!KEY_RE.test(key) || (r.photoKey && r.photoKey !== key)) return res.status(403).json({ error: 'Wrong photo key.' });
+    const list = Array.isArray(b.photos) ? b.photos.slice(0, 12) : [];
+    const dir = photoDir(id);
+    fs.mkdirSync(dir, { recursive: true });
+    let index = {};
+    try { index = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')); } catch (e) {}
+    let saved = 0;
+    for (const ph of list){
+      const n = parseInt(ph && ph.n, 10);
+      const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String((ph && ph.dataUrl) || ''));
+      if (!(n >= 1 && n <= 5000) || !m) continue;
+      const buf = Buffer.from(m[1], 'base64');
+      if (buf.length < 100 || buf.length > 12 * 1024 * 1024 || buf[0] !== 0xFF || buf[1] !== 0xD8) continue;
+      const file = path.join(dir, n + '.jpg');
+      if (!fs.existsSync(file)) fs.writeFileSync(file, buf);
+      index[n] = { title: clip(ph.title, 200), ts: clip(ph.ts, 40) };
+      saved++;
+    }
+    fs.writeFileSync(path.join(dir, 'index.json'), JSON.stringify(index));
+    if (!r.photoKey){ r.photoKey = key; fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); }
+    keyToId.set(key, id);
+    res.json({ ok: true, saved });
+  });
+  function photoFor(req){
+    const key = String(req.params.key), n = parseInt(req.params.n, 10);
+    if (!KEY_RE.test(key) || !(n >= 1 && n <= 5000)) return null;
+    const id = findByKey(key);
+    if (!id) return null;
+    const file = path.join(photoDir(id), n + '.jpg');
+    let info = {};
+    try { info = JSON.parse(fs.readFileSync(path.join(photoDir(id), 'index.json'), 'utf8'))[n] || {}; } catch (e) {}
+    return { id, n, file, info, meta: readMeta(id) };
+  }
+  const photoHeaders = res => res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' });
+  app.get('/p/:key/:n.jpg', (req, res) => {
+    photoHeaders(res);
+    const f = photoFor(req);
+    if (!f || !fs.existsSync(f.file)) return res.status(404).type('text/plain').send('Photo not found.');
+    res.set('Cache-Control', 'private, max-age=31536000, immutable');
+    res.type('jpeg').sendFile(f.file);
+  });
+  app.get('/p/:key/:n', (req, res) => {
+    photoHeaders(res);
+    const f = photoFor(req);
+    const ok = f && fs.existsSync(f.file);
+    const when = f && f.info.ts ? new Date(f.info.ts) : null;
+    const taken = when && !isNaN(when) ? when.toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    res.status(ok ? 200 : 404).type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>${ok ? esc(f.info.title || 'Photograph') : 'Photo not available'}</title><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<style>
+  * { box-sizing: border-box; } body { margin:0; background:#0B0F19; color:#E5E9F0; font:15px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  header { padding:14px 16px 10px; } h1 { font-size:15px; margin:0 0 3px; font-weight:650; } .sub { color:#9AA4B5; font-size:13px; }
+  main { padding:0 8px 16px; display:flex; justify-content:center; } img { max-width:100%; height:auto; display:block; border-radius:6px; }
+  .none { padding:40px 16px; text-align:center; color:#9AA4B5; }
+</style></head><body>
+${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${esc([f.meta && f.meta.address, taken ? 'Taken ' + taken : ''].filter(Boolean).join(' · '))}</div></header>
+<main><img src="/p/${esc(req.params.key)}/${f.n}.jpg" alt="${esc(f.info.title || 'Photograph')}"></main>`
+      : '<div class="none">This photo isn’t available. It may not have finished uploading yet, or the report has been removed.</div>'}
+</body></html>`);
   });
 
   /* ---------- owner side: /admin, behind ADMIN_PASSWORD ---------- */
@@ -309,6 +390,7 @@ async function uploadPdfs(input){
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete from the reports page.');
     if (!ID_RE.test(id) || !readMeta(id)) return res.status(404).type('text/plain').send('Report not found.');
     for (const ext of ['.pdf', '.json']) { try { fs.unlinkSync(path.join(REPORTS_DIR, id + ext)); } catch (e) {} }
+    try { fs.rmSync(photoDir(id), { recursive: true, force: true }); } catch (e) {}
     console.log('report deleted: ' + id);
     res.redirect(303, '/admin');
   });
