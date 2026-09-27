@@ -20,6 +20,7 @@ app.disable('x-powered-by');
 app.use(express.json({ limit: '15mb' }));
 
 app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
+app.get('/favicon.ico', (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'favicon-32.png')));
 
 /* ----------------------------- /api/status ----------------------------- */
 app.get('/api/status', (req, res) => {
