@@ -12,6 +12,13 @@ const REPORTS_DIR = (process.env.REPORTS_DIR || '').trim() || (VOLUME ? path.joi
 const PERSISTENT = !!(process.env.REPORTS_DIR || VOLUME) || !process.env.RAILWAY_ENVIRONMENT;
 const MAX_PDF = 80 * 1024 * 1024;
 const ID_RE = /^[A-Za-z0-9-]{8,80}$/;
+// Email to Residential Realtors when a tenant taps "Send" (via Resend, resend.com). Without
+// RESEND_API_KEY the report is still marked as sent and waits on /admin.
+const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
+const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim() || 'jayk@residentialrealtors.co.uk';
+const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'Check-in Reports <onboarding@resend.dev>';
+const PUBLIC_URL = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).replace(/\/+$/, '');
+const MAX_ATTACH = 30 * 1024 * 1024; // larger PDFs are sent as a link to /admin instead
 
 fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
@@ -38,6 +45,41 @@ function readMeta(id){
 function listReports(){
   return fs.readdirSync(REPORTS_DIR).filter(f => f.endsWith('.json')).map(f => readMeta(f.slice(0, -5))).filter(Boolean)
     .sort((a, b) => String(b.receivedAt).localeCompare(String(a.receivedAt)));
+}
+
+async function emailReport(r){
+  if (!RESEND_API_KEY) return { ok: false, reason: 'not-configured' };
+  const pdfPath = path.join(REPORTS_DIR, r.id + '.pdf');
+  const attach = r.size <= MAX_ATTACH;
+  const link = PUBLIC_URL ? PUBLIC_URL + '/admin/reports/' + r.id + '.pdf' : '';
+  const text = [
+    'A tenant has sent their ' + (r.inspectionType || 'check-in') + ' report.', '',
+    'Property: ' + (r.address || '—'),
+    'Reference: ' + (r.ref || '—'),
+    'Completed by: ' + (r.signedBy || r.inspectorName || '—'),
+    'Finished: ' + (r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' }) : '—'),
+    'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos', '',
+    attach ? 'The report is attached as a PDF.' : 'The report is too large to attach (' + (r.size / 1048576).toFixed(0) + ' MB).',
+    link ? (attach ? 'It is also on your reports page: ' : 'Open it here: ') + link : '',
+    PUBLIC_URL ? 'All reports: ' + PUBLIC_URL + '/admin' : ''
+  ].filter(l => l !== null).join('\n').trim();
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST', signal: AbortSignal.timeout(60000),
+      headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: REPORT_FROM_EMAIL, to: [REPORT_TO_EMAIL],
+        subject: (r.inspectionType || 'Check-in') + ' report: ' + (r.address || 'property') + (r.ref ? ' [' + r.ref + ']' : ''),
+        text,
+        attachments: attach ? [{ filename: r.fileName || (r.id + '.pdf'), content: fs.readFileSync(pdfPath).toString('base64') }] : undefined
+      })
+    });
+    if (!res.ok){ console.error('report email failed: HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return { ok: false, reason: 'send-failed' }; }
+    return { ok: true };
+  } catch (err) {
+    console.error('report email failed:', err.message);
+    return { ok: false, reason: 'send-failed' };
+  }
 }
 
 function mount(app){
@@ -82,6 +124,30 @@ function mount(app){
     res.status(status).json(body);
   });
 
+  // The tenant taps "Send to Residential Realtors": the stored report is marked as sent and emailed.
+  // Repeats are harmless: a report already emailed is not emailed again.
+  const sendAllowed = limiter(20, 60 * 60 * 1000);
+  const sending = new Set();
+  app.post('/api/reports/:id/send', async (req, res) => {
+    const id = String(req.params.id);
+    if (!sendAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many attempts. Try again later.' });
+    const r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    if (sending.has(id)) return res.status(409).json({ error: 'Already sending.' });
+    sending.add(id);
+    try {
+      if (!r.sentAt) r.sentAt = new Date().toISOString();
+      if (!r.emailedAt){
+        const mail = await emailReport(r);
+        if (mail.ok) r.emailedAt = new Date().toISOString();
+        else if (mail.reason === 'send-failed'){ fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); return res.status(502).json({ error: "The email didn't go through." }); }
+      }
+      fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
+      console.log('report sent: ' + id + (r.emailedAt ? ' (emailed to ' + REPORT_TO_EMAIL + ')' : ' (email not set up)'));
+      res.json({ ok: true, sentAt: r.sentAt, emailed: !!r.emailedAt });
+    } finally { sending.delete(id); }
+  });
+
   /* ---------- owner side: /admin, behind ADMIN_PASSWORD ---------- */
   function requireAdmin(req, res, next){
     res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY' });
@@ -107,7 +173,7 @@ function mount(app){
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}</td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
@@ -134,14 +200,16 @@ function mount(app){
   .upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; } #upStatus { font-size:14px; color:var(--soft); }
   .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; padding:10px 14px; font-size:14px; } .btn.primary:hover { color:#fff; opacity:.92; }
   .empty { padding: 40px 16px; text-align:center; color: var(--soft); }
+  .pill { display:inline-block; margin-top:4px; font-size:11.5px; font-weight:600; padding:2px 8px; border-radius:999px; background:#F1F3F7; color:var(--soft); } .pill.sent { background:#E7F6EC; color:#15803D; }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
 <h1>Submitted reports</h1>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
+${RESEND_API_KEY ? '' : '<div class="warn">Reports sent by tenants appear here. To also get each one by email, add RESEND_API_KEY (and REPORT_FROM_EMAIL) in Railway → Variables.</div>'}
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
 ${reports.length ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
-<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by</th><th>Contents</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
 <script>
 // Details come from the app's file names: "Address - Type - Date - Ref.pdf"; anything else keeps its file name.

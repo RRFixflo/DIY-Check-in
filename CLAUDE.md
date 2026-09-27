@@ -6,7 +6,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 
 - `public/index.html` is the whole client: HTML, CSS and one inline `<script>`. There is no build step, no bundler and no framework. Edit the file directly.
   - jsPDF 2.5.1 is loaded from cdnjs as a UMD script (`window.jspdf.jsPDF`). `buildPdfBlob(state, onProgress)` builds the report in the browser (A4 landscape, clerk report format).
-  - The draft is kept in IndexedDB on the tenant's device. When a report is finished, `submitReport()` sends a copy of the PDF to `POST /api/reports` (once per report: `state.submittedId`; retried with Try again or when back online). Nothing else is stored on the server.
+  - The draft is kept in IndexedDB on the tenant's device. When a report is finished, `submitReport()` quietly saves a copy of the PDF with `POST /api/reports` (once per report: `state.submittedId`; retried when back online), so it is never lost. The finished screen's main button, **Send to Residential Realtors** (`sendToAgent()`), then calls `POST /api/reports/:id/send`, which marks it sent (`state.sentAt`) and emails it to Residential Realtors. Nothing else is stored on the server.
   - The PDF is delivered as a plain browser download (object URL + `<a download>`). Do not add `claude.*` / `window.claude` calls. The client only talks to this server's `/api/*` endpoints.
   - `preparePdf()` builds the PDF once per finished report and keeps it, so `savePdf()` / `openPdf()` / `sharePdf()` run straight from the tap (phones block downloads that start after the async build). Share uses the Web Share API only where `navigator.canShare` accepts files. A finished report stays in IndexedDB and reopens on the done screen until a new inspection is started.
   - Every photo in the PDF (cover, keys, meters, rooms) is drawn uncropped with `drawFitted()` and links to its own full-size page in the "Photographs – full size" section at the end, which links back. Each photo is embedded once (jsPDF image alias) and reused for the thumbnail and the full-size page.
@@ -25,6 +25,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 | `GET /api/status` | `initAI()` on boot | `{ ai, reason }` |
 | `POST /api/assess` with `{ label, room, image }` (JPEG data URL) | `assessItemPhoto()` after each item photo | `{ matches, note, condition, observation, description, defects, cleanliness }`, with `condition` one of `new/good/fair/poor`, `defects` drawn from `DEFECT_OPTIONS` (kept in step with `DEFECTS` in `server.js`), `cleanliness` one of `clean/needs/dirty`. The client fills only the details the tenant hasn't set |
 | `POST /api/reports`, body = the PDF (`application/pdf`), details in the `X-Report-Meta` header (URI-encoded JSON) | `submitReport()` when a report is finished | `201 { id }`, or `200 { id, duplicate: true }` for a repeat |
+| `POST /api/reports/:id/send` | `sendToAgent()` (the Send to Residential Realtors button) | `{ ok, sentAt, emailed }`. Marks the report sent and, with `RESEND_API_KEY`, emails it to `REPORT_TO_EMAIL` with the PDF attached (a link instead above 30 MB). Never emails the same report twice |
 | `GET /admin`, `GET /admin/reports/:id.pdf[?download=1]`, `POST /admin/reports/:id/delete`, `POST /admin/upload` (PDF body, `X-Report-Meta`) | the owner, in a browser | the private report list, the PDF, delete, and adding a PDF they already have (details read from the app's file name `Address - Type - Date - Ref.pdf`; de-duplicated by file contents). All require `ADMIN_PASSWORD`; delete and upload also require the same origin |
 
 `/health` and `/healthz` return `{ ok: true }`.
@@ -34,6 +35,8 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 - `ANTHROPIC_API_KEY`: enables `/api/assess`. Without it `/api/status` reports `ai:false` and the tenant picks each condition by hand.
 - `ANTHROPIC_MODEL`: optional. Defaults to `claude-haiku-4-5-20251001`.
 - `ADMIN_PASSWORD`: the password for `/admin`. Without it `/admin` stays locked (reports are still received and stored).
+- `RESEND_API_KEY`: emails each report to Residential Realtors when the tenant taps Send (resend.com). Without it reports are still marked sent and wait on `/admin`.
+- `REPORT_TO_EMAIL`: optional, defaults to `jayk@residentialrealtors.co.uk`. `REPORT_FROM_EMAIL`: optional sender on a domain verified in Resend; the default `onboarding@resend.dev` only delivers to the Resend account's own address.
 - `REPORTS_DIR`: optional override of where reports are stored. On Railway, reports need the volume attached to this service, or they are lost on the next deploy.
 - `PORT` is set by Railway. Do not set it.
 

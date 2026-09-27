@@ -348,6 +348,10 @@
   .pdf-meta strong { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pdf-meta span { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
   .pdf-download { min-height: 52px; font-size: 16px; }
+  .send-agent { min-height: 56px; font-size: 16.5px; }
+  .send-agent.is-sent, .send-agent.is-sent:disabled { background: var(--ok); border-color: var(--ok); color: #fff; opacity: 1; }
+  #pdfDownloadBtn { margin-top: 12px; }
+  .submit-status { background: var(--surface-2); color: var(--ink-soft); }
   .pdf-more { margin-top: 10px; }
   .submit-status { font-size: 13px; margin-top: 10px; padding: 9px 12px; border-radius: var(--radius-sm); }
   .submit-status:empty { display: none; }
@@ -1431,6 +1435,7 @@ function normalizeState(saved){
     declarationAccepted: !!saved.declarationAccepted,
     finalizedAt: saved.finalizedAt || null,
     submittedId: saved.submittedId || null,
+    sentAt: saved.sentAt || null,
     submittedAt: saved.submittedAt || null
   };
 }
@@ -2740,24 +2745,55 @@ function savePdf(){
 }
 function openPdf(){ if (pdfReady) window.open(pdfReady.url, '_blank'); }
 
-/* A copy of every finished report is sent to the server, where only the owner can open it (/admin).
-   Sent once per report (the server also ignores repeats); retried when the connection comes back. */
+/* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
+   can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
+   retried when the connection comes back. The tenant then sends it to Residential Realtors with one tap
+   (sendToAgent), which marks it as sent and emails it to them. */
 let submitting = false;
 let submitUi = { phase: 'idle', msg: '' };
-function setSubmitUi(phase, msg){
-  submitUi = { phase, msg: msg || '' };
-  const el = document.getElementById('submitStatus');
-  if (!el) return;
-  el.className = 'submit-status ' + phase;
-  el.innerHTML = phase === 'sent' ? '✓ A copy has been sent to the managing agent.'
-    : phase === 'sending' ? 'Sending a copy to the managing agent…'
-    : phase === 'error' ? "Couldn't send a copy to the managing agent yet. " + escapeHtml(msg || '') + ' <button type="button" class="btn-ghost" onclick="submitReport()">Try again</button>'
-    : '';
+function setSubmitUi(phase, msg){ submitUi = { phase, msg: msg || '' }; }
+const AGENT_NAME = 'Residential Realtors';
+let sendUi = { phase: 'idle', msg: '' };
+function setSendUi(phase, msg){
+  sendUi = { phase, msg: msg || '' };
+  const btn = document.getElementById('sendBtn'), el = document.getElementById('submitStatus');
+  if (!btn || !el) return;
+  const sent = !!state.sentAt;
+  btn.disabled = sent || phase === 'sending';
+  btn.classList.toggle('is-sent', sent);
+  btn.innerHTML = sent ? '✓ Sent to ' + AGENT_NAME : phase === 'sending' ? 'Sending…' : 'Send to ' + AGENT_NAME;
+  el.className = 'submit-status ' + (sent ? 'sent' : phase);
+  el.innerHTML = sent ? 'Sent ' + escapeHtml(formatTimestamp(new Date(state.sentAt))) + '. ' + AGENT_NAME + ' now have your report. Keep a copy for yourself too.'
+    : phase === 'error' ? "It didn't send. " + escapeHtml(msg || '') + ' Tap the button to try again.'
+    : 'Tap to send your finished report to ' + AGENT_NAME + '.';
 }
-async function submitReport(){
+async function sendToAgent(){
+  if (state.sentAt || sendUi.phase === 'sending') return;
+  setSendUi('sending');
+  try {
+    if (!state.submittedId) await submitReport();
+    if (!state.submittedId) throw new Error(submitUi.msg || 'The report could not be uploaded.');
+    const res = await fetch('/api/reports/' + encodeURIComponent(state.submittedId) + '/send', { method: 'POST' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || '');
+    state.sentAt = data.sentAt || new Date().toISOString();
+    clearTimeout(saveTimer); idbSet('current', state); // saved straight away, not after the usual short delay
+    setSendUi('sent');
+  } catch (err) {
+    console.error('send failed', err);
+    setSendUi('error', navigator.onLine === false ? 'You appear to be offline. Try again when you have a connection.' : (err && err.message) || '');
+  }
+}
+let submitPromise = null;
+function submitReport(){
+  // A tap on Send while the background save is still uploading waits for that same upload.
+  if (submitting && submitPromise) return submitPromise;
+  submitPromise = submitReportOnce();
+  return submitPromise;
+}
+async function submitReportOnce(){
   if (!state.finalizedAt) return;
   if (state.submittedId){ setSubmitUi('sent'); return; }
-  if (submitting) return;
   submitting = true;
   setSubmitUi('sending');
   try {
@@ -3380,7 +3416,7 @@ function renderReview(){
 
       <p class="finish-help" id="finishHelp"></p>
       <button type="button" class="btn btn-primary btn-block" id="finishBtn" onclick="completeReport()">Finish &amp; generate report</button>
-      <p class="finish-note">When you finish, you get the report as a PDF and a copy is sent to the managing agent.</p>
+      <p class="finish-note">When you finish, you get the report as a PDF, and you can send it to Residential Realtors with one tap.</p>
     </div>
   `;
 }
@@ -3400,8 +3436,9 @@ function renderDone(){
           <span class="pdf-badge">PDF</span>
           <div class="pdf-meta"><strong>${escapeHtml(pdfFileName(state))}</strong><span id="pdfStatus">Preparing your PDF…</span></div>
         </div>
-        <button type="button" class="btn btn-primary btn-block pdf-download" id="pdfDownloadBtn" onclick="savePdf()">Download PDF</button>
+        <button type="button" class="btn btn-primary btn-block send-agent" id="sendBtn" onclick="sendToAgent()">Send to Residential Realtors</button>
         <div class="submit-status" id="submitStatus"></div>
+        <button type="button" class="btn btn-block pdf-download" id="pdfDownloadBtn" onclick="savePdf()">Download PDF</button>
         <div class="btn-row pdf-more">
           <button type="button" class="btn btn-sm pdf-secondary" onclick="openPdf()" disabled>Open</button>
           ${canSharePdf() ? '<button type="button" class="btn btn-sm pdf-secondary" onclick="sharePdf()" disabled>Share or save to Files</button>' : ''}
@@ -3434,7 +3471,7 @@ function renderDone(){
       <button type="button" class="btn-ghost" onclick="startNewInspection()">Start a new inspection</button>
     </div>
     <div class="hidden reset-confirm" id="resetConfirm">
-      This clears the current report from this device. Make sure you've downloaded it first.${state.submittedId ? '' : ' <strong>It has not been sent to the managing agent yet.</strong>'}
+      This clears the current report from this device. Make sure you've downloaded it first.${state.sentAt ? '' : ' <strong>It has not been sent to Residential Realtors yet.</strong>'}
       <div class="btn-row">
         <button type="button" class="btn" onclick="cancelReset()">Cancel</button>
         <button type="button" class="btn btn-accent" onclick="confirmReset()">Yes, start new</button>
@@ -3453,7 +3490,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSubmitUi(state.submittedId ? 'sent' : submitUi.phase, submitUi.msg); preparePdf(); if (!state.submittedId) submitReport(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!state.submittedId) submitReport(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';
