@@ -171,7 +171,7 @@ function mount(app){
   const safeNext = v => (typeof v === 'string' && /^\/admin(\/[\w.\-\/]*)?(\?download=1)?$/.test(v)) ? v : '/admin';
   function loginPage(res, status, next, msg){
     res.status(status).type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>Reports sign in</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<title>Reports sign in</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
 <style>
   * { box-sizing: border-box; } body { margin:0; min-height:100vh; display:grid; place-items:center; background:#F3F5F9; color:#0F172A; font:16px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding:16px; }
   form { width:100%; max-width:360px; background:#fff; border:1px solid #E4E8EF; border-radius:18px; padding:26px 22px; box-shadow:0 4px 16px rgba(15,23,42,.06); }
@@ -233,7 +233,7 @@ function mount(app){
         </td>
       </tr>`).join('');
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>Submitted reports</title>
+<title>Submitted reports</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
 <style>
   :root { --ink:#0F172A; --soft:#475569; --line:#E4E8EF; --bg:#F3F5F9; --accent:#3257C8; --danger:#B42318; }
   * { box-sizing: border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }

@@ -21,6 +21,8 @@ app.use(express.json({ limit: '15mb' }));
 
 app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
 app.get('/favicon.ico', (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'favicon-32.png')));
+// Phones look for these at the root when a page doesn't name its icon.
+app.get(['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png'], (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'apple-touch-icon.png')));
 
 /* ----------------------------- /api/status ----------------------------- */
 app.get('/api/status', (req, res) => {
