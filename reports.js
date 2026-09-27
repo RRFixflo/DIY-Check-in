@@ -88,22 +88,23 @@ async function emailReport(r){
 }
 
 // Never delays or breaks sending the report. Carries the address and who sent it, nothing more.
-function notifyPhone(r){
-  if (!NTFY_TOPIC) return;
-  const body = {
+function notifyPhone(r, test){
+  if (!NTFY_TOPIC) return Promise.resolve(false);
+  const body = test ? { topic: NTFY_TOPIC, title: 'Test alert', message: 'Phone alerts for check-in reports are working. You will get one like this whenever a tenant sends a report.', priority: 4, tags: ['white_check_mark'] } : {
     topic: NTFY_TOPIC,
     title: 'New ' + (r.inspectionType || 'check-in') + ' report',
     message: [r.address || 'No address given', 'From ' + (r.signedBy || r.inspectorName || 'the tenant') + (r.rooms ? ' · ' + r.rooms + ' rooms, ' + r.photos + ' photos' : ''), r.ref ? 'Ref ' + r.ref : ''].filter(Boolean).join('\n'),
     priority: 4,
     tags: ['house']
   };
-  if (PUBLIC_URL){
+  if (PUBLIC_URL && test) body.click = PUBLIC_URL + '/admin';
+  if (PUBLIC_URL && !test){
     body.click = PUBLIC_URL + '/admin/reports/' + r.id + '.pdf';
     body.actions = [{ action: 'view', label: 'Open report', url: body.click }, { action: 'view', label: 'All reports', url: PUBLIC_URL + '/admin' }];
   }
-  fetch(NTFY_SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) })
-    .then(res => { if (!res.ok) console.error('phone alert failed: HTTP ' + res.status); })
-    .catch(err => console.error('phone alert failed:', err.message));
+  return fetch(NTFY_SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) })
+    .then(res => { if (!res.ok) console.error('phone alert failed: HTTP ' + res.status); return res.ok; })
+    .catch(err => { console.error('phone alert failed:', err.message); return false; });
 }
 
 function mount(app){
@@ -360,12 +361,15 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   .upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; } #upStatus { font-size:14px; color:var(--soft); }
   .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; padding:10px 14px; font-size:14px; } .btn.primary:hover { color:#fff; opacity:.92; }
   .empty { padding: 40px 16px; text-align:center; color: var(--soft); }
+  .alerts { background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:14px; font-size:14px; color:var(--soft); line-height:1.6; }
+  .alerts code { background:#F1F3F7; color:var(--ink); padding:2px 6px; border-radius:6px; font-size:13px; user-select:all; word-break:break-all; } #alertStatus { font-weight:600; }
   .pill { display:inline-block; margin-top:4px; font-size:11.5px; font-weight:600; padding:2px 8px; border-radius:999px; background:#F1F3F7; color:var(--soft); } .pill.sent { background:#E7F6EC; color:#15803D; }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
 <h1>Submitted reports</h1>
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
+${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code><div style="margin-top:8px"><button class="btn" type="button" onclick="testAlert(this)">Send a test alert</button> <span id="alertStatus"></span></div></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
 ${reports.length ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
@@ -377,6 +381,13 @@ function metaFromName(name){
   const base = name.replace(/\.pdf$/i, ''), parts = base.split(' - ');
   if (parts.length >= 4) return { address: parts[0].replace(/-/g, ' ').trim(), inspectionType: parts[1].trim(), ref: parts[parts.length - 1].trim(), fileName: name };
   return { address: base, fileName: name };
+}
+async function testAlert(btn){
+  const st = document.getElementById('alertStatus'); btn.disabled = true; st.textContent = 'Sending…';
+  try { const r = await fetch('/admin/test-alert', { method: 'POST' }); const d = await r.json().catch(() => ({}));
+    st.textContent = d.ok ? 'Sent. Check your phone.' : "Couldn't reach ntfy just now. Try again in a moment."; }
+  catch (e) { st.textContent = "Couldn't send. Try again."; }
+  btn.disabled = false;
 }
 async function uploadPdfs(input){
   const files = Array.from(input.files || []), st = document.getElementById('upStatus');
@@ -411,6 +422,12 @@ async function uploadPdfs(input){
     if (!sameOrigin(req)) return res.status(403).json({ error: 'Upload from the reports page.' });
     const [status, body] = storeReport(req.body, metaHeader(req), 'uploaded');
     res.status(status).json(body);
+  });
+
+  app.post('/admin/test-alert', requireAdmin, async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).json({ error: 'Use the reports page.' });
+    if (!NTFY_TOPIC) return res.status(503).json({ error: 'Phone alerts are not set up.' });
+    res.json({ ok: await notifyPhone(null, true) });
   });
 
   app.post('/admin/reports/:id/delete', requireAdmin, (req, res) => {
