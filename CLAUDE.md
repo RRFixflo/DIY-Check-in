@@ -41,6 +41,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 - `ADMIN_PASSWORD`: the password for `/admin`. Without it `/admin` stays locked (reports are still received and stored).
 - `RESEND_API_KEY`: emails each report to Residential Realtors when the tenant taps Send (resend.com). Without it reports are still marked sent and wait on `/admin`.
 - `REPORT_TO_EMAIL`: optional, defaults to `jayk@residentialrealtors.co.uk`. `REPORT_FROM_EMAIL`: optional sender on a domain verified in Resend; the default `onboarding@resend.dev` only delivers to the Resend account's own address.
+- `NTFY_TOPIC`: a phone alert (free ntfy app, ntfy.sh) the first time each report is sent by the tenant, with the address, who sent it and a link to the PDF. Subscribe to the topic in the ntfy app. `NTFY_SERVER` optional, defaults to `https://ntfy.sh`.
 - `REPORTS_DIR`: optional override of where reports are stored. On Railway, reports need the volume attached to this service, or they are lost on the next deploy.
 - `PORT` is set by Railway. Do not set it.
 

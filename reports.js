@@ -20,6 +20,9 @@ const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
 const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim() || 'jayk@residentialrealtors.co.uk';
 const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'Check-in Reports <onboarding@resend.dev>';
 const PUBLIC_URL = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).replace(/\/+$/, '');
+// Phone alert when a tenant sends a report, via the free ntfy app (ntfy.sh): subscribe to NTFY_TOPIC.
+const NTFY_TOPIC = (process.env.NTFY_TOPIC || '').trim();
+const NTFY_SERVER = (process.env.NTFY_SERVER || 'https://ntfy.sh').trim().replace(/\/+$/, '');
 const MAX_ATTACH = 28 * 1024 * 1024; // Resend allows 40 MB per email after base64; larger PDFs go as a link to /admin
 
 fs.mkdirSync(REPORTS_DIR, { recursive: true });
@@ -84,6 +87,25 @@ async function emailReport(r){
   }
 }
 
+// Never delays or breaks sending the report. Carries the address and who sent it, nothing more.
+function notifyPhone(r){
+  if (!NTFY_TOPIC) return;
+  const body = {
+    topic: NTFY_TOPIC,
+    title: 'New ' + (r.inspectionType || 'check-in') + ' report',
+    message: [r.address || 'No address given', 'From ' + (r.signedBy || r.inspectorName || 'the tenant') + (r.rooms ? ' · ' + r.rooms + ' rooms, ' + r.photos + ' photos' : ''), r.ref ? 'Ref ' + r.ref : ''].filter(Boolean).join('\n'),
+    priority: 4,
+    tags: ['house']
+  };
+  if (PUBLIC_URL){
+    body.click = PUBLIC_URL + '/admin/reports/' + r.id + '.pdf';
+    body.actions = [{ action: 'view', label: 'Open report', url: body.click }, { action: 'view', label: 'All reports', url: PUBLIC_URL + '/admin' }];
+  }
+  fetch(NTFY_SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) })
+    .then(res => { if (!res.ok) console.error('phone alert failed: HTTP ' + res.status); })
+    .catch(err => console.error('phone alert failed:', err.message));
+}
+
 function mount(app){
   /* ---------- tenant side: send a copy of the finished report ---------- */
   // Saves one report PDF with its details. Returns [httpStatus, jsonBody].
@@ -140,6 +162,12 @@ function mount(app){
     sending.add(id);
     try {
       if (!r.sentAt) r.sentAt = new Date().toISOString();
+      // One phone alert per report, straight away (even if the email below fails).
+      if (NTFY_TOPIC && !r.notifiedAt){
+        r.notifiedAt = new Date().toISOString();
+        fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
+        notifyPhone(r);
+      }
       if (!r.emailedAt){
         const mail = await emailReport(r);
         if (mail.ok) r.emailedAt = new Date().toISOString();
