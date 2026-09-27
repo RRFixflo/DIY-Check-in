@@ -18,7 +18,7 @@ const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
 const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim() || 'jayk@residentialrealtors.co.uk';
 const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'Check-in Reports <onboarding@resend.dev>';
 const PUBLIC_URL = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).replace(/\/+$/, '');
-const MAX_ATTACH = 30 * 1024 * 1024; // larger PDFs are sent as a link to /admin instead
+const MAX_ATTACH = 28 * 1024 * 1024; // Resend allows 40 MB per email after base64; larger PDFs go as a link to /admin
 
 fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
