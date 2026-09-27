@@ -149,18 +149,69 @@ function mount(app){
   });
 
   /* ---------- owner side: /admin, behind ADMIN_PASSWORD ---------- */
-  function requireAdmin(req, res, next){
-    res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY' });
-    if (!ADMIN_PASSWORD) return res.status(503).type('text/plain').send('Reports are locked. Set ADMIN_PASSWORD in Railway → Variables to open this page.');
-    const ip = clientIp(req);
-    const [scheme, encoded] = String(req.headers.authorization || '').split(' ');
-    const given = scheme === 'Basic' && encoded ? Buffer.from(encoded, 'base64').toString().split(':').slice(1).join(':') : null;
-    const a = crypto.createHash('sha256').update(String(given)).digest(), b = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest();
-    if (given !== null && crypto.timingSafeEqual(a, b)) return next();
-    if (given !== null && !loginFailures(ip)) return res.status(429).type('text/plain').send('Too many attempts. Try again in 15 minutes.');
-    res.set('WWW-Authenticate', 'Basic realm="Check-in reports", charset="UTF-8"');
-    res.status(401).type('text/plain').send('Password required.');
+  // Sign-in: a form, then a signed cookie that keeps the owner signed in on that device for a year
+  // (until they sign out, or ADMIN_PASSWORD changes, which signs every device out).
+  const SESSION_DAYS = 365;
+  const signingKey = crypto.createHash('sha256').update('diy-admin-session:' + ADMIN_PASSWORD).digest();
+  const sign = exp => crypto.createHmac('sha256', signingKey).update('admin:' + exp).digest('hex');
+  const makeToken = () => { const exp = Date.now() + SESSION_DAYS * 86400000; return exp + '.' + sign(exp); };
+  function signedIn(req){
+    if (!ADMIN_PASSWORD) return false;
+    const m = String(req.headers.cookie || '').match(/(?:^|;\s*)diy_admin=([^;]+)/);
+    const [exp, mac] = (m ? decodeURIComponent(m[1]) : '').split('.');
+    if (!exp || !mac || !(Number(exp) > Date.now())) return false;
+    const a = Buffer.from(mac), b = Buffer.from(sign(exp));
+    return a.length === b.length && crypto.timingSafeEqual(a, b);
   }
+  const secure = req => req.secure || String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() === 'https';
+  function setSession(req, res, token, maxAge){
+    // Lax, so links to a report (e.g. from the email) open straight away; changes still need the same origin.
+    res.set('Set-Cookie', `diy_admin=${token}; Path=/admin; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure(req) ? '; Secure' : ''}`);
+  }
+  const safeNext = v => (typeof v === 'string' && /^\/admin(\/[\w.\-\/]*)?(\?download=1)?$/.test(v)) ? v : '/admin';
+  function loginPage(res, status, next, msg){
+    res.status(status).type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Reports sign in</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<style>
+  * { box-sizing: border-box; } body { margin:0; min-height:100vh; display:grid; place-items:center; background:#F3F5F9; color:#0F172A; font:16px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding:16px; }
+  form { width:100%; max-width:360px; background:#fff; border:1px solid #E4E8EF; border-radius:18px; padding:26px 22px; box-shadow:0 4px 16px rgba(15,23,42,.06); }
+  img { width:52px; height:52px; border-radius:13px; display:block; margin-bottom:14px; } h1 { font-size:21px; margin:0 0 4px; } p { color:#475569; margin:0 0 18px; font-size:14.5px; }
+  label { font-size:13px; font-weight:600; display:block; margin-bottom:6px; } input { width:100%; font:inherit; padding:12px 13px; border:1px solid #CDD4DF; border-radius:11px; }
+  input:focus { outline:none; border-color:#3257C8; box-shadow:0 0 0 4px rgba(50,87,200,.16); }
+  button { width:100%; margin-top:14px; font:inherit; font-weight:700; padding:13px; border:0; border-radius:11px; background:#3257C8; color:#fff; cursor:pointer; }
+  .err { background:#FDECEA; color:#B42318; font-size:14px; padding:10px 12px; border-radius:10px; margin-bottom:14px; }
+</style></head><body>
+<form method="post" action="/admin/login">
+  <img src="/icons/apple-touch-icon.png" alt="">
+  <h1>Submitted reports</h1><p>Sign in once and you stay signed in on this device.</p>
+  ${msg ? `<div class="err">${esc(msg)}</div>` : ''}
+  <input type="hidden" name="next" value="${esc(next)}">
+  <label for="pw">Password</label><input id="pw" name="password" type="password" autocomplete="current-password" autofocus required>
+  <button type="submit">Sign in</button>
+</form></body></html>`);
+  }
+  function requireAdmin(req, res, next){
+    res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'DENY' });
+    if (!ADMIN_PASSWORD) return res.status(503).type('text/plain').send('Reports are locked. Set ADMIN_PASSWORD in Railway → Variables to open this page.');
+    if (signedIn(req)) return next();
+    if (req.method !== 'GET') return res.status(401).json({ error: 'Signed out. Reload the page and sign in.' });
+    loginPage(res, 401, safeNext(req.originalUrl), '');
+  }
+  app.post('/admin/login', express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'DENY' });
+    if (!ADMIN_PASSWORD) return res.status(503).type('text/plain').send('Reports are locked. Set ADMIN_PASSWORD in Railway → Variables to open this page.');
+    const next = safeNext((req.body || {}).next);
+    if (!sameOrigin(req)) return loginPage(res, 403, next, 'Please sign in from this page.');
+    const given = String((req.body || {}).password || '');
+    const a = crypto.createHash('sha256').update(given).digest(), b = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest();
+    if (!crypto.timingSafeEqual(a, b)){
+      if (!loginFailures(clientIp(req))) return loginPage(res, 429, next, 'Too many attempts. Try again in 15 minutes.');
+      return loginPage(res, 401, next, "That password isn't right.");
+    }
+    setSession(req, res, makeToken(), SESSION_DAYS * 86400);
+    res.redirect(303, next);
+  });
+  app.post('/admin/logout', (req, res) => { setSession(req, res, '', 0); res.redirect(303, '/admin'); });
   // Deleting only from the admin page itself, never from another site's form.
   function sameOrigin(req){
     const origin = req.headers.origin || req.headers.referer || '';
@@ -204,6 +255,7 @@ function mount(app){
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
 <h1>Submitted reports</h1>
+<form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${RESEND_API_KEY ? '' : '<div class="warn">Reports sent by tenants appear here. To also get each one by email, add RESEND_API_KEY (and REPORT_FROM_EMAIL) in Railway → Variables.</div>'}
