@@ -74,6 +74,13 @@
   .stepper li.current .n { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: var(--ring); }
   @media (max-width: 720px) { .stepper .t { display: none; } .stepper li.current .t { display: inline; } .stepper li + li::before { width: 10px; } }
   @media (max-width: 400px) { .brand .bt { display: none; } }
+  .restart-btn { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; border: 1px solid var(--line-strong); background: var(--panel); color: var(--ink-soft); font-size: 12.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px; }
+  .restart-btn[hidden] { display: none; }
+  .restart-btn svg.ic { width: 14px; height: 14px; }
+  .restart-btn:hover { color: var(--danger); border-color: var(--danger); }
+  @media (max-width: 520px) { .restart-btn span { display: none; } .restart-btn { padding: 7px; } }
+  .restart-row { margin-top: 12px; }
+  .restart-row .btn { width: 100%; color: var(--danger); }
 
   #app { max-width: 960px; margin: 0 auto; padding: 22px 16px 72px; }
   @media (min-width: 560px) { #app { padding: 32px 24px 80px; } }
@@ -459,6 +466,7 @@
   <div class="appbar-inner">
     <span class="brand"><span class="brand-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="m9.5 14.5 2 2 3.5-4"/></svg></span><span class="bt">Self Check-In</span></span>
     <ol class="stepper" id="stepper"></ol>
+    <button type="button" class="restart-btn" id="restartBtn" onclick="startAgain()" title="Start again" aria-label="Start again" hidden><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Start again</span></button>
   </div>
 </header>
 <div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading Self Check-In…</p></div>
@@ -2831,9 +2839,22 @@ async function sharePdf(){
     if (!e || e.name !== 'AbortError') setPdfUi('ready', 0, "Sharing didn't work here. Use Download PDF instead.");
   }
 }
-function startNewInspection(){ const p = document.getElementById('resetConfirm'); if (p) p.classList.remove('hidden'); }
-function cancelReset(){ const p = document.getElementById('resetConfirm'); if (p) p.classList.add('hidden'); }
-async function confirmReset(){ await idbClear('current'); state = defaultState(); pendingSetup = defaultPendingSetup(); render(); window.scrollTo({top:0, behavior:'instant'}); }
+async function confirmReset(){
+  await idbClear('current'); state = defaultState(); pendingSetup = defaultPendingSetup();
+  sendUi = { phase: 'idle', msg: '' }; submitUi = { phase: 'idle', msg: '' };
+  render(); window.scrollTo({top:0, behavior:'instant'});
+}
+// "Start again", from the top bar at any stage or from the finished screen. Everything is on this
+// phone only, so it always asks first, and warns when a finished report hasn't been sent yet.
+function startAgain(){
+  const finished = !!state.finalizedAt;
+  const msg = finished && !state.sentAt
+    ? "This report hasn't been sent to Residential Realtors yet.\n\nStart again anyway? The report and all its photos will be deleted from this phone."
+    : finished
+      ? 'Start a new inspection?\n\nThis report and its photos will be removed from this phone. Residential Realtors already have it. Download it first if you want your own copy.'
+      : 'Start again?\n\nThis inspection and all its photos will be deleted from this phone. This can\'t be undone.';
+  if (window.confirm(msg)) confirmReset();
+}
 
 /* ============================= view templates ============================= */
 const ICONS = {
@@ -2851,6 +2872,8 @@ function renderStepper(){
   const v = state.view === 'done' ? 'done' : state.view;
   const cur = v === 'done' ? STEPS.length : STEPS.findIndex(st => st[0] === v);
   el.style.display = cur < 0 ? 'none' : '';
+  const rb = document.getElementById('restartBtn');
+  if (rb) rb.hidden = !(state.view !== 'setup' && state.meta && state.meta.createdAt);
   el.innerHTML = STEPS.map(([, label], i) =>
     `<li class="${i < cur ? 'done' : i === cur ? 'current' : ''}"${i === cur ? ' aria-current="step"' : ''}><span class="n">${i < cur ? '✓' : i + 1}</span><span class="t">${escapeHtml(label)}</span></li>`
   ).join('');
@@ -3443,6 +3466,7 @@ function renderDone(){
           <button type="button" class="btn btn-sm pdf-secondary" onclick="openPdf()" disabled>Open</button>
           ${canSharePdf() ? '<button type="button" class="btn btn-sm pdf-secondary" onclick="sharePdf()" disabled>Share or save to Files</button>' : ''}
         </div>
+        <div class="restart-row"><button type="button" class="btn" onclick="startAgain()">Start again</button></div>
       </div>
     </div>
 
@@ -3468,14 +3492,7 @@ function renderDone(){
     </div>
 
     <div class="btn-row" style="margin-top:24px; justify-content:center;">
-      <button type="button" class="btn-ghost" onclick="startNewInspection()">Start a new inspection</button>
-    </div>
-    <div class="hidden reset-confirm" id="resetConfirm">
-      This clears the current report from this device. Make sure you've downloaded it first.${state.sentAt ? '' : ' <strong>It has not been sent to Residential Realtors yet.</strong>'}
-      <div class="btn-row">
-        <button type="button" class="btn" onclick="cancelReset()">Cancel</button>
-        <button type="button" class="btn btn-accent" onclick="confirmReset()">Yes, start new</button>
-      </div>
+      <button type="button" class="btn" onclick="startAgain()">Start again</button>
     </div>
   `;
 }
