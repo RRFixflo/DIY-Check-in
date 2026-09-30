@@ -49,6 +49,7 @@ Self check-in / inventory report for tenants. Deployed on Railway from this repo
 
 1. Every checklist item that is not marked N/A needs at least one photo before its room can be completed.
 2. Every room needs a minimum of 8 photos (`MIN_PHOTOS`). Marking an item not applicable must never bring a room's requirement below 8. The requirement is `max(active items, 8)`. The front door item is mandatory and cannot be marked N/A.
+   A room can have at most `MAX_PHOTOS` (10) photos (`roomMaxPhotos()`). To keep every room completable, `roomPhotoSpace(room, item)` keeps one free slot for each other item still without a photo, and a room can have at most 10 items in use (adding an item or un-ticking N/A beyond that is refused). `addPhotoFiles()` and the camera enforce it; `notice()` explains why.
 3. Every photo has the date and time burned into the image pixels at capture (`stampPhoto` draws it onto the canvas before encoding). A caption or metadata alone is not enough.
 4. The report cannot be finished or produced without a signature drawn on the signature pad and the honesty declaration confirmed. `updateFinishButtonState()` / `completeReport()` enforce this.
 

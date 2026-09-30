@@ -82,6 +82,10 @@
   @media (max-width: 400px) { .brand .bt { display: none; } }
   .restart-btn { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; border: 1px solid var(--line-strong); background: var(--panel); color: var(--ink-soft); font-size: 12.5px; font-weight: 600; padding: 6px 10px; border-radius: 999px; }
   .restart-btn[hidden] { display: none; }
+  .notice { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); transform: translate(-50%, 20px); z-index: 1200; width: min(520px, calc(100% - 32px)); background: #111827; color: #fff; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.45; box-shadow: 0 8px 24px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+  .notice.show { opacity: 1; transform: translate(-50%, 0); }
+  .add-item-photo.is-full { opacity: .55; border-style: solid; }
+  #camShutter.is-full { opacity: .35; }
   .restart-btn svg.ic { width: 14px; height: 14px; }
   .restart-btn:hover { color: var(--danger); border-color: var(--danger); }
   @media (max-width: 520px) { .restart-btn span { display: none; } .restart-btn { padding: 7px; } }
@@ -515,6 +519,7 @@
 <script>
 /* ============================= constants ============================= */
 const MIN_PHOTOS = 8;
+const MAX_PHOTOS = 10; // per room; a room never needs more than this (items are capped to match)
 const DB_NAME = 'inventoryAppDB';
 const STORE = 'reports';
 
@@ -730,6 +735,28 @@ function roomTotalPhotos(room){ return (room.items || []).reduce((s,i) => s + (i
 function naCount(room){ return (room.items || []).filter(i => i.notApplicable).length; }
 function roomRequiredTotal(room){ return Math.max(activeItems(room).length, MIN_PHOTOS); }
 function roomMissingItems(room){ return activeItems(room).filter(i => !i.photos || i.photos.length === 0); }
+// Up to MAX_PHOTOS per room (more only for an older draft that already has more items than that).
+function roomMaxPhotos(room){ return Math.max(MAX_PHOTOS, activeItems(room).length); }
+/* How many more photos can go on this item (or on the room's general views when item is null), keeping one
+   free slot for every other item still waiting for its photo, so the room can always be completed. */
+function roomPhotoSpace(room, item){
+  const others = roomMissingItems(room).filter(i => i !== item).length;
+  return Math.max(0, roomMaxPhotos(room) - roomTotalPhotos(room) - others);
+}
+function roomFullMessage(room, item){
+  const others = roomMissingItems(room).filter(i => i !== item).length;
+  return roomTotalPhotos(room) >= roomMaxPhotos(room)
+    ? `${room.name} has its maximum of ${roomMaxPhotos(room)} photos. Delete one to add another.`
+    : `${room.name} can have up to ${roomMaxPhotos(room)} photos, and ${others} ${others === 1 ? 'is' : 'are'} kept for the item${others === 1 ? '' : 's'} still to photograph. Photograph ${others === 1 ? 'that item' : 'those items'} first.`;
+}
+let noticeTimer = null;
+function notice(msg){
+  if (typeof camera !== 'undefined' && camera.open){ updateCameraUi(); return; } // the camera shows it in its tip line
+  let el = document.getElementById('notice');
+  if (!el){ el = document.createElement('div'); el.id = 'notice'; el.className = 'notice'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(noticeTimer); noticeTimer = setTimeout(() => el.classList.remove('show'), 4200);
+}
 function roomItemsMissingCondition(room){ return activeItems(room).filter(i => !i.condition); }
 function roomConditionComplete(room){ const c = room.condition || {}; return !!c.cleanliness && (!c.hasDamage || (c.damageNotes||'').trim() !== ''); }
 function roomIsComplete(room){ return roomMissingItems(room).length === 0 && roomItemsMissingCondition(room).length === 0 && roomTotalPhotos(room) >= roomRequiredTotal(room) && roomConditionComplete(room); }
@@ -1150,10 +1177,13 @@ async function addPhotoFiles(files, t){
   const toAssess = [];
   let added = 0;
   for (const f of files){
+    if (r.room && roomPhotoSpace(r.room, r.item || null) <= 0){ notice(roomFullMessage(r.room, r.item || null)); break; }
     try {
       const { dataUrl, ts } = await stampPhoto(f, r.caption, r.place);
       const photo = { id: 'p' + Date.now() + Math.random().toString(36).slice(2,7), dataUrl, ts, aiCheck: null };
       photo.aiCheck = await assessPhotoQuality(dataUrl);
+      // Checked again just before saving: quick camera shots are stamped side by side.
+      if (r.room && roomPhotoSpace(r.room, r.item || null) <= 0){ notice(roomFullMessage(r.room, r.item || null)); break; }
       r.arr.push(photo); added++;
       if (r.item) toAssess.push({ roomId: r.room.id, itemId: r.item.id, photoId: photo.id });
     } catch (e) { console.error('photo failed', e); }
@@ -1225,6 +1255,7 @@ function cameraShutter(){
   const v = document.getElementById('cameraVideo');
   if (!camera.stream || !v.videoWidth) return;
   const t = cameraTarget();
+  { const r = resolveTarget(t); if (r && r.room && roomPhotoSpace(r.room, r.item || null) - camera.saving <= 0){ notice(roomFullMessage(r.room, r.item || null)); return; } }
   const c = document.createElement('canvas');
   c.width = v.videoWidth; c.height = v.videoHeight;
   c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
@@ -1252,7 +1283,9 @@ function updateCameraUi(){
   document.getElementById('camTitle').textContent = r.title;
   document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
   document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
-  document.getElementById('camTip').innerHTML = `<span>${escapeHtml(r.tip || '')}</span>`;
+  const full = r.room && roomPhotoSpace(r.room, r.item || null) - camera.saving <= 0;
+  document.getElementById('camTip').innerHTML = `<span>${escapeHtml(full ? roomFullMessage(r.room, r.item || null) : (r.tip || ''))}</span>`;
+  document.getElementById('camShutter').classList.toggle('is-full', !!full);
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
   prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
@@ -1274,6 +1307,7 @@ function toggleNA(roomId, itemId, checked){
   { const rm = state.rooms.find(r => r.id === roomId); const it = rm && rm.items.find(i => i.id === itemId); if (it && it.mandatory) { render(); return; } }
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
   const item = room.items.find(i => i.id === itemId); if (!item) return;
+  if (!checked && item.notApplicable && activeItems(room).length >= MAX_PHOTOS){ notice(`A room can have up to ${MAX_PHOTOS} items in use, as each needs its own photo. Mark another item not applicable first.`); render(); return; }
   item.notApplicable = checked;
   persist(); render();
 }
@@ -1359,6 +1393,7 @@ function addChecklistItem(roomId){
   const val = (input.value || '').trim();
   if (!val) return;
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  if (activeItems(room).length >= MAX_PHOTOS){ notice(`A room can have up to ${MAX_PHOTOS} items, as each needs its own photo and a room has at most ${MAX_PHOTOS} photos. Mark one not applicable, or mention it in the room notes.`); return; }
   room.items.push({ id: 'it' + Math.random().toString(36).slice(2,8), label: val, notApplicable: false, naReason: '', photos: [], custom: true, condition: '', conditionNote: '', desc: '', defects: [], clean: '', working: '', qty: '' });
   input.value = '';
   persist(); render();
@@ -1489,7 +1524,7 @@ function updateRoomCountHint(){
   const total = Math.max(0, pendingSetup.bedrooms||0) + Math.max(0, pendingSetup.bathrooms||0) + common + pendingSetup.customRooms.length;
   const el = document.getElementById('roomCountHint');
   if (el) el.textContent = total > 0
-    ? `${total} room${total===1?'':'s'} to inspect, each with its own photo checklist (minimum ${MIN_PHOTOS} photos).`
+    ? `${total} room${total===1?'':'s'} to inspect, each with its own photo checklist (${MIN_PHOTOS} to ${MAX_PHOTOS} photos).`
     : 'Add at least one room to continue.';
 }
 function renderCustomRoomsListHTML(){
@@ -2950,7 +2985,7 @@ function renderSetup(){
     <div class="intro-card">
       <h2>Before you start</h2>
       <ul class="intro-list">
-        <li><span class="intro-ic">${ICONS.grid}</span><span><strong>A checklist for every room</strong>Photograph each item (bed, wardrobe, cooker, sofa and so on). Each room needs at least ${MIN_PHOTOS} clear photos, and marking an item not applicable does not reduce that. The front door must always be photographed.</span></li>
+        <li><span class="intro-ic">${ICONS.grid}</span><span><strong>A checklist for every room</strong>Photograph each item (bed, wardrobe, cooker, sofa and so on). Each room needs at least ${MIN_PHOTOS} clear photos and can have up to ${MAX_PHOTOS}, and marking an item not applicable does not reduce the minimum. The front door must always be photographed.</span></li>
         <li><span class="intro-ic">${ICONS.clock}</span><span><strong>Timestamped automatically</strong>Every photo, from the camera or gallery, is stamped with the date and time the moment it's added, and checked to help confirm it shows the right item.</span></li>
         <li><span class="intro-ic">${ICONS.calendar}</span><span><strong>Within 7 days of move-in</strong>Check-in reports must be started within 7 days of the tenancy move-in date or they can't be created.</span></li>
         <li><span class="intro-ic">${ICONS.pen}</span><span><strong>Signed by you</strong>The finished report is signed off by the person carrying out the inspection.</span></li>
@@ -3093,7 +3128,7 @@ function itemCardHTML(room, item){
         </div>
       ` : `
         <div class="item-photo-row">
-          <button type="button" class="add-item-photo" onclick="triggerItemFileInput('${room.id}','${item.id}')" aria-label="Add photo">${ICONS.camera}<span>Add</span></button>
+          ${roomPhotoSpace(room, item) > 0 ? `<button type="button" class="add-item-photo" onclick="triggerItemFileInput('${room.id}','${item.id}')" aria-label="Add photo">${ICONS.camera}<span>Add</span></button>` : `<button type="button" class="add-item-photo is-full" onclick="notice(${escapeHtml(JSON.stringify(roomFullMessage(room, item)))})" aria-label="Room photo limit reached">${ICONS.camera}<span>Full</span></button>`}
           ${item.photos.map(p => `
             <div class="item-thumb">
               <img src="${p.dataUrl}" onclick="openPhotoPreview('${p.dataUrl}')" alt="${escapeHtml(item.label)}">
@@ -3217,9 +3252,9 @@ function renderCapture(){
 
         <div class="extra-section">
           <span class="sec-label">Additional photos</span>
-          <span class="sec-hint">${shortfall > 0 ? `${shortfall} more needed to reach this room's ${roomRequiredTotal(room)}-photo minimum${naCount(room) ? ` — marking items not applicable does not reduce it` : ''}.` : 'Optional — add more general condition photos if useful.'}</span>
+          <span class="sec-hint">${shortfall > 0 ? `${shortfall} more needed to reach this room's ${roomRequiredTotal(room)}-photo minimum${naCount(room) ? ` — marking items not applicable does not reduce it` : ''}.` : 'Optional — add more general condition photos if useful.'} ${roomTotalPhotos(room)} of a maximum ${roomMaxPhotos(room)} photos used in this room.</span>
           <div class="item-photo-row">
-            <button type="button" class="add-item-photo" onclick="triggerExtraFileInput('${room.id}')" aria-label="Add photo">${ICONS.camera}<span>Add</span></button>
+            ${roomPhotoSpace(room, null) > 0 ? `<button type="button" class="add-item-photo" onclick="triggerExtraFileInput('${room.id}')" aria-label="Add photo">${ICONS.camera}<span>Add</span></button>` : `<button type="button" class="add-item-photo is-full" onclick="notice(${escapeHtml(JSON.stringify(roomFullMessage(room, null)))})" aria-label="Room photo limit reached">${ICONS.camera}<span>Full</span></button>`}
             ${room.extraPhotos.map(p => `
               <div class="item-thumb">
                 <img src="${p.dataUrl}" onclick="openPhotoPreview('${p.dataUrl}')" alt="Additional photo">
