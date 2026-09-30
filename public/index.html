@@ -1795,7 +1795,8 @@ async function completeReport(){
   state.view = 'done';
   render();
   window.scrollTo({top:0, behavior:'instant'});
-  preparePdf().then(r => { if (r) savePdf(); submitReport(); });
+  // Signed and finished means sent: the report goes to Residential Realtors straight away.
+  preparePdf().then(r => { if (r) savePdf(); sendToAgent(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
 const RANK_KEY = ['new','good','fair','poor'];
@@ -2828,11 +2829,11 @@ function setSendUi(phase, msg){
   const sent = !!state.sentAt;
   btn.disabled = sent || phase === 'sending';
   btn.classList.toggle('is-sent', sent);
-  btn.innerHTML = sent ? '✓ Sent to ' + AGENT_NAME : phase === 'sending' ? 'Sending…' : 'Send to ' + AGENT_NAME;
+  btn.innerHTML = sent ? '✓ Sent to ' + AGENT_NAME : phase === 'sending' ? 'Sending to ' + AGENT_NAME + '…' : phase === 'error' ? 'Try sending again' : 'Send to ' + AGENT_NAME;
   el.className = 'submit-status ' + (sent ? 'sent' : phase);
   el.innerHTML = sent ? 'Sent ' + escapeHtml(formatTimestamp(new Date(state.sentAt))) + '. ' + AGENT_NAME + ' now have your report. Keep a copy for yourself too.'
-    : phase === 'error' ? "It didn't send. " + escapeHtml(msg || '') + ' Tap the button to try again.'
-    : 'Tap to send your finished report to ' + AGENT_NAME + '.';
+    : phase === 'error' ? "It hasn't sent yet. " + escapeHtml(msg || '') + ' Tap Try sending again. It will also send by itself when you have a connection.'
+    : 'Your report is being sent to ' + AGENT_NAME + '. Please keep this page open for a moment.';
 }
 async function sendToAgent(){
   if (state.sentAt || sendUi.phase === 'sending') return;
@@ -2902,7 +2903,7 @@ async function uploadPhotos(id, photos){
   state.photosUploaded = true;
   persist();
 }
-window.addEventListener('online', () => { if (state.view === 'done' && state.finalizedAt && !(state.submittedId && state.photosUploaded)) submitReport(); });
+window.addEventListener('online', () => { if (state.view === 'done' && state.finalizedAt && !state.sentAt) sendToAgent(); else if (state.view === 'done' && state.finalizedAt && !(state.submittedId && state.photosUploaded)) submitReport(); });
 function canSharePdf(){
   try { return !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob(['%PDF'])], 'r.pdf', { type: 'application/pdf' })] })); }
   catch (e) { return false; }
@@ -3515,7 +3516,7 @@ function renderReview(){
 
       <p class="finish-help" id="finishHelp"></p>
       <button type="button" class="btn btn-primary btn-block" id="finishBtn" onclick="completeReport()">Finish &amp; generate report</button>
-      <p class="finish-note">When you finish, you get the report as a PDF, and you can send it to Residential Realtors with one tap.</p>
+      <p class="finish-note">When you finish, your report is sent to Residential Realtors automatically, and you get a copy as a PDF.</p>
     </div>
   `;
 }
@@ -3583,7 +3584,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!(state.submittedId && state.photosUploaded)) submitReport(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!state.sentAt && sendUi.phase !== 'error') sendToAgent(); else if (!(state.submittedId && state.photosUploaded)) submitReport(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';
