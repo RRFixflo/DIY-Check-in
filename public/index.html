@@ -1555,16 +1555,20 @@ function normalisePostcode(pc){
   if (raw.length < 5) return raw;
   return raw.slice(0, raw.length - 3) + ' ' + raw.slice(-3);
 }
-/* The address is typed as separate fields and joined in UK order:
-   Flat 4, Brownlow House, 50 George Row, London SE1 6AD */
+/* The address is typed as separate fields and joined in UK order. One number field ("Flat or house
+   number"): "12" + Tower Bridge Road -> 12 Tower Bridge Road; "5" + Dudley Court -> 5 Dudley Court;
+   "Flat 4" + Brownlow House + 50 George Row -> Flat 4, Brownlow House, 50 George Row. */
 const FLAT_WORD_RE = /^(flat|apartment|apt|unit|studio|room|maisonette)\b/i;
 function streetLineFrom(f){
   const t = k => (f[k] || '').trim();
-  const flat = t('flat'), houseNo = t('houseNo'), building = t('building'), road = t('road'), town = t('town');
-  const flatPart = flat && /^\d/.test(flat) ? 'Flat ' + flat : flat;
-  const parts = (!road && houseNo && building)
-    ? [flatPart, houseNo + ' ' + building, town]
-    : [flatPart, building, [houseNo, road].filter(Boolean).join(' '), town];
+  const building = t('building'), road = t('road'), town = t('town');
+  let num = t('houseNo'), flat = t('flat'); // flat: only in drafts saved before the single number field
+  if (!num && flat){ num = flat; flat = ''; }
+  const flatPart = flat ? (/^\d/.test(flat) ? 'Flat ' + flat : flat) : '';
+  let parts;
+  if (FLAT_WORD_RE.test(num)) parts = [flatPart, num, building, road, town];
+  else if (building) parts = [flatPart, [num, building].filter(Boolean).join(' '), road, town];
+  else parts = [flatPart, [num, road].filter(Boolean).join(' '), town];
   return parts.filter(Boolean).join(', ');
 }
 function composeAddress(){
@@ -1588,7 +1592,16 @@ function splitAddressLine(line){
   const f = { flat:'', houseNo:'', building:'', road:'', town:'', postcode: m ? normalisePostcode(m[1]) : '' };
   const segs = (m ? line.slice(0, m.index) : line).split(',').map(x => x.trim()).filter(Boolean);
   const fi = segs.findIndex(x => FLAT_WORD_RE.test(x));
-  if (fi >= 0){ f.flat = segs[fi]; segs.splice(fi, 1); }
+  if (fi >= 0){
+    // "Flat 4, Brownlow House, 50 George Row, London": the flat goes in the number field, the road keeps its own number.
+    f.houseNo = segs[fi]; segs.splice(fi, 1);
+    const ri = segs.findIndex(x => /^\d/.test(x));
+    if (ri >= 0){ f.building = segs.slice(0, ri).join(', '); f.road = segs[ri]; f.town = segs.slice(ri + 1).join(', '); }
+    else if (segs.length >= 3){ f.building = segs[0]; f.road = segs[1]; f.town = segs.slice(2).join(', '); }
+    else if (segs.length === 2){ f.road = segs[0]; f.town = segs[1]; }
+    else if (segs.length === 1){ f.road = segs[0]; }
+    return f;
+  }
   const ni = segs.findIndex(x => /^\d+[a-z]?(\s*[-–]\s*\d+[a-z]?)?\s+\S/i.test(x));
   if (ni >= 0){
     const nm = segs[ni].match(/^(\S+)\s+(.+)$/);
@@ -1607,7 +1620,7 @@ function splitAddressLine(line){
 function missingAddressParts(){
   const ps = pendingSetup, t = k => (ps[k] || '').trim(), out = [];
   if (!POSTCODE_RE.test(normalisePostcode(ps.postcode))) out.push('the full postcode');
-  if (!t('flat') && !t('houseNo')) out.push('the flat or house/door number');
+  if (!t('flat') && !t('houseNo')) out.push('the flat or house number');
   if (!t('road') && !t('building')) out.push('the road name or building name');
   return out;
 }
@@ -3002,15 +3015,9 @@ function renderSetup(){
         </div>` : ''}
       <div class="addr-fields">
         <div class="addr-fields-title">Property address</div>
-        <div class="row2 keep-2">
-          <div class="field">
-            <label for="flatInput">Flat <span class="opt">optional</span></label>
-            <input class="input" id="flatInput" type="text" placeholder="e.g. Flat 4" value="${escapeHtml(ps.flat)}" oninput="setAddrField('flat', this.value)">
-          </div>
-          <div class="field">
-            <label for="houseNoInput">House / door number</label>
-            <input class="input" id="houseNoInput" type="text" placeholder="e.g. 12" value="${escapeHtml(ps.houseNo)}" oninput="setAddrField('houseNo', this.value)">
-          </div>
+        <div class="field">
+          <label for="houseNoInput">Flat or house number</label>
+          <input class="input" id="houseNoInput" type="text" placeholder="e.g. 12 or Flat 4" value="${escapeHtml(ps.houseNo || ps.flat)}" oninput="pendingSetup.flat = ''; setAddrField('houseNo', this.value)">
         </div>
         <div class="field">
           <label for="buildingInput">Building name <span class="opt">optional</span></label>
