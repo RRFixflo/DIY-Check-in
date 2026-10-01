@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F3F5F9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1020" media="(prefers-color-scheme: dark)">
-<title>Self Check-In Report</title>
+<title>DIY Check-In</title>
 <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="apple-mobile-web-app-title" content="Check-In">
-<meta name="application-name" content="Check-In">
+<meta name="apple-mobile-web-app-title" content="DIY Check-In">
+<meta name="application-name" content="DIY Check-In">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -474,12 +474,12 @@
 <body>
 <header class="appbar" id="appbar">
   <div class="appbar-inner">
-    <span class="brand"><span class="brand-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="m9.5 14.5 2 2 3.5-4"/></svg></span><span class="bt">Self Check-In</span></span>
+    <span class="brand"><span class="brand-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="m9.5 14.5 2 2 3.5-4"/></svg></span><span class="bt">DIY Check-In</span></span>
     <ol class="stepper" id="stepper"></ol>
     <button type="button" class="restart-btn" id="restartBtn" onclick="startAgain()" title="Start again" aria-label="Start again" hidden><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Start again</span></button>
   </div>
 </header>
-<div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading Self Check-In…</p></div>
+<div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading DIY Check-In…</p></div>
 <div id="camera" class="camera hidden" role="dialog" aria-modal="true" aria-label="Camera">
   <video id="cameraVideo" playsinline muted autoplay></video>
   <div class="cam-flash" id="camFlash"></div>
@@ -640,7 +640,7 @@ function defaultPendingSetup(){
   return {
     address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '',
     inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
-    managingAgent: 'Residential Realtors', furnishing: 'Furnished',
+    managingAgent: '', furnishing: 'Furnished',
     bedrooms: 1, bathrooms: 1,
     common: { kitchen: true, living: true, hallway: true, garden: false, utility: false, wc: false },
     customRooms: []
@@ -1474,6 +1474,7 @@ function normalizeProperty(saved){
 }
 function normalizeState(saved){
   const rooms = Array.isArray(saved.rooms) ? saved.rooms.map(normalizeRoom) : [];
+  if (saved.meta && saved.meta.managingAgent === 'Residential Realtors') saved.meta.managingAgent = ''; // the old pre-filled default
   return {
     meta: Object.assign({ address:'', inspectionType:'Check-In', inspectorName:'', signedBy:'', moveInDateTime:'', date:'', createdAt:'', bedrooms:0, bathrooms:0, furnishing:'', managingAgent:'', ref: 'SC-' + Math.random().toString(36).slice(2,9).toUpperCase() }, saved.meta || {}),
     rooms,
@@ -1808,7 +1809,7 @@ async function completeReport(){
   state.view = 'done';
   render();
   window.scrollTo({top:0, behavior:'instant'});
-  // Signed and finished means sent: the report goes to Residential Realtors straight away.
+  // Signed and finished means sent: the report goes to the agent straight away.
   preparePdf().then(r => { if (r) savePdf(); sendToAgent(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
@@ -1860,7 +1861,7 @@ function buildReportHTML(s){
   `).join('');
   const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
   return `<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><title>Self Check-In Report — ${escapeHtml(s.meta.address)}</title>
+<html lang="en"><head><meta charset="UTF-8"><title>${escapeHtml(reportTitle(s))}</title>
 <style>
   body{font-family:Georgia,'Times New Roman',serif;color:#16232E;max-width:820px;margin:0 auto;padding:36px 28px;line-height:1.55;background:#fff;}
   h1{font-size:24px;margin:0 0 4px;} h3{font-size:16px;margin:0 0 6px;font-family:Georgia,serif;}
@@ -1881,7 +1882,7 @@ function buildReportHTML(s){
   @media print { .report-room{break-inside:avoid;} }
 </style>
 </head><body>
-  <h1>Self Check-In Report</h1>
+  <h1>${escapeHtml(reportTitle(s))}</h1>
   <div class="meta-block">
     <div><strong>Address:</strong> ${escapeHtml(s.meta.address)}</div>
     <div><strong>Inspection type:</strong> ${escapeHtml(s.meta.inspectionType)}</div>
@@ -2107,7 +2108,7 @@ async function buildPdfBlob(s, onProgress, out){
   let y = TOP;
 
   const isOut = /check-?out/i.test(s.meta.inspectionType || '');
-  const docTitle = isOut ? 'Check Out Report' : 'Inventory Make & Check In Report';
+  const docTitle = isOut ? 'Check-Out report' : 'Check-In report';
   const stage = isOut ? 'CHECK OUT' : 'CHECK IN';
   const ref = s.meta.ref || '';
   const dateLong = s.meta.createdAt ? ordinalDate(new Date(s.meta.createdAt)) : ordinalDate(new Date());
@@ -2169,15 +2170,15 @@ async function buildPdfBlob(s, onProgress, out){
 
   function pageChrome(pageIndex){
     doc.setPage(pageIndex);
+    if (pageIndex === 1) return; // the cover carries its own title
     /* header */
     set('bold', 13, C.ink);
-    doc.text('RESIDENTIAL', M, 15);
-    const w1 = doc.getTextWidth('RESIDENTIAL ');
+    doc.text('DIY', M, 15);
+    const w1 = doc.getTextWidth('DIY ');
     set('bold', 13, C.banner);
-    doc.text('REALTORS', M + w1 + 1, 15);
+    doc.text('CHECK-IN', M + w1 + 1, 15);
     set('normal', 7.6, C.inkSoft);
-    const agent = (s.meta.managingAgent || '').trim();
-    doc.text([docTitle, agent ? 'Managing agent | ' + agent : '', 'Report reference | ' + ref].filter(Boolean), PW - M, 11.5, { align:'right' });
+    doc.text([lines(reportTitle(s), 120)[0], 'Report reference | ' + ref], PW - M, 11.5, { align:'right' });
     if (pageIndex === 1) return;
     /* footer */
     set('normal', 7.8, C.banner);
@@ -2191,18 +2192,24 @@ async function buildPdfBlob(s, onProgress, out){
 
   /* ---------------------------------------------------------------- cover */
   set('bold', 26, C.ink);
-  doc.text('RESIDENTIAL', M, 58);
-  const wBrand = doc.getTextWidth('RESIDENTIAL ');
+  doc.text('DIY', M, 58);
+  const wBrand = doc.getTextWidth('DIY ');
   set('bold', 26, C.banner);
-  doc.text('REALTORS', M + wBrand + 2, 58);
+  doc.text('CHECK-IN', M + wBrand + 2, 58);
 
   doc.setDrawColor(C.banner[0], C.banner[1], C.banner[2]); doc.setLineWidth(1.1);
   doc.line(M, 64, M + 62, 64); doc.setLineWidth(0.2);
 
+  // The report is named after the property: "CHECK-IN" then the address.
+  const hasCoverPhoto = !!((s.property && s.property.exterior && s.property.exterior.photos) || []).length;
   set('bold', 16, C.banner);
-  doc.text((isOut ? 'CHECK OUT REPORT' : 'INVENTORY MAKE & CHECK IN REPORT'), M, 78);
-  set('normal', 11, C.inkSoft);
-  doc.text('SCHEDULE OF CONDITION', M, 86);
+  doc.text(isOut ? 'CHECK-OUT' : 'CHECK-IN', M, 76);
+  set('bold', 14, C.ink);
+  const titleLines = lines(s.meta.address || '', (hasCoverPhoto ? PW - M - 104 - 8 : PW - M) - M).slice(0, 3);
+  doc.text(titleLines, M, 83);
+  const afterTitle = 83 + titleLines.length * 6;
+  set('normal', 10, C.inkSoft);
+  doc.text('SCHEDULE OF CONDITION', M, afterTitle + 2);
 
   const bedrooms = parseInt(s.meta.bedrooms, 10) || s.rooms.filter(r => r.type === 'bedroom').length;
   const bathrooms = parseInt(s.meta.bathrooms, 10) || s.rooms.filter(r => r.type === 'bathroom').length;
@@ -2226,11 +2233,11 @@ async function buildPdfBlob(s, onProgress, out){
     }
   }
 
-  y = 98;
+  y = Math.max(98, afterTitle + 14);
   [
     ['Property Address', s.meta.address],
     ['Property Description', description],
-    ['Managing Agent', (s.meta.managingAgent || '').trim() || '—'],
+    (s.meta.managingAgent || '').trim() ? ['Managing Agent', s.meta.managingAgent.trim()] : null,
     [isOut ? 'Date Of Check Out' : 'Date Of Check In', dateLong],
     s.meta.moveInDateTime ? ['Tenancy Move-In', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
     s.meta.createdAt ? ['Inspection', 'Started ' + formatTimestamp(new Date(s.meta.createdAt)) + (s.finalizedAt ? '  ·  completed ' + formatTimestamp(new Date(s.finalizedAt)) : '')] : null,
@@ -2775,6 +2782,11 @@ async function buildPdfBlob(s, onProgress, out){
 let pdfReady = null;      // { key, blob, url, fname }
 let pdfBuilding = null;
 let pdfUi = { phase: 'idle', pct: 0, msg: '' };
+// "Check-In – 5 Dudley Court, London W1H 5QA" (or Check-Out)
+function reportTitle(s){
+  const kind = /check-?out/i.test((s.meta && s.meta.inspectionType) || '') ? 'Check-Out' : 'Check-In';
+  return kind + ((s.meta && s.meta.address) ? ' – ' + s.meta.address : '');
+}
 function pdfFileName(s){
   return sanitizeFilename(s.meta.address) + ' - ' + sanitizeFilename(s.meta.inspectionType) + ' - ' + sanitizeFilename(s.meta.date) + ' - ' + sanitizeFilename(s.meta.ref || '') + '.pdf';
 }
@@ -2828,12 +2840,11 @@ function openPdf(){ if (pdfReady) window.open(pdfReady.url, '_blank'); }
 
 /* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
    can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
-   retried when the connection comes back. The tenant then sends it to Residential Realtors with one tap
+   retried when the connection comes back. Finishing then sends it to the agent (sendToAgent)
    (sendToAgent), which marks it as sent and emails it to them. */
 let submitting = false;
 let submitUi = { phase: 'idle', msg: '' };
 function setSubmitUi(phase, msg){ submitUi = { phase, msg: msg || '' }; }
-const AGENT_NAME = 'Residential Realtors';
 let sendUi = { phase: 'idle', msg: '' };
 function setSendUi(phase, msg){
   sendUi = { phase, msg: msg || '' };
@@ -2842,11 +2853,11 @@ function setSendUi(phase, msg){
   const sent = !!state.sentAt;
   btn.disabled = sent || phase === 'sending';
   btn.classList.toggle('is-sent', sent);
-  btn.innerHTML = sent ? '✓ Sent to ' + AGENT_NAME : phase === 'sending' ? 'Sending to ' + AGENT_NAME + '…' : phase === 'error' ? 'Try sending again' : 'Send to ' + AGENT_NAME;
+  btn.innerHTML = sent ? '✓ Report sent' : phase === 'sending' ? 'Sending your report…' : phase === 'error' ? 'Try sending again' : 'Send report';
   el.className = 'submit-status ' + (sent ? 'sent' : phase);
-  el.innerHTML = sent ? 'Sent ' + escapeHtml(formatTimestamp(new Date(state.sentAt))) + '. ' + AGENT_NAME + ' now have your report. Keep a copy for yourself too.'
+  el.innerHTML = sent ? 'Sent ' + escapeHtml(formatTimestamp(new Date(state.sentAt))) + '. Your report has been received. Keep a copy for yourself too.'
     : phase === 'error' ? "It hasn't sent yet. " + escapeHtml(msg || '') + ' Tap Try sending again. It will also send by itself when you have a connection.'
-    : 'Your report is being sent to ' + AGENT_NAME + '. Please keep this page open for a moment.';
+    : 'Your report is being sent. Please keep this page open for a moment.';
 }
 async function sendToAgent(){
   if (state.sentAt || sendUi.phase === 'sending') return;
@@ -2939,9 +2950,9 @@ async function confirmReset(){
 function startAgain(){
   const finished = !!state.finalizedAt;
   const msg = finished && !state.sentAt
-    ? "This report hasn't been sent to Residential Realtors yet.\n\nStart again anyway? The report and all its photos will be deleted from this phone."
+    ? "This report hasn't been sent yet.\n\nStart again anyway? The report and all its photos will be deleted from this phone."
     : finished
-      ? 'Start a new inspection?\n\nThis report and its photos will be removed from this phone. Residential Realtors already have it. Download it first if you want your own copy.'
+      ? 'Start a new inspection?\n\nThis report and its photos will be removed from this phone. It has already been sent. Download it first if you want your own copy.'
       : 'Start again?\n\nThis inspection and all its photos will be deleted from this phone. This can\'t be undone.';
   if (window.confirm(msg)) confirmReset();
 }
@@ -2993,7 +3004,7 @@ function renderSetup(){
   return `
     <div class="masthead">
       <div class="kicker">New inspection</div>
-      <h1>Self Check-In Report</h1>
+      <h1>DIY Check-In</h1>
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
     <div class="intro-card">
@@ -3073,7 +3084,7 @@ function renderSetup(){
           </select>
         </div>
         <div class="field">
-          <label for="agentInput">Managing agent / landlord</label>
+          <label for="agentInput">Managing agent / landlord <span class="opt">optional</span></label>
           <input class="input" id="agentInput" type="text" value="${escapeHtml(ps.managingAgent)}" oninput="pendingSetup.managingAgent=this.value">
         </div>
       </div>
@@ -3523,7 +3534,7 @@ function renderReview(){
 
       <p class="finish-help" id="finishHelp"></p>
       <button type="button" class="btn btn-primary btn-block" id="finishBtn" onclick="completeReport()">Finish &amp; generate report</button>
-      <p class="finish-note">When you finish, your report is sent to Residential Realtors automatically, and you get a copy as a PDF.</p>
+      <p class="finish-note">When you finish, your report is sent automatically, and you get a copy as a PDF.</p>
     </div>
   `;
 }
@@ -3543,7 +3554,7 @@ function renderDone(){
           <span class="pdf-badge">PDF</span>
           <div class="pdf-meta"><strong>${escapeHtml(pdfFileName(state))}</strong><span id="pdfStatus">Preparing your PDF…</span></div>
         </div>
-        <button type="button" class="btn btn-primary btn-block send-agent" id="sendBtn" onclick="sendToAgent()">Send to Residential Realtors</button>
+        <button type="button" class="btn btn-primary btn-block send-agent" id="sendBtn" onclick="sendToAgent()">Send report</button>
         <div class="submit-status" id="submitStatus"></div>
         <button type="button" class="btn btn-block pdf-download" id="pdfDownloadBtn" onclick="savePdf()">Download PDF</button>
         <div class="btn-row pdf-more">
@@ -3555,7 +3566,7 @@ function renderDone(){
     </div>
 
     <div class="report-doc" onclick="if (event.target.tagName === 'IMG' && !event.target.classList.contains('sig-preview')) openPhotoPreview(event.target.src)">
-      <h2>Self Check-In Report</h2>
+      <h2>${escapeHtml(reportTitle(state))}</h2>
       <div class="report-meta">
         ${escapeHtml(state.meta.address)}<br>
         ${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}<br>
