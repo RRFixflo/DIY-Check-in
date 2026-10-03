@@ -185,11 +185,6 @@
   .details-toggle { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
   .details-summary { font-size: 12.5px; color: var(--ink-soft); flex: 1 1 200px; }
   .link-btn { border: 0; background: none; padding: 4px 0; color: var(--accent); font-size: 13px; font-weight: 600; }
-  .opt-panel > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .opt-panel > summary::-webkit-details-marker { display: none; }
-  .opt-panel > summary::after { content: 'Show'; color: var(--accent); font-size: 13px; font-weight: 600; }
-  .opt-panel[open] > summary::after { content: 'Hide'; }
-  .opt-panel > summary .opt { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--ink-faint); }
   .item-details { margin-top: 12px; border-top: 1px dashed var(--line-strong); padding-top: 2px; }
   .det-label { font-size: 11.5px; font-weight: 700; color: var(--ink); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: .05em; }
   .det-label span { font-weight: 500; color: var(--ink-faint); text-transform: none; letter-spacing: 0; margin-left: 8px; font-size: 12px; }
@@ -2513,9 +2508,9 @@ async function buildPdfBlob(s, onProgress, out){
   }
 
   /* ------------------------------------------------- property details & documents */
-  newSection('Property details & documents');
+  newSection('Property details');
   labelRows([
-    ['Type of property', (pr.propertyType || '').trim() || 'Not recorded'],
+    (pr.propertyType || '').trim() ? ['Type of property', pr.propertyType.trim()] : null,
     ['Bedrooms / bathrooms', (bedrooms || '—') + ' / ' + (bathrooms || '—')],
     ['Furnishing', (s.meta.furnishing || '').trim() || 'Not recorded'],
     ['Rooms inspected', s.rooms.map(r => r.name).join(', ')],
@@ -2523,10 +2518,14 @@ async function buildPdfBlob(s, onProgress, out){
     ['Heating source', pr.heatingSource || '—'],
     ['Inspection type', s.meta.inspectionType || '—'],
     ['Compiled by', s.meta.inspectorName || '—']
-  ], 74, 9);
-  need(20);
-  set('bold', 9.5, C.banner); doc.text('DOCUMENTS GIVEN TO THE TENANT', M, y + 3); y += 7;
-  labelRows(DOC_LIST.map(([k, l]) => [l, ((pr.documents || {})[k]) || 'Not recorded']), 96, 9);
+  ].filter(Boolean), 74, 9);
+  // Documents are no longer asked for; listed only for reports that recorded them before.
+  const docsGiven = DOC_LIST.filter(([k]) => (pr.documents || {})[k]);
+  if (docsGiven.length){
+    need(20);
+    set('bold', 9.5, C.banner); doc.text('DOCUMENTS GIVEN TO THE TENANT', M, y + 3); y += 7;
+    labelRows(docsGiven.map(([k, l]) => [l, pr.documents[k]]), 96, 9);
+  }
 
   /* ---------------------------------------------------------------- rooms */
   let done = 0;
@@ -3419,26 +3418,6 @@ function renderDetails(){
         </div>`;
       }).join('')}
     </div>
-
-    <details class="panel opt-panel">
-      <summary><span class="sec-label" style="margin:0">Property details &amp; documents</span><span class="opt">optional</span></summary>
-      <div class="field" style="margin-top:12px">
-        <label>Type of property</label>
-        <select class="select" onchange="setPropAndRender('propertyType', this.value)">
-          <option value="">Select…</option>
-          ${PROPERTY_TYPES.map(o => `<option value="${escapeHtml(o)}" ${pr.propertyType===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
-        </select>
-      </div>
-      <div class="cond-help" style="margin-bottom:6px;">Which of these were you given? They are listed in the report.</div>
-      ${DOC_LIST.map(([k, l]) => `
-        <div class="decl-row">
-          <span>${escapeHtml(l)}</span>
-          <select class="select cond-select" onchange="setPropAndRender('documents.${k}', this.value)">
-            <option value="">Select…</option>
-            ${DOC_OPTIONS.map(o => `<option value="${o}" ${(pr.documents || {})[k]===o?'selected':''}>${o}</option>`).join('')}
-          </select>
-        </div>`).join('')}
-    </details>
 
     <div class="panel">
       <span class="sec-label">Smoke, heat &amp; CO detectors</span>
