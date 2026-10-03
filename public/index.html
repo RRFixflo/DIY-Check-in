@@ -182,6 +182,14 @@
   .cond-select.unset { border-color: var(--warn); }
   .cond-note { flex: 1 1 200px; min-width: 160px; }
   .cond-help { font-size: 12px; color: var(--ink-faint); margin-top: 6px; line-height: 1.45; }
+  .details-toggle { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .details-summary { font-size: 12.5px; color: var(--ink-soft); flex: 1 1 200px; }
+  .link-btn { border: 0; background: none; padding: 4px 0; color: var(--accent); font-size: 13px; font-weight: 600; }
+  .opt-panel > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .opt-panel > summary::-webkit-details-marker { display: none; }
+  .opt-panel > summary::after { content: 'Show'; color: var(--accent); font-size: 13px; font-weight: 600; }
+  .opt-panel[open] > summary::after { content: 'Hide'; }
+  .opt-panel > summary .opt { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--ink-faint); }
   .item-details { margin-top: 12px; border-top: 1px dashed var(--line-strong); padding-top: 2px; }
   .det-label { font-size: 11.5px; font-weight: 700; color: var(--ink); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: .05em; }
   .det-label span { font-weight: 500; color: var(--ink-faint); text-transform: none; letter-spacing: 0; margin-left: 8px; font-size: 12px; }
@@ -519,7 +527,7 @@
 <script>
 /* ============================= constants ============================= */
 const MIN_PHOTOS = 8;
-const MAX_PHOTOS = 10; // per room; a room never needs more than this (items are capped to match)
+const MAX_PHOTOS = 25; // per room; a room never needs more than this (items are capped to match)
 const DB_NAME = 'inventoryAppDB';
 const STORE = 'reports';
 
@@ -1361,6 +1369,29 @@ function toggleItemChoice(roomId, itemId, field, value){
 function itemNotWorking(item){ return item.working === 'no' && WORKING_KEYS.includes(exampleKeyFor(item.label)); }
 function itemDefects(item){ return (item.defects || []).filter(d => d !== 'None'); }
 function workingQuestion(key){ return key === 'door' || key === 'window' ? 'Opens, closes & locks' : key === 'smoke' ? 'Tested' : key === 'sink' || key === 'bath' ? 'Taps & drainage' : key === 'toilet' ? 'Flush' : 'Working'; }
+/* The extra detail for an item (note, description, marks, cleanliness, working, quantity) is optional,
+   so it stays folded away behind one link to keep each item simple: photo, then condition. */
+const openDetails = new Set();
+function toggleItemDetails(itemId){ openDetails.has(itemId) ? openDetails.delete(itemId) : openDetails.add(itemId); render(); }
+function itemDetailSummary(item){
+  const bits = [];
+  if ((item.desc || '').trim()) bits.push(item.desc.trim());
+  const d = itemDefects(item); if (d.length) bits.push(d.join(', ')); else if ((item.defects || []).includes('None')) bits.push('No marks');
+  const c = (ITEM_CLEAN.find(o => o[0] === item.clean) || [])[1]; if (c) bits.push(c);
+  const w = (ITEM_WORKING.find(o => o[0] === item.working) || [])[1]; if (w && WORKING_KEYS.includes(exampleKeyFor(item.label))) bits.push(w);
+  if (String(item.qty || '').trim()) bits.push('×' + String(item.qty).trim());
+  if ((item.conditionNote || '').trim()) bits.push('“' + item.conditionNote.trim() + '”');
+  return bits.join(' · ');
+}
+function itemExtrasHTML(room, item){
+  const open = openDetails.has(item.id), summary = itemDetailSummary(item);
+  if (!open) return `<div class="details-toggle">${summary ? `<span class="details-summary">${escapeHtml(summary)}</span>` : ''}<button type="button" class="link-btn" onclick="toggleItemDetails('${item.id}')">${summary ? 'Edit details' : '+ Add details (optional)'}</button></div>`;
+  return `<div class="details-toggle"><button type="button" class="link-btn" onclick="toggleItemDetails('${item.id}')">Hide details</button></div>
+    <div class="cond-row">
+      <input class="input cond-note" type="text" placeholder="Your note, e.g. 'stiff handle' or 'I think this is worse than shown'" value="${escapeHtml(item.conditionNote || '')}" oninput="updateItemNote('${room.id}','${item.id}', this.value)">
+    </div>
+    ${itemDetailsHTML(room, item)}`;
+}
 function itemDetailsHTML(room, item){
   const key = exampleKeyFor(item.label);
   const hints = DETAIL_HINTS[key] || DETAIL_HINTS.generic;
@@ -3178,10 +3209,7 @@ function itemCardHTML(room, item){
           </div>
           ${item.condition ? `<div class="cond-help">${escapeHtml(CONDITION_HELP[item.condition] || '')}</div>` : ''}`;
         })()}
-        ${item.photos.length ? `<div class="cond-row">
-          <input class="input cond-note" type="text" placeholder="Your note, e.g. 'stiff handle' or 'I think this is worse than shown'" value="${escapeHtml(item.conditionNote || '')}" oninput="updateItemNote('${room.id}','${item.id}', this.value)">
-        </div>` : ''}
-        ${item.photos.length || aiEnabled === false ? itemDetailsHTML(room, item) : ''}
+        ${item.photos.length || aiEnabled === false ? itemExtrasHTML(room, item) : ''}
       `}
       ${item.custom ? `<button type="button" class="remove-item-btn" onclick="removeChecklistItem('${room.id}','${item.id}')">Remove this item</button>` : ''}
     </div>
@@ -3392,9 +3420,9 @@ function renderDetails(){
       }).join('')}
     </div>
 
-    <div class="panel">
-      <span class="sec-label">Property details &amp; documents</span>
-      <div class="field">
+    <details class="panel opt-panel">
+      <summary><span class="sec-label" style="margin:0">Property details &amp; documents</span><span class="opt">optional</span></summary>
+      <div class="field" style="margin-top:12px">
         <label>Type of property</label>
         <select class="select" onchange="setPropAndRender('propertyType', this.value)">
           <option value="">Select…</option>
@@ -3410,7 +3438,7 @@ function renderDetails(){
             ${DOC_OPTIONS.map(o => `<option value="${o}" ${(pr.documents || {})[k]===o?'selected':''}>${o}</option>`).join('')}
           </select>
         </div>`).join('')}
-    </div>
+    </details>
 
     <div class="panel">
       <span class="sec-label">Smoke, heat &amp; CO detectors</span>
