@@ -27,6 +27,7 @@ The app is only for people who have paid for a report on residentialrealtors.co.
 - `server.js` asks Fixflow `GET $FIXFLOW_URL/api/public/diy-access/:token` whether a token is valid (cached 5 minutes). The first visit with `?access=` stores it in an HttpOnly cookie `diy_access` (200 days) and redirects to the clean URL.
 - Without a valid token every page is the "Buy a report" page (`paywallPage()`, HTTP 402), linking to `$FIXFLOW_URL/book-certificate?service=diy`. `/api/assess` and `POST /api/reports` also need a valid token.
 - A paid token is good for one report: when `POST /api/reports` stores a new report (201), the server calls `POST $FIXFLOW_URL/api/public/diy-access/:token/used`. The same person (cookie) can still open the app to see and send that report; anyone else with the link gets the buy page. Office tokens aren't limited.
+- Each new report's PDF is also sent to Fixflow (`POST $FIXFLOW_URL/api/public/diy-report/:token`, `sendToFixflow()`), where it shows in the office's Fixflow and the person is emailed a download link.
 - If Fixflow can't be reached, someone with a token is let in rather than locked out.
 - Environment: `FIXFLOW_URL` (default `https://www.residentialrealtors.co.uk`), `DIY_PAYWALL=off` to switch the lock off.
 
