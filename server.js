@@ -145,6 +145,12 @@ function markUsed(token){
   accessCache.delete(token);
   fetch(FIXFLOW_URL + '/api/public/diy-access/' + encodeURIComponent(token) + '/used', { method: 'POST', signal: AbortSignal.timeout(8000) }).catch(e => console.error('mark used failed:', e.message));
 }
+// A copy of every finished report goes to Residential Realtors' Fixflow, which emails the person a download link.
+function sendToFixflow(token, req){
+  const pdf = req.body; if (!Buffer.isBuffer(pdf)) return;
+  fetch(FIXFLOW_URL + '/api/public/diy-report/' + encodeURIComponent(token), { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': String(req.headers['x-report-meta'] || '').slice(0, 4000) }, body: pdf, signal: AbortSignal.timeout(60000) })
+    .then(r => { if (!r.ok) console.error('report copy to Fixflow failed: HTTP ' + r.status); }).catch(e => console.error('report copy to Fixflow failed:', e.message));
+}
 function paywallPage(reason){
   const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'unknown' ? 'We don’t recognise that link.' : 'You need a personal access link to use DIY Check-In.';
   return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DIY Check-In</title><link rel="icon" href="/icons/favicon-32.png">' +
@@ -158,7 +164,7 @@ if (PAYWALL) {
     if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
     const token = cookieToken(req), a = await checkAccess(token);
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
-    if (req.baseUrl === '/api/reports') res.on('finish', () => { if (res.statusCode === 201) markUsed(token); });
+    if (req.baseUrl === '/api/reports') res.on('finish', () => { if (res.statusCode === 201) { sendToFixflow(token, req); markUsed(token); } });
     next();
   });
   // The app itself: open it with a valid link; a link that has made its report still opens (to see and send it).
