@@ -116,6 +116,62 @@ app.post('/api/assess', async (req, res) => {
   }
 });
 
+/* ----------------------------- paid access ----------------------------- */
+// The app is for people who have paid for a report (or been given a link by the office). Each
+// person has a personal link (?access=TOKEN) from Residential Realtors; Fixflow says whether it's
+// valid. The token is kept in a cookie so the link only needs opening once. DIY_PAYWALL=off turns this off.
+const FIXFLOW_URL = (process.env.FIXFLOW_URL || 'https://www.residentialrealtors.co.uk').trim().replace(/\/+$/, '');
+const PAYWALL = (process.env.DIY_PAYWALL || 'on').trim().toLowerCase() !== 'off';
+const BUY_URL = FIXFLOW_URL + '/book-certificate?service=diy';
+const accessCache = new Map();
+const TOKEN_RE = /^[\w-]{12,40}$/;
+const cookieToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
+async function checkAccess(token){
+  if (!TOKEN_RE.test(token || '')) return { valid: false, reason: 'none' };
+  const c = accessCache.get(token);
+  if (c && Date.now() - c.at < 5 * 60 * 1000) return c.r;
+  try {
+    const res = await fetch(FIXFLOW_URL + '/api/public/diy-access/' + encodeURIComponent(token), { signal: AbortSignal.timeout(8000) });
+    const d = await res.json();
+    const r = { valid: !!d.valid, reason: d.valid ? '' : (d.reason || 'unknown') };
+    accessCache.set(token, { at: Date.now(), r }); if (accessCache.size > 5000) accessCache.clear();
+    return r;
+  } catch (e) {
+    console.error('access check failed:', e.message);
+    return c ? c.r : { valid: true, reason: '' };   // Fixflow unreachable: don't lock out someone with a link
+  }
+}
+function markUsed(token){
+  accessCache.delete(token);
+  fetch(FIXFLOW_URL + '/api/public/diy-access/' + encodeURIComponent(token) + '/used', { method: 'POST', signal: AbortSignal.timeout(8000) }).catch(e => console.error('mark used failed:', e.message));
+}
+function paywallPage(reason){
+  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'unknown' ? 'We don’t recognise that link.' : 'You need a personal access link to use DIY Check-In.';
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DIY Check-In</title><link rel="icon" href="/icons/favicon-32.png">' +
+    '<style>body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fb;color:#101828;display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box}.c{max-width:440px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 60px -40px rgba(16,24,40,.45);text-align:center}h1{margin:10px 0 6px;font-size:1.5rem}p{color:#475467;margin:0 0 14px}a.b{display:block;padding:14px 18px;border-radius:999px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-weight:800;text-decoration:none;margin:18px 0 10px}a.l{color:#4f46e5;font-weight:700}small{color:#667085}</style></head><body><main class="c">' +
+    '<img src="/icons/icon-192.png" alt="" width="64" height="64"><h1>DIY Check-In</h1><p>' + msg + '</p><p>Do your own room-by-room inventory on your phone and get a dated, professional report.</p>' +
+    '<a class="b" href="' + BUY_URL + '">Buy a report — £30 + VAT</a><small>Already paid? Open the link in your confirmation email.<br><a class="l" href="' + FIXFLOW_URL + '/diy-inventory">See an example report</a></small></main></body></html>';
+}
+if (PAYWALL) {
+  // New reports and photo assessment need a valid link.
+  app.use(['/api/assess', '/api/reports'], async (req, res, next) => {
+    if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
+    const token = cookieToken(req), a = await checkAccess(token);
+    if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
+    if (req.baseUrl === '/api/reports') res.on('finish', () => { if (res.statusCode === 201) markUsed(token); });
+    next();
+  });
+  // The app itself: open it with a valid link; a link that has made its report still opens (to see and send it).
+  app.use(async (req, res, next) => {
+    if (req.method !== 'GET' || /^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
+    const q = TOKEN_RE.test(String(req.query.access || '')) ? String(req.query.access) : '', token = q || cookieToken(req);
+    const a = await checkAccess(token);
+    if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) return res.status(402).type('html').send(paywallPage(q || token ? a.reason : 'none'));
+    if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, req.path); }
+    next();
+  });
+}
+
 reports.mount(app);
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
