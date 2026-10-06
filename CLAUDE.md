@@ -21,6 +21,15 @@
 - **Start again** (`startAgain()`): a button in the top bar (`#restartBtn`, shown once an inspection has started) and on the finished screen. It always asks first (warning when a finished report hasn't been sent), then `confirmReset()` deletes the inspection from the device.
 - The first photo of every inspection is the outside/front of the property (`state.property.exterior.photos`, shown first on the rooms screen). `exteriorFirst()` blocks room, key and meter photos until it exists, `updateFinishButtonState()` requires it, and it goes on the PDF cover page.
 
+## Paid access
+
+The app is only for people who have paid for a report on residentialrealtors.co.uk (£30 + VAT, through SumUp) or were given a link by the office (Fixflow's tenancy welcome emails for DIY check-ins). Each person gets a personal link `/?access=TOKEN`.
+- `server.js` asks Fixflow `GET $FIXFLOW_URL/api/public/diy-access/:token` whether a token is valid (cached 5 minutes). The first visit with `?access=` stores it in an HttpOnly cookie `diy_access` (200 days) and redirects to the clean URL.
+- Without a valid token every page is the "Buy a report" page (`paywallPage()`, HTTP 402), linking to `$FIXFLOW_URL/book-certificate?service=diy`. `/api/assess` and `POST /api/reports` also need a valid token.
+- A paid token is good for one report: when `POST /api/reports` stores a new report (201), the server calls `POST $FIXFLOW_URL/api/public/diy-access/:token/used`. The same person (cookie) can still open the app to see and send that report; anyone else with the link gets the buy page. Office tokens aren't limited.
+- If Fixflow can't be reached, someone with a token is let in rather than locked out.
+- Environment: `FIXFLOW_URL` (default `https://www.residentialrealtors.co.uk`), `DIY_PAYWALL=off` to switch the lock off.
+
 ## API
 
 | Endpoint | Used by | Returns |
