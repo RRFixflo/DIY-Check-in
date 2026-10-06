@@ -14,8 +14,8 @@
 <meta name="application-name" content="DIY Check-In">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"></noscript>
 <style>
   :root {
     color-scheme: light;
@@ -471,6 +471,138 @@
   .cam-shutter:active { transform: scale(.93); background: #fff; }
   .cam-gallery { background: none; border: none; color: #fff; opacity: .85; font-size: 13.5px; font-weight: 600; text-decoration: underline; padding: 4px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  /* =====================================================================
+     2026 refresh: a brighter, softer, more modern look. Layered on top of
+     the styles above (tokens first, then components), behaviour unchanged.
+     ===================================================================== */
+  :root {
+    --paper: #F4F5FB; --panel: #FFFFFF; --surface-2: #F3F4FA; --ink: #0E1330; --ink-soft: #4A5272; --ink-faint: #8C93AD;
+    --line: #E7E9F3; --line-strong: #D5D9E8; --accent: #4F46E5; --accent-hover: #4338CA; --accent-soft: #EEEDFE; --accent-ink: #FFFFFF;
+    --accent-2: #8B5CF6; --grad: linear-gradient(135deg, #4F46E5 0%, #7C3AED 55%, #A855F7 100%);
+    --ok: #0F9D63; --ok-soft: #E3F7EE; --warn: #C2570C; --warn-soft: #FFF1E3;
+    --radius: 16px; --radius-sm: 14px; --radius-lg: 24px;
+    --shadow-sm: 0 1px 2px rgba(14,19,48,.04);
+    --shadow: 0 1px 2px rgba(14,19,48,.04), 0 10px 30px -12px rgba(14,19,48,.12);
+    --ring: 0 0 0 4px rgba(79,70,229,.18);
+    --appbar-bg: rgba(244,245,251,.78);
+    --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #090B18; --panel: #121527; --surface-2: #181C33; --ink: #EEF0FA; --ink-soft: #A7ADC8; --ink-faint: #6F7594;
+      --line: #22263F; --line-strong: #30355A; --accent: #8B87FF; --accent-hover: #A5A2FF; --accent-soft: #1E1F45; --accent-ink: #0B0D1E;
+      --ok: #34D399; --ok-soft: #10291F; --warn: #FBBF24; --warn-soft: #2B2111;
+      --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(9,11,24,.78);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #090B18; --panel: #121527; --surface-2: #181C33; --ink: #EEF0FA; --ink-soft: #A7ADC8; --ink-faint: #6F7594;
+    --line: #22263F; --line-strong: #30355A; --accent: #8B87FF; --accent-hover: #A5A2FF; --accent-soft: #1E1F45; --accent-ink: #0B0D1E;
+    --ok: #34D399; --ok-soft: #10291F; --warn: #FBBF24; --warn-soft: #2B2111;
+    --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(9,11,24,.78);
+  }
+  body { -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, .brand, .item-title, .panel > .sec-label, .addr-fields-title, .intro-card h2 { font-family: var(--font-display); }
+
+  /* app bar: lighter, the stepper becomes small dots with the current step named */
+  .appbar { border-bottom: 0; box-shadow: 0 1px 0 var(--line); }
+  .brand { font-weight: 800; letter-spacing: -.02em; }
+  .brand-mark { border-radius: 10px; background: var(--grad); box-shadow: 0 6px 16px -6px rgba(79,70,229,.6); }
+  .stepper li + li::before { width: 14px; height: 2px; }
+  .stepper .n { width: 24px; height: 24px; font-size: 11.5px; border-width: 0; background: var(--surface-2); }
+  .stepper li.current .n { background: var(--grad); color: #fff; box-shadow: 0 0 0 4px var(--accent-soft); }
+  .stepper li.done .n { background: var(--ok); }
+  .restart-btn { border-color: transparent; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); }
+
+  /* the page title becomes a gradient hero card */
+  .masthead { position: relative; overflow: hidden; background: var(--grad); color: #fff; border-radius: var(--radius-lg); padding: 22px 20px 20px; margin-bottom: 18px; box-shadow: 0 18px 40px -18px rgba(79,70,229,.65); isolation: isolate; }
+  .masthead::before { content: ''; position: absolute; inset: auto -60px -90px auto; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.22), rgba(255,255,255,0) 70%); z-index: -1; }
+  .masthead::after { content: ''; position: absolute; inset: -80px auto auto -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.14), rgba(255,255,255,0) 70%); z-index: -1; }
+  @media (min-width: 560px) { .masthead { padding: 30px 30px 26px; } }
+  .masthead .kicker { color: #fff; background: rgba(255,255,255,.18); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); font-weight: 600; }
+  .masthead h1 { color: #fff; font-size: 28px; font-weight: 800; letter-spacing: -.03em; line-height: 1.12; }
+  @media (min-width: 560px) { .masthead h1 { font-size: 34px; } }
+  .masthead .sub { color: rgba(255,255,255,.86); }
+  .masthead .progress-bar-shell { background: rgba(255,255,255,.22); height: 8px; }
+  .masthead .progress-bar-fill { background: #fff; }
+  .masthead .autosave-note { color: rgba(255,255,255,.8); }
+  .masthead .autosave-note::before { background: #86EFAC; box-shadow: 0 0 0 3px rgba(134,239,172,.25); }
+
+  /* cards: no hard borders, soft depth, rounder */
+  .panel, .room-panel, .intro-card, .room-nav { border: 0; box-shadow: var(--shadow); }
+  .panel > .sec-label { font-size: 18px; font-weight: 800; letter-spacing: -.02em; }
+  .intro-card { border-radius: var(--radius-lg); }
+  .intro-card h2 { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+  .intro-ic { border-radius: 12px; background: var(--accent-soft); color: var(--accent); }
+  .addr-fields { border: 0; background: var(--surface-2); border-radius: 20px; }
+
+  /* inputs: filled, rounder, taller */
+  .input, .select, .textarea { border-color: transparent; background-color: var(--surface-2); box-shadow: none; min-height: 52px; border-radius: 14px; padding: 13px 15px; }
+  .input:hover, .select:hover, .textarea:hover { border-color: var(--line-strong); }
+  .input:focus, .select:focus, .textarea:focus { background-color: var(--panel); border-color: var(--accent); }
+  .addr-fields .input, .addr-fields .select { background-color: var(--panel); }
+  .cond-select.unset { border-color: var(--warn); background-color: var(--warn-soft); }
+  .field > label { font-weight: 650; }
+
+  /* buttons: pills, gradient primary */
+  .btn { border-radius: 999px; min-height: 50px; padding: 12px 22px; border-color: transparent; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line-strong); }
+  .btn:hover:not(:disabled) { background: var(--surface-2); }
+  .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 24px -10px rgba(79,70,229,.7); }
+  .btn-primary:hover:not(:disabled) { background: var(--grad); filter: brightness(1.06); }
+  .btn-sm { min-height: 42px; padding: 9px 16px; }
+  .send-agent.is-sent, .send-agent.is-sent:disabled { background: var(--ok); box-shadow: 0 10px 24px -12px rgba(15,157,99,.7); }
+  .check-row { border-color: transparent; background: var(--surface-2); }
+  .check-row:has(input:checked) { background: var(--accent-soft); border-color: transparent; box-shadow: inset 0 0 0 1.5px var(--accent); }
+  .chip { border-color: transparent; background: var(--surface-2); }
+  .chip.on { box-shadow: inset 0 0 0 1.5px currentColor; border-color: transparent; }
+  .seg { border: 0; background: var(--surface-2); padding: 3px; border-radius: 12px; gap: 2px; }
+  .seg button { border: 0 !important; background: transparent; border-radius: 9px; }
+  .seg button.on { background: var(--panel); color: var(--accent); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); }
+  .link-btn { color: var(--accent); }
+  .ex-link { border-color: transparent; background: var(--panel); box-shadow: 0 0 0 1px var(--line-strong); }
+
+  /* rooms screen */
+  .room-panel { padding: 22px 16px; }
+  @media (min-width: 560px) { .room-panel { padding: 28px; } }
+  .room-panel h2 { font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
+  .room-panel .req-line { border-radius: 12px; font-weight: 500; }
+  @media (max-width: 760px) {
+    .room-nav { box-shadow: none; }
+    .room-nav-item { border-color: transparent; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
+    .room-nav-item.active { background: var(--grad); box-shadow: 0 6px 16px -8px rgba(79,70,229,.7); }
+  }
+  .room-nav-item.active { color: var(--accent); }
+  .item-card { border: 0; background: var(--surface-2); border-radius: 20px; padding: 16px; margin-top: 14px; }
+  .item-card:has(.item-check.done) { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ok) 35%, transparent); border: 0; }
+  .item-card .photo-tip, .exterior-card .photo-tip { background: var(--panel); }
+  .item-card .input, .item-card .select { background-color: var(--panel); }
+  .item-title { font-size: 16.5px; font-weight: 700; letter-spacing: -.02em; }
+  .item-check { width: 26px; height: 26px; }
+  .add-item-photo { border-radius: 16px; border: 1.5px dashed var(--line-strong); background: var(--panel); color: var(--accent); }
+  .add-item-photo:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .item-thumb { border-radius: 16px; box-shadow: none; }
+  .exterior-card { border: 0 !important; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .photo-guide { border: 0; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .tip-kicker { color: var(--accent); }
+
+  /* review & finished */
+  .done-banner { border: 0; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .done-banner .mark { background: var(--ok-soft); color: var(--ok); }
+  .submit-status { border-radius: 14px; }
+  .pdf-file { border: 0; background: var(--surface-2); border-radius: 18px; }
+  .pdf-badge { border-radius: 12px; background: linear-gradient(135deg, #EF4444, #DC2626); }
+  .report-doc { border: 0; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .declaration, .decl-box { border: 0; border-radius: 20px; }
+  .notice { border-radius: 18px; background: #0E1330; }
+  .example-card { border-radius: var(--radius-lg); }
+  @media (max-width: 760px) { .room-nav-item.active, .room-nav-item.active .rn-name { color: #fff; } .room-nav-item.active .status-dot { border-color: #fff; } }
+  .send-agent.is-sent:disabled { opacity: 1; }
+  .room-panel .req-line.warn { background: transparent; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .req-chip { display: inline-block; font-size: 12.5px; font-weight: 600; color: var(--warn); background: var(--warn-soft); padding: 6px 11px; border-radius: 999px; line-height: 1.3; }
+  .room-panel .req-line.ok { border-radius: 999px; padding: 8px 14px; font-weight: 600; }
+  .ai-status { border-radius: 16px; }
+  .restart-row .btn { box-shadow: 0 0 0 1px var(--line-strong); background: transparent; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -2164,13 +2296,17 @@ async function buildPdfBlob(s, onProgress, out){
   function need(h){ if (y + h > BOTTOM) newPage(); }
   function lines(t, w){ return doc.splitTextToSize(String(t == null ? '' : t), w); }
 
+  // Section heading: an accent bar and the title, with a hairline under it.
   function banner(text){
-    need(14);
+    need(18);
+    const t = String(text); const title = t.charAt(0).toUpperCase() + t.slice(1);
     doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]);
-    doc.rect(M, y, CW, 8.6, 'F');
-    set('bold', 10, C.white);
-    doc.text(String(text).toUpperCase(), PW / 2, y + 5.9, { align:'center' });
-    y += 8.6 + 4;
+    doc.roundedRect(M, y + 0.6, 2.4, 8.4, 1.2, 1.2, 'F');
+    set('bold', 15, C.ink);
+    doc.text(lines(title, CW - 10)[0], M + 6, y + 7.4);
+    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.25);
+    doc.line(M, y + 12, PW - M, y + 12);
+    y += 16;
   }
   function section(title){ toc.push([title, pageNow()]); banner(title); }
   function newSection(title){ newPage(); section(title); }
@@ -2190,94 +2326,108 @@ async function buildPdfBlob(s, onProgress, out){
   }
 
   const C = {
-    banner:[79,114,156], sub:[91,128,173], ink:[45,52,60], inkSoft:[92,100,110],
-    line:[219,223,229], head:[240,243,247], white:[255,255,255], faint:[140,147,156]
+    banner:[79,70,229], sub:[124,58,237], ink:[14,19,48], inkSoft:[74,82,114],
+    line:[228,230,240], head:[244,245,251], white:[255,255,255], faint:[140,147,173], soft:[238,237,254]
   };
 
-  function pageChrome(pageIndex){
+  // A small brand mark: rounded accent square with a white tick.
+  function brandMark(x, yy, size){
+    doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]);
+    doc.roundedRect(x, yy, size, size, size * 0.28, size * 0.28, 'F');
+    doc.setDrawColor(255, 255, 255); doc.setLineWidth(size * 0.11);
+    doc.lines([[size * 0.16, size * 0.16], [size * 0.3, -size * 0.34]], x + size * 0.26, yy + size * 0.52, [1, 1], 'S', false);
+    doc.setLineWidth(0.2);
+  }
+  function pageChrome(pageIndex, total){
     doc.setPage(pageIndex);
     if (pageIndex === 1) return; // the cover carries its own title
     /* header */
-    set('bold', 13, C.ink);
-    doc.text('DIY', M, 15);
-    const w1 = doc.getTextWidth('DIY ');
-    set('bold', 13, C.banner);
-    doc.text('CHECK-IN', M + w1 + 1, 15);
-    set('normal', 7.6, C.inkSoft);
-    doc.text([lines(reportTitle(s), 120)[0], 'Report reference | ' + ref], PW - M, 11.5, { align:'right' });
-    if (pageIndex === 1) return;
-    /* footer */
-    set('normal', 7.8, C.banner);
-    doc.text(String(pageIndex - 1), M, PH - 8);
+    brandMark(M, 9.2, 6);
+    set('bold', 10, C.ink);
+    doc.text('DIY Check-In', M + 8.5, 13.6);
     set('normal', 7.8, C.inkSoft);
-    doc.text(' |  ' + docTitle, M + doc.getTextWidth(String(pageIndex - 1)), PH - 8);
-    set('normal', 7.8, C.banner); doc.text('Date', PW / 2 - 16, PH - 8);
-    set('normal', 7.8, C.inkSoft); doc.text('|  ' + dateLong, PW / 2 - 8, PH - 8);
-    doc.text(s.meta.address || '', PW - M, PH - 8, { align:'right' });
+    doc.text(lines(reportTitle(s), 150)[0], PW - M, 11.6, { align:'right' });
+    set('normal', 7, C.faint);
+    doc.text('Ref ' + ref + '  ·  ' + dateLong, PW - M, 15.4, { align:'right' });
+    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.25); doc.line(M, 19.5, PW - M, 19.5);
+    /* footer */
+    set('normal', 7.6, C.faint);
+    doc.text(lines(s.meta.address || '', 180)[0], M, PH - 8);
+    set('bold', 7.6, C.inkSoft);
+    doc.text('Page ' + (pageIndex - 1) + ' of ' + (total - 1), PW - M, PH - 8, { align:'right' });
   }
 
   /* ---------------------------------------------------------------- cover */
-  set('bold', 26, C.ink);
-  doc.text('DIY', M, 58);
-  const wBrand = doc.getTextWidth('DIY ');
-  set('bold', 26, C.banner);
-  doc.text('CHECK-IN', M + wBrand + 2, 58);
-
-  doc.setDrawColor(C.banner[0], C.banner[1], C.banner[2]); doc.setLineWidth(1.1);
-  doc.line(M, 64, M + 62, 64); doc.setLineWidth(0.2);
-
-  // The report is named after the property: "CHECK-IN" then the address.
-  const hasCoverPhoto = !!((s.property && s.property.exterior && s.property.exterior.photos) || []).length;
-  set('bold', 16, C.banner);
-  doc.text(isOut ? 'CHECK-OUT' : 'CHECK-IN', M, 76);
-  set('bold', 14, C.ink);
-  const titleLines = lines(s.meta.address || '', (hasCoverPhoto ? PW - M - 104 - 8 : PW - M) - M).slice(0, 3);
-  doc.text(titleLines, M, 83);
-  const afterTitle = 83 + titleLines.length * 6;
-  set('normal', 10, C.inkSoft);
-  doc.text('SCHEDULE OF CONDITION', M, afterTitle + 2);
-
   const bedrooms = parseInt(s.meta.bedrooms, 10) || s.rooms.filter(r => r.type === 'bedroom').length;
   const bathrooms = parseInt(s.meta.bathrooms, 10) || s.rooms.filter(r => r.type === 'bathroom').length;
   const propType = ((s.property && s.property.propertyType) || '').trim();
   const description = [[bedrooms ? bedrooms + ' Bedroom' : '', bathrooms ? bathrooms + ' Bathroom' : ''].filter(Boolean).join(', '), [(s.meta.furnishing || '').trim(), propType || 'Property'].filter(Boolean).join(' ')].filter(Boolean).join(' – ');
   const exteriorPhotos = (s.property && s.property.exterior && s.property.exterior.photos) || [];
   const photoTotal = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0) + exteriorPhotos.length;
+  const hasCoverPhoto = exteriorPhotos.length > 0;
 
-  // Front of the property on the right of the cover
-  let coverTextW = CW - 64;
-  if (exteriorPhotos.length){
-    const cw = 104, ch = 78, cx = PW - M - cw, cy = 44;
+  // Accent band down the left edge, brand at the top.
+  doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]); doc.rect(0, 0, 5, PH, 'F');
+  doc.setFillColor(C.sub[0], C.sub[1], C.sub[2]); doc.rect(0, PH * 0.62, 5, PH * 0.38, 'F');
+  brandMark(M + 4, 16, 9);
+  set('bold', 14, C.ink); doc.text('DIY Check-In', M + 16.5, 22.6);
+
+  // Front of the property on the right.
+  const pw = 118, ph = 88, px = PW - M - pw, py = 34;
+  const textW = (hasCoverPhoto ? px - 10 : PW - M) - (M + 4);
+  if (hasCoverPhoto){
     const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', area: 'Outside', ref: 'X1', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
     const exAlias = 'photo-exterior-0';
-    if (drawFitted(await shrinkPhoto(exShot.dataUrl, 1400), exAlias, cx, cy, cw, ch)){
-      linkPhoto(registerFullSize(exShot), cx, cy, cw, ch);
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.rect(cx, cy, cw, ch);
-      set('normal', 8, C.inkSoft);
-      doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts), cx, cy + ch + 5);
-      coverTextW = cx - 8 - (M + 61);
+    if (drawFitted(await shrinkPhoto(exShot.dataUrl, 1400), exAlias, px, py, pw, ph)){
+      linkPhoto(registerFullSize(exShot), px, py, pw, ph);
+      set('normal', 7.6, C.faint);
+      doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts) + '  ·  tap to enlarge', px, py + ph + 5);
     }
   }
 
-  y = Math.max(98, afterTitle + 14);
-  [
-    ['Property Address', s.meta.address],
-    ['Property Description', description],
-    (s.meta.managingAgent || '').trim() ? ['Managing Agent', s.meta.managingAgent.trim()] : null,
-    [isOut ? 'Date Of Check Out' : 'Date Of Check In', dateLong],
-    s.meta.moveInDateTime ? ['Tenancy Move-In', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
-    s.meta.createdAt ? ['Inspection', 'Started ' + formatTimestamp(new Date(s.meta.createdAt)) + (s.finalizedAt ? '  ·  completed ' + formatTimestamp(new Date(s.finalizedAt)) : '')] : null,
-    ['Compiled By', s.meta.inspectorName],
-    ['Report Reference', ref],
-    ['Photographic Record', s.rooms.length + ' rooms  ·  ' + photoTotal + ' date and time stamped photographs']
-  ].filter(Boolean).forEach(([k, v]) => {
-    set('normal', 9.5, C.banner); doc.text(String(k), M, y);
-    set('normal', 9.5, C.inkSoft); doc.text('|', M + 56, y);
-    set('normal', 9.5, C.ink);
-    const ls = lines(v, coverTextW);
-    doc.text(ls, M + 61, y);
-    y += Math.max(8, ls.length * 4.6 + 3.4);
-  });
+  // Report type pill, then the address as the title.
+  y = 46;
+  const pill = (isOut ? 'CHECK-OUT REPORT' : 'CHECK-IN REPORT');
+  set('bold', 8.5, C.banner);
+  const pillW = doc.getTextWidth(pill) + 9;
+  doc.setFillColor(C.soft[0], C.soft[1], C.soft[2]); doc.roundedRect(M + 4, y - 5.2, pillW, 8, 4, 4, 'F');
+  doc.text(pill, M + 8.5, y);
+  set('bold', 26, C.ink);
+  const titleLines = lines(s.meta.address || '', textW).slice(0, 3);
+  doc.text(titleLines, M + 4, y + 16, { lineHeightFactor: 1.08 });
+  y += 16 + (titleLines.length - 1) * 10 + 9;
+  set('normal', 11, C.inkSoft);
+  doc.text('Schedule of condition  ·  ' + dateLong, M + 4, y);
+  y += 14;
+
+  // Details as a two-column grid of label over value.
+  const facts = [
+    ['Property', description],
+    (s.meta.managingAgent || '').trim() ? ['Managing agent', s.meta.managingAgent.trim()] : null,
+    [isOut ? 'Date of check-out' : 'Date of check-in', dateLong],
+    s.meta.moveInDateTime ? ['Tenancy move-in', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
+    s.meta.createdAt ? ['Inspection', formatTimestamp(new Date(s.meta.createdAt)) + (s.finalizedAt ? ' – ' + formatTimestamp(new Date(s.finalizedAt)).split(', ').pop() : '')] : null,
+    ['Compiled by', s.meta.inspectorName],
+    ['Report reference', ref],
+    ['Photographs', s.rooms.length + ' rooms  ·  ' + photoTotal + ' date and time stamped']
+  ].filter(Boolean);
+  const factW = (textW - 6) / 2;
+  for (let i = 0; i < facts.length; i += 2){
+    let rowH = 0;
+    [facts[i], facts[i + 1]].forEach((f, c) => {
+      if (!f) return;
+      const x = M + 4 + c * (factW + 6);
+      set('bold', 7, C.faint); doc.text(String(f[0]).toUpperCase(), x, y);
+      set('normal', 10.5, C.ink);
+      const ls = lines(f[1] || '—', factW).slice(0, 2);
+      doc.text(ls, x, y + 5.2);
+      rowH = Math.max(rowH, 5.2 + ls.length * 4.6);
+    });
+    y += rowH + 5;
+  }
+
+  set('normal', 7.6, C.faint);
+  doc.text('Every photograph is date and time stamped at the moment it was taken. Tap any photograph in this report to open it at full size.', M + 4, PH - 12);
 
   /* ------------------------------------------------- reserved contents page */
   doc.addPage();
@@ -2564,8 +2714,8 @@ async function buildPdfBlob(s, onProgress, out){
         ['PHOTOGRAPHS', st.photos + '  ·  ' + st.inspected]
       ];
       const cw6 = CW / cells.length;
-      doc.setFillColor(248, 249, 251); doc.rect(M, y, CW, 13, 'F');
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.rect(M, y, CW, 13);
+      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.roundedRect(M, y, CW, 13, 3, 3, 'F');
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
       cells.forEach(([k, v], i) => {
         const x = M + i * cw6;
         if (i) doc.line(x, y, x, y + 13);
@@ -2635,9 +2785,7 @@ async function buildPdfBlob(s, onProgress, out){
 
     for (let i = 0; i < shots.length; i += 8){
       newPage();
-      set('bold', 10.5, C.banner);
-      doc.text((room.name + ' – ' + stage + ' PHOTOS').toUpperCase(), PW / 2, y + 2, { align:'center' });
-      y += 10;
+      banner(room.name + ' – photographs' + (shots.length > 8 ? ' (' + (i / 8 + 1) + ' of ' + Math.ceil(shots.length / 8) + ')' : ''));
       await photoGrid(shots.slice(i, i + 8), 4, tick);
     }
   }
@@ -2754,25 +2902,23 @@ async function buildPdfBlob(s, onProgress, out){
   /* ------------------------------------------------------- contents page */
   doc.setPage(tocPage);
   y = TOP;
-  doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]);
-  doc.rect(M, y, CW, 8.6, 'F');
-  set('bold', 10, C.white);
-  doc.text('TABLE OF CONTENTS', PW / 2, y + 5.9, { align:'center' });
-  y += 16;
+  banner('Contents');
   const half = Math.ceil(toc.length / 2);
   toc.forEach((entry, i) => {
     const col = i < half ? 0 : 1;
-    const ty = TOP + 16 + (i - col * half) * 6.4;
+    const ty = TOP + 22 + (i - col * half) * 6.4;
     const tx = M + col * (CW / 2 + 4);
-    set('normal', 9, C.ink);
-    doc.text(String(entry[0]).toUpperCase(), tx, ty);
-    set('normal', 9, C.banner);
+    set('normal', 9.5, C.ink);
+    const label = String(entry[0]);
+    doc.textWithLink(label.charAt(0).toUpperCase() + label.slice(1), tx, ty, { pageNumber: entry[1] });
+    set('bold', 9.5, C.banner);
     doc.text(String(entry[1] - 1), tx + CW / 2 - 12, ty, { align:'right' });
+    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.15); doc.line(tx, ty + 2.2, tx + CW / 2 - 12, ty + 2.2);
   });
 
   /* header and footer on every page */
   const total = doc.internal.getNumberOfPages();
-  for (let p = 1; p <= total; p++) pageChrome(p);
+  for (let p = 1; p <= total; p++) pageChrome(p, total);
 
   if (onProgress) onProgress(100);
   return doc.output('blob');
@@ -2793,8 +2939,6 @@ async function buildPdfBlob(s, onProgress, out){
         if (onEach) onEach();
         const alias = 'photo-' + fullSize.length;
         if (drawFitted(await shrinkPhoto(shot.dataUrl, 900), alias, x, top, cw, ih)){
-          doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-          doc.rect(x, top, cw, ih);
           linkPhoto(registerFullSize(shot), x, top, cw, ih);
         }
         set('normal', 7.6, C.inkSoft);
@@ -3257,7 +3401,7 @@ function renderCapture(){
   const noCond = roomItemsMissingCondition(room).length;
   if (noCond) reqParts.push(`${noCond} item${noCond===1?'':'s'} still need${noCond===1?'s':''} a condition`);
   if (!roomConditionComplete(room)) reqParts.push('room condition needs completing below');
-  const reqMsg = complete ? 'All required photos and condition details captured for this room.' : reqParts.join(' · ');
+  const reqMsg = complete ? 'All required photos and condition details captured for this room.' : reqParts.map(t => `<span class="req-chip">${t}</span>`).join('');
   const aiBanner = aiEnabled === false
     ? `<div class="ai-status off">Automatic condition assessment is off (${escapeHtml(aiStatusNote)}). Set each condition yourself below.</div>`
     : '';
