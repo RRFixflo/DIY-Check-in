@@ -31,32 +31,48 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&a
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
 
-// Access codes the owner hands out from /admin (DIY-XXXX-XXXX), so someone can use the app without
-// paying. Like a paid link, each one is good for one report. Kept in REPORTS_DIR/access-codes.json.
+// One-off access codes (DIY-XXXX-XXXX / FREE-XXXX-XXXX) made on /admin before the shared code: each is
+// good for one report. New ones are no longer made. Kept in REPORTS_DIR/access-codes.json.
 const CODES_FILE = path.join(REPORTS_DIR, 'access-codes.json');
 try { if (!fs.existsSync(CODES_FILE)) fs.renameSync(path.join(REPORTS_DIR, 'free-codes.json'), CODES_FILE); } catch (e) {}
-const CODE_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function readCodes(){ try { return JSON.parse(fs.readFileSync(CODES_FILE, 'utf8')); } catch (e) { return []; } }
 function writeCodes(list){ fs.writeFileSync(CODES_FILE + '.tmp', JSON.stringify(list, null, 1)); fs.renameSync(CODES_FILE + '.tmp', CODES_FILE); }
-function newCode(){
-  const b = crypto.randomBytes(8), c = [...b].map(x => CODE_ABC[x % CODE_ABC.length]).join('');
-  return 'DIY-' + c.slice(0, 4) + '-' + c.slice(4);
+// The shared access code (2830 to start with; the owner can change it on /admin). Anyone given it can
+// use the app without paying, as often as they like. Once typed, the browser keeps a cookie made from
+// the code with a secret (SHARED-…), so it can't be guessed by setting the cookie, and changing the
+// code ends every earlier one. Kept in REPORTS_DIR/access-code.json.
+const SHARED_FILE = path.join(REPORTS_DIR, 'access-code.json');
+const DEFAULT_SHARED_CODE = '2830';
+const normCode = raw => String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+function readShared(){
+  let d = {}; try { d = JSON.parse(fs.readFileSync(SHARED_FILE, 'utf8')); } catch (e) {}
+  if (!d.secret) { d = { code: DEFAULT_SHARED_CODE, uses: 0, ...d, secret: crypto.randomBytes(32).toString('hex') }; writeShared(d); }
+  return d;
 }
+function writeShared(d){ fs.writeFileSync(SHARED_FILE + '.tmp', JSON.stringify(d, null, 1)); fs.renameSync(SHARED_FILE + '.tmp', SHARED_FILE); }
+const sharedToken = d => 'SHARED-' + crypto.createHmac('sha256', d.secret).update('code:' + d.code).digest('hex').slice(0, 30);
+
 // A typed code in any case or spacing, with or without "DIY" ("diy 7k4m q2px", "7K4MQ2PX") → its
 // stored form, or '' if it isn't one. (Codes made before were FREE-XXXX-XXXX; they still work.)
 function canonicalCode(raw){
-  const t = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const t = normCode(raw), shared = readShared();
+  if (t && t === shared.code) return sharedToken(shared);
   const m = /^(DIY|FREE)?([A-Z0-9]{4})([A-Z0-9]{4})$/.exec(t);
   if (!m) return '';
   const codes = readCodes();
   return [(m[1] || 'DIY') + '-' + m[2] + '-' + m[3]].concat(m[1] ? [] : ['FREE-' + m[2] + '-' + m[3]]).find(k => codes.some(c => c.code === k)) || '';
 }
 function codeAccess(code){
+  if (/^SHARED-/.test(code)) return code === sharedToken(readShared()) ? { valid: true, reason: '' } : { valid: false, reason: 'changed' };
   const c = readCodes().find(c => c.code === code);
   if (!c) return null;
   return c.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
 }
 function useCode(code, address){
+  if (/^SHARED-/.test(code)) {
+    const d = readShared(); d.uses = (d.uses || 0) + 1; d.lastUsedAt = new Date().toISOString(); d.lastUsedFor = clip(address, 200);
+    writeShared(d); console.log('access code used: ' + d.code); return;
+  }
   const list = readCodes(), c = list.find(c => c.code === code);
   if (!c || c.usedAt) return;
   c.usedAt = new Date().toISOString(); c.usedFor = clip(address, 200);
@@ -376,20 +392,22 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     const rows = readCodes().slice().reverse().map(c => `<li><div><code>${esc(c.code)}</code>${c.name ? ' <strong>' + esc(c.name) + '</strong>' : ''}
       <div class="sub">Made ${esc(day(c.createdAt))} · ${c.usedAt ? '<span class="pill">Used ' + esc(day(c.usedAt)) + (c.usedFor ? ' · ' + esc(c.usedFor) : '') + '</span>' : '<span class="pill sent">Not used yet</span>'}</div></div>
       <div class="actions">${c.usedAt ? '' : `<button class="btn" type="button" onclick="copyLink(this,'${esc(base + c.code)}')">Copy link</button>`}<form method="post" action="/admin/codes/${esc(c.code)}/delete" onsubmit="return confirm('Delete code ${esc(c.code)}? It will stop working.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
-    return `<details class="codes" id="codes"><summary>🎟️ Access codes <span class="sub" style="display:inline">— let someone use the app without paying</span></summary>
-<p class="sub">Each code is good for one report. Send the person the link, or give them the code to type in on the “Buy a report” page.</p>
-<form method="post" action="/admin/codes" class="newcode"><input name="name" maxlength="80" placeholder="Who is it for? (optional)"><button class="btn primary">Create an access code</button></form>
-${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
+    const d = readShared();
+    return `<details class="codes" id="codes"><summary>🔑 Access code: <code>${esc(d.code)}</code></summary>
+<p class="sub">Give this code to anyone you want to use the app without paying. They type it on the “Buy a report” page, or you send them the link. It works for as many reports as they like${d.uses ? `; used for ${d.uses} report${d.uses === 1 ? '' : 's'} so far, last ${esc(day(d.lastUsedAt))}${d.lastUsedFor ? ' (' + esc(d.lastUsedFor) + ')' : ''}` : ''}.</p>
+<div class="newcode"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + d.code)}')">Copy link</button></div>
+<form method="post" action="/admin/code" class="newcode" onsubmit="return confirm('Change the access code? The old one will stop working, including for anyone part-way through a report with it.')"><input name="code" required pattern="[A-Za-z0-9]{4,20}" maxlength="20" placeholder="New code (4–20 letters or numbers)" autocomplete="off"><button class="btn">Change code</button></form>
+${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><ul>' + rows + '</ul>' : ''}</details>`;
   }
 
-  app.post('/admin/codes', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
-    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Create codes from the reports page.');
-    const list = readCodes();
-    let code; do { code = newCode(); } while (list.some(c => c.code === code));
-    list.push({ code, name: clip(req.body && req.body.name, 80), createdAt: new Date().toISOString() });
-    writeCodes(list);
-    res.redirect(303, '/admin?code=' + code + '#codes');
+  app.post('/admin/code', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Change the code from the reports page.');
+    const code = normCode(req.body && req.body.code);
+    if (!/^[A-Z0-9]{4,20}$/.test(code)) return res.status(400).type('text/plain').send('The code must be 4 to 20 letters or numbers.');
+    const d = readShared(); if (code !== d.code) { d.code = code; d.uses = 0; delete d.lastUsedAt; delete d.lastUsedFor; writeShared(d); }
+    res.redirect(303, '/admin#codes');
   });
+
   app.post('/admin/codes/:code/delete', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete codes from the reports page.');
     writeCodes(readCodes().filter(c => c.code !== String(req.params.code)));
