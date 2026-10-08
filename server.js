@@ -128,9 +128,9 @@ const TOKEN_RE = /^[\w-]{12,40}$/;
 const cookieToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
 async function checkAccess(token){
   if (!TOKEN_RE.test(token || '')) return { valid: false, reason: 'none' };
-  const free = reports.freeCodeAccess(token);   // a free code from the owner's /admin page
-  if (free) return free;
-  if (/^FREE-/i.test(token)) return { valid: false, reason: 'unknown' };   // a deleted or mistyped free code
+  const own = reports.codeAccess(token);   // an access code from the owner's /admin page
+  if (own) return own;
+  if (/^(DIY|FREE)-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(token)) return { valid: false, reason: 'unknown' };   // a deleted or mistyped access code
   const c = accessCache.get(token);
   if (c && Date.now() - c.at < 5 * 60 * 1000) return c.r;
   try {
@@ -159,7 +159,7 @@ function paywallPage(reason){
   return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DIY Check-In</title><link rel="icon" href="/icons/favicon-32.png">' +
     '<style>body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fb;color:#101828;display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box}.c{max-width:440px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 60px -40px rgba(16,24,40,.45);text-align:center}h1{margin:10px 0 6px;font-size:1.5rem}p{color:#475467;margin:0 0 14px}a.b{display:block;padding:14px 18px;border-radius:999px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-weight:800;text-decoration:none;margin:18px 0 10px}a.l{color:#4f46e5;font-weight:700}small{color:#667085}form{display:flex;gap:8px;margin:4px 0 14px}form input{flex:1;min-width:0;padding:12px 14px;border:0;background:#f1f3f7;border-radius:999px;font:inherit;text-transform:uppercase}form button{padding:12px 16px;border:0;border-radius:999px;background:#eef0ff;color:#3730a3;font:inherit;font-weight:800}</style></head><body><main class="c">' +
     '<img src="/icons/icon-192.png" alt="" width="64" height="64"><h1>DIY Check-In</h1><p>' + msg + '</p><p>Do your own room-by-room inventory on your phone and get a dated, professional report.</p>' +
-    '<a class="b" href="' + BUY_URL + '">Buy a report — £30 + VAT</a><p style="margin:14px 0 6px;font-weight:700">Have an access code?</p><form method="get" action="/"><input name="access" placeholder="FREE-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code"><button>Go</button></form><small>Already paid? Open the link in your confirmation email.<br><a class="l" href="' + FIXFLOW_URL + '/diy-inventory">See an example report</a></small></main></body></html>';
+    '<a class="b" href="' + BUY_URL + '">Buy a report — £30 + VAT</a><p style="margin:14px 0 6px;font-weight:700">Have an access code?</p><form method="get" action="/"><input name="access" placeholder="DIY-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code"><button>Go</button></form><small>Already paid? Open the link in your confirmation email.<br><a class="l" href="' + FIXFLOW_URL + '/diy-inventory">See an example report</a></small></main></body></html>';
 }
 if (PAYWALL) {
   // New reports and photo assessment need a valid link.
@@ -170,7 +170,7 @@ if (PAYWALL) {
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;
-      if (reports.freeCodeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useFreeCode(token, m.address); return; }
+      if (reports.codeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useCode(token, m.address); return; }
       sendToFixflow(token, req); markUsed(token);
     });
     next();

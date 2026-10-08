@@ -31,33 +31,37 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&a
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
 
-// Free access codes the owner hands out from /admin (FREE-XXXX-XXXX). Like a paid link, each one is
-// good for one report. Kept in REPORTS_DIR/free-codes.json.
-const CODES_FILE = path.join(REPORTS_DIR, 'free-codes.json');
+// Access codes the owner hands out from /admin (DIY-XXXX-XXXX), so someone can use the app without
+// paying. Like a paid link, each one is good for one report. Kept in REPORTS_DIR/access-codes.json.
+const CODES_FILE = path.join(REPORTS_DIR, 'access-codes.json');
+try { if (!fs.existsSync(CODES_FILE)) fs.renameSync(path.join(REPORTS_DIR, 'free-codes.json'), CODES_FILE); } catch (e) {}
 const CODE_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function readCodes(){ try { return JSON.parse(fs.readFileSync(CODES_FILE, 'utf8')); } catch (e) { return []; } }
 function writeCodes(list){ fs.writeFileSync(CODES_FILE + '.tmp', JSON.stringify(list, null, 1)); fs.renameSync(CODES_FILE + '.tmp', CODES_FILE); }
 function newCode(){
   const b = crypto.randomBytes(8), c = [...b].map(x => CODE_ABC[x % CODE_ABC.length]).join('');
-  return 'FREE-' + c.slice(0, 4) + '-' + c.slice(4);
+  return 'DIY-' + c.slice(0, 4) + '-' + c.slice(4);
 }
-// A typed code in any case or spacing ("free 7k4m q2px") → its stored form, or '' if it isn't one.
+// A typed code in any case or spacing, with or without "DIY" ("diy 7k4m q2px", "7K4MQ2PX") → its
+// stored form, or '' if it isn't one. (Codes made before were FREE-XXXX-XXXX; they still work.)
 function canonicalCode(raw){
   const t = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const code = /^FREE[A-Z0-9]{8}$/.test(t) ? 'FREE-' + t.slice(4, 8) + '-' + t.slice(8) : '';
-  return code && readCodes().some(c => c.code === code) ? code : '';
+  const m = /^(DIY|FREE)?([A-Z0-9]{4})([A-Z0-9]{4})$/.exec(t);
+  if (!m) return '';
+  const codes = readCodes();
+  return [(m[1] || 'DIY') + '-' + m[2] + '-' + m[3]].concat(m[1] ? [] : ['FREE-' + m[2] + '-' + m[3]]).find(k => codes.some(c => c.code === k)) || '';
 }
-function freeCodeAccess(code){
+function codeAccess(code){
   const c = readCodes().find(c => c.code === code);
   if (!c) return null;
   return c.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
 }
-function useFreeCode(code, address){
+function useCode(code, address){
   const list = readCodes(), c = list.find(c => c.code === code);
   if (!c || c.usedAt) return;
   c.usedAt = new Date().toISOString(); c.usedFor = clip(address, 200);
   writeCodes(list);
-  console.log('free code used: ' + code);
+  console.log('access code used: ' + code);
 }
 
 // Small fixed-window counters, per IP.
@@ -372,9 +376,9 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     const rows = readCodes().slice().reverse().map(c => `<li><div><code>${esc(c.code)}</code>${c.name ? ' <strong>' + esc(c.name) + '</strong>' : ''}
       <div class="sub">Made ${esc(day(c.createdAt))} · ${c.usedAt ? '<span class="pill">Used ' + esc(day(c.usedAt)) + (c.usedFor ? ' · ' + esc(c.usedFor) : '') + '</span>' : '<span class="pill sent">Not used yet</span>'}</div></div>
       <div class="actions">${c.usedAt ? '' : `<button class="btn" type="button" onclick="copyLink(this,'${esc(base + c.code)}')">Copy link</button>`}<form method="post" action="/admin/codes/${esc(c.code)}/delete" onsubmit="return confirm('Delete code ${esc(c.code)}? It will stop working.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
-    return `<details class="codes" id="codes"><summary>🎟️ Free access codes <span class="sub" style="display:inline">— let someone use it for free</span></summary>
-<p class="sub">Each code is good for one report. Send the person the link, or tell them the code: they can type it on the “Buy a report” page.</p>
-<form method="post" action="/admin/codes" class="newcode"><input name="name" maxlength="80" placeholder="Who is it for? (optional)"><button class="btn primary">Create a free code</button></form>
+    return `<details class="codes" id="codes"><summary>🎟️ Access codes <span class="sub" style="display:inline">— let someone use the app without paying</span></summary>
+<p class="sub">Each code is good for one report. Send the person the link, or give them the code to type in on the “Buy a report” page.</p>
+<form method="post" action="/admin/codes" class="newcode"><input name="name" maxlength="80" placeholder="Who is it for? (optional)"><button class="btn primary">Create an access code</button></form>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   }
 
@@ -509,4 +513,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, isOwner: signedIn, canonicalCode, freeCodeAccess, useFreeCode };
+module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode };
