@@ -162,6 +162,7 @@ if (PAYWALL) {
   // New reports and photo assessment need a valid link.
   app.use(['/api/assess', '/api/reports'], async (req, res, next) => {
     if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
+    if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const token = cookieToken(req), a = await checkAccess(token);
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => { if (res.statusCode === 201) { sendToFixflow(token, req); markUsed(token); } });
@@ -170,6 +171,7 @@ if (PAYWALL) {
   // The app itself: open it with a valid link; a link that has made its report still opens (to see and send it).
   app.use(async (req, res, next) => {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
+    if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const q = TOKEN_RE.test(String(req.query.access || '')) ? String(req.query.access) : '', token = q || cookieToken(req);
     const a = await checkAccess(token);
     if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) return res.status(402).type('html').send(paywallPage(q || token ? a.reason : 'none'));

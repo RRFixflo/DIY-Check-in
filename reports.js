@@ -106,6 +106,23 @@ function notifyPhone(r){
     .catch(err => { console.error('phone alert failed:', err.message); return false; });
 }
 
+// Owner session: signed cookie diy_admin, good for a year on that device (until Sign out, or
+// ADMIN_PASSWORD changes). Path=/ so the owner also gets into the app itself past the paywall.
+const SESSION_DAYS = 365;
+const signingKey = crypto.createHash('sha256').update('diy-admin-session:' + ADMIN_PASSWORD).digest();
+const sign = exp => crypto.createHmac('sha256', signingKey).update('admin:' + exp).digest('hex');
+const makeToken = () => { const exp = Date.now() + SESSION_DAYS * 86400000; return exp + '.' + sign(exp); };
+function signedIn(req){
+  if (!ADMIN_PASSWORD) return false;
+  const all = String(req.headers.cookie || '').match(/(?:^|;\s*)diy_admin=[^;]+/g) || [];
+  return all.some(c => {
+    const [exp, mac] = decodeURIComponent(c.split('=').slice(1).join('=')).split('.');
+    if (!exp || !mac || !(Number(exp) > Date.now())) return false;
+    const a = Buffer.from(mac), b = Buffer.from(sign(exp));
+    return a.length === b.length && crypto.timingSafeEqual(a, b);
+  });
+}
+
 function mount(app){
   /* ---------- tenant side: send a copy of the finished report ---------- */
   // Saves one report PDF with its details. Returns [httpStatus, jsonBody].
@@ -260,22 +277,12 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   /* ---------- owner side: /admin, behind ADMIN_PASSWORD ---------- */
   // Sign-in: a form, then a signed cookie that keeps the owner signed in on that device for a year
   // (until they sign out, or ADMIN_PASSWORD changes, which signs every device out).
-  const SESSION_DAYS = 365;
-  const signingKey = crypto.createHash('sha256').update('diy-admin-session:' + ADMIN_PASSWORD).digest();
-  const sign = exp => crypto.createHmac('sha256', signingKey).update('admin:' + exp).digest('hex');
-  const makeToken = () => { const exp = Date.now() + SESSION_DAYS * 86400000; return exp + '.' + sign(exp); };
-  function signedIn(req){
-    if (!ADMIN_PASSWORD) return false;
-    const m = String(req.headers.cookie || '').match(/(?:^|;\s*)diy_admin=([^;]+)/);
-    const [exp, mac] = (m ? decodeURIComponent(m[1]) : '').split('.');
-    if (!exp || !mac || !(Number(exp) > Date.now())) return false;
-    const a = Buffer.from(mac), b = Buffer.from(sign(exp));
-    return a.length === b.length && crypto.timingSafeEqual(a, b);
-  }
   const secure = req => req.secure || String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() === 'https';
   function setSession(req, res, token, maxAge){
     // Lax, so links to a report (e.g. from the email) open straight away; changes still need the same origin.
-    res.set('Set-Cookie', `diy_admin=${token}; Path=/admin; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure(req) ? '; Secure' : ''}`);
+    const flags = `HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure(req) ? '; Secure' : ''}`;
+    // Path=/ covers the app too; the old Path=/admin cookie is cleared so signing out signs out everywhere.
+    res.set('Set-Cookie', [`diy_admin=${token}; Path=/; ${flags}`, `diy_admin=; Path=/admin; HttpOnly; SameSite=Lax; Max-Age=0`]);
   }
   const safeNext = v => (typeof v === 'string' && /^\/admin(\/[\w.\-\/]*)?(\?download=1)?$/.test(v)) ? v : '/admin';
   function loginPage(res, status, next, msg){
@@ -302,7 +309,10 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   function requireAdmin(req, res, next){
     res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'DENY' });
     if (!ADMIN_PASSWORD) return res.status(503).type('text/plain').send('Reports are locked. Set ADMIN_PASSWORD in Railway → Variables to open this page.');
-    if (signedIn(req)) return next();
+    if (signedIn(req)){
+      if (req.method === 'GET' && req.path === '/admin' && !/(?:^|;\s*)diy_admin=[^;]+;[^]*diy_admin=/.test(String(req.headers.cookie || ''))) setSession(req, res, makeToken(), SESSION_DAYS * 86400);
+      return next();
+    }
     if (req.method !== 'GET') return res.status(401).json({ error: 'Signed out. Reload the page and sign in.' });
     loginPage(res, 401, safeNext(req.originalUrl), '');
   }
@@ -368,6 +378,7 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
 <h1>Submitted reports</h1>
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
+<p style="margin:-6px 0 16px"><a class="btn primary" href="/">Open the app</a> <span class="sub" style="display:inline">You can use DIY Check-In without a paid link while signed in here.</span></p>
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
@@ -429,4 +440,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount };
+module.exports = { mount, isOwner: signedIn };
