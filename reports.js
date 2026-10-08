@@ -31,6 +31,35 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&a
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
 
+// Free access codes the owner hands out from /admin (FREE-XXXX-XXXX). Like a paid link, each one is
+// good for one report. Kept in REPORTS_DIR/free-codes.json.
+const CODES_FILE = path.join(REPORTS_DIR, 'free-codes.json');
+const CODE_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function readCodes(){ try { return JSON.parse(fs.readFileSync(CODES_FILE, 'utf8')); } catch (e) { return []; } }
+function writeCodes(list){ fs.writeFileSync(CODES_FILE + '.tmp', JSON.stringify(list, null, 1)); fs.renameSync(CODES_FILE + '.tmp', CODES_FILE); }
+function newCode(){
+  const b = crypto.randomBytes(8), c = [...b].map(x => CODE_ABC[x % CODE_ABC.length]).join('');
+  return 'FREE-' + c.slice(0, 4) + '-' + c.slice(4);
+}
+// A typed code in any case or spacing ("free 7k4m q2px") → its stored form, or '' if it isn't one.
+function canonicalCode(raw){
+  const t = String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const code = /^FREE[A-Z0-9]{8}$/.test(t) ? 'FREE-' + t.slice(4, 8) + '-' + t.slice(8) : '';
+  return code && readCodes().some(c => c.code === code) ? code : '';
+}
+function freeCodeAccess(code){
+  const c = readCodes().find(c => c.code === code);
+  if (!c) return null;
+  return c.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
+}
+function useFreeCode(code, address){
+  const list = readCodes(), c = list.find(c => c.code === code);
+  if (!c || c.usedAt) return;
+  c.usedAt = new Date().toISOString(); c.usedFor = clip(address, 200);
+  writeCodes(list);
+  console.log('free code used: ' + code);
+}
+
 // Small fixed-window counters, per IP.
 function limiter(max, windowMs){
   const hits = new Map();
@@ -337,6 +366,32 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     try { return new URL(origin).host === req.headers.host; } catch (e) { return false; }
   }
 
+  function codesHTML(req){
+    const base = (PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/?access=';
+    const day = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
+    const rows = readCodes().slice().reverse().map(c => `<li><div><code>${esc(c.code)}</code>${c.name ? ' <strong>' + esc(c.name) + '</strong>' : ''}
+      <div class="sub">Made ${esc(day(c.createdAt))} · ${c.usedAt ? '<span class="pill">Used ' + esc(day(c.usedAt)) + (c.usedFor ? ' · ' + esc(c.usedFor) : '') + '</span>' : '<span class="pill sent">Not used yet</span>'}</div></div>
+      <div class="actions">${c.usedAt ? '' : `<button class="btn" type="button" onclick="copyLink(this,'${esc(base + c.code)}')">Copy link</button>`}<form method="post" action="/admin/codes/${esc(c.code)}/delete" onsubmit="return confirm('Delete code ${esc(c.code)}? It will stop working.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
+    return `<details class="codes" id="codes"><summary>🎟️ Free access codes <span class="sub" style="display:inline">— let someone use it for free</span></summary>
+<p class="sub">Each code is good for one report. Send the person the link, or tell them the code: they can type it on the “Buy a report” page.</p>
+<form method="post" action="/admin/codes" class="newcode"><input name="name" maxlength="80" placeholder="Who is it for? (optional)"><button class="btn primary">Create a free code</button></form>
+${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
+  }
+
+  app.post('/admin/codes', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Create codes from the reports page.');
+    const list = readCodes();
+    let code; do { code = newCode(); } while (list.some(c => c.code === code));
+    list.push({ code, name: clip(req.body && req.body.name, 80), createdAt: new Date().toISOString() });
+    writeCodes(list);
+    res.redirect(303, '/admin?code=' + code + '#codes');
+  });
+  app.post('/admin/codes/:code/delete', requireAdmin, (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete codes from the reports page.');
+    writeCodes(readCodes().filter(c => c.code !== String(req.params.code)));
+    res.redirect(303, '/admin#codes');
+  });
+
   app.get('/admin', requireAdmin, (req, res) => {
     const reports = listReports();
     const rows = reports.map(r => `
@@ -373,12 +428,17 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   .alerts { background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:14px; font-size:14px; color:var(--soft); line-height:1.6; }
   .alerts code { background:#F1F3F7; color:var(--ink); padding:2px 6px; border-radius:6px; font-size:13px; user-select:all; word-break:break-all; }
   .pill { display:inline-block; margin-top:4px; font-size:11.5px; font-weight:600; padding:2px 8px; border-radius:999px; background:#F1F3F7; color:var(--soft); } .pill.sent { background:#E7F6EC; color:#15803D; }
+  .codes { background:#fff; border-radius:16px; padding:12px 16px; margin-bottom:14px; box-shadow:0 1px 2px rgba(15,23,42,.04); } .codes summary { cursor:pointer; font-weight:700; }
+  .codes .newcode { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; } .codes input { flex:1; min-width:180px; padding:10px 14px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
+  .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
+  .codes code { background:#EEF0FF; color:#3730A3; padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:#4F46E5; color:#fff; }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
 <h1>Submitted reports</h1>
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/">Open the app</a> <span class="sub" style="display:inline">You can use DIY Check-In without a paid link while signed in here.</span></p>
+${codesHTML(req)}
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
@@ -386,6 +446,15 @@ ${reports.length ? `<input type="search" placeholder="Search by address, referen
 <div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
 <script>
+function copyLink(btn, url){
+  const done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => btn.textContent = 'Copy link', 2000); };
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url)); else prompt('Copy this link:', url);
+}
+// A code just made: open the section and show it.
+(function(){ const c = new URLSearchParams(location.search).get('code'), d = document.querySelector('.codes');
+  if (location.hash === '#codes' || c) d.open = true;
+  if (c) document.querySelectorAll('.codes li').forEach(li => { if (li.querySelector('code').textContent === c) li.classList.add('new'); });
+  if (c || location.hash) history.replaceState(null, '', '/admin'); })();
 // Details come from the app's file names: "Address - Type - Date - Ref.pdf"; anything else keeps its file name.
 function metaFromName(name){
   const base = name.replace(/\.pdf$/i, ''), parts = base.split(' - ');
@@ -440,4 +509,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, isOwner: signedIn };
+module.exports = { mount, isOwner: signedIn, canonicalCode, freeCodeAccess, useFreeCode };
