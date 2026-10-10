@@ -179,7 +179,7 @@ if (PAYWALL) {
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;
-      if (reports.codeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useCode(token, m.address); return; }
+      if (reports.codeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useCode(token, m.address, req); return; }
       sendToFixflow(token, req); markUsed(token);
     });
     next();
@@ -194,6 +194,7 @@ if (PAYWALL) {
     if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown')); }
     const a = await checkAccess(token);
     if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) return res.status(402).type('html').send(paywallPage(q || token ? a.reason : 'none'));
+    if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
     if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, req.path); }
     next();
   });

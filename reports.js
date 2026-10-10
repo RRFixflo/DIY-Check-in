@@ -68,7 +68,31 @@ function codeAccess(code){
   if (!c) return null;
   return c.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
 }
-function useCode(code, address){
+// What people did with an access code, newest last: each time someone gets in with it ('in') and each
+// report made with it ('report'), with the device. Shown on /admin, where entries since the owner's
+// last visit are marked New. Kept in REPORTS_DIR/access-log.json (the last 300).
+const LOG_FILE = path.join(REPORTS_DIR, 'access-log.json');
+function readLog(){ try { const d = JSON.parse(fs.readFileSync(LOG_FILE, 'utf8')); return { seenAt: d.seenAt || '', entries: d.entries || [] }; } catch (e) { return { seenAt: '', entries: [] }; } }
+function writeLog(d){ fs.writeFileSync(LOG_FILE + '.tmp', JSON.stringify(d, null, 1)); fs.renameSync(LOG_FILE + '.tmp', LOG_FILE); }
+function deviceName(ua){
+  ua = String(ua || '');
+  const dev = /iPhone/.test(ua) ? 'iPhone' : /iPad/.test(ua) ? 'iPad' : /Android/.test(ua) ? 'Android phone' : /Macintosh/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows PC' : /Linux/.test(ua) ? 'Linux' : 'Unknown device';
+  const br = /EdgA?\/|EdgiOS/.test(ua) ? 'Edge' : /SamsungBrowser/.test(ua) ? 'Samsung Internet' : /FxiOS|Firefox/.test(ua) ? 'Firefox' : /CriOS|Chrome/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : '';
+  return br ? dev + ' · ' + br : dev;
+}
+function logCode(req, kind, code, address){
+  try {
+    const d = readLog();
+    d.entries.push({ at: new Date().toISOString(), kind, code: /^SHARED-/.test(code) ? readShared().code : code, device: deviceName(req.headers['user-agent']), ...(address ? { address: clip(address, 200) } : {}) });
+    if (d.entries.length > 300) d.entries = d.entries.slice(-300);
+    writeLog(d);
+  } catch (e) { console.error('access log failed:', e.message); }
+}
+// Someone has just got in with an access code (called by server.js when the code is accepted).
+function codeLogin(req, code){ logCode(req, 'in', code); console.log('access code login: ' + deviceName(req.headers['user-agent'])); }
+
+function useCode(code, address, req){
+  if (req) logCode(req, 'report', code, address);
   if (/^SHARED-/.test(code)) {
     const d = readShared(); d.uses = (d.uses || 0) + 1; d.lastUsedAt = new Date().toISOString(); d.lastUsedFor = clip(address, 200);
     writeShared(d); console.log('access code used: ' + d.code); return;
@@ -386,6 +410,20 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     try { return new URL(origin).host === req.headers.host; } catch (e) { return false; }
   }
 
+  // Access code activity for the admin page; opening the page marks everything as seen.
+  function activityHTML(){
+    const log = readLog(), seen = log.seenAt, entries = log.entries.slice().reverse();
+    const isNew = e => !seen || e.at > seen, fresh = entries.filter(isNew);
+    if (entries.length) { log.seenAt = new Date().toISOString(); writeLog(log); }
+    const when = d => new Date(d).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+    const ins = fresh.filter(e => e.kind === 'in').length, reps = fresh.filter(e => e.kind === 'report').length;
+    const banner = fresh.length ? `<a class="news" href="#activity" onclick="document.getElementById('activity').open=true">🔔 ${[ins ? ins + ' new login' + (ins === 1 ? '' : 's') + ' with the access code' : '', reps ? reps + ' new report' + (reps === 1 ? '' : 's') + ' made with it' : ''].filter(Boolean).join(' and ')} since your last visit</a>` : '';
+    const rows = entries.slice(0, 100).map(e => `<li${isNew(e) ? ' class="isnew"' : ''}><div><strong>${e.kind === 'report' ? '📄 Made a report' + (e.address ? ': ' + esc(e.address) : '') : '🔓 Logged in with the access code'}</strong>${isNew(e) ? ' <span class="pill new">New</span>' : ''}
+      <div class="sub">${esc(when(e.at))} · ${esc(e.device)} · code ${esc(e.code)}</div></div></li>`).join('');
+    return banner + `<details class="codes" id="activity"${fresh.length ? ' open' : ''}><summary>👥 Who has used the access code <span class="sub" style="display:inline">— ${entries.length ? entries.filter(e => e.kind === 'in').length + ' login' + (entries.filter(e => e.kind === 'in').length === 1 ? '' : 's') + ', ' + entries.filter(e => e.kind === 'report').length + ' report' + (entries.filter(e => e.kind === 'report').length === 1 ? '' : 's') : 'nobody yet'}</span></summary>
+${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">When someone gets in with the access code, it shows here with the time and their device.</p>'}</details>`;
+  }
+
   function codesHTML(req){
     const base = (PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/?access=';
     const day = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
@@ -453,6 +491,8 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
   .codes { background:#fff; border-radius:16px; padding:12px 16px; margin-bottom:14px; box-shadow:0 1px 2px rgba(15,23,42,.04); } .codes summary { cursor:pointer; font-weight:700; }
   .codes .newcode { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; } .codes input { flex:1; min-width:180px; padding:10px 14px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
+  .news { display:block; background:#EEF0FF; color:#3730A3; font-weight:700; text-decoration:none; padding:12px 16px; border-radius:14px; margin-bottom:12px; }
+  .codes li.isnew { background:#F7F7FF; margin:0 -16px; padding:10px 16px; } .pill.new { background:#4F46E5; color:#fff; }
   .codes code { background:#EEF0FF; color:#3730A3; padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:#4F46E5; color:#fff; }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
 </style></head><body><main>
@@ -460,6 +500,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/">Open the app</a> <span class="sub" style="display:inline">You can use DIY Check-In without a paid link while signed in here.</span></p>
+${activityHTML()}
 ${codesHTML(req)}
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
@@ -531,4 +572,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode };
+module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin };
