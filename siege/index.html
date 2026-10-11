@@ -262,6 +262,27 @@ label.sens input{accent-color:var(--atk);width:140px}
 .pausebox{display:flex;flex-direction:column;align-items:center;gap:16px}
 #quitBtn{all:unset;cursor:pointer;font-family:var(--body);font-size:14px;font-weight:600;color:var(--fg);border:1px solid var(--line);padding:8px 16px;background:rgba(255,255,255,.05)}
 #quitBtn:hover{background:rgba(255,255,255,.12)}
+
+/* ---------- Touch controls ---------- */
+#touch{position:absolute;inset:0;touch-action:none;-webkit-touch-callout:none;z-index:5}
+#stick{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.06);pointer-events:none}
+#knob{position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.35);transform:translate(-50%,-50%)}
+.tb{all:unset;position:absolute;box-sizing:border-box;width:72px;height:72px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;color:var(--fg);background:rgba(11,15,20,.45);border:2px solid rgba(255,255,255,.3);-webkit-tap-highlight-color:transparent;user-select:none}
+.tb small{font-family:var(--body);font-weight:600;font-size:9px;letter-spacing:.12em;opacity:.8;margin-top:1px}
+.tb.sm{width:44px;height:44px;border-radius:10px;font-size:15px}
+.tb.fire{width:96px;height:96px;font-size:20px;background:rgba(255,82,82,.28);border-color:rgba(255,120,120,.7)}
+.tb.go2{width:auto;height:48px;border-radius:24px;padding:0 22px;background:var(--us);color:#111;border:0}
+.tb.on{background:rgba(255,255,255,.35)}
+.tb.lit{border-color:var(--us);background:rgba(244,167,43,.3)}
+#rotate{position:absolute;left:50%;top:40%;transform:translateX(-50%);background:var(--panel);padding:10px 16px;font-weight:600;font-size:15px;text-align:center;pointer-events:none;width:min(80vw,320px)}
+body.touch #bl{bottom:auto;top:calc(104px + env(safe-area-inset-top,0px));min-width:160px;transform:scale(.8);transform-origin:left top}
+body.touch #br{bottom:auto;right:auto;left:16px;top:calc(168px + env(safe-area-inset-top,0px));align-items:flex-start;transform:scale(.8);transform-origin:left top}
+body.touch #floorTag{left:120px;top:calc(52px + env(safe-area-inset-top,0px))}
+body.touch #droneHelp,body.touch #spec{display:none}
+body.touch #feed{top:calc(48px + env(safe-area-inset-top,0px));transform:scale(.85);transform-origin:right top}
+body.touch #prompt kbd{display:none}
+body.touch #prompt{top:calc(50% + 34px)}
+@media (max-height:500px){body.touch #top{transform:translateX(-50%) scale(.78);transform-origin:center top}body.touch #toast b{font-size:30px}body.touch #death b{font-size:36px}}
 </style>
 
 <div id="app">
@@ -295,6 +316,26 @@ label.sens input{accent-color:var(--atk);width:140px}
     <div id="toast"><b id="toastB"></b><span id="toastS"></span></div>
   </div>
   <div id="board" hidden></div>
+  <div id="touch" hidden>
+    <div id="stick" hidden><i id="knob"></i></div>
+    <button data-k="pause" class="tb sm" style="left:16px;top:calc(48px + env(safe-area-inset-top,0px))" aria-label="Pause">❚❚</button>
+    <button data-k="score" class="tb sm" style="left:66px;top:calc(48px + env(safe-area-inset-top,0px))" aria-label="Scoreboard">☰</button>
+    <button data-k="leanL" class="tb sm" style="right:76px;top:calc(46% - 60px)">◂Q</button>
+    <button data-k="leanR" class="tb sm" style="right:20px;top:calc(46% - 60px)">E▸</button>
+    <button data-k="reinf" class="tb" style="right:200px;top:calc(46% - 70px)">T<small>STEEL</small></button>
+    <button data-k="melee" class="tb" style="right:118px;bottom:calc(196px + env(safe-area-inset-bottom,0px))">V<small>MELEE</small></button>
+    <button data-k="reload" class="tb" style="right:22px;bottom:calc(150px + env(safe-area-inset-bottom,0px))">R<small>RELOAD</small></button>
+    <button data-k="ads" id="tAds" class="tb" style="right:128px;bottom:calc(112px + env(safe-area-inset-bottom,0px))">◎<small>AIM</small></button>
+    <button data-k="fire" id="tFire" class="tb fire" style="right:24px;bottom:calc(30px + env(safe-area-inset-bottom,0px))">FIRE</button>
+    <button data-k="crouch" id="tCrouch" class="tb" style="right:130px;bottom:calc(26px + env(safe-area-inset-bottom,0px))">C<small>CROUCH</small></button>
+    <button data-k="gadget" class="tb" style="right:212px;bottom:calc(26px + env(safe-area-inset-bottom,0px))">G<small>GADGET</small></button>
+    <button data-k="useF" class="tb" style="right:212px;bottom:calc(112px + env(safe-area-inset-bottom,0px))">F<small>USE</small></button>
+    <button data-k="hop" class="tb" style="right:130px;bottom:calc(30px + env(safe-area-inset-bottom,0px))">HOP</button>
+    <button data-k="go" id="tGo" class="tb go2" style="right:24px;top:calc(46% - 30px)">GO</button>
+    <button data-k="next" class="tb" style="right:24px;bottom:calc(40px + env(safe-area-inset-bottom,0px))">NEXT</button>
+    <button data-k="ff" class="tb" style="right:110px;bottom:calc(40px + env(safe-area-inset-bottom,0px))">4×</button>
+    <div id="rotate" hidden>Turn your phone sideways for the best view</div>
+  </div>
 
   <div id="home">
     <header class="topbar">
@@ -543,7 +584,9 @@ const other = t => t === 'atk' ? 'def' : 'atk';
 const DEFAULT_L = { weapon: 'ar', sight: 'reddot', barrel: 'none', grip: 'vert', laser: false, skin: 'graphite' };
 const S = { atkOp: 'raze', defOp: 'warden', diff: 'regular', sens: 1.2, gfx: 'high', mode: 'bomb', map: 'random', toWin: 3, start: 'atk', wins: 0, losses: 0, L: Object.assign({}, DEFAULT_L) };
 try { const s = JSON.parse(localStorage.getItem('bp-settings3') || '{}'); Object.assign(S, s); S.L = Object.assign({}, DEFAULT_L, s.L || {}); } catch (e) {}
-if (S.gfx !== 'high' && S.gfx !== 'medium') S.gfx = 'high';
+// phones and tablets: touch controls and a lighter renderer
+const TOUCH = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && matchMedia('(pointer: coarse)').matches;
+if (S.gfx !== 'high' && S.gfx !== 'medium') S.gfx = TOUCH ? 'medium' : 'high';
 if (!OPS[S.atkOp]) S.atkOp = 'raze'; if (!OPS[S.defOp]) S.defOp = 'warden'; if (!DIFFS[S.diff]) S.diff = 'regular';
 if (!MODES[S.mode]) S.mode = 'bomb'; if (S.map !== 'random' && !MAPS[S.map]) S.map = 'random'; if (![2, 3, 4].includes(S.toWin)) S.toWin = 3; if (!['atk', 'def'].includes(S.start)) S.start = 'atk';
 if (!WEAPONS[S.L.weapon]) S.L.weapon = 'ar'; if (!SIGHTS[S.L.sight]) S.L.sight = 'reddot'; if (!BARRELS[S.L.barrel]) S.L.barrel = 'none'; if (!GRIPS[S.L.grip]) S.L.grip = 'none'; if (!SKINS[S.L.skin]) S.L.skin = 'graphite';
@@ -560,7 +603,7 @@ const canvas = $('cv');
 let renderer;
 try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' }); }
 catch (e) { document.body.insertAdjacentHTML('beforeend', '<p style="position:fixed;inset:auto 16px 16px;color:#fff">This browser could not start WebGL, which the game needs.</p>'); return; }
-renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, TOUCH ? 1.25 : 1.5));
 renderer.autoClear = false;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
 renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
@@ -572,7 +615,7 @@ scene.add(camera);
 const hemi = new THREE.HemisphereLight(lin(0xcfe0f5), lin(0x7a6f60), 0.55); scene.add(hemi);
 const sun = new THREE.DirectionalLight(lin(0xfff0d8), 2.6);
 scene.add(sun, sun.target);
-sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+sun.castShadow = true; sun.shadow.mapSize.set(TOUCH ? 1024 : 2048, TOUCH ? 1024 : 2048);
 Object.assign(sun.shadow.camera, { left: -45, right: 45, top: 45, bottom: -45, near: 1, far: 220 }); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
 const skyMat = new THREE.ShaderMaterial({
   side: THREE.BackSide, depthWrite: false, fog: false,
@@ -2040,27 +2083,30 @@ function renderHome(dt) {
 const keys = {}; let mouseL = false, mouseR = false, locked = false, lockFailed = false;
 const playing = () => game.phase === 'prep' || game.phase === 'action';
 const droneMode = () => game.phase === 'prep' && P.team === 'atk';
+function onKeyDown(code) {
+  if (code === 'Tab' && playing()) { $('board').innerHTML = boardHTML(); $('board').hidden = false; }
+  if (game.paused || !playing()) return;
+  if (code === 'KeyM') { muted = !muted; toast(muted ? 'Sound off' : 'Sound on', ''); }
+  if (!P.alive) {
+    const mates = bots.filter(b => b.alive && b.team === P.team);
+    if (code === 'Space' && mates.length) game.spec = (game.spec + 1) % mates.length;
+    if (code === 'Enter') game.speed = game.speed === 1 ? 4 : 1;
+    return;
+  }
+  if (droneMode()) { if (code === 'Enter') startAction(); if (code === 'Space' && drone.alive && !drone.air) { drone.vy = 3.4; drone.air = true; drone.y += .01; } return; }
+  if (game.phase === 'prep' && code === 'Enter') { startAction(); return; }
+  if (P.climb) return;
+  if (code === 'KeyF') tryLadder();
+  if (code === 'KeyR') startReload();
+  if (code === 'KeyC') P.crouch = !P.crouch;
+  if (code === 'KeyG') useGadget();
+  if (code === 'KeyT') tryReinforce();
+  if (code === 'KeyV') melee();
+}
 addEventListener('keydown', e => {
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code) && playing()) e.preventDefault();
   if (keys[e.code]) return; keys[e.code] = true;
-  if (e.code === 'Tab' && playing()) { $('board').innerHTML = boardHTML(); $('board').hidden = false; }
-  if (game.paused || !playing()) return;
-  if (e.code === 'KeyM') { muted = !muted; toast(muted ? 'Sound off' : 'Sound on', ''); }
-  if (!P.alive) {
-    const mates = bots.filter(b => b.alive && b.team === P.team);
-    if (e.code === 'Space' && mates.length) game.spec = (game.spec + 1) % mates.length;
-    if (e.code === 'Enter') game.speed = game.speed === 1 ? 4 : 1;
-    return;
-  }
-  if (droneMode()) { if (e.code === 'Enter') startAction(); if (e.code === 'Space' && drone.alive && !drone.air) { drone.vy = 3.4; drone.air = true; drone.y += .01; } return; }
-  if (game.phase === 'prep' && e.code === 'Enter') { startAction(); return; }
-  if (P.climb) return;
-  if (e.code === 'KeyF') tryLadder();
-  if (e.code === 'KeyR') startReload();
-  if (e.code === 'KeyC') P.crouch = !P.crouch;
-  if (e.code === 'KeyG') useGadget();
-  if (e.code === 'KeyT') tryReinforce();
-  if (e.code === 'KeyV') melee();
+  onKeyDown(e.code);
 });
 addEventListener('keyup', e => { keys[e.code] = false; if (e.code === 'Tab') $('board').hidden = true; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; mouseL = mouseR = false; $('board').hidden = true; });
@@ -2087,8 +2133,78 @@ document.addEventListener('pointerlockchange', () => {
   if (locked) setPause(false);
 });
 document.addEventListener('pointerlockerror', () => { lockFailed = true; setPause(false); });
-function setPause(v) { game.paused = v; $('pause').hidden = !v; if (v) mouseL = mouseR = false; }
-$('pause').addEventListener('click', e => { if (e.target.id === 'quitBtn') return; audioInit(); requestLock(); setTimeout(() => { if (!locked && game.paused) { lockFailed = true; setPause(false); } }, 400); });
+function setPause(v) { game.paused = v; $('pause').hidden = !v; if (v) { mouseL = mouseR = false; touchReset(); } }
+
+/* ---------- Touch controls ---------- */
+const tc_ = { move: { id: null, ox: 0, oy: 0, x: 0, y: 0 }, look: { id: null, x: 0, y: 0 }, btn: new Map(), ads: false, sprint: false };
+function touchReset() { tc_.move.id = tc_.look.id = null; tc_.move.x = tc_.move.y = 0; tc_.btn.clear(); tc_.sprint = false; mouseL = false; keys.KeyF = keys.KeyQ = keys.KeyE = false; $('stick').hidden = true; document.querySelectorAll('#touch [data-k].on').forEach(b => b.classList.remove('on')); }
+function lookBy(dx, dy) {
+  const zoom = droneMode() ? 1 : 1 - P.ads * (1 - (W8.zoom < 1 ? W8.zoom : .65));
+  const k = .0048 * S.sens * zoom, o = droneMode() ? drone : P;
+  o.yaw -= dx * k; o.pitch = clamp(o.pitch - dy * k, -1.45, 1.45);
+}
+function touchButton(k, down) {
+  if (k === 'fire') { mouseL = down; if (down) { P.wantShot = true; if (droneMode()) pingDrone(); } return; }
+  if (k === 'useF') { keys.KeyF = down; if (down) onKeyDown('KeyF'); return; }
+  if (k === 'leanL') { keys.KeyQ = down; return; }
+  if (k === 'leanR') { keys.KeyE = down; return; }
+  if (k === 'score') { if (down) onKeyDown('Tab'); else $('board').hidden = true; return; }
+  if (!down) return;
+  audioInit();
+  if (k === 'ads') { tc_.ads = !tc_.ads; return; }
+  if (k === 'pause') { setPause(true); return; }
+  const map = { reload: 'KeyR', crouch: 'KeyC', gadget: 'KeyG', reinf: 'KeyT', melee: 'KeyV', hop: 'Space', go: 'Enter', next: 'Space', ff: 'Enter' };
+  if (map[k]) onKeyDown(map[k]);
+}
+function setupTouch() {
+  if (!TOUCH) return;
+  document.body.classList.add('touch'); lockFailed = true;
+  const el = $('touch'), stick = $('stick'), knob = $('knob'), R = 56;
+  const start = e => {
+    e.preventDefault();
+    for (const t of e.changedTouches) {
+      const b = t.target.closest && t.target.closest('[data-k]');
+      if (b) { tc_.btn.set(t.identifier, { k: b.dataset.k, el: b, x: t.clientX, y: t.clientY }); b.classList.add('on'); touchButton(b.dataset.k, true); continue; }
+      if (t.clientX < innerWidth * .45 && tc_.move.id === null) { Object.assign(tc_.move, { id: t.identifier, ox: t.clientX, oy: t.clientY, x: 0, y: 0 }); stick.hidden = false; stick.style.left = t.clientX + 'px'; stick.style.top = t.clientY + 'px'; knob.style.transform = 'translate(-50%,-50%)'; continue; }
+      if (tc_.look.id === null) Object.assign(tc_.look, { id: t.identifier, x: t.clientX, y: t.clientY });
+    }
+  };
+  const move = e => {
+    e.preventDefault();
+    for (const t of e.changedTouches) {
+      if (t.identifier === tc_.move.id) {
+        let dx = t.clientX - tc_.move.ox, dy = t.clientY - tc_.move.oy; const d = Math.hypot(dx, dy);
+        if (d > R) { dx *= R / d; dy *= R / d; }
+        tc_.move.x = dx / R; tc_.move.y = dy / R; tc_.sprint = d > R * 1.15 && dy < -R * .7;
+        knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      } else if (t.identifier === tc_.look.id) { lookBy(t.clientX - tc_.look.x, t.clientY - tc_.look.y); tc_.look.x = t.clientX; tc_.look.y = t.clientY; }
+      else { const b = tc_.btn.get(t.identifier); if (b && b.k === 'fire') { lookBy(t.clientX - b.x, t.clientY - b.y); b.x = t.clientX; b.y = t.clientY; } }
+    }
+  };
+  const end = e => {
+    for (const t of e.changedTouches) {
+      if (t.identifier === tc_.move.id) { tc_.move.id = null; tc_.move.x = tc_.move.y = 0; tc_.sprint = false; stick.hidden = true; }
+      else if (t.identifier === tc_.look.id) tc_.look.id = null;
+      else { const b = tc_.btn.get(t.identifier); if (b) { b.el.classList.remove('on'); touchButton(b.k, false); tc_.btn.delete(t.identifier); } }
+    }
+  };
+  el.addEventListener('touchstart', start, { passive: false });
+  el.addEventListener('touchmove', move, { passive: false });
+  el.addEventListener('touchend', end); el.addEventListener('touchcancel', end);
+}
+function updateTouchUI() {
+  if (!TOUCH) return;
+  const on = playing() && !game.paused;
+  $('touch').hidden = !on; if (!on) return;
+  const dm = droneMode(), alive = P.alive, prepDef = game.phase === 'prep' && P.team === 'def';
+  const show = { fire: (alive && !dm) || (dm && drone.alive), ads: alive && !dm, reload: alive && !dm, crouch: alive && !dm, gadget: alive && !dm, useF: alive && !dm, melee: alive && !dm, leanL: alive && !dm, leanR: alive && !dm,
+    reinf: alive && prepDef, hop: dm && drone.alive, go: dm || prepDef, next: !alive, ff: !alive, score: true, pause: true };
+  for (const b of document.querySelectorAll('#touch [data-k]')) b.hidden = !show[b.dataset.k];
+  $('tFire').textContent = dm ? 'SPOT' : 'FIRE'; $('tGo').textContent = dm ? 'GO' : 'READY';
+  $('tAds').classList.toggle('lit', tc_.ads); $('tCrouch').classList.toggle('lit', P.crouch);
+  $('rotate').hidden = innerHeight <= innerWidth;
+}
+$('pause').addEventListener('click', e => { if (e.target.id === 'quitBtn') return; audioInit(); if (TOUCH) { setPause(false); return; } requestLock(); setTimeout(() => { if (!locked && game.paused) { lockFailed = true; setPause(false); } }, 400); });
 $('quitBtn').addEventListener('click', e => { e.stopPropagation(); setPause(false); if (document.pointerLockElement) document.exitPointerLock(); game.phase = 'menu'; showHome(); });
 
 /* ---------- Player actions ---------- */
@@ -2354,6 +2470,7 @@ const inSite = u => { const [l, c, r] = nodeOf(u); return l === site.l && chAt(l
 function specTarget() { const mates = bots.filter(b => b.alive && b.team === P.team); return mates.length ? mates[game.spec % mates.length] : null; }
 const floorName = l => l === ROOF ? 'Roof' : l === 0 ? 'Ground floor' : l === 1 ? 'First floor' : 'Second floor';
 function updateHud() {
+  updateTouchUI();
   const op = currentOp(), obj = mode().obj;
   setT('sU', String(game.us)); setT('sT', String(game.them));
   const tLeft = game.planted ? game.defuseT : game.time;
@@ -2455,7 +2572,7 @@ function startRound() {
   decals.forEach(d => d.visible = false); debris.forEach(d => d.m.visible = false);
   $('droneDead').hidden = true; $('feed').innerHTML = ''; $('death').hidden = true; $('killpop').classList.remove('on');
   const hud = $('hud'); hud.style.setProperty('--us', `var(--${P.team})`); hud.style.setProperty('--them', `var(--${other(P.team)})`);
-  buildViewmodel(); updatePips();
+  buildViewmodel(); updatePips(); tc_.ads = false; touchReset();
   showScreen(null); hud.hidden = false;
   toast(`Round ${game.round} · ${P.team === 'atk' ? 'Attack' : 'Defence'}`, P.team === 'atk' ? `${MAP.name}. Drone the building and find the ${mode().obj === 'secure' ? 'room to take' : 'device'}.` : `Fortify the ${site.name} (${floorName(site.l).toLowerCase()}). Attackers move in after 35 seconds.`);
 }
@@ -2488,7 +2605,7 @@ function endRound(winner, why) {
 $('next').addEventListener('click', () => { sfx.ui(); if (game.over) { showHome(); return; } game.round++; showBriefing(); });
 
 /* ---------- Screens: home, briefing, result ---------- */
-function showScreen(id) { for (const s of ['home', 'menu', 'result']) $(s).hidden = s !== id; if (id) $('hud').hidden = true; }
+function showScreen(id) { for (const s of ['home', 'menu', 'result']) $(s).hidden = s !== id; if (id) { $('hud').hidden = true; if (TOUCH) { $('touch').hidden = true; touchReset(); } } }
 function startMatch(modeKey, mapKey2) {
   match.mode = modeKey; match.map = mapKey2 === 'random' || !MAPS[mapKey2] ? pickOne(Object.keys(MAPS)) : mapKey2;
   match.toWin = S.toWin; match.start = S.start;
@@ -2601,10 +2718,10 @@ $('slots').addEventListener('click', e => {
   const b = e.target.closest('[data-v]'); if (!b) return; const slot = b.parentElement.dataset.slot;
   S.L[slot] = slot === 'laser' ? b.dataset.v === 'true' : b.dataset.v; saveSettings(); sfx.ui(); renderArmory();
 });
-$('go').addEventListener('click', () => { audioInit(); sfx.ui(); startRound(); requestLock(); });
+$('go').addEventListener('click', () => { audioInit(); sfx.ui(); if (TOUCH) { try { const d = document.documentElement; (d.requestFullscreen || d.webkitRequestFullscreen || (() => {})).call(d); if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (e) {} } startRound(); if (!TOUCH) requestLock(); });
 $('brQuit').addEventListener('click', () => { sfx.ui(); showHome(); });
 $('brLoad').addEventListener('click', () => { const a = $('brArmory'); a.hidden = !a.hidden; $('brLoad').textContent = a.hidden ? 'Change loadout' : 'Hide loadout'; });
-if (matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches) document.querySelectorAll('.needs').forEach(n => n.textContent = 'This game needs a keyboard and mouse. Open it on a computer to play.');
+if (TOUCH) document.querySelectorAll('.needs').forEach(n => n.textContent = 'Touch controls: left thumb moves (push to the edge to sprint), right thumb aims. Turn your phone sideways to play.');
 
 /* ---------- Main loop ---------- */
 let last = performance.now(), menuT = 0;
@@ -2643,7 +2760,9 @@ function update(dt) {
   for (const b of bots) if (b.spotted > 0) b.spotted -= dt;
   const turnKeys = (keys.ArrowLeft ? 1 : 0) - (keys.ArrowRight ? 1 : 0), pitchKeys = (keys.ArrowUp ? 1 : 0) - (keys.ArrowDown ? 1 : 0);
   let f = (keys.KeyW ? 1 : 0) - (keys.KeyS ? 1 : 0), s = (keys.KeyD ? 1 : 0) - (keys.KeyA ? 1 : 0);
-  const len = Math.hypot(f, s); if (len) { f /= len; s /= len; }
+  if (TOUCH && tc_.move.id !== null) { f -= tc_.move.y; s += tc_.move.x; }
+  if (TOUCH) mouseR = tc_.ads && P.alive && !droneMode();
+  const len = Math.hypot(f, s); if (len > 1) { f /= len; s /= len; }
   const op = currentOp();
   if (game.phase === 'prep' && game.time <= 0) { startAction(); return; }
   if (droneMode()) {
@@ -2667,7 +2786,7 @@ function update(dt) {
     } else P.plantT = 0;
     P.lean += (((keys.KeyE ? 1 : 0) - (keys.KeyQ ? 1 : 0)) - P.lean) * Math.min(1, dt * 10);
     P.eye += ((P.crouch ? 1.05 : 1.62) - P.eye) * Math.min(1, dt * 10);
-    P.sprint = !!(keys.ShiftLeft || keys.ShiftRight) && f > 0 && !P.crouch && !mouseR && P.reloadT <= 0 && Math.abs(P.lean) < .3;
+    P.sprint = !!(keys.ShiftLeft || keys.ShiftRight || tc_.sprint) && f > 0 && !P.crouch && !mouseR && P.reloadT <= 0 && Math.abs(P.lean) < .3;
     P.ads += (((mouseR && !P.sprint && P.reloadT <= 0 && P.meleeT <= 0 && !P.climb) ? 1 : 0) - P.ads) * Math.min(1, dt * W8.adsSpeed);
     let sp = 3.3 * op.speed * W8.mob; if (P.sprint) sp = 5.4 * op.speed * W8.mob; if (P.crouch) sp = 1.9; if (P.ads > .5) sp = Math.min(sp, 2.3);
     const [fx, fz] = fwdXZ(P.yaw), rx = -fz, rz = fx;
@@ -2754,7 +2873,7 @@ function frame(now) {
   }
   renderPreview(dt);
 }
-resize(); setupPost();
+resize(); setupPost(); setupTouch();
 showHome();
 requestAnimationFrame(frame);
 window.__bp = { game, P, bots: () => bots, startRound, startAction, startMatch, showHome, drone, S, match, nodeOf, navPath, walkable, MAPS, hatches: () => hatches, ladders: () => ladders, links: () => links,

@@ -2,7 +2,7 @@
 
 A tactical shooter in the style of Rainbow Six Siege, in one HTML file (`index.html`). It uses Three.js r128 from cdnjs and its post-processing examples from jsDelivr. It is separate from the DIY Check-In app: nothing in `public/` or `server.js` serves or links to it.
 
-Play: open `siege/index.html` in a desktop browser (keyboard and mouse).
+Play: open `siege/index.html` in a browser. On a computer use keyboard and mouse; on a phone or tablet, touch controls appear automatically (left thumb moves, right thumb aims, on-screen buttons for everything else; play in landscape).
 
 ## What's in it
 
