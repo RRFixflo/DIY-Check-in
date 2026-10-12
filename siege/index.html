@@ -291,6 +291,15 @@ body.touch #prompt{top:calc(50% + 34px)}
 #lock i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
 #lock i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
 #lock i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+
+/* ---------- Character names ---------- */
+.op .look{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.opnames{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;max-width:760px}
+@media (max-width:620px){.opnames{grid-template-columns:minmax(0,1fr)}}
+.opnames .nm{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;letter-spacing:.06em;min-width:0}
+.opnames .nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opnames input{font:inherit;font-size:16px;font-weight:600;letter-spacing:.04em;color:var(--fg);background:var(--panel-2);border:1px solid var(--line);padding:8px 10px;min-width:0}
+.opnames input:focus-visible{outline:2px solid var(--atk);outline-offset:1px}
 </style>
 
 <div id="app">
@@ -400,6 +409,9 @@ body.touch #prompt{top:calc(50% + 34px)}
         <h2 class="defc">Defenders</h2>
         <div class="ops" id="opsDef"></div>
         <p class="hint">Your choice for each side is saved and used whenever you play that side. You can also change it in the briefing before each round.</p>
+        <h2>Names</h2>
+        <p class="hint" style="margin-top:0">Give each character a name. It shows on their card, in the scoreboard and on your HUD.</p>
+        <div class="opnames" id="opNames"></div>
       </section>
       <section data-panel="armory" class="panel narrow" id="armoryHome" hidden>
         <h1 class="ptitle">Armory</h1>
@@ -599,6 +611,11 @@ try { const s = JSON.parse(localStorage.getItem('bp-settings3') || '{}'); Object
 const TOUCH = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && matchMedia('(pointer: coarse)').matches;
 if (S.gfx !== 'high' && S.gfx !== 'medium') S.gfx = TOUCH ? 'medium' : 'high';
 if (!['auto', 'assist', 'off'].includes(S.aim)) S.aim = 'auto';
+// players can give each operator a name of their own
+const OP_CALLSIGN = Object.fromEntries(Object.entries(OPS).map(([k, o]) => [k, o.name]));
+if (!S.names || typeof S.names !== 'object') S.names = {};
+function applyNames() { for (const k in OPS) { const n = String(S.names[k] || '').replace(/[^\p{L}\p{N} '\-]/gu, '').trim().slice(0, 14); OPS[k].name = n ? n.toUpperCase() : OP_CALLSIGN[k]; } }
+applyNames();
 if (!OPS[S.atkOp]) S.atkOp = 'raze'; if (!OPS[S.defOp]) S.defOp = 'warden'; if (!DIFFS[S.diff]) S.diff = 'regular';
 if (!MODES[S.mode]) S.mode = 'bomb'; if (S.map !== 'random' && !MAPS[S.map]) S.map = 'random'; if (![2, 3, 4].includes(S.toWin)) S.toWin = 3; if (!['atk', 'def'].includes(S.start)) S.start = 'atk';
 if (!WEAPONS[S.L.weapon]) S.L.weapon = 'ar'; if (!SIGHTS[S.L.sight]) S.L.sight = 'reddot'; if (!BARRELS[S.L.barrel]) S.L.barrel = 'none'; if (!GRIPS[S.L.grip]) S.L.grip = 'none'; if (!SKINS[S.L.skin]) S.L.skin = 'graphite';
@@ -1770,45 +1787,70 @@ function buildGun(L, lite) {
   return { g, line, flashZ: -fx - .01, flashY: by };
 }
 
-/* ---------- Soldiers ----------
- Built once per team from shaped parts (lathed limbs, plate carrier, helmet kit), then merged
- into one mesh per material per body section so each soldier costs only a handful of draw calls. */
+/* ---------- Characters ----------
+ Six characters, one per operator, dressed as in the family photo. Each wears a slim chest rig and an
+ armband in its side's colour so teams stay readable. Built once per character from shaped parts,
+ then merged into one mesh per material per body section, so each one costs only a few draw calls. */
 const UP = new V3(0, 1, 0);
-const TEAM_MATS = {
-  atk: { camo: ['#8a7f62', '#6b5e45', '#a39878', '#4f5a3d', '#3f3a2c'], gear: 0x6d6450, gear2: 0x4a4536, helm: 0x7a7058, boot: 0x3b3027, glove: 0x3a342a, skin: 0xb48b6c, band: 0xf4a72b, face: 0x3a3a34 },
-  def: { camo: ['#2f3b4f', '#243042', '#3b4a63', '#1b2433', '#4a5870'], gear: 0x23293a, gear2: 0x161a24, helm: 0x252c3a, boot: 0x14161b, glove: 0x1d2028, skin: 0xa87e60, band: 0x4aa3ff, face: 0x1a1d24 },
+const TEAM_GEAR = { atk: { rig: 0x6d6450, rig2: 0x4a4536, band: 0xf4a72b }, def: { rig: 0x2b3346, rig2: 0x1a1f2b, band: 0x4aa3ff } };
+// head: short | quiff | long | hijab; top/robe/outer: clothing layers; feet: sneaker | shoe | slipper | bare
+const LOOKS = {
+  raze: { who: 'Maroon tee, black jeans, white trainers', skin: 0x9a684a, head: 'quiff', hair: 0x141110, beard: true,
+    top: 0x4a1a22, shortSleeve: true, legs: 0x18181d, feet: 'sneaker', shoe: 0xf1f1ef },
+  forge: { who: 'Beige hijab, glasses, satin abaya', skin: 0xbb8a6a, head: 'hijab', hijab: 0xcdb08f, glasses: 0xc9a46a,
+    top: 0xdcc6a6, satin: true, robe: 0xdcc6a6, belt: 0xe7dccb, legs: 0xdcc6a6, feet: 'slipper', shoe: 0xe8bdb6 },
+  maul: { who: 'Maroon top, short black hair', skin: 0x8c5a3e, head: 'short', hair: 0x101010,
+    top: 0x5a2c29, legs: 0x2a2e38, feet: 'shoe', shoe: 0x2a2a2c },
+  warden: { who: 'Brown hijab, white dress, brown cardigan', skin: 0xa06d50, head: 'hijab', hijab: 0x4a2a22,
+    top: 0xe8e5de, robe: 0xe8e5de, outer: 0x5c3b2a, outerTo: .42, legs: 0x1c1c20, feet: 'slipper', shoe: 0xe8bdb6 },
+  vigil: { who: 'Long hair, glasses, floral jacket', skin: 0xab7a5c, head: 'long', hair: 0x0e0c0c, glasses: 0xd8b2ae,
+    top: 0xf0eeea, outer: 'floral', outerTo: .3, legs: 0xeceae6, feet: 'slipper', shoe: 0xe8bdb6 },
+  bastion: { who: 'White thobe, bare feet', skin: 0xa87656, head: 'short', hair: 0x141210,
+    top: 0xf2f1ec, robe: 0xf2f1ec, legs: 0xf2f1ec, feet: 'bare' },
 };
-function camoTex(cols, pixel) {
+const lookOf = op => LOOKS[op] || LOOKS.raze;
+function floralTex() {
   return mkTex(256, 256, (g, s) => {
-    g.fillStyle = cols[0]; g.fillRect(0, 0, s, s);
-    for (let i = 0; i < (pixel ? 900 : 70); i++) {
-      g.fillStyle = cols[1 + (Math.random() * (cols.length - 1) | 0)];
-      if (pixel) { const z = 6 + (Math.random() * 3 | 0) * 6; g.fillRect((Math.random() * s / 6 | 0) * 6, (Math.random() * s / 6 | 0) * 6, z, z * (Math.random() < .5 ? 1 : 2)); }
-      else { g.beginPath(); const x = Math.random() * s, y = Math.random() * s, r = 8 + Math.random() * 22; for (let a = 0; a < 7; a++) { const ang = a / 7 * 6.28, rr = r * rnd(.5, 1.2); g.lineTo(x + Math.cos(ang) * rr * 1.4, y + Math.sin(ang) * rr); } g.fill(); }
+    g.fillStyle = '#8b93a6'; g.fillRect(0, 0, s, s);
+    for (let i = 0; i < 46; i++) {
+      const x = Math.random() * s, y = Math.random() * s, r = 7 + Math.random() * 12;
+      g.fillStyle = Math.random() < .5 ? '#a9b5d3' : '#6f7891';
+      for (let p = 0; p < 5; p++) { const a = p / 5 * 6.28; g.beginPath(); g.ellipse(x + Math.cos(a) * r * .6, y + Math.sin(a) * r * .6, r * .5, r * .3, a, 0, 6.28); g.fill(); }
+      g.fillStyle = '#c9b48e'; g.beginPath(); g.arc(x, y, r * .22, 0, 6.28); g.fill();
     }
-    speckle(g, s, s, 2500, .12);
-    for (let y = 0; y < s; y += 3) { g.fillStyle = 'rgba(0,0,0,.05)'; g.fillRect(0, y, s, 1); }
+    speckle(g, s, s, 1500, .08);
   });
 }
-const SM = {};
-function soldierMats(team) {
-  if (SM[team]) return SM[team];
-  const c = TEAM_MATS[team], camo = camoTex(c.camo, team === 'def');
+const LM = {};
+function lookMats(op, team) {
+  const key = op + team;
+  if (LM[key]) return LM[key];
+  const L = lookOf(op), T = TEAM_GEAR[team];
+  const cloth = (c, sh = 6) => phong({ color: c, bumpMap: TX.carpet, bumpScale: .004, shininess: sh });
+  const outer = L.outer === 'floral' ? (() => { const t = floralTex(); return phong({ map: t, shininess: 30, side: THREE.DoubleSide }); })() : L.outer ? phong({ color: L.outer, bumpMap: TX.carpet, bumpScale: .006, shininess: 4, side: THREE.DoubleSide }) : null;
   const o = {
-    uni: phong({ map: camo, bumpMap: camo, bumpScale: .01, shininess: 6 }),
-    gear: phong({ color: c.gear, bumpMap: TX.carpet, bumpScale: .01, shininess: 10 }),
-    gear2: phong({ color: c.gear2, shininess: 18 }),
-    helm: phong({ color: c.helm, map: team === 'atk' ? camo : null, shininess: 30 }),
-    boot: phong({ color: c.boot, shininess: 25 }), sole: phong({ color: 0x141414, shininess: 4 }),
-    glove: phong({ color: c.glove, shininess: 14 }), skin: phong({ color: c.skin, shininess: 22 }), face: phong({ color: c.face, shininess: 6, bumpMap: TX.carpet, bumpScale: .006 }),
-    metal: phong({ color: 0x2a2d31, shininess: 80, metal: .7 }), lens: phong({ color: 0x0b0d10, shininess: 110, metal: .5, envMapIntensity: 2 }),
-    band: new THREE.MeshBasicMaterial({ color: lin(c.band).multiplyScalar(1.5) }),
-    glow: new THREE.MeshBasicMaterial({ color: lin(c.band).multiplyScalar(team === 'def' ? 2.2 : .2) }),
+    top: L.satin ? phong({ color: L.top, shininess: 70 }) : cloth(L.top),
+    robe: L.robe ? (L.satin ? phong({ color: L.robe, shininess: 70, side: THREE.DoubleSide }) : phong({ color: L.robe, shininess: 8, side: THREE.DoubleSide })) : null,
+    outer, legs: cloth(L.legs, 10),
+    skin: phong({ color: L.skin, shininess: 26 }),
+    hair: phong({ color: L.hair || 0x111111, shininess: 45, bumpMap: TX.carpet, bumpScale: .006 }),
+    hijab: L.hijab ? phong({ color: L.hijab, bumpMap: TX.carpet, bumpScale: .004, shininess: 10, side: THREE.DoubleSide }) : null,
+    shoe: phong({ color: L.shoe || L.skin, shininess: L.feet === 'slipper' ? 2 : 30, bumpMap: L.feet === 'slipper' ? TX.carpet : null, bumpScale: .02 }),
+    sole: phong({ color: L.feet === 'sneaker' ? 0xe9e9e6 : 0x1a1a1a, shininess: 10 }),
+    belt: L.belt ? phong({ color: L.belt, shininess: 60, metal: .3 }) : null,
+    frame: L.glasses ? phong({ color: L.glasses, shininess: 80, metal: .5 }) : null,
+    lens: phong({ color: 0xdfe8f0, shininess: 110, metal: .2, transparent: true, opacity: .25 }),
+    eye: phong({ color: 0x0c0a09, shininess: 90 }), brow: phong({ color: 0x14100e, shininess: 4 }), lip: phong({ color: 0x7a4a3c, shininess: 30 }),
+    rig: phong({ color: T.rig, bumpMap: TX.carpet, bumpScale: .01, shininess: 10 }), rig2: phong({ color: T.rig2, shininess: 18 }),
+    metal: phong({ color: 0x2a2d31, shininess: 80, metal: .7 }),
+    band: new THREE.MeshBasicMaterial({ color: lin(T.band).multiplyScalar(1.5) }),
   };
-  Object.values(o).forEach(x => x.userData.shared = true);
-  return SM[team] = o;
+  Object.values(o).forEach(x => x && (x.userData.shared = true));
+  return LM[key] = o;
 }
-function lathe(pts, seg = 14) { return new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(Math.max(1e-4, r), y)), seg); }
+// the viewmodel's sleeve and hand
+function sleeveMats(op, team) { const L = lookOf(op), M = lookMats(op, team); return { sleeve: L.shortSleeve ? M.skin : (M.outer || M.top), hand: M.skin }; }
+function lathe(pts, seg = 14, p0 = 0, pl = Math.PI * 2) { return new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(Math.max(1e-4, r), y)), seg, p0, pl); }
 function limb(parent, r, a, b, mat) {
   const d = new V3().subVectors(b, a), len = d.length();
   const m = new THREE.Mesh(geo(`limb${r}_${len.toFixed(2)}`, () => capsuleGeo(r, Math.max(.01, len - r))), mat);
@@ -1839,68 +1881,97 @@ function mergeGroup(root) {
   return out;
 }
 const SOLDIER = {};
-function soldierParts(team) {
-  if (SOLDIER[team]) return SOLDIER[team];
-  const M = soldierMats(team), atk = team === 'atk';
+function soldierParts(op, team) {
+  const key = op + team;
+  if (SOLDIER[key]) return SOLDIER[key];
+  const L = lookOf(op), M = lookMats(op, team);
   const add = (parent, geom, mat, x, y, z, sx = 1, sy = 1, sz = 1, rx = 0, ry = 0, rz = 0) => { const m = new THREE.Mesh(geom, mat); m.position.set(x, y, z); m.scale.set(sx, sy, sz); m.rotation.set(rx, ry, rz); parent.add(m); return m; };
   // thigh (hip pivot at origin) and shin (knee pivot at origin)
   const thigh = new THREE.Group();
-  add(thigh, lathe([[0, -.47], [.062, -.46], [.068, -.38], [.08, -.2], [.09, -.06], [.084, .02], [0, .06]]), M.uni, 0, 0, 0, 1, 1, .92);
-  add(thigh, rbox(.07, .13, .1, .02), M.uni, .085, -.2, -.005);                      // cargo pocket
-  add(thigh, rbox(.1, .12, .06, .02), M.gear2, 0, -.47, -.055);                      // knee pad
+  add(thigh, lathe([[0, -.47], [.062, -.46], [.068, -.38], [.08, -.2], [.09, -.06], [.084, .02], [0, .06]]), M.legs, 0, 0, 0, 1, 1, .92);
   const shin = new THREE.Group();
-  add(shin, lathe([[0, -.44], [.052, -.43], [.058, -.33], [.068, -.18], [.064, -.05], [.056, .01], [0, .04]]), M.uni, 0, 0, 0, 1, 1, .95);
-  add(shin, rbox(.115, .14, .16, .03), M.boot, 0, -.39, -.005);                      // boot upper
-  add(shin, rbox(.11, .07, .28, .03), M.boot, 0, -.43, -.055);                       // boot foot
-  add(shin, rbox(.12, .025, .3, .01), M.sole, 0, -.465, -.055);                      // sole
-  // torso: everything above the hips, including arms, head and kit
+  add(shin, lathe([[0, -.44], [.052, -.43], [.058, -.33], [.068, -.18], [.064, -.05], [.056, .01], [0, .04]]), L.feet === 'bare' && !L.robe ? M.skin : M.legs, 0, 0, 0, 1, 1, .95);
+  if (L.feet === 'sneaker' || L.feet === 'shoe') {
+    add(shin, rbox(.11, .1, .27, .04), M.shoe, 0, -.425, -.05);
+    add(shin, rbox(.118, .035, .29, .015), M.sole, 0, -.465, -.05);
+    if (L.feet === 'sneaker') add(shin, rbox(.07, .02, .1, .008), M.sole, 0, -.37, -.1);
+  } else if (L.feet === 'slipper') {
+    add(shin, rbox(.06, .05, .2, .02), M.skin, 0, -.43, -.05);
+    add(shin, geo('slip', () => new THREE.SphereGeometry(.1, 12, 8)), M.shoe, 0, -.43, -.07, .75, .45, 1.45);
+  } else add(shin, rbox(.07, .055, .22, .025), M.skin, 0, -.44, -.05);
+  // torso: everything above the hips, including arms and head
   const t = new THREE.Group();
-  add(t, lathe([[0, .86], [.15, .88], [.16, .98], [.148, 1.07], [.165, 1.2], [.185, 1.32], [.17, 1.41], [.11, 1.47], [.05, 1.5], [0, 1.5]], 16), M.uni, 0, 0, 0, 1, 1, .68);
-  add(t, geo('belt', () => new THREE.TorusGeometry(.158, .024, 6, 22)), M.gear2, 0, .965, 0, 1, 1, .7, Math.PI / 2);
-  add(t, rbox(.06, .05, .02, .01), M.metal, 0, .965, -.112);                         // buckle
-  add(t, rbox(.06, .17, .1, .02), M.gear2, .175, .82, -.02);                         // thigh holster
-  add(t, rbox(.07, .09, .05, .015), M.gear, -.15, .93, .06);                         // dump pouch
-  // plate carrier
-  add(t, rbox(.31, .36, .055, .025), M.gear, 0, 1.25, -.13);
-  add(t, rbox(.31, .36, .05, .025), M.gear, 0, 1.26, .125);
-  add(t, geo('cumm', () => new THREE.CylinderGeometry(.19, .19, .17, 20, 1, true)), M.gear, 0, 1.15, 0, 1, 1, .74);
-  for (const sx of [-1, 1]) add(t, rbox(.06, .03, .28, .01), M.gear, sx * .1, 1.43, 0);            // shoulder straps
-  for (const sx of [-.085, 0, .085]) { add(t, rbox(.072, .12, .055, .015), M.gear, sx, 1.14, -.175); add(t, rbox(.07, .02, .058, .006), M.gear2, sx, 1.205, -.176); }
-  add(t, rbox(.14, .09, .04, .015), M.gear, 0, 1.33, -.17);                          // admin pouch
-  add(t, rbox(.06, .14, .05, .015), M.gear2, -.19, 1.2, .02);                        // radio
-  add(t, geo('ant', () => new THREE.CylinderGeometry(.004, .004, .28, 5)), M.metal, -.2, 1.38, .03);
-  if (atk) { add(t, rbox(.28, .34, .14, .05), M.gear, 0, 1.24, .23); add(t, rbox(.22, .12, .06, .03), M.gear2, 0, 1.16, .31); }
-  else add(t, rbox(.2, .32, .06, .03), M.gear2, 0, 1.25, .18);
+  add(t, lathe([[0, .86], [.15, .88], [.16, .98], [.148, 1.07], [.165, 1.2], [.18, 1.32], [.165, 1.41], [.11, 1.47], [.05, 1.5], [0, 1.5]], 16), M.top, 0, 0, 0, 1, 1, .68);
+  if (L.robe) add(t, lathe([[.155, 1.0], [.17, .9], [.19, .7], [.21, .45], [.235, .2], [.25, .06], [.24, .05]], 18), M.robe, 0, 0, 0, 1, 1, .78);
+  if (L.belt) add(t, geo('belt2', () => new THREE.TorusGeometry(.152, .016, 6, 22)), M.belt, 0, 1.03, 0, 1, 1, .7, Math.PI / 2);
+  if (L.outer) {   // open-front long jacket or cardigan, gap facing forward (-z)
+    const lo = L.outerTo, gap = .5;
+    add(t, lathe([[.07, 1.49], [.15, 1.46], [.19, 1.38], [.2, 1.2], [.205, 1.0], [.22, .8], [.24, (lo + .8) / 2], [.25, lo]], 20, Math.PI + gap / 2, Math.PI * 2 - gap), M.outer, 0, 0, 0, 1, 1, .78);
+  }
+  // slim chest rig in the side's colour
+  add(t, rbox(.27, .2, .045, .02), M.rig, 0, 1.2, -.125);
+  for (const sx of [-.07, 0, .07]) add(t, rbox(.062, .1, .05, .012), M.rig2, sx, 1.16, -.155);
+  for (const sx of [-1, 1]) add(t, rbox(.045, .025, .3, .01), M.rig, sx * .09, 1.39, 0);
+  add(t, rbox(.24, .05, .03, .01), M.rig, 0, 1.12, .11);
   // neck and head
-  add(t, geo('neck', () => new THREE.CylinderGeometry(.048, .056, .1, 12)), M.face, 0, 1.49, 0);
+  add(t, geo('neck', () => new THREE.CylinderGeometry(.045, .052, .1, 12)), M.skin, 0, 1.49, 0);
   add(t, lathe([[0, 1.5], [.05, 1.505], [.078, 1.54], [.093, 1.59], [.098, 1.64], [.09, 1.7], [.062, 1.745], [0, 1.76]], 16), M.skin, 0, 0, 0, .95, 1, 1.08);
-  add(t, lathe([[0, 1.49], [.06, 1.5], [.088, 1.54], [.1, 1.6], [.098, 1.625], [0, 1.63]], 16), M.face, 0, 0, -.004, .98, 1, 1.1); // balaclava / lower mask
-  add(t, rbox(.03, .035, .03, .01), M.face, 0, 1.6, -.106);                          // nose under mask
-  // goggles (attackers) or lit visor (defenders)
-  add(t, rbox(.17, .05, .04, .018), atk ? M.lens : M.glow, 0, 1.645, -.093);
-  add(t, geo('strap', () => new THREE.TorusGeometry(.1, .009, 5, 24)), M.gear2, 0, 1.645, -.005, 1, 1, 1.05, Math.PI / 2);
-  // helmet with rails, NVG mount and headset
-  add(t, geo('helm2', () => new THREE.SphereGeometry(.128, 22, 12, 0, Math.PI * 2, 0, Math.PI * .5)), M.helm, 0, 1.655, .008, 1.02, .92, 1.1);
-  add(t, geo('helmrim', () => new THREE.TorusGeometry(.128, .008, 5, 26)), M.helm, 0, 1.656, .008, 1.02, 1.1, 1, Math.PI / 2);
-  for (const sx of [-1, 1]) { add(t, rbox(.012, .03, .11, .004), M.metal, sx * .128, 1.69, .01); add(t, geo('cup', () => new THREE.CylinderGeometry(.042, .042, .035, 14)), M.gear2, sx * .107, 1.62, .012, 1, 1, 1, 0, 0, Math.PI / 2); }
-  add(t, rbox(.05, .035, .025, .008), M.metal, 0, 1.72, -.118);                      // NVG shroud
-  add(t, rbox(.09, .05, .06, .02), M.gear2, 0, 1.73, .115);                          // counterweight
+  for (const sx of [-1, 1]) {
+    add(t, geo('eye', () => new THREE.SphereGeometry(.012, 8, 6)), M.eye, sx * .034, 1.645, -.097);
+    add(t, rbox(.03, .007, .008, .003), M.brow, sx * .036, 1.672, -.1, 1, 1, 1, 0, 0, sx * -.12);
+    add(t, geo('ear', () => new THREE.SphereGeometry(.022, 8, 6)), M.skin, sx * .094, 1.635, .005, .5, 1, .8);
+  }
+  add(t, rbox(.024, .04, .03, .01), M.skin, 0, 1.612, -.108);                       // nose
+  add(t, rbox(.038, .008, .008, .003), M.lip, 0, 1.567, -.1);                       // mouth
+  if (L.beard) { add(t, rbox(.05, .01, .012, .004), M.hair, 0, 1.585, -.103); add(t, rbox(.03, .025, .02, .008), M.hair, 0, 1.535, -.09); }
+  if (L.glasses) {
+    for (const sx of [-1, 1]) {
+      add(t, geo('rim', () => new THREE.TorusGeometry(.027, .0035, 5, 18)), M.frame, sx * .036, 1.645, -.113);
+      add(t, geo('lensd', () => new THREE.CircleGeometry(.026, 14)), M.lens, sx * .036, 1.645, -.114, 1, 1, 1, 0, Math.PI);
+      add(t, rbox(.004, .004, .1, .002), M.frame, sx * .09, 1.65, -.065);
+    }
+    add(t, rbox(.02, .004, .004, .002), M.frame, 0, 1.652, -.113);
+  }
+  if (L.head === 'hijab') {
+    // wrap over the head with an opening for the face, then a drape over the neck and shoulders
+    add(t, geo('hij', () => new THREE.SphereGeometry(.118, 22, 14, Math.PI * 1.5 + .78, Math.PI * 2 - 1.56, 0, Math.PI * .8)), M.hijab, 0, 1.64, .004, 1, 1.1, 1.08);
+    add(t, geo('hijtop', () => new THREE.SphereGeometry(.119, 22, 8, 0, Math.PI * 2, 0, .62)), M.hijab, 0, 1.64, .004, 1, 1.1, 1.08);
+    add(t, lathe([[.09, 1.56], [.1, 1.52], [.13, 1.47], [.19, 1.41], [.22, 1.34], [.215, 1.26], [.19, 1.22]], 20), M.hijab, 0, 0, 0, 1, 1, .82);
+  } else {
+    add(t, geo('cap', () => new THREE.SphereGeometry(.118, 20, 10, 0, Math.PI * 2, 0, Math.PI * .6)), M.hair, 0, 1.648, .01, .97, 1, 1.03, .5);
+    add(t, geo('capb', () => new THREE.SphereGeometry(.114, 16, 8, Math.PI * .05, Math.PI * .9, Math.PI * .4, Math.PI * .32)), M.hair, 0, 1.65, .012, .97, 1, 1.05);
+    if (L.head === 'quiff') add(t, rbox(.13, .045, .1, .022), M.hair, 0, 1.742, -.055, 1, 1, 1, .3);
+    if (L.head === 'long') {
+      add(t, rbox(.2, .5, .06, .03), M.hair, 0, 1.47, .085, 1, 1, 1, -.06);
+      for (const sx of [-1, 1]) add(t, rbox(.045, .34, .04, .02), M.hair, sx * .1, 1.5, -.035, 1, 1, 1, 0, 0, sx * .05);
+    }
+  }
   // arms in a rifle-holding pose
   const sh = { r: new V3(.2, 1.42, -.02), l: new V3(-.2, 1.42, -.02) }, el = { r: new V3(.22, 1.18, -.11), l: new V3(-.17, 1.2, -.27) }, hd = { r: new V3(.075, 1.26, -.09), l: new V3(.04, 1.32, -.46) };
+  const sleeve = M.outer || M.top;
   for (const k of ['r', 'l']) {
-    add(t, geo('delt', () => new THREE.SphereGeometry(.072, 12, 10)), M.uni, sh[k].x, sh[k].y - .01, sh[k].z, 1, .95, 1);
-    taper(t, .066, .052, sh[k], el[k], M.uni);
-    taper(t, .052, .042, el[k], hd[k], M.uni);
-    add(t, geo('elbow', () => new THREE.SphereGeometry(.058, 10, 8)), M.gear2, el[k].x, el[k].y, el[k].z, 1, 1, .8);
-    add(t, rbox(.065, .085, .09, .025), M.glove, hd[k].x, hd[k].y, hd[k].z);
+    add(t, geo('delt', () => new THREE.SphereGeometry(.07, 12, 10)), sleeve, sh[k].x, sh[k].y - .01, sh[k].z, 1, .95, 1);
+    if (L.shortSleeve) {
+      const mid = new V3().lerpVectors(sh[k], el[k], .55);
+      taper(t, .068, .062, sh[k], mid, sleeve); taper(t, .052, .046, mid, el[k], M.skin);
+      taper(t, .046, .036, el[k], hd[k], M.skin);
+    } else {
+      taper(t, .066, .056, sh[k], el[k], sleeve);
+      taper(t, .056, .046, el[k], hd[k], sleeve);
+    }
+    add(t, rbox(.055, .08, .085, .025), M.skin, hd[k].x, hd[k].y, hd[k].z);
     const m = new V3().addVectors(sh[k], el[k]).multiplyScalar(.5);
-    add(t, rbox(.03, .06, .07, .01), M.band, m.x + (k === 'r' ? .062 : -.062), m.y + .03, m.z);   // team patch
+    add(t, geo('armband', () => new THREE.CylinderGeometry(.074, .074, .045, 14, 1, true)), M.band, m.x, m.y, m.z, 1, 1, 1, 0, 0, 0)
+      .quaternion.setFromUnitVectors(UP, new V3().subVectors(el[k], sh[k]).normalize());
   }
-  return SOLDIER[team] = { thigh: mergeGroup(thigh), shin: mergeGroup(shin), torso: mergeGroup(t) };
+  return SOLDIER[key] = { thigh: mergeGroup(thigh), shin: mergeGroup(shin), torso: mergeGroup(t) };
 }
-function makeSoldier(team, weapon) {
-  const parts = soldierParts(team), g = new THREE.Group();
-  const put = (parent, list) => list.forEach(({ g: geom, mat }) => { const m = new THREE.Mesh(geom, mat); m.castShadow = true; m.receiveShadow = true; parent.add(m); });
+// which operator each bot on a side plays: the side's operators in turn, the player's own last
+function opsFor(side, mine) { const ks = Object.keys(OPS).filter(k => OPS[k].side === side); return mine ? [...ks.filter(k => k !== mine), mine] : ks; }
+function makeSoldier(team, weapon, op) {
+  op = op || opsFor(team)[0];
+  const parts = soldierParts(op, team), g = new THREE.Group();
+  const put = (parent, list) => list.forEach(({ g: geom, mat }) => { const m = new THREE.Mesh(geom, mat); m.castShadow = !mat.transparent; m.receiveShadow = true; parent.add(m); });
   const legs = [];
   for (const s of [-1, 1]) {
     const hip = new THREE.Group(); hip.position.set(s * .1, .92, 0); g.add(hip); put(hip, parts.thigh);
@@ -1931,7 +2002,8 @@ function makeBot(team, name, l, c, r, role) {
   const b = { team, name, role, isBot: true, x: tc(c) + rnd(-.4, .4), y: levelY(l), z: tc(r) + rnd(-.4, .4), vy: 0, yaw: 0, tYaw: 0, baseYaw: 0, hp: 100, alive: true, path: null, state: 'hold',
     target: null, seeT: 0, react: 0, fireT: 0, burst: 0, checkT: Math.random() * .1, lastSeen: null, alertT: 0, waitT: rnd(1, 3), spotted: 0, deadT: 0, sweep: Math.random() * 6,
     droneT: 0, bob: 0, gear: { breach: 0, thermal: 0 }, breaching: null, breachT: 0, plantT: 0, delay: 0, goal: null, moving: false, flashT: 0, climb: null };
-  const s = makeSoldier(team); Object.assign(b, { model: s.g, legs: s.legs, flash: s.flash, muzzleZ: s.muzzleZ, muzzleY: s.muzzleY });
+  b.op = opsFor(team, team === P.team ? S[team === 'atk' ? 'atkOp' : 'defOp'] : null)[bots.filter(x => x.team === team).length % 3];
+  const s = makeSoldier(team, null, b.op); Object.assign(b, { model: s.g, legs: s.legs, flash: s.flash, muzzleZ: s.muzzleZ, muzzleY: s.muzzleY });
   s.g.position.set(b.x, b.y, b.z); world.add(s.g);
   return b;
 }
@@ -2295,8 +2367,8 @@ function buildViewmodel() {
   if (vm) vmScene.remove(vm.root);
   const L = S.L, built = buildGun(L, false), m = gunMats(L.skin), w = WEAPONS[L.weapon];
   const root = new THREE.Group(); root.add(built.g);
-  const SMt = soldierMats(P.team);
-  const hand = (a, b) => { taper(root, .046, .036, a, b, SMt.uni); const h = new THREE.Mesh(rbox(.05, .07, .08, .02), SMt.glove); h.position.copy(b); root.add(h); };
+  const SMt = sleeveMats(S[P.team === 'atk' ? 'atkOp' : 'defOp'], P.team);
+  const hand = (a, b) => { taper(root, .046, .036, a, b, SMt.sleeve); const h = new THREE.Mesh(rbox(.045, .065, .08, .02), SMt.hand); h.position.copy(b); root.add(h); };
   hand(new V3(.12, -.32, .35), new V3(0, -.075, .05));
   const lx = w.ug ? w.ug[0] : (w.pump ? (w.pump[0] + w.pump[1]) / 2 : .35);
   hand(new V3(-.2, -.3, .05), new V3(-.01, -.035, -lx));
@@ -2368,9 +2440,11 @@ function buildHome() {
   s.add(city);
   // three operators
   const ops = [];
-  const lineup = [['atk', 'ar', 2.35, .1, .3], ['def', 'smg', 3.55, -.7, -.45], ['atk', 'dmr', 1.2, -.8, .55]];
-  for (const [team, wpn, x, z, yaw] of lineup) {
-    const sd = makeSoldier(team, wpn); sd.g.position.set(x, 0, z); sd.g.rotation.y = Math.PI + yaw; s.add(sd.g);
+  // all six characters, grouped like the family photo: kids in front, the older ones behind
+  const lineup = [['def', 'vigil', 'smg', 1.25, .35, .4, .93], ['def', 'bastion', 'smg', 2.05, .65, .15, .62], ['atk', 'maul', 'ar', 2.85, .45, -.1, .82],
+    ['atk', 'forge', 'dmr', 1.75, -.75, .3, 1], ['atk', 'raze', 'ar', 2.75, -.7, 0, 1], ['def', 'warden', 'smg', 3.75, -.55, -.35, 1]];
+  for (const [team, op, wpn, x, z, yaw, sc] of lineup) {
+    const sd = makeSoldier(team, wpn, op); sd.g.position.set(x, 0, z); sd.g.rotation.y = Math.PI + yaw; sd.g.scale.setScalar(sc); s.add(sd.g);
     sd.g.traverse(o => { if (o.isMesh) o.castShadow = true; });
     ops.push({ ...sd, base: Math.PI + yaw, ph: Math.random() * 6 });
   }
@@ -2894,7 +2968,7 @@ function boardHTML() {
   const inRound = playing() || game.phase === 'end';
   const aliveOf = n => { if (!inRound) return undefined; if (n === 'YOU') return P.alive; const b = bots.find(x => x.name === n); return b ? b.alive : undefined; };
   const us = P.team, them = other(P.team), solo = mode().solo;
-  const table = (title, side, names) => `<table class="sb"><caption class="${side}c">${title} · ${side === 'atk' ? 'Attack' : 'Defence'}</caption><thead><tr><th>Operator</th><th>Score</th><th>K</th><th>D</th><th>HS</th></tr></thead><tbody>${names.sort((a, b) => (squad.stats[b] || {}).pts - (squad.stats[a] || {}).pts).map(n => row(n, side, aliveOf(n), n === 'YOU' ? currentOp().name : '')).join('')}</tbody></table>`;
+  const table = (title, side, names) => `<table class="sb"><caption class="${side}c">${title} · ${side === 'atk' ? 'Attack' : 'Defence'}</caption><thead><tr><th>Operator</th><th>Score</th><th>K</th><th>D</th><th>HS</th></tr></thead><tbody>${names.sort((a, b) => (squad.stats[b] || {}).pts - (squad.stats[a] || {}).pts).map(n => row(n, side, aliveOf(n), n === 'YOU' ? currentOp().name : ((bots.find(b => b.name === n) || {}).op ? OPS[bots.find(b => b.name === n).op].name : ''))).join('')}</tbody></table>`;
   return `<div class="sb-head"><span>${MAP ? MAP.name : ''} · ${MODES[match.mode].name} · Round ${game.round}</span><b><span class="${us}c">YOU ${game.us}</span> – <span class="${them}c">${game.them} THEM</span></b><span>First to ${match.toWin}</span></div><div class="sb-wrap">${table('Your squad', us, ['YOU', ...(solo ? [] : squad.us)])}${table('Enemy squad', them, squad.them.slice())}</div>`;
 }
 
@@ -3040,13 +3114,18 @@ $('panelPlay').addEventListener('click', e => {
 });
 function renderOps(el, side) {
   const key = side === 'atk' ? 'atkOp' : 'defOp';
-  el.innerHTML = Object.entries(OPS).filter(([, o]) => o.side === side).map(([k, o]) => `<button class="op" style="--side:var(--${side})" data-op="${k}" aria-pressed="${S[key] === k}"><span class="role">${o.role}</span><b>${o.name}</b><p>${o.desc}</p><span class="stats">${o.stats}${o.reinf ? ' · ' + o.reinf + ' REINFORCEMENTS' : ''}</span></button>`).join('');
+  el.innerHTML = Object.entries(OPS).filter(([, o]) => o.side === side).map(([k, o]) => `<button class="op" style="--side:var(--${side})" data-op="${k}" aria-pressed="${S[key] === k}"><span class="role">${o.role}</span><b>${o.name}</b><span class="look">${lookOf(k).who}</span><p>${o.desc}</p><span class="stats">${o.stats}${o.reinf ? ' · ' + o.reinf + ' REINFORCEMENTS' : ''}</span></button>`).join('');
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('.ops [data-op]'); if (!b) return;
   S[OPS[b.dataset.op].side === 'atk' ? 'atkOp' : 'defOp'] = b.dataset.op; saveSettings(); sfx.ui();
   renderOps(b.parentElement, OPS[b.dataset.op].side);
 });
+function renderNames() {
+  $('opNames').innerHTML = Object.entries(OPS).map(([k, o]) => `<label class="nm ${o.side}c"><span>${OP_CALLSIGN[k]} · ${lookOf(k).who}</span><input data-name="${k}" maxlength="14" autocomplete="off" placeholder="${OP_CALLSIGN[k]}" value="${String(S.names[k] || '').replace(/[&"<>]/g, '')}"></label>`).join('');
+}
+$('opNames').addEventListener('input', e => { const i = e.target.closest('[data-name]'); if (!i) return; S.names[i.dataset.name] = i.value; applyNames(); saveSettings(); renderOps($('opsAtk'), 'atk'); renderOps($('opsDef'), 'def'); });
+renderNames();
 function renderOptions() {
   for (const b of $('gfx').children) b.setAttribute('aria-pressed', String(S.gfx === b.dataset.g));
   $('sens').value = S.sens;

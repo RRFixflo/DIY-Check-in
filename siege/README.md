@@ -23,14 +23,17 @@ Play: open `siege/index.html` in a browser. On a computer use keyboard and mouse
   - Wooden floors can be shot through.
   - Defenders can reinforce hatches.
 - **5v5 with AI teammates.** Sides swap every round. Bots route across floors, climb ladders, breach walls and hatches, plant and disable defusers.
-- **Operators:** RAZE, FORGE and MAUL on attack; WARDEN, VIGIL and BASTION on defence.
 - **Armory:** 4 weapons, sights including a 2.5x scope, muzzles, grips, a laser and finishes, with a 3D preview.
 - **Feedback:** kill banners, a death screen, the kill feed and a Tab scoreboard with per-match K/D.
 - **Auto aim (Options → Aim):**
   - **Auto aim** (default) pulls your sights onto the nearest enemy you can see and puts a red bracket on them.
   - **Assist** only nudges when an enemy is near the crosshair while you aim or fire.
   - **Off**
-- **Characters:** soldiers with camo uniforms, plate carriers, pouches, backpacks and helmets with headsets and goggles (attackers) or visors (defenders). They walk and breathe, and your own sleeves and gloves match your side.
+- **Characters:** six family members, one per operator, dressed as in the family photo. Each wears a slim chest rig and an armband in their side's colour (orange for attack, blue for defence). Bots play their side's characters in turn.
+  - **Attack:** RAZE (maroon tee, black jeans, white trainers), FORGE (beige hijab, glasses, satin abaya), MAUL (maroon top).
+  - **Defence:** WARDEN (brown hijab, white dress, brown cardigan), VIGIL (long hair, glasses, floral jacket), BASTION (white thobe, bare feet).
+  - **Operators → Names:** type each person's name. It shows on their card, in the scoreboard and on your HUD, and is saved on the device.
+  - The home screen shows all six together.
 - **Scenery:**
   - Windows, skirting, rugs, paintings and plants inside.
   - Grass, bushes, rocks in the snow, a fence, a road with street lamps.
