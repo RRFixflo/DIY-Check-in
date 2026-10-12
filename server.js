@@ -170,6 +170,28 @@ function paywallPage(reason){
     '<img src="/icons/icon-192.png" alt="" width="64" height="64"><h1>DIY Check-In</h1><p>' + msg + '</p><p>Do your own room-by-room inventory on your phone and get a dated, professional report.</p>' +
     '<a class="b" href="' + BUY_URL + '">Buy a report — £30 + VAT</a><p style="margin:14px 0 6px;font-weight:700">Have an access code?</p><form method="get" action="/"><input name="access" placeholder="Access code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code"><button>Go</button></form><small>Already paid? Open the link in your confirmation email.<br><a class="l" href="' + FIXFLOW_URL + '/diy-inventory">See an example report</a></small></main></body></html>';
 }
+// Link previews (WhatsApp, iMessage, Facebook, Slack…): their robots fetch the link with no access, so
+// they get a small page with the title, description and icon instead of the buy page (HTTP 402, which
+// they skip). Robots never count as an access-code login.
+const PREVIEW_BOT = /facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely/i;
+function previewPage(req){
+  const host = String(req.headers.host || '');
+  const base = /^(localhost|127\.|\[::1\])/.test(host) ? 'http://' + host : 'https://' + host;
+  const title = 'DIY Check-In', desc = 'Do your own room-by-room check-in on your phone and get a dated, professional inventory report.';
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>' + title + '</title>' +
+    '<meta name="description" content="' + desc + '">' +
+    '<meta property="og:type" content="website"><meta property="og:site_name" content="' + title + '"><meta property="og:title" content="' + title + '">' +
+    '<meta property="og:description" content="' + desc + '"><meta property="og:url" content="' + base + '/">' +
+    '<meta property="og:image" content="' + base + '/icons/icon-512.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="512"><meta property="og:image:height" content="512"><meta property="og:image:alt" content="DIY Check-In">' +
+    '<meta name="twitter:card" content="summary"><meta name="twitter:title" content="' + title + '"><meta name="twitter:description" content="' + desc + '"><meta name="twitter:image" content="' + base + '/icons/icon-512.png">' +
+    '<link rel="icon" href="/icons/favicon-32.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"></head><body><h1>' + title + '</h1><p>' + desc + '</p></body></html>';
+}
+app.use((req, res, next) => {
+  if ((req.method !== 'GET' && req.method !== 'HEAD') || !PREVIEW_BOT.test(String(req.headers['user-agent'] || ''))) return next();
+  if (/^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|pdf)$/i.test(req.path)) return next();
+  res.set('Cache-Control', 'public, max-age=3600').type('html').send(previewPage(req));
+});
+
 if (PAYWALL) {
   // New reports and photo assessment need a valid link.
   app.use(['/api/assess', '/api/reports'], async (req, res, next) => {
