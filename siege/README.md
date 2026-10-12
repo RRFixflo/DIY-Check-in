@@ -29,11 +29,10 @@ Play: open `siege/index.html` in a browser. On a computer use keyboard and mouse
   - **Auto aim** (default) pulls your sights onto the nearest enemy you can see and puts a red bracket on them.
   - **Assist** only nudges when an enemy is near the crosshair while you aim or fire.
   - **Off**
-- **Characters:** six family members, one per operator, dressed as in the family photo. Each wears a slim chest rig and an armband in their side's colour (orange for attack, blue for defence). Bots play their side's characters in turn.
-  - **Attack:** RAZE (maroon tee, black jeans, white trainers), FORGE (beige hijab, glasses, satin abaya), MAUL (maroon top).
-  - **Defence:** WARDEN (brown hijab, white dress, brown cardigan), VIGIL (long hair, glasses, floral jacket), BASTION (white thobe, bare feet).
-  - **Operators → Names:** type each person's name. It shows on their card, in the scoreboard and on your HUD, and is saved on the device.
-  - The home screen shows all six together.
+- **Characters:** 19 family members from three photos (Eid, a birthday and a party), each dressed as in their photo: hijabs, glasses, abayas, dresses, a thobe, hoodies, a check shirt, trainers, boots, slippers and sliders. Everyone wears a slim chest rig and an armband in their side's colour (orange for attack, blue for defence).
+  - **Operators → Family:** type each person's name and pick who you play as. Names show above heads, in the kill feed and on the scoreboard, and are saved on the device.
+  - Each match, both squads are drawn at random from everyone else, so different people turn up every game.
+  - The home screen shows you and five others, with the smaller ones in front.
 - **Scenery:**
   - Windows, skirting, rugs, paintings and plants inside.
   - Grass, bushes, rocks in the snow, a fence, a road with street lamps.
