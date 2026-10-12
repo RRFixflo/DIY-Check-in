@@ -26,4 +26,14 @@ Play: open `siege/index.html` in a browser. On a computer use keyboard and mouse
 - **Operators:** RAZE, FORGE and MAUL on attack; WARDEN, VIGIL and BASTION on defence.
 - **Armory:** 4 weapons, sights including a 2.5x scope, muzzles, grips, a laser and finishes, with a 3D preview.
 - **Feedback:** kill banners, a death screen, the kill feed and a Tab scoreboard with per-match K/D.
+- **Auto aim (Options → Aim):**
+  - **Auto aim** (default) pulls your sights onto the nearest enemy you can see and puts a red bracket on them.
+  - **Assist** only nudges when an enemy is near the crosshair while you aim or fire.
+  - **Off**
+- **Characters:** soldiers with camo uniforms, plate carriers, pouches, backpacks and helmets with headsets and goggles (attackers) or visors (defenders). They walk and breathe, and your own sleeves and gloves match your side.
+- **Scenery:**
+  - Windows, skirting, rugs, paintings and plants inside.
+  - Grass, bushes, rocks in the snow, a fence, a road with street lamps.
+  - Hills, mountains or a harbour with cranes and a skyline around each map.
+  - A sky with moving clouds and a sun.
 - **Graphics:** physically based materials, shadows, ambient occlusion, bloom and a filmic grade. Set Graphics to Medium in Options if it stutters.
