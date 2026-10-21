@@ -1,6 +1,6 @@
 {
-  "name": "DIY Check-In",
-  "short_name": "DIY Check-In",
+  "name": "DIY Inventory",
+  "short_name": "DIY Inventory",
   "description": "Tenant self check-in and inventory report.",
   "start_url": "/",
   "scope": "/",

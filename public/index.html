@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F3F5F9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1020" media="(prefers-color-scheme: dark)">
-<title>DIY Check-In</title>
+<title>DIY Inventory</title>
 <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="apple-mobile-web-app-title" content="DIY Check-In">
-<meta name="application-name" content="DIY Check-In">
+<meta name="apple-mobile-web-app-title" content="DIY Inventory">
+<meta name="application-name" content="DIY Inventory">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -609,12 +609,12 @@
 <body>
 <header class="appbar" id="appbar">
   <div class="appbar-inner">
-    <span class="brand"><span class="brand-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="m9.5 14.5 2 2 3.5-4"/></svg></span><span class="bt">DIY Check-In</span></span>
+    <span class="brand"><span class="brand-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="m9.5 14.5 2 2 3.5-4"/></svg></span><span class="bt">DIY Inventory</span></span>
     <ol class="stepper" id="stepper"></ol>
     <button type="button" class="restart-btn" id="restartBtn" onclick="startAgain()" title="Start again" aria-label="Start again" hidden><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Start again</span></button>
   </div>
 </header>
-<div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading DIY Check-In…</p></div>
+<div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading DIY Inventory…</p></div>
 <div id="camera" class="camera hidden" role="dialog" aria-modal="true" aria-label="Camera">
   <video id="cameraVideo" playsinline muted autoplay></video>
   <div class="cam-flash" id="camFlash"></div>
@@ -2344,7 +2344,7 @@ async function buildPdfBlob(s, onProgress, out){
     /* header */
     brandMark(M, 9.2, 6);
     set('bold', 10, C.ink);
-    doc.text('DIY Check-In', M + 8.5, 13.6);
+    doc.text('DIY Inventory', M + 8.5, 13.6);
     set('normal', 7.8, C.inkSoft);
     doc.text(lines(reportTitle(s), 150)[0], PW - M, 11.6, { align:'right' });
     set('normal', 7, C.faint);
@@ -2370,7 +2370,7 @@ async function buildPdfBlob(s, onProgress, out){
   doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]); doc.rect(0, 0, 5, PH, 'F');
   doc.setFillColor(C.sub[0], C.sub[1], C.sub[2]); doc.rect(0, PH * 0.62, 5, PH * 0.38, 'F');
   brandMark(M + 4, 16, 9);
-  set('bold', 14, C.ink); doc.text('DIY Check-In', M + 16.5, 22.6);
+  set('bold', 14, C.ink); doc.text('DIY Inventory', M + 16.5, 22.6);
 
   // Front of the property on the right.
   const pw = 118, ph = 88, px = PW - M - pw, py = 34;
@@ -3178,7 +3178,7 @@ function renderSetup(){
   return `
     <div class="masthead">
       <div class="kicker">New inspection</div>
-      <h1>DIY Check-In</h1>
+      <h1>DIY Inventory</h1>
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
     <div class="intro-card">

@@ -175,12 +175,12 @@ const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
 const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).digest('hex').slice(0, 10);
 const DESC = 'Do your own room-by-room check-in or check-out inventory on your phone. Time-stamped photos, a signed declaration and a professional PDF report, for £30 + VAT.';
 const SITE = {
-  home: { path: '/', title: 'DIY Check-In · Your inventory report, done on your phone', og: 'DIY Check-In', desc: DESC },
-  how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Check-In', desc: 'How to do your own check-in or check-out inventory on your phone with DIY Check-In, step by step.' },
-  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Check-In', desc: 'One inventory report for £30 + VAT. Check-in or check-out, done on your phone, with a professional PDF report.' },
-  faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Check-In', desc: 'Answers to common questions about doing your own inventory report with DIY Check-In.' },
-  contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Check-In', desc: 'Get in touch with DIY Check-In.' },
-  privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Check-In', desc: 'What DIY Check-In keeps about you and why.' },
+  home: { path: '/', title: 'DIY Inventory · Your inventory report, done on your phone', og: 'DIY Inventory', desc: DESC },
+  how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do your own check-in or check-out inventory on your phone with DIY Inventory, step by step.' },
+  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One inventory report for £30 + VAT. Check-in or check-out, done on your phone, with a professional PDF report.' },
+  faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Inventory', desc: 'Answers to common questions about doing your own inventory report with DIY Inventory.' },
+  contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Inventory', desc: 'Get in touch with DIY Inventory.' },
+  privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Inventory', desc: 'What DIY Inventory keeps about you and why.' },
 };
 for (const [key, pg] of Object.entries(SITE)) pg.body = fs.readFileSync(path.join(VIEWS, 'pages', (pg.file || key) + '.html'), 'utf8');
 const siteBase = req => { const host = String(req.headers.host || ''); return (/^(localhost|127\.|\[::1\])/.test(host) ? 'http://' : 'https://') + host; };
@@ -225,7 +225,7 @@ if (PAYWALL) {
     if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const token = cookieToken(req), a = await checkAccess(token);
-    if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Check-In.', buy: BUY_URL });
+    if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Inventory.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;
       if (reports.codeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useCode(token, m.address, req); return; }
