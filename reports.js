@@ -233,6 +233,7 @@ function mount(app){
       finalizedAt: clip(m.finalizedAt, 40), rooms: Math.max(0, Math.min(99, parseInt(m.rooms, 10) || 0)),
       photos: Math.max(0, Math.min(9999, parseInt(m.photos, 10) || 0)), fileName: clip(m.fileName, 200).replace(/[\\/"]/g, '-'),
       photoKey: KEY_RE.test(String(m.photoKey || '')) ? String(m.photoKey) : '',
+      basedOnRef: clip(m.basedOnRef, 40),
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -307,6 +308,35 @@ function mount(app){
     if (r) keyToId.set(key, r.id);
     return r ? r.id : null;
   }
+  // A finished report's details (rooms, items, conditions, meters, keys; photos as their numbers), so a
+  // later check-out or inspection can start from it and compare. Kept beside its photos (data.json).
+  app.post('/api/reports/:id/data', (req, res) => {
+    if (!photoUploads(clientIp(req))) return res.status(429).json({ error: 'Too many uploads. Try again later.' });
+    const id = String(req.params.id), b = req.body || {}, key = String(b.key || '');
+    const r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    if (!KEY_RE.test(key) || (r.photoKey && r.photoKey !== key)) return res.status(403).json({ error: 'Wrong photo key.' });
+    const d = b.data;
+    if (!d || typeof d !== 'object' || !Array.isArray(d.rooms) || d.rooms.length > 60) return res.status(400).json({ error: 'Expected the report details.' });
+    const text = JSON.stringify(d);
+    if (text.length > 2 * 1024 * 1024) return res.status(413).json({ error: 'The report details are too large.' });
+    fs.mkdirSync(photoDir(id), { recursive: true });
+    fs.writeFileSync(path.join(photoDir(id), 'data.json'), text);
+    if (!r.photoKey){ r.photoKey = key; fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); }
+    keyToId.set(key, id);
+    res.json({ ok: true });
+  });
+  // An earlier report's details, for starting a new report from it. The random key is the access.
+  app.get('/api/earlier/:key', (req, res) => {
+    const key = String(req.params.key).toLowerCase();
+    if (!KEY_RE.test(key)) return res.status(404).json({ error: 'That report could not be found.' });
+    const id = findByKey(key);
+    let data = null;
+    try { data = id && JSON.parse(fs.readFileSync(path.join(photoDir(id), 'data.json'), 'utf8')); } catch (e) {}
+    if (!data) return res.status(404).json({ error: id ? 'That report was made before reports could be reused, so it can’t be used to start a new one.' : 'That report could not be found.' });
+    res.set('Cache-Control', 'no-store').json({ id, base: '/p/' + key + '/', data });
+  });
+
   app.post('/api/reports/:id/photos', (req, res) => {
     if (!photoUploads(clientIp(req))) return res.status(429).json({ error: 'Too many uploads. Try again later.' });
     const id = String(req.params.id), b = req.body || {}, key = String(b.key || '');
@@ -503,7 +533,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
     const rows = reports.map(r => `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
-        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
+        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
