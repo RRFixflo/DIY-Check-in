@@ -173,11 +173,11 @@ function sendToFixflow(token, req){
 const VIEWS = path.join(__dirname, 'views');
 const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
 const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).digest('hex').slice(0, 10);
-const DESC = 'Do your own room-by-room check-in or check-out inventory on your phone. Time-stamped photos, a signed declaration and a professional PDF report, for £30 + VAT.';
+const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone. Dated photos, tenant sign-off, side-by-side comparison and PDF reports, for £30 + VAT per report.';
 const SITE = {
-  home: { path: '/', title: 'DIY Inventory · Your inventory report, done on your phone', og: 'DIY Inventory', desc: DESC },
-  how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do your own check-in or check-out inventory on your phone with DIY Inventory, step by step.' },
-  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One inventory report for £30 + VAT. Check-in or check-out, done on your phone, with a professional PDF report.' },
+  home: { path: '/', title: 'DIY Inventory · Property inventories and inspections', og: 'DIY Inventory', desc: DESC },
+  how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do check-ins, inspections and check-outs on your phone with DIY Inventory, step by step.' },
+  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One report for £30 + VAT: a check-in, check-out or inspection, done on your phone, with a professional PDF report.' },
   faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Inventory', desc: 'Answers to common questions about doing your own inventory report with DIY Inventory.' },
   contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Inventory', desc: 'Get in touch with DIY Inventory.' },
   privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Inventory', desc: 'What DIY Inventory keeps about you and why.' },

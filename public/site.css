@@ -226,3 +226,9 @@ section.tight { padding: 28px 0 64px; }
   .form .row { grid-template-columns: 1fr; }
   .page-head { padding: 40px 0 20px; }
 }
+
+/* Four-step row on the home page; site disclaimer in the footer */
+.steps.four { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1000px) { .steps.four { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .steps.four { grid-template-columns: 1fr; } }
+footer .disclaimer { flex-basis: 100%; margin: 0 0 6px; max-width: 760px; }
