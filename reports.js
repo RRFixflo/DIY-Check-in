@@ -179,6 +179,32 @@ function notifyPhone(r){
     .catch(err => { console.error('phone alert failed:', err.message); return false; });
 }
 
+// Messages from the website's contact form (/contact): kept in REPORTS_DIR/messages.json (the last 500),
+// shown on /admin with the ones since the owner's last visit marked New, and a phone alert via ntfy.
+const MSG_FILE = path.join(REPORTS_DIR, 'messages.json');
+const messageLimit = limiter(5, 60 * 60 * 1000);
+function readMessages(){ try { const d = JSON.parse(fs.readFileSync(MSG_FILE, 'utf8')); return { seenAt: d.seenAt || '', list: d.list || [] }; } catch (e) { return { seenAt: '', list: [] }; } }
+function writeMessages(d){ fs.writeFileSync(MSG_FILE + '.tmp', JSON.stringify(d, null, 1)); fs.renameSync(MSG_FILE + '.tmp', MSG_FILE); }
+function saveMessage(req, b){
+  if (clip(b.website, 200)) return { ok: true };   // the hidden field only robots fill in
+  const m = { name: clip(b.name, 80), email: clip(b.email, 120), phone: clip(b.phone, 30), topic: clip(b.topic, 60), message: String(b.message == null ? '' : b.message).replace(/\r\n?/g, '\n').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 3000) };
+  if (!m.name || !m.message) return { ok: false, error: 'Please fill in your name and a message.' };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return { ok: false, error: 'Please enter a valid email address so we can reply.' };
+  if (!messageLimit(clientIp(req))) return { ok: false, status: 429, error: 'Too many messages from here. Please try again in an hour.' };
+  const d = readMessages();
+  Object.assign(m, { id: Date.now().toString(36) + crypto.randomBytes(4).toString('hex'), at: new Date().toISOString(), device: deviceName(req.headers['user-agent']) });
+  d.list.push(m); if (d.list.length > 500) d.list = d.list.slice(-500);
+  writeMessages(d);
+  console.log('message received from ' + m.email);
+  if (NTFY_TOPIC) {
+    const body = { topic: NTFY_TOPIC, title: 'New message from ' + m.name, message: (m.topic ? m.topic + '\n' : '') + m.message.slice(0, 300), priority: 4, tags: ['envelope'] };
+    if (PUBLIC_URL) { body.click = PUBLIC_URL + '/admin#messages'; body.actions = [{ action: 'view', label: 'Open messages', url: body.click }]; }
+    fetch(NTFY_SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) })
+      .then(r => { if (!r.ok) console.error('message alert failed: HTTP ' + r.status); }).catch(e => console.error('message alert failed:', e.message));
+  }
+  return { ok: true };
+}
+
 // Owner session: signed cookie diy_admin, good for a year on that device (until Sign out, or
 // ADMIN_PASSWORD changes). Path=/ so the owner also gets into the app itself past the paywall.
 const SESSION_DAYS = 365;
@@ -410,6 +436,26 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     try { return new URL(origin).host === req.headers.host; } catch (e) { return false; }
   }
 
+  // Contact form messages for the admin page; opening the page marks them as seen.
+  function messagesHTML(){
+    const d = readMessages(), seen = d.seenAt, list = d.list.slice().reverse();
+    const isNew = m => !seen || m.at > seen, fresh = list.filter(isNew).length;
+    if (list.length) { d.seenAt = new Date().toISOString(); writeMessages(d); }
+    const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+    const rows = list.slice(0, 200).map(m => `<li${isNew(m) ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong>${esc(m.name)}</strong>${isNew(m) ? ' <span class="pill new">New</span>' : ''}${m.topic ? ' <span class="pill">' + esc(m.topic) + '</span>' : ''}
+      <div class="sub"><a href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: your message to DIY Check-In')}">${esc(m.email)}</a>${m.phone ? ' · <a href="tel:' + esc(m.phone.replace(/[^\d+]/g, '')) + '">' + esc(m.phone) + '</a>' : ''} · ${esc(when(m.at))}</div>
+      <div class="msg">${esc(m.message)}</div></div>
+      <div class="actions"><form method="post" action="/admin/messages/${esc(m.id)}/delete" onsubmit="return confirm('Delete this message?')"><button class="btn danger">Delete</button></form></div></li>`).join('');
+    const banner = fresh ? `<a class="news" href="#messages" onclick="document.getElementById('messages').open=true">✉️ ${fresh} new message${fresh === 1 ? '' : 's'} from the website</a>` : '';
+    return banner + `<details class="codes" id="messages"${fresh ? ' open' : ''}><summary>✉️ Messages <span class="sub" style="display:inline">— ${list.length ? list.length + ' from the contact form' : 'none yet'}</span></summary>
+${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">Messages sent from the website’s Contact page appear here.</p>'}</details>`;
+  }
+  app.post('/admin/messages/:id/delete', requireAdmin, (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete messages from the reports page.');
+    const d = readMessages(); d.list = d.list.filter(m => m.id !== String(req.params.id)); writeMessages(d);
+    res.redirect(303, '/admin#messages');
+  });
+
   // Access code activity for the admin page; opening the page marks everything as seen.
   function activityHTML(){
     const log = readLog(), seen = log.seenAt, entries = log.entries.slice().reverse();
@@ -492,6 +538,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
   .codes .newcode { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; } .codes input { flex:1; min-width:180px; padding:10px 14px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
   .news { display:block; background:#EEF0FF; color:#3730A3; font-weight:700; text-decoration:none; padding:12px 16px; border-radius:14px; margin-bottom:12px; }
+  .codes .msg { white-space:pre-wrap; overflow-wrap:anywhere; margin-top:6px; color:var(--ink); }
   .codes li.isnew { background:#F7F7FF; margin:0 -16px; padding:10px 16px; } .pill.new { background:#4F46E5; color:#fff; }
   .codes code { background:#EEF0FF; color:#3730A3; padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:#4F46E5; color:#fff; }
   @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
@@ -500,6 +547,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/">Open the app</a> <span class="sub" style="display:inline">You can use DIY Check-In without a paid link while signed in here.</span></p>
+${messagesHTML()}
 ${activityHTML()}
 ${codesHTML(req)}
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
@@ -572,4 +620,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin };
+module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage };

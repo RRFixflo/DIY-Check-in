@@ -4,6 +4,8 @@
 //   POST /api/assess          rate one photo of a checklist item (assessed and discarded)
 //   POST /api/reports         receive a copy of a finished report PDF (see reports.js)
 //   /admin                    the owner's private list of submitted reports (ADMIN_PASSWORD)
+const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
@@ -163,33 +165,58 @@ function sendToFixflow(token, req){
   fetch(FIXFLOW_URL + '/api/public/diy-report/' + encodeURIComponent(token), { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': String(req.headers['x-report-meta'] || '').slice(0, 4000) }, body: pdf, signal: AbortSignal.timeout(60000) })
     .then(r => { if (!r.ok) console.error('report copy to Fixflow failed: HTTP ' + r.status); }).catch(e => console.error('report copy to Fixflow failed:', e.message));
 }
-function paywallPage(reason){
-  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : 'You need a personal access link to use DIY Check-In.';
-  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DIY Check-In</title><link rel="icon" href="/icons/favicon-32.png">' +
-    '<style>body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fb;color:#101828;display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box}.c{max-width:440px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 60px -40px rgba(16,24,40,.45);text-align:center}h1{margin:10px 0 6px;font-size:1.5rem}p{color:#475467;margin:0 0 14px}a.b{display:block;padding:14px 18px;border-radius:999px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-weight:800;text-decoration:none;margin:18px 0 10px}a.l{color:#4f46e5;font-weight:700}small{color:#667085}form{display:flex;gap:8px;margin:4px 0 14px}form input{flex:1;min-width:0;padding:12px 14px;border:0;background:#f1f3f7;border-radius:999px;font:inherit;text-transform:uppercase}form button{padding:12px 16px;border:0;border-radius:999px;background:#eef0ff;color:#3730a3;font:inherit;font-weight:800}</style></head><body><main class="c">' +
-    '<img src="/icons/icon-192.png" alt="" width="64" height="64"><h1>DIY Check-In</h1><p>' + msg + '</p><p>Do your own room-by-room inventory on your phone and get a dated, professional report.</p>' +
-    '<a class="b" href="' + BUY_URL + '">Buy a report — £30 + VAT</a><p style="margin:14px 0 6px;font-weight:700">Have an access code?</p><form method="get" action="/"><input name="access" placeholder="Access code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code"><button>Go</button></form><small>Already paid? Open the link in your confirmation email.<br><a class="l" href="' + FIXFLOW_URL + '/diy-inventory">See an example report</a></small></main></body></html>';
+/* ------------------------------- website ------------------------------- */
+// The public website: views/layout.html (header, menu, footer) around a page from views/pages/, styled
+// by public/site.css. The home page is what everyone without access sees at "/" (the app is there for
+// people with access); the other pages are open to everyone. A link or code that didn't work, or a sent
+// message, adds a notice at the top.
+const VIEWS = path.join(__dirname, 'views');
+const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
+const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).digest('hex').slice(0, 10);
+const DESC = 'Do your own room-by-room check-in or check-out inventory on your phone. Time-stamped photos, a signed declaration and a professional PDF report, for £30 + VAT.';
+const SITE = {
+  home: { path: '/', title: 'DIY Check-In · Your inventory report, done on your phone', og: 'DIY Check-In', desc: DESC },
+  how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Check-In', desc: 'How to do your own check-in or check-out inventory on your phone with DIY Check-In, step by step.' },
+  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Check-In', desc: 'One inventory report for £30 + VAT. Check-in or check-out, done on your phone, with a professional PDF report.' },
+  faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Check-In', desc: 'Answers to common questions about doing your own inventory report with DIY Check-In.' },
+  contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Check-In', desc: 'Get in touch with DIY Check-In.' },
+  privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Check-In', desc: 'What DIY Check-In keeps about you and why.' },
+};
+for (const [key, pg] of Object.entries(SITE)) pg.body = fs.readFileSync(path.join(VIEWS, 'pages', (pg.file || key) + '.html'), 'utf8');
+const siteBase = req => { const host = String(req.headers.host || ''); return (/^(localhost|127\.|\[::1\])/.test(host) ? 'http://' : 'https://') + host; };
+const escHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function sitePage(key, req, notice){
+  const pg = SITE[key];
+  const fill = t => t.split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join(escHtml(FIXFLOW_URL + '/diy-inventory'));
+  let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
+    .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
+    .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
+  for (const k of Object.keys(SITE)) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  return fill(html).replace('{{TITLE}}', escHtml(pg.title)).replace('{{OG_TITLE}}', escHtml(pg.og || pg.title))
+    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(siteBase(req))).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
 }
-// Link previews (WhatsApp, iMessage, Facebook, Slack…): their robots fetch the link with no access, so
-// they get a small page with the title, description and icon instead of the buy page (HTTP 402, which
-// they skip). Robots never count as an access-code login.
+function paywallPage(reason, req){
+  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : '';
+  return sitePage('home', req, msg ? { text: msg } : null);
+}
+for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.path, pg.path + '/'], (req, res) => {
+  const notice = key === 'contact' && req.query.sent ? { ok: true, text: 'Thanks, your message has been sent. We’ll get back to you soon.' } : null;
+  res.type('html').send(sitePage(key, req, notice));
+});
+app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
+  const r = reports.saveMessage(req, req.body || {});
+  if (r.ok) return res.redirect(303, '/contact?sent=1');
+  res.status(r.status || 400).type('html').send(sitePage('contact', req, { text: r.error }));
+});
+
+// Link previews and search engines (WhatsApp, iMessage, Facebook, Slack, Google…): their robots fetch the
+// link with no access, so they always get the landing page (HTTP 200, with its title, description and
+// icon), whatever link was shared. Robots never count as an access-code login.
 const PREVIEW_BOT = /facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely/i;
-function previewPage(req){
-  const host = String(req.headers.host || '');
-  const base = /^(localhost|127\.|\[::1\])/.test(host) ? 'http://' + host : 'https://' + host;
-  const title = 'DIY Check-In', desc = 'Do your own room-by-room check-in on your phone and get a dated, professional inventory report.';
-  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>' + title + '</title>' +
-    '<meta name="description" content="' + desc + '">' +
-    '<meta property="og:type" content="website"><meta property="og:site_name" content="' + title + '"><meta property="og:title" content="' + title + '">' +
-    '<meta property="og:description" content="' + desc + '"><meta property="og:url" content="' + base + '/">' +
-    '<meta property="og:image" content="' + base + '/icons/icon-512.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="512"><meta property="og:image:height" content="512"><meta property="og:image:alt" content="DIY Check-In">' +
-    '<meta name="twitter:card" content="summary"><meta name="twitter:title" content="' + title + '"><meta name="twitter:description" content="' + desc + '"><meta name="twitter:image" content="' + base + '/icons/icon-512.png">' +
-    '<link rel="icon" href="/icons/favicon-32.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"></head><body><h1>' + title + '</h1><p>' + desc + '</p></body></html>';
-}
 app.use((req, res, next) => {
   if ((req.method !== 'GET' && req.method !== 'HEAD') || !PREVIEW_BOT.test(String(req.headers['user-agent'] || ''))) return next();
   if (/^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|pdf)$/i.test(req.path)) return next();
-  res.set('Cache-Control', 'public, max-age=3600').type('html').send(previewPage(req));
+  res.set('Cache-Control', 'public, max-age=3600').type('html').send(sitePage('home', req));
 });
 
 if (PAYWALL) {
@@ -211,11 +238,11 @@ if (PAYWALL) {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const raw = String(req.query.access || '').trim();
-    if (raw && codeTries.blocked(req)) return res.status(429).type('html').send(paywallPage('tries'));
+    if (raw && codeTries.blocked(req)) return res.status(429).type('html').send(paywallPage('tries', req));
     const q = reports.canonicalCode(raw) || (TOKEN_RE.test(raw) ? raw : ''), token = q || cookieToken(req);
-    if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown')); }
+    if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown', req)); }
     const a = await checkAccess(token);
-    if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) return res.status(402).type('html').send(paywallPage(q || token ? a.reason : 'none'));
+    if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) { const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
     if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
     if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, req.path); }
     next();
