@@ -215,7 +215,7 @@ app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (re
 const PREVIEW_BOT = /facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely/i;
 app.use((req, res, next) => {
   if ((req.method !== 'GET' && req.method !== 'HEAD') || !PREVIEW_BOT.test(String(req.headers['user-agent'] || ''))) return next();
-  if (/^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|pdf)$/i.test(req.path)) return next();
+  if (/^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|pdf)$/i.test(req.path)) return next();
   res.set('Cache-Control', 'public, max-age=3600').type('html').send(sitePage('home', req));
 });
 
@@ -235,7 +235,7 @@ if (PAYWALL) {
   });
   // The app itself: open it with a valid link; a link that has made its report still opens (to see and send it).
   app.use(async (req, res, next) => {
-    if (req.method !== 'GET' || /^\/(api|admin|p|icons)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
+    if (req.method !== 'GET' || /^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const raw = String(req.query.access || '').trim();
     if (raw && codeTries.blocked(req)) return res.status(429).type('html').send(paywallPage('tries', req));

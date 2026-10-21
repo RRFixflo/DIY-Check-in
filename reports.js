@@ -205,6 +205,15 @@ function saveMessage(req, b){
   return { ok: true };
 }
 
+// A phone alert to the owner (ntfy), for anything other than a new report.
+function notifyOwner({ title, message, tags, click }){
+  if (!NTFY_TOPIC) return;
+  const body = { topic: NTFY_TOPIC, title: clip(title, 120), message: String(message || '').slice(0, 1000), priority: 4, tags: tags || [] };
+  if (click){ body.click = click; body.actions = [{ action: 'view', label: 'Open', url: click }]; }
+  fetch(NTFY_SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) })
+    .then(r => { if (!r.ok) console.error('phone alert failed: HTTP ' + r.status); }).catch(e => console.error('phone alert failed:', e.message));
+}
+
 // Owner session: signed cookie diy_admin, good for a year on that device (until Sign out, or
 // ADMIN_PASSWORD changes). Path=/ so the owner also gets into the app itself past the paywall.
 const SESSION_DAYS = 365;
@@ -308,6 +317,9 @@ function mount(app){
     if (r) keyToId.set(key, r.id);
     return r ? r.id : null;
   }
+  // Tenant sign-off links (/sign/<key>), in signoff.js.
+  require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
+
   // A finished report's details (rooms, items, conditions, meters, keys; photos as their numbers), so a
   // later check-out or inspection can start from it and compare. Kept beside its photos (data.json).
   app.post('/api/reports/:id/data', (req, res) => {
@@ -534,11 +546,12 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
+          ${r.tenantSignedAt && r.photoKey ? `<a class="btn" href="/sign/${r.photoKey}/signed.pdf" target="_blank" rel="noopener">Signed copy</a>` : ''}
           <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="btn danger">Delete</button></form>
         </td>
       </tr>`).join('');
@@ -641,7 +654,7 @@ async function uploadPdfs(input){
     const id = String(req.params.id);
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete from the reports page.');
     if (!ID_RE.test(id) || !readMeta(id)) return res.status(404).type('text/plain').send('Report not found.');
-    for (const ext of ['.pdf', '.json']) { try { fs.unlinkSync(path.join(REPORTS_DIR, id + ext)); } catch (e) {} }
+    for (const ext of ['.pdf', '.json', '.signed.pdf']) { try { fs.unlinkSync(path.join(REPORTS_DIR, id + ext)); } catch (e) {} }
     try { fs.rmSync(photoDir(id), { recursive: true, force: true }); } catch (e) {}
     console.log('report deleted: ' + id);
     res.redirect(303, '/admin');

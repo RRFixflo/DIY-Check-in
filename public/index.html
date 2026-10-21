@@ -619,6 +619,9 @@
   .then-k { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
   .then-row img { width: 44px; height: 44px; object-fit: cover; border-radius: 9px; cursor: zoom-in; background: var(--line); }
   .next-card p { color: var(--ink-soft); margin: 4px 0 12px; }
+  .sign-status { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; }
+  .sign-status .muted-line { color: var(--ink-faint); }
+  .signed-ok { flex-basis: 100%; color: var(--good, #15803D); font-weight: 700; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -3116,6 +3119,7 @@ async function uploadData(id, photos){
     state.dataUploaded = true;
     persist();
     await rememberReport(state);
+    if (state.view === 'done') checkSign();
   } catch (e) { console.error('report details upload failed (tried again later)', e); }
 }
 async function rememberReport(s){
@@ -3364,6 +3368,33 @@ async function sharePdf(){
   } catch (e) {
     if (!e || e.name !== 'AbortError') setPdfUi('ready', 0, "Sharing didn't work here. Use Download PDF instead.");
   }
+}
+// Tenant sign-off: the link (/sign/<key>) and whether it has been signed yet.
+let signUi = { checked: false, signed: false };
+function signLink(s){ return (location && /^https?:/.test(location.origin || '') ? location.origin : '') + '/sign/' + ensurePhotoKey(s); }
+async function checkSign(){
+  if (!state.photoKey || !state.dataUploaded) { paintSign(); return; }
+  try { const r = await fetch('/api/sign/' + state.photoKey, { cache: 'no-store' }); if (r.ok) signUi = Object.assign({ checked: true }, await r.json()); } catch (e) {}
+  paintSign();
+}
+function paintSign(){
+  const el = document.getElementById('signStatus');
+  if (!el) return;
+  if (!state.dataUploaded) { el.innerHTML = '<span class="muted-line">The link works once the report has been sent.</span>'; return; }
+  el.innerHTML = signUi.signed
+    ? `<div class="signed-ok">✓ Signed by ${escapeHtml(signUi.name)} on ${escapeHtml(new Date(signUi.at).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }))}${signUi.agree === 'comments' ? ', with ' + signUi.comments + ' comment' + (signUi.comments === 1 ? '' : 's') : ''}</div><a class="btn btn-sm" href="${escapeHtml(signUi.pdf)}" target="_blank" rel="noopener">Open the signed report</a>`
+    : `<span class="muted-line">${signUi.checked ? 'Not signed yet.' : ''}</span> <button type="button" class="btn-ghost" onclick="checkSign()">Check again</button>`;
+}
+async function shareSignLink(btn){
+  if (!state.dataUploaded) { notice('The report is still being sent. The link works once it says Report sent.'); return; }
+  const url = signLink(state);
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Please check and sign this report', text: 'Please check and sign the ' + inspectionKind(state.meta.inspectionType).toLowerCase() + ' report for ' + state.meta.address + ':', url }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  const done = () => { btn.textContent = 'Link copied ✓'; setTimeout(() => { btn.textContent = navigator.share ? 'Send the sign-off link' : 'Copy the sign-off link'; }, 2200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link:', url));
+  else window.prompt('Copy this link:', url);
 }
 function copyLaterLink(btn){
   const url = laterReportLink(state);
@@ -3987,6 +4018,15 @@ function renderDone(){
     </div>
 
     <div class="panel next-card">
+      <div class="section-title" style="margin-top:0">Get it signed by the tenant</div>
+      <p>Send the tenant (or landlord) a link. They check the report room by room, can comment on anything, and sign on their phone. A signed page is then added to the report.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="shareSignLink(this)">${navigator.share ? 'Send the sign-off link' : 'Copy the sign-off link'}</button>
+      </div>
+      <div class="sign-status" id="signStatus"></div>
+    </div>
+
+    <div class="panel next-card">
       <div class="section-title" style="margin-top:0">Next time at this property</div>
       <p>For the check-out or an inspection, start from this report: the rooms and checklists are copied and the new report compares the two.</p>
       <div class="btn-row">
@@ -4033,7 +4073,7 @@ function render(){
     else if (state.view === 'capture') { app.innerHTML = renderCapture(); }
     else if (state.view === 'details') { app.innerHTML = renderDetails(); }
     else if (state.view === 'review') { app.innerHTML = renderReview(); initSignaturePad(); updateFinishButtonState(); }
-    else if (state.view === 'done') { app.innerHTML = renderDone(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!state.sentAt && sendUi.phase !== 'error') sendToAgent(); else if (!(state.submittedId && state.photosUploaded && state.dataUploaded)) submitReport(); }
+    else if (state.view === 'done') { app.innerHTML = renderDone(); checkSign(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); preparePdf(); if (!state.sentAt && sendUi.phase !== 'error') sendToAgent(); else if (!(state.submittedId && state.photosUploaded && state.dataUploaded)) submitReport(); }
   } catch (err) {
     console.error('Render failed:', err);
     app.innerHTML = '<div class="panel"><p style="margin-bottom:10px;">Something went wrong showing this screen.</p><p style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(err && err.message ? err.message : String(err)) + '</p><button type="button" class="btn" style="margin-top:14px;" onclick="location.reload()">Reload</button></div>';
