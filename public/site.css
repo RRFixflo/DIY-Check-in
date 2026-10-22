@@ -402,3 +402,28 @@ header.top.scrolled { background: color-mix(in srgb, var(--bg) 92%, transparent)
   .js .reveal { opacity: 1; }
   .ring .fg { stroke-dashoffset: 0; stroke: #FBBF24; } .ring .done { opacity: 1; transform: none; } .sig-line { opacity: 0; } .instant-pdf { opacity: 1; transform: rotate(4deg); }
 }
+
+/* Landlord certificates (/certificates, and the home page's teaser) */
+a.card.cert-card { color: inherit; text-decoration: none; }
+.cert-card .cert-sub { margin: -2px 0 8px; color: var(--ink-faint); font-size: 13.5px; font-weight: 600; }
+.cert-card .cert-price { font-family: "Plus Jakarta Sans", Inter, sans-serif; font-size: 30px; font-weight: 800; letter-spacing: -.02em; margin: 4px 0 10px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cert-card .cert-price small { font-size: 14px; font-weight: 600; -webkit-text-fill-color: var(--ink-faint); }
+.cert-card ul { list-style: none; margin: 12px 0 16px; padding: 0; display: grid; gap: 6px; font-size: 14.5px; color: var(--ink-soft); }
+.cert-card ul li { padding-left: 20px; position: relative; }
+.cert-card ul li::before { content: ""; position: absolute; left: 2px; top: .5em; width: 8px; height: 8px; border-radius: 50%; background: var(--grad); }
+.cert-form { max-width: 720px; margin: 0 auto; }
+.cert-pick { border: 0; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.cert-pick legend { font-weight: 600; font-size: 14.5px; margin-bottom: 8px; padding: 0; }
+.form label.pick { display: block; cursor: pointer; }
+.pick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.form .pick span { color: var(--ink); font-weight: 500; }
+.pick span { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s, background .2s, transform .2s; }
+.pick span b { font-weight: 700; } .pick span em { font-style: normal; color: var(--ink-faint); font-size: 13.5px; font-weight: 500; }
+.pick:hover span { transform: translateY(-2px); }
+.pick input:checked + span { box-shadow: inset 0 0 0 2px var(--accent); background: var(--soft); }
+.pick input:checked + span b::after { content: " ✓"; color: var(--accent); }
+.pick input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cert-total { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 14px 16px; border-radius: 14px; background: var(--soft); }
+.cert-total span { font-weight: 600; color: var(--ink-soft); } .cert-total strong { font-family: "Plus Jakarta Sans", Inter, sans-serif; font-size: 26px; font-weight: 800; } .cert-total small { color: var(--ink-faint); font-weight: 500; }
+@media (max-width: 720px) { .cert-pick { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .pick span { transition: none; } .pick:hover span { transform: none; } }

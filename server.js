@@ -10,6 +10,7 @@ const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
+const certs = require('./certs');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -233,11 +234,11 @@ function faqLd(body){
 }
 function renderPage(pg, req, notice){
   const key = pg.key;
-  const fill = t => t.split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join(escHtml(FIXFLOW_URL + '/diy-inventory'));
+  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join(escHtml(FIXFLOW_URL + '/diy-inventory'));
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req);
@@ -254,9 +255,12 @@ for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.pa
   const notice = key === 'contact' && req.query.sent ? { ok: true, text: 'Thanks, your message has been sent. We’ll get back to you soon.' } : null;
   res.type('html').send(sitePage(key, req, notice));
 });
+// Landlord certificates (Gas Safety, EICR, EPC), booked on /certificates: certs.js.
+const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,
+  limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path), siteBodies: Object.values(SITE).map(pg => pg.body),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
