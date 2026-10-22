@@ -2519,11 +2519,11 @@ async function buildPdfBlob(s, onProgress, out){
   }
   function linkPhoto(n, x, yy, w, h){ if (photoBase) doc.link(x, yy, w, h, { url: photoBase + n }); }
 
-  // The report's look: warm paper, ink and one deep green, as on the website. Serif (Times) for titles,
+  // The report's look: beige and navy, as on the website. Serif (Times) for titles,
   // Helvetica for everything else, hairline rules instead of filled table heads.
   const C = {
-    ink:[23,25,28], inkSoft:[78,83,90], faint:[134,139,146], line:[225,221,211], paper:[247,245,240],
-    accent:[31,75,58], accentSoft:[227,235,229], white:[255,255,255]
+    ink:[19,33,58], inkSoft:[74,85,104], faint:[138,134,124], line:[228,217,198], paper:[245,239,228],
+    accent:[27,46,75], accentSoft:[236,228,214], white:[255,255,255]
   };
   const COND = {   // strong colour, soft fill
     new:[[42,96,140],[226,236,245]], good:[[46,125,79],[228,240,232]], fair:[[150,92,20],[246,236,219]],
