@@ -234,7 +234,7 @@ function faqLd(body){
 }
 function renderPage(pg, req, notice){
   const key = pg.key;
-  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join(escHtml(FIXFLOW_URL + '/diy-inventory'));
+  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report');
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
@@ -254,6 +254,11 @@ function paywallPage(reason, req){
 for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.path, pg.path + '/'], (req, res) => {
   const notice = key === 'contact' && req.query.sent ? { ok: true, text: 'Thanks, your message has been sent. We’ll get back to you soon.' } : null;
   res.type('html').send(sitePage(key, req, notice));
+});
+// The example report: a real report made by the app, with real photographs (public/example/).
+app.get(['/example-report', '/example-report.pdf'], (req, res) => {
+  res.set({ 'Content-Disposition': 'inline; filename="DIY Inventory - example check-in report.pdf"', 'Cache-Control': 'public, max-age=86400' });
+  res.type('pdf').sendFile(path.join(__dirname, 'public', 'example', 'example-report.pdf'));
 });
 // Landlord certificates (Gas Safety, EICR, EPC), booked on /certificates: certs.js.
 const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,

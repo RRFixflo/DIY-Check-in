@@ -2371,13 +2371,12 @@ async function buildPdfBlob(s, onProgress, out){
   if (!JsPDF) throw new Error('pdf_library_unavailable');
   const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'landscape', compress:true });
 
-  const PW = 297, PH = 210, M = 12, CW = PW - M * 2;
-  const TOP = 30, BOTTOM = PH - 16;
+  const PW = 297, PH = 210, M = 16, CW = PW - M * 2;
+  const TOP = 28, BOTTOM = PH - 17;
   let y = TOP;
 
   const kind = inspectionKind(s.meta.inspectionType);
   const isOut = kind === 'Check-Out', isInsp = kind === 'Inspection';
-  const docTitle = kind + ' report';
   const stage = isOut ? 'CHECK OUT' : isInsp ? 'INSPECTION' : 'CHECK IN';
   const E = earlierFor(s);   // the earlier report this one is compared with, if any
   const eName = E ? earlierName(E) : '', eWhen = E ? earlierWhen(E) : '';
@@ -2393,82 +2392,136 @@ async function buildPdfBlob(s, onProgress, out){
     return fullSize.length;
   }
   function linkPhoto(n, x, yy, w, h){ if (photoBase) doc.link(x, yy, w, h, { url: photoBase + n }); }
+
+  // The report's look: warm paper, ink and one deep green, as on the website. Serif (Times) for titles,
+  // Helvetica for everything else, hairline rules instead of filled table heads.
+  const C = {
+    ink:[23,25,28], inkSoft:[78,83,90], faint:[134,139,146], line:[225,221,211], paper:[247,245,240],
+    accent:[31,75,58], accentSoft:[227,235,229], white:[255,255,255]
+  };
+  const COND = {   // strong colour, soft fill
+    new:[[42,96,140],[226,236,245]], good:[[46,125,79],[228,240,232]], fair:[[150,92,20],[246,236,219]],
+    poor:[[170,62,38],[247,228,222]], na:[[134,139,146],[239,236,229]]
+  };
+
   // Draws the photo uncropped, centred in the box (so portrait photos and their stamp are never cut off).
   function drawFitted(dataUrl, alias, x, yy, w, h){
     let props;
     try { props = doc.getImageProperties(dataUrl); } catch (e) { return false; }
     const r = Math.min(w / props.width, h / props.height);
     const dw = props.width * r, dh = props.height * r;
-    doc.setFillColor(244, 245, 247); doc.rect(x, yy, w, h, 'F');
+    doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(x, yy, w, h, 'F');
     doc.addImage(dataUrl, 'JPEG', x + (w - dw) / 2, yy + (h - dh) / 2, dw, dh, alias, 'FAST');
     return true;
   }
 
   const set = (font, size, colour) => { doc.setFont('helvetica', font); doc.setFontSize(size); doc.setTextColor(colour[0], colour[1], colour[2]); };
+  const serif = (font, size, colour) => { doc.setFont('times', font); doc.setFontSize(size); doc.setTextColor(colour[0], colour[1], colour[2]); };
   const pageNow = () => doc.internal.getNumberOfPages();
   function newPage(){ doc.addPage(); y = TOP; }
   function need(h){ if (y + h > BOTTOM) newPage(); }
   function lines(t, w){ return doc.splitTextToSize(String(t == null ? '' : t), w); }
+  function hr(yy, colour, width, x1, x2){ const c = colour || C.line; doc.setDrawColor(c[0], c[1], c[2]); doc.setLineWidth(width || 0.2); doc.line(x1 == null ? M : x1, yy, x2 == null ? PW - M : x2, yy); doc.setLineWidth(0.2); }
+  function vr(x, y1, y2){ doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.line(x, y1, x, y2); }
+  function cap(t){ t = String(t); return t.charAt(0).toUpperCase() + t.slice(1); }
 
-  // Section heading: an accent bar and the title, with a hairline under it.
+  // Section heading: the title in serif over a fine ink rule.
   function banner(text){
-    need(18);
-    const t = String(text); const title = t.charAt(0).toUpperCase() + t.slice(1);
-    doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]);
-    doc.roundedRect(M, y + 0.6, 2.4, 8.4, 1.2, 1.2, 'F');
-    set('bold', 15, C.ink);
-    doc.text(lines(title, CW - 10)[0], M + 6, y + 7.4);
-    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.25);
-    doc.line(M, y + 12, PW - M, y + 12);
-    y += 16;
+    need(22);
+    serif('normal', 21, C.ink);
+    doc.text(lines(cap(text), CW)[0], M, y + 8);
+    hr(y + 12.5, C.ink, 0.35);
+    y += 19;
   }
   function section(title){ toc.push([title, pageNow()]); banner(title); }
   function newSection(title){ newPage(); section(title); }
-  function rule(){ doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.2); doc.line(M, y, PW - M, y); }
+  function subhead(text){ need(12); set('bold', 7, C.faint); doc.text(String(text).toUpperCase(), M, y + 3); y += 6.5; }
   function labelRows(rows, labelW, size){
     rows.forEach(([k, v]) => {
       set('normal', size, C.inkSoft);
       const ls = lines(v, CW - labelW - 6);
-      const h = Math.max(7, ls.length * (size * 0.42) + 3);
+      const h = Math.max(7.5, ls.length * (size * 0.42) + 3.6);
       need(h);
-      set('bold', size, C.ink); doc.text(String(k).toUpperCase(), M + 2, y + 4.3);
-      set('normal', size, C.inkSoft); doc.text(ls, M + labelW, y + 4.3);
+      set('bold', size, C.ink); doc.text(lines(cap(String(k).toLowerCase()), labelW - 4)[0], M, y + 4.8);
+      set('normal', size, C.inkSoft); doc.text(ls, M + labelW, y + 4.8);
       y += h;
-      rule();
+      hr(y);
+    });
+    y += 5;
+  }
+  // A table with a quiet head (small capitals over an ink rule) and hairline rows. The head repeats
+  // on every page the table runs onto.
+  function table(cols, rows, o){
+    o = o || {};
+    const size = o.size || 8;
+    const head = () => {
+      set('bold', 6.6, C.faint);
+      let x = M; cols.forEach(c => { doc.text(String(c[0]).toUpperCase(), x, y + 4.2); x += c[1]; });
+      y += 6; hr(y, C.ink, 0.3); y += 0.4;
+    };
+    need(16); head();
+    rows.forEach((row, ri) => {
+      set('normal', size, C.inkSoft);
+      const cl = row.map((v, i) => lines(v == null ? '' : String(v), cols[i][1] - 4));
+      const h = Math.max(7.6, Math.max.apply(null, cl.map(c => c.length)) * (size * 0.47) + 3.8);
+      if (y + h > BOTTOM){ newPage(); if (o.onBreak) o.onBreak(); head(); }
+      let x = M;
+      cl.forEach((c, i) => {
+        const st = o.style ? o.style(i, row, ri) : null;
+        set(st && st[0] || (i === 0 ? 'bold' : 'normal'), size, st && st[1] || (i === 0 ? C.ink : C.inkSoft));
+        doc.text(c, x, y + 4.9); x += cols[i][1];
+      });
+      y += h; hr(y);
     });
     y += 4;
   }
-
-  const C = {
-    banner:[79,70,229], sub:[124,58,237], ink:[14,19,48], inkSoft:[74,82,114],
-    line:[228,230,240], head:[244,245,251], white:[255,255,255], faint:[140,147,173], soft:[238,237,254]
-  };
-
-  // A small brand mark: rounded accent square with a white tick.
+  // A condition as a small coloured label. Returns its width; align 'right' draws it ending at x.
+  function pill(x, yy, key, align){
+    const k = COND[key] ? key : 'na';
+    const label = key === 'na' ? 'N/A' : COND[key] ? conditionWord(key) : 'Not recorded';
+    set('bold', 6.8, COND[k][0]);
+    const w = doc.getTextWidth(label) + 5;
+    if (align === 'right') x -= w;
+    doc.setFillColor(COND[k][1][0], COND[k][1][1], COND[k][1][2]); doc.roundedRect(x, yy, w, 5, 1.1, 1.1, 'F');
+    doc.text(label, x + 2.5, yy + 3.5);
+    return w;
+  }
+  const condKey = label => { const v = String(label || '').toLowerCase(); return /^new/.test(v) ? 'new' : /^good/.test(v) ? 'good' : /^fair/.test(v) ? 'fair' : /^poor/.test(v) ? 'poor' : 'na'; };
+  // How many items are in each condition, as one stacked bar.
+  function condBar(x, yy, w, h, st){
+    const parts = [['new', st.new], ['good', st.good], ['fair', st.fair], ['poor', st.poor], ['na', st.na]].filter(p => p[1] > 0);
+    const total = parts.reduce((a, p) => a + p[1], 0);
+    if (!total){ doc.setFillColor(C.line[0], C.line[1], C.line[2]); doc.rect(x, yy, w, h, 'F'); return; }
+    let cx = x;
+    parts.forEach(([k, n], i) => {
+      const pw = w * n / total, c = k === 'na' ? C.line : COND[k][0];
+      doc.setFillColor(c[0], c[1], c[2]); doc.rect(cx, yy, Math.max(0.1, pw - (i < parts.length - 1 ? 0.5 : 0)), h, 'F');
+      cx += pw;
+    });
+  }
+  // The brand mark: a deep green square with a white house and tick, as on the website.
   function brandMark(x, yy, size){
-    doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]);
-    doc.roundedRect(x, yy, size, size, size * 0.28, size * 0.28, 'F');
-    doc.setDrawColor(255, 255, 255); doc.setLineWidth(size * 0.11);
-    doc.lines([[size * 0.16, size * 0.16], [size * 0.3, -size * 0.34]], x + size * 0.26, yy + size * 0.52, [1, 1], 'S', false);
+    doc.setFillColor(C.accent[0], C.accent[1], C.accent[2]);
+    doc.roundedRect(x, yy, size, size, size * 0.22, size * 0.22, 'F');
+    doc.setDrawColor(255, 255, 255); doc.setLineWidth(size * 0.06);
+    const u = size / 28;
+    doc.lines([[6.5 * u, -5.2 * u], [6.5 * u, 5.2 * u], [0, 7.6 * u], [-13 * u, 0], [0, -7.6 * u]], x + 7.5 * u, yy + 13.2 * u, [1, 1], 'S', true);
+    doc.lines([[2 * u, 2 * u], [3.8 * u, -3.9 * u]], x + 11.2 * u, yy + 16.4 * u, [1, 1], 'S', false);
     doc.setLineWidth(0.2);
   }
   function pageChrome(pageIndex, total){
     doc.setPage(pageIndex);
     if (pageIndex === 1) return; // the cover carries its own title
-    /* header */
-    brandMark(M, 9.2, 6);
-    set('bold', 10, C.ink);
-    doc.text('DIY Inventory', M + 8.5, 13.6);
-    set('normal', 7.8, C.inkSoft);
-    doc.text(lines(reportTitle(s), 150)[0], PW - M, 11.6, { align:'right' });
+    brandMark(M, 9.6, 5);
+    set('bold', 8, C.ink); doc.text('DIY Inventory', M + 7, 13.3);
+    set('normal', 8, C.faint); doc.text(kind + ' report', M + 7 + doc.getTextWidth('DIY Inventory') + 9, 13.3);
+    set('normal', 7.6, C.inkSoft);
+    doc.text(lines(s.meta.address || '', 150)[0], PW - M, 13.3, { align:'right' });
+    hr(17.5);
     set('normal', 7, C.faint);
-    doc.text('Ref ' + ref + '  ·  ' + dateLong, PW - M, 15.4, { align:'right' });
-    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.25); doc.line(M, 19.5, PW - M, 19.5);
-    /* footer */
-    set('normal', 7.6, C.faint);
-    doc.text(lines(s.meta.address || '', 180)[0], M, PH - 8);
-    set('bold', 7.6, C.inkSoft);
-    doc.text('Page ' + (pageIndex - 1) + ' of ' + (total - 1), PW - M, PH - 8, { align:'right' });
+    doc.text('Ref ' + ref + '   ·   ' + dateLong + '   ·   Every photograph is date and time stamped. Tap one to open it at full size.', M, PH - 9);
+    set('bold', 7.6, C.ink);
+    doc.text(String(pageIndex - 1) + '  /  ' + String(total - 1), PW - M, PH - 9, { align:'right' });
   }
 
   /* ---------------------------------------------------------------- cover */
@@ -2478,43 +2531,56 @@ async function buildPdfBlob(s, onProgress, out){
   const description = [[bedrooms ? bedrooms + ' Bedroom' : '', bathrooms ? bathrooms + ' Bathroom' : ''].filter(Boolean).join(', '), [(s.meta.furnishing || '').trim(), propType || 'Property'].filter(Boolean).join(' ')].filter(Boolean).join(' – ');
   const exteriorPhotos = (s.property && s.property.exterior && s.property.exterior.photos) || [];
   const photoTotal = s.rooms.reduce((a, r) => a + roomTotalPhotos(r), 0) + exteriorPhotos.length;
-  const hasCoverPhoto = exteriorPhotos.length > 0;
+  const dcl = (s.property && s.property.declaration) || {};
+  const totals = { items:0, new:0, good:0, fair:0, poor:0, na:0, marks:0, photos:0, needsClean:0, notWorking:0 };
+  s.rooms.forEach(r => { const st = roomStats(r); Object.keys(totals).forEach(k => { totals[k] += st[k] || 0; }); });
+  const overallKey = (derivedPropertyCondition(s.rooms) || {}).key;
 
-  // Accent band down the left edge, brand at the top.
-  doc.setFillColor(C.banner[0], C.banner[1], C.banner[2]); doc.rect(0, 0, 5, PH, 'F');
-  doc.setFillColor(C.sub[0], C.sub[1], C.sub[2]); doc.rect(0, PH * 0.62, 5, PH * 0.38, 'F');
-  brandMark(M + 4, 16, 9);
-  set('bold', 14, C.ink); doc.text('DIY Inventory', M + 16.5, 22.6);
-
-  // Front of the property on the right.
-  const pw = 118, ph = 88, px = PW - M - pw, py = 34;
-  const textW = (hasCoverPhoto ? px - 10 : PW - M) - (M + 4);
-  if (hasCoverPhoto){
+  // The front of the property fills the top right, edge to edge.
+  const pw = 150, ph = 112.5, px = PW - pw, py = 0;
+  if (exteriorPhotos.length){
     const exShot = { dataUrl: exteriorPhotos[0].dataUrl, ts: exteriorPhotos[0].ts, label: 'Front of the property', area: 'Outside', ref: 'X1', fullTitle: 'OUTSIDE  ·  FRONT OF THE PROPERTY' };
-    const exAlias = 'photo-exterior-0';
-    if (drawFitted(await shrinkPhoto(exShot.dataUrl, 1400), exAlias, px, py, pw, ph)){
+    if (drawFitted(await shrinkPhoto(exShot.dataUrl, 1400), 'photo-exterior-0', px, py, pw, ph)){
       linkPhoto(registerFullSize(exShot), px, py, pw, ph);
-      set('normal', 7.6, C.faint);
-      doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts) + '  ·  tap to enlarge', px, py + ph + 5);
     }
+    set('normal', 7, C.faint);
+    doc.text('Front of the property  ·  ' + photoStamp(exteriorPhotos[0].ts) + '  ·  tap to enlarge', px + 8, ph + 6);
+  } else {
+    doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(px, py, pw, ph, 'F');
   }
 
-  // Report type pill, then the address as the title.
-  y = 46;
-  const pill = kind.toUpperCase() + ' REPORT';
-  set('bold', 8.5, C.banner);
-  const pillW = doc.getTextWidth(pill) + 9;
-  doc.setFillColor(C.soft[0], C.soft[1], C.soft[2]); doc.roundedRect(M + 4, y - 5.2, pillW, 8, 4, 4, 'F');
-  doc.text(pill, M + 8.5, y);
-  set('bold', 26, C.ink);
-  const titleLines = lines(s.meta.address || '', textW).slice(0, 3);
-  doc.text(titleLines, M + 4, y + 16, { lineHeightFactor: 1.08 });
-  y += 16 + (titleLines.length - 1) * 10 + 9;
-  set('normal', 11, C.inkSoft);
-  doc.text('Schedule of condition  ·  ' + dateLong, M + 4, y);
-  y += 14;
+  // Brand, report type and the address as the title, on the left.
+  const LW = px - M - 12;
+  brandMark(M, 15, 7.5);
+  set('bold', 10.5, C.ink); doc.text('DIY Inventory', M + 10.5, 20.4);
+  y = 50;
+  set('bold', 8, C.accent); doc.text(kind.toUpperCase() + ' REPORT', M, y);
+  serif('normal', 30, C.ink);
+  const titleLines = lines(s.meta.address || '', LW).slice(0, 4);
+  doc.text(titleLines, M, y + 14, { lineHeightFactor: 1.04 });
+  y += 14 + (titleLines.length - 1) * 11 + 9;
+  set('normal', 10, C.inkSoft);
+  doc.text('Schedule of condition  ·  ' + dateLong, M, y);
 
-  // Details as a two-column grid of label over value.
+  // At a glance, along the bottom left: the condition of every item, and the totals.
+  const gy = 150;
+  set('bold', 6.6, C.faint); doc.text('CONDITION OF EVERY ITEM', M, gy);
+  condBar(M, gy + 3, LW, 3.2, totals);
+  let lx = M; set('normal', 7.4, C.inkSoft);
+  [['new', totals.new], ['good', totals.good], ['fair', totals.fair], ['poor', totals.poor]].filter(p => p[1] > 0).forEach(([k, n]) => {
+    doc.setFillColor(COND[k][0][0], COND[k][0][1], COND[k][0][2]); doc.rect(lx, gy + 9.4, 2.4, 2.4, 'F');
+    const t = conditionWord(k) + ' ' + n; doc.text(t, lx + 3.6, gy + 11.5); lx += doc.getTextWidth(t) + 9;
+  });
+  const big = [['Rooms', String(s.rooms.length)], ['Items recorded', String(totals.items)], ['Photographs', String(photoTotal)]];
+  const bw3 = LW / 3;
+  big.forEach(([k, v], i) => {
+    const x = M + i * bw3;
+    if (i) vr(x - 4, gy + 19, gy + 37);
+    serif('normal', 26, C.ink); doc.text(v, x, gy + 30);
+    set('normal', 7.4, C.faint); doc.text(k, x, gy + 36);
+  });
+
+  // Details under the photograph, two columns of label over value.
   const facts = [
     ['Property', description],
     (s.meta.managingAgent || '').trim() ? ['Managing agent', s.meta.managingAgent.trim()] : null,
@@ -2523,128 +2589,80 @@ async function buildPdfBlob(s, onProgress, out){
     s.meta.moveInDateTime ? ['Tenancy move-in', formatDateTimeLocal(s.meta.moveInDateTime)] : null,
     s.meta.createdAt ? ['Inspection', formatTimestamp(new Date(s.meta.createdAt)) + (s.finalizedAt ? ' – ' + formatTimestamp(new Date(s.finalizedAt)).split(', ').pop() : '')] : null,
     ['Compiled by', s.meta.inspectorName],
-    ['Report reference', ref],
-    ['Photographs', s.rooms.length + ' rooms  ·  ' + photoTotal + ' date and time stamped']
+    ['Overall condition', overallKey ? conditionWord(overallKey) : 'Not recorded'],
+    ['Report reference', ref]
   ].filter(Boolean);
-  const factW = (textW - 6) / 2;
+  const fx = px + 8, factW = (pw - 16 - 8) / 2;
+  let fy = ph + 15;
   for (let i = 0; i < facts.length; i += 2){
     let rowH = 0;
     [facts[i], facts[i + 1]].forEach((f, c) => {
       if (!f) return;
-      const x = M + 4 + c * (factW + 6);
-      set('bold', 7, C.faint); doc.text(String(f[0]).toUpperCase(), x, y);
-      set('normal', 10.5, C.ink);
+      const x = fx + c * (factW + 8);
+      set('bold', 6.4, C.faint); doc.text(String(f[0]).toUpperCase(), x, fy);
+      set('normal', 9, C.ink);
       const ls = lines(f[1] || '—', factW).slice(0, 2);
-      doc.text(ls, x, y + 5.2);
-      rowH = Math.max(rowH, 5.2 + ls.length * 4.6);
+      doc.text(ls, x, fy + 4.6);
+      rowH = Math.max(rowH, 4.6 + ls.length * 3.9);
     });
-    y += rowH + 5;
+    fy += rowH + 4.2;
+    if (fy > PH - 10) break;
   }
-
-  set('normal', 7.6, C.faint);
-  doc.text('Every photograph is date and time stamped at the moment it was taken. Tap any photograph in this report to open it at full size.', M + 4, PH - 12);
 
   /* ------------------------------------------------- reserved contents page */
   doc.addPage();
   const tocPage = pageNow();
 
-  /* ------------------------------------------------- important information */
-  newPage(); section('Important information – please read');
-  const info = [
-    'This report records the condition, cleanliness and contents of the property at the date and time of the inspection. It is intended as a fair and accurate record for both landlord and tenant, and it is the document the two parties compare against at the end of the tenancy.',
-    'Every room in this report carries a minimum of eight photographs taken on the day of the inspection. Each photograph is date and time stamped at the moment it is captured, and the stamp is written into the image itself so it cannot be separated from the picture.',
-    'The person compiling this report is not a qualified surveyor. Descriptions of woods, fabrics, plant life and colours are for identification only and should not be read as an expert assessment. An item is only described as new where it is still in its original packaging or an invoice has been provided.',
-    'Each item is described by its colour, material and main features, with any marks or damage seen, its cleanliness and, where it can be tested (doors, windows, taps, appliances, lights, detectors), whether it was working. Each room opens with a summary of its overall condition, cleanliness and the times it was photographed.',
-    'Items are numbered within each room, and each item\u2019s photographs carry the same number: item 3 is shown in photograph 3, or 3a, 3b and so on where there are several. General photographs of a room are numbered G1, G2 and so on. Every entry in the schedule lists the photographs that show it.',
-    'Photographs may not be exhaustive of every item and area of the property. Where an item is not photographed, the written description stands as the record of its condition.',
-    'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
-    'A signature on the declaration form applies to the whole report: the schedule of condition, the general condition and cleanliness of the property, the meter readings, and the handover or hand back of keys.',
-    'Items left for the tenant\u2019s use are recorded and counted. Items stored in the property in bags or boxes are not opened or inspected; a note is made that they are present. Where furniture can safely be moved, the area behind and beneath it is inspected.',
-    'A copy of this report is sent to the managing agent when it is completed, and kept securely by them as the record of the inspection.',
-    'Fire safety labels are recorded where they are seen. That is not a statement that the item complies with current fire safety regulations. Keeping smoke, heat and CO detectors in working order during the tenancy is the tenant\u2019s responsibility.'
-  ];
-  set('normal', 9, C.ink);
-  info.forEach(p => {
-    const ls = lines(p, CW);
-    need(ls.length * 4.2 + 4);
-    set('normal', 9, C.ink);
-    doc.text(ls, M, y + 3);
-    y += ls.length * 4.2 + 4.5;
-  });
-
-  /* ------------------------------------------------------- condition guide */
-  newSection('Condition and cleanliness explained');
-  const colW = (CW - 8) / 2;
-  const startY = y;
-  let leftY = y, rightY = y;
-  set('bold', 9.5, C.banner); doc.text('CONDITION', M, leftY + 3); leftY += 7;
-  CONDITION_OPTIONS.forEach(([v, l]) => {
-    set('bold', 8.6, C.ink); doc.text(l.toUpperCase(), M, leftY + 3);
-    const ls = lines(CONDITION_HELP[v], colW);
-    set('normal', 8.4, C.inkSoft); doc.text(ls, M, leftY + 7.6);
-    leftY += 7.6 + ls.length * 4 + 3.4;
-  });
-  const CLEAN_HELP = {
-    excellent: 'A third party has carried out the clean and the property is spotless throughout, including floors, surfaces, appliances and sanitary ware.',
-    good: 'Cleaning has been done to a good standard, with no receipt or evidence of a professional clean provided. No cleaning omissions found.',
-    fair: 'An attempt has been made, but further cleaning is needed: dust, cobwebs, debris, light grease or limescale remain.',
-    poor: 'No real attempt has been made to clean. A full clean is needed to bring the property back to the standard it was let in.'
-  };
-  const rx = M + colW + 8;
-  set('bold', 9.5, C.banner); doc.text('CLEANLINESS', rx, rightY + 3); rightY += 7;
-  CLEANLINESS_OPTIONS.forEach(([v, l]) => {
-    set('bold', 8.6, C.ink); doc.text(l.toUpperCase(), rx, rightY + 3);
-    const ls = lines(CLEAN_HELP[v] || '', colW);
-    set('normal', 8.4, C.inkSoft); doc.text(ls, rx, rightY + 7.6);
-    rightY += 7.6 + ls.length * 4 + 3.4;
-  });
-  y = Math.max(leftY, rightY, startY) + 4;
-
-  /* --------------------------------------------------- schedule of condition */
-  newSection('Schedule of condition – ' + stage.toLowerCase());
-  const dcl = (s.property && s.property.declaration) || {};
-  const schedule = [
-    ['GENERAL CONDITION', derivedLabel(derivedPropertyCondition(s.rooms))],
-    ['GENERAL CLEANLINESS', dcl.cleaning || 'Not recorded'],
-    ['GENERAL DECORATIVE ORDER', derivedLabel(derivedDecorativeCondition(s.rooms))]
-  ].concat(scheduleRows(s));
-  labelRows(schedule, 62, 9);
-
-  /* ------------------------------------------------- property overview */
-  newSection('Room by room overview – ' + stage.toLowerCase());
+  /* ---------------------------------------------------------- at a glance */
+  newSection('At a glance – ' + stage.toLowerCase());
   {
-    const cols = [['ROOM', 52], ['ITEMS', 16], ['NEW', 14], ['GOOD', 14], ['FAIR', 14], ['POOR', 14], ['N/A', 13], ['OVERALL', 26], ['CLEANLINESS', 40], ['MARKS', 17], ['PHOTOS', 17], ['PHOTOGRAPHED', CW - 237]];
-    const head = () => {
-      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F');
-      set('bold', 7.4, C.inkSoft);
-      let x = M; cols.forEach(([t, w]) => { doc.text(t, x + 2, y + 5.3); x += w; });
-      y += 8;
-    };
+    const blocks = [
+      ['Overall condition', overallKey ? conditionWord(overallKey) : 'Not recorded'],
+      ['General cleanliness', dcl.cleaning || 'Not recorded'],
+      ['Items recorded', String(totals.items)],
+      ['Marks or damage', totals.marks ? totals.marks + ' item' + (totals.marks === 1 ? '' : 's') : 'None'],
+      ['Photographs', String(photoTotal)]
+    ];
+    const bw = CW / blocks.length;
+    blocks.forEach(([k, v], i) => {
+      const x = M + i * bw;
+      if (i) vr(x - 4, y, y + 20);
+      set('normal', 7.4, C.faint); doc.text(k, x, y + 3);
+      if (v.length > 12){ serif('normal', 13, C.ink); doc.text(lines(v, bw - 8).slice(0, 2), x, y + 11); } else { serif('normal', 22, C.ink); doc.text(v, x, y + 14); }
+    });
+    y += 27;
+    set('bold', 6.6, C.faint); doc.text('CONDITION OF EVERY ITEM', M, y);
+    condBar(M, y + 3, CW, 4, totals);
+    let lx2 = M; set('normal', 7.6, C.inkSoft);
+    [['new', totals.new], ['good', totals.good], ['fair', totals.fair], ['poor', totals.poor], ['na', totals.na]].filter(p => p[1] > 0).forEach(([k, n]) => {
+      const c = k === 'na' ? C.line : COND[k][0];
+      doc.setFillColor(c[0], c[1], c[2]); doc.rect(lx2, y + 10, 2.4, 2.4, 'F');
+      const t = (k === 'na' ? 'Not applicable' : conditionWord(k)) + '  ' + n; set('normal', 7.6, C.inkSoft); doc.text(t, lx2 + 3.6, y + 12.1); lx2 += doc.getTextWidth(t) + 10;
+    });
+    y += 22;
+
+    // Room by room: the mix of conditions in each room, and its totals.
+    const cols = [['Room', 58], ['Condition of its items', 72], ['Overall', 26], ['Cleanliness', 40], ['Marks', 18], ['Photos', 18], ['Photographed', CW - 232]];
+    const head = () => { set('bold', 6.6, C.faint); let x = M; cols.forEach(c => { doc.text(c[0].toUpperCase(), x, y + 4.2); x += c[1]; }); y += 6; hr(y, C.ink, 0.3); y += 0.4; };
     head();
-    const tot = { items:0, new:0, good:0, fair:0, poor:0, na:0, marks:0, photos:0 };
-    const row = (cells, bold) => {
-      const cl = cells.map((v, i) => lines(String(v), cols[i][1] - 3));
-      const h = Math.max(8, Math.max.apply(null, cl.map(c => c.length)) * 3.9 + 4.2);
-      if (y + h > BOTTOM){ newPage(); head(); }
-      let x = M;
-      cl.forEach((c, i) => {
-        set(bold || i === 0 ? 'bold' : 'normal', 8, (i === 5 && cells[5] > 0) || (i === 9 && cells[9] > 0) ? C.banner : (i === 0 ? C.ink : C.inkSoft));
-        doc.text(c, x + 2, y + 5.2); x += cols[i][1];
-      });
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + h, PW - M, y + h);
-      y += h;
-    };
     s.rooms.forEach(room => {
       const st = roomStats(room);
-      Object.keys(tot).forEach(k => { tot[k] += st[k]; });
-      row([room.name, st.items, st.new, st.good, st.fair, st.poor, st.na, st.overall, cleanlinessLabel(room.condition.cleanliness).split(' — ')[0], st.marks, st.photos, st.inspected]);
+      if (y + 9 > BOTTOM){ newPage(); head(); }
+      let x = M;
+      set('bold', 8.2, C.ink); doc.text(lines(room.name, cols[0][1] - 4)[0], x, y + 5.6); x += cols[0][1];
+      condBar(x, y + 3.2, cols[1][1] - 10, 2.6, st); x += cols[1][1];
+      pill(x, y + 2, condKey(st.overall)); x += cols[2][1];
+      set('normal', 8, C.inkSoft); doc.text(lines(cleanlinessLabel(room.condition.cleanliness).split(' — ')[0], cols[3][1] - 4)[0], x, y + 5.6); x += cols[3][1];
+      set(st.marks ? 'bold' : 'normal', 8, st.marks ? COND.fair[0] : C.inkSoft); doc.text(String(st.marks), x, y + 5.6); x += cols[4][1];
+      set('normal', 8, C.inkSoft); doc.text(String(st.photos), x, y + 5.6); x += cols[5][1];
+      doc.text(String(st.inspected || '—'), x, y + 5.6);
+      y += 9; hr(y);
     });
+    y += 4;
+    set('normal', 7.4, C.faint);
     const exN = exteriorPhotos.length;
-    row(['All rooms', tot.items, tot.new, tot.good, tot.fair, tot.poor, tot.na, conditionLabel((derivedPropertyCondition(s.rooms) || {}).key).replace(' condition', ''), (dcl.cleaning || '—'), tot.marks, tot.photos + exN, s.meta.createdAt ? formatTimestamp(new Date(s.meta.createdAt)).split(', ').pop() + (s.finalizedAt ? ' – ' + timeHM(s.finalizedAt) : '') : '—'], true);
-    y += 3;
-    set('normal', 7.8, C.faint);
-    const nl = lines('MARKS is the number of items with marks or damage noted. PHOTOGRAPHED is the time of the first and last photograph in each room. The totals include ' + exN + ' photograph' + (exN === 1 ? '' : 's') + ' of the outside of the property.', CW);
-    need(nl.length * 3.8 + 2); doc.text(nl, M, y + 3); y += nl.length * 3.8 + 4;
+    const nl = lines('Marks is the number of items with marks or damage noted. Photographed is the time of the first and last photograph in each room. The photograph total includes ' + exN + ' of the outside of the property.', CW);
+    need(nl.length * 3.6 + 2); doc.text(nl, M, y + 3); y += nl.length * 3.6 + 4;
   }
 
   /* ------------------------------------------- changes since the earlier report */
@@ -2654,119 +2672,147 @@ async function buildPdfBlob(s, onProgress, out){
     s.rooms.forEach(room => room.items.forEach(item => { const c = itemChange(s, room, item); if (c) changes.push({ room, item, c }); }));
     changes.sort((a, b) => (b.c.worse ? 1 : 0) - (a.c.worse ? 1 : 0));
     const worseN = changes.filter(x => x.c.worse).length;
-    set('normal', 9, C.ink);
+    set('normal', 9.4, C.ink);
     const il = lines('This report is compared with the ' + eName + ' of ' + eWhen + (E.ref ? ' (ref ' + E.ref + ')' : '') + '. ' +
-      (changes.length ? worseN + ' item' + (worseN === 1 ? '' : 's') + ' changed for the worse (a lower condition, new marks or damage, not working, or less clean)' + (changes.length > worseN ? ', and ' + (changes.length - worseN) + ' other change' + (changes.length - worseN === 1 ? '' : 's') : '') + '. Each room’s table shows both reports side by side.' : 'No changes were recorded between the two reports.'), CW);
-    doc.text(il, M, y + 3); y += il.length * 4.4 + 5;
+      (changes.length ? worseN + ' item' + (worseN === 1 ? '' : 's') + ' changed for the worse (a lower condition, new marks or damage, not working, or less clean)' + (changes.length > worseN ? ', and ' + (changes.length - worseN) + ' other change' + (changes.length - worseN === 1 ? '' : 's') : '') + '. Each item in the room pages shows both reports.' : 'No changes were recorded between the two reports.'), CW * 0.75);
+    doc.text(il, M, y + 3); y += il.length * 4.6 + 6;
     if (changes.length){
-      const cols = [['ROOM', 44], ['ITEM', 52], [eStage + ' · ' + eWhen.toUpperCase(), 55], ['NOW', 55], ['CHANGE', CW - 206]];
-      const head = () => { doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F'); set('bold', 7.4, C.inkSoft); let x = M; cols.forEach(([t, w]) => { doc.text(t, x + 2, y + 5.3); x += w; }); y += 8; };
-      head();
-      changes.forEach(({ room, item, c }) => {
-        const brief = it => !it ? '—' : it.notApplicable ? 'Not applicable' : [it.condition ? conditionWord(it.condition) : 'Not recorded'].concat((it.defects || []).filter(d => d !== 'None').map(d => d.toLowerCase())).join(', ');
-        const cells = [room.name, item.label, brief(c.ei), brief(item), c.text];
-        set('normal', 8, C.inkSoft);
-        const cl = cells.map((v, i) => lines(String(v), cols[i][1] - 4));
-        const h = Math.max(8, Math.max.apply(null, cl.map(x => x.length)) * 3.9 + 4.2);
-        if (y + h > BOTTOM){ newPage(); head(); }
-        let x = M;
-        cl.forEach((t, i) => { set(i === 4 && c.worse ? 'bold' : i < 2 ? 'bold' : 'normal', 8, i === 4 && c.worse ? C.banner : i < 2 ? C.ink : C.inkSoft); doc.text(t, x + 2, y + 5.2); x += cols[i][1]; });
-        doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + h, PW - M, y + h);
-        y += h;
-      });
-      y += 4;
+      const brief = it => !it ? '—' : it.notApplicable ? 'Not applicable' : [it.condition ? conditionWord(it.condition) : 'Not recorded'].concat((it.defects || []).filter(d => d !== 'None').map(d => d.toLowerCase())).join(', ');
+      table([['Room', 44], ['Item', 52], [eStage + ' · ' + eWhen.toUpperCase(), 55], ['Now', 55], ['Change', CW - 206]],
+        changes.map(({ room, item, c }) => [room.name, item.label, brief(c.ei), brief(item), c.text]),
+        { style: (i, row, ri) => i === 4 && changes[ri].c.worse ? ['bold', COND.poor[0]] : i < 2 ? ['bold', C.ink] : null });
     }
     // Meter readings then and now.
     const mRows = Object.keys(METER_LABELS).map(k => { const a = (E.meters || {})[k] || {}, b = ((s.property || {}).meters || {})[k] || {}; return (a.reading || b.reading) ? [METER_LABELS[k], (a.na ? 'N/A' : (a.reading || '—') + (a.reading ? ' ' + METER_UNITS[k] : '')), (b.na ? 'N/A' : (b.reading || '—') + (b.reading ? ' ' + METER_UNITS[k] : ''))] : null; }).filter(Boolean);
     if (mRows.length){
-      need(10 + mRows.length * 8);
-      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F'); set('bold', 7.4, C.inkSoft);
-      doc.text('METER', M + 2, y + 5.3); doc.text('READING AT THE ' + eStage, M + 70, y + 5.3); doc.text('READING NOW', M + 150, y + 5.3); y += 8;
-      mRows.forEach(r => { set('bold', 8, C.ink); doc.text(r[0], M + 2, y + 5.2); set('normal', 8, C.inkSoft); doc.text(r[1], M + 70, y + 5.2); doc.text(r[2], M + 150, y + 5.2); doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + 8, PW - M, y + 8); y += 8; });
-      y += 4;
+      need(12 + mRows.length * 8);
+      table([['Meter', 70], ['Reading at the ' + eStage, 80], ['Reading now', CW - 150]], mRows);
     }
     // Side-by-side photos of the items that changed for the worse: then on the left, now on the right.
     const pairs = changes.filter(x => x.c.worse && x.c.ei && (x.c.ei.photos || []).length && (x.item.photos || []).length).slice(0, 40);
     if (pairs.length){
       newPage(); banner('Changes since the ' + eName + ' – photographs');
-      const bw = (CW - 8) / 2, bh = 54;
+      const bw = (CW - 10) / 2, bh = 56;
       const origin = (location && /^https?:/.test(location.origin || '')) ? location.origin : '';
       for (let i = 0; i < pairs.length; i++){
         const { room, item, c } = pairs[i];
-        if (y + bh + 16 > BOTTOM){ newPage(); banner('Changes since the ' + eName + ' – photographs'); }
-        set('bold', 8.6, C.ink); doc.text(room.name + '  ·  ' + item.label, M, y + 3);
-        set('bold', 8, C.banner); doc.text(c.text, PW - M, y + 3, { align: 'right' });
+        if (y + bh + 18 > BOTTOM){ newPage(); banner('Changes since the ' + eName + ' – photographs'); }
+        set('bold', 9, C.ink); doc.text(room.name + '  ·  ' + item.label, M, y + 3);
+        set('bold', 8, COND.poor[0]); doc.text(c.text, PW - M, y + 3, { align: 'right' });
         const top = y + 6;
         const n = c.ei.photos[0];
         const thenImg = await (async () => { try { const r = await fetch(E.base + n + '.jpg'); if (!r.ok) return null; const b = await r.blob(); const du = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }); return await shrinkPhoto(du, 700); } catch (e) { return null; } })();
         if (!(thenImg && drawFitted(thenImg, 'cmp-then-' + i, M, top, bw, bh))){
-          doc.setFillColor(244, 245, 247); doc.rect(M, top, bw, bh, 'F'); set('normal', 8, C.faint); doc.text('Earlier photo not available offline', M + bw / 2, top + bh / 2, { align: 'center' });
+          doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(M, top, bw, bh, 'F'); set('normal', 8, C.faint); doc.text('Earlier photo not available offline', M + bw / 2, top + bh / 2, { align: 'center' });
         }
         if (origin) doc.link(M, top, bw, bh, { url: origin + E.base + n });
         const nowP = item.photos[0];
-        drawFitted(await shrinkPhoto(nowP.dataUrl, 700), 'cmp-now-' + i, M + bw + 8, top, bw, bh);
-        const ref = (photoRefsForRoom(room).byItem.get(item.id) || { refs: [] }).refs[0];
+        drawFitted(await shrinkPhoto(nowP.dataUrl, 700), 'cmp-now-' + i, M + bw + 10, top, bw, bh);
+        const pref = (photoRefsForRoom(room).byItem.get(item.id) || { refs: [] }).refs[0];
+        set('bold', 6.6, C.faint); doc.text('THEN', M, top + bh + 4.4); doc.text('NOW', M + bw + 10, top + bh + 4.4);
         set('normal', 7.4, C.inkSoft);
-        doc.text('At the ' + eName + ' · ' + eWhen + ' · ' + (c.ei.condition ? conditionWord(c.ei.condition) : 'not recorded') + ' · tap to enlarge', M, top + bh + 4);
-        doc.text('Now' + (ref ? ' · photo ' + ref : '') + ' · ' + photoStamp(nowP.ts) + ' · ' + (item.condition ? conditionWord(item.condition) : 'not recorded'), M + bw + 8, top + bh + 4);
-        y = top + bh + 10;
+        doc.text('At the ' + eName + ' · ' + eWhen + ' · ' + (c.ei.condition ? conditionWord(c.ei.condition) : 'not recorded') + ' · tap to enlarge', M + 9, top + bh + 4.4);
+        doc.text((pref ? 'Photo ' + pref + ' · ' : '') + photoStamp(nowP.ts) + ' · ' + (item.condition ? conditionWord(item.condition) : 'not recorded'), M + bw + 18, top + bh + 4.4);
+        y = top + bh + 11;
       }
     }
   }
 
+  /* ------------------------------------------------- important information */
+  newSection('Important information – please read');
+  {
+    const info = [
+      'This report records the condition, cleanliness and contents of the property at the date and time of the inspection. It is intended as a fair and accurate record for both landlord and tenant, and it is the document the two parties compare against at the end of the tenancy.',
+      'Every room in this report carries a minimum of eight photographs taken on the day of the inspection. Each photograph is date and time stamped at the moment it is captured, and the stamp is written into the image itself so it cannot be separated from the picture.',
+      'The person compiling this report is not a qualified surveyor. Descriptions of woods, fabrics, plant life and colours are for identification only and should not be read as an expert assessment. An item is only described as new where it is still in its original packaging or an invoice has been provided.',
+      'Each item is described by its colour, material and main features, with any marks or damage seen, its cleanliness and, where it can be tested (doors, windows, taps, appliances, lights, detectors), whether it was working. Each room opens with a summary of its overall condition, cleanliness and the times it was photographed.',
+      'Items are numbered within each room, and each item’s photographs carry the same number: item 3 is shown in photograph 3, or 3a, 3b and so on where there are several. General photographs of a room are numbered G1, G2 and so on.',
+      'Photographs may not be exhaustive of every item and area of the property. Where an item is not photographed, the written description stands as the record of its condition.',
+      'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
+      'A signature on the declaration form applies to the whole report: the schedule of condition, the general condition and cleanliness of the property, the meter readings, and the handover or hand back of keys.',
+      'Items left for the tenant’s use are recorded and counted. Items stored in the property in bags or boxes are not opened or inspected; a note is made that they are present. Where furniture can safely be moved, the area behind and beneath it is inspected.',
+      'A copy of this report is sent to the managing agent when it is completed, and kept securely by them as the record of the inspection.',
+      'Fire safety labels are recorded where they are seen. That is not a statement that the item complies with current fire safety regulations. Keeping smoke, heat and CO detectors in working order during the tenancy is the tenant’s responsibility.'
+    ];
+    // Two columns, like a printed page: fill the left column to about half, then the right.
+    const gw = (CW - 14) / 2, lh = 4.15;
+    set('normal', 8.8, C.ink);
+    const blocks = info.map(p => lines(p, gw));
+    const totalH = blocks.reduce((a, b) => a + b.length * lh + 3.6, 0);
+    let col = 0, cy = y, used = 0;
+    blocks.forEach(b => {
+      const h = b.length * lh + 3.6;
+      if (col === 0 && used > 0 && (used + h / 2 > totalH / 2 || cy + h > BOTTOM)){ col = 1; cy = y; }
+      if (cy + h > BOTTOM){ newPage(); col = 0; cy = y; used = 0; }
+      set('normal', 8.8, C.ink);
+      doc.text(b, M + col * (gw + 14), cy + 3);
+      cy += h; used += h;
+    });
+    vr(M + gw + 7, y, Math.min(BOTTOM, y + totalH / 2 + 10));
+  }
+
+  /* ------------------------------------------------------- condition guide */
+  newSection('Condition and cleanliness explained');
+  {
+    const colW = (CW - 14) / 2;
+    const startY = y;
+    let leftY = y, rightY = y;
+    set('bold', 6.6, C.faint); doc.text('CONDITION', M, leftY + 3); leftY += 8;
+    CONDITION_OPTIONS.forEach(([v, l]) => {
+      pill(M, leftY, v);
+      set('bold', 8.6, C.ink); doc.text(l, M + 24, leftY + 3.6);
+      const ls = lines(CONDITION_HELP[v], colW - 24);
+      set('normal', 8.2, C.inkSoft); doc.text(ls, M + 24, leftY + 8);
+      leftY += 8 + ls.length * 3.9 + 4;
+      hr(leftY - 2, C.line, 0.2, M, M + colW);
+    });
+    const CLEAN_HELP = {
+      excellent: 'A third party has carried out the clean and the property is spotless throughout, including floors, surfaces, appliances and sanitary ware.',
+      good: 'Cleaning has been done to a good standard, with no receipt or evidence of a professional clean provided. No cleaning omissions found.',
+      fair: 'An attempt has been made, but further cleaning is needed: dust, cobwebs, debris, light grease or limescale remain.',
+      poor: 'No real attempt has been made to clean. A full clean is needed to bring the property back to the standard it was let in.'
+    };
+    const rx = M + colW + 14;
+    set('bold', 6.6, C.faint); doc.text('CLEANLINESS', rx, rightY + 3); rightY += 8;
+    CLEANLINESS_OPTIONS.forEach(([v, l]) => {
+      set('bold', 8.6, C.ink); doc.text(l, rx, rightY + 3.6);
+      const ls = lines(CLEAN_HELP[v] || '', colW);
+      set('normal', 8.2, C.inkSoft); doc.text(ls, rx, rightY + 8);
+      rightY += 8 + ls.length * 3.9 + 4;
+      hr(rightY - 2, C.line, 0.2, rx, PW - M);
+    });
+    y = Math.max(leftY, rightY, startY) + 4;
+  }
+
+  /* --------------------------------------------------- schedule of condition */
+  newSection('Schedule of condition – ' + stage.toLowerCase());
+  const schedule = [
+    ['General condition', derivedLabel(derivedPropertyCondition(s.rooms))],
+    ['General cleanliness', dcl.cleaning || 'Not recorded'],
+    ['General decorative order', derivedLabel(derivedDecorativeCondition(s.rooms))]
+  ].concat(scheduleRows(s));
+  labelRows(schedule, 70, 8.8);
+
   /* ------------------------------------------------- summary of items noted */
   newSection('Summary of items noted – ' + stage.toLowerCase());
   const issues = issuesNoted(s);
-  set('normal', 8.6, C.inkSoft);
+  set('normal', 8.8, C.inkSoft);
   const introLines = lines(issues.length
-    ? 'Every item recorded in fair or poor condition, every note added by the tenant, any damage or defects reported, room cleanliness below a good standard, and every item marked not applicable. Full details are in the room schedules that follow.'
-    : 'No items were recorded in fair or poor condition, no damage or defects were reported, and no notes were added. Full details are in the room schedules that follow.', CW);
+    ? 'Every item recorded in fair or poor condition, every note added, any damage or defects reported, room cleanliness below a good standard, and every item marked not applicable. Full details are in the room pages that follow.'
+    : 'No items were recorded in fair or poor condition, no damage or defects were reported, and no notes were added. Full details are in the room pages that follow.', CW * 0.75);
   doc.text(introLines, M, y + 3);
-  y += introLines.length * 4.1 + 5;
+  y += introLines.length * 4.2 + 6;
   if (issues.length){
-    const cols = [[ 'ROOM', 46 ], [ 'REF', 16 ], [ 'ITEM', 52 ], [ 'CONDITION', 34 ], [ 'DETAILS', CW - 148 ]];
-    const head = () => {
-      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(M, y, CW, 8, 'F');
-      set('bold', 7.8, C.inkSoft);
-      let x = M; cols.forEach(([t, w]) => { doc.text(t, x + 2, y + 5.3); x += w; });
-      y += 8;
-    };
-    head();
-    issues.forEach(row => {
-      const cells = row.map((v, i) => lines(v || '', cols[i][1] - 4));
-      const h = Math.max(8.5, Math.max.apply(null, cells.map(c => c.length)) * 4 + 4.4);
-      if (y + h > BOTTOM){ newPage(); head(); }
-      let x = M;
-      cells.forEach((c, i) => {
-        set(i === 2 ? 'bold' : 'normal', 8, i === 3 && /poor|reported/i.test(row[3]) ? C.banner : (i === 2 ? C.ink : C.inkSoft));
-        doc.text(c, x + 2, y + 5.2); x += cols[i][1];
-      });
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(M, y + h, PW - M, y + h);
-      y += h;
+    table([['Room', 46], ['Ref', 16], ['Item', 52], ['Condition', 34], ['Details', CW - 148]], issues, {
+      style: (i, row) => i === 0 ? ['normal', C.inkSoft] : i === 2 ? ['bold', C.ink] : i === 3 ? ['bold', COND[condKey(row[3])] ? COND[condKey(row[3])][0] : /reported/i.test(row[3]) ? COND.poor[0] : C.inkSoft] : null
     });
   }
 
   /* -------------------------------------------------------------- the keys */
   newSection('Keys – ' + stage.toLowerCase());
   const keys = ((s.property && s.property.keys) || []).filter(k => (k.desc || '').trim());
-  doc.setFillColor(C.head[0], C.head[1], C.head[2]);
-  doc.rect(M, y, CW, 8, 'F');
-  set('bold', 8.4, C.inkSoft);
-  doc.text('KEYS AT ' + stage, M + 3, y + 5.4);
-  doc.text('ACTION', M + CW * 0.6, y + 5.4);
-  y += 8;
-  rule();
-  if (!keys.length){ set('italic', 9, C.inkSoft); doc.text('No keys recorded.', M + 3, y + 6); y += 10; }
-  keys.forEach(k => {
-    set('normal', 9, C.ink);
-    const ls = lines(k.desc, CW * 0.55);
-    const h = Math.max(9, ls.length * 4.4 + 4);
-    need(h);
-    set('normal', 9, C.ink); doc.text(ls, M + 3, y + 5.6);
-    set('normal', 9, C.inkSoft); doc.text(k.action || '', M + CW * 0.6, y + 5.6);
-    y += h; rule();
-  });
-  y += 5;
+  if (!keys.length){ set('italic', 9, C.inkSoft); doc.text('No keys recorded.', M, y + 4); y += 10; }
+  else table([['Keys at ' + stage, CW * 0.6], ['Action', CW * 0.4]], keys.map(k => [k.desc, k.action || '']), { size: 8.8, style: i => i === 0 ? ['normal', C.ink] : null });
   const keyShots = [];
   keys.forEach(k => (k.photos || []).forEach(p => keyShots.push({ area:'Keys', ref:'K' + (keyShots.length + 1), label:'Keys – ' + k.desc, fullTitle:'KEYS  ·  ' + String(k.desc || '').toUpperCase(), ts:p.ts, dataUrl:p.dataUrl })));
   await photoGrid(keyShots, 4);
@@ -2774,33 +2820,29 @@ async function buildPdfBlob(s, onProgress, out){
   /* ------------------------------------------------------- utility meters */
   newSection('Utility meters – ' + stage.toLowerCase());
   const meterKeys = Object.keys((s.property && s.property.meters) || {}).filter(k => METER_LABELS[k]);
-  const mw = (CW - 3 * (meterKeys.length - 1)) / Math.max(1, meterKeys.length);
-  let mx = M;
-  const mTop = y;
-  meterKeys.forEach(key => {
-    const m = s.property.meters[key];
-    doc.setFillColor(C.head[0], C.head[1], C.head[2]);
-    doc.rect(mx, mTop, mw, 8, 'F');
-    set('bold', 8.2, C.banner);
-    doc.text(METER_SHORT[key] || METER_LABELS[key] || key, mx + mw / 2, mTop + 5.4, { align:'center' });
-    let my = mTop + 12;
-    const rows = m.na
-      ? [['', 'N/A – not present']]
-      : [['Reading', (m.reading || '').trim() || 'Not recorded'],
-         ['Serial No', (m.serial || '').trim() || '—'],
-         ['Location', (m.location || '').trim() || '—']];
-    rows.forEach(([k, v]) => {
-      set('normal', 8.2, C.banner); if (k) doc.text(k, mx + 2, my);
-      set('normal', 8.2, C.ink);
-      const ls = lines(v, mw - (k ? 22 : 4));
-      doc.text(ls, mx + (k ? 22 : 2), my);
-      my += Math.max(5.4, ls.length * 4 + 1.6);
+  {
+    const gap = 10, mw = (CW - gap * (meterKeys.length - 1)) / Math.max(1, meterKeys.length);
+    const mTop = y; let maxH = 0;
+    meterKeys.forEach((key, i) => {
+      const m = s.property.meters[key], x = M + i * (mw + gap);
+      let my = mTop;
+      set('bold', 6.6, C.faint); doc.text(String(METER_SHORT[key] || METER_LABELS[key] || key).toUpperCase(), x, my + 3);
+      hr(my + 5.5, C.ink, 0.3, x, x + mw);
+      my += 9;
+      if (m.na){ serif('normal', 16, C.faint); doc.text('Not present', x, my + 7); my += 12; }
+      else {
+        serif('normal', 22, C.ink); doc.text(lines((m.reading || '').trim() || 'Not recorded', mw)[0], x, my + 8);
+        my += 13;
+        [['Serial number', (m.serial || '').trim() || '—'], ['Location', (m.location || '').trim() || '—']].forEach(([k, v]) => {
+          set('normal', 7.4, C.faint); doc.text(k, x, my + 3);
+          set('normal', 8.4, C.ink); const ls = lines(v, mw - 30); doc.text(ls, x + 28, my + 3);
+          my += Math.max(5.6, ls.length * 3.9 + 1.8); hr(my - 1.2, C.line, 0.2, x, x + mw);
+        });
+      }
+      maxH = Math.max(maxH, my - mTop);
     });
-    doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-    doc.rect(mx, mTop, mw, Math.max(34, my - mTop + 2));
-    mx += mw + 3;
-  });
-  y = mTop + 40;
+    y = mTop + maxH + 6;
+  }
   const meterShots = [];
   meterKeys.forEach(key => {
     const m = s.property.meters[key];
@@ -2816,27 +2858,11 @@ async function buildPdfBlob(s, onProgress, out){
     ['Number of floors in property', pr.floors || ''],
     ['Detectors present on all floors', pr.detectorsAllFloors || ''],
     ['Heating source within the property', pr.heatingSource || '']
-  ], 74, 9);
+  ], 74, 8.8);
   const dets = (pr.detectors || []).filter(d => (d.location || '').trim() || d.category);
   if (dets.length){
-    const dw = (CW - 9) / 4;
-    const rowsNeeded = Math.ceil(dets.length / 4);
-    need(rowsNeeded * 30 + 4);
-    let dx = M, dTop = y;
-    dets.forEach((d, i) => {
-      if (i > 0 && i % 4 === 0){ dTop += 30; dx = M; }
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-      doc.rect(dx, dTop, dw, 26);
-      set('bold', 8.2, C.banner); doc.text('Category', dx + 2, dTop + 6);
-      set('normal', 8.2, C.ink); doc.text(lines(d.category, dw - 24), dx + 24, dTop + 6);
-      set('bold', 8.2, C.banner); doc.text('Location', dx + 2, dTop + 12);
-      set('normal', 8.2, C.ink); doc.text(lines(d.location || '—', dw - 24), dx + 24, dTop + 12);
-      set('bold', 8.2, C.banner); doc.text('Tested', dx + 2, dTop + 20);
-      set('bold', 8.6, d.tested === 'Yes' ? [46,110,70] : [150,82,30]);
-      doc.text(d.tested === 'Yes' ? 'YES – audible' : (d.tested === 'No' ? 'NO' : 'N/A'), dx + 24, dTop + 20);
-      dx += dw + 3;
-    });
-    y = dTop + 30;
+    table([['Detector', 70], ['Location', 110], ['Tested', CW - 180]], dets.map(d => [d.category || '—', (d.location || '').trim() || '—', d.tested === 'Yes' ? 'Yes – audible' : (d.tested === 'No' ? 'No' : 'N/A')]),
+      { size: 8.6, style: i => i === 2 ? ['bold', C.ink] : null });
   }
 
   /* ------------------------------------------------- property details & documents */
@@ -2850,216 +2876,230 @@ async function buildPdfBlob(s, onProgress, out){
     ['Heating source', pr.heatingSource || '—'],
     ['Inspection type', s.meta.inspectionType || '—'],
     ['Compiled by', s.meta.inspectorName || '—']
-  ].filter(Boolean), 74, 9);
+  ].filter(Boolean), 74, 8.8);
   // Documents are no longer asked for; listed only for reports that recorded them before.
   const docsGiven = DOC_LIST.filter(([k]) => (pr.documents || {})[k]);
   if (docsGiven.length){
-    need(20);
-    set('bold', 9.5, C.banner); doc.text('DOCUMENTS GIVEN TO THE TENANT', M, y + 3); y += 7;
-    labelRows(docsGiven.map(([k, l]) => [l, pr.documents[k]]), 96, 9);
+    subhead('Documents given to the tenant');
+    labelRows(docsGiven.map(([k, l]) => [l, pr.documents[k]]), 96, 8.8);
   }
 
   /* ---------------------------------------------------------------- rooms */
+  // Each room opens with its summary, then every item as a card: its photographs on the left, its
+  // condition and details on the right, two cards to a row. General views of the room follow.
   let done = 0;
   const progressTotal = Math.max(1, photoTotal);
   const tick = () => { done++; if (onProgress) onProgress(Math.min(98, Math.round((done / progressTotal) * 100))); };
 
-  const wRef = 11, wDesc = 68, wIn = 86, wOut = 68, wLia = CW - wRef - wDesc - wIn - wOut;
-  const xRef = M, xDesc = xRef + wRef, xIn = xDesc + wDesc, xOut = xIn + wIn, xLia = xOut + wOut;
+  const GAP = 12, colW = (CW - GAP) / 2, PHW = 44, PHH = 33, TX = PHW + 6, TW = colW - TX - 2;
+  const TH = 13, THH = 9.75, TGAP = (PHW - TH * 3) / 2;   // extra photos as small thumbnails under the first
+  const itemDetailText = item => {
+    const bits = [itemMarksText(item), itemCleanText(item.clean), itemWorkingText(item)].filter(Boolean);
+    const obs = sentence(item.aiObservation); if (obs) bits.push(obs);
+    const note = sentence(item.conditionNote); if (note) bits.push('Note: ' + note);
+    return bits.join(' ');
+  };
 
-  function tableHead(name){
-    doc.setFillColor(C.head[0], C.head[1], C.head[2]);
-    doc.rect(M, y, CW, 8, 'F');
-    set('bold', 7.8, C.inkSoft);
-    doc.text('REF', xRef + 2, y + 5.3);
-    doc.text('DESCRIPTION', xDesc + wDesc / 2, y + 5.3, { align:'center' });
-    doc.text(E ? eStage + ' ' + eWhen.toUpperCase() : isInsp ? 'INSPECTION CONDITION' : 'CHECK IN CONDITION', xIn + wIn / 2, y + 5.3, { align:'center' });
-    doc.text(E ? stage + ' CONDITION' : isInsp ? '' : 'CHECK OUT CONDITION', xOut + wOut / 2, y + 5.3, { align:'center' });
-    doc.text('LIABILITY', xLia + wLia / 2, y + 5.3, { align:'center' });
-    y += 8;
-    doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-    doc.line(M, y, PW - M, y);
+  function roomHeader(room, idx, cont){
+    set('normal', 7.4, C.faint); doc.text('Room ' + (idx + 1) + ' of ' + s.rooms.length + (cont ? '  ·  continued' : ''), M, y + 2);
+    serif('normal', 22, C.ink); doc.text(lines(room.name, CW - 60)[0], M, y + 11);
+    if (!cont) toc.push([room.name, pageNow()]);
+    hr(y + 14.5, C.ink, 0.35);
+    y += 18;
+    if (cont) return;
+    const st = roomStats(room);
+    const cells = [
+      ['Overall', null],
+      ['Cleanliness', cleanlinessLabel(room.condition.cleanliness).split(' — ')[0]],
+      ['Items', st.items + ' recorded' + (st.na ? ', ' + st.na + ' n/a' : '')],
+      ['Marks or damage', st.marks ? st.marks + ' item' + (st.marks === 1 ? '' : 's') : 'None noted'],
+      ['Needs attention', [st.needsClean ? st.needsClean + ' to clean' : '', st.notWorking ? st.notWorking + ' not working' : ''].filter(Boolean).join(', ') || 'Nothing'],
+      ['Photographs', st.photos + '  ·  ' + st.inspected]
+    ];
+    const cw6 = CW / cells.length;
+    cells.forEach(([k, v], i) => {
+      const x = M + i * cw6;
+      if (i) vr(x - 3, y, y + 11);
+      set('normal', 7, C.faint); doc.text(k, x, y + 3);
+      if (v == null) pill(x, y + 5.4, condKey(st.overall));
+      else { set('bold', 8.6, k === 'Marks or damage' && st.marks ? COND.fair[0] : C.ink); doc.text(lines(v, cw6 - 6)[0], x, y + 9.2); }
+    });
+    y += 14;
+    condBar(M, y, CW, 1.4, st);
+    y += 6;
   }
 
-  for (const room of s.rooms){
-    newPage();
-    toc.push([room.name, pageNow()]);
-    banner(room.name);
-    {
-      const st = roomStats(room);
-      const cells = [
-        ['OVERALL CONDITION', st.overall],
-        ['CLEANLINESS', cleanlinessLabel(room.condition.cleanliness).split(' — ')[0]],
-        ['ITEMS', st.items + ' recorded' + (st.na ? ', ' + st.na + ' n/a' : '')],
-        ['MARKS / DAMAGE', st.marks ? st.marks + ' item' + (st.marks === 1 ? '' : 's') : 'None noted'],
-        ['NEEDS ATTENTION', [st.needsClean ? st.needsClean + ' to clean' : '', st.notWorking ? st.notWorking + ' not working' : ''].filter(Boolean).join(', ') || 'Nothing'],
-        ['PHOTOGRAPHS', st.photos + '  ·  ' + st.inspected]
-      ];
-      const cw6 = CW / cells.length;
-      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.roundedRect(M, y, CW, 13, 3, 3, 'F');
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-      cells.forEach(([k, v], i) => {
-        const x = M + i * cw6;
-        if (i) doc.line(x, y, x, y + 13);
-        set('bold', 6.6, C.faint); doc.text(k, x + 2.5, y + 4.6);
-        set('bold', 8.4, k === 'MARKS / DAMAGE' && st.marks ? C.banner : C.ink); doc.text(lines(v, cw6 - 4)[0], x + 2.5, y + 10);
-      });
-      y += 17;
+  function measureCard(room, item, refs){
+    const photos = item.photos || [];
+    const extraRows = Math.ceil(Math.max(0, photos.length - 1) / 3);
+    const photoH = PHH + 5 + extraRows * (THH + 5);
+    set('bold', 9, C.ink);
+    const pillW = 22;
+    const labelL = lines(item.label, TW - pillW);
+    set('normal', 7.6, C.inkSoft);
+    const descL = item.notApplicable ? [] : lines(itemDescriptionText(item), TW);
+    const detail = item.notApplicable ? ('Not applicable' + ((item.naReason || '').trim() ? ' – ' + item.naReason.trim() : '') + '.') : itemDetailText(item);
+    const detL = detail ? lines(detail, TW) : [];
+    let earL = [], chL = [];
+    if (E){
+      const ei = earlierItem(s, room, item);
+      const eText = ei ? reportConditionText(ei, ['@']).replace(/ Photo @$/, (ei.photos || []).length ? '' : ' No photograph.') : 'Not in the earlier report.';
+      set('normal', 7.3, C.faint); earL = lines('At the ' + eName + ', ' + eWhen + ': ' + eText, TW);
+      const c = itemChange(s, room, item);
+      if (c && c.text){ set('bold', 7.4, C.ink); chL = lines(c.text, TW); }
     }
-    tableHead(room.name);
-
-    const roomRefs = photoRefsForRoom(room);
-    let n = 0, lastCat = '';
-    for (const item of room.items){
-      const cat = itemCategory(item.label);
-      if (cat !== lastCat){
-        need(8);
-        set('bold', 8.2, C.sub);
-        doc.text(cat, xRef + 2, y + 5);
-        y += 6.4;
-        lastCat = cat;
+    const textH = 4 + labelL.length * 4 + 1.2 + descL.length * 3.5 + (detL.length ? 1.6 + detL.length * 3.5 : 0) + (earL.length ? 2.6 + earL.length * 3.3 : 0) + (chL.length ? 1 + chL.length * 3.4 : 0);
+    return { h: Math.max(photoH, textH) + 3.5, labelL, descL, detL, earL, chL, change: E ? itemChange(s, room, item) : null };
+  }
+  async function drawCard(room, item, refs, m, x, top){
+    const photos = item.photos || [];
+    const cat = itemCategory(item.label);
+    // Photographs.
+    if (photos.length){
+      for (let k = 0; k < photos.length; k++){
+        const p = photos[k], pref = refs[k] || '';
+        const shot = { area: room.name, label: item.label, ts: p.ts, dataUrl: p.dataUrl, ref: pref, fullTitle: (room.name + '  ·  ' + pref + '  ·  ' + item.label).toUpperCase() };
+        tick();
+        if (k === 0){
+          if (drawFitted(await shrinkPhoto(p.dataUrl, 900), 'photo-' + fullSize.length, x, top + 3, PHW, PHH)) linkPhoto(registerFullSize(shot), x, top + 3, PHW, PHH);
+          set('bold', 6.4, C.ink); doc.text(pref, x, top + 3 + PHH + 3.6);
+          set('normal', 6.2, C.faint); doc.text(photoStamp(p.ts), x + doc.getTextWidth(pref) + 2.6, top + 3 + PHH + 3.6);
+        } else {
+          const tx = x + ((k - 1) % 3) * (TH + TGAP), ty = top + 3 + PHH + 6 + Math.floor((k - 1) / 3) * (THH + 5);
+          if (drawFitted(await shrinkPhoto(p.dataUrl, 600), 'photo-' + fullSize.length, tx, ty, TH, THH)) linkPhoto(registerFullSize(shot), tx, ty, TH, THH);
+          set('normal', 5.8, C.faint); doc.text(pref, tx, ty + THH + 3);
+        }
       }
-      n++;
-      set('bold', 8.2, C.ink);
-      const dLines = lines(item.label, wDesc - 6);
-      set('normal', 7.8, C.inkSoft);
-      const descText = item.notApplicable ? '' : itemDescriptionText(item);
-      const ddLines = descText ? lines(descText, wDesc - 6) : [];
-      set('normal', 8, C.inkSoft);
-      const toRight = isOut || !!E;
-      const cLines = lines(reportConditionText(item, roomRefs.byItem.get(item.id).refs), (toRight ? wOut : wIn) - 6);
-      const ei = E ? earlierItem(s, room, item) : null;
-      const eLines = E ? lines(ei ? reportConditionText(ei, ['@']).replace(/ Photo @$/, (ei.photos || []).length ? ' Photographed.' : ' No photograph.') : 'Not in the earlier report.', wIn - 6) : [];
-      const h = Math.max(9, Math.max(dLines.length + ddLines.length, cLines.length, eLines.length) * 4.1 + 4.2);
-      if (y + h > BOTTOM){ newPage(); banner(room.name); tableHead(room.name); lastCat = ''; }
-      set('normal', 8, C.inkSoft); doc.text(String(n) + '.', xRef + 2, y + 5.2);
-      set('bold', 8.2, C.ink); doc.text(dLines, xDesc + 2, y + 5.2);
-      if (ddLines.length){ set('normal', 7.8, C.inkSoft); doc.text(ddLines, xDesc + 2, y + 5.2 + dLines.length * 4.1); }
-      set('normal', 8, item.notApplicable ? C.faint : C.inkSoft);
-      if (toRight) doc.text(cLines, xOut + 2, y + 5.2);
-      else doc.text(cLines, xIn + 2, y + 5.2);
-      if (eLines.length){ set('normal', 8, C.faint); doc.text(eLines, xIn + 2, y + 5.2); }
-      doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-      doc.line(M, y + h, PW - M, y + h);
-      [xDesc, xIn, xOut, xLia].forEach(x => doc.line(x, y, x, y + h));
-      y += h;
+    } else {
+      doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(x, top + 3, PHW, PHH, 'F');
+      set('normal', 7.4, C.faint); doc.text(item.notApplicable ? 'Not applicable' : 'No photograph', x + PHW / 2, top + 3 + PHH / 2 + 1, { align:'center' });
+    }
+    // Text.
+    const tx = x + TX;
+    let ty = top + 5.4;
+    set('bold', 6, C.faint); doc.text(String(cat || '').toUpperCase(), tx, ty);
+    pill(x + colW, top + 2.4, item.notApplicable ? 'na' : item.condition, 'right');
+    ty += 4.4;
+    set('bold', 9, C.ink); doc.text(m.labelL, tx, ty); ty += (m.labelL.length - 1) * 4 + 1.6;
+    if (m.descL.length){ set('normal', 7.6, C.inkSoft); doc.text(m.descL, tx, ty + 3); ty += m.descL.length * 3.5; }
+    if (m.detL.length){ ty += 1.6; set('normal', 7.6, C.ink); doc.text(m.detL, tx, ty + 3); ty += m.detL.length * 3.5; }
+    if (m.earL.length){ ty += 2.6; set('normal', 7.3, C.faint); doc.text(m.earL, tx, ty + 3); ty += m.earL.length * 3.3; }
+    if (m.chL.length){ ty += 1; set('bold', 7.4, m.change && m.change.worse ? COND.poor[0] : COND.good[0]); doc.text(m.chL, tx, ty + 3); }
+  }
+
+  for (let ri = 0; ri < s.rooms.length; ri++){
+    const room = s.rooms[ri];
+    newPage();
+    roomHeader(room, ri, false);
+    const roomRefs = photoRefsForRoom(room);
+    for (let i = 0; i < room.items.length; i += 2){
+      const pair = room.items.slice(i, i + 2);
+      const ms = pair.map(item => measureCard(room, item, roomRefs.byItem.get(item.id).refs));
+      const rowH = Math.max.apply(null, ms.map(m => m.h));
+      if (y + rowH > BOTTOM){ newPage(); roomHeader(room, ri, true); }
+      for (let c = 0; c < pair.length; c++) await drawCard(room, pair[c], roomRefs.byItem.get(pair[c].id).refs, ms[c], M + c * (colW + GAP), y);
+      if (pair.length > 1) vr(M + colW + GAP / 2, y + 3, y + rowH - 3);
+      y += rowH; hr(y);
     }
 
-    /* room summary line */
-    y += 4;
-    need(14);
-    set('bold', 8.4, C.banner); doc.text('ROOM CLEANLINESS', M + 2, y + 4);
-    set('normal', 8.4, C.ink); doc.text(cleanlinessLabel(room.condition.cleanliness), M + 46, y + 4);
-    set('bold', 8.4, C.banner); doc.text('DAMAGE / DEFECTS', M + CW * 0.5, y + 4);
-    set('normal', 8.4, C.ink);
-    doc.text(lines(room.condition.hasDamage ? (room.condition.damageNotes || 'Noted, no detail given.') : 'None noted', CW * 0.32), M + CW * 0.5 + 44, y + 4);
-    y += 10;
-    set('normal', 8, C.inkSoft);
-    doc.text(roomTotalPhotos(room) + ' date and time stamped photographs  ·  ' + room.items.filter(i => !i.notApplicable).length + ' items recorded' + (naCount(room) ? ', ' + naCount(room) + ' not applicable' : ''), M + 2, y);
-    y += 6;
-    if ((room.notes || '').trim()){
-      const ls = lines('Notes: ' + room.notes, CW);
-      need(ls.length * 4.2 + 4);
-      set('normal', 8.4, C.inkSoft); doc.text(ls, M, y + 3);
-      y += ls.length * 4.2 + 4;
+    /* the room's summary */
+    {
+      const notes = (room.notes || '').trim();
+      const parts = [
+        ['Room cleanliness', cleanlinessLabel(room.condition.cleanliness)],
+        ['Damage or defects', room.condition.hasDamage ? (room.condition.damageNotes || 'Noted, no detail given.') : 'None noted'],
+        ['Photographs', roomTotalPhotos(room) + ' date and time stamped  ·  ' + room.items.filter(i => !i.notApplicable).length + ' items recorded' + (naCount(room) ? ', ' + naCount(room) + ' not applicable' : '')]
+      ].concat(notes ? [['Notes', notes]] : []);
+      const pw3 = (CW - 8) / parts.length;
+      set('normal', 8, C.ink);
+      const pl = parts.map(p => lines(p[1], pw3 - 8));
+      const h = Math.max.apply(null, pl.map(l => l.length)) * 3.8 + 12;
+      y += 4; need(h + 2);
+      doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(M, y, CW, h, 'F');
+      parts.forEach((p, i) => {
+        const x = M + 4 + i * pw3;
+        set('normal', 7, C.faint); doc.text(p[0], x, y + 5);
+        set('normal', 8, C.ink); doc.text(pl[i], x, y + 9.6);
+      });
+      y += h + 6;
     }
 
-    /* photo pages, eight to a page */
-    const shots = [];
-    room.items.forEach(i => (i.photos || []).forEach((p, k) => { const ref = roomRefs.byItem.get(i.id).refs[k]; shots.push({ area: room.name, label:i.label, ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  ' + i.label).toUpperCase() }); }));
-    (room.extraPhotos || []).forEach((p, k) => { const ref = roomRefs.extras[k]; shots.push({ area: room.name, label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref, fullTitle: (room.name + '  ·  ' + ref + '  ·  General view').toUpperCase() }); });
-
-    for (let i = 0; i < shots.length; i += 8){
-      newPage();
-      banner(room.name + ' – photographs' + (shots.length > 8 ? ' (' + (i / 8 + 1) + ' of ' + Math.ceil(shots.length / 8) + ')' : ''));
-      await photoGrid(shots.slice(i, i + 8), 4, tick);
+    /* general views */
+    const extras = [];
+    (room.extraPhotos || []).forEach((p, k) => { const r = roomRefs.extras[k]; extras.push({ area: room.name, label:'General view', ts:p.ts, dataUrl:p.dataUrl, ref: r, fullTitle: (room.name + '  ·  ' + r + '  ·  General view').toUpperCase() }); });
+    if (extras.length){
+      need(60);
+      subhead(room.name + ' – general views');
+      await photoGrid(extras, 4, tick);
     }
   }
 
   /* ---------------------------------------------------------- declaration */
   newSection('Declaration form');
   const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
-  const detTested = (pr.detectors || []).every(d => d.tested === 'Yes') ? 'YES' : 'SEE DETECTOR PAGE';
-  const keysReleased = keys.some(k => /released to tenant/i.test(k.action || '')) ? 'YES' : 'NO';
-
-  doc.setFillColor(C.head[0], C.head[1], C.head[2]);
-  doc.rect(M, y, CW, 8, 'F');
-  set('bold', 8, C.inkSoft);
-  doc.text(stage + ' INFORMATION', M + 3, y + 5.4);
-  doc.text('RECORDED', M + CW * 0.46, y + 5.4);
-  doc.text('ADDITIONAL COMMENTS', M + CW * 0.62, y + 5.4);
-  y += 8; rule();
-
-  [
-    ['General cleaning condition', (dcl.cleaning || 'Not recorded').toUpperCase(), ''],
-    ['General property condition', conditionLabel((derivedPropertyCondition(s.rooms) || {}).key).toUpperCase(), derivedLabel(derivedPropertyCondition(s.rooms))],
-    ['General decorative condition', conditionLabel((derivedDecorativeCondition(s.rooms) || {}).key).toUpperCase(), derivedLabel(derivedDecorativeCondition(s.rooms))],
+  const detTested = (pr.detectors || []).every(d => d.tested === 'Yes') ? 'Yes' : 'See the detector page';
+  const keysReleased = keys.some(k => /released to tenant/i.test(k.action || '')) ? 'Yes' : 'No';
+  table([[stage + ' information', CW * 0.4], ['Recorded', CW * 0.22], ['Additional comments', CW * 0.38]], [
+    ['General cleaning condition', dcl.cleaning || 'Not recorded', ''],
+    ['General property condition', conditionLabel((derivedPropertyCondition(s.rooms) || {}).key), derivedLabel(derivedPropertyCondition(s.rooms))],
+    ['General decorative condition', conditionLabel((derivedDecorativeCondition(s.rooms) || {}).key), derivedLabel(derivedDecorativeCondition(s.rooms))],
     ['Smoke / CO detectors tested & audible', detTested, ''],
     ['Keys released to tenant(s)', keysReleased, keys.map(k => k.desc).join('; ')],
-    ['All utility meters recorded', (dcl.metersRecorded || '').toUpperCase(), ''],
-    ['Minimum eight photographs per room', 'YES', s.rooms.length + ' rooms  ·  ' + photoTotal + ' photographs, each date and time stamped'],
-    ['Additional information', (dcl.additional || '').trim() ? 'YES' : 'NO', (dcl.additional || '').trim() || 'n/a']
-  ].forEach(([k, v, note]) => {
-    const nLines = lines(note || 'n/a', CW * 0.36);
-    const h = Math.max(9, nLines.length * 4.1 + 4.4);
-    need(h);
-    set('normal', 8.4, C.ink); doc.text(k, M + 3, y + 5.6);
-    set('bold', 8.4, C.banner); doc.text(String(v), M + CW * 0.46, y + 5.6);
-    set('normal', 8.2, C.inkSoft); doc.text(nLines, M + CW * 0.62, y + 5.6);
-    y += h; rule();
-  });
-  y += 6;
+    ['All utility meters recorded', cap(dcl.metersRecorded || ''), ''],
+    ['Minimum eight photographs per room', 'Yes', s.rooms.length + ' rooms  ·  ' + photoTotal + ' photographs, each date and time stamped'],
+    ['Additional information', (dcl.additional || '').trim() ? 'Yes' : 'No', (dcl.additional || '').trim() || 'n/a']
+  ], { size: 8.4, style: i => i === 0 ? ['normal', C.ink] : i === 1 ? ['bold', C.accent] : null });
 
-  const disclaimer = 'Disclaimer – any query or discrepancy relating to the descriptions or contents of this report must be raised in writing with the managing agent within 7 days of receipt. If nothing is received in writing within that period, this report is taken as an accurate representation of the cleanliness and condition of the property and its contents at the time of the inspection.';
-  set('normal', 8, C.inkSoft);
-  let dLines2 = lines(disclaimer, CW - 2);
-  need(dLines2.length * 4 + 6);
+  const disclaimer = 'Any query or discrepancy relating to the descriptions or contents of this report must be raised in writing with the managing agent within 7 days of receipt. If nothing is received in writing within that period, this report is taken as an accurate representation of the cleanliness and condition of the property and its contents at the time of the inspection.';
+  set('normal', 7.8, C.inkSoft);
+  const dLines2 = lines(disclaimer, CW * 0.8);
+  need(dLines2.length * 3.8 + 6);
   doc.text(dLines2, M, y + 3);
-  y += dLines2.length * 4 + 7;
+  y += dLines2.length * 3.8 + 7;
 
   const declarationText = 'I, ' + (s.meta.signedBy || s.meta.inspectorName) + ', confirm that I carried out this inspection myself, that every photograph in this report was taken by me at the property on the date and time stamped on it, and that the descriptions and condition ratings recorded here are an honest and accurate account of the property as I found it.';
-  set('normal', 8.8, C.ink);
-  const decLines = lines(declarationText, CW - 8);
-  need(decLines.length * 4.3 + 62);
-  doc.setFillColor(248, 249, 251);
-  doc.rect(M, y, CW, decLines.length * 4.3 + 10, 'F');
-  set('normal', 8.8, C.ink);
-  doc.text(decLines, M + 3, y + 6);
-  y += decLines.length * 4.3 + 14;
+  serif('italic', 11, C.ink);
+  const decLines = lines(declarationText, CW - 16);
+  need(decLines.length * 4.8 + 62);
+  doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]);
+  doc.rect(M, y, CW, decLines.length * 4.8 + 10, 'F');
+  doc.setFillColor(C.accent[0], C.accent[1], C.accent[2]); doc.rect(M, y, 1.2, decLines.length * 4.8 + 10, 'F');
+  serif('italic', 11, C.ink);
+  doc.text(decLines, M + 8, y + 7);
+  y += decLines.length * 4.8 + 16;
 
-  const sigW = (CW - 10) / 2;
+  const sigW = (CW - 16) / 2;
   need(50);
-  set('bold', 8.4, C.banner); doc.text('COMPILED AND SIGNED BY', M, y);
-  doc.text('TENANT(S) FULL NAME(S)', M + sigW + 10, y);
-  y += 5;
+  set('bold', 6.6, C.faint); doc.text('COMPILED AND SIGNED BY', M, y);
+  doc.text('TENANT(S) FULL NAME(S)', M + sigW + 16, y);
+  y += 4;
   if (s.signatureDataUrl){
     const sig = await prepPhoto(s.signatureDataUrl, 760, 3/1);
     if (sig) doc.addImage(sig, 'JPEG', M, y, 62, 20.6);
   }
-  doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
-  doc.line(M, y + 22, M + sigW, y + 22);
-  doc.line(M + sigW + 10, y + 22, PW - M, y + 22);
-  set('normal', 8.4, C.ink);
+  hr(y + 22, C.ink, 0.3, M, M + sigW);
+  hr(y + 22, C.ink, 0.3, M + sigW + 16, PW - M);
+  set('bold', 8.6, C.ink);
   doc.text(s.meta.signedBy || s.meta.inspectorName || '', M, y + 27);
-  set('normal', 8.4, C.inkSoft);
-  doc.text('Signed ' + (signedDate || dateLong), M, y + 32);
-  set('bold', 8.4, C.banner);
-  doc.text('TENANT(S) SIGNATURE(S)', M + sigW + 10, y + 32);
-  doc.line(M + sigW + 10, y + 42, PW - M, y + 42);
+  set('normal', 8, C.inkSoft);
+  doc.text('Signed ' + (signedDate || dateLong), M, y + 31.5);
+  set('bold', 6.6, C.faint);
+  doc.text('TENANT(S) SIGNATURE(S)', M + sigW + 16, y + 32);
+  hr(y + 44, C.ink, 0.3, M + sigW + 16, PW - M);
 
   /* --------------------------------------------------- index of photographs */
   if (fullSize.length){
     newSection('Index of photographs');
-    set('normal', 9, C.ink);
+    set('normal', 8.8, C.inkSoft);
     const fl = lines('Every photograph in this report is listed below with the time it was taken. The photographs are shown smaller in the report to keep it a manageable size. ' +
-      (photoBase ? 'Tap or click any photograph, or View below, to open it at full size, uncropped and exactly as taken, with the date and time stamp written into the image (this needs an internet connection).' : ''), CW);
+      (photoBase ? 'Tap or click any photograph, or View below, to open it at full size, uncropped and exactly as taken, with the date and time stamp written into the image (this needs an internet connection).' : ''), CW * 0.8);
     doc.text(fl, M, y + 3);
-    y += fl.length * 4.2 + 5;
-    const colW = (CW - 8) / 2, rowH = 5.4;
-    const ic = [['REF', 13], ['AREA / ITEM', colW - 13 - 30 - 14], ['TAKEN', 30], ['', 14]];
+    y += fl.length * 4.1 + 6;
+    const colW2 = (CW - 12) / 2, rowH = 5.4;
+    const ic = [['Ref', 13], ['Area / item', colW2 - 13 - 30 - 12], ['Taken', 30], ['', 12]];
     const headAt = (x) => {
-      doc.setFillColor(C.head[0], C.head[1], C.head[2]); doc.rect(x, y, colW, 6.5, 'F');
-      set('bold', 7, C.inkSoft); let xx = x; ic.forEach(([t, w]) => { doc.text(t, xx + 1.5, y + 4.4); xx += w; });
+      set('bold', 6.4, C.faint); let xx = x; ic.forEach(([t, w]) => { doc.text(t.toUpperCase(), xx, y + 4); xx += w; });
+      hr(y + 5.6, C.ink, 0.3, x, x + colW2);
     };
     let i = 0;
     while (i < fullSize.length){
@@ -3067,16 +3107,16 @@ async function buildPdfBlob(s, onProgress, out){
       const perCol = Math.max(1, Math.floor((BOTTOM - y - 6.5) / rowH));
       const top = y;
       for (let c = 0; c < 2 && i < fullSize.length; c++){
-        const x = M + c * (colW + 8);
+        const x = M + c * (colW2 + 12);
         y = top; headAt(x); y += 6.5;
         for (let r = 0; r < perCol && i < fullSize.length; r++, i++){
           const f = fullSize[i];
-          set('bold', 7, C.ink); doc.text(String(f.ref || i + 1), x + 1.5, y + 3.9);
+          set('bold', 7, C.ink); doc.text(String(f.ref || i + 1), x, y + 3.9);
           set('normal', 7, C.inkSoft);
-          doc.text(lines((f.area ? f.area + ' – ' : '') + (f.what || ''), ic[1][1] - 3)[0], x + 1.5 + ic[0][1], y + 3.9);
-          doc.text(photoStamp(f.ts) || '—', x + 1.5 + ic[0][1] + ic[1][1], y + 3.9);
-          if (photoBase){ set('bold', 7, C.banner); doc.textWithLink('View', x + 1.5 + ic[0][1] + ic[1][1] + ic[2][1], y + 3.9, { url: photoBase + (i + 1) }); }
-          doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.line(x, y + rowH, x + colW, y + rowH);
+          doc.text(lines((f.area ? f.area + ' – ' : '') + (f.what || ''), ic[1][1] - 3)[0], x + ic[0][1], y + 3.9);
+          doc.text(photoStamp(f.ts) || '—', x + ic[0][1] + ic[1][1], y + 3.9);
+          if (photoBase){ set('bold', 7, C.accent); doc.textWithLink('View', x + ic[0][1] + ic[1][1] + ic[2][1], y + 3.9, { url: photoBase + (i + 1) }); }
+          hr(y + rowH, C.line, 0.15, x, x + colW2);
           y += rowH;
         }
       }
@@ -3090,24 +3130,24 @@ async function buildPdfBlob(s, onProgress, out){
   y = TOP;
   banner('Contents');
   const half = Math.ceil(toc.length / 2);
+  const tw2 = (CW - 20) / 2;
   toc.forEach((entry, i) => {
     const col = i < half ? 0 : 1;
-    const ty = TOP + 22 + (i - col * half) * 6.4;
-    const tx = M + col * (CW / 2 + 4);
-    set('normal', 9.5, C.ink);
-    const label = String(entry[0]);
-    doc.textWithLink(label.charAt(0).toUpperCase() + label.slice(1), tx, ty, { pageNumber: entry[1] });
-    set('bold', 9.5, C.banner);
-    doc.text(String(entry[1] - 1), tx + CW / 2 - 12, ty, { align:'right' });
-    doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(0.15); doc.line(tx, ty + 2.2, tx + CW / 2 - 12, ty + 2.2);
+    const ty = TOP + 25 + (i - col * half) * 7.4;
+    const tx = M + col * (tw2 + 20);
+    serif('normal', 11, C.faint);
+    doc.text(String(entry[1] - 1).padStart(2, '0'), tx, ty);
+    set('normal', 9.6, C.ink);
+    doc.textWithLink(cap(entry[0]), tx + 12, ty, { pageNumber: entry[1] });
+    hr(ty + 2.6, C.line, 0.15, tx, tx + tw2);
   });
   if (photoBase){
     // Where to start the next check-out or inspection from this report.
     const later = laterReportLink(s);
-    const ly = BOTTOM - 14;
-    doc.setFillColor(C.soft[0], C.soft[1], C.soft[2]); doc.roundedRect(M, ly, CW, 12, 3, 3, 'F');
-    set('bold', 8.4, C.banner); doc.text('NEXT REPORT AT THIS PROPERTY', M + 4, ly + 5);
-    set('normal', 8.4, C.ink); doc.textWithLink('To start the check-out or an inspection from this report, open ' + later, M + 4, ly + 9.4, { url: later });
+    const ly = BOTTOM - 16;
+    doc.setFillColor(C.accentSoft[0], C.accentSoft[1], C.accentSoft[2]); doc.rect(M, ly, CW, 13, 'F');
+    set('bold', 7, C.accent); doc.text('NEXT REPORT AT THIS PROPERTY', M + 5, ly + 5.2);
+    set('normal', 8.4, C.ink); doc.textWithLink('To start the check-out or an inspection from this report, open ' + later, M + 5, ly + 9.8, { url: later });
   }
 
   /* header and footer on every page */
@@ -3120,12 +3160,12 @@ async function buildPdfBlob(s, onProgress, out){
   /* ------------------------------------------------------------- helpers */
   async function photoGrid(shots, cols, onEach){
     if (!shots || !shots.length) return;
-    const gap = 5;
+    const gap = 6;
     const cw = (CW - gap * (cols - 1)) / cols;
     const ih = cw * 0.75;
     for (let i = 0; i < shots.length; i += cols){
       const row = shots.slice(i, i + cols);
-      if (y + ih + 13 > BOTTOM) newPage();
+      if (y + ih + 12 > BOTTOM) newPage();
       const top = y;
       for (let c = 0; c < row.length; c++){
         const shot = row[c];
@@ -3135,12 +3175,15 @@ async function buildPdfBlob(s, onProgress, out){
         if (drawFitted(await shrinkPhoto(shot.dataUrl, 900), alias, x, top, cw, ih)){
           linkPhoto(registerFullSize(shot), x, top, cw, ih);
         }
-        set('normal', 7.6, C.inkSoft);
-        doc.text(lines((shot.ref ? shot.ref + '  ·  ' : '') + String(shot.label || '').toUpperCase(), cw)[0], x + cw / 2, top + ih + 4, { align:'center' });
-        set('normal', 6.8, C.faint);
-        doc.text(photoStamp(shot.ts), x + cw / 2, top + ih + 8, { align:'center' });
+        set('bold', 6.8, C.ink);
+        const r = shot.ref ? shot.ref + '  ' : '';
+        doc.text(r, x, top + ih + 4);
+        set('normal', 6.8, C.inkSoft);
+        doc.text(lines(String(shot.label || ''), cw - doc.getTextWidth(r) - 2)[0], x + doc.getTextWidth(r), top + ih + 4);
+        set('normal', 6.2, C.faint);
+        doc.text(photoStamp(shot.ts), x, top + ih + 7.6);
       }
-      y = top + ih + 13;
+      y = top + ih + 12;
     }
   }
 }

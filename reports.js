@@ -12,7 +12,9 @@ const REPORTS_DIR = (process.env.REPORTS_DIR || '').trim() || (VOLUME ? path.joi
 const PERSISTENT = !!(process.env.REPORTS_DIR || VOLUME) || !process.env.RAILWAY_ENVIRONMENT;
 const MAX_PDF = 80 * 1024 * 1024;
 const ID_RE = /^[A-Za-z0-9-]{8,80}$/;
-const KEY_RE = /^[a-f0-9]{32}$/;       // a report's private photo key (random, made on the tenant's phone)
+const KEY_RE = /^[a-f0-9]{32}$/;
+// The example report shown on the website (public/example/, made by the PDF test harness).
+const EXAMPLE_KEY = 'e8a1c0d2b4f6e8a1c0d2b4f6e8a1c0d2', EXAMPLE_DIR = path.join(__dirname, 'public', 'example', 'photos');       // a report's private photo key (random, made on the tenant's phone)
 const photoDir = id => path.join(REPORTS_DIR, id + '.photos');
 // Email to Residential Realtors when a tenant taps "Send" (via Resend, resend.com). Without
 // RESEND_API_KEY the report is still marked as sent and waits on /admin.
@@ -383,6 +385,10 @@ function mount(app){
   function photoFor(req){
     const key = String(req.params.key), n = parseInt(req.params.n, 10);
     if (!KEY_RE.test(key) || !(n >= 1 && n <= 5000)) return null;
+    if (key === EXAMPLE_KEY){   // the example report on the website: its photos ship with the app
+      let idx = {}; try { idx = JSON.parse(fs.readFileSync(path.join(EXAMPLE_DIR, 'index.json'), 'utf8')); } catch (e) {}
+      return { id: 'example', n, file: path.join(EXAMPLE_DIR, n + '.jpg'), info: idx[n] || {}, meta: { address: idx.address } };
+    }
     const id = findByKey(key);
     if (!id) return null;
     const file = path.join(photoDir(id), n + '.jpg');
