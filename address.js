@@ -15,7 +15,9 @@ const GA_KEY = clean(process.env.GETADDRESS_API_KEY);
 const EPC_BASE = clean(process.env.EPC_API_BASE).replace(/\/+$/, '') || 'https://epc.opendatacommunities.org/api/v1';
 const EPC_AUTH = clean(process.env.EPC_API_TOKEN) ? 'Bearer ' + clean(process.env.EPC_API_TOKEN)
   : clean(process.env.EPC_API_EMAIL) && clean(process.env.EPC_API_KEY) ? 'Basic ' + Buffer.from(clean(process.env.EPC_API_EMAIL) + ':' + clean(process.env.EPC_API_KEY)).toString('base64') : '';
-const CHAIN = [IDEAL_KEY && 'ideal-postcodes', EPC_AUTH && 'epc', GA_KEY && 'getaddress'].filter(Boolean);
+// Without any key, the public "Find an energy certificate" site is read instead (epcweb.js, as Fixflow does).
+const epcweb = require('./epcweb');
+const CHAIN = [IDEAL_KEY && 'ideal-postcodes', EPC_AUTH ? 'epc' : 'epc-web', GA_KEY && 'getaddress'].filter(Boolean);
 const PROVIDER = CHAIN[0] || '';
 const TEST_BASE = clean(process.env.ADDRESS_API_BASE).replace(/\/+$/, '');
 const IDEAL_BASE = TEST_BASE || 'https://api.ideal-postcodes.co.uk';
@@ -143,6 +145,18 @@ const providers = {
       rows.map(epcParts).filter(Boolean).forEach(a => { const k = a.uprn || a.label.toLowerCase().replace(/[^a-z0-9]/g, ''); const o = best.get(k); if (!o || a.lodged > o.lodged) best.set(k, a); });
       return [...best.values()].sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }))
         .map((a, i) => ({ id: 'epc-' + (a.uprn || i), label: a.label, houseNo: a.houseNo, building: a.building, road: a.road, town: a.town, postcode: a.postcode || pc }));
+    },
+    async item(){ const e = new Error('not used'); e.status = 404; throw e; },
+  },
+  'epc-web': {
+    async postcode(pc){
+      let rows;
+      try { rows = await epcweb.search(pc); }
+      catch (e) { console.error('address lookup (epc-web) failed: ' + e.message); throw e; }
+      const best = new Map();
+      rows.forEach(r => { const a = epcParts(Object.assign({ postcode: pc }, epcweb.lines(r.address))); if (!a) return; a.lodged = r.expires; const k = a.label.toLowerCase().replace(/[^a-z0-9]/g, ''); const o = best.get(k); if (!o || a.lodged > o.lodged) best.set(k, a); });
+      return [...best.values()].sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }))
+        .map((a, i) => ({ id: 'epcw-' + i, label: a.label, houseNo: a.houseNo, building: a.building, road: a.road, town: a.town, postcode: a.postcode || pc }));
     },
     async item(){ const e = new Error('not used'); e.status = 404; throw e; },
   },

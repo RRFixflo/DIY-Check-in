@@ -182,7 +182,8 @@ function epcConf(){
   return { base: (process.env.EPC_API_BASE || 'https://epc.opendatacommunities.org/api/v1').trim().replace(/\/+$/, ''),
     email: (process.env.EPC_API_EMAIL || '').trim(), key: (process.env.EPC_API_KEY || '').trim(), token: (process.env.EPC_API_TOKEN || '').trim() };
 }
-const epcOn = () => { const c = epcConf(); return !!((c.email && c.key) || c.token); };
+const epcOn = () => true;   // the register API with keys, else the public site
+const epcApi = () => { const c = epcConf(); return !!((c.email && c.key) || c.token); };
 const FIND_EPC = pc => 'https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode?postcode=' + encodeURIComponent(pc);
 const EPC_CERT = no => 'https://find-energy-certificate.service.gov.uk/energy-certificate/' + encodeURIComponent(no);
 function epcRow(r){
@@ -199,9 +200,30 @@ function epcRow(r){
     expires: validDate(g('expiryDate', 'expiry-date').slice(0, 10)) || addMonths(lodged, 120), certNo, lmk: line(g('lmk-key', 'lmkKey') || certNo, 80),
     type: line([g('property-type', 'propertyType'), g('built-form', 'builtForm')].filter(Boolean).join(', '), 60) };
 }
+// Without register API keys, the public "Find an energy certificate" site is read instead (epcweb.js).
+async function epcLookupWeb(postcode){
+  try {
+    const rows = await require('./epcweb').search(postcode);
+    const best = new Map(); let n = 0;
+    rows.forEach(r => {
+      const expires = validDate(r.expires), rating = String(r.rating || '').toUpperCase();
+      if (!r.address || !/^[A-G]$/.test(rating) || !expires) return;
+      n++;
+      const row = { address: line(r.address.replace(/,?\s*[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\s*$/i, ''), 200), postcode: line(postcode, 10), rating, score: null, potential: '',
+        lodged: addMonths(expires, -120), expires, certNo: line(r.reference, 40), lmk: line(r.reference, 80), type: '' };
+      const k = row.address.toLowerCase().replace(/[^a-z0-9]/g, ''), o = best.get(k);
+      if (!o || row.expires > o.expires) best.set(k, row);
+    });
+    const results = [...best.values()].sort((a, b) => a.address.localeCompare(b.address, 'en', { numeric: true })).slice(0, 200);
+    return { ok: true, results, hidden: n - best.size };
+  } catch (e) {
+    console.error('landlords: EPC search (find-energy-certificate) failed: ' + e.message);
+    return { ok: false, reason: 'network', results: [] };
+  }
+}
 async function epcLookup(postcode){
   const c = epcConf();
-  if (!((c.email && c.key) || c.token)) return { ok: false, reason: 'not-configured', results: [] };
+  if (!((c.email && c.key) || c.token)) return epcLookupWeb(postcode);
   const url = c.base + '/domestic/search?postcode=' + encodeURIComponent(postcode) + '&size=1000';
   try {
     const res = await fetch(url, { headers: { Accept: 'application/json', Authorization: c.token ? 'Bearer ' + c.token : 'Basic ' + Buffer.from(c.email + ':' + c.key).toString('base64') }, signal: AbortSignal.timeout(10000) });
@@ -928,7 +950,7 @@ ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 9
   });
   if (ctx.addAdminSection) ctx.addAdminSection(adminHTML);
 
-  console.log('landlords: accounts in ' + DIR + ' · EPC search ' + (epcOn() ? 'on (' + epcConf().base + ')' : 'off (EPC_API_EMAIL / EPC_API_KEY not set)') + ' · reminder emails ' + (emailOn() ? 'on' : 'off (RESEND_API_KEY not set)'));
+  console.log('landlords: accounts in ' + DIR + ' · EPC search ' + (epcApi() ? 'on (' + epcConf().base + ')' : 'on (find-energy-certificate.service.gov.uk, no key)') + ' · reminder emails ' + (emailOn() ? 'on' : 'off (RESEND_API_KEY not set)'));
   Object.assign(module.exports, { runReminders, adminHTML });   // for tests and scripts
   return { paths: ['/landlords'], runReminders, adminHTML };
 }
