@@ -250,7 +250,7 @@ function renderPage(pg, req, notice){
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req);
@@ -274,6 +274,8 @@ app.get(['/example-report', '/example-report.pdf'], (req, res) => {
   res.type('pdf').sendFile(path.join(__dirname, 'public', 'example', 'example-report.pdf'));
 });
 // Landlord certificates (Gas Safety, EICR, EPC), booked on /certificates: certs.js.
+// Location pages for search (UK cities, towns and London boroughs): locations.js.
+const locationPaths = require('./locations').mount(app, { renderPage, escHtml }).paths;
 const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE, track: analytics.track }).paths;
 // Free landlord area: /landlords, and accounts at /account with properties, certificates, tenancy and reminders: landlords.js.
@@ -284,7 +286,7 @@ const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, r
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, floorplanPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, floorplanPaths, locationPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
