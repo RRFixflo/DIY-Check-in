@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F3F5F9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B1020" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5EFE4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1626" media="(prefers-color-scheme: dark)">
 <title>DIY Inventory</title>
 <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -20,12 +20,12 @@
   :root {
     color-scheme: light;
     --paper: #F3F5F9; --panel: #FFFFFF; --surface-2: #F7F8FB; --ink: #0F172A; --ink-soft: #475569; --ink-faint: #8A96A8;
-    --line: #E4E8EF; --line-strong: #CDD4DF; --accent: #3257C8; --accent-hover: #2847A8; --accent-soft: #EDF1FD; --accent-ink: #FFFFFF;
+    --line: #E4E8EF; --line-strong: #CDD4DF; --accent: #1B2E4B; --accent-hover: #2847A8; --accent-soft: #EDF1FD; --accent-ink: #FFFFFF;
     --ok: #15803D; --ok-soft: #E7F6EC; --warn: #B45309; --warn-soft: #FDF3E1; --danger: #B42318; --danger-soft: #FDECEA; --white: #FFFFFF;
     --radius: 12px; --radius-sm: 10px; --radius-lg: 18px;
     --shadow-sm: 0 1px 2px rgba(15,23,42,.05);
     --shadow: 0 1px 2px rgba(15,23,42,.04), 0 4px 16px rgba(15,23,42,.06);
-    --ring: 0 0 0 4px rgba(50,87,200,.16);
+    --ring: 0 0 0 4px rgba(27,46,75,.16);
     --appbar-bg: rgba(255,255,255,.82);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-serif: var(--font-sans);
@@ -34,19 +34,19 @@
     :root:not([data-theme="light"]) {
       color-scheme: dark;
       --paper: #0B1020; --panel: #131A2B; --surface-2: #1A2236; --ink: #EEF2F8; --ink-soft: #A9B4C6; --ink-faint: #6E7A8F;
-      --line: #232C41; --line-strong: #33405A; --accent: #7C9BFF; --accent-hover: #9AB2FF; --accent-soft: #1B2542; --accent-ink: #0B1020;
+      --line: #232C41; --line-strong: #33405A; --accent: #D9B98C; --accent-hover: #E6CBA2; --accent-soft: #1B2542; --accent-ink: #0B1020;
       --ok: #4ADE80; --ok-soft: #13291D; --warn: #F5B452; --warn-soft: #2E2413; --danger: #F87171; --danger-soft: #331A1C; --white: #131A2B;
       --shadow-sm: none; --shadow: 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.35);
-      --ring: 0 0 0 4px rgba(124,155,255,.22); --appbar-bg: rgba(11,16,32,.8);
+      --ring: 0 0 0 4px rgba(217,185,140,.22); --appbar-bg: rgba(11,16,32,.8);
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
     --paper: #0B1020; --panel: #131A2B; --surface-2: #1A2236; --ink: #EEF2F8; --ink-soft: #A9B4C6; --ink-faint: #6E7A8F;
-    --line: #232C41; --line-strong: #33405A; --accent: #7C9BFF; --accent-hover: #9AB2FF; --accent-soft: #1B2542; --accent-ink: #0B1020;
+    --line: #232C41; --line-strong: #33405A; --accent: #D9B98C; --accent-hover: #E6CBA2; --accent-soft: #1B2542; --accent-ink: #0B1020;
     --ok: #4ADE80; --ok-soft: #13291D; --warn: #F5B452; --warn-soft: #2E2413; --danger: #F87171; --danger-soft: #331A1C; --white: #131A2B;
     --shadow-sm: none; --shadow: 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.35);
-    --ring: 0 0 0 4px rgba(124,155,255,.22); --appbar-bg: rgba(11,16,32,.8);
+    --ring: 0 0 0 4px rgba(217,185,140,.22); --appbar-bg: rgba(11,16,32,.8);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
@@ -68,7 +68,7 @@
   .appbar { position: sticky; top: 0; z-index: 50; background: var(--appbar-bg); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
   .appbar-inner { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; letter-spacing: -.01em; white-space: nowrap; }
-  .brand-mark { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), #6D5BD0); color: #fff; display: grid; place-items: center; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), #2F4F7F); color: #fff; display: grid; place-items: center; }
   .brand-mark svg.ic { width: 17px; height: 17px; stroke: #fff; }
   .stepper { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 6px; }
   .stepper li { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--ink-faint); white-space: nowrap; }
@@ -106,7 +106,7 @@
   .btn:hover:not(:disabled) { border-color: var(--ink-faint); background: var(--surface-2); }
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: 0 1px 2px rgba(15,23,42,.1), 0 6px 16px -6px rgba(50,87,200,.55); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: 0 1px 2px rgba(15,23,42,.1), 0 6px 16px -6px rgba(27,46,75,.55); }
   .btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: transparent; }
   .btn-accent { background: var(--ink); color: var(--paper); border-color: transparent; }
   .btn-accent:hover:not(:disabled) { background: var(--ink); opacity: .9; border-color: transparent; }
@@ -244,7 +244,7 @@
 
   /* ---------- capture ---------- */
   .progress-bar-shell { height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; margin: 14px 0 0; }
-  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #6D5BD0); border-radius: 999px; transition: width .35s ease; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #2F4F7F); border-radius: 999px; transition: width .35s ease; }
   .capture-layout { display: grid; grid-template-columns: 230px 1fr; gap: 20px; align-items: start; }
   @media (max-width: 760px) { .capture-layout { grid-template-columns: 1fr; gap: 14px; } }
 
@@ -407,7 +407,7 @@
   .lightbox-close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 16px); right: 16px; background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; }
 
   /* ---------- example pictures ---------- */
-  .ex { --ex-bg:#EEF2FA; --ex-line:#4B5B77; --ex-fill:#FFFFFF; --ex-acc:#3257C8; --ex-soft:#DCE4F7; --ex-mark:#E0663A; display:block; width:100%; height:auto; }
+  .ex { --ex-bg:#EEF2FA; --ex-line:#4B5B77; --ex-fill:#FFFFFF; --ex-acc:#1B2E4B; --ex-soft:#DCE4F7; --ex-mark:#E0663A; display:block; width:100%; height:auto; }
   .ex .bg { fill: var(--ex-bg); }
   .ex .l { fill: none; stroke: var(--ex-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .ex .f { fill: var(--ex-fill); stroke: var(--ex-line); stroke-width: 2; stroke-linejoin: round; }
@@ -416,8 +416,8 @@
   .ex .al { fill: none; stroke: var(--ex-acc); stroke-width: 2.5; stroke-linecap: round; }
   .ex .m { fill: var(--ex-mark); }
   .ex .t { fill: var(--ex-line); font: 600 9.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; } }
-  :root[data-theme="dark"] .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#7C9BFF; --ex-soft:#2A3552; --ex-mark:#F08A5D; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#D9B98C; --ex-soft:#2A3552; --ex-mark:#F08A5D; } }
+  :root[data-theme="dark"] .ex { --ex-bg:#1A2236; --ex-line:#A9B4C6; --ex-fill:#232C41; --ex-acc:#D9B98C; --ex-soft:#2A3552; --ex-mark:#F08A5D; }
   .ex-link { order: 2; flex: 0 0 auto; align-self: center; margin-left: auto; padding: 5px 10px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--panel); color: var(--accent); font-size: 12px; font-weight: 600; white-space: nowrap; }
   .ex-link:hover { border-color: var(--accent); }
   .photo-tip > span, .photo-tip > .exterior-help { flex: 1 1 auto; }
@@ -477,30 +477,30 @@
      the styles above (tokens first, then components), behaviour unchanged.
      ===================================================================== */
   :root {
-    --paper: #F4F5FB; --panel: #FFFFFF; --surface-2: #F3F4FA; --ink: #0E1330; --ink-soft: #4A5272; --ink-faint: #8C93AD;
-    --line: #E7E9F3; --line-strong: #D5D9E8; --accent: #4F46E5; --accent-hover: #4338CA; --accent-soft: #EEEDFE; --accent-ink: #FFFFFF;
-    --accent-2: #8B5CF6; --grad: linear-gradient(135deg, #4F46E5 0%, #7C3AED 55%, #A855F7 100%);
+    --paper: #F5EFE4; --panel: #FFFCF7; --surface-2: #F1E9DC; --ink: #13213A; --ink-soft: #4A5568; --ink-faint: #8E8A7E;
+    --line: #E8DECD; --line-strong: #D8CBB4; --accent: #1B2E4B; --accent-hover: #14233B; --accent-soft: #EFE6D7; --accent-ink: #FFFFFF;
+    --accent-2: #2F4F7F; --grad: linear-gradient(135deg, #1B2E4B 0%, #2F4F7F 55%, #46699E 100%);
     --ok: #0F9D63; --ok-soft: #E3F7EE; --warn: #C2570C; --warn-soft: #FFF1E3;
     --radius: 16px; --radius-sm: 14px; --radius-lg: 24px;
     --shadow-sm: 0 1px 2px rgba(14,19,48,.04);
     --shadow: 0 1px 2px rgba(14,19,48,.04), 0 10px 30px -12px rgba(14,19,48,.12);
-    --ring: 0 0 0 4px rgba(79,70,229,.18);
-    --appbar-bg: rgba(244,245,251,.78);
+    --ring: 0 0 0 4px rgba(27,46,75,.18);
+    --appbar-bg: rgba(245,239,228,.82);
     --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #090B18; --panel: #121527; --surface-2: #181C33; --ink: #EEF0FA; --ink-soft: #A7ADC8; --ink-faint: #6F7594;
-      --line: #22263F; --line-strong: #30355A; --accent: #8B87FF; --accent-hover: #A5A2FF; --accent-soft: #1E1F45; --accent-ink: #0B0D1E;
+      --paper: #0D1626; --panel: #14213A; --surface-2: #1A2945; --ink: #F1EADF; --ink-soft: #B9B2A5; --ink-faint: #857F72;
+      --line: #263553; --line-strong: #34466A; --accent: #D9B98C; --accent-hover: #E6CBA2; --accent-soft: #1E2F4E; --accent-ink: #13213A;
       --ok: #34D399; --ok-soft: #10291F; --warn: #FBBF24; --warn-soft: #2B2111;
-      --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(9,11,24,.78);
+      --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(13,22,38,.82);
     }
   }
   :root[data-theme="dark"] {
-    --paper: #090B18; --panel: #121527; --surface-2: #181C33; --ink: #EEF0FA; --ink-soft: #A7ADC8; --ink-faint: #6F7594;
-    --line: #22263F; --line-strong: #30355A; --accent: #8B87FF; --accent-hover: #A5A2FF; --accent-soft: #1E1F45; --accent-ink: #0B0D1E;
+    --paper: #0D1626; --panel: #14213A; --surface-2: #1A2945; --ink: #F1EADF; --ink-soft: #B9B2A5; --ink-faint: #857F72;
+    --line: #263553; --line-strong: #34466A; --accent: #D9B98C; --accent-hover: #E6CBA2; --accent-soft: #1E2F4E; --accent-ink: #13213A;
     --ok: #34D399; --ok-soft: #10291F; --warn: #FBBF24; --warn-soft: #2B2111;
-    --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(9,11,24,.78);
+    --shadow: 0 1px 0 rgba(255,255,255,.03), 0 12px 32px -12px rgba(0,0,0,.6); --appbar-bg: rgba(13,22,38,.82);
   }
   body { -webkit-font-smoothing: antialiased; }
   h1, h2, h3, .brand, .item-title, .panel > .sec-label, .addr-fields-title, .intro-card h2 { font-family: var(--font-display); }
@@ -508,7 +508,7 @@
   /* app bar: lighter, the stepper becomes small dots with the current step named */
   .appbar { border-bottom: 0; box-shadow: 0 1px 0 var(--line); }
   .brand { font-weight: 800; letter-spacing: -.02em; }
-  .brand-mark { border-radius: 10px; background: var(--grad); box-shadow: 0 6px 16px -6px rgba(79,70,229,.6); }
+  .brand-mark { border-radius: 10px; background: var(--grad); box-shadow: 0 6px 16px -6px rgba(27,46,75,.6); }
   .stepper li + li::before { width: 14px; height: 2px; }
   .stepper .n { width: 24px; height: 24px; font-size: 11.5px; border-width: 0; background: var(--surface-2); }
   .stepper li.current .n { background: var(--grad); color: #fff; box-shadow: 0 0 0 4px var(--accent-soft); }
@@ -516,7 +516,7 @@
   .restart-btn { border-color: transparent; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); }
 
   /* the page title becomes a gradient hero card */
-  .masthead { position: relative; overflow: hidden; background: var(--grad); color: #fff; border-radius: var(--radius-lg); padding: 22px 20px 20px; margin-bottom: 18px; box-shadow: 0 18px 40px -18px rgba(79,70,229,.65); isolation: isolate; }
+  .masthead { position: relative; overflow: hidden; background: var(--grad); color: #fff; border-radius: var(--radius-lg); padding: 22px 20px 20px; margin-bottom: 18px; box-shadow: 0 18px 40px -18px rgba(27,46,75,.65); isolation: isolate; }
   .masthead::before { content: ''; position: absolute; inset: auto -60px -90px auto; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.22), rgba(255,255,255,0) 70%); z-index: -1; }
   .masthead::after { content: ''; position: absolute; inset: -80px auto auto -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.14), rgba(255,255,255,0) 70%); z-index: -1; }
   @media (min-width: 560px) { .masthead { padding: 30px 30px 26px; } }
@@ -548,7 +548,7 @@
   /* buttons: pills, gradient primary */
   .btn { border-radius: 999px; min-height: 50px; padding: 12px 22px; border-color: transparent; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line-strong); }
   .btn:hover:not(:disabled) { background: var(--surface-2); }
-  .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 24px -10px rgba(79,70,229,.7); }
+  .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 10px 24px -10px rgba(27,46,75,.7); }
   .btn-primary:hover:not(:disabled) { background: var(--grad); filter: brightness(1.06); }
   .btn-sm { min-height: 42px; padding: 9px 16px; }
   .send-agent.is-sent, .send-agent.is-sent:disabled { background: var(--ok); box-shadow: 0 10px 24px -12px rgba(15,157,99,.7); }
@@ -570,7 +570,7 @@
   @media (max-width: 760px) {
     .room-nav { box-shadow: none; }
     .room-nav-item { border-color: transparent; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
-    .room-nav-item.active { background: var(--grad); box-shadow: 0 6px 16px -8px rgba(79,70,229,.7); }
+    .room-nav-item.active { background: var(--grad); box-shadow: 0 6px 16px -8px rgba(27,46,75,.7); }
   }
   .room-nav-item.active { color: var(--accent); }
   .item-card { border: 0; background: var(--surface-2); border-radius: 20px; padding: 16px; margin-top: 14px; }
@@ -641,6 +641,13 @@
   .fp-offer-t { font: 800 17px var(--font-display, inherit); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .fp-offer-tag { font: 700 12px var(--font-sans); color: var(--accent); background: var(--panel); border-radius: 999px; padding: 3px 9px; }
   .fp-offer p { margin: 4px 0 12px; color: var(--ink-soft); font-size: 14.5px; }
+  /* Beige and navy, as on the website: navy buttons on beige; in dark mode a lighter navy so buttons stand out */
+  :root { --grad: linear-gradient(135deg, #1B2E4B 0%, #2F4F7F 100%); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --grad: linear-gradient(135deg, #2F4F7F 0%, #46699E 100%); } }
+  :root[data-theme="dark"] { --grad: linear-gradient(135deg, #2F4F7F 0%, #46699E 100%); }
+  .pay-first { margin: -6px 0 16px; padding: 12px 16px; border-radius: 16px; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); font-size: 14.5px; color: var(--ink-soft); display: flex; gap: 10px 14px; align-items: center; flex-wrap: wrap; }
+  .pay-first strong { color: var(--ink); }
+  .pay-first a { margin-left: auto; white-space: nowrap; text-decoration: none; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -1757,7 +1764,7 @@ function normalizeState(saved){
 
 /* ============================= resume screen ============================= */
 function resumeDraft(){ state = savedDraft; savedDraft = null; render(); window.scrollTo({top:0, behavior:'instant'}); }
-async function discardDraft(){ await idbClear('current'); savedDraft = null; state = defaultState(); pendingSetup = defaultPendingSetup(); render(); }
+async function discardDraft(){ await idbClear('current'); clearSetupDraft(); savedDraft = null; state = defaultState(); pendingSetup = defaultPendingSetup(); render(); }
 
 /* ============================= setup view logic ============================= */
 function computeMoveInStatus(){
@@ -2101,6 +2108,7 @@ function submitSetup(){
   state.rooms = rooms;
   state.activeRoomId = rooms[0].id;
   state.view = 'capture';
+  clearSetupDraft();
   state.tracked = {}; track('report_started', 1);
   persist(); render();
   window.scrollTo({top:0, behavior:'instant'});
@@ -3848,7 +3856,7 @@ async function startNextFromThis(){
   startFromEarlier(key);
 }
 async function confirmReset(){
-  await idbClear('current'); state = defaultState(); pendingSetup = defaultPendingSetup();
+  await idbClear('current'); clearSetupDraft(); state = defaultState(); pendingSetup = defaultPendingSetup();
   sendUi = { phase: 'idle', msg: '' }; submitUi = { phase: 'idle', msg: '' };
   render(); window.scrollTo({top:0, behavior:'instant'});
 }
@@ -3915,6 +3923,7 @@ function renderSetup(){
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
     ${accessUi.checked && !accessUi.access ? `<div class="price-note"><strong>Free to start.</strong> You only pay £30 when your report is finished, to download it and send it.</div>` : ''}
+    ${accessUi.checked && !accessUi.access ? `<div class="pay-first"><span><strong>Landlord or agent?</strong> Pay now and send your tenant the link: they do the report and never see a price.</span><a class="btn btn-primary btn-sm" href="${escapeHtml(accessUi.buy || '/pricing#buy-first')}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay now · £30</a></div>` : ''}
     <div class="intro-card">
       <h2>Before you start</h2>
       <ul class="intro-list">
@@ -4521,7 +4530,26 @@ function render(){
   }
 }
 
+/* The setup form is kept on this phone as it's filled in (before the inspection starts there's no draft
+   yet), so closing the page or losing signal never loses it. Cleared once the inspection starts. */
+const SETUP_KEY = 'diySetupDraft';
+function saveSetupDraft(){ if (state.view !== 'setup') return; try { const p = Object.assign({}, pendingSetup); delete p.lookup; localStorage.setItem(SETUP_KEY, JSON.stringify({ at: Date.now(), p })); } catch (e) {} }
+function clearSetupDraft(){ try { localStorage.removeItem(SETUP_KEY); } catch (e) {} }
+function restoreSetupDraft(){
+  try {
+    const d = JSON.parse(localStorage.getItem(SETUP_KEY) || 'null');
+    if (!d || !d.p || Date.now() - d.at > 30 * 86400000) return false;
+    Object.assign(pendingSetup, d.p, { lookup: null });
+    return true;
+  } catch (e) { return false; }
+}
+let setupSaveTimer = null;
+document.addEventListener('input', () => { clearTimeout(setupSaveTimer); setupSaveTimer = setTimeout(saveSetupDraft, 300); }, true);
+document.addEventListener('change', () => { clearTimeout(setupSaveTimer); setupSaveTimer = setTimeout(saveSetupDraft, 300); }, true);
+addEventListener('pagehide', saveSetupDraft);
+
 /* ============================= boot ============================= */
+if (state.view === 'setup') restoreSetupDraft();
 render(); // paint instantly with no dependency on storage or network
 track('app_open');
 (async () => {
