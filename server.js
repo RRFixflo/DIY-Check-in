@@ -275,7 +275,7 @@ app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (re
 const PREVIEW_BOT = /facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely/i;
 app.use((req, res, next) => {
   if ((req.method !== 'GET' && req.method !== 'HEAD') || !PREVIEW_BOT.test(String(req.headers['user-agent'] || ''))) return next();
-  if (/^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|pdf)$/i.test(req.path)) return next();
+  if (/^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
   res.set('Cache-Control', 'public, max-age=3600').type('html').send(sitePage('home', req));
 });
 
@@ -302,7 +302,7 @@ if (PAYWALL) {
   // asked for when the report is finished: /api/access). A paid link (/?access=TOKEN) or code sets the
   // cookie and goes on to /app.
   app.use(async (req, res, next) => {
-    if (req.method !== 'GET' || /^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
+    if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
     const isRoot = req.path === '/';
     if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
     if (reports.isOwner(req)) return isRoot ? res.type('html').send(sitePage('home', req)) : next(); // the owner (signed in to /admin) needs no paid link

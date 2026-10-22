@@ -44,10 +44,10 @@ function mountPublic(app, ctx){
       ['eicr', 'Electrical safety (EICR)', 'Electrical Installation Condition Report', 'From ' + money(eLow), eicrs[0].desc, eicrs.map(s => s.name.replace('Electrical safety (EICR), ', '').replace(/^./, c => c.toUpperCase()) + ': ' + money(s.price) + ' + VAT').concat(['Required at least every 5 years for rented homes in England'])],
       ['epc', 'EPC', 'Energy Performance Certificate', money(epc.price), epc.desc, ['Assessor visit and energy rating', 'Valid for 10 years', 'Needed before you advertise to rent or sell']],
     ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price} <small>+ VAT</small></div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">For landlords</span><h1>Gas Safety, EICR and EPC certificates</h1><p>Book your landlord certificates in one go, at simple fixed prices. Pick what you need, tell us about the property, and we’ll arrange the visit.</p></div></div>
-<section class="tight"><div class="wrap"><div class="features">${cards}</div></div></section>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
+<section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div></div></section>
 <section id="book" style="padding-top:8px"><div class="wrap">
-  <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
+  <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates.</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
   <form class="card form cert-form" method="post" action="/certificates#book">
     <fieldset class="cert-pick"><legend>What do you need?</legend>
       <label class="pick"><input type="checkbox" name="svc" value="gas"><span><b>Gas Safety (CP12)</b><em>${money(gas.price)} + VAT</em></span></label>
@@ -87,7 +87,7 @@ function mountPublic(app, ctx){
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
 </script>`;
-    return renderPage({ key: 'certificates', path: '/certificates', title: 'Gas Safety, EICR & EPC certificates for landlords · DIY Inventory', og: 'Landlord certificates: Gas Safety, EICR, EPC',
+    return renderPage({ key: 'certificates', path: '/certificates', title: 'Landlord services: Gas Safety, EICR & EPC certificates · DIY Inventory', og: 'Landlord services: Gas Safety, EICR and EPC certificates',
       desc: 'Book a Gas Safety certificate (' + money(gas.price) + ' + VAT), electrical safety EICR (from ' + money(eLow) + ' + VAT) or EPC (' + money(epc.price) + ' + VAT) for your rental property.', body,
       jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: 'GB',
         offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', valueAddedTaxIncluded: false } } })) }, req, notice);

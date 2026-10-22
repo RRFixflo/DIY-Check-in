@@ -119,7 +119,7 @@ function mount(app, ctx){
       '- UK landlords can also book a Gas Safety certificate (CP12), an electrical safety report (EICR) or an EPC at fixed prices: ' + base + '/certificates', '',
       '## Pages',
       '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Gas Safety, EICR and EPC certificates for landlords](' + base + '/certificates)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
-      '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Questions and answers'], faq, ['', 'DIY Inventory records the condition of a property. It is not legal advice.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
+      '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Questions and answers'], faq, ['', 'Reports are made to be used as evidence, including in deposit disputes (TDS, DPS, mydeposits): dated photos, both sides’ signatures, and check-out compared with check-in.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
   });
   app.get('/' + seo.indexNowKey + '.txt', (req, res) => res.type('text/plain').send(seo.indexNowKey));
 
