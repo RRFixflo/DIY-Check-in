@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
+const address = require('./address');
 
 const SERVICES = [
   { id: 'gas', group: 'gas', name: 'Gas Safety certificate (CP12)', short: 'Gas Safety', desc: 'Annual gas safety check of the boiler and gas appliances by a Gas Safe registered engineer.', price: 70 },
@@ -29,6 +30,63 @@ function priceOf(id){ const s = services().find(x => x.id === id); return s ? s.
 function priceText(group){ return money(Math.min.apply(null, services().filter(s => s.group === group).map(s => s.price))); }
 
 /* ------------------------------- public page ------------------------------- */
+// Postcode lookup on the booking form (only when a provider key is set: address.js). Without JavaScript the
+// form is plain inputs. Typing a full postcode (or Find address) lists every address there; picking one
+// fills "Property address", which stays editable. The postcode field has autocomplete off so the browser's
+// own saved-address list doesn't cover ours.
+const ADDRESS_UI = String.raw`<style>
+.cert-addr { display: grid; gap: 12px; }
+.cert-addr [hidden] { display: none !important; }
+.cert-pc-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.cert-pc-row .btn { min-height: 48px; }
+.cert-addr-msg { margin: 0; font-size: 14px; color: var(--ink-faint); }
+</style>
+<script>
+(function(){
+  var pc = document.getElementById('certPc'), btn = document.getElementById('certFind'), msg = document.getElementById('certAddrMsg'),
+      wrap = document.getElementById('certPickWrap'), pick = document.getElementById('certPick'), addr = document.getElementById('certAddr');
+  if (!pc || !btn || !window.fetch) return;
+  var RE = /^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/, last = '', timer = 0, seq = 0, list = [];
+  btn.hidden = false;
+  function tidy(v){ var s = String(v || '').toUpperCase().replace(/\s+/g, ''); return RE.test(s) ? s.slice(0, -3) + ' ' + s.slice(-3) : ''; }
+  function say(t){ msg.textContent = t; msg.hidden = !t; }
+  function opt(v, t){ var o = document.createElement('option'); o.value = v; o.textContent = t; return o; }
+  function find(force){
+    var p = tidy(pc.value);
+    if (!p) { if (force) say('Enter the full postcode, e.g. SE16 4JU.'); return; }
+    if (p === last && !force) return;
+    last = p; pc.value = p; var my = ++seq;
+    say('Looking up ' + p + '…'); btn.disabled = true;
+    fetch('/api/address/' + encodeURIComponent(p)).then(function(r){ return r.json(); }).catch(function(){ return { ok: false }; }).then(function(d){
+      if (my !== seq) return;
+      btn.disabled = false;
+      if (d.reason === 'not-configured') { btn.hidden = true; say(''); return; }
+      list = d.ok && d.addresses ? d.addresses : [];
+      pick.innerHTML = '';
+      if (list.length) {
+        pick.appendChild(opt('', 'Choose the address (' + list.length + ' found)'));
+        list.forEach(function(a, i){ pick.appendChild(opt(String(i), a.label)); });
+        pick.appendChild(opt('manual', 'It’s not listed: I’ll type it'));
+        wrap.hidden = false; say('');
+        pick.focus();
+      } else {
+        wrap.hidden = true; if (!d.ok) last = '';
+        say(d.ok ? 'We couldn’t find any addresses at ' + p + '. Check the postcode, or type the address below.'
+          : d.reason === 'invalid' ? 'Enter the full postcode, e.g. SE16 4JU.'
+          : 'Address search isn’t available right now. Please type the address below.');
+      }
+    });
+  }
+  pc.addEventListener('input', function(){ clearTimeout(timer); if (tidy(pc.value)) timer = setTimeout(find, 350); });
+  pc.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); find(true); } });
+  btn.addEventListener('click', function(){ clearTimeout(timer); find(true); });
+  pick.addEventListener('change', function(){
+    if (pick.value === 'manual') { wrap.hidden = true; say('Type the address below.'); addr.focus(); return; }
+    var a = list[+pick.value]; if (pick.value === '' || !a) return;
+    addr.value = a.label; say('Check the address below, and change it if it isn’t quite right.');
+  });
+})();
+</script>`;
 function mountPublic(app, ctx){
   DIR = ctx.REPORTS_DIR;
   const { renderPage, esc, clip, clientIp, limiter, notify, PUBLIC_BASE } = ctx;
@@ -37,6 +95,7 @@ function mountPublic(app, ctx){
   const ICON = { gas: '<path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/>', eicr: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', epc: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M9 20v-5h6v5"/>' };
 
   function page(req, notice){
+    const lookup = address.configured();
     const list = services(), gas = list.find(s => s.id === 'gas'), epc = list.find(s => s.id === 'epc'), eicrs = list.filter(s => s.group === 'eicr');
     const eLow = Math.min.apply(null, eicrs.map(s => s.price));
     const cards = [
@@ -54,20 +113,21 @@ function mountPublic(app, ctx){
       <label class="pick"><input type="checkbox" name="svc" value="eicr"><span><b>Electrical safety (EICR)</b><em>from ${money(eLow)} + VAT</em></span></label>
       <label class="pick"><input type="checkbox" name="svc" value="epc"><span><b>EPC</b><em>${money(epc.price)} + VAT</em></span></label>
     </fieldset>
+    <div class="cert-addr">
+      <div class="cert-pc-row"><label>Postcode<input name="postcode" id="certPc" required maxlength="12" autocapitalize="characters" ${lookup ? 'autocomplete="off" spellcheck="false" aria-describedby="certAddrMsg"' : 'autocomplete="postal-code"'} placeholder="e.g. SE16 4JU"></label>${lookup ? '<button type="button" class="btn ghost sm" id="certFind" hidden>Find address</button>' : ''}</div>
+      ${lookup ? '<label id="certPickWrap" hidden>Choose the address<select id="certPick"></select></label><p class="cert-addr-msg" id="certAddrMsg" aria-live="polite" hidden></p>' : ''}
+      <label>Property address<input name="address" id="certAddr" required maxlength="200" autocomplete="${lookup ? 'off' : 'street-address'}"></label>
+    </div>
     <div class="row">
       <label>Bedrooms<select name="beds">${[0, 1, 2, 3, 4, 5, 6].map(n => `<option value="${n}"${n === 2 ? ' selected' : ''}>${n === 0 ? 'Studio' : n === 6 ? '6 or more' : n}</option>`).join('')}</select></label>
-      <label>Postcode<input name="postcode" required maxlength="12" autocomplete="postal-code" autocapitalize="characters"></label>
+      <label>Who will let us in?<select name="access"><option>Me (the landlord)</option><option>The tenant</option><option>An agent</option><option>Key safe / collect keys</option></select></label>
     </div>
-    <label>Property address<input name="address" required maxlength="200" autocomplete="street-address"></label>
     <div class="row">
       <label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>
       <label>Phone<input name="phone" type="tel" required maxlength="30" autocomplete="tel"></label>
     </div>
     <label>Email<input name="email" type="email" required maxlength="120" autocomplete="email"></label>
-    <div class="row">
-      <label><b>Preferred dates <span>(optional)</span></b><input name="when" maxlength="120" placeholder="e.g. any weekday next week"></label>
-      <label>Who will let us in?<select name="access"><option>Me (the landlord)</option><option>The tenant</option><option>An agent</option><option>Key safe / collect keys</option></select></label>
-    </div>
+    <label><b>Preferred dates <span>(optional)</span></b><input name="when" maxlength="120" placeholder="e.g. any weekday next week"></label>
     <label><b>Notes <span>(optional)</span></b><textarea name="notes" maxlength="1500" placeholder="Tenant’s name and phone, parking, boiler location…"></textarea></label>
     <label class="hp" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label>
     <div class="cert-total" aria-live="polite"><span>Total</span><strong id="certTotal">£0</strong><small id="certVat">Choose what you need</small></div>
@@ -86,7 +146,7 @@ function mountPublic(app, ctx){
   f.addEventListener('change', total); total();
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
-</script>`;
+</script>${lookup ? ADDRESS_UI : ''}`;
     return renderPage({ key: 'certificates', path: '/certificates', title: 'Gas Safety, EICR & EPC certificates for landlords · DIY Inventory', og: 'Landlord certificates: Gas Safety, EICR, EPC',
       desc: 'Book a Gas Safety certificate (' + money(gas.price) + ' + VAT), electrical safety EICR (from ' + money(eLow) + ' + VAT) or EPC (' + money(epc.price) + ' + VAT) for your rental property.', body,
       jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: 'GB',

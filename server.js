@@ -1,6 +1,7 @@
 // Self check-in report server.
 // Serves the single-file client in public/ and a small API:
-//   GET  /api/status          what the server can do (AI assessment)
+//   GET  /api/status          what the server can do (AI assessment, address lookup)
+//   GET  /api/address/:pc     every address at a UK postcode (paid PAF provider; see address.js)
 //   POST /api/assess          rate one photo of a checklist item (assessed and discarded)
 //   POST /api/reports         receive a copy of a finished report PDF (see reports.js)
 //   /admin                    the owner's private list of submitted reports (ADMIN_PASSWORD)
@@ -11,6 +12,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
 const certs = require('./certs');
+const address = require('./address');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -43,9 +45,15 @@ app.get('/api/status', (req, res) => {
   res.json({
     ai: !!anthropic,
     model: anthropic ? ANTHROPIC_MODEL : '',
-    reason: anthropic ? '' : 'ANTHROPIC_API_KEY is not set on the server'
+    reason: anthropic ? '' : 'ANTHROPIC_API_KEY is not set on the server',
+    address: address.configured()
   });
 });
+
+/* ----------------------------- /api/address ----------------------------- */
+// Postcode → addresses, for the app's setup form and the certificates form. Open to everyone (the app is
+// free to start); rate-limited per IP. See address.js.
+address.mount(app, { limiter: reports.limiter, clientIp: reports.clientIp });
 
 /* ----------------------------- /api/assess ----------------------------- */
 const CONDITIONS = ['new', 'good', 'fair', 'poor'];
@@ -359,5 +367,5 @@ app.use(express.static(PUBLIC, { index: 'index.html' }));
 app.use((req, res) => res.sendFile(path.join(PUBLIC, 'index.html')));
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Check-in report app listening on port ${PORT} (AI ${anthropic ? 'on, ' + ANTHROPIC_MODEL : 'off'})`);
+  console.log(`Check-in report app listening on port ${PORT} (AI ${anthropic ? 'on, ' + ANTHROPIC_MODEL : 'off'}, address lookup ${address.provider() || 'off'})`);
 });
