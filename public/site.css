@@ -234,3 +234,10 @@ section.tight { padding: 28px 0 64px; }
 @media (max-width: 1000px) { .steps.four { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .steps.four { grid-template-columns: 1fr; } }
 footer .disclaimer { flex-basis: 100%; margin: 0 0 6px; max-width: 760px; }
+
+/* Room checklist pages */
+.checklist-list { padding-left: 22px; margin: 0 0 8px; }
+.checklist-list li { margin: 0 0 12px; }
+.checklist-list li strong { display: block; color: var(--ink); }
+.checklist-list li span { color: var(--ink-soft); }
+article.prose h2 { margin-top: 26px; }

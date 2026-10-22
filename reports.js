@@ -668,4 +668,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage };
+module.exports = { mount, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage };

@@ -201,20 +201,44 @@ const SITE = {
   privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Inventory', desc: 'What DIY Inventory keeps about you and why.' },
 };
 for (const [key, pg] of Object.entries(SITE)) pg.body = fs.readFileSync(path.join(VIEWS, 'pages', (pg.file || key) + '.html'), 'utf8');
+const aiText = t => anthropic ? t.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : t.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
+SITE.faq.jsonld = () => faqLd(aiText(SITE.faq.body));
+SITE.home.jsonld = base => [{ '@type': 'SoftwareApplication', name: 'DIY Inventory', url: base + '/', applicationCategory: 'BusinessApplication', operatingSystem: 'Any (works in the phone’s web browser)',
+  description: DESC, offers: { '@type': 'Offer', price: '36.00', priceCurrency: 'GBP', description: 'One report: £30 + VAT, paid when the finished report is downloaded. Free to start.' }, publisher: { '@id': base + '/#org' } }].concat(faqLd(aiText(SITE.home.body)));
 const siteBase = req => { const host = String(req.headers.host || ''); return (/^(localhost|127\.|\[::1\])/.test(host) ? 'http://' : 'https://') + host; };
 const escHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-function sitePage(key, req, notice){
-  const pg = SITE[key];
+// The site's public address: PUBLIC_URL (e.g. your own domain), else Railway's, else this request's host.
+const PUBLIC_BASE = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).trim().replace(/\/+$/, '');
+const canonicalBase = req => PUBLIC_BASE || siteBase(req);
+const VERIFY = [['google-site-verification', process.env.GOOGLE_SITE_VERIFICATION], ['msvalidate.01', process.env.BING_SITE_VERIFICATION]]
+  .filter(([, v]) => v && String(v).trim()).map(([n, v]) => '<meta name="' + n + '" content="' + escHtml(String(v).trim()) + '">').join('\n');
+// Structured data for search engines, on every page: who we are, plus anything the page adds (pg.jsonld).
+function jsonLd(pg, base){
+  const org = { '@type': 'Organization', '@id': base + '/#org', name: 'DIY Inventory', url: base + '/', logo: base + '/icons/icon-512.png' };
+  const site = { '@type': 'WebSite', '@id': base + '/#site', name: 'DIY Inventory', url: base + '/', publisher: { '@id': base + '/#org' }, inLanguage: 'en' };
+  const extra = typeof pg.jsonld === 'function' ? pg.jsonld(base) : (pg.jsonld || []);
+  return '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', '@graph': [org, site].concat(extra) }).replace(/</g, '\\u003c') + '</script>';
+}
+// Questions and answers in a page's <details> blocks, as FAQPage structured data.
+function faqLd(body){
+  const qs = [...body.matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => ({ q: m[1].replace(/<[^>]+>/g, '').trim(), a: m[2].replace(/<[^>]+>/g, '').trim() }));
+  return qs.length ? [{ '@type': 'FAQPage', mainEntity: qs.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) }] : [];
+}
+function renderPage(pg, req, notice){
+  const key = pg.key;
   const fill = t => t.split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join(escHtml(FIXFLOW_URL + '/diy-inventory'));
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE)) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
+  const base = canonicalBase(req);
   return fill(html).replace('{{TITLE}}', escHtml(pg.title)).replace('{{OG_TITLE}}', escHtml(pg.og || pg.title))
-    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(siteBase(req))).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
+    .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base))
+    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
 }
+function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
   const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : '';
   return sitePage('home', req, msg ? { text: msg } : null);
@@ -223,6 +247,10 @@ for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.pa
   const notice = key === 'contact' && req.query.sent ? { ok: true, text: 'Thanks, your message has been sent. We’ll get back to you soon.' } : null;
   res.type('html').send(sitePage(key, req, notice));
 });
+// Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
+require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
+  sitePaths: Object.values(SITE).map(pg => pg.path), siteBodies: Object.values(SITE).map(pg => pg.body) });
+
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
   const r = reports.saveMessage(req, req.body || {});
   if (r.ok) return res.redirect(303, '/contact?sent=1');
