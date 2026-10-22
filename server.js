@@ -26,6 +26,13 @@ app.disable('x-powered-by');
 app.use(express.json({ limit: '15mb' }));
 
 app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
+// One address for search engines: with PUBLIC_URL set (e.g. https://diyinventory.co.uk), the www. form of it
+// (or the bare form, if PUBLIC_URL is the www. one) redirects there permanently.
+{
+  let pub = ''; try { pub = new URL((process.env.PUBLIC_URL || '').trim()).host.toLowerCase(); } catch (e) {}
+  const twin = pub ? (pub.startsWith('www.') ? pub.slice(4) : 'www.' + pub) : '';
+  if (twin) app.use((req, res, next) => String(req.headers.host || '').toLowerCase() === twin ? res.redirect(301, 'https://' + pub + req.originalUrl) : next());
+}
 app.get('/favicon.ico', (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'favicon-32.png')));
 // Phones look for these at the root when a page doesn't name its icon.
 app.get(['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png'], (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'apple-touch-icon.png')));

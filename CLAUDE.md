@@ -72,7 +72,7 @@ People pay for a report on residentialrealtors.co.uk (£30 + VAT, through SumUp)
 - `REPORT_TO_EMAIL`: optional, defaults to `jayk@residentialrealtors.co.uk`. `REPORT_FROM_EMAIL`: optional sender on a domain verified in Resend; the default `onboarding@resend.dev` only delivers to the Resend account's own address.
 - `NTFY_TOPIC`: a phone alert (free ntfy app, ntfy.sh) the first time each report is sent by the tenant, with the address, who sent it and a link to the PDF. Subscribe to the topic in the ntfy app. `NTFY_SERVER` optional, defaults to `https://ntfy.sh`.
 - `REPORTS_DIR`: optional override of where reports are stored. On Railway, reports need the volume attached to this service, or they are lost on the next deploy.
-- `PUBLIC_URL`: the site's public address (e.g. `https://yourdomain.com`), used for canonical URLs, the sitemap, IndexNow and links in alerts. Set it once your own domain is connected.
+- `PUBLIC_URL`: the site's public address, `https://diyinventory.co.uk` once that domain is connected in Railway. Used for canonical URLs, the sitemap, IndexNow and links in alerts; the `www.` form of it (or the bare form, if it's the `www.` one) redirects there with a 301.
 - `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`: optional; the content values from Google Search Console / Bing Webmaster Tools.
 - `DRAFTS_MAX_MB`: optional cap for online backups (default 2000).
 - `PORT` is set by Railway. Do not set it.
