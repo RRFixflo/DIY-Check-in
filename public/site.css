@@ -557,3 +557,7 @@ a.card.fp-home-art { display: block; padding: 14px; color: inherit; text-decorat
 @media (max-width: 900px) { .fp-home-wrap { grid-template-columns: 1fr; gap: 28px; } }
 /* One more link in the header (Floor plans): switch to the menu button a little earlier */
 @media (max-width: 1240px) { .top nav a.link, .top nav > .btn { display: none; } .menu { display: block; } }
+/* The header always stays on one line: nothing wraps, and below the width that fits every link it switches to the menu button */
+.brand, .top nav a.link, .top nav > .btn { white-space: nowrap; }
+.top nav { flex-wrap: nowrap; gap: 2px; }
+.top nav a.link { padding: 8px 9px; font-size: 14px; }
