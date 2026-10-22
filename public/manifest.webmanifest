@@ -1,8 +1,8 @@
 {
   "name": "DIY Inventory",
   "short_name": "DIY Inventory",
-  "description": "Tenant self check-in and inventory report.",
-  "start_url": "/",
+  "description": "Property inventories, check-ins, check-outs and inspections on your phone.",
+  "start_url": "/app",
   "scope": "/",
   "display": "browser",
   "background_color": "#F3F5F9",

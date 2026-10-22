@@ -233,21 +233,54 @@ if (PAYWALL) {
     });
     next();
   });
-  // The app itself: open it with a valid link; a link that has made its report still opens (to see and send it).
+  // The app is free to start at /app (payment is asked for when the report is finished: /api/access).
+  // "/" is the app for people with a valid link (a link that has made its report still opens, to see
+  // and send it), and the website for everyone else.
   app.use(async (req, res, next) => {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
+    const isApp = /^\/app\/?$/.test(req.path);
+    if (isApp && !req.query.access) return next();
     const raw = String(req.query.access || '').trim();
     if (raw && codeTries.blocked(req)) return res.status(429).type('html').send(paywallPage('tries', req));
     const q = reports.canonicalCode(raw) || (TOKEN_RE.test(raw) ? raw : ''), token = q || cookieToken(req);
     if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown', req)); }
     const a = await checkAccess(token);
-    if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) { const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
+    if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) {
+      if (!q && req.path === '/' && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
+      if (!q && isApp) return next();
+      const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
     if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
     if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, req.path); }
     next();
   });
 }
+
+// Free to start, pay at the end: whether this browser may download and send a finished report, and
+// unlocking it with the link from the payment email (or its token, or an access code) pasted in the app.
+app.get('/api/access', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!PAYWALL || reports.isOwner(req)) return res.json({ access: true, buy: BUY_URL });
+  const a = await checkAccess(cookieToken(req));
+  res.json({ access: !!a.valid, reason: a.valid ? '' : a.reason, buy: BUY_URL });
+});
+app.post('/api/access', async (req, res) => {
+  if (!PAYWALL) return res.json({ ok: true });
+  if (codeTries.blocked(req)) return res.status(429).json({ error: 'Too many wrong codes. Please wait 15 minutes and try again.' });
+  let raw = String((req.body || {}).code || '').trim().slice(0, 400);
+  const m = /[?&]access=([^&#\s]+)/.exec(raw);
+  if (m) { try { raw = decodeURIComponent(m[1]); } catch (e) { raw = m[1]; } }
+  const q = reports.canonicalCode(raw) || (TOKEN_RE.test(raw) ? raw : '');
+  if (!q) { codeTries.wrong(req); return res.status(400).json({ error: 'We don’t recognise that link or code. Check it and try again.' }); }
+  const a = await checkAccess(q);
+  if (!a.valid) {
+    if (a.reason !== 'used') codeTries.wrong(req);
+    return res.status(402).json({ error: a.reason === 'used' ? 'That link has already been used for another report.' : a.reason === 'expired' ? 'That link has expired.' : a.reason === 'changed' ? 'That access code has changed.' : 'We don’t recognise that link or code. Check it and try again.' });
+  }
+  if (reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);
+  res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');
+  res.json({ ok: true });
+});
 
 reports.mount(app);
 
