@@ -11,6 +11,7 @@ const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
 const certs = require('./certs');
+const analytics = require('./analytics');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -34,6 +35,8 @@ app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
   const twin = pub ? (pub.startsWith('www.') ? pub.slice(4) : 'www.' + pub) : '';
   if (twin) app.use((req, res, next) => String(req.headers.host || '').toLowerCase() === twin ? res.redirect(301, 'https://' + pub + req.originalUrl) : next());
 }
+// Visit and funnel counts for /admin/analytics (no cookies, no IP addresses kept): analytics.js.
+analytics.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE: process.env.PUBLIC_URL || '' });
 app.get('/favicon.ico', (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'favicon-32.png')));
 // Phones look for these at the root when a page doesn't name its icon.
 app.get(['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png'], (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'apple-touch-icon.png')));
@@ -257,7 +260,7 @@ for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.pa
 });
 // Landlord certificates (Gas Safety, EICR, EPC), booked on /certificates: certs.js.
 const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,
-  limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE }).paths;
+  limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE, track: analytics.track }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
   sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths), siteBodies: Object.values(SITE).map(pg => pg.body),

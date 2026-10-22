@@ -111,6 +111,7 @@ function mountPublic(app, ctx){
     const booking = Object.assign({ id: Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), at: new Date().toISOString(), status: 'new', beds, items, subtotal: sub, vat, total: Math.round((sub + vat) * 100) / 100 }, m);
     const all = readJson(bookingsFile(), []); all.push(booking); writeJson(bookingsFile(), all.slice(-1000));
     console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+'));
+    if (ctx.track) ctx.track(req, 'certificate_booking', booking.total);
     notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + '), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + ' inc VAT' + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
     res.redirect(303, '/certificates?booked=1#book');
   });

@@ -889,6 +889,12 @@ function allPhotos(s){
   Object.values(pr.meters || {}).forEach(m => add(m && m.photos));
   return out;
 }
+/* Funnel counts for the owner (/admin/analytics): only the step's name is sent, no details and no cookies.
+   once = at most once per report (kept in state.tracked). */
+function track(name, once){
+  if (once){ state.tracked = state.tracked || {}; if (state.tracked[name]) return; state.tracked[name] = 1; persist(); }
+  try { const body = JSON.stringify({ name }); if (!(navigator.sendBeacon && navigator.sendBeacon('/api/event', new Blob([body], { type: 'text/plain' })))) fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body, keepalive: true }).catch(() => {}); } catch (e) {}
+}
 function cloudState(s){ return JSON.parse(JSON.stringify(s, (k, v) => (k === 'dataUrl' && typeof v === 'string') ? undefined : v)); }
 function scheduleCloud(delay){ clearTimeout(cloudTimer); cloudTimer = setTimeout(cloudSync, delay == null ? 3000 : delay); }
 async function cloudSync(){
@@ -1400,6 +1406,7 @@ async function addPhotoFiles(files, t){
       if (r.item) toAssess.push({ roomId: r.room.id, itemId: r.item.id, photoId: photo.id });
     } catch (e) { console.error('photo failed', e); }
   }
+  if (added) track('first_photo', 1);
   persist();
   toAssess.forEach(a => assessItemPhoto(a.roomId, a.itemId, a.photoId));
   return added;
@@ -1727,7 +1734,8 @@ function normalizeState(saved){
     draftKey: /^[a-f0-9]{32}$/.test(saved.draftKey || '') ? saved.draftKey : null,
     cloudSent: Array.isArray(saved.cloudSent) ? saved.cloudSent : [],
     earlier: saved.earlier && Array.isArray(saved.earlier.rooms) ? saved.earlier : null,
-    submittedAt: saved.submittedAt || null
+    submittedAt: saved.submittedAt || null,
+    tracked: saved.tracked && typeof saved.tracked === 'object' ? saved.tracked : {}
   };
 }
 
@@ -1964,6 +1972,7 @@ function submitSetup(){
   state.rooms = rooms;
   state.activeRoomId = rooms[0].id;
   state.view = 'capture';
+  state.tracked = {}; track('report_started', 1);
   persist(); render();
   window.scrollTo({top:0, behavior:'instant'});
 }
@@ -2073,6 +2082,7 @@ async function completeReport(){
   const signedByInput = document.getElementById('signedByInput');
   state.meta.signedBy = (signedByInput && signedByInput.value.trim()) || state.meta.inspectorName;
   state.finalizedAt = new Date().toISOString();
+  track('report_finished', 1);
   persist();
   state.view = 'done';
   render();
@@ -3350,9 +3360,10 @@ function savePdf(){
   const a = document.createElement('a');
   a.href = pdfReady.url; a.download = pdfReady.fname;
   document.body.appendChild(a); a.click(); a.remove();
+  if (reportUnlocked()) track('downloaded', 1);
   setPdfUi('ready', 0, 'Saved to your Downloads · ' + formatBytes(pdfReady.blob.size) + '. On iPhone: Files app → Downloads.');
 }
-function openPdf(){ if (pdfReady) window.open(pdfReady.url, '_blank'); }
+function openPdf(){ if (pdfReady) { track('downloaded', 1); window.open(pdfReady.url, '_blank'); } }
 
 /* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
    can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
@@ -3453,6 +3464,7 @@ function canSharePdf(){
 }
 async function sharePdf(){
   if (!pdfReady) return;
+  track('downloaded', 1);
   try {
     await navigator.share({ files: [new File([pdfReady.blob], pdfReady.fname, { type: 'application/pdf' })], title: state.meta.inspectionType + ' report' });
   } catch (e) {
@@ -3498,7 +3510,7 @@ function payCardHTML(){
   return `<div class="pay-card">
       <div class="pay-title">Your report is ready</div>
       <p>Pay <strong>£30 + VAT</strong> (£36) to download your PDF report, send it, and get it signed by the tenant. Your report stays saved on this phone in the meantime.</p>
-      <a class="btn btn-primary btn-block" href="${escapeHtml(buy)}" target="_blank" rel="noopener">Pay £30 + VAT</a>
+      <a class="btn btn-primary btn-block" href="${escapeHtml(buy)}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay £30 + VAT</a>
       <div class="pay-paid">
         <label for="payInput"><strong>Paid, or have an access code?</strong> Paste the link from your payment email, or type your code.</label>
         <div class="custom-room-add">
@@ -4227,7 +4239,7 @@ function render(){
     else if (state.view === 'done') {
       app.innerHTML = renderDone();
       preparePdf();   // built straight away, so it's ready the moment it's paid for
-      if (reportUnlocked()) { checkSign(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); if (!state.sentAt && sendUi.phase !== 'error') sendToAgent(); else if (!(state.submittedId && state.photosUploaded && state.dataUploaded)) submitReport(); }
+      if (reportUnlocked()) { track('unlocked', 1); checkSign(); setPdfUi(pdfUi.phase, pdfUi.pct, pdfUi.msg); setSendUi(state.sentAt ? 'sent' : sendUi.phase, sendUi.msg); if (!state.sentAt && sendUi.phase !== 'error') sendToAgent(); else if (!(state.submittedId && state.photosUploaded && state.dataUploaded)) submitReport(); }
       else if (!accessUi.checked) checkAccessStatus().then(() => { if (state.view === 'done') render(); });
     }
   } catch (err) {
@@ -4238,6 +4250,7 @@ function render(){
 
 /* ============================= boot ============================= */
 render(); // paint instantly with no dependency on storage or network
+track('app_open');
 (async () => {
   try {
     try { addressBook = (await idbGet('addressBook')) || []; reportHistory = (await idbGet('history')) || []; if ((addressBook.length || reportHistory.length) && state.view === 'setup') render(); } catch(e){}
