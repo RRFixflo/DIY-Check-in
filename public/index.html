@@ -2204,7 +2204,7 @@ async function completeReport(){
   render();
   window.scrollTo({top:0, behavior:'instant'});
   // Signed and finished means sent: the report goes to the agent straight away.
-  preparePdf().then(r => { if (r) savePdf(); sendToAgent(); });
+  preparePdf().then(r => { if (r && reportUnlocked()) savePdf(); sendToAgent(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
 const RANK_KEY = ['new','good','fair','poor'];
@@ -3512,6 +3512,7 @@ function preparePdf(){
   return pdfBuilding;
 }
 function savePdf(){
+  if (!reportUnlocked()) return;   // paid for first: the PDF is only handed over once the report is unlocked
   if (!pdfReady || pdfReady.key !== state.finalizedAt){
     preparePdf().then(r => { if (r) setPdfUi('ready', 0, 'Your PDF is ready. Tap Download PDF.'); });
     return;
@@ -3522,7 +3523,7 @@ function savePdf(){
   if (reportUnlocked()) track('downloaded', 1);
   setPdfUi('ready', 0, 'Saved to your Downloads · ' + formatBytes(pdfReady.blob.size) + '. On iPhone: Files app → Downloads.');
 }
-function openPdf(){ if (pdfReady) { track('downloaded', 1); window.open(pdfReady.url, '_blank'); } }
+function openPdf(){ if (pdfReady && reportUnlocked()) { track('downloaded', 1); window.open(pdfReady.url, '_blank'); } }
 
 /* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
    can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
@@ -3622,6 +3623,7 @@ function canSharePdf(){
   catch (e) { return false; }
 }
 async function sharePdf(){
+  if (!reportUnlocked()) return;   // paid for first: the PDF is only handed over once the report is unlocked
   if (!pdfReady) return;
   track('downloaded', 1);
   try {
