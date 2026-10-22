@@ -802,6 +802,7 @@ function defaultState(){
 function defaultPendingSetup(){
   return {
     address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '', country: '',
+    lookup: null, manualAddress: false, picked: false,
     inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
     managingAgent: '', furnishing: 'Furnished',
     bedrooms: 1, bathrooms: 1,
@@ -1193,13 +1194,15 @@ function photoGuideHTML(){
 /* ============================= AI condition assessment (server-backed) ============================= */
 let aiEnabled = null;        // null unknown, true/false once checked
 let aiStatusNote = '';
+let addressLookup = false;   // the server can list the addresses at a UK postcode (/api/status → address)
 async function initAI(){
   try{
     const res = await fetch('/api/status');
     const data = await res.json();
     aiEnabled = !!data.ai;
     aiStatusNote = data.ai ? '' : (data.reason || 'no API key configured on the server');
-  }catch(e){ aiEnabled = false; aiStatusNote = 'server unreachable'; }
+    addressLookup = !!data.address;
+  }catch(e){ aiEnabled = false; aiStatusNote = 'server unreachable'; addressLookup = false; }
   render();
 }
 
@@ -1882,7 +1885,7 @@ function missingAddressParts(){
   const ps = pendingSetup, t = k => (ps[k] || '').trim(), out = [];
   if (!isUkAddress(ps)) { if (!t('road') && !t('building')) out.push('the street or building name'); return out; }
   if (!POSTCODE_RE.test(normalisePostcode(ps.postcode))) out.push('the full postcode');
-  if (!t('flat') && !t('houseNo')) out.push('the flat or house number');
+  if (!t('flat') && !t('houseNo') && !(ps.picked && t('building'))) out.push('the flat or house number');
   if (!t('road') && !t('building')) out.push('the road name or building name');
   return out;
 }
@@ -1893,6 +1896,119 @@ function onPostcodeBlur(){
   const el = document.getElementById('postcodeInput');
   if (el && el.value !== pendingSetup.postcode) el.value = pendingSetup.postcode;
   composeAddress();
+}
+/* Postcode lookup (UK only, when the server has an address provider: /api/address). The postcode comes
+   first; every address at it is listed in a select, and picking one fills the fields below, which stay
+   editable. "Enter the address yourself" is always there, and is what shows when lookup finds nothing. */
+let lookupTimer = null, lookupSeq = 0;
+function lookupMode(ps){ ps = ps || pendingSetup; return addressLookup && isUkAddress(ps); }
+function hasAddrContent(ps){ return ['houseNo', 'flat', 'building', 'road', 'town'].some(k => (ps[k] || '').trim()); }
+function onLookupInput(value){
+  clearTimeout(lookupTimer);
+  const pc = normalisePostcode(value);
+  if (!POSTCODE_RE.test(pc) || (pendingSetup.lookup && pendingSetup.lookup.pc === pc)) return;
+  lookupTimer = setTimeout(() => lookupPostcode(false), 400);
+}
+async function lookupPostcode(force){
+  clearTimeout(lookupTimer);
+  const ps = pendingSetup, pc = normalisePostcode(ps.postcode);
+  if (!POSTCODE_RE.test(pc)){
+    ps.lookup = { status: 'invalid', pc: '' };
+    refreshAddr(); return;
+  }
+  if (!force && ps.lookup && ps.lookup.pc === pc && ps.lookup.status !== 'error') return;
+  ps.postcode = pc; ps.picked = false;
+  const el = document.getElementById('postcodeInput'); if (el && el.value !== pc) el.value = pc;
+  composeAddress();
+  const my = ++lookupSeq;
+  ps.lookup = { status: 'loading', pc };
+  refreshAddr();
+  let d = null;
+  try { const res = await fetch('/api/address/' + encodeURIComponent(pc)); d = await res.json(); } catch (e) { d = null; }
+  if (my !== lookupSeq) return;
+  if (d && d.reason === 'not-configured'){ addressLookup = false; ps.lookup = null; render(); return; }
+  const list = d && d.ok && Array.isArray(d.addresses) ? d.addresses.slice(0, 400) : [];
+  if (list.length) ps.lookup = { status: 'done', pc, addresses: list };
+  else { ps.lookup = { status: d && d.ok ? 'none' : 'error', pc }; ps.manualAddress = true; }
+  refreshAddr();
+  const sel = document.getElementById('addrPick'); if (sel && list.length) sel.focus();
+}
+async function pickLookupAddress(value){
+  const ps = pendingSetup, lk = ps.lookup || {};
+  if (value === 'manual'){ ps.manualAddress = true; lk.status = 'manual'; refreshAddr(); const el = document.getElementById('houseNoInput'); if (el) el.focus(); return; }
+  const a = (lk.addresses || [])[+value];
+  if (value === '' || !a) return;
+  let f = a;
+  if (!('road' in a) && !('building' in a) && !('houseNo' in a)){
+    // getAddress.io lists labels only: the parts come from /api/address/item/:id.
+    lk.status = 'fetching'; refreshAddr();
+    try { const res = await fetch('/api/address/item/' + encodeURIComponent(a.id)); const d = await res.json(); f = d && d.ok && d.address ? d.address : null; } catch (e) { f = null; }
+    if (!f) f = splitAddressLine(a.label + (lk.pc ? ', ' + lk.pc : ''));
+  }
+  setAddressFields({ houseNo: f.houseNo, building: f.building, road: f.road, town: f.town, postcode: f.postcode || lk.pc });
+  ps.picked = true; ps.manualAddress = true;
+  lk.status = 'picked'; lk.chosen = +value;
+  const el = document.getElementById('postcodeInput'); if (el) el.value = ps.postcode;
+  refreshAddr();
+}
+function enterAddressYourself(){
+  pendingSetup.manualAddress = true; refreshAddr();
+  const el = document.getElementById('houseNoInput'); if (el) el.focus();
+}
+function addrLookupHTML(ps){
+  const lk = ps.lookup || {}, list = lk.addresses || [];
+  const showFields = ps.manualAddress || hasAddrContent(ps);
+  let html = '';
+  if (lk.status === 'loading') html += `<div class="room-count-hint">Looking up ${escapeHtml(lk.pc)}…</div>`;
+  else if (lk.status === 'invalid') html += `<div class="room-count-hint">Enter the full postcode, e.g. SE16 4JU.</div>`;
+  else if (lk.status === 'none') html += `<div class="room-count-hint">We couldn't find any addresses at ${escapeHtml(lk.pc)}. Check the postcode, or enter the address yourself below.</div>`;
+  else if (lk.status === 'error') html += `<div class="room-count-hint">Address search isn't available right now. Enter the address yourself below.</div>`;
+  if (list.length && ['done', 'picked', 'fetching', 'manual'].includes(lk.status)){
+    html += `<div class="field" style="margin-top:4px">
+      <label for="addrPick">Choose the address</label>
+      <select class="select" id="addrPick" onchange="pickLookupAddress(this.value)">
+        <option value="" ${lk.chosen == null ? 'selected' : ''}>${list.length} address${list.length === 1 ? '' : 'es'} found: choose yours</option>
+        ${list.map((a, i) => `<option value="${i}" ${lk.chosen === i ? 'selected' : ''}>${escapeHtml(a.label)}</option>`).join('')}
+        <option value="manual">It's not listed: enter it myself</option>
+      </select>
+      ${lk.status === 'fetching' ? '<div class="room-count-hint">Filling in the address…</div>' : lk.status === 'picked' ? '<div class="room-count-hint">Filled in below. Check each part, and add the flat number if it is missing.</div>' : ''}
+    </div>`;
+  }
+  if (!showFields) html += `<div class="field"><button type="button" class="link-btn" onclick="enterAddressYourself()">Enter the address yourself</button></div>`;
+  return html;
+}
+function addrFieldsHTML(ps){
+  const uk = isUkAddress(ps), lookup = lookupMode(ps);
+  if (lookup && !(ps.manualAddress || hasAddrContent(ps))) return '';
+  return `
+        <div class="field">
+          <label for="houseNoInput">${uk ? 'Flat or house number' + (ps.picked && !(ps.houseNo || ps.flat) && ps.building ? ' <span class="opt">if any</span>' : '') : 'Flat, unit or house number <span class="opt">if any</span>'}</label>
+          <input class="input" id="houseNoInput" type="text" placeholder="e.g. 12 or Flat 4" value="${escapeHtml(ps.houseNo || ps.flat)}" oninput="pendingSetup.flat = ''; setAddrField('houseNo', this.value)">
+        </div>
+        <div class="field">
+          <label for="buildingInput">Building name <span class="opt">optional</span></label>
+          <input class="input" id="buildingInput" type="text" placeholder="e.g. Brownlow House" value="${escapeHtml(ps.building)}" oninput="setAddrField('building', this.value)">
+        </div>
+        <div class="field">
+          <label for="roadInput">${uk ? 'Road name' : 'Street'}</label>
+          <input class="input" id="roadInput" type="text" placeholder="e.g. Tower Bridge Road" value="${escapeHtml(ps.road)}" oninput="setAddrField('road', this.value)">
+        </div>
+        <div class="field">
+          <label for="townInput">Town or city <span class="opt">optional</span></label>
+          <input class="input" id="townInput" type="text" placeholder="e.g. London" value="${escapeHtml(ps.town)}" oninput="setAddrField('town', this.value)">
+        </div>
+        ${lookup ? '' : `<div class="field">
+          <label for="postcodeInput">${uk ? 'Postcode' : 'Postcode or ZIP <span class="opt">optional</span>'}</label>
+          <input class="input" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="postal-code" placeholder="${uk ? 'e.g. SE16 4JU' : 'e.g. 10001'}" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)" onblur="onPostcodeBlur()">
+        </div>`}
+        <div class="addr-preview"><span>On the report</span><strong id="addressPreview">${escapeHtml(ps.address || 'Fill in the fields above')}</strong></div>
+        <div class="room-count-hint">Check it reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>`;
+}
+function addrBelowHTML(ps){ return (lookupMode(ps) ? addrLookupHTML(ps) : '') + addrFieldsHTML(ps); }
+// Redraws only the part under the postcode, so the postcode field keeps focus while the list appears.
+function refreshAddr(){
+  const box = document.getElementById('addrBelow');
+  if (box) box.innerHTML = addrBelowHTML(pendingSetup); else render();
 }
 function useSavedAddress(line){
   setAddressFields(splitAddressLine(line));
@@ -3689,28 +3805,14 @@ function renderSetup(){
           <label for="countryInput">Country</label>
           <select class="select" id="countryInput" autocomplete="country" onchange="setCountry(this.value)">${countryOptionsHTML(ps.country || defaultCountry())}</select>
         </div>
-        <div class="field">
-          <label for="houseNoInput">${isUkAddress(ps) ? 'Flat or house number' : 'Flat, unit or house number <span class="opt">if any</span>'}</label>
-          <input class="input" id="houseNoInput" type="text" placeholder="e.g. 12 or Flat 4" value="${escapeHtml(ps.houseNo || ps.flat)}" oninput="pendingSetup.flat = ''; setAddrField('houseNo', this.value)">
-        </div>
-        <div class="field">
-          <label for="buildingInput">Building name <span class="opt">optional</span></label>
-          <input class="input" id="buildingInput" type="text" placeholder="e.g. Brownlow House" value="${escapeHtml(ps.building)}" oninput="setAddrField('building', this.value)">
-        </div>
-        <div class="field">
-          <label for="roadInput">${isUkAddress(ps) ? 'Road name' : 'Street'}</label>
-          <input class="input" id="roadInput" type="text" placeholder="e.g. Tower Bridge Road" value="${escapeHtml(ps.road)}" oninput="setAddrField('road', this.value)">
-        </div>
-        <div class="field">
-          <label for="townInput">Town or city <span class="opt">optional</span></label>
-          <input class="input" id="townInput" type="text" placeholder="e.g. London" value="${escapeHtml(ps.town)}" oninput="setAddrField('town', this.value)">
-        </div>
-        <div class="field">
-          <label for="postcodeInput">${isUkAddress(ps) ? 'Postcode' : 'Postcode or ZIP <span class="opt">optional</span>'}</label>
-          <input class="input" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="postal-code" placeholder="${isUkAddress(ps) ? 'e.g. SE16 4JU' : 'e.g. 10001'}" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)" onblur="onPostcodeBlur()">
-        </div>
-        <div class="addr-preview"><span>On the report</span><strong id="addressPreview">${escapeHtml(ps.address || 'Fill in the fields above')}</strong></div>
-        <div class="room-count-hint">Check it reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>
+        ${lookupMode(ps) ? `<div class="field">
+          <label for="postcodeInput">Postcode</label>
+          <div class="cond-row" style="margin-top:0">
+            <input class="input" style="flex:1 1 120px" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value); onLookupInput(this.value)" onblur="onPostcodeBlur()" onkeydown="if(event.key==='Enter'){event.preventDefault(); lookupPostcode(true);}">
+            <button type="button" class="btn btn-sm" onclick="lookupPostcode(true)">Find address</button>
+          </div>
+        </div>` : ''}
+        <div id="addrBelow">${addrBelowHTML(ps)}</div>
       </div>
       <div class="row2">
         <div class="field">

@@ -67,7 +67,7 @@ Visit `/api/status` on your deployed URL. You should see:
 
 ## What the app does
 
-**Setup.** The tenant types the address as separate fields (flat, house/door number, building name, road, town, postcode), with a preview of exactly how it will read on the report.
+**Setup.** For a UK address the tenant enters the postcode and picks the address from the list of every address there (when `IDEAL_POSTCODES_KEY` or `GETADDRESS_API_KEY` is set), which fills the separate fields (flat or house number, building name, road, town, postcode); they can always enter it themselves instead. A preview shows exactly how it will read on the report.
 inspector or tenant name, tenancy move-in date. Number of bedrooms and bathrooms,
 plus common areas, which generates one checklist per room.
 
