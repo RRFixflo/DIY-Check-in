@@ -801,7 +801,7 @@ function defaultState(){
 }
 function defaultPendingSetup(){
   return {
-    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '',
+    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '', country: '',
     inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
     managingAgent: '', furnishing: 'Furnished',
     bedrooms: 1, bathrooms: 1,
@@ -1791,6 +1791,24 @@ function removeCustomRoom(index){
 }
 /* ============================= property address ============================= */
 const POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+/* Country. The UK keeps its postcode check and house number; anywhere else the postcode or ZIP is
+   optional and the country is added to the address. The default comes from the phone's language setting. */
+const COUNTRY_CODES = 'AF AX AL DZ AS AD AO AI AG AR AM AW AU AT AZ BS BH BD BB BY BE BZ BJ BM BT BO BA BW BR BN BG BF BI CV KH CM CA KY CF TD CL CN CO KM CG CD CK CR CI HR CU CW CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FK FO FJ FI FR GF PF GA GM GE DE GH GI GR GL GD GP GU GT GG GN GW GY HT HN HK HU IS IN ID IR IQ IE IM IL IT JM JP JE JO KZ KE KI KW KG LA LV LB LS LR LY LI LT LU MO MG MW MY MV ML MT MH MQ MR MU YT MX FM MD MC MN ME MS MA MZ MM NA NR NP NL NC NZ NI NE NG MK NO OM PK PW PS PA PG PY PE PH PL PT PR QA RE RO RU RW KN LC VC WS SM ST SA SN RS SC SL SG SX SK SI SB SO ZA KR SS ES LK SD SR SE CH SY TW TJ TZ TH TL TG TO TT TN TR TM TC TV UG UA AE GB US UY UZ VU VA VE VN VG VI YE ZM ZW'.split(' ');
+const UK_LIKE = ['GB', 'JE', 'GG', 'IM'];   // UK-format postcodes
+function countryName(code){ try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch (e) { return code; } }
+const TZ_COUNTRY = { 'Europe/London': 'GB', 'Europe/Dublin': 'IE', 'Europe/Jersey': 'JE', 'Europe/Guernsey': 'GG', 'Europe/Isle_of_Man': 'IM' };
+function defaultCountry(){
+  try { const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; if (TZ_COUNTRY[tz]) return TZ_COUNTRY[tz]; } catch (e) {}
+  const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+  for (const l of langs) { const m = /[-_]([A-Z]{2})\b/i.exec(l || ''); if (m && COUNTRY_CODES.includes(m[1].toUpperCase())) return m[1].toUpperCase(); }
+  return 'GB';
+}
+function isUkAddress(ps){ return UK_LIKE.includes((ps || pendingSetup).country || 'GB'); }
+function countryOptionsHTML(sel){
+  const list = COUNTRY_CODES.map(c => [c, countryName(c)]).sort((a, b) => a[1].localeCompare(b[1]));
+  return list.map(([c, n]) => `<option value="${c}" ${c === sel ? 'selected' : ''}>${escapeHtml(n)}</option>`).join('');
+}
+function setCountry(code){ pendingSetup.country = code; composeAddress(); render(); }
 function normalisePostcode(pc){
   const raw = (pc || '').toUpperCase().replace(/\s+/g, '');
   if (raw.length < 5) return raw;
@@ -1815,9 +1833,11 @@ function streetLineFrom(f){
 function composeAddress(){
   const ps = pendingSetup;
   ps.unit = streetLineFrom(ps);
-  const pc = normalisePostcode(ps.postcode);
-  const tail = POSTCODE_RE.test(pc) ? pc : (ps.postcode || '').trim();
+  if (!ps.country) ps.country = defaultCountry();
+  const pc = isUkAddress(ps) ? normalisePostcode(ps.postcode) : (ps.postcode || '').trim();
+  const tail = isUkAddress(ps) && POSTCODE_RE.test(pc) ? pc : (ps.postcode || '').trim();
   ps.address = ps.unit && tail ? ps.unit + ' ' + tail : (ps.unit || tail);
+  if (!isUkAddress(ps) && ps.address) ps.address += ', ' + countryName(ps.country);
   const el = document.getElementById('addressPreview');
   if (el) el.textContent = ps.address || 'Fill in the fields above';
 }
@@ -1860,13 +1880,15 @@ function splitAddressLine(line){
 }
 function missingAddressParts(){
   const ps = pendingSetup, t = k => (ps[k] || '').trim(), out = [];
+  if (!isUkAddress(ps)) { if (!t('road') && !t('building')) out.push('the street or building name'); return out; }
   if (!POSTCODE_RE.test(normalisePostcode(ps.postcode))) out.push('the full postcode');
   if (!t('flat') && !t('houseNo')) out.push('the flat or house number');
   if (!t('road') && !t('building')) out.push('the road name or building name');
   return out;
 }
 function onPostcodeBlur(){
-  // Tidy the field in place ("se16ad" -> "SE1 6AD") without re-rendering the form.
+  // Tidy the field in place ("se16ad" -> "SE1 6AD") without re-rendering the form. UK only.
+  if (!isUkAddress()) { composeAddress(); return; }
   pendingSetup.postcode = normalisePostcode(pendingSetup.postcode);
   const el = document.getElementById('postcodeInput');
   if (el && el.value !== pendingSetup.postcode) el.value = pendingSetup.postcode;
@@ -1929,7 +1951,7 @@ function submitSetup(){
   if (!rooms.length) { showSetupError('Add at least one room before starting.'); return; }
 
   state.meta = {
-    address, inspectionType: pendingSetup.inspectionType, inspectorName, signedBy: '',
+    address, country: pendingSetup.country || defaultCountry(), inspectionType: pendingSetup.inspectionType, inspectorName, signedBy: '',
     moveInDateTime: pendingSetup.moveInDateTime || '', date: todayDisplay(), createdAt: new Date().toISOString(),
     bedrooms, bathrooms,
     furnishing: pendingSetup.furnishing || '',
@@ -3161,7 +3183,7 @@ function reportData(s, photos){
   const pr = s.property || {};
   const m = s.meta || {};
   return {
-    v: 1, type: m.inspectionType, ref: m.ref, address: m.address, date: m.date, createdAt: m.createdAt, finalizedAt: s.finalizedAt,
+    v: 1, type: m.inspectionType, ref: m.ref, address: m.address, country: m.country || '', date: m.date, createdAt: m.createdAt, finalizedAt: s.finalizedAt,
     inspectorName: m.inspectorName, signedBy: m.signedBy, bedrooms: m.bedrooms, bathrooms: m.bathrooms, furnishing: m.furnishing, managingAgent: m.managingAgent,
     exterior: ns(pr.exterior && pr.exterior.photos),
     rooms: s.rooms.map(r => ({ name: r.name, type: r.type, notes: r.notes || '', condition: r.condition || {}, extra: ns(r.extraPhotos),
@@ -3209,7 +3231,14 @@ async function startFromEarlier(input){
     if (!res.ok || !d.data) throw new Error(d.error || 'That report could not be found.');
     const e = Object.assign({}, d.data, { id: d.id, key, base: d.base || ('/p/' + key + '/') });
     pendingSetup.basedOn = e;
-    setAddressFields(splitAddressLine(e.address || ''));
+    pendingSetup.country = e.country || (/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\s*$/i.test(e.address || '') ? 'GB' : (pendingSetup.country || defaultCountry()));
+    if (isUkAddress()) setAddressFields(splitAddressLine(e.address || ''));
+    else {   // keep a non-UK address exactly as it was: everything before ", <country>" as the street line
+      const tail = ', ' + countryName(pendingSetup.country), a = String(e.address || '');
+      setAddressFields({ road: a.endsWith(tail) ? a.slice(0, -tail.length) : a });
+      pendingSetup.postcode = '';
+      composeAddress();
+    }
     pendingSetup.bedrooms = parseInt(e.bedrooms, 10) || 0;
     pendingSetup.bathrooms = parseInt(e.bathrooms, 10) || 0;
     if (e.furnishing) pendingSetup.furnishing = e.furnishing;
@@ -3614,7 +3643,11 @@ function renderSetup(){
       <div class="addr-fields">
         <div class="addr-fields-title">Property address</div>
         <div class="field">
-          <label for="houseNoInput">Flat or house number</label>
+          <label for="countryInput">Country</label>
+          <select class="select" id="countryInput" autocomplete="country" onchange="setCountry(this.value)">${countryOptionsHTML(ps.country || defaultCountry())}</select>
+        </div>
+        <div class="field">
+          <label for="houseNoInput">${isUkAddress(ps) ? 'Flat or house number' : 'Flat, unit or house number <span class="opt">if any</span>'}</label>
           <input class="input" id="houseNoInput" type="text" placeholder="e.g. 12 or Flat 4" value="${escapeHtml(ps.houseNo || ps.flat)}" oninput="pendingSetup.flat = ''; setAddrField('houseNo', this.value)">
         </div>
         <div class="field">
@@ -3622,7 +3655,7 @@ function renderSetup(){
           <input class="input" id="buildingInput" type="text" placeholder="e.g. Brownlow House" value="${escapeHtml(ps.building)}" oninput="setAddrField('building', this.value)">
         </div>
         <div class="field">
-          <label for="roadInput">Road name</label>
+          <label for="roadInput">${isUkAddress(ps) ? 'Road name' : 'Street'}</label>
           <input class="input" id="roadInput" type="text" placeholder="e.g. Tower Bridge Road" value="${escapeHtml(ps.road)}" oninput="setAddrField('road', this.value)">
         </div>
         <div class="field">
@@ -3630,8 +3663,8 @@ function renderSetup(){
           <input class="input" id="townInput" type="text" placeholder="e.g. London" value="${escapeHtml(ps.town)}" oninput="setAddrField('town', this.value)">
         </div>
         <div class="field">
-          <label for="postcodeInput">Postcode</label>
-          <input class="input" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="postal-code" placeholder="e.g. SE16 4JU" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)" onblur="onPostcodeBlur()">
+          <label for="postcodeInput">${isUkAddress(ps) ? 'Postcode' : 'Postcode or ZIP <span class="opt">optional</span>'}</label>
+          <input class="input" id="postcodeInput" type="text" autocapitalize="characters" autocomplete="postal-code" placeholder="${isUkAddress(ps) ? 'e.g. SE16 4JU' : 'e.g. 10001'}" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)" onblur="onPostcodeBlur()">
         </div>
         <div class="addr-preview"><span>On the report</span><strong id="addressPreview">${escapeHtml(ps.address || 'Fill in the fields above')}</strong></div>
         <div class="room-count-hint">Check it reads exactly as it does on the tenancy agreement. It goes on the signed report.</div>
