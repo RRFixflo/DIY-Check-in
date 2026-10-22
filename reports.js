@@ -489,6 +489,8 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
 
   // Certificate bookings (Gas Safety, EICR, EPC) and their prices: certs.js.
   const certs = require('./certs').mountAdmin(app, { REPORTS_DIR, esc, requireAdmin, sameOrigin });
+  // Visits and sales funnel: /admin/analytics (analytics.js).
+  const analytics = require('./analytics'); analytics.mountAdmin(app, { esc, requireAdmin });
 
   // Contact form messages for the admin page; opening the page marks them as seen.
   function messagesHTML(){
@@ -594,6 +596,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
   .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
   .news { display:block; background:#EEF0FF; color:#3730A3; font-weight:700; text-decoration:none; padding:12px 16px; border-radius:14px; margin-bottom:12px; }
   .pill.wait { background:#FEF3E2; color:#B45309; }
+  .news.stats { display:flex; justify-content:space-between; align-items:center; gap:10px; background:linear-gradient(135deg,#EEF0FF,#F3EEFF); } .news.stats b { font-size:17px; } .news.stats .open { white-space:nowrap; background:#4F46E5; color:#fff; padding:6px 12px; border-radius:999px; font-size:13px; }
   .codes select { padding:8px 12px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes .msg { white-space:pre-wrap; overflow-wrap:anywhere; margin-top:6px; color:var(--ink); }
   .codes li.isnew { background:#F7F7FF; margin:0 -16px; padding:10px 16px; } .pill.new { background:#4F46E5; color:#fff; }
@@ -604,6 +607,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/app">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
+${analytics.summaryHTML(esc)}
 ${certs.adminHTML()}
 ${messagesHTML()}
 ${drafts.draftsHTML()}
