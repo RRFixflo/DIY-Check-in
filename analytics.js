@@ -12,7 +12,7 @@ const crypto = require('crypto');
 const express = require('express');
 
 const KEEP_DAYS = 400;
-const REPORT_PRICE = 30;   // £ ex VAT, per paid report
+const REPORT_PRICE = 30;   // £, per paid report
 // Funnel steps the app may send to POST /api/event (anything else is ignored).
 const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded'];
 // Recorded by the server itself.
@@ -104,7 +104,7 @@ function pageView(req, pathName){
   if (u('source') || u('medium') || u('campaign')) bump(d.utm, cap(d.utm, [u('source') || '-', u('medium') || '-', u('campaign') || '-'].join(' / '), 200));
   save();
 }
-// One funnel step. `value` is money (£ ex VAT) for sales and bookings; `kind` says how a report was paid for.
+// One funnel step. `value` is money (£) for sales and bookings; `kind` says how a report was paid for.
 function track(req, name, value, kind){
   if (!DIR || !(CLIENT_EVENTS.includes(name) || SERVER_EVENTS.includes(name))) return;
   if (req && skip(req)) return;
@@ -238,7 +238,7 @@ function mountAdmin(app, a){
       ['Started a report', people(s, 'report_started')],
       ['Took the first photo', people(s, 'first_photo')],
       ['Finished (signed and declared)', people(s, 'report_finished')],
-      ['Clicked Pay £30 + VAT', people(s, 'pay_click')],
+      ['Clicked Pay £30', people(s, 'pay_click')],
       ['Unlocked the report', people(s, 'unlocked')],
       ['Report sold', sold],
     ];
@@ -282,8 +282,8 @@ function mountAdmin(app, a){
 <div class="tiles">
   <div class="tile"><div class="l">Visitors</div><div class="v">${s.visitors}</div><p class="sub">${s.views} page view${s.views === 1 ? '' : 's'}</p></div>
   <div class="tile"><div class="l">Opened the app</div><div class="v">${steps[1][1]}</div><p class="sub">${people(s, 'report_started')} started a report</p></div>
-  <div class="tile"><div class="l">Reports sold</div><div class="v">${sold}</div><p class="sub">${money(s.revenue)} ex VAT${s.sales.code ? ` · ${s.sales.code} with the access code` : ''}${s.sales.open ? ` · ${s.sales.open} with the paywall off` : ''}</p></div>
-  <div class="tile"><div class="l">Certificate bookings</div><div class="v">${s.certs.n}</div><p class="sub">${money(s.certs.value)} inc VAT requested</p></div>
+  <div class="tile"><div class="l">Reports sold</div><div class="v">${sold}</div><p class="sub">${money(s.revenue)}${s.sales.code ? ` · ${s.sales.code} with the access code` : ''}${s.sales.open ? ` · ${s.sales.open} with the paywall off` : ''}</p></div>
+  <div class="tile"><div class="l">Certificate bookings</div><div class="v">${s.certs.n}</div><p class="sub">${money(s.certs.value)} requested</p></div>
 </div>
 <div class="card"><h2>${n === 1 ? 'New visitors by hour today' : 'Visitors per day'}</h2>${chartHTML}<p class="sub">${n === 1 ? 'UK time. ' : ''}Hover or tap a bar for its number. A visitor is counted once a day.</p></div>
 <div class="card"><h2>Sales funnel</h2><table><thead><tr><th>Step</th><th class="n">People</th><th class="n">From step before</th><th class="bar"></th></tr></thead><tbody>${funnel}</tbody></table>

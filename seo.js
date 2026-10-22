@@ -108,7 +108,7 @@ function mount(app, ctx){
     const faq = [...String(ctx.faqBody()).matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => '- **' + strip(m[1]) + '** ' + strip(m[2]));
     res.type('text/plain; charset=utf-8').send([
       '# DIY Inventory', '',
-      '> Property inventories, check-in and check-out reports and inspections done on a phone, for landlords, letting agents and tenants anywhere in the world. Free to start; £30 + VAT per report, paid when the finished report is downloaded. The PDF report is ready instantly, the moment it is signed.', '',
+      '> Property inventories, check-in and check-out reports and inspections done on a phone, for landlords, letting agents and tenants anywhere in the world. Free to start; £30 per report, paid when the finished report is downloaded. The PDF report is ready instantly, the moment it is signed.', '',
       '## What it does',
       '- A photo checklist for every room; at least 8 photos per room, with the date and time burned into every photo.',
       ctx.aiOn() ? '- AI suggests each item’s condition, a short description, marks or damage and cleanliness from its photo; the person can change anything.' : '',

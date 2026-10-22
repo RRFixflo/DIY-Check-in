@@ -15,7 +15,7 @@ const SERVICES = [
   { id: 'eicr_l', group: 'eicr', name: 'Electrical safety (EICR), 5 or more bedrooms', short: 'EICR', desc: 'Electrical Installation Condition Report by a qualified electrician.', price: 150, beds: [5, 99] },
   { id: 'epc', group: 'epc', name: 'EPC (Energy Performance Certificate)', short: 'EPC', desc: 'Survey by an accredited energy assessor, lodged on the government register and valid for 10 years.', price: 120 },
 ];
-const VAT = 0.2;
+const VAT = 0;   // the business doesn't charge VAT
 const money = n => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
 
 let DIR = '';
@@ -100,18 +100,18 @@ function mountPublic(app, ctx){
     const eLow = Math.min.apply(null, eicrs.map(s => s.price));
     const cards = [
       ['gas', 'Gas Safety certificate', 'CP12', money(gas.price), gas.desc, ['Boiler, hob and every gas appliance checked', 'Certificate emailed to you', 'A legal requirement every 12 months for rented homes in the UK']],
-      ['eicr', 'Electrical safety (EICR)', 'Electrical Installation Condition Report', 'From ' + money(eLow), eicrs[0].desc, eicrs.map(s => s.name.replace('Electrical safety (EICR), ', '').replace(/^./, c => c.toUpperCase()) + ': ' + money(s.price) + ' + VAT').concat(['Required at least every 5 years for rented homes in England'])],
+      ['eicr', 'Electrical safety (EICR)', 'Electrical Installation Condition Report', 'From ' + money(eLow), eicrs[0].desc, eicrs.map(s => s.name.replace('Electrical safety (EICR), ', '').replace(/^./, c => c.toUpperCase()) + ': ' + money(s.price)).concat(['Required at least every 5 years for rented homes in England'])],
       ['epc', 'EPC', 'Energy Performance Certificate', money(epc.price), epc.desc, ['Assessor visit and energy rating', 'Valid for 10 years', 'Needed before you advertise to rent or sell']],
-    ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price} <small>+ VAT</small></div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
+    ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price}</div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
     const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
 <section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div><p style="margin:28px 0 0"><a class="arrow" href="/landlords">Keep every certificate in one place, with reminders before they expire: the free landlord dashboard</a></p></div></section>
 <section id="book" style="padding-top:8px"><div class="wrap">
   <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates.</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
   <form class="card form cert-form" method="post" action="/certificates#book">
     <fieldset class="cert-pick"><legend>What do you need?</legend>
-      <label class="pick"><input type="checkbox" name="svc" value="gas"><span><b>Gas Safety (CP12)</b><em>${money(gas.price)} + VAT</em></span></label>
-      <label class="pick"><input type="checkbox" name="svc" value="eicr"><span><b>Electrical safety (EICR)</b><em>from ${money(eLow)} + VAT</em></span></label>
-      <label class="pick"><input type="checkbox" name="svc" value="epc"><span><b>EPC</b><em>${money(epc.price)} + VAT</em></span></label>
+      <label class="pick"><input type="checkbox" name="svc" value="gas"><span><b>Gas Safety (CP12)</b><em>${money(gas.price)}</em></span></label>
+      <label class="pick"><input type="checkbox" name="svc" value="eicr"><span><b>Electrical safety (EICR)</b><em>from ${money(eLow)}</em></span></label>
+      <label class="pick"><input type="checkbox" name="svc" value="epc"><span><b>EPC</b><em>${money(epc.price)}</em></span></label>
     </fieldset>
     <div class="cert-addr">
       <div class="cert-pc-row"><label>Postcode<input name="postcode" id="certPc" required maxlength="12" autocapitalize="characters" ${lookup ? 'autocomplete="off" spellcheck="false" aria-describedby="certAddrMsg"' : 'autocomplete="postal-code"'} placeholder="e.g. SE16 4JU"></label>${lookup ? '<button type="button" class="btn ghost sm" id="certFind" hidden>Find address</button>' : ''}</div>
@@ -141,8 +141,8 @@ function mountPublic(app, ctx){
   function eicr(b){ b = +b; return b >= 5 ? 'eicr_l' : b >= 3 ? 'eicr_m' : 'eicr_s'; }
   function fmt(n){ return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
   function total(){ var sub = 0; f.querySelectorAll('[name=svc]:checked').forEach(function(x){ sub += x.value === 'eicr' ? P[eicr(f.beds.value)] : P[x.value]; });
-    var vat = Math.round(sub * ${VAT} * 100) / 100; document.getElementById('certTotal').textContent = fmt(sub + vat);
-    document.getElementById('certVat').textContent = sub ? fmt(sub) + ' + ' + fmt(vat) + ' VAT' : 'Choose what you need'; }
+    document.getElementById('certTotal').textContent = fmt(sub);
+    document.getElementById('certVat').textContent = sub ? 'Total to pay' : 'Choose what you need'; }
   // Prefilled from a "Book a renewal" link on the landlord dashboard: ?svc=gas&postcode=…&address=…&beds=…
   var q = new URLSearchParams(location.search);
   q.getAll('svc').forEach(function(v){ var c = f.querySelector('[name=svc][value="' + v.replace(/[^a-z]/g, '') + '"]'); if (c) c.checked = true; });
@@ -152,9 +152,9 @@ function mountPublic(app, ctx){
 })();
 </script>${lookup ? ADDRESS_UI : ''}`;
     return renderPage({ key: 'certificates', path: '/certificates', title: 'Landlord services: Gas Safety, EICR & EPC certificates · DIY Inventory', og: 'Landlord services: Gas Safety, EICR and EPC certificates',
-      desc: 'Book a Gas Safety certificate (' + money(gas.price) + ' + VAT), electrical safety EICR (from ' + money(eLow) + ' + VAT) or EPC (' + money(epc.price) + ' + VAT) for your rental property.', body,
+      desc: 'Book a Gas Safety certificate (' + money(gas.price) + '), electrical safety EICR (from ' + money(eLow) + ') or EPC (' + money(epc.price) + ') for your rental property.', body,
       jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: 'GB',
-        offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', valueAddedTaxIncluded: false } } })) }, req, notice);
+        offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP' } } })) }, req, notice);
   }
 
   app.get(['/certificates', '/certificates/'], (req, res) => res.type('html').send(page(req, req.query.booked ? { ok: true, text: 'Thanks, your booking request has been sent. We’ll be in touch to confirm the date.' } : null)));
@@ -176,7 +176,7 @@ function mountPublic(app, ctx){
     const all = readJson(bookingsFile(), []); all.push(booking); writeJson(bookingsFile(), all.slice(-1000));
     console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+'));
     if (ctx.track) ctx.track(req, 'certificate_booking', booking.total);
-    notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + '), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + ' inc VAT' + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
+    notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + '), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
     res.redirect(303, '/certificates?booked=1#book');
   });
   return { paths: ['/certificates'] };
@@ -191,14 +191,14 @@ function mountAdmin(app, ctx){
   function adminHTML(){
     const list = readJson(bookingsFile(), []).slice().reverse(), open = list.filter(b => b.status === 'new').length;
     const rows = list.slice(0, 200).map(b => `<li><div style="flex:1;min-width:0"><strong>${esc(b.items.map(i => i.name).join(' + '))}</strong> <span class="pill ${(STATUS[b.status] || STATUS.new)[1]}">${(STATUS[b.status] || STATUS.new)[0]}</span>
-      <div class="sub">${esc(b.address)}, ${esc(b.postcode)} · ${b.beds === 0 ? 'studio' : b.beds + ' bed'} · <b>${money(b.total)}</b> inc VAT (${money(b.subtotal)} + ${money(b.vat)})</div>
+      <div class="sub">${esc(b.address)}, ${esc(b.postcode)} · ${b.beds === 0 ? 'studio' : b.beds + ' bed'} · <b>${money(b.total)}</b></div>
       <div class="sub">${esc(b.name)} · <a href="tel:${esc(String(b.phone).replace(/[^\d+]/g, ''))}">${esc(b.phone)}</a> · <a href="mailto:${esc(b.email)}">${esc(b.email)}</a> · access: ${esc(b.access || '—')}${b.when ? ' · wants: ' + esc(b.when) : ''} · ${esc(when(b.at))}</div>
       ${b.notes ? `<div class="msg">${esc(b.notes)}</div>` : ''}</div>
       <div class="actions"><form method="post" action="/admin/bookings/${esc(b.id)}"><select name="status" onchange="this.form.submit()">${Object.entries(STATUS).map(([k, [l]]) => `<option value="${k}"${k === b.status ? ' selected' : ''}>${l}</option>`).join('')}</select></form></div></li>`).join('');
     const prices = services();
     return `${open ? `<a class="news" href="#bookings" onclick="document.getElementById('bookings').open=true">📅 ${open} new certificate booking${open === 1 ? '' : 's'}</a>` : ''}<details class="codes" id="bookings"${open ? ' open' : ''}><summary>📅 Certificate bookings <span class="sub" style="display:inline">— ${list.length ? list.length + ' in total' + (open ? ', ' + open + ' new' : '') : 'none yet'}</span></summary>
 ${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">Bookings from the Certificates page appear here.</p>'}
-<form method="post" action="/admin/cert-prices" class="newcode" style="margin-top:14px;flex-wrap:wrap">${prices.map(s => `<label class="sub" style="display:grid;gap:4px">${esc(s.name.replace('Electrical safety (EICR), ', 'EICR ').replace(' certificate (CP12)', ''))} £<input name="${s.id}" value="${s.price}" inputmode="decimal" style="max-width:110px"></label>`).join('')}<button class="btn">Save prices (+ VAT)</button></form></details>`;
+<form method="post" action="/admin/cert-prices" class="newcode" style="margin-top:14px;flex-wrap:wrap">${prices.map(s => `<label class="sub" style="display:grid;gap:4px">${esc(s.name.replace('Electrical safety (EICR), ', 'EICR ').replace(' certificate (CP12)', ''))} £<input name="${s.id}" value="${s.price}" inputmode="decimal" style="max-width:110px"></label>`).join('')}<button class="btn">Save prices</button></form></details>`;
   }
   app.post('/admin/bookings/:id', requireAdmin, express.urlencoded({ extended: false, limit: '2kb' }), (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Change bookings from the reports page.');

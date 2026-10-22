@@ -3670,8 +3670,8 @@ function payCardHTML(){
   const buy = accessUi.buy || '/pricing';
   return `<div class="pay-card">
       <div class="pay-title">Your report is ready</div>
-      <p>Pay <strong>£30 + VAT</strong> (£36) to download your PDF report, send it, and get it signed by the tenant. Your report stays saved on this phone in the meantime.</p>
-      <a class="btn btn-primary btn-block" href="${escapeHtml(buy)}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay £30 + VAT</a>
+      <p>Pay <strong>£30</strong> to download your PDF report, send it, and get it signed by the tenant. Your report stays saved on this phone in the meantime.</p>
+      <a class="btn btn-primary btn-block" href="${escapeHtml(buy)}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay £30</a>
       <div class="pay-paid">
         <label for="payInput"><strong>Paid, or have an access code?</strong> Paste the link from your payment email, or type your code.</label>
         <div class="custom-room-add">
@@ -3792,7 +3792,7 @@ function renderSetup(){
       <h1>DIY Inventory</h1>
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
-    ${accessUi.checked && !accessUi.access ? `<div class="price-note"><strong>Free to start.</strong> You only pay £30 + VAT (£36) when your report is finished, to download it and send it.</div>` : ''}
+    ${accessUi.checked && !accessUi.access ? `<div class="price-note"><strong>Free to start.</strong> You only pay £30 when your report is finished, to download it and send it.</div>` : ''}
     <div class="intro-card">
       <h2>Before you start</h2>
       <ul class="intro-list">

@@ -210,11 +210,11 @@ function sendToFixflow(token, req){
 const VIEWS = path.join(__dirname, 'views');
 const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
 const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).update(fs.readFileSync(path.join(__dirname, 'public', 'site.js'))).digest('hex').slice(0, 10);
-const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone, with the PDF report ready instantly. Dated photos, tenant sign-off, side-by-side comparison. Free to start, £30 + VAT per report.';
+const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone, with the PDF report ready instantly. Dated photos, tenant sign-off, side-by-side comparison. Free to start, £30 per report.';
 const SITE = {
   home: { path: '/', title: 'DIY Inventory · Property inventories and inspections', og: 'DIY Inventory', desc: DESC },
   how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do check-ins, inspections and check-outs on your phone with DIY Inventory, step by step.' },
-  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One report for £30 + VAT: a check-in, check-out or inspection, done on your phone, with a professional PDF report.' },
+  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One report for £30: a check-in, check-out or inspection, done on your phone, with a professional PDF report.' },
   faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Inventory', desc: 'Answers to common questions about doing your own inventory report with DIY Inventory.' },
   contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Inventory', desc: 'Get in touch with DIY Inventory.' },
   privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Inventory', desc: 'What DIY Inventory keeps about you and why.' },
@@ -223,7 +223,7 @@ for (const [key, pg] of Object.entries(SITE)) pg.body = fs.readFileSync(path.joi
 const aiText = t => anthropic ? t.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : t.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
 SITE.faq.jsonld = () => faqLd(aiText(SITE.faq.body));
 SITE.home.jsonld = base => [{ '@type': 'SoftwareApplication', name: 'DIY Inventory', url: base + '/', applicationCategory: 'BusinessApplication', operatingSystem: 'Any (works in the phone’s web browser)',
-  description: DESC, offers: { '@type': 'Offer', price: '36.00', priceCurrency: 'GBP', description: 'One report: £30 + VAT, paid when the finished report is downloaded. Free to start.' }, publisher: { '@id': base + '/#org' } }].concat(faqLd(aiText(SITE.home.body)));
+  description: DESC, offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP', description: 'One report: £30, paid when the finished report is downloaded. Free to start.' }, publisher: { '@id': base + '/#org' } }].concat(faqLd(aiText(SITE.home.body)));
 const siteBase = req => { const host = String(req.headers.host || ''); return (/^(localhost|127\.|\[::1\])/.test(host) ? 'http://' : 'https://') + host; };
 const escHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 // The site's public address: PUBLIC_URL (e.g. your own domain), else Railway's, else this request's host.
