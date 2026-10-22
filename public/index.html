@@ -631,8 +631,20 @@
   .pay-msg { color: #B42318; font-size: 14px; font-weight: 600; min-height: 1em; }
   .price-note { margin: 0 0 16px; padding: 12px 16px; border-radius: 16px; background: var(--accent-soft); color: var(--ink-soft); font-size: 14.5px; }
   .price-note strong { color: var(--accent); }
+
+  /* Floor plan offer (review and finished screens); the editor itself is styled by /floorplan.css */
+  .fp-offer { display: flex; gap: 14px; align-items: flex-start; margin: 16px 0 4px; padding: 16px; border-radius: 18px; background: var(--accent-soft); }
+  .next-card .fp-offer { margin: 0; padding: 0; background: transparent; }
+  .fp-offer-ic { flex: none; width: 44px; height: 44px; border-radius: 14px; background: var(--grad); display: grid; place-items: center; }
+  .fp-offer-ic svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .fp-offer-body { flex: 1; min-width: 0; }
+  .fp-offer-t { font: 800 17px var(--font-display, inherit); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .fp-offer-tag { font: 700 12px var(--font-sans); color: var(--accent); background: var(--panel); border-radius: 999px; padding: 3px 9px; }
+  .fp-offer p { margin: 4px 0 12px; color: var(--ink-soft); font-size: 14.5px; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="/floorplan.css">
+<script src="/floorplan.js"></script>
 </head>
 <body>
 <header class="appbar" id="appbar">
@@ -1738,7 +1750,8 @@ function normalizeState(saved){
     cloudSent: Array.isArray(saved.cloudSent) ? saved.cloudSent : [],
     earlier: saved.earlier && Array.isArray(saved.earlier.rooms) ? saved.earlier : null,
     submittedAt: saved.submittedAt || null,
-    tracked: saved.tracked && typeof saved.tracked === 'object' ? saved.tracked : {}
+    tracked: saved.tracked && typeof saved.tracked === 'object' ? saved.tracked : {},
+    floorplan: saved.floorplan && typeof saved.floorplan === 'object' && saved.floorplan.plan ? saved.floorplan : null
   };
 }
 
@@ -2791,6 +2804,21 @@ async function buildPdfBlob(s, onProgress, out){
     need(nl.length * 3.6 + 2); doc.text(nl, M, y + 3); y += nl.length * 3.6 + 4;
   }
 
+  /* ------------------------------------------------------------- floor plan */
+  // Only when one was drawn and paid for (fpIncluded); one page per floor, the drawing on the left and its rooms on the right.
+  if (fpIncluded(s) && window.FloorPlan){
+    const FP = window.FloorPlan, plan = FP.prepare(fpPlan(s)), fst = FP.stats(plan);
+    const drawn = plan.floors.map((f, i) => i).filter(i => fst.floors[i].rooms);
+    drawn.forEach(fi => {
+      newSection(drawn.length > 1 || plan.floors[fi] !== 'Ground floor' ? 'Floor plan – ' + plan.floors[fi].toLowerCase() : 'Floor plan');
+      const colW = 70, top = y, bottom = BOTTOM - 9;
+      FP.drawPdf(doc, plan, fi, { x: M, y: top, w: CW - colW - 12, h: bottom - top }, { pal: { wall: C.accent, room: C.paper, paper: C.white, text: C.ink, soft: C.inkSoft } });
+      FP.roomColumn(doc, plan, fi, PW - M - colW, top, colW, bottom, set, hr, fst);
+      set('normal', 7, C.faint);
+      doc.text(lines(FP.NOTE + ' Room sizes as measured by ' + (s.meta.inspectorName || 'the person making this report') + '.', CW)[0], M, BOTTOM - 1);
+    });
+  }
+
   /* ------------------------------------------- changes since the earlier report */
   if (E){
     newSection('Changes since the ' + eName);
@@ -3491,15 +3519,15 @@ function setPdfUi(phase, pct, msg){
   extra.forEach(b => { b.disabled = !ready; });
 }
 function preparePdf(){
-  if (pdfReady && pdfReady.key === state.finalizedAt) { setPdfUi('ready'); return Promise.resolve(pdfReady); }
+  if (pdfReady && pdfReady.key === pdfKey()) { setPdfUi('ready'); return Promise.resolve(pdfReady); }
   if (pdfBuilding) return pdfBuilding;
   setPdfUi('building', 0);
   pdfBuilding = (async () => {
     try {
-      const extra = {};
+      const extra = {}, key = pdfKey();
       const blob = await buildPdfBlob(state, pct => setPdfUi('building', pct), extra);
       if (pdfReady && pdfReady.url) URL.revokeObjectURL(pdfReady.url);
-      pdfReady = { key: state.finalizedAt, blob, url: URL.createObjectURL(blob), fname: pdfFileName(state), photos: extra.photos || [] };
+      pdfReady = { key, blob, url: URL.createObjectURL(blob), fname: pdfFileName(state), photos: extra.photos || [] };
       persist(); // keeps the photo key the PDF's links were made with
       setPdfUi('ready');
       return pdfReady;
@@ -3513,7 +3541,7 @@ function preparePdf(){
 }
 function savePdf(){
   if (!reportUnlocked()) return;   // paid for first: the PDF is only handed over once the report is unlocked
-  if (!pdfReady || pdfReady.key !== state.finalizedAt){
+  if (!pdfReady || pdfReady.key !== pdfKey()){
     preparePdf().then(r => { if (r) setPdfUi('ready', 0, 'Your PDF is ready. Tap Download PDF.'); });
     return;
   }
@@ -3683,6 +3711,100 @@ function payCardHTML(){
       </div>
       <div class="room-count-hint">Opening the link in your payment email on this phone unlocks it too. Your report will be waiting here.</div>
     </div>`;
+}
+
+/* Floor plan (optional, £9.55): drawn with public/floorplan.js, starting from the report's own rooms, and kept in
+   state.floorplan = { plan, token, pendingRef, free }. Paid for (a purchase token from /api/floorplan/return), or
+   free for the owner and the shared access code, it is added to the report PDF and can be downloaded on its own.
+   Not paid, the report is exactly as it would be without it. It never holds up finishing the report. */
+let fpCtrl = null, fpAccessUi = { checked: false, configured: true, free: false }, fpPolling = false;
+function fpPlan(s){ return s && s.floorplan && s.floorplan.plan; }
+function fpHas(s){ return !!(window.FloorPlan && fpPlan(s) && FloorPlan.hasPlan(fpPlan(s))); }
+function fpUnlocked(s){ return !!(s && s.floorplan && (s.floorplan.token || s.floorplan.free)); }
+function fpIncluded(s){ return fpHas(s) && fpUnlocked(s); }
+function pdfKey(){ return state.finalizedAt + '|' + (fpIncluded(state) ? 'fp' + (fpPlan(state).updatedAt || '') : ''); }
+function fpAccessFor(){ return { checking: !fpAccessUi.checked && !fpUnlocked(state), unlocked: fpUnlocked(state), configured: fpAccessUi.configured }; }
+// The report's rooms, named the way a floor plan names them; outside spaces are left out.
+function fpRoomNames(){
+  return state.rooms.filter(r => r.type !== 'garden' && !/garden|outdoor|outside|exterior|driveway/i.test(r.name)).map(r => r.name
+    .replace(/^Living \/ Reception Room$/i, 'Living room').replace(/^Hallway \/ Entrance$/i, 'Hallway').replace(/^Utility Room$/i, 'Utility').replace(/^Separate WC$/i, 'WC'));
+}
+function openFloorPlan(step){
+  if (!window.FloorPlan) { notice('The floor plan tool hasn’t loaded. Check your connection, then reload the page.'); return; }
+  if (!state.floorplan) state.floorplan = { plan: null, token: '', pendingRef: '', free: false };
+  const fp = state.floorplan;
+  if (!fp.plan) { fp.plan = FloorPlan.fromNames(fpRoomNames(), { address: state.meta.address }); persist(); }
+  fp.plan.address = state.meta.address;
+  if (fpCtrl) fpCtrl.close();
+  fpCtrl = FloorPlan.open({
+    plan: fp.plan, mode: 'app', address: state.meta.address, step, access: fpAccessFor(),
+    copy: { buyTitle: 'Add it to your report', buyText: 'The plan goes into your report’s PDF, and you can download it on its own too. Your report is complete without it.',
+      buyBtn: 'Pay ' + FloorPlan.PRICE_TEXT + ' to add it', unlocked: state.finalizedAt ? '✓ Your floor plan is in your report.' : '✓ Your floor plan will be added to your report.', closeLabel: 'Back to my report' },
+    onChange: p => { if (state.floorplan) { state.floorplan.plan = p; persist(); } },
+    onBuy: fpBuy,
+    onClose: () => { fpCtrl = null; fpRepaint(); },
+    onDownload: () => track('downloaded', 1)
+  });
+  fpCheck();
+}
+async function fpBuy(){
+  const r = await FloorPlan.checkout('app', state.meta.address);
+  if (r.free) { state.floorplan.free = true; persist(); fpRefreshAccess(); return {}; }
+  if (!r.url) return r;
+  // Saved straight away: the payment page takes over this tab, and the report must be here when it comes back.
+  state.floorplan.pendingRef = r.ref || '';
+  clearTimeout(saveTimer); await idbSet('current', state);
+  location.href = r.url;
+  return { redirecting: true };
+}
+function fpRefreshAccess(){ if (fpCtrl) fpCtrl.setAccess(fpAccessFor()); fpRepaint(); }
+async function fpCheck(){
+  const fp = state.floorplan;
+  if (!fp || !window.FloorPlan) return;
+  const s = await FloorPlan.status(fp.token, fp.pendingRef);
+  if (state.floorplan !== fp) return;
+  if (!s.offline && !s.error) {
+    fpAccessUi = { checked: true, configured: !!s.configured, free: !!s.free };
+    if (s.token) { fp.token = s.token; fp.pendingRef = ''; }
+    else if (fp.token && !s.paid) fp.token = '';
+    fp.free = !!s.free;
+    persist();
+  }
+  fpRefreshAccess();
+  // Back from the payment page before the payment was confirmed: keep asking for a little while.
+  if (fp.pendingRef && !fpUnlocked(state) && !fpPolling) {
+    fpPolling = true; let n = 0;
+    const tick = async () => { await fpCheck(); if (fp.pendingRef && !fpUnlocked(state) && n++ < 10) setTimeout(tick, 3000); else fpPolling = false; };
+    setTimeout(tick, 3000);
+  }
+}
+// The card on the review screen, and on the finished screen.
+function fpCardHTML(){
+  if (!window.FloorPlan) return '';
+  const has = fpHas(state), st = has ? FloorPlan.stats(FloorPlan.normalize(fpPlan(state))) : null, paid = fpUnlocked(state);
+  return `<div class="fp-offer" id="fpCard">
+      <div class="fp-offer-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h7v9M10 3v5M14 12h7M14 12v3"/></svg></div>
+      <div class="fp-offer-body">
+        <div class="fp-offer-t">Floor plan <span class="fp-offer-tag">${paid ? (has ? 'Added' : 'Included') : 'Optional · + ' + FloorPlan.PRICE_TEXT}</span></div>
+        <p>${has ? escapeHtml(st.rooms + ' room' + (st.rooms === 1 ? '' : 's') + ' · ' + FloorPlan.areaText(st.total) + ' in total. ') + (paid ? 'It is added to your report.' : 'It is added to your report once it’s paid for.')
+          : 'Add a measured floor plan to your report. Your rooms are filled in: just type each one’s width and length. You can skip this; your report is complete without it.'}</p>
+        <div class="btn-row">
+          <button type="button" class="btn ${has ? '' : 'btn-primary'}" onclick="openFloorPlan()">${has ? 'Edit the floor plan' : 'Draw a floor plan'}</button>
+          ${has && paid ? `<button type="button" class="btn" onclick="fpDownload()">Download the plan</button>` : has ? `<button type="button" class="btn btn-primary" onclick="openFloorPlan('finish')">Add it · ${FloorPlan.PRICE_TEXT}</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+function fpDownload(){
+  if (!fpIncluded(state)) return;
+  try { FloorPlan.saveBlob(FloorPlan.pdfBlob(fpPlan(state), { address: state.meta.address }), FloorPlan.fileBase(fpPlan(state), { address: state.meta.address }) + '.pdf'); track('downloaded', 1); }
+  catch (e) { notice('The floor plan couldn’t be made. Please try again.'); }
+}
+function fpRepaint(){
+  const el = document.getElementById('fpCard');
+  if (el) el.outerHTML = fpCardHTML();
+  // A plan paid for (or changed) after the report's PDF was made: make it again, with the plan.
+  if (state.view === 'done' && state.finalizedAt && pdfReady && pdfReady.key !== pdfKey()) (pdfBuilding || Promise.resolve()).then(() => preparePdf());
 }
 
 // Tenant sign-off: the link (/sign/<key>) and whether it has been signed yet.
@@ -4265,6 +4387,8 @@ function renderReview(){
         </tbody>
       </table>
 
+      ${fpCardHTML()}
+
       ${aiWarnings > 0 ? `<div class="hint-banner">The AI photo check flagged ${aiWarnings} photo${aiWarnings===1?'':'s'} that may not clearly match its checklist item. Tap into the relevant room to take a quick look — it's a helpful check, not always right.</div>` : ''}
 
       <div class="declaration-box">
@@ -4326,6 +4450,8 @@ function renderDone(){
         <div class="restart-row"><button type="button" class="btn" onclick="startAgain()">Start again</button></div>
       </div>
     </div>
+
+    ${reportUnlocked() && window.FloorPlan ? `<div class="panel next-card">${fpCardHTML()}</div>` : ''}
 
     ${reportUnlocked() ? `<div class="panel next-card">
       <div class="section-title" style="margin-top:0">Get it signed by the tenant</div>
@@ -4415,6 +4541,21 @@ track('app_open');
     }
   } catch (err) {
     console.error('Inventory app failed to check for a saved draft:', err);
+  }
+  // Back from paying for a floor plan (/app?fp=<token>, ?fp_ref=<ref> when not confirmed yet, ?fp_cancel=1): straight back to it.
+  {
+    const q = new URLSearchParams(location.search), tok = q.get('fp'), ref = q.get('fp_ref');
+    if (tok || ref || q.get('fp_cancel')) {
+      history.replaceState(null, '', location.pathname);
+      const target = state.floorplan ? state : savedDraft && savedDraft.floorplan ? savedDraft : null;
+      if (target) {
+        if (tok) { target.floorplan.token = String(tok).slice(0, 64); target.floorplan.pendingRef = ''; }
+        if (ref) target.floorplan.pendingRef = String(ref).slice(0, 64);
+        await idbSet('current', target);
+        if (target === savedDraft) resumeDraft();
+        openFloorPlan('finish');
+      }
+    } else if (state.floorplan) fpCheck();
   }
   checkAccessStatus().then(() => { if (state.view === 'setup') render(); });
   // Opened from an earlier report's link (/?from=<key>): start a new report from it, if nothing else is open.

@@ -116,9 +116,10 @@ function mount(app, ctx){
       '- Do it yourself as a landlord or agent, or send the tenant a link to do it. Either side can send the other a link to check, comment and sign.',
       '- Check-outs and mid-tenancy inspections start from the earlier report and compare the two: what changed, meter readings then and now, photos side by side.',
       '- Works in any phone browser, no app to install, in any country. Saved as you go, on the phone and backed up online.',
+      '- Floor plans: type each room’s width and length and a clean, measured floor plan is drawn, with room sizes and the total floor area, as a PDF and a picture. Free to draw, £9.55 to download, on its own or added to a report: ' + base + '/floor-plan',
       '- UK landlords can also book a Gas Safety certificate (CP12), an electrical safety report (EICR) or an EPC at fixed prices: ' + base + '/certificates', '',
       '## Pages',
-      '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Gas Safety, EICR and EPC certificates for landlords](' + base + '/certificates)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
+      '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Gas Safety, EICR and EPC certificates for landlords](' + base + '/certificates)', '- [Floor plans](' + base + '/floor-plan)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
       '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Questions and answers'], faq, ['', 'Reports are made to be used as evidence, including in deposit disputes (TDS, DPS, mydeposits): dated photos, both sides’ signatures, and check-out compared with check-in.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
   });
   app.get('/' + seo.indexNowKey + '.txt', (req, res) => res.type('text/plain').send(seo.indexNowKey));

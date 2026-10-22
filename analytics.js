@@ -16,7 +16,7 @@ const REPORT_PRICE = 30;   // £ ex VAT, per paid report
 // Funnel steps the app may send to POST /api/event (anything else is ignored).
 const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded'];
 // Recorded by the server itself.
-const SERVER_EVENTS = ['report_submitted', 'certificate_booking', 'contact_message', 'sign_off', 'sign_page'];
+const SERVER_EVENTS = ['report_submitted', 'certificate_booking', 'contact_message', 'sign_off', 'sign_page', 'floorplan_purchase'];
 const BOT = /bot\b|bot\/|crawl|spider|slurp|preview|monitor|curl|wget|python|headless|facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely|lighthouse|pingdom|uptime|axios|node-fetch|undici|go-http|okhttp|java\/|libwww|httpclient|scrapy|semrush|ahrefs|mj12|dotbot|petalbot|yandex|baidu|duckduck|GPTBot|ClaudeBot|PerplexityBot|OAI-SearchBot|bytespider|CCBot/i;
 const SKIP_PATH = /^\/(api|admin|p|sign|icons|img|images|fonts|static)(\/|$)/;
 const ASSET = /\.(css|js|mjs|map|png|jpe?g|gif|webp|avif|svg|ico|pdf|json|txt|xml|webmanifest|woff2?|ttf|otf|mp4|webm|zip)$/i;
@@ -113,6 +113,7 @@ function track(req, name, value, kind){
   if (req && firstToday(d, 'e:' + name, visitorOf(req))) e.visitors++;
   if (name === 'report_submitted') { bump(d.sales, kind || 'link'); if (kind === 'link') d.revenue = Math.round((d.revenue + REPORT_PRICE) * 100) / 100; }
   if (name === 'certificate_booking') { d.certs.n++; d.certs.value = Math.round((d.certs.value + (Number(value) || 0)) * 100) / 100; }
+  if (name === 'floorplan_purchase') { const f = d.floorplans || (d.floorplans = { n: 0, value: 0 }); f.n++; f.value = Math.round((f.value + (Number(value) || 0)) * 100) / 100; }
   save();
 }
 const cookieToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
@@ -173,7 +174,7 @@ function mount(app, c){
 function daysBack(n){ const t = Date.parse(dayKey() + 'T12:00:00Z'), out = []; for (let i = n - 1; i >= 0; i--) out.push(new Date(t - i * 86400000).toISOString().slice(0, 10)); return out; }
 function load(n){ const t = current(); flush(); return daysBack(n).map(day => day === t.day ? t : (readJson(fileOf(day), null) || blankDay(day))); }
 function sum(days){
-  const s = blankDay(''); delete s.seen; s.pathsV = {};
+  const s = blankDay(''); delete s.seen; s.pathsV = {}; s.floorplans = { n: 0, value: 0 };
   for (const d of days) {
     s.views += d.views || 0; s.visitors += d.visitors || 0; s.revenue += d.revenue || 0;
     (d.hours || []).forEach((h, i) => s.hours[i] += h || 0);
@@ -182,6 +183,7 @@ function sum(days){
     for (const [k, v] of Object.entries(d.events || {})) { const e = s.events[k] || (s.events[k] = { n: 0, visitors: 0 }); e.n += v.n || 0; e.visitors += v.visitors || 0; }
     for (const k of Object.keys(s.sales)) s.sales[k] += (d.sales || {})[k] || 0;
     s.certs.n += (d.certs || {}).n || 0; s.certs.value += (d.certs || {}).value || 0;
+    s.floorplans.n += (d.floorplans || {}).n || 0; s.floorplans.value += (d.floorplans || {}).value || 0;
   }
   s.revenue = Math.round(s.revenue * 100) / 100; s.certs.value = Math.round(s.certs.value * 100) / 100;
   return s;
@@ -246,7 +248,8 @@ function mountAdmin(app, a){
       const prev = i ? steps[i - 1][1] : 0, pct = i && prev ? Math.round(v / prev * 100) + '%' : i ? '—' : '';
       return `<tr><td>${esc(label)}</td><td class="n">${v}</td><td class="n">${pct}</td><td class="bar"><i style="width:${s.visitors ? Math.max(v ? 1 : 0, v / s.visitors * 100) : 0}%"></i></td></tr>`;
     }).join('');
-    const others = ['downloaded', 'sign_page', 'sign_off', 'contact_message', 'certificate_booking'].map(k => `<li><span class="k">${esc(EVENT_LABEL[k])}</span><span class="v">${people(s, k)}</span></li>`).join('');
+    const others = ['downloaded', 'sign_page', 'sign_off', 'contact_message', 'certificate_booking'].map(k => `<li><span class="k">${esc(EVENT_LABEL[k])}</span><span class="v">${people(s, k)}</span></li>`).join('')
+      + `<li><span class="k">Bought a floor plan <small>${money(Math.round(s.floorplans.value * 100) / 100)}</small></span><span class="v">${s.floorplans.n}</span></li>`;
     const pages = Object.fromEntries(Object.entries(s.paths));
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Visits and sales</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
