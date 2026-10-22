@@ -1,0 +1,154 @@
+/* Landlord area (/landlords, /account): pages rendered by landlords.js inside the website's layout.
+   Uses site.css's tokens and components; only what those pages add is here. Light and dark come from site.css. */
+
+/* Page heads with actions */
+.acc-head { padding-bottom: 32px; }
+.acc-head .back { display: block; width: fit-content; margin: 0 0 18px; color: var(--ink-soft); text-decoration: none; font-size: 15px; }
+.acc-head .back:hover { color: var(--ink); }
+.acc-head h1 { overflow-wrap: anywhere; }
+.acc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 28px; }
+.acc-actions .btn { white-space: nowrap; }
+
+/* Buttons that post a form but read as links */
+form.inline { display: inline; margin: 0; }
+.linkbtn { background: none; border: 0; padding: 0; font: 600 15px var(--sans); color: var(--ink-soft); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.linkbtn:hover { color: var(--ink); }
+.linkbtn.danger { color: var(--warm); font-weight: 500; }
+.btn.danger { background: transparent; color: var(--warm); box-shadow: inset 0 0 0 1px currentColor; }
+.btn.danger:hover { background: color-mix(in srgb, var(--warm) 8%, transparent); }
+
+/* Status: a dot and a few words */
+.st { display: inline-flex; align-items: baseline; gap: 8px; font-weight: 600; font-size: 15px; color: var(--ink); line-height: 1.35; }
+.st i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--good); transform: translateY(-1px); }
+.st.due { color: var(--amber); } .st.due i { background: var(--amber); }
+.st.exp { color: var(--warm); } .st.exp i { background: var(--warm); }
+.st.none { color: var(--ink-faint); font-weight: 500; } .st.none i { background: transparent; box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+
+.acc-note { margin: 0 0 24px; padding: 14px 16px; border-radius: var(--radius); background: var(--soft); color: var(--ink-soft); font-size: 15px; }
+.acc-note a { font-weight: 600; }
+.small, p.small { font-size: 14px; color: var(--ink-faint); margin: 0; }
+.form label small.hint { font-weight: 400; color: var(--ink-faint); font-size: 13.5px; }
+.form label.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; }
+.form label.check input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+.form input[type=file] { padding: 10px; font-size: 14.5px; }
+.form .btn { justify-self: start; }
+.pre { white-space: pre-wrap; }
+
+/* Sign in / sign up */
+.auth { max-width: 480px; padding-top: 64px; padding-bottom: 96px; }
+.auth h1 { font-size: clamp(36px, 5vw, 48px); margin: 0 0 12px; }
+.auth .lead { color: var(--ink-soft); margin: 0 0 28px; }
+.auth .card { padding: 28px; }
+.auth .btn.primary { width: 100%; }
+
+/* Dashboard: figures, then one ruled row per property */
+.acc-figs { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 0 40px; }
+.acc-figs > div { padding: 20px 20px 20px 0; border-right: 1px solid var(--line); min-width: 0; }
+.acc-figs > div + div { padding-left: 20px; }
+.acc-figs > div:last-child { border-right: 0; }
+.acc-figs b { display: block; font: 500 40px/1 var(--serif); letter-spacing: -.02em; }
+.acc-figs b.date { font-size: 26px; line-height: 1.5; }
+.acc-figs span { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 14.5px; }
+
+.props { border-top: 1px solid var(--ink); }
+.prop { display: grid; grid-template-columns: minmax(200px, 1fr) 2.6fr auto; gap: 24px; align-items: start; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.prop-addr { color: inherit; text-decoration: none; min-width: 0; }
+.prop-addr h3 { margin: 0 0 4px; font: 500 22px/1.2 var(--serif); letter-spacing: -.01em; overflow-wrap: anywhere; }
+a.prop-addr:hover h3 { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.prop-addr span { color: var(--ink-faint); font-size: 14.5px; }
+.prop-st { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0; }
+.prop-st dt { font-size: 13.5px; color: var(--ink-faint); margin: 0 0 4px; }
+.prop-st dd { margin: 0; min-width: 0; }
+.prop-st dd .st + .st { margin-top: 6px; }
+.prop-st dd small { display: block; color: var(--ink-soft); font-size: 13.5px; margin-top: 3px; overflow-wrap: anywhere; }
+.prop-go { color: var(--ink); font-weight: 600; text-decoration: none; padding-top: 2px; white-space: nowrap; }
+.prop-go::after { content: " →"; display: inline-block; transition: transform .2s var(--ease); }
+.prop:hover .prop-go::after { transform: translateX(3px); }
+
+.acc-empty { max-width: 680px; padding: 36px; }
+.acc-empty h2 { font-size: 32px; margin: 0 0 12px; }
+.acc-empty p { color: var(--ink-soft); margin: 0 0 24px; }
+
+/* The example on /landlords */
+.sample { position: relative; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 8px 28px; }
+.sample .prop { border-bottom: 0; }
+.sample .prop-go { display: none; }
+.sample .prop { grid-template-columns: minmax(200px, 1fr) 2.6fr; }
+.sample-cap { position: absolute; top: -10px; left: 20px; background: var(--bg); padding: 0 8px; font-size: 13px; color: var(--ink-faint); }
+.services .track { grid-template-columns: 1.1fr 2fr; }
+
+/* Property page: jump list, then one section per certificate */
+.ov { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--ink); }
+.ov li { border-bottom: 1px solid var(--line); min-width: 0; }
+.ov li + li { border-left: 1px solid var(--line); }
+.ov a { display: grid; gap: 6px; padding: 16px 16px 16px 0; color: inherit; text-decoration: none; }
+.ov li + li a { padding-left: 16px; }
+.ov b { font-size: 13.5px; color: var(--ink-faint); font-weight: 500; }
+.ov a:hover b { color: var(--ink); }
+
+.acc-sec { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr); gap: 24px 56px; padding: 48px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.acc-sec:last-child { border-bottom: 0; }
+.acc-sec-h h2 { font-size: clamp(28px, 3vw, 36px); margin: 0 0 12px; }
+.acc-sec-h p { color: var(--ink-soft); font-size: 15.5px; margin: 14px 0 18px; max-width: 30em; }
+.acc-sec-h .st-extra { display: flex; gap: 10px; align-items: baseline; margin: 0 0 16px; }
+.acc-sec-h .arrow { display: flex; width: fit-content; margin: 0 0 10px; font-size: 15.5px; }
+.acc-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 28px; display: grid; gap: 20px; }
+.acc-row { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; }
+
+.kv { margin: 0; border-top: 1px solid var(--line); }
+.kv > div { display: grid; grid-template-columns: 9.5em 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.kv dt { color: var(--ink-faint); font-size: 14.5px; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+
+details.edit { border-top: 1px solid var(--line); padding-top: 4px; }
+.acc-box > details.edit:first-child { border-top: 0; padding-top: 0; }
+details.edit summary { cursor: pointer; list-style: none; font-weight: 600; padding: 10px 0; display: flex; align-items: center; gap: 10px; color: var(--ink); }
+details.edit summary::-webkit-details-marker { display: none; }
+details.edit summary::before { content: ""; width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform .2s var(--ease); }
+details.edit[open] summary::before { transform: rotate(45deg); }
+details.edit[open] summary { margin-bottom: 12px; }
+
+/* EPC: the rating letter on the register's own colour scale */
+.epc-badge { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 6px; font: 600 24px/1 var(--serif); color: #fff; background: #6B7078; }
+.epc-badge.b-A { background: #0E7A4B; } .epc-badge.b-B { background: #2A9A4E; } .epc-badge.b-C { background: #7FAE3A; } .epc-badge.b-D { background: #D9A619; color: #17191C; }
+.epc-badge.b-E { background: #E3863A; color: #17191C; } .epc-badge.b-F { background: #D35F2B; } .epc-badge.b-G { background: #C0392B; }
+.epc-cur { display: grid; grid-template-columns: 44px 1fr; gap: 20px; align-items: start; }
+.epc-found p { margin: 0 0 14px; }
+.epc-res { list-style: none; margin: 0 0 14px; padding: 0; border-top: 1px solid var(--line); max-height: 460px; overflow-y: auto; }
+.epc-res li { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.epc-res li b { display: block; font-weight: 600; overflow-wrap: anywhere; }
+.epc-res li small { color: var(--ink-faint); font-size: 13.5px; }
+.epc-res li em { font-style: normal; color: var(--accent-ink); font-weight: 600; }
+.epc-res li.match { background: var(--accent-soft); margin: 0 -12px; padding: 12px; border-radius: 6px; border-bottom-color: transparent; }
+
+@media (max-width: 1000px) {
+  .prop { grid-template-columns: 1fr auto; }
+  .prop-st { grid-column: 1 / -1; grid-row: 2; }
+  .prop-go { grid-column: 2; grid-row: 1; }
+}
+@media (max-width: 860px) {
+  .acc-sec { grid-template-columns: 1fr; padding: 36px 0; }
+  .acc-sec-h p { margin-bottom: 10px; }
+  .ov { grid-template-columns: 1fr 1fr; }
+  .ov li + li { border-left: 0; }
+  .ov li:nth-child(even) { border-left: 1px solid var(--line); }
+  .ov li + li a { padding-left: 0; } .ov li:nth-child(even) a { padding-left: 16px; }
+  .acc-figs { grid-template-columns: 1fr 1fr; }
+  .acc-figs > div:nth-child(2) { border-right: 0; } .acc-figs > div:nth-child(3) { padding-left: 0; }
+  .acc-figs > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 600px) {
+  .prop-st { grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+  .acc-box { padding: 20px 18px; }
+  .kv > div { grid-template-columns: 1fr; gap: 2px; }
+  .sample { padding: 4px 18px; }
+  .auth { padding-top: 40px; }
+  .auth .card, .acc-empty { padding: 22px 18px; }
+  .epc-res { max-height: none; }
+  .epc-res li { grid-template-columns: 40px 1fr; }
+  .epc-res li form { grid-column: 2; }
+  .epc-badge { width: 40px; height: 40px; font-size: 22px; }
+  .epc-cur { grid-template-columns: 40px 1fr; gap: 14px; }
+  .acc-figs b { font-size: 34px; } .acc-figs b.date { font-size: 22px; }
+}
+@media (max-width: 760px) { .services .track { grid-template-columns: 1fr; } .services .track p { grid-row: auto; } }

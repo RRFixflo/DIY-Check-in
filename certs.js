@@ -83,6 +83,10 @@ function mountPublic(app, ctx){
   function total(){ var sub = 0; f.querySelectorAll('[name=svc]:checked').forEach(function(x){ sub += x.value === 'eicr' ? P[eicr(f.beds.value)] : P[x.value]; });
     var vat = Math.round(sub * ${VAT} * 100) / 100; document.getElementById('certTotal').textContent = fmt(sub + vat);
     document.getElementById('certVat').textContent = sub ? fmt(sub) + ' + ' + fmt(vat) + ' VAT' : 'Choose what you need'; }
+  // Prefilled from a "Book a renewal" link on the landlord dashboard: ?svc=gas&postcode=…&address=…&beds=…
+  var q = new URLSearchParams(location.search);
+  q.getAll('svc').forEach(function(v){ var c = f.querySelector('[name=svc][value="' + v.replace(/[^a-z]/g, '') + '"]'); if (c) c.checked = true; });
+  ['postcode', 'address', 'beds'].forEach(function(k){ var v = q.get(k), el = f.elements[k]; if (v && el && (el.tagName === 'SELECT' || !el.value)) el.value = v.slice(0, 200); });
   f.addEventListener('change', total); total();
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
