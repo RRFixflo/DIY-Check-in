@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESCRIPTION}}">
-<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#4F46E5">
 <link rel="canonical" href="{{BASE}}{{PATH}}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DIY Inventory">
@@ -22,7 +21,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="/site.css?v={{CSS_V}}">
 <script src="/site.js?v={{CSS_V}}" defer></script>
@@ -31,7 +30,7 @@
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="currentColor" style="color:var(--accent)"/><path d="M7.5 13.2 14 8l6.5 5.2V20a.8.8 0 0 1-.8.8H8.3a.8.8 0 0 1-.8-.8z" fill="none" stroke="var(--on-accent)" stroke-width="1.7" stroke-linejoin="round"/><path d="M11.2 16.4l2 2 3.8-3.9" fill="none" stroke="var(--on-accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>DIY Inventory</a>
+    <a class="brand" href="/"><img src="/icons/icon-192.png" alt="" width="32" height="32">DIY Inventory</a>
     <nav aria-label="Main">
       <a class="link{{ON_how}}" href="/how-it-works">How it works</a>
       <a class="link{{ON_pricing}}" href="/pricing">Pricing</a>
@@ -41,7 +40,7 @@
       <a class="link{{ON_account}}" href="/account">Sign in</a>
       <a class="btn primary sm" href="/app">Start free</a>
       <details class="menu">
-        <summary aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></summary>
+        <summary aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
         <div class="drop">
           <a class="{{ON_home}}" href="/">Home</a>
           <a class="{{ON_how}}" href="/how-it-works">How it works</a>
@@ -67,19 +66,9 @@
 </main>
 <footer>
   <div class="wrap">
-    <div>
-      <a class="brand" href="/"><svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="currentColor" style="color:var(--accent)"/><path d="M7.5 13.2 14 8l6.5 5.2V20a.8.8 0 0 1-.8.8H8.3a.8.8 0 0 1-.8-.8z" fill="none" stroke="var(--on-accent)" stroke-width="1.7" stroke-linejoin="round"/><path d="M11.2 16.4l2 2 3.8-3.9" fill="none" stroke="var(--on-accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>DIY Inventory</a>
-      <p class="disclaimer">Property inventories, check-ins, check-outs and inspections, done on your phone. Dated, signed evidence of a property’s condition, ready the moment it’s signed.</p>
-    </div>
-    <nav class="links" aria-label="Footer">
-      <a href="/how-it-works">How it works</a><a href="/guides">Guides</a>
-      <a href="/pricing">Pricing</a><a href="/checklists">Room checklists</a>
-      <a href="/example-report">Example report</a><a href="/contact">Contact</a>
-      <a href="/certificates">Landlord services</a><a href="/privacy">Privacy</a>
-      <a href="/landlords">Landlord dashboard</a><a href="/privacy#cookies">Cookies</a>
-      <a href="/faq">FAQ</a><a href="/account">Sign in</a>
-    </nav>
-    <div class="copy">© 2026 DIY Inventory. A tool for recording a property’s condition, not legal advice.</div>
+    <p class="disclaimer"><strong>DIY Inventory</strong>: property inventories, check-ins, check-outs and inspections, done on your phone. Dated, signed evidence of a property’s condition. A tool for recording a property’s condition, not legal advice.</p>
+    <span>© 2026 DIY Inventory</span>
+    <span><a href="/how-it-works">How it works</a> · <a href="/pricing">Pricing</a> · <a href="/faq">FAQ</a> · <a href="/certificates">Landlord services</a> · <a href="/landlords">Landlord dashboard</a> · <a href="/account">Sign in</a> · <a href="/contact">Contact</a> · <a href="/guides">Guides</a> · <a href="/checklists">Checklists</a> · <a href="/privacy">Privacy</a> · <a href="/privacy#cookies">Cookies</a> · <a href="{{EXAMPLE_URL}}">Example report</a></span>
   </div>
 </footer>
 </body>
