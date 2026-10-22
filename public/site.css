@@ -519,3 +519,27 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 .way .buy-first { margin-top: 18px; width: 100%; }
 .way .buy-note { margin: 10px 0 0; font-size: 13.5px; color: var(--ink-faint); }
 .buy-card .btn { flex: 0 0 auto; }
+
+/* Someone taking the photos: a real hand holding a phone, with the app's camera on its screen. The photo
+   is 1400×933; .hand-stage keeps that coordinate space (cropped to x 330–1080) and site.js scales it to
+   the box (--k). The screen is mapped onto the phone's glass with matrix3d (corners measured on the photo). */
+.visual { min-height: 0; }
+.hand-shot { position: relative; width: min(100%, 470px); aspect-ratio: 750 / 933; border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px -30px rgba(20,35,59,.55); background: #9da3a8; animation: fadeIn 1s .1s backwards; }
+.hand-stage { position: absolute; left: 0; top: 0; width: 1400px; height: 933px; transform-origin: 0 0; transform: scale(var(--k, .62)) translateX(-330px); }
+.hand-img { position: absolute; inset: 0; width: 1400px; height: 933px; max-width: none; }
+.hand-screen { position: absolute; left: 0; top: 0; width: 375px; height: 812px; transform-origin: 0 0; border-radius: 44px; overflow: hidden; }
+.hand-screen .screen.cam { width: 250px; height: 541px; border-radius: 0; transform: scale(1.5); transform-origin: 0 0; }
+.hand-screen .cam-top { padding-top: 26px; }
+.cam-cond { display: flex; gap: 5px; padding: 8px 10px 0; }
+.cam-cond span { flex: 1; text-align: center; font-size: 10px; font-weight: 800; padding: 5px 0; border-radius: 999px; background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+.cam-cond .c-good { animation: condGood 12s infinite; } .cam-cond .c-fair { animation: condFair 12s infinite; }
+@keyframes condGood { 0%, 19% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); transform: none; } 20% { transform: scale(1.12); } 20.5%, 24.5% { background: #2E7D4F; color: #fff; transform: none; } 25.5%, 69% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); } 70% { transform: scale(1.12); } 70.5%, 74.5% { background: #2E7D4F; color: #fff; transform: none; } 75.5%, 100% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); } }
+@keyframes condFair { 0%, 44% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); transform: none; } 45% { transform: scale(1.12); } 45.5%, 49.5% { background: #B45309; color: #fff; transform: none; } 50.5%, 94% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); } 95% { transform: scale(1.12); } 95.5%, 99.5% { background: #B45309; color: #fff; transform: none; } 100% { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); } }
+.hand-screen .cam-roll { height: 46px; padding-top: 8px; }
+.hand-screen .cam-shutter { margin: 8px auto 12px; width: 44px; height: 44px; } .hand-screen .cam-shutter i { width: 33px; height: 33px; }
+.visual .stamp { top: 34%; left: -18px; }
+.visual .pdf { bottom: 6%; }
+@media (max-width: 560px) { .visual .stamp { left: 0; } }
+@media (prefers-reduced-motion: reduce) { .cam-cond span { animation: none !important; } .cam-cond .c-fair { background: #B45309; color: #fff; } }
+.visual .pdf { bottom: -18px; right: -34px; width: 176px; }
+@media (max-width: 900px) { .visual .pdf { right: -6px; bottom: -14px; } }

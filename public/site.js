@@ -49,3 +49,11 @@
     vis.style.transition = 'transform .4s cubic-bezier(.2,.7,.2,1)';
   }
 })();
+
+// The hero photo of a hand holding a phone: scale its 750px-wide crop to the box.
+(function () {
+  var box = document.querySelector('.hand-shot'); if (!box) return;
+  function fit() { box.style.setProperty('--k', (box.clientWidth / 750).toFixed(4)); }
+  fit(); addEventListener('resize', fit);
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(box);
+})();
