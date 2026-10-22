@@ -867,7 +867,53 @@ async function idbClear(key){
     });
   }catch(e){ return false; }
 }
-function persist(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => { idbSet('current', state); }, 250); }
+function persist(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => { idbSet('current', state); }, 250); scheduleCloud(); }
+
+/* Online backup. Besides this phone (IndexedDB), the report is backed up to the server as it changes,
+   finished or not: its state with photos replaced by ids, then each photo once (drafts.js). Nothing here
+   ever blocks the app; it just tries again on the next change or when the connection is back. */
+let cloudBusy = false, cloudTimer = null;
+function ensureDraftKey(s){
+  if (!/^[a-f0-9]{32}$/.test(s.draftKey || '')){
+    const b = new Uint8Array(16); (window.crypto || window.msCrypto).getRandomValues(b);
+    s.draftKey = Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
+  }
+  return s.draftKey;
+}
+function allPhotos(s){
+  const out = [], add = l => (l || []).forEach(p => { if (p && p.id && p.dataUrl) out.push(p); });
+  const pr = s.property || {};
+  add(pr.exterior && pr.exterior.photos);
+  (s.rooms || []).forEach(r => { (r.items || []).forEach(i => add(i.photos)); add(r.extraPhotos); });
+  (pr.keys || []).forEach(k => add(k.photos));
+  Object.values(pr.meters || {}).forEach(m => add(m && m.photos));
+  return out;
+}
+function cloudState(s){ return JSON.parse(JSON.stringify(s, (k, v) => (k === 'dataUrl' && typeof v === 'string') ? undefined : v)); }
+function scheduleCloud(delay){ clearTimeout(cloudTimer); cloudTimer = setTimeout(cloudSync, delay == null ? 3000 : delay); }
+async function cloudSync(){
+  if (!state.rooms || !state.rooms.length || navigator.onLine === false) return;
+  if (cloudBusy) { scheduleCloud(); return; }
+  cloudBusy = true;
+  try {
+    const key = ensureDraftKey(state);
+    const r = await fetch('/api/drafts/' + key, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ state: cloudState(state) }) });
+    if (!r.ok) return;
+    const sent = new Set(state.cloudSent || []);
+    const pending = allPhotos(state).filter(p => !sent.has(p.id));
+    for (let i = 0; i < pending.length; i += 3){
+      const res = await fetch('/api/drafts/' + key + '/photos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ photos: pending.slice(i, i + 3).map(p => ({ id: p.id, dataUrl: p.dataUrl })) }) });
+      if (!res.ok) break;
+      const d = await res.json().catch(() => ({}));
+      (d.saved || []).forEach(id => sent.add(id));
+      state.cloudSent = [...sent];
+    }
+    clearTimeout(saveTimer); idbSet('current', state);
+  } catch (e) { /* offline or busy: tried again on the next change */ }
+  finally { cloudBusy = false; }
+}
+window.addEventListener('online', () => scheduleCloud(500));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') scheduleCloud(0); });
 
 /* ============================= helpers ============================= */
 function escapeHtml(str){
@@ -1678,6 +1724,8 @@ function normalizeState(saved){
     photoKey: /^[a-f0-9]{32}$/.test(saved.photoKey || '') ? saved.photoKey : null,
     photosUploaded: !!saved.photosUploaded,
     dataUploaded: !!saved.dataUploaded,
+    draftKey: /^[a-f0-9]{32}$/.test(saved.draftKey || '') ? saved.draftKey : null,
+    cloudSent: Array.isArray(saved.cloudSent) ? saved.cloudSent : [],
     earlier: saved.earlier && Array.isArray(saved.earlier.rooms) ? saved.earlier : null,
     submittedAt: saved.submittedAt || null
   };
@@ -3548,6 +3596,7 @@ function renderSetup(){
       <ul class="intro-list">
         <li><span class="intro-ic">${ICONS.grid}</span><span><strong>A checklist for every room</strong>Photograph each item (bed, wardrobe, cooker, sofa and so on). Each room needs at least ${MIN_PHOTOS} clear photos and can have up to ${MAX_PHOTOS}, and marking an item not applicable does not reduce the minimum. The front door must always be photographed.</span></li>
         ${aiEnabled ? `<li><span class="intro-ic">✨</span><span><strong>AI suggests the condition</strong>After each photo, our AI suggests the item's condition, a short description and any marks it can see. Check it and change anything you disagree with.</span></li>` : ''}
+        <li><span class="intro-ic">☁️</span><span><strong>Saved as you go</strong>Everything saves automatically, on this phone and backed up online with your photos, so nothing is lost if you close the page or lose signal.</span></li>
         <li><span class="intro-ic">${ICONS.clock}</span><span><strong>Timestamped automatically</strong>Every photo, from the camera or gallery, is stamped with the date and time the moment it's added, and checked to help confirm it shows the right item.</span></li>
         <li><span class="intro-ic">${ICONS.calendar}</span><span><strong>Within 7 days of move-in</strong>Check-in reports must be started within 7 days of the tenancy move-in date or they can't be created.</span></li>
         <li><span class="intro-ic">${ICONS.pen}</span><span><strong>Signed by you</strong>The finished report is signed off by the person carrying out the inspection.</span></li>
