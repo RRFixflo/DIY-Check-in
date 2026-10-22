@@ -233,6 +233,10 @@ function signedIn(req){
   });
 }
 
+// Sections other modules add to the /admin page (e.g. landlord accounts, landlords.js).
+const adminSections = [];
+function addAdminSection(fn){ adminSections.push(fn); }
+
 function mount(app){
   /* ---------- tenant side: send a copy of the finished report ---------- */
   // Saves one report PDF with its details. Returns [httpStatus, jsonBody].
@@ -609,6 +613,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/app">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
 ${analytics.summaryHTML(esc)}
 ${certs.adminHTML()}
+${adminSections.map(f => { try { return f(req); } catch (e) { console.error('admin section failed:', e.message); return ''; } }).join('')}
 ${messagesHTML()}
 ${drafts.draftsHTML()}
 ${activityHTML()}
@@ -683,4 +688,4 @@ async function uploadPdfs(input){
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner };
+module.exports = { mount, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

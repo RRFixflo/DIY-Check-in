@@ -249,12 +249,13 @@ function renderPage(pg, req, notice){
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req);
-  return fill(html).replace('{{TITLE}}', escHtml(pg.title)).replace('{{OG_TITLE}}', escHtml(pg.og || pg.title))
-    .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base))
+  // Functions as replacements, so a "$" in a title (e.g. a landlord's own address) is taken literally. pg.head: a page's own <head> extras.
+  return fill(html).replace('{{TITLE}}', () => escHtml(pg.title)).replace('{{OG_TITLE}}', () => escHtml(pg.og || pg.title))
+    .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base) + (pg.head ? '\n' + pg.head : ''))
     .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
@@ -274,9 +275,12 @@ app.get(['/example-report', '/example-report.pdf'], (req, res) => {
 // Landlord certificates (Gas Safety, EICR, EPC), booked on /certificates: certs.js.
 const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE, track: analytics.track }).paths;
+// Free landlord area: /landlords, and accounts at /account with properties, certificates, tenancy and reminders: landlords.js.
+const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
+  notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {

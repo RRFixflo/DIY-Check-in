@@ -104,7 +104,7 @@ function mountPublic(app, ctx){
       ['epc', 'EPC', 'Energy Performance Certificate', money(epc.price), epc.desc, ['Assessor visit and energy rating', 'Valid for 10 years', 'Needed before you advertise to rent or sell']],
     ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price} <small>+ VAT</small></div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
     const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
-<section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div></div></section>
+<section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div><p style="margin:28px 0 0"><a class="arrow" href="/landlords">Keep every certificate in one place, with reminders before they expire: the free landlord dashboard</a></p></div></section>
 <section id="book" style="padding-top:8px"><div class="wrap">
   <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates.</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
   <form class="card form cert-form" method="post" action="/certificates#book">
@@ -143,6 +143,10 @@ function mountPublic(app, ctx){
   function total(){ var sub = 0; f.querySelectorAll('[name=svc]:checked').forEach(function(x){ sub += x.value === 'eicr' ? P[eicr(f.beds.value)] : P[x.value]; });
     var vat = Math.round(sub * ${VAT} * 100) / 100; document.getElementById('certTotal').textContent = fmt(sub + vat);
     document.getElementById('certVat').textContent = sub ? fmt(sub) + ' + ' + fmt(vat) + ' VAT' : 'Choose what you need'; }
+  // Prefilled from a "Book a renewal" link on the landlord dashboard: ?svc=gas&postcode=…&address=…&beds=…
+  var q = new URLSearchParams(location.search);
+  q.getAll('svc').forEach(function(v){ var c = f.querySelector('[name=svc][value="' + v.replace(/[^a-z]/g, '') + '"]'); if (c) c.checked = true; });
+  ['postcode', 'address', 'beds'].forEach(function(k){ var v = q.get(k), el = f.elements[k]; if (v && el && (el.tagName === 'SELECT' || !el.value)) el.value = v.slice(0, 200); });
   f.addEventListener('change', total); total();
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
