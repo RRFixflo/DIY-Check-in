@@ -3547,6 +3547,7 @@ function renderSetup(){
       <h2>Before you start</h2>
       <ul class="intro-list">
         <li><span class="intro-ic">${ICONS.grid}</span><span><strong>A checklist for every room</strong>Photograph each item (bed, wardrobe, cooker, sofa and so on). Each room needs at least ${MIN_PHOTOS} clear photos and can have up to ${MAX_PHOTOS}, and marking an item not applicable does not reduce the minimum. The front door must always be photographed.</span></li>
+        ${aiEnabled ? `<li><span class="intro-ic">✨</span><span><strong>AI suggests the condition</strong>After each photo, our AI suggests the item's condition, a short description and any marks it can see. Check it and change anything you disagree with.</span></li>` : ''}
         <li><span class="intro-ic">${ICONS.clock}</span><span><strong>Timestamped automatically</strong>Every photo, from the camera or gallery, is stamped with the date and time the moment it's added, and checked to help confirm it shows the right item.</span></li>
         <li><span class="intro-ic">${ICONS.calendar}</span><span><strong>Within 7 days of move-in</strong>Check-in reports must be started within 7 days of the tenancy move-in date or they can't be created.</span></li>
         <li><span class="intro-ic">${ICONS.pen}</span><span><strong>Signed by you</strong>The finished report is signed off by the person carrying out the inspection.</span></li>

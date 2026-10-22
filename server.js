@@ -13,7 +13,11 @@ const reports = require('./reports');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
-const ANTHROPIC_MODEL = (process.env.ANTHROPIC_MODEL || '').trim() || 'claude-haiku-4-5-20251001';
+const ANTHROPIC_MODEL = (process.env.ANTHROPIC_MODEL || '').trim() || 'claude-opus-5-5';
+// Current models take an effort level (low is plenty for one photo); the Opus/Fable/Sonnet 5.5 line also
+// takes the server-side fallback, so a declined photo is retried on another model in the same call.
+const AI_EFFORT = /^claude-(opus|sonnet|fable|haiku)-5/.test(ANTHROPIC_MODEL);
+const AI_FALLBACK = /^claude-(opus-5|fable-5|sonnet-5-5)/.test(ANTHROPIC_MODEL);
 
 const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null;
 
@@ -30,6 +34,7 @@ app.get(['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png'], (req, re
 app.get('/api/status', (req, res) => {
   res.json({
     ai: !!anthropic,
+    model: anthropic ? ANTHROPIC_MODEL : '',
     reason: anthropic ? '' : 'ANTHROPIC_API_KEY is not set on the server'
   });
 });
@@ -41,7 +46,7 @@ const DEFECTS = ['Scuffs', 'Scratches', 'Marks', 'Stains', 'Chips', 'Cracks', 'H
 const CLEANLINESS = ['clean', 'needs', 'dirty'];
 
 const ASSESS_SYSTEM = [
-  'You assess photographs taken by a tenant for a UK residential inventory and check-in report.',
+  'You assess photographs taken by a tenant, landlord or agent for a residential property inventory, check-in, check-out or inspection report. The property can be anywhere in the world.',
   'You are told which checklist item and room the photo is meant to show.',
   'Reply with a single JSON object and nothing else, with exactly these keys:',
   '  "matches": true if the photo plausibly shows the named item, false if it clearly shows something else or is unusable,',
@@ -75,9 +80,11 @@ app.post('/api/assess', async (req, res) => {
   if (!img) return res.status(400).json({ error: 'Expected an image data URL.' });
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await anthropic.beta.messages.create({
       model: ANTHROPIC_MODEL,
-      max_tokens: 600,
+      max_tokens: 16000,
+      ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}),
+      ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}),
       system: ASSESS_SYSTEM,
       messages: [{
         role: 'user',
@@ -126,6 +133,17 @@ const FIXFLOW_URL = (process.env.FIXFLOW_URL || 'https://www.residentialrealtors
 const PAYWALL = (process.env.DIY_PAYWALL || 'on').trim().toLowerCase() !== 'off';
 const BUY_URL = FIXFLOW_URL + '/book-certificate?service=diy';
 const accessCache = new Map();
+const freeAssess = (() => {
+  const perIp = new Map(), DAY = 24 * 3600 * 1000, MAX_IP = 300, MAX_ALL = Math.max(0, parseInt(process.env.AI_FREE_DAILY, 10) || 3000);
+  let all = { start: Date.now(), n: 0 };
+  return { allow(req){
+    const now = Date.now(), ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+    if (now - all.start > DAY) all = { start: now, n: 0 };
+    let h = perIp.get(ip); if (!h || now - h.start > DAY) { h = { start: now, n: 0 }; perIp.set(ip, h); if (perIp.size > 20000) perIp.clear(); }
+    if (h.n >= MAX_IP || all.n >= MAX_ALL) return false;
+    h.n++; all.n++; return true;
+  } };
+})();
 // The access code is short, so wrong tries are limited: 10 per IP per 15 minutes.
 const codeTries = (() => {
   const hits = new Map(), ip = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
@@ -192,6 +210,8 @@ function sitePage(key, req, notice){
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
   for (const k of Object.keys(SITE)) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
+  html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   return fill(html).replace('{{TITLE}}', escHtml(pg.title)).replace('{{OG_TITLE}}', escHtml(pg.og || pg.title))
     .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(siteBase(req))).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
 }
@@ -220,11 +240,16 @@ app.use((req, res, next) => {
 });
 
 if (PAYWALL) {
-  // New reports and photo assessment need a valid link.
+  // New reports need a valid link. AI condition suggestions are part of the free start too, within limits
+  // (per person per day, and for the whole site per day: AI_FREE_DAILY, default 3000 photos).
   app.use(['/api/assess', '/api/reports'], async (req, res, next) => {
     if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
     const token = cookieToken(req), a = await checkAccess(token);
+    if (!a.valid && req.baseUrl === '/api/assess') {
+      if (!freeAssess.allow(req)) return res.status(429).json({ error: 'Automatic suggestions are busy right now. Choose the condition yourself.' });
+      return next();
+    }
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Inventory.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;

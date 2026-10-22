@@ -61,7 +61,9 @@ People pay for a report on residentialrealtors.co.uk (£30 + VAT, through SumUp)
 ## Environment variables (set in Railway → Variables)
 
 - `ANTHROPIC_API_KEY`: enables `/api/assess`. Without it `/api/status` reports `ai:false` and the tenant picks each condition by hand.
-- `ANTHROPIC_MODEL`: optional. Defaults to `claude-haiku-4-5-20251001`.
+- `ANTHROPIC_MODEL`: optional. Defaults to `claude-opus-5-5` (sent with `output_config.effort: 'low'`, `max_tokens: 16000`, and the server-side refusal fallback `fallbacks: 'default'` on the beta endpoint). `claude-haiku-5-5` is much cheaper per photo.
+- `AI_FREE_DAILY`: optional. AI suggestions for people who haven't paid yet are limited to 300 photos per IP per day and this many photos per day for the whole site (default 3000).
+- **AI is the selling point**: the website and app wording about AI (between `<!--AI-->` and `<!--/AI-->` in `views/pages/`, with `<!--NOAI-->` alternatives; the app's start screen when `aiEnabled`) only appears while `ANTHROPIC_API_KEY` is set, so the site never claims AI that isn't running.
 - `ADMIN_PASSWORD`: the password for `/admin`. Without it `/admin` stays locked (reports are still received and stored).
 - `RESEND_API_KEY`: emails each report to Residential Realtors when the tenant taps Send (resend.com). Without it reports are still marked sent and wait on `/admin`.
 - `REPORT_TO_EMAIL`: optional, defaults to `jayk@residentialrealtors.co.uk`. `REPORT_FROM_EMAIL`: optional sender on a domain verified in Resend; the default `onboarding@resend.dev` only delivers to the Resend account's own address.
