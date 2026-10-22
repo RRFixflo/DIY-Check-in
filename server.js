@@ -197,8 +197,8 @@ function sendToFixflow(token, req){
 // message, adds a notice at the top.
 const VIEWS = path.join(__dirname, 'views');
 const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
-const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).digest('hex').slice(0, 10);
-const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone. Dated photos, tenant sign-off, side-by-side comparison and PDF reports, for £30 + VAT per report.';
+const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).update(fs.readFileSync(path.join(__dirname, 'public', 'site.js'))).digest('hex').slice(0, 10);
+const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone, with the PDF report ready instantly. Dated photos, tenant sign-off, side-by-side comparison. Free to start, £30 + VAT per report.';
 const SITE = {
   home: { path: '/', title: 'DIY Inventory · Property inventories and inspections', og: 'DIY Inventory', desc: DESC },
   how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do check-ins, inspections and check-outs on your phone with DIY Inventory, step by step.' },
@@ -256,7 +256,8 @@ for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.pa
 });
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path), siteBodies: Object.values(SITE).map(pg => pg.body) });
+  sitePaths: Object.values(SITE).map(pg => pg.path), siteBodies: Object.values(SITE).map(pg => pg.body),
+  faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
   const r = reports.saveMessage(req, req.body || {});

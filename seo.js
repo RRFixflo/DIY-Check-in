@@ -95,8 +95,30 @@ function mount(app, ctx){
     res.type('application/xml').send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
       sitePaths.map(p => `  <url><loc>${escHtml(base + p)}</loc><lastmod>${lastmod}</lastmod><changefreq>${p === '/' ? 'weekly' : 'monthly'}</changefreq><priority>${p === '/' ? '1.0' : p.split('/').length > 2 ? '0.6' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
   });
+  // Search engines and AI assistants (ChatGPT, Claude, Perplexity, Gemini, Copilot…) are all welcome on the
+  // public pages; private ones stay out. /llms.txt is a plain summary of the site for AI tools.
+  const AI_BOTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'Bingbot', 'Googlebot', 'CCBot', 'Meta-ExternalAgent', 'Amazonbot', 'DuckAssistBot', 'MistralAI-User'];
+  const PRIVATE = ['Disallow: /admin', 'Disallow: /api/', 'Disallow: /sign/', 'Disallow: /p/', 'Disallow: /app'];
   app.get('/robots.txt', (req, res) => {
-    res.type('text/plain').send(['User-agent: *', 'Allow: /', 'Disallow: /admin', 'Disallow: /api/', 'Disallow: /sign/', 'Disallow: /p/', 'Disallow: /app', '', 'Sitemap: ' + canonicalBase(req) + '/sitemap.xml', ''].join('\n'));
+    res.type('text/plain').send(['User-agent: *', 'Allow: /'].concat(PRIVATE, [''], AI_BOTS.map(b => 'User-agent: ' + b), ['Allow: /'], PRIVATE,
+      ['', 'Sitemap: ' + canonicalBase(req) + '/sitemap.xml', '# A summary for AI assistants: ' + canonicalBase(req) + '/llms.txt', '']).join('\n'));
+  });
+  app.get(['/llms.txt', '/llms-full.txt'], (req, res) => {
+    const base = canonicalBase(req), strip = t => String(t).replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    const faq = [...String(ctx.faqBody()).matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => '- **' + strip(m[1]) + '** ' + strip(m[2]));
+    res.type('text/plain; charset=utf-8').send([
+      '# DIY Inventory', '',
+      '> Property inventories, check-in and check-out reports and inspections done on a phone, for landlords, letting agents and tenants anywhere in the world. Free to start; £30 + VAT per report, paid when the finished report is downloaded. The PDF report is ready instantly, the moment it is signed.', '',
+      '## What it does',
+      '- A photo checklist for every room; at least 8 photos per room, with the date and time burned into every photo.',
+      ctx.aiOn() ? '- AI suggests each item’s condition, a short description, marks or damage and cleanliness from its photo; the person can change anything.' : '',
+      '- The report is a professional PDF, ready instantly when signed: cover, room-by-room condition, meters, keys, signature and declaration, with every photo linked at full size.',
+      '- Do it yourself as a landlord or agent, or send the tenant a link to do it. Either side can send the other a link to check, comment and sign.',
+      '- Check-outs and mid-tenancy inspections start from the earlier report and compare the two: what changed, meter readings then and now, photos side by side.',
+      '- Works in any phone browser, no app to install, in any country. Saved as you go, on the phone and backed up online.', '',
+      '## Pages',
+      '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
+      '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Questions and answers'], faq, ['', 'DIY Inventory records the condition of a property. It is not legal advice.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
   });
   app.get('/' + seo.indexNowKey + '.txt', (req, res) => res.type('text/plain').send(seo.indexNowKey));
 
