@@ -152,3 +152,146 @@ details.edit[open] summary { margin-bottom: 12px; }
   .acc-figs b { font-size: 34px; } .acc-figs b.date { font-size: 22px; }
 }
 @media (max-width: 760px) { .services .track { grid-template-columns: 1fr; } .services .track p { grid-row: auto; } }
+
+/* ------------------------------ Rent, receipts, expenses, tax year (landlords-money.js) ------------------------------ */
+.wrap.narrow { max-width: 860px; }
+.acc-form { max-width: 720px; }
+.muted { color: var(--ink-soft); margin: 0; font-size: 15.5px; }
+.prop-st { grid-template-columns: repeat(5, 1fr); }
+.danger-row { margin-top: 18px; }
+@media (min-width: 861px) { .ov { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+/* Three figures: rent, paid up to, owed */
+.rent-figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); margin: 0 0 4px; }
+.rent-figs > div { padding: 14px 14px 14px 0; min-width: 0; }
+.rent-figs > div + div { padding-left: 14px; border-left: 1px solid var(--line); }
+.rent-figs span { display: block; font-size: 13.5px; color: var(--ink-faint); }
+.rent-figs b { display: block; font: 700 24px/1.25 var(--serif); letter-spacing: -.02em; margin: 4px 0 2px; overflow-wrap: anywhere; }
+.rent-figs b.d { font-size: 19px; line-height: 1.55; }
+.rent-figs small { display: block; color: var(--ink-soft); font-size: 13.5px; line-height: 1.4; }
+.rent-figs .warn b { color: var(--amber); } .rent-figs .bad b { color: var(--warm); }
+.wrap.narrow > .rent-figs { margin-bottom: 24px; }
+
+/* Rent periods, most recent first */
+.rps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.rp { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 20px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.rp-main { min-width: 0; display: grid; gap: 4px; }
+.rp-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.rp-top b { font-weight: 600; }
+.rp-amt { font-weight: 600; white-space: nowrap; color: var(--ink-soft); }
+.rp-act { display: grid; gap: 4px; justify-items: end; }
+.rp-act .btn { min-height: 44px; padding: 10px 20px; }
+.rp-other { font-size: 14px; color: var(--ink-soft); padding: 6px 0; }
+.rp-upcoming .rp-top b { color: var(--ink-soft); }
+.pay { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin-top: 4px; padding: 8px 12px; border-radius: 10px; background: var(--soft); font-size: 14.5px; scroll-margin-top: 90px; }
+.pay:target { box-shadow: inset 0 0 0 2px var(--accent); }
+.pay-t { min-width: 0; color: var(--ink-soft); overflow-wrap: anywhere; }
+.pay-t b { color: var(--ink); }
+.pay-sent { display: inline-block; color: var(--good); font-weight: 600; white-space: nowrap; }
+.pay-sent::before { content: "✓ "; }
+.pay-act { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
+.pay-act a, .pay-act .linkbtn { font-size: 14.5px; font-weight: 600; color: var(--accent); padding: 6px 0; }
+details.edit.more { margin-top: 12px; }
+
+/* This tax year, on the property page and the dashboard */
+.ty-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+.ty-strip > div { padding: 12px 12px 12px 0; min-width: 0; }
+.ty-strip > div + div { padding-left: 12px; border-left: 1px solid var(--line); }
+.ty-strip span, .ty-dash span { display: block; font-size: 13.5px; color: var(--ink-faint); }
+.ty-strip b { font: 700 20px/1.3 var(--serif); letter-spacing: -.02em; overflow-wrap: anywhere; }
+.ty-strip small { grid-column: 1 / -1; color: var(--ink-faint); font-size: 13px; padding: 0 0 10px; }
+.ty-dash { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)) auto; gap: 8px 28px; align-items: center; padding: 16px 22px; margin: -16px 0 36px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+.ty-dash-h b { display: block; font-weight: 700; }
+.ty-dash-h span { font-size: 13.5px; }
+.ty-dash > div > b { font: 700 22px/1.3 var(--serif); letter-spacing: -.02em; }
+
+/* Expenses */
+.xps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.xp { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 4px 18px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.xp-main { min-width: 0; }
+.xp-main b { display: block; font-weight: 600; overflow-wrap: anywhere; }
+.xp-main small { color: var(--ink-faint); font-size: 13.5px; overflow-wrap: anywhere; }
+.xp-amt { font-weight: 700; white-space: nowrap; }
+.xp-edit { font-size: 14.5px; font-weight: 600; padding: 10px 0 10px 4px; }
+.xp-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 0 0 12px; color: var(--ink-soft); }
+.xp-total b { font: 700 24px var(--serif); color: var(--ink); }
+.form.filters { grid-template-columns: 1fr 1fr auto; align-items: end; margin: 0 0 24px; }
+.form.filters .btn { min-height: 48px; }
+.acc-sub { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.acc-sub h2 { font-size: clamp(22px, 2.6vw, 28px); margin: 0; }
+.acc-sub p { margin: 0; }
+
+/* Tax-year summary */
+.ty-switch { display: flex; align-items: end; gap: 10px; margin: 0 0 20px; }
+.ty-switch > a { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); text-decoration: none; font-weight: 700; color: var(--ink); flex: none; }
+.ty-switch form { flex: 1; max-width: 260px; }
+.ty-switch label { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
+.ty-switch select { width: 100%; padding: 12px 14px; border: 0; border-radius: 14px; background: var(--panel); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); font: inherit; font-weight: 600; }
+.ty-big { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); margin: 0 0 20px; }
+.ty-big > div { padding: 18px 16px 18px 0; min-width: 0; }
+.ty-big > div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+.ty-big span { display: block; font-size: 14px; color: var(--ink-faint); }
+.ty-big b { display: block; font: 700 clamp(22px, 4vw, 34px)/1.2 var(--serif); letter-spacing: -.02em; margin-top: 4px; overflow-wrap: anywhere; }
+.ty-big small { color: var(--ink-faint); font-size: 13px; }
+.ty-h { font-size: clamp(22px, 2.6vw, 28px); margin: 32px 0 12px; }
+.tbl { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tbl table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.tbl th, .tbl td { text-align: right; padding: 11px 0 11px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl th:first-child, .tbl td:first-child { text-align: left; padding-left: 0; white-space: normal; overflow-wrap: anywhere; }
+.tbl thead th { font-size: 13.5px; color: var(--ink-faint); font-weight: 500; border-bottom-color: var(--ink); }
+.tbl tfoot th { font-weight: 700; border-bottom: 0; border-top: 1px solid var(--ink); }
+.tbl td a { color: inherit; text-underline-offset: 3px; }
+.dl-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.dl-list .btn { min-height: 44px; }
+
+/* A receipt: on screen, and printed */
+.receipt { background: var(--panel); border: 1px solid var(--line); border-top: 6px solid var(--accent); border-radius: var(--radius); padding: 28px 30px 24px; }
+.rc-top { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--warm); }
+.rc-top span + span { color: var(--ink-soft); }
+.receipt h2 { font-size: clamp(26px, 4vw, 34px); margin: 18px 0 4px; }
+.rc-amt { font: 800 clamp(34px, 6vw, 44px)/1.1 var(--serif); letter-spacing: -.03em; margin: 0; }
+.rc-for { color: var(--ink-soft); margin: 6px 0 20px; }
+.receipt dl { margin: 0; border-top: 1px solid var(--ink); }
+.receipt dl > div { display: grid; grid-template-columns: 11em 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.receipt dt { color: var(--ink-faint); font-size: 14.5px; }
+.receipt dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+.rc-foot { margin: 18px 0 0; color: var(--ink-soft); font-size: 14px; }
+.rc-actions { margin-top: 20px; }
+.rc-actions .acc-note { flex-basis: 100%; margin: 0; }
+@media print {
+  header.top, footer, .no-print, .acc-head .back, .notice { display: none !important; }
+  body { background: #fff !important; color: #13213A !important; }
+  .acc-head { padding: 0 0 12px; } .acc-head h1 { font-size: 20px; } .acc-head p, .acc-head .kicker { color: #4A5568 !important; animation: none !important; }
+  .page-head::before { display: none; }
+  .receipt { border-color: #E4D9C6; border-top-color: #1B2E4B; background: #fff; color: #13213A; box-shadow: none; }
+  .receipt dt, .rc-for, .rc-foot { color: #4A5568; }
+}
+
+@media (max-width: 1000px) {
+  .ty-dash { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ty-dash-h { grid-column: 1 / -1; display: flex; gap: 10px; align-items: baseline; }
+  .ty-dash .arrow { grid-column: 1 / -1; min-height: 0; }
+}
+@media (max-width: 860px) {
+  .prop-st { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .prop-st { grid-template-columns: 1fr 1fr; }
+  .rp { grid-template-columns: 1fr; }
+  .rp-act { justify-items: stretch; grid-template-columns: 1fr; }
+  .rp-act form, .rp-act .btn { width: 100%; }
+  .rp-other { text-align: center; }
+  .rent-figs, .ty-big { grid-template-columns: 1fr 1fr; }
+  .rent-figs > div:nth-child(3), .ty-big > div:nth-child(3) { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--line); }
+  .rent-figs b { font-size: 21px; }
+  .ty-strip b, .ty-dash > div > b { font-size: 17px; }
+  .ty-dash { padding: 14px 16px; gap: 6px 12px; }
+  .form.filters { grid-template-columns: 1fr 1fr; }
+  .form.filters .btn { grid-column: 1 / -1; }
+  .xp { grid-template-columns: minmax(0, 1fr) auto; }
+  .xp-edit { grid-column: 2; grid-row: 2; justify-self: end; padding-top: 0; }
+  .receipt { padding: 22px 18px 18px; }
+  .receipt dl > div { grid-template-columns: 1fr; gap: 2px; }
+  .tbl table { font-size: 14px; }
+  .tbl th, .tbl td { padding-left: 10px; }
+}

@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
+const money = require('./landlords-money');   // rent, receipts, expenses and the tax-year summary
 
 let DIR = '', ACC_DIR = '', FILE_DIR = '';
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return d; } };
@@ -19,7 +20,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const normEmail = e => line(e, 120).toLowerCase();
 const rid = n => crypto.randomBytes(n).toString('hex');
 const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
-const money = n => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const pounds = n => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
 
 /* ------------------------------------ dates ------------------------------------ */
 // Dates are kept as YYYY-MM-DD (UK calendar days); "today" is the date in London.
@@ -98,7 +99,8 @@ async function sendEmail(m){
   const from = (process.env.REPORT_FROM_EMAIL || '').trim() || 'DIY Inventory <onboarding@resend.dev>';
   try {
     const res = await fetch('https://api.resend.com/emails', { method: 'POST', signal: AbortSignal.timeout(30000), headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to: m.to, subject: m.subject, html: m.html, text: m.text }) });
+      body: JSON.stringify(Object.assign({ from: m.fromName ? `"${m.fromName.replace(/["<>\r\n\\]/g, '')}" <${(/<([^>]+)>/.exec(from) || [, from])[1].trim()}>` : from, to: m.to, subject: m.subject, html: m.html, text: m.text },
+        m.replyTo ? { reply_to: m.replyTo } : {}, m.attachments ? { attachments: m.attachments } : {})) });
     if (!res.ok) { console.error('landlords: email failed: HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return { ok: false, reason: 'send-failed' }; }
     return { ok: true };
   } catch (e) { console.error('landlords: email failed:', e.message); return { ok: false, reason: 'send-failed' }; }
@@ -311,7 +313,8 @@ function mount(app, ctx){
     ['Is it really free?', 'Yes. The property dashboard and the reminders are free, for as many properties as you have. We also arrange certificates and inventory reports, but you don’t have to use them.'],
     ['How is the EPC found?', 'When you add a property we search the government’s EPC register for its postcode and show you the certificates there. You choose the right one and we keep its rating and expiry date. The register covers England and Wales; elsewhere you can enter the EPC yourself.'],
     ['When do the reminders arrive?', 'By email 60, 30, 14 and 7 days before a Gas Safety certificate, EICR or EPC expires, and on the day. You also get a reminder 60 days before a fixed-term tenancy ends, and while a deposit still needs protecting.'],
-    ['Who can see my information?', 'Only you, when signed in. Certificates you upload are shown only to your account. We don’t share your details or your tenants’ details with anyone.'],
+    ['Can I keep track of rent and expenses?', 'Yes. Add the rent and we list each rent period as paid, due or late. Mark rent as received in one tap and send your tenant a receipt by email, or download it as a PDF. Add costs such as repairs and certificates with their receipts, and download a summary for each tax year (6 April to 5 April) for your Self Assessment or your accountant. It’s a record, not tax advice.'],
+    ['Who can see my information?', 'Only you, when signed in. Certificates and receipts you upload are shown only to your account. We don’t share your details, your figures or your tenants’ details with anyone.'],
   ];
   function landlordsPage(req){
     const acc = current(req);
@@ -322,10 +325,12 @@ function mount(app, ctx){
       ['EPC', 'Valid for 10 years', 'Found for you on the government register from the postcode: the rating, score and expiry date.'],
       ['Tenancy', 'Dates, rent and tenants', 'Who lives there, how to reach them, the rent and when the fixed term ends, with a reminder 60 days before.'],
       ['Deposit', 'Protected within 30 days', 'The amount, the scheme and the reference, and a reminder while it still needs protecting.'],
+      ['Rent and receipts', 'Paid, due or late', 'Mark each rent payment as received in one tap, see what’s owed, and email your tenant a receipt.'],
+      ['Expenses and tax year', '6 April to 5 April', 'Repairs, certificates, insurance and other costs, with their receipts. A summary for each tax year to download for your accountant.'],
     ].map(([h, s, p]) => `<div class="service track"><h3>${h}<small>${s}</small></h3><p>${p}</p></div>`).join('');
     const sample = `<div class="sample" aria-hidden="true"><div class="sample-cap">Example</div>${propRow({ id: '', address: { houseNo: '14', road: 'Elm Grove', town: 'Bristol', postcode: 'BS6 6AH' }, type: 'Terraced house', beds: 3,
       gas: { date: addMonths(todayLondon(), -11), }, eicr: { date: '2023-05-02', result: 'satisfactory' }, epc: { rating: 'D', score: 62, lodged: '2019-09-12' },
-      tenancy: { names: 'A. Patel, R. Patel', start: '2025-09-01', end: addDays(todayLondon(), 150), rent: 1450, rentFreq: 'month' } }, todayLondon(), true)}</div>`;
+      tenancy: { names: 'A. Patel, R. Patel', start: '2025-09-01', end: addDays(todayLondon(), 150), rentP: 145000, rentFreq: 'month', dueDay: 1 }, payments: [{ id: 's', date: todayLondon(), amt: 145000 * 24, method: 'bank', period: '' }] }, todayLondon(), true)}</div>`;
     const body = head('For landlords · Free', 'Every property’s certificates and tenancy, in one place.',
       'A free dashboard for landlords. Add your properties and we find each one’s EPC on the government register, keep your Gas Safety and EICR dates and certificates, and email you before anything expires.', cta) + `
 <section class="tight"><div class="wrap">${sample}</div></section>
@@ -480,12 +485,12 @@ function mount(app, ctx){
   // One row of the dashboard (and the example on /landlords).
   function propRow(p, t, sample){
     const tn = p.tenancy || {}, ts = tenancyStatus(p, t), dep = depositStatus(p, t);
-    const tSub = [tn.names, tn.rent > 0 ? money(tn.rent) + ' a ' + (tn.rentFreq || 'month') : ''].filter(Boolean).join(' · ');
+    const tSub = [tn.names, money.rentPence(tn) > 0 ? money.gbp(money.rentPence(tn)) + ' ' + money.perText(tn) : ''].filter(Boolean).join(' · ');
     const cell = (k, s, sub, more) => `<div><dt>${SHORT[k]}</dt><dd>${stHTML(s)}${more || ''}${sub ? `<small>${esc(sub)}</small>` : ''}</dd></div>`;
     const href = sample ? '' : ` href="/account/p/${p.id}"`;
     return `<article class="prop">
       <a class="prop-addr"${href}><h3>${esc(streetLine(p.address))}</h3><span>${esc([p.address.town, p.address.postcode].filter(Boolean).join(' '))} · ${esc(p.type)} · ${esc(bedsText(p.beds))}</span></a>
-      <dl class="prop-st">${cell('gas', certStatus('gas', p, t))}${cell('eicr', certStatus('eicr', p, t))}${cell('epc', certStatus('epc', p, t), p.epc && p.epc.rating ? 'Rating ' + p.epc.rating + (p.epc.score ? ' (' + p.epc.score + ')' : '') : '')}${cell('tenancy', ts, tSub, dep.cls === 'due' || dep.cls === 'exp' ? stHTML({ cls: dep.cls, text: dep.cls === 'exp' ? 'Deposit not protected' : dep.text.replace(/^Protect by/, 'Protect deposit by').replace(/^Not protected yet/, 'Deposit not protected yet') }) : '')}</dl>
+      <dl class="prop-st">${cell('gas', certStatus('gas', p, t))}${cell('eicr', certStatus('eicr', p, t))}${cell('epc', certStatus('epc', p, t), p.epc && p.epc.rating ? 'Rating ' + p.epc.rating + (p.epc.score ? ' (' + p.epc.score + ')' : '') : '')}${cell('tenancy', ts, tSub, dep.cls === 'due' || dep.cls === 'exp' ? stHTML({ cls: dep.cls, text: dep.cls === 'exp' ? 'Deposit not protected' : dep.text.replace(/^Protect by/, 'Protect deposit by').replace(/^Not protected yet/, 'Deposit not protected yet') }) : '')}${M.dashCell(p, t)}</dl>
       ${sample ? '<span class="prop-go">Open</span>' : `<a class="prop-go" href="/account/p/${p.id}" aria-label="Open ${esc(streetLine(p.address))}">Open</a>`}</article>`;
   }
 
@@ -494,10 +499,10 @@ function mount(app, ctx){
     const all = list.flatMap(p => ['gas', 'eicr', 'epc'].map(k => Object.assign({ k, p }, certStatus(k, p, t))).concat([Object.assign({ k: 'deposit', p }, depositStatus(p, t))]));
     const exp = all.filter(x => x.cls === 'exp').length, due = all.filter(x => x.cls === 'due').length, missing = all.filter(x => x.cls === 'none' && x.k !== 'deposit').length;
     const next = all.filter(x => x.due && x.d >= 0).sort((a, b) => a.d - b.d)[0];
-    const actions = `<a class="btn primary" href="/account/properties/new">Add a property</a><a class="btn ghost" href="/account/settings">Settings</a>${postBtn('/account/sign-out', 'Sign out')}`;
+    const actions = `<a class="btn primary" href="/account/properties/new">Add a property</a>${list.length ? '<a class="btn ghost" href="/account/expenses/new">Add an expense</a><a class="btn ghost" href="/account/money">Money and tax</a>' : ''}<a class="btn ghost" href="/account/settings">Settings</a>${postBtn('/account/sign-out', 'Sign out')}`;
     const mailNote = !emailOn() ? `<p class="acc-note">Email reminders aren’t switched on for this site yet, so none will be sent for now. Your dates are still tracked here.</p>`
       : acc.settings.reminders === false ? `<p class="acc-note">Email reminders are off. <a href="/account/settings">Turn them on in Settings</a>.</p>` : '';
-    const body = head('Signed in as ' + esc(acc.name), 'Your properties', list.length ? 'Each property’s certificates and tenancy at a glance. Open one to update it.' : '', actions) + `
+    const body = head('Signed in as ' + esc(acc.name), 'Your properties', list.length ? 'Each property’s certificates, tenancy and rent at a glance. Open one to update it or mark rent as received.' : '', actions) + `
 <section class="tight"><div class="wrap">${mailNote}
 ${list.length ? `<div class="acc-figs">
   <div><b>${list.length}</b><span>${list.length === 1 ? 'property' : 'properties'}</span></div>
@@ -505,6 +510,7 @@ ${list.length ? `<div class="acc-figs">
   <div><b>${missing}</b><span>certificate${missing === 1 ? '' : 's'} not added</span></div>
   <div>${next ? `<b class="date">${esc(fmt(next.due))}</b><span>next: ${esc(SHORT[next.k])}, ${esc(streetLine(next.p.address))}</span>` : `<b class="date">—</b><span>nothing coming up</span>`}</div>
 </div>
+${M.dashStrip(acc, t)}
 <div class="props">${list.map(p => propRow(p, t)).join('')}</div>`
   : `<div class="card acc-empty"><h2>Add your first property</h2><p>Enter the address and we’ll look up its EPC on the government register. Then add the Gas Safety and EICR dates, and the tenancy if it’s let. We’ll email you before anything expires.</p>
      <ul class="ruled"><li><b>Gas Safety</b>every 12 months</li><li><b>EICR</b>at least every 5 years</li><li><b>EPC</b>valid for 10 years, found for you</li></ul>
@@ -604,33 +610,35 @@ ${list.length ? `<div class="acc-figs">
       <div class="row">${inp('Email(s)', 'emails', v.emails, { opt: true, max: 200 })}${inp('Phone(s)', 'phones', v.phones, { opt: true, max: 100, attrs: ' inputmode="tel"' })}</div>
       <div class="row">${inp('Start date', 'start', v.start, { type: 'date' })}${inp('End of the fixed term', 'end', v.end, { type: 'date', opt: true })}</div>
       <label class="check"><input type="checkbox" name="periodic" value="1"${v.periodic ? ' checked' : ''}> Periodic (rolling, with no fixed end date, or continuing after the fixed term)</label>
-      <div class="row">${inp('Rent (£)', 'rent', v.rent || '', { opt: true, max: 10, attrs: ' inputmode="decimal"' })}${sel('How often', 'rentFreq', FREQ, v.rentFreq || 'month')}</div>
+      <div class="row">${inp('Rent (£)', 'rent', money.rentPence(v) ? (money.rentPence(v) / 100).toFixed(2).replace(/\.00$/, '') : '', { opt: true, max: 12, attrs: ' inputmode="decimal"' })}${sel('How often', 'rentFreq', FREQ, v.rentFreq || 'month')}</div>
       <div class="row">${inp('Deposit (£)', 'deposit', v.deposit || '', { opt: true, max: 10, attrs: ' inputmode="decimal"' })}${sel('Deposit scheme', 'scheme', [['', 'Choose…']].concat(SCHEMES), v.scheme || '', { opt: true })}</div>
       <div class="row">${inp('Date protected', 'protectedOn', v.protectedOn, { type: 'date', opt: true })}${inp('Protection reference', 'depositRef', v.depositRef, { opt: true, max: 60 })}</div>
       ${area('Notes', 'notes', v.notes, { max: 2000 })}
       <button class="btn primary sm">Save tenancy</button></form>`;
-    const rent = tn && tn.rent > 0 ? money(tn.rent) + ' ' + (FREQ.find(f => f[0] === tn.rentFreq) || FREQ[0])[1] : '';
-    return `<div class="acc-box">${has ? kv([['Tenants', esc(tn.names || '')], ['Email', esc(tn.emails || '')], ['Phone', esc(tn.phones || '')], ['Start', esc(fmt(tn.start))], ['Fixed term ends', tn.end ? esc(fmt(tn.end)) : ''], ['Periodic', tn.periodic ? 'Yes' : ''], ['Rent', esc(rent)],
-      ['Deposit', tn.deposit > 0 ? esc(money(tn.deposit)) + (tn.scheme ? ' · ' + esc(tn.scheme) : '') + (tn.protectedOn ? ' · protected ' + esc(fmt(tn.protectedOn)) : '') + (tn.depositRef ? ' · ref ' + esc(tn.depositRef) : '') : ''], ['Notes', tn.notes ? '<span class="pre">' + esc(tn.notes) + '</span>' : '']]) : ''}
+    const rent = tn && money.rentPence(tn) > 0 ? money.gbp(money.rentPence(tn)) + ' ' + money.perText(tn) + ' <a href="#rent">(rent and receipts)</a>' : '';
+    return `<div class="acc-box">${has ? kv([['Tenants', esc(tn.names || '')], ['Email', esc(tn.emails || '')], ['Phone', esc(tn.phones || '')], ['Start', esc(fmt(tn.start))], ['Fixed term ends', tn.end ? esc(fmt(tn.end)) : ''], ['Periodic', tn.periodic ? 'Yes' : ''], ['Rent', rent],
+      ['Deposit', tn.deposit > 0 ? esc(pounds(tn.deposit)) + (tn.scheme ? ' · ' + esc(tn.scheme) : '') + (tn.protectedOn ? ' · protected ' + esc(fmt(tn.protectedOn)) : '') + (tn.depositRef ? ' · ref ' + esc(tn.depositRef) : '') : ''], ['Notes', tn.notes ? '<span class="pre">' + esc(tn.notes) + '</span>' : '']]) : ''}
       ${editBox(has, 'Update the tenancy', form)}${has ? `<div class="acc-row">${postBtn(`/account/p/${p.id}/clear/tenancy`, 'Remove tenancy', 'linkbtn danger', 'Remove the tenancy details?')}</div>` : ''}</div>`;
   }
   function propertyPage(req, res, p, o = {}){
     const t = todayLondon(), base = '', a = p.address, sec = o.section, ov = o.values;
     const book = k => `<a class="arrow" href="${esc(bookLink(base, k, p))}">Book ${k === 'gas' ? 'a Gas Safety check' : k === 'eicr' ? 'an EICR' : 'an EPC'}</a>`;
     const block = (id, title, s, note, content, extra) => `<div class="acc-sec" id="${id}"><div class="acc-sec-h"><h2>${title}</h2>${stHTML(s)}<p>${note}</p>${extra || ''}</div><div class="acc-sec-b">${content}</div></div>`;
-    const ds = depositStatus(p, t);
+    const ds = depositStatus(p, t), rent = M.rentSection(p, t), acc = readAcc(req.acc.id) || req.acc, exps = M.expenseSection(acc, p, t);
     const body = head(esc([a.town, a.postcode].filter(Boolean).join(' · ')), esc(streetLine(a)), esc(p.type + ' · ' + bedsText(p.beds)),
-      `<a class="btn ghost sm" href="/app">Do a check-in or inspection</a><a class="btn ghost sm" href="#details">Edit details</a>`, ['All properties', '/account']) + `
+      `<a class="btn primary sm" href="#rent">Rent</a><a class="btn ghost sm" href="/account/expenses/new?p=${p.id}">Add an expense</a><a class="btn ghost sm" href="/app">Do a check-in or inspection</a><a class="btn ghost sm" href="#details">Edit details</a>`, ['All properties', '/account']) + `
 <section class="tight"><div class="wrap">
-  <ul class="ov">${[['epc', 'EPC', certStatus('epc', p, t)], ['gas', 'Gas Safety', certStatus('gas', p, t)], ['eicr', 'EICR', certStatus('eicr', p, t)], ['tenancy', 'Tenancy', tenancyStatus(p, t)], ['tenancy', 'Deposit', ds]]
+  <ul class="ov">${[['rent', 'Rent', rent.st], ['epc', 'EPC', certStatus('epc', p, t)], ['gas', 'Gas Safety', certStatus('gas', p, t)], ['eicr', 'EICR', certStatus('eicr', p, t)], ['tenancy', 'Tenancy', tenancyStatus(p, t)], ['tenancy', 'Deposit', ds]]
     .map(([id, l, s]) => `<li><a href="#${id}"><b>${l}</b>${stHTML(s)}</a></li>`).join('')}</ul>
+  ${block('rent', 'Rent', rent.st, 'Each rent period, paid or still due. Tap <b>Mark as received</b> when the rent comes in, then send your tenant a receipt.', rent.html)}
+  ${block('expenses', 'Expenses', exps.st, 'Costs for this property, such as repairs, certificates and insurance, with their receipts. Together with the rent, they make up your tax-year summary.', exps.html)}
   ${block('epc', 'EPC', certStatus('epc', p, t), 'An Energy Performance Certificate is valid for 10 years. You need a valid one before you let the property to a new tenant.', epcSection(p, t, sec === 'epc' ? ov : null), book('epc'))}
   ${block('gas', 'Gas Safety', certStatus('gas', p, t), 'A Gas Safe registered engineer must check every gas appliance every 12 months, and the tenant must have a copy of the certificate.', gasSection(p, sec === 'gas' ? ov : null), book('gas'))}
   ${block('eicr', 'Electrical safety (EICR)', certStatus('eicr', p, t), 'In England the electrics must be inspected at least every 5 years, and any remedial work done within 28 days.', eicrSection(p, sec === 'eicr' ? ov : null), book('eicr'))}
   ${block('tenancy', 'Tenancy', tenancyStatus(p, t), 'Who lives here and on what terms. In England and Wales a deposit must be protected within 30 days of receiving it.', tenancySection(p, sec === 'tenancy' ? ov : null), `<div class="st-extra"><span class="sub">Deposit</span> ${stHTML(ds)}</div><a class="arrow" href="/app">Do a check-in or check-out</a>`)}
   <div class="acc-sec" id="details"><div class="acc-sec-h"><h2>Property details</h2><p>The address, type and bedrooms. Changing the postcode searches the EPC register again.</p></div>
     <div class="acc-sec-b"><div class="acc-box"><form class="form" method="post" action="/account/p/${p.id}/details">${detailsFields(Object.assign({}, a, { type: p.type, beds: p.beds, notes: p.notes }, sec === 'details' ? ov : {}))}<button class="btn primary sm">Save details</button></form>
-    <div class="acc-row">${postBtn(`/account/p/${p.id}/delete`, 'Delete this property', 'linkbtn danger', 'Delete this property, with its certificates and tenancy? This cannot be undone.')}</div></div></div></div>
+    <div class="acc-row">${postBtn(`/account/p/${p.id}/delete`, 'Delete this property', 'linkbtn danger', 'Delete this property, with its certificates, tenancy, rent payments and expenses? This cannot be undone.')}</div></div></div></div>
 </div></section>`;
     send(req, res, { path: '/account/p/' + p.id, title: streetLine(a), body, status: o.status, notice: o.error ? { text: o.error } : null });
   }
@@ -653,8 +661,9 @@ ${list.length ? `<div class="acc-figs">
   });
   app.post('/account/p/:id/delete', need, (req, res) => {
     const acc = readAcc(req.acc.id), p = prop(acc, req.params.id); if (!p) return gone(res);
-    [p.gas && p.gas.file, p.eicr && p.eicr.file].filter(Boolean).forEach(f => { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext)); } catch (e) {} });
-    acc.properties = acc.properties.filter(x => x.id !== p.id); writeAcc(acc);
+    const exps = (acc.expenses || []).filter(e => e.propId === p.id);
+    [p.gas && p.gas.file, p.eicr && p.eicr.file].concat(exps.map(e => e.file)).filter(Boolean).forEach(f => { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext)); } catch (e) {} });
+    acc.properties = acc.properties.filter(x => x.id !== p.id); acc.expenses = (acc.expenses || []).filter(e => e.propId !== p.id); writeAcc(acc);
     res.redirect(303, '/account?m=deleted');
   });
   app.post('/account/p/:id/clear/:what', need, (req, res) => {
@@ -695,21 +704,21 @@ ${list.length ? `<div class="acc-figs">
   /* Gas Safety and EICR, with an optional certificate file */
   const raw = express.raw({ type: 'multipart/form-data', limit: MAX_FILE + 256 * 1024 });
   const multipart = (req, res, next) => raw(req, res, err => {
-    if (err) { req.formError = err.type === 'entity.too.large' ? 'That file is too large. Certificates can be up to 10 MB.' : 'The form could not be read. Please try again.'; req.body = {}; return next(); }
+    if (err) { req.formError = err.type === 'entity.too.large' ? 'That file is too large. Files can be up to 10 MB.' : 'The form could not be read. Please try again.'; req.body = {}; return next(); }
     const r = parseMultipart(req.body, req.headers['content-type']);
     if (!r) { req.formError = 'The form could not be read. Please try again.'; req.body = {}; return next(); }
     req.body = r.fields; req.files = r.files; next();
   });
-  function takeFile(req, acc, old){
+  function takeFile(req, acc, old, what = 'certificate'){
     const f = req.files && req.files.file;
     if (!f) return { keep: true };
-    if (f.data.length > MAX_FILE) return { error: 'That file is too large. Certificates can be up to 10 MB.' };
+    if (f.data.length > MAX_FILE) return { error: 'That file is too large. Files can be up to 10 MB.' };
     const k = fileKind(f.data);
-    if (!k) return { error: 'Please upload the certificate as a PDF, JPEG or PNG.' };
+    if (!k) return { error: 'Please upload the ' + what + ' as a PDF, JPEG or PNG.' };
     const id = rid(12), dir = path.join(FILE_DIR, acc.id);
     fs.mkdirSync(dir, { recursive: true }); fs.writeFileSync(path.join(dir, id + '.' + k.ext), f.data);
     if (old) { try { fs.unlinkSync(path.join(dir, old.id + '.' + old.ext)); } catch (e) {} }
-    return { file: { id, ext: k.ext, type: k.type, size: f.data.length, name: line(path.basename(f.filename).replace(/[^\w .,()&'-]/g, '-'), 120) || 'certificate.' + k.ext, at: new Date().toISOString() } };
+    return { file: { id, ext: k.ext, type: k.type, size: f.data.length, name: line(path.basename(f.filename).replace(/[^\w .,()&'-]/g, '-'), 120) || what + '.' + k.ext, at: new Date().toISOString() } };
   }
   function certPost(kind){
     return (req, res) => {
@@ -738,22 +747,34 @@ ${list.length ? `<div class="acc-figs">
   const amount = v => { const n = Math.round(parseFloat(String(v || '').replace(/[£,\s]/g, '')) * 100) / 100; return n > 0 && n < 10000000 ? n : 0; };
   app.post('/account/p/:id/tenancy', need, urlenc, (req, res) => {
     const b = req.body || {}, p0 = prop(req.acc, req.params.id); if (!p0) return gone(res);
-    const v = { names: line(b.names, 200), emails: line(b.emails, 200), phones: line(b.phones, 100), start: validDate(b.start), end: validDate(b.end), periodic: !!b.periodic, rent: amount(b.rent), rentFreq: FREQ.some(f => f[0] === b.rentFreq) ? b.rentFreq : 'month',
-      deposit: amount(b.deposit), scheme: SCHEMES.includes(b.scheme) ? b.scheme : '', protectedOn: validDate(b.protectedOn), depositRef: line(b.depositRef, 60), notes: text(b.notes, 2000) };
+    const v = { names: line(b.names, 200), emails: line(b.emails, 200), phones: line(b.phones, 100), start: validDate(b.start), end: validDate(b.end), periodic: !!b.periodic, rentFreq: FREQ.some(f => f[0] === b.rentFreq) ? b.rentFreq : 'month',
+      rentP: money.parsePence(b.rent), deposit: amount(b.deposit), scheme: SCHEMES.includes(b.scheme) ? b.scheme : '', protectedOn: validDate(b.protectedOn), depositRef: line(b.depositRef, 60), notes: text(b.notes, 2000) };
     const err = !v.names && !v.start ? 'Please enter the tenant’s name or the start date.' : v.end && v.start && v.end <= v.start ? 'The end of the fixed term must be after the start date.' : v.emails && !v.emails.split(/[,;\s]+/).filter(Boolean).every(e => EMAIL_RE.test(e)) ? 'Please check the tenant email addresses.' : '';
     if (err) return propertyPage(req, res, p0, { section: 'tenancy', values: v, error: err, status: 400 });
-    const p = update(req, p => { p.tenancy = Object.assign(v, { savedAt: new Date().toISOString() }); });
+    const p = update(req, p => {
+      const old = p.tenancy || {}, rentP = money.parsePence(b.rent);
+      // The rent's schedule (first rent date, due day, earlier amounts) is set in the Rent section; keep it.
+      ['rentStart', 'dueDay', 'rentHist', 'rentP', 'rent'].forEach(k => { if (old[k] !== undefined) v[k] = old[k]; });
+      if (money.STEP[v.rentFreq].d) v.dueDay = 0;
+      const next = (p.payments || []).length ? (money._test.ledger(Object.assign({}, p, { tenancy: Object.assign({}, old, v) }), todayLondon()).next || {}).due || '' : '';
+      money.applyRent(old, v, rentP, next);
+      p.tenancy = Object.assign(v, { savedAt: new Date().toISOString() });
+    });
     p ? done(res, p, 'tenancy') : gone(res);
   });
 
   /* Uploaded certificates: only to the account they belong to */
   app.get('/account/files/:fid', need, (req, res) => {
     const fid = String(req.params.fid), acc = req.acc;
-    const f = acc.properties.flatMap(p => [p.gas && p.gas.file, p.eicr && p.eicr.file]).find(x => x && x.id === fid);
+    const f = acc.properties.flatMap(p => [p.gas && p.gas.file, p.eicr && p.eicr.file]).concat((acc.expenses || []).map(e => e.file)).find(x => x && x.id === fid);
     if (!f || !/^[a-f0-9]{24}$/.test(fid)) return res.status(404).type('text/plain').send('File not found.');
     res.set({ 'Content-Disposition': `inline; filename="${f.name.replace(/["\\]/g, '')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' });
     res.type(f.type).sendFile(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext), err => { if (err && !res.headersSent) res.status(404).type('text/plain').send('File not found.'); });
   });
+
+  /* ------------------------------ rent, receipts, expenses, tax year ------------------------------ */
+  const M = money.mount(app, { need, send, head, inp, sel, area, stHTML, esc, line, text, todayLondon, readAcc, writeAcc, prop, update, multipart, takeFile, FILE_DIR, emailOn, sendEmail, emailHTML,
+    limiter, clientIp, urlenc, EMAIL_RE, rid, NOTES, propertyPage });
 
   /* ------------------------------ settings ------------------------------ */
   function settingsPage(req, res, error, status){
@@ -765,6 +786,8 @@ ${list.length ? `<div class="acc-figs">
       ${inp('Your name', 'name', acc.name, { req: true, max: 80 })}
       <label class="check"><input type="checkbox" name="reminders" value="1"${s.reminders !== false ? ' checked' : ''}> Email me reminders</label>
       ${inp('Also send reminders to', 'ccEmail', s.ccEmail, { type: 'email', opt: true, hint: 'For example your letting agent or a partner.' })}
+      <label class="check"><input type="checkbox" name="rentReminders" value="1"${s.rentReminders ? ' checked' : ''}> Email me when rent is more than ${money.GRACE} days late and not marked as received (once for each rent period; only to you, never to the tenant)</label>
+      ${inp('Your name on rent receipts', 'receiptName', s.receiptName, { opt: true, max: 80, hint: 'Leave blank to use your name above. For example a company name.' })}
       ${emailOn() ? '' : '<p class="acc-note">Email reminders aren’t switched on for this site yet.</p>'}
       <button class="btn primary sm">Save settings</button></form></div></div></div>
   <div class="acc-sec" id="password"><div class="acc-sec-h"><h2>Password</h2><p>Changing your password signs you out on your other devices.</p></div>
@@ -772,7 +795,7 @@ ${list.length ? `<div class="acc-figs">
       ${inp('Current password', 'current', '', { type: 'password', req: true, max: 200, attrs: ' autocomplete="current-password"' })}
       ${inp('New password', 'password', '', { type: 'password', req: true, max: 200, attrs: ' minlength="8" autocomplete="new-password"', hint: 'At least 8 characters.' })}
       <button class="btn primary sm">Change password</button></form></div></div></div>
-  <div class="acc-sec" id="delete"><div class="acc-sec-h"><h2>Delete account</h2><p>Deletes your account, every property, and every certificate you’ve uploaded. This can’t be undone.</p></div>
+  <div class="acc-sec" id="delete"><div class="acc-sec-h"><h2>Delete account</h2><p>Deletes your account, every property, every certificate and receipt you’ve uploaded, and your rent and expense records. This can’t be undone. Download your tax-year summaries first if you need them.</p></div>
     <div class="acc-sec-b"><div class="acc-box"><form class="form" method="post" action="/account/delete" onsubmit="return confirm('Delete your account and everything in it?')">
       ${inp('Your password', 'password', '', { type: 'password', req: true, max: 200, attrs: ' autocomplete="current-password"' })}
       <button class="btn danger sm">Delete my account</button></form></div></div></div>
@@ -783,7 +806,7 @@ ${list.length ? `<div class="acc-figs">
     const b = req.body || {}, name = line(b.name, 80), cc = normEmail(b.ccEmail);
     if (!name) return settingsPage(req, res, 'Please enter your name.', 400);
     if (cc && !EMAIL_RE.test(cc)) return settingsPage(req, res, 'Please check the extra email address.', 400);
-    const acc = readAcc(req.acc.id); acc.name = name; acc.settings = { reminders: !!b.reminders, ccEmail: cc === acc.email ? '' : cc }; writeAcc(acc);
+    const acc = readAcc(req.acc.id); acc.name = name; acc.settings = { reminders: !!b.reminders, ccEmail: cc === acc.email ? '' : cc, rentReminders: !!b.rentReminders, receiptName: line(b.receiptName, 80) }; writeAcc(acc);
     res.redirect(303, '/account/settings?m=settings');
   });
   app.post('/account/password', need, urlenc, async (req, res) => {
@@ -808,12 +831,21 @@ ${list.length ? `<div class="acc-figs">
     if (!o.send && !emailOn()) { console.log('landlords: reminders skipped (RESEND_API_KEY is not set)'); return { skipped: true, sent: 0, emails: 0 }; }
     let sent = 0, emails = 0, failed = 0;
     for (const id of accountIds()) {
-      const acc = readAcc(id); if (!acc || (acc.settings && acc.settings.reminders === false)) continue;
+      const acc = readAcc(id); if (!acc) continue;
+      const certsOn = !(acc.settings && acc.settings.reminders === false), rentOn = !!(acc.settings && acc.settings.rentReminders);
+      if (!certsOn && !rentOn) continue;
       const due = [];
-      for (const p of acc.properties) for (const it of dueItems(p)) {
-        const left = days(t, it.due), stage = stageFor(it.stages, left); if (stage === null) continue;
-        const key = p.id + ':' + it.kind + ':' + it.due + ':' + stage;
-        if (!(acc.sent || {})[key]) due.push({ p, it, left, key });
+      for (const p of acc.properties) {
+        if (certsOn) for (const it of dueItems(p)) {
+          const left = days(t, it.due), stage = stageFor(it.stages, left); if (stage === null) continue;
+          const key = p.id + ':' + it.kind + ':' + it.due + ':' + stage;
+          if (!(acc.sent || {})[key]) due.push({ p, it, left, key });
+        }
+        // Rent more than a few days late: once per rent period (off unless the landlord turns it on).
+        if (rentOn) for (const it of money.rentReminderItems(p, t)) {
+          const key = p.id + ':rent:' + it.due + ':late';
+          if (!(acc.sent || {})[key]) due.push({ p, it, left: days(t, it.due), key });
+        }
       }
       if (!due.length) continue;
       due.sort((a, b) => a.left - b.left);
@@ -835,7 +867,8 @@ ${list.length ? `<div class="acc-figs">
       const a = fullAddress(x.p.address), d = fmtLong(x.it.due), l = x.left;
       switch (x.it.kind) {
         case 'tenancy': return { h: 'The tenancy ends ' + inDays(l), p: `The fixed term at ${a} ends on ${d}. If you’d like to renew it, or plan the check-out, now is a good time.`, link: ['Do the check-out', base + '/app'] };
-        case 'deposit': return { h: 'Protect the deposit' + (l < 0 ? ': the deadline has passed' : ' ' + (l === 0 ? 'today' : 'by ' + fmt(x.it.due))), p: `The deposit of ${money(x.p.tenancy.deposit)} for ${a} isn’t recorded as protected yet. In England and Wales it must be protected within 30 days of receiving it, which for this tenancy is ${d}. If it’s already protected, add the date on your dashboard.`, link: ['Update the tenancy', base + '/account/p/' + x.p.id + '#tenancy'] };
+        case 'rent': return { h: 'Rent overdue: ' + money.gbp(x.it.left, true), p: `The rent for ${x.it.period} at ${a} was due on ${d} and ${money.gbp(x.it.left, true)} isn’t marked as received yet. If it has been paid, mark it as received on your dashboard so it’s up to date.`, link: ['Mark it as received', base + '/account/p/' + x.p.id + '#rent'] };
+        case 'deposit': return { h: 'Protect the deposit' + (l < 0 ? ': the deadline has passed' : ' ' + (l === 0 ? 'today' : 'by ' + fmt(x.it.due))), p: `The deposit of ${pounds(x.p.tenancy.deposit)} for ${a} isn’t recorded as protected yet. In England and Wales it must be protected within 30 days of receiving it, which for this tenancy is ${d}. If it’s already protected, add the date on your dashboard.`, link: ['Update the tenancy', base + '/account/p/' + x.p.id + '#tenancy'] };
         default: {
           const name = LABEL[x.it.kind], lower = { gas: 'Gas Safety certificate', eicr: 'electrical safety report (EICR)', epc: 'EPC' }[x.it.kind];
           return { h: name + (l < 0 ? ' expired ' + inDays(l) : l === 0 ? ' expires today' : ' expires ' + inDays(l)), p: `The ${lower} for ${a} ${l < 0 ? 'expired' : 'expires'} on ${d}.`, link: ['Book ' + (x.it.kind === 'gas' ? 'a Gas Safety check' : x.it.kind === 'eicr' ? 'an EICR' : 'an EPC'), bookLink(base, x.it.kind, x.p)] };
@@ -867,7 +900,7 @@ ${list.length ? `<div class="acc-figs">
     const accs = allAccounts().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))), t = todayLondon();
     const s = readState(), seen = s.adminSeenAt || '', fresh = accs.filter(a => a.createdAt > seen).length;
     if (accs.length) { s.adminSeenAt = new Date().toISOString(); writeState(s); }
-    const nProps = accs.reduce((n, a) => n + a.properties.length, 0);
+    const nProps = accs.reduce((n, a) => n + a.properties.length, 0), mc = money.adminCounts(accs);
     const day = d => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
     const up = [], missing = { gas: 0, eicr: 0, epc: 0 };
     accs.forEach(a => a.properties.forEach(p => {
@@ -883,6 +916,7 @@ ${list.length ? `<div class="acc-figs">
     return banner + `<details class="codes" id="landlords"${fresh ? ' open' : ''}><summary>🏠 Landlord accounts <span class="sub" style="display:inline">— ${accs.length ? plural(accs.length, 'account') + ', ' + nProps + ' propert' + (nProps === 1 ? 'y' : 'ies') + (up.length ? ', ' + up.length + ' certificate' + (up.length === 1 ? '' : 's') + ' due within 90 days' : '') : 'none yet'}</span></summary>
 ${accs.length ? `<p class="sub" style="margin-top:12px">Certificates expired or due in the next 90 days (leads for bookings). Not added yet: ${missing.gas} Gas Safety, ${missing.eicr} EICR, ${missing.epc} EPC.${emailOn() ? '' : ' Reminder emails are off until RESEND_API_KEY is set.'}${epcOn() ? '' : ' The automatic EPC search is off until EPC_API_EMAIL and EPC_API_KEY are set.'}</p>
 ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 90 days.</p>'}
+<p class="sub" style="margin-top:14px">Rent and expenses (counts only): ${(mc.rentProps + ' propert' + (mc.rentProps === 1 ? 'y' : 'ies'))} with rent set up, ${plural(mc.payments, 'rent payment')} recorded, ${plural(mc.receipts, 'receipt')} emailed, ${plural(mc.expenses, 'expense')} recorded.</p>
 <p class="sub" style="margin-top:14px">Accounts, newest first:</p><ul>${accRows}</ul>` : '<p class="sub">Landlords who create a free account on the Landlords page appear here, with their properties’ certificate dates.</p>'}</details>`;
   }
   app.post('/admin/landlords/:id/delete', urlenc, (req, res) => {
