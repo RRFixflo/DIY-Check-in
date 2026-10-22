@@ -293,12 +293,14 @@ if (PAYWALL) {
     });
     next();
   });
-  // The app is free to start at /app (payment is asked for when the report is finished: /api/access).
-  // "/" is the app for people with a valid link (a link that has made its report still opens, to see
-  // and send it), and the website for everyone else.
+  // "/" is always the website's home page, for everyone. The app is at /app: free to start (payment is
+  // asked for when the report is finished: /api/access). A paid link (/?access=TOKEN) or code sets the
+  // cookie and goes on to /app.
   app.use(async (req, res, next) => {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json)$/i.test(req.path)) return next();
-    if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
+    const isRoot = req.path === '/';
+    if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
+    if (reports.isOwner(req)) return isRoot ? res.type('html').send(sitePage('home', req)) : next(); // the owner (signed in to /admin) needs no paid link
     const isApp = /^\/app\/?$/.test(req.path);
     if (isApp && !req.query.access) return next();
     const raw = String(req.query.access || '').trim();
@@ -307,11 +309,11 @@ if (PAYWALL) {
     if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown', req)); }
     const a = await checkAccess(token);
     if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) {
-      if (!q && req.path === '/' && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
       if (!q && isApp) return next();
       const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
     if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
-    if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, req.path); }
+    if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, isRoot ? '/app' : req.path); }
+    if (isRoot) return res.type('html').send(sitePage('home', req));
     next();
   });
 }

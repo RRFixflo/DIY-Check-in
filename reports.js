@@ -593,7 +593,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
 <h1>Submitted reports</h1>
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
-<p style="margin:-6px 0 16px"><a class="btn primary" href="/">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
+<p style="margin:-6px 0 16px"><a class="btn primary" href="/app">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
 ${messagesHTML()}
 ${drafts.draftsHTML()}
 ${activityHTML()}
