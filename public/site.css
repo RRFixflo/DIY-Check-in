@@ -515,3 +515,7 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 @media (prefers-color-scheme: dark) {
   .hero h1 em { background-image: linear-gradient(90deg, #D9B37C, #F1E3CB, #C49A6C, #D9B37C); }
 }
+/* Buy first, for a tenant to do the report */
+.way .buy-first { margin-top: 18px; width: 100%; }
+.way .buy-note { margin: 10px 0 0; font-size: 13.5px; color: var(--ink-faint); }
+.buy-card .btn { flex: 0 0 auto; }
