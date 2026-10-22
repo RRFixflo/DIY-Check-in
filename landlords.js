@@ -108,11 +108,11 @@ async function sendEmail(m){
 // A plain, readable email: one column, the site's ink and green, no images.
 function emailHTML(paras, button, foot){
   const p = t => `<p style="margin:0 0 16px">${t}</p>`;
-  return `<!doctype html><html><body style="margin:0;background:#F7F5F0;padding:24px 12px;font:16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#17191C">
-<div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #E1DDD3;border-radius:10px;padding:28px 26px">
-<div style="font-weight:700;font-size:15px;margin:0 0 22px;color:#1F4B3A">DIY Inventory</div>
+  return `<!doctype html><html><body style="margin:0;background:#F5EFE4;padding:24px 12px;font:16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#17191C">
+<div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #E4D9C6;border-radius:10px;padding:28px 26px">
+<div style="font-weight:700;font-size:15px;margin:0 0 22px;color:#1B2E4B">DIY Inventory</div>
 ${paras.map(x => x.startsWith('<') ? x : p(x)).join('\n')}
-${button ? `<p style="margin:22px 0 6px"><a href="${esc(button[1])}" style="display:inline-block;background:#1F4B3A;color:#fff;text-decoration:none;font-weight:600;padding:11px 18px;border-radius:8px">${esc(button[0])}</a></p>` : ''}
+${button ? `<p style="margin:22px 0 6px"><a href="${esc(button[1])}" style="display:inline-block;background:#1B2E4B;color:#fff;text-decoration:none;font-weight:600;padding:11px 18px;border-radius:8px">${esc(button[0])}</a></p>` : ''}
 </div>
 <p style="max-width:560px;margin:14px auto 0;color:#868B92;font-size:13px">${foot || ''}</p>
 </body></html>`;
@@ -878,8 +878,8 @@ ${M.dashStrip(acc, t)}
     const items = due.map(x => Object.assign({ x }, what(x)));
     const subject = items.length === 1 ? items[0].h + ': ' + streetLine(due[0].p.address) : plural(items.length, 'reminder') + ' for your properties';
     const html = emailHTML([`Hello ${esc(acc.name)},`, items.length === 1 ? 'A reminder from your DIY Inventory property dashboard.' : 'Reminders from your DIY Inventory property dashboard.']
-      .concat(items.map(i => `<div style="border-top:1px solid #E1DDD3;padding:16px 0 4px"><p style="margin:0 0 6px;font-weight:700">${esc(i.h)}</p><p style="margin:0 0 10px;color:#4E535A">${esc(i.p)}</p><p style="margin:0 0 12px"><a href="${esc(i.link[1])}" style="color:#1F4B3A;font-weight:600">${esc(i.link[0])} →</a></p></div>`))
-      .concat([`<p style="margin:12px 0 0;color:#4E535A">See all your properties: <a href="${esc(base + '/account')}" style="color:#1F4B3A">${esc(base.replace(/^https?:\/\//, '') + '/account')}</a></p>`]), null,
+      .concat(items.map(i => `<div style="border-top:1px solid #E4D9C6;padding:16px 0 4px"><p style="margin:0 0 6px;font-weight:700">${esc(i.h)}</p><p style="margin:0 0 10px;color:#4E535A">${esc(i.p)}</p><p style="margin:0 0 12px"><a href="${esc(i.link[1])}" style="color:#1B2E4B;font-weight:600">${esc(i.link[0])} →</a></p></div>`))
+      .concat([`<p style="margin:12px 0 0;color:#4E535A">See all your properties: <a href="${esc(base + '/account')}" style="color:#1B2E4B">${esc(base.replace(/^https?:\/\//, '') + '/account')}</a></p>`]), null,
       `You get these emails because reminders are on for your DIY Inventory landlord account. <a href="${esc(base + '/account/settings')}" style="color:#868B92">Turn them off</a>.`);
     const txt = [`Hello ${acc.name},`, '', items.length === 1 ? 'A reminder from your DIY Inventory property dashboard.' : 'Reminders from your DIY Inventory property dashboard.', '']
       .concat(items.flatMap(i => [i.h, i.p, i.link[0] + ': ' + i.link[1], ''])).concat(['All your properties: ' + base + '/account', 'Turn reminders off: ' + base + '/account/settings']).join('\n');
