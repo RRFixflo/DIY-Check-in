@@ -9,6 +9,9 @@ const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
 const money = require('./landlords-money');   // rent, receipts, expenses and the tax-year summary
+const address = require('./address');          // postcode → addresses, for the property form
+const UI = require('./landlords-ui');          // the dashboard's own header and its small browser scripts
+let currentFn = null;                          // set by mount(): the signed-in landlord for a request, or null
 
 let DIR = '', ACC_DIR = '', FILE_DIR = '';
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return d; } };
@@ -41,6 +44,7 @@ function addMonths(s, n){
 const todayLondon = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 const londonHour = (d = new Date()) => parseInt(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', hourCycle: 'h23' }).format(d), 10);
 const fmt = s => s ? new Date(toUTC(s)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '';
+const fmtShort = s => s ? new Date(toUTC(s)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }) : '';
 const fmtLong = s => new Date(toUTC(s)).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const inDays = n => n === 0 ? 'today' : n === 1 ? 'tomorrow' : n > 0 ? 'in ' + n + ' days' : plural(-n, 'day') + ' ago';
 
@@ -58,10 +62,36 @@ const fullAddress = a => [streetLine(a), a.town, a.postcode].filter(Boolean).joi
 const TYPES = ['Flat', 'Maisonette', 'Studio', 'Terraced house', 'Semi-detached house', 'Detached house', 'Bungalow', 'HMO or shared house', 'Other'];
 const bedsText = b => b === 0 ? 'Studio' : b >= 6 ? '6 or more bedrooms' : plural(b, 'bedroom');
 
+/* ----------------------------------- tenants ----------------------------------- */
+// Each tenancy keeps a list of tenants, tn.tenants = [{ name, email, phone }]. tn.names / emails / phones stay
+// as the same details joined with commas, for the receipts, the CSVs and the dashboard. Tenancies saved before
+// the list (those three as free text) are split into it when the account is read, and saved with it next time.
+const MAX_TENANTS = 8;
+function splitNames(s){
+  // "Sam Jones, Alex Jones", "Sam Jones and Alex Jones", "A. Patel & R. Patel"; but "Mr and Mrs Smith" is one entry.
+  return String(s || '').split(/\s*[,;\/\n]\s*/).flatMap(part => {
+    const bits = part.split(/\s+(?:&|and|\+)\s+/i);
+    return bits.length > 1 && bits.every(b => /\S\s+\S/.test(b.trim())) ? bits : [part];
+  }).map(x => line(x, 80)).filter(Boolean);
+}
+function legacyTenants(tn){
+  const names = splitNames(tn.names), emails = String(tn.emails || '').split(/[,;\s]+/).map(e => line(e, 120)).filter(Boolean),
+    phones = String(tn.phones || '').split(/\s*[,;\/]\s*/).map(x => line(x, 30)).filter(Boolean);
+  const n = Math.min(MAX_TENANTS, Math.max(names.length, emails.length, phones.length));
+  return Array.from({ length: n }, (_, i) => ({ name: names[i] || '', email: emails[i] || '', phone: phones[i] || '' }));
+}
+const tenantsOf = tn => !tn ? [] : Array.isArray(tn.tenants) ? tn.tenants : legacyTenants(tn);
+function migrateTenants(acc){
+  (acc.properties || []).forEach(p => { if (p.tenancy && !Array.isArray(p.tenancy.tenants)) p.tenancy.tenants = legacyTenants(p.tenancy); });
+  return acc;
+}
+// "Sam and Alex", for a greeting.
+function greetNames(list){ const n = list.map(t => String(t.name || '').split(/\s+/)[0]).filter(Boolean); return n.length > 1 ? n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1] : n[0] || ''; }
+
 /* ----------------------------------- storage ----------------------------------- */
 const accFile = id => path.join(ACC_DIR, id + '.json');
 const ID_RE = /^[a-f0-9]{16}$/;
-const readAcc = id => ID_RE.test(String(id)) ? readJson(accFile(id), null) : null;
+const readAcc = id => { const acc = ID_RE.test(String(id)) ? readJson(accFile(id), null) : null; return acc ? migrateTenants(acc) : null; };
 const writeAcc = acc => writeJson(accFile(acc.id), acc);
 const readIndex = () => readJson(path.join(DIR, 'index.json'), { byEmail: {} });
 const writeIndex = d => writeJson(path.join(DIR, 'index.json'), d);
@@ -122,11 +152,30 @@ ${button ? `<p style="margin:22px 0 6px"><a href="${esc(button[1])}" style="disp
 const gasExpiry = g => g && g.date ? (g.expiresSet || addMonths(g.date, 12)) : '';
 const eicrDue = e => e && e.date ? (e.dueSet || addMonths(e.date, 60)) : '';
 const epcExpiry = e => e ? (e.expires || (e.lodged ? addMonths(e.lodged, 120) : '')) : '';
-const LABEL = { gas: 'Gas Safety certificate', eicr: 'Electrical safety report (EICR)', epc: 'EPC', tenancy: 'Tenancy', deposit: 'Deposit protection' };
-const SHORT = { gas: 'Gas Safety', eicr: 'EICR', epc: 'EPC', tenancy: 'Tenancy', deposit: 'Deposit' };
+// Property licensing (selective, additional or mandatory HMO): set by the council; "none" = not needed.
+const LIC_TYPES = [['selective', 'Selective licence'], ['additional', 'Additional HMO licence'], ['mandatory', 'Mandatory HMO licence'], ['none', 'Not needed'], ['', 'Not sure yet']];
+const licText = t => (LIC_TYPES.find(x => x[0] === t) || LIC_TYPES[4])[1];
+const licExpiry = l => l && l.type && l.type !== 'none' ? (l.expires || '') : '';
+const COUNCIL_URL = 'https://www.gov.uk/find-local-council';
+const LABEL = { gas: 'Gas Safety certificate', eicr: 'Electrical safety report (EICR)', epc: 'EPC', licence: 'Property licence', tenancy: 'Tenancy', deposit: 'Deposit protection' };
+const SHORT = { gas: 'Gas Safety', eicr: 'EICR', epc: 'EPC', licence: 'Licence', tenancy: 'Tenancy', deposit: 'Deposit' };
+const CERT_KINDS = ['gas', 'eicr', 'epc', 'licence'];
 const CERT_STAGES = [60, 30, 14, 7, 0];
+// When each certificate was issued and when it runs out (for the dashboard's bars).
+function certSpan(kind, p){
+  if (kind === 'gas') return [p.gas && p.gas.date, gasExpiry(p.gas)];
+  if (kind === 'eicr') return [p.eicr && p.eicr.date, eicrDue(p.eicr)];
+  if (kind === 'epc') return [p.epc && (p.epc.lodged || (p.epc.expires && addMonths(p.epc.expires, -120))), epcExpiry(p.epc)];
+  return [p.licence && p.licence.start, licExpiry(p.licence)];
+}
 function certStatus(kind, p, t){
-  const due = kind === 'gas' ? gasExpiry(p.gas) : kind === 'eicr' ? eicrDue(p.eicr) : epcExpiry(p.epc);
+  if (kind === 'licence') {
+    const l = p.licence;
+    if (!l || !l.type) return { cls: 'none', text: l ? 'Not sure yet' : 'Not added', due: '' };
+    if (l.type === 'none') return { cls: 'ok', text: 'Not needed', due: '', na: true };
+    if (!l.expires) return { cls: 'ok', text: licText(l.type) + ', no expiry date', due: '' };
+  }
+  const due = kind === 'gas' ? gasExpiry(p.gas) : kind === 'eicr' ? eicrDue(p.eicr) : kind === 'licence' ? licExpiry(p.licence) : epcExpiry(p.epc);
   if (!due) return { cls: 'none', text: 'Not added', due: '' };
   const d = days(t, due);
   if (d < 0) return { cls: 'exp', text: 'Expired ' + fmt(due), due, d };
@@ -158,6 +207,7 @@ function depositStatus(p, t){
 function dueItems(p){
   const out = [];
   [['gas', gasExpiry(p.gas)], ['eicr', eicrDue(p.eicr)], ['epc', epcExpiry(p.epc)]].forEach(([kind, due]) => { if (due) out.push({ kind, due, stages: CERT_STAGES }); });
+  const lic = licExpiry(p.licence); if (lic) out.push({ kind: 'licence', due: lic, stages: [90].concat(CERT_STAGES) });   // renewing a licence takes the council a while
   const tn = p.tenancy;
   if (tn && tn.end && !tn.periodic) out.push({ kind: 'tenancy', due: tn.end, stages: [60] });
   const dl = depositDeadline(tn); if (dl) out.push({ kind: 'deposit', due: dl, stages: [14, 7, 0] });
@@ -248,10 +298,36 @@ function looksLike(p, r){
   const a = r.address.toLowerCase(), want = [p.address.houseNo, p.address.building, p.address.road].filter(Boolean).map(s => s.toLowerCase().replace(/^flat\s+/, ''));
   return want.length > 0 && want.every(w => new RegExp('(^|[^a-z0-9])' + w.replace(/[^a-z0-9 ]/g, '').replace(/ +/g, '[^a-z0-9]+') + '($|[^a-z0-9])').test(a));
 }
-async function searchEpc(p){
-  const r = await epcLookup(p.address.postcode);
+// One certificate that's clearly this home (Fixflow's approach): exactly the same door and flat numbers, and a
+// street or building word in common; or the very address picked from the postcode lookup. Two or more: none.
+const squash = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const GENERIC = new Set(['flat', 'flats', 'apartment', 'road', 'street', 'lane', 'avenue', 'house', 'court', 'close', 'the', 'and', 'floor', 'first', 'second', 'third', 'ground', 'basement', 'top', 'london', 'upper', 'lower']);
+const numsOf = v => (String(v || '').replace(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/gi, ' ').match(/\b\d+[a-z]?\b/gi) || []).map(x => x.toUpperCase()).sort().join(',');
+const wordsOf = v => String(v || '').toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(w => w.length >= 4 && !GENERIC.has(w));
+function epcClear(p, results, picked){
+  const pk = squash(picked);
+  if (pk.length > 3) { const ex = results.filter(r => squash(r.address) === pk); if (ex.length === 1) return ex[0]; }
+  const a = p.address, ours = [streetLine(a), a.town].filter(Boolean).join(', '), on = numsOf(streetLine(a)), ow = wordsOf(streetLine(a));
+  if (!ow.length) return null;
+  const hits = results.filter(r => { const rn = numsOf(r.address); return rn === on && (on || wordsOf(r.address).filter(w => ow.includes(w)).length >= Math.min(2, ow.length)) && wordsOf(r.address).some(w => ow.includes(w)); });
+  return hits.length === 1 && ours ? hits[0] : null;
+}
+function epcFrom(r, auto){ return { source: 'register', auto: !!auto, rating: r.rating, score: r.score, potential: r.potential, certNo: r.certNo, lmk: r.lmk, address: r.address, lodged: r.lodged, expires: r.expires, savedAt: new Date().toISOString() }; }
+// picked: the address chosen from the postcode lookup (the same register lists it).
+async function searchEpc(p, picked){
+  const r = await epcLookup(p.address.postcode), pk = squash(picked);
+  const hit = r.ok ? epcClear(p, r.results, picked) : null;
   p.epcSearch = { at: new Date().toISOString(), postcode: p.address.postcode, ok: r.ok, reason: r.reason || '', hidden: r.hidden || 0,
-    results: r.results.map(x => Object.assign(x, { match: looksLike(p, x) })).sort((a, b) => (b.match - a.match)), done: false };
+    results: r.results.map(x => Object.assign(x, { match: x === hit || (pk.length > 3 && squash(x.address) === pk) || looksLike(p, x) })).sort((a, b) => (b.match - a.match)), done: false };
+  p.epcCheckedAt = new Date().toISOString();
+  return hit;
+}
+// Save the clear match unless the landlord typed the EPC in themselves (or chose one, when keepChosen).
+function adoptEpc(p, hit, keepChosen){
+  if (!hit || !p.epcSearch) return false;
+  if (p.epc && (p.epc.source === 'manual' || (keepChosen && !p.epc.auto))) return false;
+  p.epc = epcFrom(hit, true); p.epcSearch.done = true; p.epcSearch.auto = hit.lmk;
+  return true;
 }
 
 /* ---------------------------------- multipart ---------------------------------- */
@@ -302,6 +378,7 @@ function mount(app, ctx){
     res.append('Set-Cookie', `diy_landlord=${v ? v + '.' + mac(v) : ''}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${v ? DAYS * 86400 : 0}${secure(req) ? '; Secure' : ''}`);
   }
   function current(req){
+    if (!req || !req.headers) return null;
     const m = /(?:^|;\s*)diy_landlord=([a-f0-9]{16})\.(\d{10,16})\.(\d{1,9})\.([a-f0-9]{64})/.exec(req.headers.cookie || '');
     if (!m || Number(m[2]) < Date.now()) return null;
     const a = Buffer.from(m[4]), b = Buffer.from(mac(m[1] + '.' + m[2] + '.' + m[3]));
@@ -309,23 +386,26 @@ function mount(app, ctx){
     const acc = readAcc(m[1]);
     return acc && String(acc.sessionVer || 0) === m[3] ? acc : null;
   }
+  currentFn = current;
   // Every change must come from one of our own pages.
   function sameOrigin(req){ const o = req.headers.origin || req.headers.referer || ''; try { return new URL(o).host === req.headers.host; } catch (e) { return false; } }
 
   /* ------------------------------ pages ------------------------------ */
   const NOTES = { welcome: 'Your account is ready. Add your first property.', added: 'Property added.', saved: 'Saved.', deleted: 'Property deleted.', out: 'You’ve signed out.',
-    pw: 'Your password has been changed.', settings: 'Settings saved.', epc: 'EPC saved.', cleared: 'Removed.', gone: 'Your account has been deleted.', sent: 'If there’s an account for that email, we’ve sent a link to reset the password. It works for one hour.' };
+    pw: 'Your password has been changed.', 'added-epc': 'Property added. We found its EPC on the register and saved it.', 'epc-auto': 'We found the EPC on the register and saved it.', licence: 'Licence saved.', settings: 'Settings saved.', epc: 'EPC saved.', cleared: 'Removed.', gone: 'Your account has been deleted.', sent: 'If there’s an account for that email, we’ve sent a link to reset the password. It works for one hour.' };
   function send(req, res, o){
     const notice = o.notice || (NOTES[req.query.m] ? { ok: true, text: NOTES[req.query.m] } : null);
-    const html = renderPage({ key: o.key || 'account', path: o.path, title: o.title + ' · DIY Inventory', og: o.title, desc: o.desc || 'Your properties, certificates and tenancies on DIY Inventory.', body: o.body,
+    let html = renderPage({ key: o.key || 'account', path: o.path, title: o.title + ' · DIY Inventory', og: o.title, desc: o.desc || 'Your properties, certificates and tenancies on DIY Inventory.', body: o.body,
       head: HEAD + (o.index ? '' : '\n<meta name="robots" content="noindex, nofollow">'), jsonld: o.jsonld }, req, notice);
+    // Signed-in pages are the dashboard: its own header and footer, not the website's, and every form keeps a draft.
+    if (req.acc && !o.index) html = UI.appChrome(html, req.acc, o.path).replace('</body>', () => UI.DRAFT_UI + '\n</body>');
     if (!o.index) res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'DENY' });
     res.status(o.status || 200).type('html').send(html);
   }
   const head = (kicker, h1, lead, actions, back) => `<div class="page-head acc-head"><div class="wrap">${back ? `<a class="back" href="${back[1]}">← ${esc(back[0])}</a>` : ''}<span class="kicker">${kicker}</span><h1>${h1}</h1>${lead ? `<p>${lead}</p>` : ''}${actions ? `<div class="acc-actions">${actions}</div>` : ''}</div></div>`;
   const inp = (label, name, value, o = {}) => `<label${o.cls ? ` class="${o.cls}"` : ''}>${o.opt ? `<b>${label} <span>(optional)</span></b>` : label}<input name="${name}" value="${esc(value == null ? '' : value)}" type="${o.type || 'text'}"${o.req ? ' required' : ''} maxlength="${o.max || 120}"${o.attrs || ''}>${o.hint ? `<small class="hint">${o.hint}</small>` : ''}</label>`;
   const sel = (label, name, opts, value, o = {}) => `<label>${o.opt ? `<b>${label} <span>(optional)</span></b>` : label}<select name="${name}">${opts.map(x => { const [v, t] = Array.isArray(x) ? x : [x, x]; return `<option value="${esc(v)}"${String(v) === String(value) ? ' selected' : ''}>${esc(t)}</option>`; }).join('')}</select></label>`;
-  const area = (label, name, value, o = {}) => `<label><b>${label} <span>(optional)</span></b><textarea name="${name}" maxlength="${o.max || 2000}" rows="${o.rows || 3}">${esc(value || '')}</textarea></label>`;
+  const area = (label, name, value, o = {}) => `<label><b>${label} <span>(optional)</span></b><textarea name="${name}" maxlength="${o.max || 2000}" rows="${o.rows || 3}"${o.save ? ` data-autosave="${o.save}"` : ''}>${esc(value || '')}</textarea></label>`;
   const hp = '<label class="hp" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label>';
   const stHTML = s => `<span class="st ${s.cls}"><i></i>${esc(s.text)}</span>`;
   const postBtn = (action, label, cls, confirmText) => `<form method="post" action="${action}" class="inline"${confirmText ? ` onsubmit="return confirm('${esc(confirmText)}')"` : ''}><button class="${cls || 'linkbtn'}">${label}</button></form>`;
@@ -346,13 +426,17 @@ function mount(app, ctx){
       ['Electrical safety (EICR)', 'At least every 5 years', 'The inspection date, the result, any remedial work and the report. Reminders before the next one is due.'],
       ['EPC', 'Valid for 10 years', 'Found for you on the government register from the postcode: the rating, score and expiry date.'],
       ['Tenancy', 'Dates, rent and tenants', 'Who lives there, how to reach them, the rent and when the fixed term ends, with a reminder 60 days before.'],
+      ['Property licence', 'Selective or HMO', 'The council, the licence number and its expiry date, with the licence itself. Reminders before it runs out.'],
       ['Deposit', 'Protected within 30 days', 'The amount, the scheme and the reference, and a reminder while it still needs protecting.'],
-      ['Rent and receipts', 'Paid, due or late', 'Mark each rent payment as received in one tap, see what’s owed, and email your tenant a receipt.'],
+      ['Rent and receipts', 'Paid, due or late', 'Mark each rent payment as received in one tap, see what’s owed, and email your tenant a receipt from your own email.'],
+      ['Rent reminders', 'Friendly, then formal', 'A friendly reminder, a late-rent letter or a final letter, written from your rent record. Each one sent is kept with the property.'],
       ['Expenses and tax year', '6 April to 5 April', 'Repairs, certificates, insurance and other costs, with their receipts. A summary for each tax year to download for your accountant.'],
     ].map(([h, s, p]) => `<div class="service track"><h3>${h}<small>${s}</small></h3><p>${p}</p></div>`).join('');
-    const sample = `<div class="sample" aria-hidden="true"><div class="sample-cap">Example</div>${propRow({ id: '', address: { houseNo: '14', road: 'Elm Grove', town: 'Bristol', postcode: 'BS6 6AH' }, type: 'Terraced house', beds: 3,
-      gas: { date: addMonths(todayLondon(), -11), }, eicr: { date: '2023-05-02', result: 'satisfactory' }, epc: { rating: 'D', score: 62, lodged: '2019-09-12' },
-      tenancy: { names: 'A. Patel, R. Patel', start: '2025-09-01', end: addDays(todayLondon(), 150), rentP: 145000, rentFreq: 'month', dueDay: 1 }, payments: [{ id: 's', date: todayLondon(), amt: 145000 * 24, method: 'bank', period: '' }] }, todayLondon(), true)}</div>`;
+    const T0 = todayLondon(), mStart = T0.slice(0, 8) + '01';
+    const sample = `<div class="sample" aria-hidden="true"><div class="sample-cap">Example</div>${dashCard({ id: '', address: { houseNo: '14', road: 'Elm Grove', town: 'Bristol', postcode: 'BS6 6AH' }, type: 'Terraced house', beds: 3,
+      gas: { date: addMonths(T0, -11), }, eicr: { date: '2023-05-02', result: 'satisfactory' }, epc: { rating: 'D', score: 62, lodged: '2019-09-12' }, licence: { type: 'selective', start: '2022-04-01', expires: '2027-03-31' },
+      tenancy: { tenants: [{ name: 'Asha Patel' }, { name: 'Ravi Patel' }], names: 'Asha Patel, Ravi Patel', start: '2025-09-01', end: addDays(T0, 150), rentP: 145000, rentFreq: 'month', dueDay: 1 },
+      payments: [{ id: 's', date: addDays(mStart, 1), amt: 145000 * ((Number(T0.slice(0, 4)) - 2025) * 12 + Number(T0.slice(5, 7)) - 8), method: 'bank', period: '' }] }, T0, { sample: true })}</div>`;
     const body = head('For landlords · Free', 'Every property’s certificates and tenancy, in one place.',
       'A free dashboard for landlords. Add your properties and we find each one’s EPC on the government register, keep your Gas Safety and EICR dates and certificates, and email you before anything expires.', cta) + `
 <section class="tight"><div class="wrap">${sample}</div></section>
@@ -363,8 +447,8 @@ function mount(app, ctx){
 <section><div class="wrap">
   <div class="sec-head"><span class="kicker">How it works</span><h2>Ten minutes, then it looks after itself.</h2><p>Nothing to install. It works on your phone or your computer.</p></div>
   <div class="steps">
-    <div class="step"><div class="n">01</div><h3>Add a property</h3><p>The address, the type and the number of bedrooms. Add the tenancy if it’s let.</p></div>
-    <div class="step"><div class="n">02</div><h3>We find the EPC</h3><p>We search the register by postcode. You pick the right certificate. Add your Gas Safety and EICR dates and upload the certificates.</p></div>
+    <div class="step"><div class="n">01</div><h3>Add a property</h3><p>Type the postcode and pick the address. Add the tenants and the rent if it’s let.</p></div>
+    <div class="step"><div class="n">02</div><h3>We find the EPC</h3><p>We look it up on the government register and save it, with its expiry date, when it’s clearly your home. Add your Gas Safety, EICR and any licence.</p></div>
     <div class="step"><div class="n">03</div><h3>Reminders by email</h3><p>60, 30, 14 and 7 days before anything expires, with a link to book the renewal if you’d like us to arrange it.</p></div>
   </div>
 </div></section>
@@ -504,62 +588,149 @@ function mount(app, ctx){
   }
   const prop = (acc, id) => acc.properties.find(p => p.id === String(id));
 
-  // One row of the dashboard (and the example on /landlords).
-  function propRow(p, t, sample){
-    const tn = p.tenancy || {}, ts = tenancyStatus(p, t), dep = depositStatus(p, t);
-    const tSub = [tn.names, money.rentPence(tn) > 0 ? money.gbp(money.rentPence(tn)) + ' ' + money.perText(tn) : ''].filter(Boolean).join(' · ');
-    const cell = (k, s, sub, more) => `<div><dt>${SHORT[k]}</dt><dd>${stHTML(s)}${more || ''}${sub ? `<small>${esc(sub)}</small>` : ''}</dd></div>`;
-    const href = sample ? '' : ` href="/account/p/${p.id}"`;
-    return `<article class="prop">
-      <a class="prop-addr"${href}><h3>${esc(streetLine(p.address))}</h3><span>${esc([p.address.town, p.address.postcode].filter(Boolean).join(' '))} · ${esc(p.type)} · ${esc(bedsText(p.beds))}</span></a>
-      <dl class="prop-st">${cell('gas', certStatus('gas', p, t))}${cell('eicr', certStatus('eicr', p, t))}${cell('epc', certStatus('epc', p, t), p.epc && p.epc.rating ? 'Rating ' + p.epc.rating + (p.epc.score ? ' (' + p.epc.score + ')' : '') : '')}${cell('tenancy', ts, tSub, dep.cls === 'due' || dep.cls === 'exp' ? stHTML({ cls: dep.cls, text: dep.cls === 'exp' ? 'Deposit not protected' : dep.text.replace(/^Protect by/, 'Protect deposit by').replace(/^Not protected yet/, 'Deposit not protected yet') }) : '')}${M.dashCell(p, t)}</dl>
-      ${sample ? '<span class="prop-go">Open</span>' : `<a class="prop-go" href="/account/p/${p.id}" aria-label="Open ${esc(streetLine(p.address))}">Open</a>`}</article>`;
+  // One card per property, on the dashboard, the property's Overview and the example on /landlords: the rent now,
+  // this rent period (received or due), the next rent, each certificate with a bar that fills as it nears expiry
+  // (green, amber within 60 days, red once expired), the tenants and buttons into the property's tabs.
+  function chip(kind, p, t, href){
+    const st = certStatus(kind, p, t), [from, due] = certSpan(kind, p);
+    const cls = st.na ? 'ok' : st.cls === 'exp' ? 'bad' : st.cls === 'due' ? 'warn' : st.cls === 'ok' ? 'ok' : 'grey';
+    const rt = kind === 'epc' && p.epc && p.epc.rating ? p.epc.rating + ' · ' : '';
+    const txt = st.na ? 'Not needed' : !due ? (st.cls === 'none' ? st.text : '✓ ' + st.text) : (cls === 'bad' ? '✕ ' + rt + (st.d === 0 ? 'Expires today' : 'Expired ' + fmt(due)) : cls === 'warn' ? '⏰ ' + rt + 'Due ' + fmt(due) : (rt || '✓ ') + 'Valid until ' + fmt(due));
+    let bar = '';
+    if (due && !st.na) {
+      const life = Math.max(30, from ? days(from, due) : { gas: 365, eicr: 1826, epc: 3652, licence: 1826 }[kind]), left = days(t, due);
+      bar = `<div class="dc-bar"><i class="${cls}" style="width:${Math.max(4, Math.min(100, Math.round((1 - left / life) * 100)))}%"></i></div>`;
+    }
+    return `<div class="dc-cert"><div class="dc-cl"><span>${SHORT[kind] === 'Licence' ? 'Licence' : SHORT[kind]}</span>${href ? `<a class="chip ${cls}" href="${href}">${esc(txt)}</a>` : `<span class="chip ${cls}">${esc(txt)}</span>`}</div>${bar}</div>`;
+  }
+  function dashCard(p, t, o = {}){
+    const base = o.sample ? '' : o.local ? '' : '/account/p/' + p.id, link = h => o.sample ? '' : (o.local ? '#' + h : base + '#' + h);
+    const tn = p.tenancy || {}, rs = money.rentStatus(p, t), L = rs.L;
+    const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+    let rent;
+    if (!L) rent = `<div class="dc-rent"><div class="dc-none">${money.rentPence(tn) > 0 ? 'Rent ' + esc(money.gbp(money.rentPence(tn))) + ' ' + esc(money.perText(tn)) + '. Add the first rent date to track payments.' : 'No rent added yet.'} ${o.sample ? '' : `<a href="${link('rent')}">Add the rent</a>`}</div></div>`;
+    else {
+      const cur = L.sch.filter(s => !s.future).pop(), nx = L.next, last = (p.rentReminders || [])[0];
+      let status = '<b class="muted">Starts ' + esc(fmt(L.sch[0] && L.sch[0].due)) + '</b>';
+      if (cur) {
+        const pays = cur.pays.slice().sort((a, b) => b.date.localeCompare(a.date));
+        status = cur.left <= 0 ? `<b class="ok">✓ Received${pays[0] ? ' ' + esc(fmtShort(pays[0].date)) : ''}</b>`
+          : cur.paid > 0 ? `<b class="warn">⏳ Part paid</b><small>${esc(money.gbp(cur.left))} still to pay</small>`
+          : days(cur.due, t) <= 0 ? `<b class="warn">⏳ Due today</b>` : `<b class="${cur.late ? 'bad' : 'warn'}">⏳ Not received yet</b><small>due ${esc(fmtShort(cur.due))}</small>`;
+      }
+      const owed = L.arrears;
+      rent = `<div class="dc-rent">
+        <div><span>Rent now</span><b>${esc(money.gbp(money.rentPence(tn)))}</b><small>${esc(money.perText(tn))}</small></div>
+        <div><span>${cur ? 'Rent due ' + esc(fmtShort(cur.due)) : 'First rent'}</span>${status}</div>
+        <div><span>Next rent due</span><b>${nx ? esc(fmtShort(nx.due)) : '—'}</b>${tn.dueDay && !money.STEP[money.freqOf(tn)].d ? `<small>on the ${ord(tn.dueDay)}</small>` : ''}</div>
+        <div><span>Owed now</span><b class="${L.overdue > 0 ? 'bad' : owed > 0 ? 'warn' : 'ok'}">${owed > 0 ? esc(money.gbp(owed)) : 'Nothing'}</b>${last ? `<small>Reminder sent ${esc(fmtShort(String(last.at).slice(0, 10)))}</small>` : L.credit > 0 ? `<small>${esc(money.gbp(L.credit))} paid ahead</small>` : ''}</div>
+      </div>`;
+    }
+    const list = tenantsOf(tn), ts = tenancyStatus(p, t), dep = depositStatus(p, t);
+    const ten = `<div class="dc-ten"><span>Tenancy</span><div>${list.length ? `<b>${esc(list.map(x => x.name).filter(Boolean).join(', '))}</b>` : ''}${stHTML(ts)}${dep.cls === 'due' || dep.cls === 'exp' ? stHTML({ cls: dep.cls, text: dep.cls === 'exp' ? 'Deposit not protected' : dep.text.replace(/^Protect by/, 'Protect deposit by').replace(/^Not protected yet/, 'Deposit not protected yet') }) : ''}</div></div>`;
+    const go = (h, l) => o.sample ? `<span class="dc-btn">${l}</span>` : `<a class="dc-btn" href="${link(h)}">${l}</a>`;
+    const flat = /flat|maisonette|studio/i.test(p.type || '') || /^flat|apartment/i.test(p.address.houseNo || '');
+    const title = `<span class="dc-ic" aria-hidden="true">${UI.svg(flat ? '<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/>' : UI.ICON.home, 22)}</span><span class="dc-t"><b>${esc(streetLine(p.address))}</b><small>${esc([p.address.town, p.address.postcode].filter(Boolean).join(' '))} · ${esc(p.type)} · ${esc(bedsText(p.beds))}</small></span>`;
+    return `<article class="dc">
+      ${o.sample || o.local ? `<div class="dc-hd">${title}</div>` : `<a class="dc-hd" href="${base}">${title}<span class="dc-go" aria-hidden="true">›</span></a>`}
+      ${rent}
+      <div class="dc-certs">${CERT_KINDS.map(k => chip(k, p, t, o.sample ? '' : link(k))).join('')}</div>
+      ${ten}
+      ${o.noacts ? '' : `<div class="dc-acts">${go('rent', 'Rent')}${go('expenses', 'Expenses')}${go('certificates', 'Certificates')}${go('tenancy', 'Tenancy')}</div>`}</article>`;
+  }
+
+  // What each figure at the top is made of: a line per item with its amount and the running total.
+  function dtTable(rows, head, foot){
+    let run = 0;
+    return `<div class="dtt"><div class="dtr dth"><span>${head}</span><span>Amount</span><span>Running total</span></div>${rows.map(r => {
+      run += r.v || 0;
+      const inner = `<span><b>${esc(r.a)}</b>${r.s ? `<small>${esc(r.s)}</small>` : ''}</span><span>${esc(money.gbp(r.v || 0, true))}</span><span>${esc(money.gbp(run, true))}</span>`;
+      return r.href ? `<a class="dtr" href="${esc(r.href)}">${inner}</a>` : `<div class="dtr">${inner}</div>`;
+    }).join('')}<div class="dtr dtf"><span>${foot}</span><span></span><span>${esc(money.gbp(run, true))}</span></div></div>`;
+  }
+  const dtPanel = (k, title, body, note) => `<div class="dtl" id="dt-${k}" hidden><div class="dtl-h"><b>${title}</b><a class="dtl-x" href="#top" data-dt-close aria-label="Close">✕</a></div>${body}${note ? `<p class="dtl-n">${note}</p>` : ''}</div>`;
+  const PER_MONTH = { month: 1, week: 52 / 12, '4 weeks': 13 / 12, quarter: 1 / 3, year: 1 / 12 };
+  function hero(acc, t, list){
+    const month = t.slice(0, 7), monthName = new Date(toUTC(t)).toLocaleDateString('en-GB', { month: 'long', timeZone: 'UTC' });
+    const y = money.taxYearOf(t), sum = money.summary(acc, y), name = p => streetLine(p.address);
+    const rentRows = list.filter(p => { const tn = p.tenancy; return money.rentPence(tn) > 0 && !(tn.end && !tn.periodic && tn.end < t); }).map(p => {
+      const tn = p.tenancy, f = money.freqOf(tn), m = Math.round(money.rentPence(tn) * PER_MONTH[f]);
+      return { a: name(p), s: f === 'month' ? 'A month' : money.gbp(money.rentPence(tn), true) + ' ' + money.perText(tn) + ' is about this a month', v: m, href: '/account/p/' + p.id + '#rent' };
+    });
+    const recv = [];
+    list.forEach(p => (p.payments || []).forEach(x => { if (String(x.date).startsWith(month)) recv.push({ p, x }); }));
+    recv.sort((a, b) => a.x.date.localeCompare(b.x.date));
+    const certs = [];
+    list.forEach(p => CERT_KINDS.forEach(k => { const st = certStatus(k, p, t); if (st.cls === 'exp' || st.cls === 'due') certs.push({ p, k, st }); }));
+    certs.sort((a, b) => (a.st.due || '').localeCompare(b.st.due || ''));
+    const exps = (acc.expenses || []).filter(e => money.inTY(e.date, y)).sort((a, b) => a.date.localeCompare(b.date));
+    const pName = id => { const p = list.find(q => q.id === id); return p ? name(p) : 'All properties'; };
+    const rentM = rentRows.reduce((n, r) => n + r.v, 0), recvT = recv.reduce((n, r) => n + r.x.amt, 0);
+    const tile = (k, big, small, more) => `<a class="tile" href="#dt-${k}" data-dt="${k}" role="button" aria-expanded="false"><b>${big}</b><span>${small}</span>${more ? `<small>${more}</small>` : ''}</a>`;
+    const tiles = `<div class="tiles">
+      ${tile('rent', esc(money.gbp(rentM)), 'Rent a month · ' + plural(rentRows.length, 'property').replace('propertys', 'properties'))}
+      ${tile('recv', esc(money.gbp(recvT)), 'Received in ' + esc(monthName), recv.length ? plural(recv.length, 'payment') : 'Nothing yet')}
+      ${tile('certs', String(certs.length), 'Certificates expired or due in 60 days', certs.filter(c => c.st.cls === 'exp').length ? certs.filter(c => c.st.cls === 'exp').length + ' expired' : '')}
+      ${tile('exp', esc(money.gbp(sum.total.expenses)), 'Expenses this tax year', 'Net ' + esc(money.gbp(sum.total.net)) + ' · ' + esc(money.tyLabel(y)))}</div>`;
+    const none = t => `<p class="dtl-e">${t}</p>`;
+    const panels = dtPanel('rent', 'Rent a month, each property', rentRows.length ? dtTable(rentRows, 'Property', 'Total rent a month') : none('No rent added yet. Open a property and add its rent.'), rentM ? 'About ' + esc(money.gbp(rentM * 12)) + ' a year. Weekly and other rents are shown as their monthly amount.' : '')
+      + dtPanel('recv', 'Rent received in ' + esc(monthName), recv.length ? dtTable(recv.map(({ p, x }) => ({ a: name(p), s: 'Received ' + fmt(x.date) + ' · ' + money.methodText(x.method) + (x.no ? ' · receipt ' + money.receiptNo(x.no) : ''), v: x.amt, href: '/account/p/' + p.id + '/rent/pay/' + x.id + '/receipt' })), 'Payment', 'Received this month') : none('Nothing marked as received yet this month.'), 'Tap a payment to see its receipt. <a href="/account/rent">All rent ›</a>')
+      + dtPanel('certs', 'Certificates expired or due in the next 60 days', certs.length ? `<div class="dtt">${certs.map(c => `<a class="dtr dtc" href="/account/p/${c.p.id}#${c.k}"><span><b>${esc(LABEL[c.k])}</b><small>${esc(name(c.p))}</small></span><span class="${c.st.cls === 'exp' ? 'late' : 'due'}">${esc(c.st.cls === 'exp' ? (c.st.d === 0 ? 'Expires today' : 'Expired ' + fmt(c.st.due)) : 'Due ' + fmt(c.st.due))}</span></a>`).join('')}</div>` : none('Everything added is in date for at least 60 days.'), '<a href="/certificates">Book a Gas Safety check, EICR or EPC ›</a>')
+      + dtPanel('exp', 'Expenses this tax year (' + esc(money.tyLabel(y)) + ')', exps.length ? dtTable(exps.map(e => ({ a: e.desc || e.supplier || money.catText(e.cat), s: fmt(e.date) + ' · ' + money.catText(e.cat) + ' · ' + pName(e.propId), v: e.amt, href: '/account/expenses/' + e.id })), 'Expense', 'Expenses this tax year') : none('No expenses recorded this tax year.'),
+        'Rent received this tax year: <b>' + esc(money.gbp(sum.total.income, true)) + '</b> · net <b>' + esc(money.gbp(sum.total.net, true)) + '</b>. <a href="/account/money">Tax year summary ›</a>');
+    return tiles + panels;
   }
 
   app.get(['/account', '/account/'], need, (req, res) => {
     const acc = req.acc, t = todayLondon(), list = acc.properties.slice().sort((a, b) => streetLine(a.address).localeCompare(streetLine(b.address), 'en', { numeric: true }));
-    const all = list.flatMap(p => ['gas', 'eicr', 'epc'].map(k => Object.assign({ k, p }, certStatus(k, p, t))).concat([Object.assign({ k: 'deposit', p }, depositStatus(p, t))]));
-    const exp = all.filter(x => x.cls === 'exp').length, due = all.filter(x => x.cls === 'due').length, missing = all.filter(x => x.cls === 'none' && x.k !== 'deposit').length;
-    const next = all.filter(x => x.due && x.d >= 0).sort((a, b) => a.d - b.d)[0];
-    const actions = `<a class="btn primary" href="/account/properties/new">Add a property</a>${list.length ? '<a class="btn ghost" href="/account/expenses/new">Add an expense</a><a class="btn ghost" href="/account/money">Money and tax</a>' : ''}<a class="btn ghost" href="/account/settings">Settings</a>${postBtn('/account/sign-out', 'Sign out')}`;
     const mailNote = !emailOn() ? `<p class="acc-note">Email reminders aren’t switched on for this site yet, so none will be sent for now. Your dates are still tracked here.</p>`
       : acc.settings.reminders === false ? `<p class="acc-note">Email reminders are off. <a href="/account/settings">Turn them on in Settings</a>.</p>` : '';
-    const body = head('Signed in as ' + esc(acc.name), 'Your properties', list.length ? 'Each property’s certificates, tenancy and rent at a glance. Open one to update it or mark rent as received.' : '', actions) + `
+    const first = String(acc.name || '').trim().split(/\s+/)[0] || 'there';
+    const body = `<div id="top"></div><section class="lhero"><div class="wrap">
+  <span class="kicker">Your properties</span><h1>Hi ${esc(first)}</h1>
+  <p>${list.length ? 'Rent, certificates and tenancies at a glance. Tap a figure to see what makes it up.' : 'Add your first property to get started.'}</p>
+  ${list.length ? hero(acc, t, list) : ''}
+  <div class="acc-actions"><a class="btn primary" href="/account/properties/new">+ Add a property</a>${list.length ? '<a class="btn ghost" href="/account/rent">Rent</a><a class="btn ghost" href="/account/expenses/new">Add an expense</a>' : ''}</div>
+</div></section>
 <section class="tight"><div class="wrap">${mailNote}
-${list.length ? `<div class="acc-figs">
-  <div><b>${list.length}</b><span>${list.length === 1 ? 'property' : 'properties'}</span></div>
-  <div><b>${exp + due}</b><span>${exp ? exp + ' expired, ' + due + ' due within 60 days' : 'due within 60 days'}</span></div>
-  <div><b>${missing}</b><span>certificate${missing === 1 ? '' : 's'} not added</span></div>
-  <div>${next ? `<b class="date">${esc(fmt(next.due))}</b><span>next: ${esc(SHORT[next.k])}, ${esc(streetLine(next.p.address))}</span>` : `<b class="date">—</b><span>nothing coming up</span>`}</div>
-</div>
-${M.dashStrip(acc, t)}
-<div class="props">${list.map(p => propRow(p, t)).join('')}</div>`
-  : `<div class="card acc-empty"><h2>Add your first property</h2><p>Enter the address and we’ll look up its EPC on the government register. Then add the Gas Safety and EICR dates, and the tenancy if it’s let. We’ll email you before anything expires.</p>
+${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</div>`
+  : `<div class="card acc-empty"><h2>Add your first property</h2><p>Start with the postcode and pick the address: we’ll find its EPC on the government register by ourselves. Then add the Gas Safety and EICR dates, any licence, and the tenancy if it’s let. We’ll email you before anything expires.</p>
      <ul class="ruled"><li><b>Gas Safety</b>every 12 months</li><li><b>EICR</b>at least every 5 years</li><li><b>EPC</b>valid for 10 years, found for you</li></ul>
      <a class="btn primary" href="/account/properties/new">Add a property</a></div>`}
-</div></section>`;
+</div></section>${UI.DT_UI}`;
     send(req, res, { path: '/account', title: 'Your properties', body });
   });
 
   /* ------------------------------ add / edit a property ------------------------------ */
+  // Postcode first: with JavaScript, a full UK postcode (or Find address) lists the addresses there from
+  // /api/address (address.js, rate-limited per IP); picking one fills the fields below, which stay editable.
+  // "It's not listed", nothing found, a failed lookup or no JavaScript: the plain fields.
   function detailsFields(v){
-    return `<div class="row">${inp('Flat or house number', 'houseNo', v.houseNo, { opt: true, max: 40, attrs: ' placeholder="e.g. 12 or Flat 4"' })}${inp('Building name', 'building', v.building, { opt: true, max: 80 })}</div>
+    const look = address.configured(), blank = !(v.houseNo || v.building || v.road || v.town);
+    return `<div class="addr-find"${look ? ' data-addr' : ''}>
+      <div class="pc-row">${inp('Postcode', 'postcode', v.postcode, { req: true, max: 10, attrs: ' autocomplete="postal-code" autocapitalize="characters" spellcheck="false" placeholder="e.g. SW1A 1AA"' + (look ? ' data-pc' : '') })}${look ? '<button type="button" class="btn ghost" data-find hidden>Find address</button>' : ''}</div>
+      ${look ? `<label class="addr-pick" data-pickwrap hidden>Choose the address<select data-pick></select></label><p class="addr-msg" data-msg aria-live="polite" hidden></p><input type="hidden" name="picked" value="" data-picked>` : ''}
+    </div>
+    <div class="addr-fields" data-fields${look && blank ? ' data-blank' : ''}>
+      <div class="row">${inp('Flat or house number', 'houseNo', v.houseNo, { opt: true, max: 40, attrs: ' placeholder="e.g. 12 or Flat 4"' })}${inp('Building name', 'building', v.building, { opt: true, max: 80 })}</div>
       ${inp('Road', 'road', v.road, { max: 100, attrs: ' autocomplete="address-line1"' })}
-      <div class="row">${inp('Town or city', 'town', v.town, { req: true, max: 60, attrs: ' autocomplete="address-level2"' })}${inp('Postcode', 'postcode', v.postcode, { req: true, max: 10, attrs: ' autocomplete="postal-code" autocapitalize="characters"' })}</div>
+      ${inp('Town or city', 'town', v.town, { req: true, max: 60, attrs: ' autocomplete="address-level2"' })}
+    </div>
+    ${look ? '<p class="addr-manual" data-manualwrap hidden><button type="button" class="linkbtn" data-manual>Enter the address yourself</button></p>' : ''}
       <div class="row">${sel('Property type', 'type', TYPES, v.type || 'Flat')}${sel('Bedrooms', 'beds', [0, 1, 2, 3, 4, 5, 6].map(n => [n, n === 0 ? 'Studio' : n === 6 ? '6 or more' : String(n)]), v.beds == null ? 2 : v.beds)}</div>
-      ${area('Notes', 'notes', v.notes, { max: 2000 })}`;
+      ${area('Notes', 'notes', v.notes, { max: 2000, save: v.notesSave })}`;
   }
   function readDetails(b){
     const a = { houseNo: line(b.houseNo, 40), building: line(b.building, 80), road: line(b.road, 100), town: line(b.town, 60), postcode: normPostcode(b.postcode) };
-    const v = Object.assign({}, a, { postcodeRaw: line(b.postcode, 12), type: TYPES.includes(b.type) ? b.type : 'Other', beds: Math.max(0, Math.min(6, parseInt(b.beds, 10) || 0)), notes: text(b.notes, 2000) });
+    const v = Object.assign({}, a, { picked: line(b.picked, 200), postcodeRaw: line(b.postcode, 12), type: TYPES.includes(b.type) ? b.type : 'Other', beds: Math.max(0, Math.min(6, parseInt(b.beds, 10) || 0)), notes: text(b.notes, 2000) });
     const error = !a.postcode ? 'Please enter a valid UK postcode, for example SW1A 1AA.' : !(a.road || a.building) ? 'Please enter the road or the building name.' : !a.town ? 'Please enter the town or city.' : '';
     return { a, v, error };
   }
   function newPage(req, res, values, error, status){
     const v = values || {};
     send(req, res, { path: '/account/properties/new', title: 'Add a property', status, notice: error ? { text: error } : null,
-      body: head('Your properties', 'Add a property', 'Enter the address. We’ll search the EPC register for its postcode straight away.', '', ['All properties', '/account']) +
-      `<section class="tight"><div class="wrap"><form class="card form acc-form" method="post" action="/account/properties">${detailsFields(Object.assign({}, v, { postcode: v.postcodeRaw || v.postcode }))}<button class="btn primary">Add property</button></form></div></section>` });
+      body: head('Your properties', 'Add a property', 'Start with the postcode to find the address. We’ll search the EPC register for it straight away.', '', ['All properties', '/account']) +
+      `<section class="tight"><div class="wrap"><form class="card form acc-form" method="post" action="/account/properties">${detailsFields(Object.assign({}, v, { postcode: v.postcodeRaw || v.postcode }))}<button class="btn primary">Add property</button></form></div></section>${address.configured() ? UI.ADDR_UI : ''}` });
   }
   app.get('/account/properties/new', need, (req, res) => newPage(req, res));
   app.post('/account/properties', need, urlenc, async (req, res) => {
@@ -567,23 +738,27 @@ ${M.dashStrip(acc, t)}
     if (error) return newPage(req, res, v, error, 400);
     if (req.acc.properties.length >= 200) return newPage(req, res, v, 'You can keep up to 200 properties in one account. Please contact us for more.', 400);
     const p = { id: rid(6), createdAt: new Date().toISOString(), address: a, type: v.type, beds: v.beds, notes: v.notes };
-    if (lookups(clientIp(req))) await searchEpc(p);
+    let auto = false;
+    if (lookups(clientIp(req))) auto = adoptEpc(p, await searchEpc(p, v.picked));
     const acc = readAcc(req.acc.id); acc.properties.push(p); writeAcc(acc);
-    res.redirect(303, '/account/p/' + p.id + '?m=added#epc');
+    res.redirect(303, '/account/p/' + p.id + '?m=' + (auto ? 'added-epc' : 'added') + '#epc');
   });
 
   /* ------------------------------ the property page ------------------------------ */
   function fileLink(f){ return f ? `<a href="/account/files/${f.id}" target="_blank" rel="noopener">${esc(f.name)}</a> <span class="sub">${f.type === 'application/pdf' ? 'PDF' : f.type === 'image/png' ? 'PNG' : 'JPEG'}, ${f.size < 1048576 ? Math.max(1, Math.round(f.size / 1024)) + ' KB' : (f.size / 1048576).toFixed(1) + ' MB'}</span>` : '<span class="sub">No file uploaded</span>'; }
   const kv = rows => `<dl class="kv">${rows.filter(r => r && r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
   const fileInput = (f) => `<label><b>Certificate <span>(optional: PDF, JPEG or PNG, up to 10 MB)</span></b><input type="file" name="file" accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png"></label>${f ? `<label class="check"><input type="checkbox" name="removeFile" value="1"> Remove the uploaded file (${esc(f.name)})</label>` : ''}`;
-  const editBox = (has, label, form) => has ? `<details class="edit"><summary>${label}</summary>${form}</details>` : form;
+  const editBox = (has, label, form, open) => has ? `<details class="edit"${open ? ' open' : ''}><summary>${label}</summary>${form}</details>` : form;
   const epcBadge = r => `<span class="epc-badge b-${esc(r)}" aria-label="Rating ${esc(r)}">${esc(r)}</span>`;
 
   function epcSection(p, t, o){
     const e = p.epc, s = p.epcSearch, pc = p.address.postcode;
     let found = '';
+    const resList = () => `<ul class="epc-res">${s.results.map((r, i) => `<li${r.match ? ' class="match"' : ''}>${epcBadge(r.rating)}<div><b>${esc(r.address)}</b><small>${e && e.lmk === r.lmk ? '<em>Saved</em> · ' : r.match ? '<em>Looks like this property</em> · ' : ''}Rating ${esc(r.rating)}${r.score ? ' (' + r.score + ')' : ''} · ${days(t, r.expires) < 0 ? 'expired ' : 'valid until '}${esc(fmt(r.expires))}</small></div>
+          ${e && e.lmk === r.lmk ? '' : `<form method="post" action="/account/p/${p.id}/epc/pick"><input type="hidden" name="i" value="${i}"><input type="hidden" name="lmk" value="${esc(r.lmk)}"><button class="btn ghost sm">This one</button></form>`}</li>`).join('')}</ul>`;
+    if (s && s.done && s.ok && s.results.length > 1 && e && e.source === 'register') found = `<details class="edit"><summary>Not the right certificate? Choose another (${plural(s.results.length, 'certificate')} at ${esc(s.postcode)})</summary>${resList()}</details>`;
     if (s && !s.done) {
-      if (s.ok && s.results.length) found = `<div class="epc-found"><p><b>${plural(s.results.length, 'certificate')} on the register for ${esc(s.postcode)}.</b> Choose the one for this property.${s.hidden ? ' Older certificates for the same addresses are left out.' : ''}</p>
+      if (s.ok && s.results.length) found = `<div class="epc-found"><p><b>${plural(s.results.length, 'certificate')} on the register for ${esc(s.postcode)}.</b> ${s.results.filter(r => r.match).length > 1 ? 'More than one looks like this property: choose the right one.' : 'Choose the one for this property.'}${s.hidden ? ' Older certificates for the same addresses are left out.' : ''}</p>
         <ul class="epc-res">${s.results.map((r, i) => `<li${r.match ? ' class="match"' : ''}>${epcBadge(r.rating)}<div><b>${esc(r.address)}</b><small>${r.match ? '<em>Looks like this property</em> · ' : ''}Rating ${esc(r.rating)}${r.score ? ' (' + r.score + ')' : ''} · lodged ${esc(fmt(r.lodged))} · ${days(t, r.expires) < 0 ? 'expired ' : 'valid until '}${esc(fmt(r.expires))}</small></div>
           <form method="post" action="/account/p/${p.id}/epc/pick"><input type="hidden" name="i" value="${i}"><input type="hidden" name="lmk" value="${esc(r.lmk)}"><button class="btn ghost sm">This one</button></form></li>`).join('')}</ul>
         <p class="small">Not listed? <a href="${esc(FIND_EPC(pc))}" target="_blank" rel="noopener">Search the register yourself</a> and enter it below.</p></div>`;
@@ -598,7 +773,7 @@ ${M.dashStrip(acc, t)}
       <button class="btn primary sm">Save EPC</button></form>`;
     const has = !!e;
     return `<div class="acc-box">
-      ${has ? `<div class="epc-cur">${epcBadge(e.rating)}<div>${kv([['Rating', esc(e.rating) + (e.score ? ' (' + e.score + ')' : '') + (e.potential ? ' · potential ' + esc(e.potential) : '')], ['Address', esc(e.address || '')], ['Certificate', e.certNo ? `<a href="${esc(EPC_CERT(e.certNo))}" target="_blank" rel="noopener">${esc(e.certNo)}</a>` : ''], ['Lodged', esc(fmt(e.lodged))], ['Valid until', esc(fmt(epcExpiry(e)))], ['Source', e.source === 'register' ? 'Found on the EPC register' : 'Entered by hand']])}</div></div>` : ''}
+      ${has ? `<div class="epc-cur">${epcBadge(e.rating)}<div>${kv([['Rating', esc(e.rating) + (e.score ? ' (' + e.score + ')' : '') + (e.potential ? ' · potential ' + esc(e.potential) : '')], ['Address', esc(e.address || '')], ['Certificate', e.certNo ? `<a href="${esc(EPC_CERT(e.certNo))}" target="_blank" rel="noopener">${esc(e.certNo)}</a>` : ''], ['Lodged', esc(fmt(e.lodged))], ['Valid until', esc(fmt(epcExpiry(e)))], ['Source', e.source === 'register' ? (e.auto ? 'Found on the EPC register automatically' : 'Chosen from the EPC register') : 'Entered by hand']])}</div></div>` : ''}
       ${found}
       <div class="acc-row">${postBtn(`/account/p/${p.id}/epc/search`, s ? 'Search the register again' : 'Search the EPC register', 'btn ghost sm')}${has ? postBtn(`/account/p/${p.id}/clear/epc`, 'Remove EPC', 'linkbtn danger', 'Remove this EPC from the property?') : ''}</div>
       <details class="edit"${o ? ' open' : ''}><summary>Enter the EPC by hand</summary>${manual}</details>
@@ -623,45 +798,106 @@ ${M.dashStrip(acc, t)}
     return `<div class="acc-box">${e ? kv([['Inspected', esc(fmt(e.date))], ['Next due', esc(fmt(eicrDue(e)))], ['Result', e.result === 'unsatisfactory' ? 'Unsatisfactory' + (e.remedialDate ? ', remedial work completed ' + esc(fmt(e.remedialDate)) : ', remedial work not recorded yet') : 'Satisfactory'], ['Electrician', esc(e.engineer || '')], ['Report', fileLink(e.file)]]) : ''}
       ${editBox(!!e, 'Update, or add the new report', form)}${e ? `<div class="acc-row">${postBtn(`/account/p/${p.id}/clear/eicr`, 'Remove EICR record', 'linkbtn danger', 'Remove the EICR record and its file?')}</div>` : ''}</div>`;
   }
+  function licenceSection(p, o){
+    const l = p.licence, v = Object.assign({}, l || {}, o || {}), needs = v.type && v.type !== 'none';
+    const form = `<form class="form" method="post" action="/account/p/${p.id}/licence" enctype="multipart/form-data">
+      ${sel('Licence', 'type', LIC_TYPES, v.type == null ? '' : v.type)}
+      <div class="row">${inp('Council', 'council', v.council, { opt: true, max: 100, attrs: ' placeholder="e.g. London Borough of Newham"' })}${inp('Licence number', 'number', v.number, { opt: true, max: 60 })}</div>
+      <div class="row">${inp('Start date', 'start', v.start, { type: 'date', opt: true })}${inp('Expiry date', 'expires', v.expires, { type: 'date', opt: true, hint: 'Usually up to 5 years after the start.' })}</div>
+      ${area('Conditions and notes', 'notes', v.notes, { max: 2000 })}
+      <label><b>Licence certificate <span>(optional: PDF, JPEG or PNG, up to 10 MB)</span></b><input type="file" name="file" accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png"></label>${l && l.file ? `<label class="check"><input type="checkbox" name="removeFile" value="1"> Remove the uploaded file (${esc(l.file.name)})</label>` : ''}
+      <button class="btn primary sm">Save licence</button></form>`;
+    const info = l ? kv([['Licence', esc(licText(l.type))], ['Council', esc(l.council || '')], ['Number', esc(l.number || '')], ['Start', esc(fmt(l.start))], ['Expires', l.type !== 'none' && l.expires ? esc(fmt(l.expires)) : ''], ['Conditions', l.notes ? '<span class="pre">' + esc(l.notes) + '</span>' : ''], ['Certificate', l.type !== 'none' ? fileLink(l.file) : '']]) : '';
+    return `<div class="acc-box">${info}${!l || !l.type ? `<p class="muted">Not sure if this property needs a licence? <a href="${COUNCIL_URL}" target="_blank" rel="noopener">Check with your council</a>: search its website for “selective licensing” or “HMO licence”.</p>` : ''}
+      ${editBox(!!l, needs ? 'Update, or add the renewed licence' : 'Update the licence', form)}${l ? `<div class="acc-row">${postBtn(`/account/p/${p.id}/clear/licence`, 'Remove licence record', 'linkbtn danger', 'Remove the licence record and its file?')}</div>` : ''}</div>`;
+  }
   const FREQ = [['month', 'a month'], ['week', 'a week'], ['4 weeks', 'every 4 weeks'], ['quarter', 'a quarter'], ['year', 'a year']];
   const SCHEMES = ['DPS', 'TDS', 'mydeposits', 'Other'];
-  function tenancySection(p, o){
-    const tn = p.tenancy, v = Object.assign({}, tn || {}, o || {}), has = !!(tn && (tn.names || tn.start));
+  // One block per tenant (name, email, mobile). Without JavaScript there's always one empty block for another
+  // tenant, and clearing a block removes that tenant; with it, "Add another tenant" and "Remove" do the same.
+  function tenantBlock(x, i, spare){
+    return `<fieldset class="tnt"${spare ? ' data-spare' : ''}><legend>${spare ? 'Another tenant <span>(optional)</span>' : 'Tenant ' + (i + 1)}</legend>
+      ${inp('Full name', 't_name', x.name, { max: 80, attrs: ' autocomplete="off" autocapitalize="words"' })}
+      <div class="row">${inp('Email', 't_email', x.email, { type: 'email', opt: true, max: 120, attrs: ' autocomplete="off" inputmode="email"' })}${inp('Mobile', 't_phone', x.phone, { type: 'tel', opt: true, max: 30, attrs: ' autocomplete="off" inputmode="tel"' })}</div>
+      <button type="button" class="linkbtn danger tnt-x" data-tnt-remove hidden>Remove this tenant</button></fieldset>`;
+  }
+  function tenantsHTML(list){
+    if (!list.length) return '';
+    return `<ul class="tnts">${list.map(x => `<li><b>${esc(x.name || 'Tenant')}</b>${x.email || x.phone ? `<span>${[x.email ? `<a href="mailto:${esc(x.email)}">${esc(x.email)}</a>` : '', x.phone ? `<a href="tel:${esc(x.phone.replace(/[^\d+]/g, ''))}">${esc(x.phone)}</a>` : ''].filter(Boolean).join('<i> · </i>')}</span>` : ''}</li>`).join('')}</ul>`;
+  }
+  // The "Email tenancy details to tenants" message (plain text, for the landlord's own email app).
+  function tenancyMail(acc, p){
+    const tn = p.tenancy || {}, list = tenantsOf(tn), who = (acc.settings && acc.settings.receiptName) || acc.name;
+    const rp = money.rentPence(tn), first = tn.rentStart || tn.start;
+    const freq = money.freqOf(tn), dd = tn.dueDay || (first && !money.STEP[freq].d ? Number(first.slice(8)) : 0);
+    const ordn = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+    const when = !rp ? '' : money.STEP[freq].d ? (first ? ', due every ' + (freq === 'week' ? 'week' : '4 weeks') + ' from ' + fmt(first) : '')
+      : dd ? ', due on the ' + ordn(dd) + (freq === 'month' ? ' of each month' : freq === 'quarter' ? ' of the month, each quarter' : ' of the month, each year') : '';
+    const rows = [['Property', fullAddress(p.address)], ['Tenants', list.map(x => x.name).filter(Boolean).join(', ')], ['Start date', tn.start ? fmtLong(tn.start) : ''],
+      ['Fixed term ends', tn.end ? fmtLong(tn.end) + (tn.periodic ? ' (then periodic)' : '') : tn.periodic ? 'Periodic (rolling, no fixed end date)' : ''],
+      ['Rent', rp ? money.gbp(rp, true) + ' ' + money.perText(tn) + when : ''], ['Deposit', tn.deposit > 0 ? pounds(tn.deposit) : ''],
+      ['Deposit scheme', tn.deposit > 0 ? tn.scheme || '' : ''], ['Deposit protected on', tn.protectedOn ? fmtLong(tn.protectedOn) : ''], ['Deposit reference', tn.depositRef || '']].filter(r => r[1]);
+    const hi = greetNames(list);
+    const body = [`Hello${hi ? ' ' + hi : ''},`, '', 'Here are the details of your tenancy, for your records.', '']
+      .concat(rows.map(([k, v]) => k + ': ' + v), ['', 'If anything here isn’t right, or you have any questions, please reply to this email.', '', 'Kind regards,', who, acc.email]);
+    return { to: list.map(x => x.email).filter(e => EMAIL_RE.test(e || '')), subject: 'Your tenancy at ' + streetLine(p.address), body: body.join('\n') };
+  }
+  function tenancySection(p, o, acc){
+    const tn = p.tenancy, v = Object.assign({}, tn || {}, o || {}), has = !!(tn && (tn.names || tn.start || tenantsOf(tn).length));
+    const list = (o && o.tenants) || tenantsOf(v);
     const form = `<form class="form" method="post" action="/account/p/${p.id}/tenancy">
-      ${inp('Tenant name(s)', 'names', v.names, { max: 200, attrs: ' placeholder="e.g. Sam Jones, Alex Jones"' })}
-      <div class="row">${inp('Email(s)', 'emails', v.emails, { opt: true, max: 200 })}${inp('Phone(s)', 'phones', v.phones, { opt: true, max: 100, attrs: ' inputmode="tel"' })}</div>
+      <div class="tnt-list" data-tnts>${list.map((x, i) => tenantBlock(x, i)).join('')}${list.length < MAX_TENANTS ? tenantBlock({}, list.length, list.length > 0) : ''}</div>
+      <button type="button" class="btn ghost sm tnt-add" data-tnt-add hidden>+ Add another tenant</button>
       <div class="row">${inp('Start date', 'start', v.start, { type: 'date' })}${inp('End of the fixed term', 'end', v.end, { type: 'date', opt: true })}</div>
       <label class="check"><input type="checkbox" name="periodic" value="1"${v.periodic ? ' checked' : ''}> Periodic (rolling, with no fixed end date, or continuing after the fixed term)</label>
       <div class="row">${inp('Rent (£)', 'rent', money.rentPence(v) ? (money.rentPence(v) / 100).toFixed(2).replace(/\.00$/, '') : '', { opt: true, max: 12, attrs: ' inputmode="decimal"' })}${sel('How often', 'rentFreq', FREQ, v.rentFreq || 'month')}</div>
       <div class="row">${inp('Deposit (£)', 'deposit', v.deposit || '', { opt: true, max: 10, attrs: ' inputmode="decimal"' })}${sel('Deposit scheme', 'scheme', [['', 'Choose…']].concat(SCHEMES), v.scheme || '', { opt: true })}</div>
       <div class="row">${inp('Date protected', 'protectedOn', v.protectedOn, { type: 'date', opt: true })}${inp('Protection reference', 'depositRef', v.depositRef, { opt: true, max: 60 })}</div>
-      ${area('Notes', 'notes', v.notes, { max: 2000 })}
+      ${area('Notes', 'notes', v.notes, { max: 2000, save: has ? '/account/p/' + p.id + '/notes/tenancy' : '' })}
       <button class="btn primary sm">Save tenancy</button></form>`;
     const rent = tn && money.rentPence(tn) > 0 ? money.gbp(money.rentPence(tn)) + ' ' + money.perText(tn) + ' <a href="#rent">(rent and receipts)</a>' : '';
-    return `<div class="acc-box">${has ? kv([['Tenants', esc(tn.names || '')], ['Email', esc(tn.emails || '')], ['Phone', esc(tn.phones || '')], ['Start', esc(fmt(tn.start))], ['Fixed term ends', tn.end ? esc(fmt(tn.end)) : ''], ['Periodic', tn.periodic ? 'Yes' : ''], ['Rent', rent],
+    const saved = has ? tenantsOf(tn) : [];
+    const mail = has && acc ? money.mailBlock(Object.assign(tenancyMail(acc, p), { label: 'Email tenancy details to tenants', cls: 'btn primary sm', none: 'There’s no email address for the tenants yet. Add one below, or choose who to send it to in your email app.' })) : '';
+    return `<div class="acc-box">${has ? kv([['Tenants', tenantsHTML(saved) || '<span class="sub">No tenants added</span>'], ['Start', esc(fmt(tn.start))], ['Fixed term ends', tn.end ? esc(fmt(tn.end)) : ''], ['Periodic', tn.periodic ? 'Yes' : ''], ['Rent', rent],
       ['Deposit', tn.deposit > 0 ? esc(pounds(tn.deposit)) + (tn.scheme ? ' · ' + esc(tn.scheme) : '') + (tn.protectedOn ? ' · protected ' + esc(fmt(tn.protectedOn)) : '') + (tn.depositRef ? ' · ref ' + esc(tn.depositRef) : '') : ''], ['Notes', tn.notes ? '<span class="pre">' + esc(tn.notes) + '</span>' : '']]) : ''}
-      ${editBox(has, 'Update the tenancy', form)}${has ? `<div class="acc-row">${postBtn(`/account/p/${p.id}/clear/tenancy`, 'Remove tenancy', 'linkbtn danger', 'Remove the tenancy details?')}</div>` : ''}</div>`;
+      ${mail}
+      ${editBox(has, saved.length ? 'Update the tenancy or the tenants' : 'Update the tenancy', form, o)}${has ? `<div class="acc-row">${postBtn(`/account/p/${p.id}/clear/tenancy`, 'Remove tenancy', 'linkbtn danger', 'Remove the tenancy details?')}</div>` : ''}</div>`;
   }
+  // The property page, in tabs: Overview (the card and the details), Rent, Expenses, Certificates (EPC, Gas Safety,
+  // EICR, licence) and Tenancy. Each section keeps its own #id, so links and saves land on the right tab.
   function propertyPage(req, res, p, o = {}){
     const t = todayLondon(), base = '', a = p.address, sec = o.section, ov = o.values;
     const book = k => `<a class="arrow" href="${esc(bookLink(base, k, p))}">Book ${k === 'gas' ? 'a Gas Safety check' : k === 'eicr' ? 'an EICR' : 'an EPC'}</a>`;
-    const block = (id, title, s, note, content, extra) => `<div class="acc-sec" id="${id}"><div class="acc-sec-h"><h2>${title}</h2>${stHTML(s)}<p>${note}</p>${extra || ''}</div><div class="acc-sec-b">${content}</div></div>`;
+    const block = (id, title, s, note, content, extra) => `<div class="acc-sec" id="${id}"><div class="acc-sec-h"><h2>${title}</h2>${s ? stHTML(s) : ''}<p>${note}</p>${extra || ''}</div><div class="acc-sec-b">${content}</div></div>`;
     const ds = depositStatus(p, t), rent = M.rentSection(p, t), acc = readAcc(req.acc.id) || req.acc, exps = M.expenseSection(acc, p, t);
+    const certsBad = CERT_KINDS.map(k => certStatus(k, p, t)).filter(x => x.cls === 'exp' || x.cls === 'due').length;
+    const tabs = [['overview', 'Overview'], ['rent', 'Rent'], ['expenses', 'Expenses'], ['certificates', 'Certificates' + (certsBad ? ` <i class="tab-n">${certsBad}</i>` : '')], ['tenancy', 'Tenancy']];
     const body = head(esc([a.town, a.postcode].filter(Boolean).join(' · ')), esc(streetLine(a)), esc(p.type + ' · ' + bedsText(p.beds)),
-      `<a class="btn primary sm" href="#rent">Rent</a><a class="btn ghost sm" href="/account/expenses/new?p=${p.id}">Add an expense</a><a class="btn ghost sm" href="/app">Do a check-in or inspection</a><a class="btn ghost sm" href="#details">Edit details</a>`, ['All properties', '/account']) + `
-<section class="tight"><div class="wrap">
-  <ul class="ov">${[['rent', 'Rent', rent.st], ['epc', 'EPC', certStatus('epc', p, t)], ['gas', 'Gas Safety', certStatus('gas', p, t)], ['eicr', 'EICR', certStatus('eicr', p, t)], ['tenancy', 'Tenancy', tenancyStatus(p, t)], ['tenancy', 'Deposit', ds]]
-    .map(([id, l, s]) => `<li><a href="#${id}"><b>${l}</b>${stHTML(s)}</a></li>`).join('')}</ul>
-  ${block('rent', 'Rent', rent.st, 'Each rent period, paid or still due. Tap <b>Mark as received</b> when the rent comes in, then send your tenant a receipt.', rent.html)}
-  ${block('expenses', 'Expenses', exps.st, 'Costs for this property, such as repairs, certificates and insurance, with their receipts. Together with the rent, they make up your tax-year summary.', exps.html)}
-  ${block('epc', 'EPC', certStatus('epc', p, t), 'An Energy Performance Certificate is valid for 10 years. You need a valid one before you let the property to a new tenant.', epcSection(p, t, sec === 'epc' ? ov : null), book('epc'))}
-  ${block('gas', 'Gas Safety', certStatus('gas', p, t), 'A Gas Safe registered engineer must check every gas appliance every 12 months, and the tenant must have a copy of the certificate.', gasSection(p, sec === 'gas' ? ov : null), book('gas'))}
-  ${block('eicr', 'Electrical safety (EICR)', certStatus('eicr', p, t), 'In England the electrics must be inspected at least every 5 years, and any remedial work done within 28 days.', eicrSection(p, sec === 'eicr' ? ov : null), book('eicr'))}
-  ${block('tenancy', 'Tenancy', tenancyStatus(p, t), 'Who lives here and on what terms. In England and Wales a deposit must be protected within 30 days of receiving it.', tenancySection(p, sec === 'tenancy' ? ov : null), `<div class="st-extra"><span class="sub">Deposit</span> ${stHTML(ds)}</div><a class="arrow" href="/app">Do a check-in or check-out</a>`)}
-  <div class="acc-sec" id="details"><div class="acc-sec-h"><h2>Property details</h2><p>The address, type and bedrooms. Changing the postcode searches the EPC register again.</p></div>
-    <div class="acc-sec-b"><div class="acc-box"><form class="form" method="post" action="/account/p/${p.id}/details">${detailsFields(Object.assign({}, a, { type: p.type, beds: p.beds, notes: p.notes }, sec === 'details' ? ov : {}))}<button class="btn primary sm">Save details</button></form>
-    <div class="acc-row">${postBtn(`/account/p/${p.id}/delete`, 'Delete this property', 'linkbtn danger', 'Delete this property, with its certificates, tenancy, rent payments and expenses? This cannot be undone.')}</div></div></div></div>
-</div></section>`;
+      `<a class="btn primary sm" href="#rent">Rent</a><a class="btn ghost sm" href="/account/expenses/new?p=${p.id}">Add an expense</a><a class="btn ghost sm" href="/app">Do a check-in or inspection</a>`, ['All properties', '/account']) + `
+<section class="tight ptop"><div class="wrap">
+  <nav class="ptabs" data-ptabs aria-label="This property">${tabs.map(([k, l]) => `<a href="#${k}" data-tab="${k}">${l}</a>`).join('')}</nav>
+  <div class="pane" data-pane="overview" id="overview">
+    <div class="ov-wrap">${dashCard(p, t, { local: true, noacts: true })}
+      <div class="ov-side"><ul class="ov">${[['rent', 'Rent', rent.st], ['epc', 'EPC', certStatus('epc', p, t)], ['gas', 'Gas Safety', certStatus('gas', p, t)], ['eicr', 'EICR', certStatus('eicr', p, t)], ['licence', 'Licence', certStatus('licence', p, t)], ['tenancy', 'Tenancy', tenancyStatus(p, t)], ['tenancy', 'Deposit', ds]]
+        .map(([id, l, s]) => `<li><a href="#${id}"><b>${l}</b>${stHTML(s)}</a></li>`).join('')}</ul></div></div>
+    <div class="acc-sec" id="details"><div class="acc-sec-h"><h2>Property details</h2><p>The address, type and bedrooms. Changing the address looks for its EPC again.</p></div>
+      <div class="acc-sec-b"><div class="acc-box"><details class="edit"${sec === 'details' ? ' open' : ''}><summary>Edit the address and details</summary><form class="form" method="post" action="/account/p/${p.id}/details">${detailsFields(Object.assign({}, a, { type: p.type, beds: p.beds, notes: p.notes, notesSave: '/account/p/' + p.id + '/notes/property' }, sec === 'details' ? ov : {}))}<button class="btn primary sm">Save details</button></form></details>
+      ${p.notes ? `<p class="pre muted">${esc(p.notes)}</p>` : ''}
+      <div class="acc-row">${postBtn(`/account/p/${p.id}/delete`, 'Delete this property', 'linkbtn danger', 'Delete this property, with its certificates, licence, tenancy, rent payments and expenses? This cannot be undone.')}</div></div></div></div>
+  </div>
+  <div class="pane" data-pane="rent">
+    ${block('rent', 'Rent', rent.st, 'Each rent period, paid or still due. Tap <b>Mark as received</b> when the rent comes in, then send your tenant a receipt.', rent.html)}
+    ${M.remindersBlock(p, t)}
+  </div>
+  <div class="pane" data-pane="expenses">${block('expenses', 'Expenses', exps.st, 'Costs for this property, such as repairs, certificates and insurance, with their receipts. Together with the rent, they make up your tax-year summary.', exps.html)}</div>
+  <div class="pane" data-pane="certificates" id="certificates">
+    ${block('epc', 'EPC', certStatus('epc', p, t), 'An Energy Performance Certificate is valid for 10 years. You need a valid one before you let the property to a new tenant. We look for it on the government register by ourselves.', epcSection(p, t, sec === 'epc' ? ov : null), book('epc'))}
+    ${block('gas', 'Gas Safety', certStatus('gas', p, t), 'A Gas Safe registered engineer must check every gas appliance every 12 months, and the tenant must have a copy of the certificate.', gasSection(p, sec === 'gas' ? ov : null), book('gas'))}
+    ${block('eicr', 'Electrical safety (EICR)', certStatus('eicr', p, t), 'In England the electrics must be inspected at least every 5 years, and any remedial work done within 28 days.', eicrSection(p, sec === 'eicr' ? ov : null), book('eicr'))}
+    ${block('licence', 'Property licence', certStatus('licence', p, t), 'Some councils need a licence for every rented home in an area (selective licensing), and HMOs often need one. Rules differ from council to council.', licenceSection(p, sec === 'licence' ? ov : null), `<a class="arrow" href="${COUNCIL_URL}" target="_blank" rel="noopener">Check with your council</a>`)}
+  </div>
+  <div class="pane" data-pane="tenancy">${block('tenancy', 'Tenancy', tenancyStatus(p, t), 'Who lives here, how to reach them, and on what terms. In England and Wales a deposit must be protected within 30 days of receiving it.', tenancySection(p, sec === 'tenancy' ? ov : null, acc), `<div class="st-extra"><span class="sub">Deposit</span> ${stHTML(ds)}</div><a class="arrow" href="/app">Do a check-in or check-out</a>`)}</div>
+</div></section>${UI.TABS_UI}${address.configured() ? UI.ADDR_UI : ''}${UI.TNT_UI}${money.MAIL_UI}`;
     send(req, res, { path: '/account/p/' + p.id, title: streetLine(a), body, status: o.status, notice: o.error ? { text: o.error } : null });
   }
   app.get('/account/p/:id', need, (req, res) => { const p = prop(req.acc, req.params.id); if (!p) return res.redirect(303, '/account'); propertyPage(req, res, p); });
@@ -677,19 +913,19 @@ ${M.dashStrip(acc, t)}
     if (error) return propertyPage(req, res, p0, { section: 'details', values: Object.assign({}, v, { postcode: v.postcodeRaw }), error, status: 400 });
     const moved = a.postcode !== p0.address.postcode;
     const tmp = Object.assign({}, p0, { address: a });
-    if (moved && lookups(clientIp(req))) await searchEpc(tmp);
-    const p = update(req, p => { p.address = a; p.type = v.type; p.beds = v.beds; p.notes = v.notes; if (moved && tmp.epcSearch) p.epcSearch = tmp.epcSearch; });
+    const hit = moved && lookups(clientIp(req)) ? await searchEpc(tmp, v.picked) : null;
+    const p = update(req, p => { p.address = a; p.type = v.type; p.beds = v.beds; p.notes = v.notes; if (moved && tmp.epcSearch) { p.epcSearch = tmp.epcSearch; p.epcCheckedAt = tmp.epcCheckedAt; adoptEpc(p, hit); } });
     p ? done(res, p, moved ? 'epc' : 'details') : gone(res);
   });
   app.post('/account/p/:id/delete', need, (req, res) => {
     const acc = readAcc(req.acc.id), p = prop(acc, req.params.id); if (!p) return gone(res);
     const exps = (acc.expenses || []).filter(e => e.propId === p.id);
-    [p.gas && p.gas.file, p.eicr && p.eicr.file].concat(exps.map(e => e.file)).filter(Boolean).forEach(f => { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext)); } catch (e) {} });
+    [p.gas && p.gas.file, p.eicr && p.eicr.file, p.licence && p.licence.file].concat(exps.map(e => e.file)).filter(Boolean).forEach(f => { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext)); } catch (e) {} });
     acc.properties = acc.properties.filter(x => x.id !== p.id); acc.expenses = (acc.expenses || []).filter(e => e.propId !== p.id); writeAcc(acc);
     res.redirect(303, '/account?m=deleted');
   });
   app.post('/account/p/:id/clear/:what', need, (req, res) => {
-    const what = String(req.params.what); if (!['epc', 'gas', 'eicr', 'tenancy'].includes(what)) return gone(res);
+    const what = String(req.params.what); if (!['epc', 'gas', 'eicr', 'licence', 'tenancy'].includes(what)) return gone(res);
     const p = update(req, (p, acc) => { const f = p[what] && p[what].file; if (f) { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext)); } catch (e) {} } delete p[what]; if (what === 'epc' && p.epcSearch) p.epcSearch.done = false; });
     p ? done(res, p, what, 'cleared') : gone(res);
   });
@@ -698,15 +934,16 @@ ${M.dashStrip(acc, t)}
   app.post('/account/p/:id/epc/search', need, async (req, res) => {
     const p0 = prop(req.acc, req.params.id); if (!p0) return gone(res);
     if (!lookups(clientIp(req))) return propertyPage(req, res, p0, { error: 'Too many searches from here. Please try again later.', status: 429 });
-    const tmp = JSON.parse(JSON.stringify(p0)); await searchEpc(tmp);
-    const p = update(req, p => { p.epcSearch = tmp.epcSearch; }); p ? done(res, p, 'epc', 'x') : gone(res);
+    const tmp = JSON.parse(JSON.stringify(p0)), hit = await searchEpc(tmp);
+    let auto = false;
+    const p = update(req, p => { p.epcSearch = tmp.epcSearch; p.epcCheckedAt = tmp.epcCheckedAt; auto = adoptEpc(p, hit, true); }); p ? done(res, p, 'epc', auto ? 'epc-auto' : 'x') : gone(res);
   });
   app.post('/account/p/:id/epc/pick', need, urlenc, (req, res) => {
     const b = req.body || {};
     const p = update(req, p => {
       const s = p.epcSearch, r = s && s.results[parseInt(b.i, 10)];
       if (!r || r.lmk !== String(b.lmk || '')) return false;
-      p.epc = { source: 'register', rating: r.rating, score: r.score, potential: r.potential, certNo: r.certNo, lmk: r.lmk, address: r.address, lodged: r.lodged, expires: r.expires, savedAt: new Date().toISOString() };
+      p.epc = epcFrom(r, false);
       s.done = true;
     });
     if (p === null) return gone(res);
@@ -765,13 +1002,61 @@ ${M.dashStrip(acc, t)}
   app.post('/account/p/:id/gas', need, multipart, certPost('gas'));
   app.post('/account/p/:id/eicr', need, multipart, certPost('eicr'));
 
+  /* Property licence, with an optional certificate file */
+  app.post('/account/p/:id/licence', need, multipart, (req, res) => {
+    const b = req.body || {}, p0 = prop(req.acc, req.params.id); if (!p0) return gone(res);
+    const v = { type: LIC_TYPES.some(x => x[0] === b.type) ? String(b.type || '') : '', council: line(b.council, 100), number: line(b.number, 60), start: validDate(b.start), expires: validDate(b.expires), notes: text(b.notes, 2000) };
+    const err = req.formError || (v.expires && v.start && v.expires <= v.start ? 'The expiry date must be after the start date.' : '');
+    if (err) return propertyPage(req, res, p0, { section: 'licence', values: v, error: err, status: req.formError && /large/.test(req.formError) ? 413 : 400 });
+    let fileErr = '';
+    const p = update(req, (p, acc) => {
+      const old = p.licence && p.licence.file, f = takeFile(req, acc, old, 'licence');
+      if (f.error) { fileErr = f.error; return; }
+      let file = f.file || old || null;
+      if (!f.file && b.removeFile && old) { try { fs.unlinkSync(path.join(FILE_DIR, acc.id, old.id + '.' + old.ext)); } catch (e) {} file = null; }
+      p.licence = Object.assign(v, { file, savedAt: new Date().toISOString() });
+    });
+    if (!p) return gone(res);
+    if (fileErr) return propertyPage(req, res, prop(readAcc(req.acc.id), req.params.id), { section: 'licence', values: v, error: fileErr, status: /large/.test(fileErr) ? 413 : 400 });
+    done(res, p, 'licence', 'licence');
+  });
+
+  /* Notes save themselves as they're typed (the property's, and the tenancy's) */
+  const noteSaves = limiter(600, 3600000);
+  app.post('/account/p/:id/notes/:which', need, urlenc, (req, res) => {
+    const which = String(req.params.which); if (!['property', 'tenancy'].includes(which)) return res.status(404).json({ ok: false });
+    if (!noteSaves(req.acc.id)) return res.status(429).json({ ok: false });
+    const v = text((req.body || {}).notes, 2000);
+    const p = update(req, p => { if (which === 'property') p.notes = v; else if (p.tenancy) p.tenancy.notes = v; else return false; });
+    res.status(p && p !== false ? 200 : 404).json({ ok: !!(p && p !== false) });
+  });
+
   /* Tenancy */
   const amount = v => { const n = Math.round(parseFloat(String(v || '').replace(/[£,\s]/g, '')) * 100) / 100; return n > 0 && n < 10000000 ? n : 0; };
+  // The tenants from the form's repeated t_name / t_email / t_phone fields; empty blocks are dropped.
+  function readTenants(b){
+    const arr = k => [].concat(b[k] == null ? [] : b[k]).map(String);
+    const N = arr('t_name'), E = arr('t_email'), P = arr('t_phone'), out = [];
+    let error = '';
+    for (let i = 0; i < Math.max(N.length, E.length, P.length) && i < 40; i++) {
+      const x = { name: line(N[i], 80), email: line(E[i], 120).toLowerCase(), phone: line(P[i], 30) };
+      if (!x.name && !x.email && !x.phone) continue;
+      const n = out.length + 1;
+      if (!error && !x.name) error = 'Please enter the name of tenant ' + n + '.';
+      if (!error && x.email && !EMAIL_RE.test(x.email)) error = 'Please check the email address for ' + (x.name || 'tenant ' + n) + '.';
+      if (!error && x.phone && !/^[\d+()\s.-]{6,30}$/.test(x.phone)) error = 'Please check the mobile number for ' + (x.name || 'tenant ' + n) + '.';
+      out.push(x);
+    }
+    if (!error && out.length > MAX_TENANTS) error = 'You can add up to ' + MAX_TENANTS + ' tenants.';
+    return { tenants: out.slice(0, MAX_TENANTS), error };
+  }
   app.post('/account/p/:id/tenancy', need, urlenc, (req, res) => {
     const b = req.body || {}, p0 = prop(req.acc, req.params.id); if (!p0) return gone(res);
-    const v = { names: line(b.names, 200), emails: line(b.emails, 200), phones: line(b.phones, 100), start: validDate(b.start), end: validDate(b.end), periodic: !!b.periodic, rentFreq: FREQ.some(f => f[0] === b.rentFreq) ? b.rentFreq : 'month',
+    const T = readTenants(b);
+    const v = { tenants: T.tenants, names: T.tenants.map(x => x.name).join(', '), emails: T.tenants.map(x => x.email).filter(Boolean).join(', '), phones: T.tenants.map(x => x.phone).filter(Boolean).join(', '),
+      start: validDate(b.start), end: validDate(b.end), periodic: !!b.periodic, rentFreq: FREQ.some(f => f[0] === b.rentFreq) ? b.rentFreq : 'month',
       rentP: money.parsePence(b.rent), deposit: amount(b.deposit), scheme: SCHEMES.includes(b.scheme) ? b.scheme : '', protectedOn: validDate(b.protectedOn), depositRef: line(b.depositRef, 60), notes: text(b.notes, 2000) };
-    const err = !v.names && !v.start ? 'Please enter the tenant’s name or the start date.' : v.end && v.start && v.end <= v.start ? 'The end of the fixed term must be after the start date.' : v.emails && !v.emails.split(/[,;\s]+/).filter(Boolean).every(e => EMAIL_RE.test(e)) ? 'Please check the tenant email addresses.' : '';
+    const err = T.error || (!v.tenants.length && !v.start ? 'Please add a tenant or the start date.' : v.end && v.start && v.end <= v.start ? 'The end of the fixed term must be after the start date.' : '');
     if (err) return propertyPage(req, res, p0, { section: 'tenancy', values: v, error: err, status: 400 });
     const p = update(req, p => {
       const old = p.tenancy || {}, rentP = money.parsePence(b.rent);
@@ -788,7 +1073,7 @@ ${M.dashStrip(acc, t)}
   /* Uploaded certificates: only to the account they belong to */
   app.get('/account/files/:fid', need, (req, res) => {
     const fid = String(req.params.fid), acc = req.acc;
-    const f = acc.properties.flatMap(p => [p.gas && p.gas.file, p.eicr && p.eicr.file]).concat((acc.expenses || []).map(e => e.file)).find(x => x && x.id === fid);
+    const f = acc.properties.flatMap(p => [p.gas && p.gas.file, p.eicr && p.eicr.file, p.licence && p.licence.file]).concat((acc.expenses || []).map(e => e.file)).find(x => x && x.id === fid);
     if (!f || !/^[a-f0-9]{24}$/.test(fid)) return res.status(404).type('text/plain').send('File not found.');
     res.set({ 'Content-Disposition': `inline; filename="${f.name.replace(/["\\]/g, '')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store' });
     res.type(f.type).sendFile(path.join(FILE_DIR, acc.id, f.id + '.' + f.ext), err => { if (err && !res.headersSent) res.status(404).type('text/plain').send('File not found.'); });
@@ -890,6 +1175,7 @@ ${M.dashStrip(acc, t)}
       switch (x.it.kind) {
         case 'tenancy': return { h: 'The tenancy ends ' + inDays(l), p: `The fixed term at ${a} ends on ${d}. If you’d like to renew it, or plan the check-out, now is a good time.`, link: ['Do the check-out', base + '/app'] };
         case 'rent': return { h: 'Rent overdue: ' + money.gbp(x.it.left, true), p: `The rent for ${x.it.period} at ${a} was due on ${d} and ${money.gbp(x.it.left, true)} isn’t marked as received yet. If it has been paid, mark it as received on your dashboard so it’s up to date.`, link: ['Mark it as received', base + '/account/p/' + x.p.id + '#rent'] };
+        case 'licence': return { h: 'Property licence' + (l < 0 ? ' expired ' + inDays(l) : l === 0 ? ' expires today' : ' expires ' + inDays(l)), p: `The ${licText(x.p.licence.type).toLowerCase()} for ${a}${x.p.licence.council ? ' (' + x.p.licence.council + ')' : ''} ${l < 0 ? 'expired' : 'expires'} on ${d}. Councils can take a while to renew a licence, so it’s worth applying early.`, link: ['Update the licence', base + '/account/p/' + x.p.id + '#licence'] };
         case 'deposit': return { h: 'Protect the deposit' + (l < 0 ? ': the deadline has passed' : ' ' + (l === 0 ? 'today' : 'by ' + fmt(x.it.due))), p: `The deposit of ${pounds(x.p.tenancy.deposit)} for ${a} isn’t recorded as protected yet. In England and Wales it must be protected within 30 days of receiving it, which for this tenancy is ${d}. If it’s already protected, add the date on your dashboard.`, link: ['Update the tenancy', base + '/account/p/' + x.p.id + '#tenancy'] };
         default: {
           const name = LABEL[x.it.kind], lower = { gas: 'Gas Safety certificate', eicr: 'electrical safety report (EICR)', epc: 'EPC' }[x.it.kind];
@@ -915,7 +1201,39 @@ ${M.dashStrip(acc, t)}
     runReminders().then(r => { if (r.sent) notify({ title: 'Landlord reminders sent', message: plural(r.sent, 'reminder') + ' to ' + plural(r.emails, 'landlord') + (r.failed ? ' (' + r.failed + ' failed)' : ''), tags: ['bell'] }); })
       .catch(e => console.error('landlords: reminder run failed:', e.message));
   }
-  if ((process.env.LANDLORD_REMINDERS || 'on').trim().toLowerCase() !== 'off') { setTimeout(tick, 45000).unref(); setInterval(tick, 3600000).unref(); }
+  // Once a day: look again on the EPC register for properties with no EPC, or one expired or due within 60 days,
+  // and save a clear match (a renewed certificate) by itself. Never replaces one the landlord typed in or chose
+  // unless the register has a newer certificate for the same home.
+  async function epcDaily(o = {}){
+    const t = o.today || todayLondon(); let looked = 0, found = 0;
+    for (const id of accountIds()) {
+      const acc0 = readAcc(id); if (!acc0) continue;
+      for (const p0 of acc0.properties) {
+        const st = certStatus('epc', p0, t);
+        if (!(st.cls === 'none' || st.cls === 'exp' || st.cls === 'due') || !p0.address.postcode) continue;
+        if (!o.force && p0.epcCheckedAt && Date.now() - Date.parse(p0.epcCheckedAt) < 20 * 3600000) continue;
+        if (looked >= (o.max || 300)) break;
+        looked++;
+        const tmp = JSON.parse(JSON.stringify(p0)), hit = await searchEpc(tmp);
+        const acc = readAcc(id), p = acc && prop(acc, p0.id); if (!p) continue;
+        p.epcCheckedAt = tmp.epcCheckedAt;
+        const newer = hit && (!p.epc || (hit.expires > epcExpiry(p.epc) && hit.lmk !== p.epc.lmk));
+        if (newer && (!p.epc || p.epc.source !== 'manual' || hit.expires > epcExpiry(p.epc))) { p.epcSearch = tmp.epcSearch; p.epc = epcFrom(hit, true); p.epcSearch.done = true; found++; }
+        else if (!p.epc && tmp.epcSearch.ok) p.epcSearch = tmp.epcSearch;
+        writeAcc(acc);
+        if (!o.today) await new Promise(r => setTimeout(r, 1500));
+      }
+    }
+    if (looked) console.log('landlords: daily EPC check: ' + plural(looked, 'property').replace('propertys', 'properties') + ' looked up, ' + found + ' EPC' + (found === 1 ? '' : 's') + ' found');
+    return { looked, found };
+  }
+  function epcTick(){
+    const t = todayLondon(), s = readState();
+    if (s.lastEpcRun === t || londonHour() < 6) return;
+    s.lastEpcRun = t; writeState(s);
+    epcDaily().catch(e => console.error('landlords: daily EPC check failed:', e.message));
+  }
+  if ((process.env.LANDLORD_REMINDERS || 'on').trim().toLowerCase() !== 'off') { setTimeout(() => { tick(); epcTick(); }, 45000).unref(); setInterval(() => { tick(); epcTick(); }, 3600000).unref(); }
 
   /* ------------------------------ the owner's /admin ------------------------------ */
   function adminHTML(){
@@ -951,8 +1269,10 @@ ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 9
   if (ctx.addAdminSection) ctx.addAdminSection(adminHTML);
 
   console.log('landlords: accounts in ' + DIR + ' · EPC search ' + (epcApi() ? 'on (' + epcConf().base + ')' : 'on (find-energy-certificate.service.gov.uk, no key)') + ' · reminder emails ' + (emailOn() ? 'on' : 'off (RESEND_API_KEY not set)'));
-  Object.assign(module.exports, { runReminders, adminHTML });   // for tests and scripts
+  Object.assign(module.exports, { runReminders, adminHTML, epcDaily });   // for tests and scripts
   return { paths: ['/landlords'], runReminders, adminHTML };
 }
 
-module.exports = { mount, setMailer: fn => { mailer = fn; }, _test: { certStatus, tenancyStatus, depositStatus, dueItems, stageFor, addMonths, normPostcode, streetLine, parseMultipart, epcRow, days } };
+// Is this request from a signed-in landlord? (the website's header then says "My dashboard")
+function signedIn(req){ try { return !!(currentFn && currentFn(req)); } catch (e) { return false; } }
+module.exports = { mount, signedIn, setMailer: fn => { mailer = fn; }, _test: { epcClear, legacyTenants, splitNames, certStatus, tenancyStatus, depositStatus, dueItems, stageFor, addMonths, normPostcode, streetLine, parseMultipart, epcRow, days } };
