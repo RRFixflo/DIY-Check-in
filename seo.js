@@ -98,7 +98,7 @@ function mount(app, ctx){
   // Search engines and AI assistants (ChatGPT, Claude, Perplexity, Gemini, Copilot…) are all welcome on the
   // public pages; private ones stay out. /llms.txt is a plain summary of the site for AI tools.
   const AI_BOTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'Bingbot', 'Googlebot', 'CCBot', 'Meta-ExternalAgent', 'Amazonbot', 'DuckAssistBot', 'MistralAI-User'];
-  const PRIVATE = ['Disallow: /admin', 'Disallow: /api/', 'Disallow: /sign/', 'Disallow: /p/', 'Disallow: /app', 'Disallow: /account'];
+  const PRIVATE = ['Disallow: /admin', 'Disallow: /api/', 'Disallow: /buy/done', 'Disallow: /sign/', 'Disallow: /p/', 'Disallow: /app', 'Disallow: /account'];
   app.get('/robots.txt', (req, res) => {
     res.type('text/plain').send(['User-agent: *', 'Allow: /'].concat(PRIVATE, [''], AI_BOTS.map(b => 'User-agent: ' + b), ['Allow: /'], PRIVATE,
       ['', 'Sitemap: ' + canonicalBase(req) + '/sitemap.xml', '# A summary for AI assistants: ' + canonicalBase(req) + '/llms.txt', '']).join('\n'));

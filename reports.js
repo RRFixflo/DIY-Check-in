@@ -16,11 +16,11 @@ const KEY_RE = /^[a-f0-9]{32}$/;
 // The example report shown on the website (public/example/, made by the PDF test harness).
 const EXAMPLE_KEY = 'e8a1c0d2b4f6e8a1c0d2b4f6e8a1c0d2', EXAMPLE_DIR = path.join(__dirname, 'public', 'example', 'photos');       // a report's private photo key (random, made on the tenant's phone)
 const photoDir = id => path.join(REPORTS_DIR, id + '.photos');
-// Email to Residential Realtors when a tenant taps "Send" (via Resend, resend.com). Without
-// RESEND_API_KEY the report is still marked as sent and waits on /admin.
+// Email to the owner (REPORT_TO_EMAIL) when a report is sent (via Resend, resend.com). Without
+// RESEND_API_KEY and REPORT_TO_EMAIL the report is still marked as sent and waits on /admin (with the ntfy alert).
 const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
-const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim() || 'jayk@residentialrealtors.co.uk';
-const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'Check-in Reports <onboarding@resend.dev>';
+const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim();
+const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'DIY Inventory <onboarding@resend.dev>';
 const PUBLIC_URL = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).replace(/\/+$/, '');
 // Phone alert when a tenant sends a report, via the free ntfy app (ntfy.sh): subscribe to NTFY_TOPIC.
 const NTFY_TOPIC = (process.env.NTFY_TOPIC || '').trim();
@@ -128,12 +128,12 @@ function listReports(){
 }
 
 async function emailReport(r){
-  if (!RESEND_API_KEY) return { ok: false, reason: 'not-configured' };
+  if (!RESEND_API_KEY || !REPORT_TO_EMAIL) return { ok: false, reason: 'not-configured' };
   const pdfPath = path.join(REPORTS_DIR, r.id + '.pdf');
   const attach = r.size <= MAX_ATTACH;
   const link = PUBLIC_URL ? PUBLIC_URL + '/admin/reports/' + r.id + '.pdf' : '';
   const text = [
-    'A tenant has sent their ' + (r.inspectionType || 'check-in') + ' report.', '',
+    'A new ' + (r.inspectionType || 'check-in') + ' report has been sent.', '',
     'Property: ' + (r.address || '—'),
     'Reference: ' + (r.ref || '—'),
     'Completed by: ' + (r.signedBy || r.inspectorName || '—'),
@@ -281,7 +281,7 @@ function mount(app){
     res.status(status).json(body);
   });
 
-  // The tenant taps "Send to Residential Realtors": the stored report is marked as sent and emailed.
+  // A finished report is sent: the stored report is marked as sent, the owner is alerted, and it is emailed to REPORT_TO_EMAIL if set.
   // Repeats are harmless: a report already emailed is not emailed again.
   const sendAllowed = limiter(20, 60 * 60 * 1000);
   const sending = new Set();

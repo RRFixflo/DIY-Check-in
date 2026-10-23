@@ -15,6 +15,7 @@ const certs = require('./certs');
 const address = require('./address');
 const analytics = require('./analytics');
 const payments = require('./payments');
+const purchases = require('./purchases');
 
 const PORT = process.env.PORT || 3000;
 const ANTHROPIC_API_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
@@ -39,7 +40,7 @@ app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
   if (twin) app.use((req, res, next) => String(req.headers.host || '').toLowerCase() === twin ? res.redirect(301, 'https://' + pub + req.originalUrl) : next());
 }
 // Visit and funnel counts for /admin/analytics (no cookies, no IP addresses kept): analytics.js.
-analytics.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE: process.env.PUBLIC_URL || '' });
+analytics.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, codeAccess: reports.codeAccess, isPurchase: purchases.isToken, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE: process.env.PUBLIC_URL || '' });
 app.get('/favicon.ico', (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'favicon-32.png')));
 // Phones look for these at the root when a page doesn't name its icon.
 app.get(['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png'], (req, res) => res.type('png').sendFile(path.join(__dirname, 'public', 'icons', 'apple-touch-icon.png')));
@@ -146,12 +147,14 @@ app.post('/api/assess', async (req, res) => {
 });
 
 /* ----------------------------- paid access ----------------------------- */
-// The app is for people who have paid for a report (or been given a link by the office). Each
-// person has a personal link (?access=TOKEN) from Residential Realtors; Fixflow says whether it's
-// valid. The token is kept in a cookie so the link only needs opening once. DIY_PAYWALL=off turns this off.
-const FIXFLOW_URL = (process.env.FIXFLOW_URL || 'https://www.residentialrealtors.co.uk').trim().replace(/\/+$/, '');
+// Free to start, pay at the end. A report is bought on our own page, /buy (purchases.js: card payment through
+// payments.js), which gives a personal link (?access=RPT-…) good for one report. The token is kept in a cookie
+// so the link only needs opening once. The owner's access code works too (reports.js). DIY_PAYWALL=off turns this off.
+// Links sold before /buy existed were issued by another system; they are still checked there (LEGACY_ACCESS_URL),
+// silently, so nobody who bought one is locked out. Nothing else is sent there.
+const LEGACY_ACCESS_URL = (process.env.LEGACY_ACCESS_URL || process.env.FIXFLOW_URL || 'https://www.residentialrealtors.co.uk').trim().replace(/\/+$/, '');
 const PAYWALL = (process.env.DIY_PAYWALL || 'on').trim().toLowerCase() !== 'off';
-const BUY_URL = FIXFLOW_URL + '/book-certificate?service=diy';
+const BUY_URL = '/buy';
 const accessCache = new Map();
 const freeAssess = (() => {
   const perIp = new Map(), DAY = 24 * 3600 * 1000, MAX_IP = 300, MAX_ALL = Math.max(0, parseInt(process.env.AI_FREE_DAILY, 10) || 3000);
@@ -179,29 +182,26 @@ async function checkAccess(token){
   if (!TOKEN_RE.test(token || '')) return { valid: false, reason: 'none' };
   const own = reports.codeAccess(token);   // an access code from the owner's /admin page
   if (own) return own;
+  const bought = purchases.access(token);  // a report bought on /buy
+  if (bought) return bought;
   if (/^(DIY|FREE)-[A-Z0-9]{4}-[A-Z0-9]{4}$|^SHARED-/i.test(token)) return { valid: false, reason: 'unknown' };   // a deleted or mistyped access code
   const c = accessCache.get(token);
   if (c && Date.now() - c.at < 5 * 60 * 1000) return c.r;
   try {
-    const res = await fetch(FIXFLOW_URL + '/api/public/diy-access/' + encodeURIComponent(token), { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(LEGACY_ACCESS_URL + '/api/public/diy-access/' + encodeURIComponent(token), { signal: AbortSignal.timeout(8000) });
     const d = await res.json();
     const r = { valid: !!d.valid, reason: d.valid ? '' : (d.reason || 'unknown') };
     accessCache.set(token, { at: Date.now(), r }); if (accessCache.size > 5000) accessCache.clear();
     return r;
   } catch (e) {
     console.error('access check failed:', e.message);
-    return c ? c.r : { valid: true, reason: '' };   // Fixflow unreachable: don't lock out someone with a link
+    return c ? c.r : { valid: true, reason: '' };   // the old system unreachable: don't lock out someone with a link
   }
 }
-function markUsed(token){
+// An old link has been used for a report: the old system is told, so it can't be used for another one.
+function markLegacyUsed(token){
   accessCache.delete(token);
-  fetch(FIXFLOW_URL + '/api/public/diy-access/' + encodeURIComponent(token) + '/used', { method: 'POST', signal: AbortSignal.timeout(8000) }).catch(e => console.error('mark used failed:', e.message));
-}
-// A copy of every finished report goes to Residential Realtors' Fixflow, which emails the person a download link.
-function sendToFixflow(token, req){
-  const pdf = req.body; if (!Buffer.isBuffer(pdf)) return;
-  fetch(FIXFLOW_URL + '/api/public/diy-report/' + encodeURIComponent(token), { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': String(req.headers['x-report-meta'] || '').slice(0, 4000) }, body: pdf, signal: AbortSignal.timeout(60000) })
-    .then(r => { if (!r.ok) console.error('report copy to Fixflow failed: HTTP ' + r.status); }).catch(e => console.error('report copy to Fixflow failed:', e.message));
+  fetch(LEGACY_ACCESS_URL + '/api/public/diy-access/' + encodeURIComponent(token) + '/used', { method: 'POST', signal: AbortSignal.timeout(8000) }).catch(e => console.error('mark used failed:', e.message));
 }
 /* ------------------------------- website ------------------------------- */
 // The public website: views/layout.html (header, menu, footer) around a page from views/pages/, styled
@@ -283,11 +283,14 @@ const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, ren
 const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
   notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE }).paths;
 // Floor plans (£9.55): /floor-plan, the drawing tool /floor-plan/create, and paying by card (SumUp or Stripe): payments.js.
+// Buying a report (£30) on our own page, /buy, with the same card checkout: purchases.js.
+const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
+  track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, floorplanPaths, locationPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
@@ -320,8 +323,10 @@ if (PAYWALL) {
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Inventory.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;
-      if (reports.codeAccess(token)) { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} reports.useCode(token, m.address, req); return; }
-      sendToFixflow(token, req); markUsed(token);
+      let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {}
+      if (reports.codeAccess(token)) { reports.useCode(token, m.address, req); return; }
+      if (purchases.isToken(token)) { purchases.markUsed(token, m.address); return; }
+      markLegacyUsed(token);
     });
     next();
   });
@@ -351,7 +356,7 @@ if (PAYWALL) {
 }
 
 // Free to start, pay at the end: whether this browser may download and send a finished report, and
-// unlocking it with the link from the payment email (or its token, or an access code) pasted in the app.
+// unlocking it with the report link from /buy (or its token, or an access code) pasted in the app.
 app.get('/api/access', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   if (!PAYWALL || reports.isOwner(req)) return res.json({ access: true, buy: BUY_URL });

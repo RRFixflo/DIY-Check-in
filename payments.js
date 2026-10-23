@@ -31,7 +31,7 @@ const SUMUP_BASE = () => (env('SUMUP_API_BASE') || 'https://api.sumup.com').repl
 const STRIPE_BASE = () => (env('STRIPE_API_BASE') || 'https://api.stripe.com').replace(/\/+$/, '');
 
 function provider(){
-  const sumup = !!(env('SUMUP_API_KEY') && env('SUMUP_MERCHANT_CODE')), stripe = !!env('STRIPE_SECRET_KEY'), pick = env('FLOORPLAN_PROVIDER').toLowerCase();
+  const sumup = !!(env('SUMUP_API_KEY') && env('SUMUP_MERCHANT_CODE')), stripe = !!env('STRIPE_SECRET_KEY'), pick = (env('PAYMENT_PROVIDER') || env('FLOORPLAN_PROVIDER')).toLowerCase();
   if (pick === 'stripe' && stripe) return 'stripe';
   if (pick === 'sumup' && sumup) return 'sumup';
   return sumup ? 'sumup' : stripe ? 'stripe' : '';
@@ -49,54 +49,72 @@ async function call(url, opts){
   return { ok: res.ok, status: res.status, d };
 }
 
+// Both providers take one checkout `o`: { ref, amountPence, name, detail, returnUrl, cancelUrl, hookUrl, tag } and
+// are checked with { ref, providerId, amountPence, tag }. `tag` only prefixes the log lines ('floorplan', 'report').
 const PROVIDERS = {
   sumup: {
-    async create(rec, urls){
-      const body = { checkout_reference: rec.ref, amount: PRICE, currency: CURRENCY, merchant_code: env('SUMUP_MERCHANT_CODE'),
-        description: 'Floor plan' + (rec.label ? ': ' + rec.label.slice(0, 80) : ''), redirect_url: urls.ret, return_url: urls.hook, hosted_checkout: { enabled: true } };
+    async create(o){
+      const body = { checkout_reference: o.ref, amount: o.amountPence / 100, currency: CURRENCY, merchant_code: env('SUMUP_MERCHANT_CODE'),
+        description: o.name + (o.detail ? ': ' + o.detail.slice(0, 80) : ''), redirect_url: o.returnUrl, return_url: o.hookUrl, hosted_checkout: { enabled: true } };
       const r = await call(SUMUP_BASE() + '/v0.1/checkouts', { method: 'POST', headers: { Authorization: 'Bearer ' + env('SUMUP_API_KEY'), 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
       const url = r.d && (r.d.hosted_checkout_url || (r.d.hosted_checkout && (r.d.hosted_checkout.url || r.d.hosted_checkout.hosted_checkout_url)));
-      if (!r.ok || !r.d.id || !url) { console.error('floorplan: SumUp checkout not created: HTTP ' + r.status + ' ' + said(r.d) + (r.ok ? ' (fields: ' + Object.keys(r.d || {}).join(', ') + ')' : '')); throw new Error('provider'); }
+      if (!r.ok || !r.d.id || !url) { console.error(o.tag + ': SumUp checkout not created: HTTP ' + r.status + ' ' + said(r.d) + (r.ok ? ' (fields: ' + Object.keys(r.d || {}).join(', ') + ')' : '')); throw new Error('provider'); }
       return { id: String(r.d.id), url: String(url) };
     },
-    async verify(rec){
-      const r = await call(SUMUP_BASE() + '/v0.1/checkouts/' + encodeURIComponent(rec.providerId), { headers: { Authorization: 'Bearer ' + env('SUMUP_API_KEY'), Accept: 'application/json' } });
-      if (!r.ok) { console.error('floorplan: SumUp checkout ' + rec.ref + ' could not be checked: HTTP ' + r.status + ' ' + said(r.d)); return { paid: false, status: 'unknown' }; }
+    async verify(o){
+      const amount = o.amountPence / 100;
+      const r = await call(SUMUP_BASE() + '/v0.1/checkouts/' + encodeURIComponent(o.providerId), { headers: { Authorization: 'Bearer ' + env('SUMUP_API_KEY'), Accept: 'application/json' } });
+      if (!r.ok) { console.error(o.tag + ': SumUp checkout ' + o.ref + ' could not be checked: HTTP ' + r.status + ' ' + said(r.d)); return { paid: false, status: 'unknown' }; }
       const d = r.d || {}, status = String(d.status || '').toUpperCase();
-      const amountOk = d.amount == null || Math.abs(Number(d.amount) - PRICE) < 0.005, curOk = !d.currency || String(d.currency).toUpperCase() === CURRENCY;
+      const amountOk = d.amount == null || Math.abs(Number(d.amount) - amount) < 0.005, curOk = !d.currency || String(d.currency).toUpperCase() === CURRENCY;
       const txn = d.transaction_code || (Array.isArray(d.transactions) && d.transactions[0] && (d.transactions[0].transaction_code || d.transactions[0].id)) || '';
-      if (status === 'PAID' && !(amountOk && curOk)) console.error('floorplan: SumUp checkout ' + rec.ref + ' paid with an unexpected amount: ' + d.amount + ' ' + d.currency);
-      if (status !== 'PAID') console.log('floorplan: SumUp checkout ' + rec.ref + ' status ' + (status || '(none)'));
+      if (status === 'PAID' && !(amountOk && curOk)) console.error(o.tag + ': SumUp checkout ' + o.ref + ' paid with an unexpected amount: ' + d.amount + ' ' + d.currency);
+      if (status !== 'PAID') console.log(o.tag + ': SumUp checkout ' + o.ref + ' status ' + (status || '(none)'));
       return { paid: status === 'PAID' && amountOk && curOk, status: status.toLowerCase() || 'unknown', providerRef: String(txn) };
     }
   },
   stripe: {
-    async create(rec, urls){
+    async create(o){
       const f = new URLSearchParams();
       f.set('mode', 'payment');
-      f.set('success_url', urls.ret + '&session_id={CHECKOUT_SESSION_ID}');
-      f.set('cancel_url', urls.cancel);
-      f.set('client_reference_id', rec.ref);
-      f.set('metadata[ref]', rec.ref);
+      f.set('success_url', o.returnUrl + (o.returnUrl.includes('?') ? '&' : '?') + 'session_id={CHECKOUT_SESSION_ID}');
+      f.set('cancel_url', o.cancelUrl);
+      f.set('client_reference_id', o.ref);
+      f.set('metadata[ref]', o.ref);
       f.set('line_items[0][quantity]', '1');
       f.set('line_items[0][price_data][currency]', 'gbp');
-      f.set('line_items[0][price_data][unit_amount]', String(PENCE));
-      f.set('line_items[0][price_data][product_data][name]', 'Floor plan');
-      if (rec.label) f.set('line_items[0][price_data][product_data][description]', rec.label.slice(0, 200));
+      f.set('line_items[0][price_data][unit_amount]', String(o.amountPence));
+      f.set('line_items[0][price_data][product_data][name]', o.name);
+      if (o.detail) f.set('line_items[0][price_data][product_data][description]', o.detail.slice(0, 200));
+      if (o.email) f.set('customer_email', o.email);
       const r = await call(STRIPE_BASE() + '/v1/checkout/sessions', { method: 'POST', headers: { Authorization: 'Bearer ' + env('STRIPE_SECRET_KEY'), 'Content-Type': 'application/x-www-form-urlencoded' }, body: f.toString() });
-      if (!r.ok || !r.d.id || !r.d.url) { console.error('floorplan: Stripe session not created: HTTP ' + r.status + ' ' + said(r.d)); throw new Error('provider'); }
+      if (!r.ok || !r.d.id || !r.d.url) { console.error(o.tag + ': Stripe session not created: HTTP ' + r.status + ' ' + said(r.d)); throw new Error('provider'); }
       return { id: String(r.d.id), url: String(r.d.url) };
     },
-    async verify(rec){
-      const r = await call(STRIPE_BASE() + '/v1/checkout/sessions/' + encodeURIComponent(rec.providerId), { headers: { Authorization: 'Bearer ' + env('STRIPE_SECRET_KEY') } });
-      if (!r.ok) { console.error('floorplan: Stripe session ' + rec.ref + ' could not be checked: HTTP ' + r.status + ' ' + said(r.d)); return { paid: false, status: 'unknown' }; }
-      const d = r.d || {}, paid = d.payment_status === 'paid', amountOk = d.amount_total == null || Number(d.amount_total) === PENCE, curOk = !d.currency || String(d.currency).toLowerCase() === 'gbp';
-      if (paid && !(amountOk && curOk)) console.error('floorplan: Stripe session ' + rec.ref + ' paid with an unexpected amount: ' + d.amount_total + ' ' + d.currency);
-      if (!paid) console.log('floorplan: Stripe session ' + rec.ref + ' payment_status ' + (d.payment_status || '(none)') + ', status ' + (d.status || '(none)'));
+    async verify(o){
+      const r = await call(STRIPE_BASE() + '/v1/checkout/sessions/' + encodeURIComponent(o.providerId), { headers: { Authorization: 'Bearer ' + env('STRIPE_SECRET_KEY') } });
+      if (!r.ok) { console.error(o.tag + ': Stripe session ' + o.ref + ' could not be checked: HTTP ' + r.status + ' ' + said(r.d)); return { paid: false, status: 'unknown' }; }
+      const d = r.d || {}, paid = d.payment_status === 'paid', amountOk = d.amount_total == null || Number(d.amount_total) === o.amountPence, curOk = !d.currency || String(d.currency).toLowerCase() === 'gbp';
+      if (paid && !(amountOk && curOk)) console.error(o.tag + ': Stripe session ' + o.ref + ' paid with an unexpected amount: ' + d.amount_total + ' ' + d.currency);
+      if (!paid) console.log(o.tag + ': Stripe session ' + o.ref + ' payment_status ' + (d.payment_status || '(none)') + ', status ' + (d.status || '(none)'));
       return { paid: paid && amountOk && curOk, status: String(d.payment_status || d.status || 'unknown'), providerRef: String(d.payment_intent || '') };
     }
   }
 };
+// The shared card checkout, for floor plans and reports alike (GBP, no VAT):
+//   createCheckout({ ref, amountPence, name, detail, email, returnUrl, cancelUrl, hookUrl, tag }) → { provider, id, url }
+//   verify({ provider, providerId, ref, amountPence, tag }) → { paid, status, providerRef }; always asks the provider itself.
+async function createCheckout(o){
+  const prov = o.provider || provider();
+  if (!PROVIDERS[prov]) throw new Error('not-configured');
+  const c = await PROVIDERS[prov].create(Object.assign({ tag: 'payments' }, o));
+  return { provider: prov, id: c.id, url: c.url };
+}
+async function verify(o){
+  const p = PROVIDERS[o.provider];
+  if (!p || !o.providerId) return { paid: false, status: 'unknown' };
+  return p.verify(Object.assign({ tag: 'payments' }, o));
+}
 
 let FILE = '';
 function readAll(){ try { const d = JSON.parse(fs.readFileSync(FILE, 'utf8')); return Array.isArray(d.list) ? d : { list: [] }; } catch (e) { return { list: [] }; } }
@@ -130,7 +148,7 @@ function mount(app, ctx){
     const p = PROVIDERS[rec.provider]; if (!p || !rec.providerId) return rec;
     const last = lastCheck.get(rec.ref) || 0; if (Date.now() - last < 4000) return rec;
     lastCheck.set(rec.ref, Date.now()); if (lastCheck.size > 2000) lastCheck.clear();
-    let v; try { v = await p.verify(rec); } catch (e) { console.error('floorplan: checking ' + rec.ref + ' failed: ' + e.message); return rec; }
+    let v; try { v = await verify({ provider: rec.provider, providerId: rec.providerId, ref: rec.ref, amountPence: PENCE, tag: 'floorplan' }); } catch (e) { console.error('floorplan: checking ' + rec.ref + ' failed: ' + e.message); return rec; }
     if (!v.paid) return update(rec.ref, r => { r.providerStatus = v.status; }) || rec;
     let first = false;
     const out = update(rec.ref, r => { if (r.status !== 'paid') { first = true; r.status = 'paid'; r.paidAt = new Date().toISOString(); r.providerRef = v.providerRef || r.providerRef || ''; r.providerStatus = v.status; } });
@@ -169,7 +187,7 @@ function mount(app, ctx){
     const base = canonicalBase(req);
     const urls = { ret: base + '/api/floorplan/return?ref=' + rec.ref, cancel: base + '/api/floorplan/cancel?ref=' + rec.ref, hook: base + '/api/floorplan/webhook' };
     try {
-      const c = await PROVIDERS[prov].create(rec, urls);
+      const c = await createCheckout({ provider: prov, ref: rec.ref, amountPence: PENCE, name: 'Floor plan', detail: rec.label, returnUrl: urls.ret, cancelUrl: urls.cancel, hookUrl: urls.hook, tag: 'floorplan' });
       rec.providerId = c.id;
       const d = readAll(); d.list.push(rec); writeAll(d);
       console.log('floorplan: checkout ' + rec.ref + ' created (' + prov + ', from ' + rec.from + ')');
@@ -299,4 +317,4 @@ const TOOL_CSS = `main { padding: 0; } .fp-host { max-width: 1120px; margin: 12p
 .fp-host .fp { box-shadow: var(--shadow), 0 0 0 1px var(--line); }
 @media (max-width: 600px) { .fp-host { margin: 0; padding: 0; height: calc(100dvh - 64px); } .fp-host .fp { border-radius: 0; box-shadow: none; } }`;
 
-module.exports = { mount, PRICE, PRICE_TEXT, provider, _test: { PROVIDERS, readAll } };
+module.exports = { mount, PRICE, PRICE_TEXT, provider, createCheckout, verify, CURRENCY, _test: { PROVIDERS, readAll } };
