@@ -177,3 +177,5 @@ html.fp-lock, html.fp-lock body { overflow: hidden; }
 
 .fp-q { margin: 10px 0 6px; font-weight: 700; font-size: 14.5px; } .fp-q span { font-weight: 500; color: var(--fp-ink-soft); }
 .fp-walls button { min-height: 46px; font-size: 15px; }
+.fp-meas { margin: 4px 0 10px; font-size: 14px; color: var(--fp-ink-soft); }
+.fp-meas b { color: var(--fp-ink); font-variant-numeric: tabular-nums; }

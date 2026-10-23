@@ -121,6 +121,7 @@
   function ftIn(m) { var t = Math.round(m / 0.0254), ft = Math.floor(t / 12), inch = t % 12; return { ft: ft, inch: inch }; }
   function fmtFt(m) { var f = ftIn(m); return f.ft + "' " + f.inch + '"'; }
   function fmtM(m) { return m.toFixed(2) + ' m'; }
+  function fmtLen(m, unit) { return unit === 'ft' ? fmtFt(m) : fmtM(m); }
   function dimM(r) { return fmtM(r.w) + ' × ' + fmtM(r.l); }
   function dimFt(r) { return fmtFt(r.w) + ' × ' + fmtFt(r.l); }
   function areaText(a) { return a.toFixed(1) + ' m²'; }
@@ -225,8 +226,29 @@
       out.push('<g transform="translate(' + f3(cx) + ' ' + f3(cy) + ') scale(0.01)' + (L.rot ? ' rotate(-90)' : '') + '" font-family="' + FONT + '" text-rendering="geometricPrecision" pointer-events="none">' + t + '</g>');
     });
     var s2 = rs.filter(function (r) { return r.id === sel.room && !sel.open; })[0];
+    // While editing, the selected room shows the length of every wall, and a selected door or window its width and distance to each corner.
+    var s3 = o.hit && rs.filter(function (r) { return r.id === sel.room; })[0];
+    if (s3) {
+      var sop = sel.open && s3.openings.filter(function (q) { return q.id === sel.open; })[0];
+      if (sop) {
+        var g3 = openingGeom(s3, sop), w3 = g3.w, st3 = g3.pos - g3.wd / 2, en3 = g3.pos + g3.wd / 2;
+        if (st3 > 0.05) out.push(dimSVG(w3, 0, st3, p.unit, pal));
+        out.push(dimSVG(w3, st3, en3, p.unit, pal, true));
+        if (w3.len - en3 > 0.05) out.push(dimSVG(w3, en3, w3.len, p.unit, pal));
+      } else ['n', 'e', 's', 'w'].forEach(function (k) { var w4 = wallOf(s3, k); out.push(dimSVG(w4, 0, w4.len, p.unit, pal)); });
+    }
     if (s2) out.push('<rect x="' + f3(s2.x + 0.1) + '" y="' + f3(s2.y + 0.1) + '" width="' + f3(Math.max(0.05, s2.w - 0.2)) + '" height="' + f3(Math.max(0.05, s2.l - 0.2)) + '" fill="none" stroke="' + pal.sel + '" stroke-width="0.06" stroke-dasharray="0.18 0.1" pointer-events="none"/>');
     return out.join('');
+  }
+  // A measurement along a wall, just inside the room: a line with end ticks and its length in the middle.
+  function dimSVG(w, from, to, unit, pal, strong) {
+    var off = 0.32, tk = 0.09, P = function (t, d) { return { x: w.x + w.ax * t + w.nx * d, y: w.y + w.ay * t + w.ny * d }; };
+    var a = P(from, off), b = P(to, off), c = P((from + to) / 2, off), col = strong ? pal.sel : pal.soft, s = [];
+    var ln = function (p1, p2, sw) { s.push('<line x1="' + f3(p1.x) + '" y1="' + f3(p1.y) + '" x2="' + f3(p2.x) + '" y2="' + f3(p2.y) + '" stroke="' + col + '" stroke-width="' + sw + '"/>'); };
+    ln(a, b, 0.02); ln(P(from, off - tk), P(from, off + tk), 0.025); ln(P(to, off - tk), P(to, off + tk), 0.025);
+    var fs = Math.min(0.19, Math.max(0.1, (to - from) / 4.2));
+    s.push('<g transform="translate(' + f3(c.x) + ' ' + f3(c.y) + ') scale(0.01)' + (w.ay ? ' rotate(-90)' : '') + '"><text x="0" y="0" font-size="' + f3(fs * 100) + '" font-weight="700" fill="' + col + '" stroke="' + pal.room + '" stroke-width="' + f3(fs * 35) + '" paint-order="stroke" text-anchor="middle" dominant-baseline="central" font-family="' + FONT + '">' + esc(fmtLen(to - from, unit)) + '</text></g>');
+    return '<g pointer-events="none" class="fp-dim">' + s.join('') + '</g>';
   }
   function stairsSVG(r, pal) {
     var along = r.l >= r.w, n = Math.max(2, Math.floor((along ? r.l : r.w) / 0.25)), s = [], i, step = (along ? r.l : r.w) / n;
@@ -583,6 +605,7 @@
           (op.type === 'door' ? '<button type="button" class="fp-icon" data-act="flip" aria-label="Flip the door">' + ICON.flip + '</button>' : '') +
           '<button type="button" class="fp-icon danger" data-act="delOpen" aria-label="Remove the ' + op.type + '">' + ICON.bin + '</button><button type="button" class="fp-link" data-act="unsel">Done</button></div>' +
           '<p class="fp-q">Which wall is it on? <span>Or drag it round the room.</span></p><div class="fp-seg fp-walls" role="group" aria-label="Which wall">' + [['n', 'Top'], ['e', 'Right'], ['s', 'Bottom'], ['w', 'Left']].map(function (w) { return '<button type="button" class="' + (op.wall === w[0] ? 'on' : '') + '" data-act="wall" data-v="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div>' +
+          '<p class="fp-meas">' + (g.w.ay ? 'From the top corner' : 'From the left corner') + ' <b>' + esc(fmtLen(g.pos - g.wd / 2, plan.unit)) + '</b> · ' + (op.type === 'door' ? 'Door' : 'Window') + ' <b>' + esc(fmtLen(g.wd, plan.unit)) + '</b> wide · Wall <b>' + esc(fmtLen(g.w.len, plan.unit)) + '</b></p>' +
           '<label class="fp-range"><span>Move</span><input type="range" data-f="opos" min="' + round2(g.wd / 2) + '" max="' + round2(g.w.len - g.wd / 2) + '" step="0.05" value="' + round2(g.pos) + '" aria-label="Position along the wall"></label>' +
           '<label class="fp-range"><span>Width <output>' + fmtM(op.width) + '</output></span><input type="range" data-f="owidth" min="0.4" max="' + round2(maxW) + '" step="0.05" value="' + round2(op.width) + '"></label>';
       }
@@ -824,7 +847,10 @@
         var op = r.openings.filter(function (o) { return o.id === sel.open; })[0]; if (!op) return;
         if (!inputSnap) inputSnap = snapshot();
         if (f === 'opos') op.pos = +t.value; else { op.width = +t.value; var o2 = t.parentNode.querySelector('output'); if (o2) o2.textContent = fmtM(op.width); }
-        save(); draw(); return;
+        save(); draw();
+        var g5 = openingGeom(r, op), bs = el.querySelectorAll('.fp-sheet .fp-meas b');
+        if (bs.length) { bs[0].textContent = fmtLen(g5.pos - g5.wd / 2, plan.unit); bs[1].textContent = fmtLen(g5.wd, plan.unit); }
+        return;
       }
       if (!r) return;
       var m = /^(w|l)(?:_(ft|in))?$/.exec(f); if (!m) return;
