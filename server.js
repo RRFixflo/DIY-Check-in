@@ -288,6 +288,10 @@ const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, render
   track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// Mid-term inspections by a contractor, for the owner: a link from /admin, photos sorted into rooms by AI, a PDF report: inspections.js.
+require('./inspections').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, notify: reports.notifyOwner, clientIp: reports.clientIp, limiter: reports.limiter,
+  addAdminSection: reports.addAdminSection, PUBLIC_BASE, ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, Anthropic, DEFECTS, CLEANLINESS, extractJson,
+    extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
   sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
