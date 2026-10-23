@@ -15,7 +15,7 @@ const GA_KEY = clean(process.env.GETADDRESS_API_KEY);
 const EPC_BASE = clean(process.env.EPC_API_BASE).replace(/\/+$/, '') || 'https://epc.opendatacommunities.org/api/v1';
 const EPC_AUTH = clean(process.env.EPC_API_TOKEN) ? 'Bearer ' + clean(process.env.EPC_API_TOKEN)
   : clean(process.env.EPC_API_EMAIL) && clean(process.env.EPC_API_KEY) ? 'Basic ' + Buffer.from(clean(process.env.EPC_API_EMAIL) + ':' + clean(process.env.EPC_API_KEY)).toString('base64') : '';
-// Without any key, the public "Find an energy certificate" site is read instead (epcweb.js, as Fixflow does).
+// Without any key, the public "Find an energy certificate" site is read instead (epcweb.js).
 const epcweb = require('./epcweb');
 const CHAIN = [IDEAL_KEY && 'ideal-postcodes', EPC_AUTH ? 'epc' : 'epc-web', GA_KEY && 'getaddress'].filter(Boolean);
 const PROVIDER = CHAIN[0] || '';

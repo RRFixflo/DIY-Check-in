@@ -1,5 +1,5 @@
 // The government's public "Find an energy certificate" site, read by postcode: no key or sign-up needed.
-// The same approach Fixflow uses: the search page lists every domestic certificate at the postcode with its
+// The search page lists every domestic certificate at the postcode with its
 // address, current rating and "valid until" date. Used for the free postcode lookup (address.js) and the
 // landlord dashboard's EPC search (landlords.js) when no EPC register API key is set.
 const SITE = 'https://find-energy-certificate.service.gov.uk';

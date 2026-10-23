@@ -16,7 +16,7 @@ const REPORT_PRICE = 30;   // £, per paid report
 // Funnel steps the app may send to POST /api/event (anything else is ignored).
 const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded'];
 // Recorded by the server itself.
-const SERVER_EVENTS = ['report_submitted', 'certificate_booking', 'contact_message', 'sign_off', 'sign_page', 'floorplan_purchase'];
+const SERVER_EVENTS = ['report_submitted', 'certificate_booking', 'contact_message', 'sign_off', 'sign_page', 'floorplan_purchase', 'report_purchase'];
 const BOT = /bot\b|bot\/|crawl|spider|slurp|preview|monitor|curl|wget|python|headless|facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely|lighthouse|pingdom|uptime|axios|node-fetch|undici|go-http|okhttp|java\/|libwww|httpclient|scrapy|semrush|ahrefs|mj12|dotbot|petalbot|yandex|baidu|duckduck|GPTBot|ClaudeBot|PerplexityBot|OAI-SearchBot|bytespider|CCBot/i;
 const SKIP_PATH = /^\/(api|admin|p|sign|icons|img|images|fonts|static)(\/|$)/;
 const ASSET = /\.(css|js|mjs|map|png|jpe?g|gif|webp|avif|svg|ico|pdf|json|txt|xml|webmanifest|woff2?|ttf|otf|mp4|webm|zip)$/i;
@@ -32,7 +32,7 @@ const writeJson = (f, d) => { fs.writeFileSync(f + '.tmp', JSON.stringify(d)); f
 
 function blankDay(day){
   return { day, views: 0, visitors: 0, hours: new Array(24).fill(0), paths: {}, referrers: {}, utm: {}, devices: {}, countries: {}, events: {},
-    sales: { link: 0, code: 0, open: 0 }, revenue: 0, certs: { n: 0, value: 0 }, seen: {} };
+    sales: { link: 0, code: 0, open: 0, bought: 0 }, revenue: 0, purchases: { n: 0, value: 0 }, certs: { n: 0, value: 0 }, seen: {} };
 }
 // Today's counts in memory; `seen` holds today's visitor hashes: seen['*'] everyone, seen['p:/path'], seen['e:name'].
 let today = null, salt = null, dirty = false, timer = null;
@@ -111,7 +111,10 @@ function track(req, name, value, kind){
   const d = current(), e = d.events[name] || (d.events[name] = { n: 0, visitors: 0 });
   e.n++;
   if (req && firstToday(d, 'e:' + name, visitorOf(req))) e.visitors++;
+  // A report bought on /buy is counted as sold (with its value) when it is paid; storing the report later ('bought')
+  // is not counted again. An older paid link ('link') is counted as sold when its report is stored.
   if (name === 'report_submitted') { bump(d.sales, kind || 'link'); if (kind === 'link') d.revenue = Math.round((d.revenue + REPORT_PRICE) * 100) / 100; }
+  if (name === 'report_purchase') { const f = d.purchases || (d.purchases = { n: 0, value: 0 }); f.n++; f.value = Math.round((f.value + (Number(value) || 0)) * 100) / 100; d.revenue = Math.round(((d.revenue || 0) + (Number(value) || 0)) * 100) / 100; }
   if (name === 'certificate_booking') { d.certs.n++; d.certs.value = Math.round((d.certs.value + (Number(value) || 0)) * 100) / 100; }
   if (name === 'floorplan_purchase') { const f = d.floorplans || (d.floorplans = { n: 0, value: 0 }); f.n++; f.value = Math.round((f.value + (Number(value) || 0)) * 100) / 100; }
   save();
@@ -151,7 +154,7 @@ function mount(app, c){
       if (p === '/api/reports') res.on('finish', () => {
         if (res.statusCode !== 201) return;
         const t = cookieToken(req);
-        track(req, 'report_submitted', REPORT_PRICE, !t ? 'open' : ctx.codeAccess && ctx.codeAccess(t) ? 'code' : 'link');
+        track(req, 'report_submitted', REPORT_PRICE, !t ? 'open' : ctx.codeAccess && ctx.codeAccess(t) ? 'code' : ctx.isPurchase && ctx.isPurchase(t) ? 'bought' : 'link');
       });
       else if (p === '/contact') res.on('finish', () => { if (res.statusCode === 303 && !String((req.body || {}).website || '').trim()) track(req, 'contact_message'); });
       else if (/^\/sign\/[a-f0-9]{32}\/?$/.test(p)) res.on('finish', () => { if (res.statusCode === 200) track(req, 'sign_off'); });
@@ -184,10 +187,12 @@ function sum(days){
     for (const k of Object.keys(s.sales)) s.sales[k] += (d.sales || {})[k] || 0;
     s.certs.n += (d.certs || {}).n || 0; s.certs.value += (d.certs || {}).value || 0;
     s.floorplans.n += (d.floorplans || {}).n || 0; s.floorplans.value += (d.floorplans || {}).value || 0;
+    s.purchases.n += (d.purchases || {}).n || 0; s.purchases.value += (d.purchases || {}).value || 0;
   }
   s.revenue = Math.round(s.revenue * 100) / 100; s.certs.value = Math.round(s.certs.value * 100) / 100;
   return s;
 }
+const soldOf = s => s.sales.link + ((s.purchases || {}).n || 0);   // bought on /buy, plus reports stored with an older paid link
 const people = (s, name) => { const e = s.events[name]; return e ? (e.visitors || e.n) : 0; };
 const money = n => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
 
@@ -195,7 +200,7 @@ const money = n => '£' + Number(n).toLocaleString('en-GB', { minimumFractionDig
 function summaryHTML(esc){
   if (!DIR) return '';
   const t = sum(load(1)), w = sum(load(7));
-  return `<a class="news stats" href="/admin/analytics">📈 <span>Visits and sales: today <b>${t.visitors}</b> visitor${t.visitors === 1 ? '' : 's'}, 7 days <b>${w.visitors}</b>, <b>${w.sales.link}</b> report${w.sales.link === 1 ? '' : 's'} sold</span><span class="open">Open ›</span></a>`;
+  return `<a class="news stats" href="/admin/analytics">📈 <span>Visits and sales: today <b>${t.visitors}</b> visitor${t.visitors === 1 ? '' : 's'}, 7 days <b>${w.visitors}</b>, <b>${soldOf(w)}</b> report${soldOf(w) === 1 ? '' : 's'} sold</span><span class="open">Open ›</span></a>`;
 }
 
 function mountAdmin(app, a){
@@ -233,7 +238,7 @@ function mountAdmin(app, a){
     const chartHTML = [720, 360].map(W => n === 1
       ? chart(s.hours.map((v, h) => ({ v, label: String(h).padStart(2, '0') + ':00' })), s.hours.map((v, h) => String(h).padStart(2, '0')), 'New visitors by hour today', W)
       : chart(days.map(d => ({ v: d.visitors || 0, label: fmtDay(d.day) })), days.map(d => fmtDay(d.day)), 'Visitors per day', W)).join('');
-    const sold = s.sales.link, appVisitors = s.pathsV['/app'] || 0;
+    const sold = soldOf(s), appVisitors = s.pathsV['/app'] || 0;
     const steps = [
       ['Visited the website', s.visitors],
       ['Opened the app', Math.max(people(s, 'app_open'), appVisitors)],
@@ -285,12 +290,12 @@ function mountAdmin(app, a){
 <div class="tiles">
   <div class="tile"><div class="l">Visitors</div><div class="v">${s.visitors}</div><p class="sub">${s.views} page view${s.views === 1 ? '' : 's'}</p></div>
   <div class="tile"><div class="l">Opened the app</div><div class="v">${steps[1][1]}</div><p class="sub">${people(s, 'report_started')} started a report</p></div>
-  <div class="tile"><div class="l">Reports sold</div><div class="v">${sold}</div><p class="sub">${money(s.revenue)}${s.sales.code ? ` · ${s.sales.code} with the access code` : ''}${s.sales.open ? ` · ${s.sales.open} with the paywall off` : ''}</p></div>
+  <div class="tile"><div class="l">Reports sold</div><div class="v">${sold}</div><p class="sub">${money(s.revenue)}${s.purchases.n ? ` · ${s.purchases.n} bought on /buy, ${s.sales.bought} made so far` : ''}${s.sales.code ? ` · ${s.sales.code} with the access code` : ''}${s.sales.open ? ` · ${s.sales.open} with the paywall off` : ''}</p></div>
   <div class="tile"><div class="l">Certificate bookings</div><div class="v">${s.certs.n}</div><p class="sub">${money(s.certs.value)} requested</p></div>
 </div>
 <div class="card"><h2>${n === 1 ? 'New visitors by hour today' : 'Visitors per day'}</h2>${chartHTML}<p class="sub">${n === 1 ? 'UK time. ' : ''}Hover or tap a bar for its number. A visitor is counted once a day.</p></div>
 <div class="card"><h2>Sales funnel</h2><table><thead><tr><th>Step</th><th class="n">People</th><th class="n">From step before</th><th class="bar"></th></tr></thead><tbody>${funnel}</tbody></table>
-<p class="sub">People are counted once a day per step, so over several days someone who came back is counted again. “Report sold” is a report stored with a paid link (office links from Fixflow look the same here).</p></div>
+<p class="sub">People are counted once a day per step, so over several days someone who came back is counted again. “Report sold” is a report bought on /buy (counted once, when it is paid), or a report stored with an older paid link.</p></div>
 <div class="grid2">
   <div class="card"><h2>Top pages</h2>${list(pages, s.views, k => `<a href="${esc(k)}" target="_blank" rel="noopener">${esc(k)}</a>`)}<p class="sub">Page views.</p></div>
   <div class="card"><h2>Where visitors came from</h2>${list(s.referrers, Object.values(s.referrers).reduce((a, b) => a + b, 0))}<p class="sub">Arrivals from another site; “direct” is a typed address, a bookmark or an app that doesn’t say.</p></div>

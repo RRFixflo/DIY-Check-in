@@ -625,6 +625,7 @@
   .pay-card { margin-top: 14px; padding: 16px; border-radius: 18px; background: var(--accent-soft); }
   .pay-card .pay-title { font: 800 20px 'Plus Jakarta Sans', Inter, sans-serif; margin-bottom: 6px; }
   .pay-card p { margin: 0 0 14px; color: var(--ink-soft); }
+  .pay-card a.btn { text-decoration: none; }
   .pay-paid { margin-top: 16px; display: grid; gap: 8px; }
   .pay-paid label { font-size: 14px; color: var(--ink-soft); }
   .pay-paid label strong { color: var(--ink); display: block; }
@@ -2224,7 +2225,7 @@ async function completeReport(){
   state.view = 'done';
   render();
   window.scrollTo({top:0, behavior:'instant'});
-  // Signed and finished means sent: the report goes to the agent straight away.
+  // Signed and finished means sent: the report is sent straight away.
   preparePdf().then(r => { if (r && reportUnlocked()) savePdf(); sendToAgent(); });
 }
 const CONDITION_RANK = { new:0, good:1, fair:2, poor:3 };
@@ -2890,10 +2891,10 @@ async function buildPdfBlob(s, onProgress, out){
       'Each item is described by its colour, material and main features, with any marks or damage seen, its cleanliness and, where it can be tested (doors, windows, taps, appliances, lights, detectors), whether it was working. Each room opens with a summary of its overall condition, cleanliness and the times it was photographed.',
       'Items are numbered within each room, and each item’s photographs carry the same number: item 3 is shown in photograph 3, or 3a, 3b and so on where there are several. General photographs of a room are numbered G1, G2 and so on.',
       'Photographs may not be exhaustive of every item and area of the property. Where an item is not photographed, the written description stands as the record of its condition.',
-      'To dispute anything in this report, or to add something it has missed, write to the managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
+      'To dispute anything in this report, or to add something it has missed, write to the landlord or managing agent within 7 days of receiving it. After 7 days the report is taken as an accurate record of the condition and cleanliness of the property and its contents at the time of the inspection.',
       'A signature on the declaration form applies to the whole report: the schedule of condition, the general condition and cleanliness of the property, the meter readings, and the handover or hand back of keys.',
       'Items left for the tenant’s use are recorded and counted. Items stored in the property in bags or boxes are not opened or inspected; a note is made that they are present. Where furniture can safely be moved, the area behind and beneath it is inspected.',
-      'A copy of this report is sent to the managing agent when it is completed, and kept securely by them as the record of the inspection.',
+      'A copy of this report is kept securely online when it is completed, as the record of the inspection.',
       'Fire safety labels are recorded where they are seen. That is not a statement that the item complies with current fire safety regulations. Keeping smoke, heat and CO detectors in working order during the tenancy is the tenant’s responsibility.'
     ];
     // Two columns, like a printed page: fill the left column to about half, then the right.
@@ -3212,7 +3213,7 @@ async function buildPdfBlob(s, onProgress, out){
     ['Additional information', (dcl.additional || '').trim() ? 'Yes' : 'No', (dcl.additional || '').trim() || 'n/a']
   ], { size: 8.4, style: i => i === 0 ? ['normal', C.ink] : i === 1 ? ['bold', C.accent] : null });
 
-  const disclaimer = 'Any query or discrepancy relating to the descriptions or contents of this report must be raised in writing with the managing agent within 7 days of receipt. If nothing is received in writing within that period, this report is taken as an accurate representation of the cleanliness and condition of the property and its contents at the time of the inspection.';
+  const disclaimer = 'Any query or discrepancy relating to the descriptions or contents of this report must be raised in writing with the landlord or managing agent within 7 days of receipt. If nothing is received in writing within that period, this report is taken as an accurate representation of the cleanliness and condition of the property and its contents at the time of the inspection.';
   set('normal', 7.8, C.inkSoft);
   const dLines2 = lines(disclaimer, CW * 0.8);
   need(dLines2.length * 3.8 + 6);
@@ -3563,8 +3564,8 @@ function openPdf(){ if (pdfReady && reportUnlocked()) { track('downloaded', 1); 
 
 /* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
    can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
-   retried when the connection comes back. Finishing then sends it to the agent (sendToAgent)
-   (sendToAgent), which marks it as sent and emails it to them. */
+   retried when the connection comes back. Finishing then sends it (sendToAgent), which marks it as sent
+   and lets us know. */
 let submitting = false;
 let submitUi = { phase: 'idle', msg: '' };
 function setSubmitUi(phase, msg){ submitUi = { phase, msg: msg || '' }; }
@@ -3669,7 +3670,7 @@ async function sharePdf(){
   }
 }
 /* Free to start, pay at the end. Anyone can do a report; downloading and sending it needs a paid link
-   (from the payment email), the access code, or the owner's sign-in. A report already sent is unlocked. */
+   (bought on /buy), the access code, or the owner's sign-in. A report already sent is unlocked. */
 let accessUi = { checked: false, access: false, reason: '', buy: '' };
 async function checkAccessStatus(){
   try {
@@ -3683,7 +3684,7 @@ function reportUnlocked(){ return !!(state.submittedId || accessUi.access); }
 async function unlockReport(){
   const input = document.getElementById('payInput'), msg = document.getElementById('payMsg'), btn = document.getElementById('payUnlockBtn');
   const code = (input && input.value || '').trim();
-  if (!code){ if (msg) msg.textContent = 'Paste the link from your payment email, or type your access code.'; return; }
+  if (!code){ if (msg) msg.textContent = 'Paste your report link, or type your access code.'; return; }
   if (btn){ btn.disabled = true; btn.textContent = 'Checking…'; }
   try {
     const r = await fetch('/api/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
@@ -3700,16 +3701,16 @@ async function recheckPaid(btn){
   if (btn){ btn.disabled = true; btn.textContent = 'Checking…'; }
   await checkAccessStatus();
   if (reportUnlocked()) render();
-  else { const msg = document.getElementById('payMsg'); if (msg) msg.textContent = accessUi.offline ? 'You appear to be offline.' : 'Not paid yet. After paying, open the link in your email on this phone, or paste it above.'; if (btn){ btn.disabled = false; btn.textContent = 'I’ve paid, check again'; } }
+  else { const msg = document.getElementById('payMsg'); if (msg) msg.textContent = accessUi.offline ? 'You appear to be offline.' : 'Not paid yet. After paying, open your report link on this phone, or paste it above.'; if (btn){ btn.disabled = false; btn.textContent = 'I’ve paid, check again'; } }
 }
 function payCardHTML(){
-  const buy = accessUi.buy || '/pricing';
+  const buy = accessUi.buy || '/buy';
   return `<div class="pay-card">
       <div class="pay-title">Your report is ready</div>
       <p>Pay <strong>£30</strong> to download your PDF report, send it, and get it signed by the tenant. Your report stays saved on this phone in the meantime.</p>
-      <a class="btn btn-primary btn-block" href="${escapeHtml(buy)}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay £30</a>
+      <a class="btn btn-primary btn-block" href="${escapeHtml(buy + (buy.indexOf('?') < 0 ? '?' : '&') + 'from=app')}" onclick="track('pay_click', 1)">Pay £30</a>
       <div class="pay-paid">
-        <label for="payInput"><strong>Paid, or have an access code?</strong> Paste the link from your payment email, or type your code.</label>
+        <label for="payInput"><strong>Paid, or have an access code?</strong> Paste your report link, or type your code.</label>
         <div class="custom-room-add">
           <input class="input" id="payInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Link or access code" onkeydown="if(event.key==='Enter'){event.preventDefault(); unlockReport();}">
           <button type="button" class="btn" id="payUnlockBtn" onclick="unlockReport()">Unlock</button>
@@ -3717,7 +3718,7 @@ function payCardHTML(){
         <div class="pay-msg" id="payMsg" role="status">${accessUi.reason === 'used' ? 'The link on this phone has already been used for another report. Each report needs its own payment.' : ''}</div>
         <button type="button" class="btn-ghost" onclick="recheckPaid(this)">I’ve paid, check again</button>
       </div>
-      <div class="room-count-hint">Opening the link in your payment email on this phone unlocks it too. Your report will be waiting here.</div>
+      <div class="room-count-hint">After paying you come straight back here and the report unlocks. Opening your report link on this phone unlocks it too.</div>
     </div>`;
 }
 
@@ -3923,7 +3924,7 @@ function renderSetup(){
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
     ${accessUi.checked && !accessUi.access ? `<div class="price-note"><strong>Free to start.</strong> You only pay £30 when your report is finished, to download it and send it.</div>` : ''}
-    ${accessUi.checked && !accessUi.access ? `<div class="pay-first"><span><strong>Landlord or agent?</strong> Pay now and send your tenant the link: they do the report and never see a price.</span><a class="btn btn-primary btn-sm" href="${escapeHtml(accessUi.buy || '/pricing#buy-first')}" target="_blank" rel="noopener" onclick="track('pay_click', 1)">Pay now · £30</a></div>` : ''}
+    ${accessUi.checked && !accessUi.access ? `<div class="pay-first"><span><strong>Landlord or agent?</strong> Pay now and send your tenant the link: they do the report and never see a price.</span><a class="btn btn-primary btn-sm" href="${escapeHtml((accessUi.buy || '/buy') + ((accessUi.buy || '/buy').indexOf('?') < 0 ? '?' : '&') + 'for=tenant')}" onclick="track('pay_click', 1)">Pay now · £30</a></div>` : ''}
     <div class="intro-card">
       <h2>Before you start</h2>
       <ul class="intro-list">
@@ -4585,7 +4586,10 @@ track('app_open');
       }
     } else if (state.floorplan) fpCheck();
   }
-  checkAccessStatus().then(() => { if (state.view === 'setup') render(); });
+  // Back from paying on /buy (/app?paid=1): the cookie is set, so check access again and unlock the finished report.
+  const backFromPaying = new URLSearchParams(location.search).get('paid');
+  if (backFromPaying) history.replaceState(null, '', location.pathname);
+  checkAccessStatus().then(() => { if (state.view === 'setup' || (backFromPaying && state.view === 'done')) render(); });
   // Opened from an earlier report's link (/?from=<key>): start a new report from it, if nothing else is open.
   const fromKey = keyFromInput(new URLSearchParams(location.search).get('from'));
   if (fromKey){ history.replaceState(null, '', location.pathname); if (state.view === 'setup') startFromEarlier(fromKey); }
