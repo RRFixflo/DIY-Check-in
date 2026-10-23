@@ -1249,9 +1249,9 @@ ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</d
     up.sort((x, y) => x.st.d - y.st.d);
     const upRows = up.slice(0, 100).map(({ a, p, k, st }) => `<li><div style="flex:1;min-width:0"><strong>${esc(SHORT[k])} · ${esc(fullAddress(p.address))}</strong> <span class="pill${st.d < 0 ? ' wait' : ''}">${st.d < 0 ? 'Expired ' + esc(fmt(st.due)) : 'Due ' + esc(fmt(st.due)) + ' · ' + esc(inDays(st.d))}</span>
       <div class="sub">${esc(p.type)} · ${esc(bedsText(p.beds))} · ${esc(a.name)} · <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></div></div></li>`).join('');
-    const accRows = accs.slice(0, 300).map(a => `<li${a.createdAt > seen ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong>${esc(a.name)}</strong>${a.createdAt > seen ? ' <span class="pill new">New</span>' : ''}
+    const accRows = accs.slice(0, 300).map(a => `<li${a.createdAt > seen ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong><a href="/admin/landlords/${esc(a.id)}">${esc(a.name)}</a></strong>${a.createdAt > seen ? ' <span class="pill new">New</span>' : ''}
       <div class="sub"><a href="mailto:${esc(a.email)}">${esc(a.email)}</a> · joined ${esc(day(a.createdAt))} · ${plural(a.properties.length, 'property').replace('propertys', 'properties')}${a.properties.length ? ': ' + esc(a.properties.slice(0, 3).map(p => streetLine(p.address) + ', ' + p.address.postcode).join('; ')) + (a.properties.length > 3 ? '…' : '') : ''} · reminders ${a.settings && a.settings.reminders === false ? 'off' : 'on'}</div></div>
-      <div class="actions"><form method="post" action="/admin/landlords/${esc(a.id)}/delete" onsubmit="return confirm('Delete the account of ${esc(a.name.replace(/'/g, ''))} with all its properties and files? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
+      <div class="actions"><a class="btn" href="/admin/landlords/${esc(a.id)}">View all details</a><form method="post" action="/admin/landlords/${esc(a.id)}/delete" onsubmit="return confirm('Delete the account of ${esc(a.name.replace(/'/g, ''))} with all its properties and files? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#landlords" onclick="document.getElementById('landlords').open=true">🏠 ${plural(fresh, 'new landlord sign-up')} since your last visit</a>` : '';
     return banner + `<details class="codes" id="landlords"${fresh ? ' open' : ''}><summary>🏠 Landlord accounts <span class="sub" style="display:inline">— ${accs.length ? plural(accs.length, 'account') + ', ' + nProps + ' propert' + (nProps === 1 ? 'y' : 'ies') + (up.length ? ', ' + up.length + ' certificate' + (up.length === 1 ? '' : 's') + ' due within 90 days' : '') : 'none yet'}</span></summary>
 ${accs.length ? `<p class="sub" style="margin-top:12px">Certificates expired or due in the next 90 days (leads for bookings). Not added yet: ${missing.gas} Gas Safety, ${missing.eicr} EICR, ${missing.epc} EPC.${emailOn() ? '' : ' Reminder emails are off until RESEND_API_KEY is set.'}${epcOn() ? '' : ' The automatic EPC search is off until EPC_API_EMAIL and EPC_API_KEY are set.'}</p>
@@ -1259,6 +1259,56 @@ ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 9
 <p class="sub" style="margin-top:14px">Rent and expenses (counts only): ${(mc.rentProps + ' propert' + (mc.rentProps === 1 ? 'y' : 'ies'))} with rent set up, ${plural(mc.payments, 'rent payment')} recorded, ${plural(mc.receipts, 'receipt')} emailed, ${plural(mc.expenses, 'expense')} recorded.</p>
 <p class="sub" style="margin-top:14px">Accounts, newest first:</p><ul>${accRows}</ul>` : '<p class="sub">Landlords who create a free account on the Landlords page appear here, with their properties’ certificate dates.</p>'}</details>`;
   }
+  // The owner's read-only view of one landlord account: every property with its address, certificates, licence, tenancy, rent and expenses.
+  app.get('/admin/landlords/:id', (req, res) => {
+    res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' });
+    if (!isOwner(req)) return res.redirect(303, '/admin');
+    const a = readAcc(String(req.params.id)); if (!a) return res.status(404).type('text/plain').send('Account not found.');
+    const t = todayLondon(), st = a.settings || {};
+    const fl = f => f && f.id ? `<a href="/admin/landlords/${esc(a.id)}/files/${esc(f.id)}" target="_blank" rel="noopener">${esc(f.name || 'View file')}</a>` : '';
+    const rows = list => '<table>' + list.filter(r => r[1] !== '' && r[1] != null).map(r => `<tr><th>${esc(r[0])}</th><td>${r[1]}</td></tr>`).join('') + '</table>';
+    const chip = x => `<span class="chip ${esc(x.cls)}">${esc(x.text)}</span>`;
+    const props = a.properties.map(p => {
+      const g = p.gas || null, e = p.eicr || null, ep = p.epc || null, l = p.licence || null, tn = p.tenancy || null;
+      const rs = money.rentStatus(p, t), L = tn ? money._test.ledger(p, t) : null;
+      const tenants = tn && tn.tenants && tn.tenants.length ? tn.tenants.map(x => [esc(x.name || ''), x.email ? `<a href="mailto:${esc(x.email)}">${esc(x.email)}</a>` : '', x.phone ? `<a href="tel:${esc(x.phone)}">${esc(x.phone)}</a>` : ''].filter(Boolean).join(' · ')).join('<br>') : '';
+      const pays = (p.payments || []).slice().sort((x, y) => y.date.localeCompare(x.date)).slice(0, 24).map(x => `<tr><td>${esc(fmt(x.date))}</td><td>${esc(money.gbp(x.amt))}</td><td>${esc(money.methodText(x.method))}</td><td>${x.no ? esc(money.receiptNo(x.no)) : ''}${x.sentAt ? ' · receipt sent ' + esc(fmt(x.sentAt.slice(0, 10))) : ''}</td></tr>`).join('');
+      const rems = (p.rentReminders || []).slice(0, 10).map(r => `<li>${esc(fmt(String(r.at).slice(0, 10)))} · ${esc(r.type)} · ${esc(money.gbp(r.owed || 0))} owed · ${esc(r.via || '')}</li>`).join('');
+      const exps = (a.expenses || []).filter(x => x.propId === p.id).sort((x, y) => y.date.localeCompare(x.date)).slice(0, 30).map(x => `<tr><td>${esc(fmt(x.date))}</td><td>${esc(money.catText(x.cat))}</td><td>${esc([x.supplier, x.desc].filter(Boolean).join(' · '))}</td><td>${esc(money.gbp(x.amt))}</td><td>${fl(x.file)}</td></tr>`).join('');
+      return `<section class="prop"><h2>${esc(fullAddress(p.address))}</h2><p class="sub">${esc(p.type || '')} · ${esc(bedsText(p.beds))} · added ${esc(fmt(String(p.createdAt || '').slice(0, 10)))}</p>
+<div class="chips">${['gas', 'eicr', 'epc', 'licence'].map(k => '<span>' + esc(SHORT[k]) + ': ' + chip(certStatus(k, p, t)) + '</span>').join('')}<span>Tenancy: ${chip(tenancyStatus(p, t))}</span><span>Deposit: ${chip(depositStatus(p, t))}</span><span>Rent: ${chip(rs)}</span></div>
+<div class="grid">
+<div><h3>EPC</h3>${ep ? rows([['Rating', esc([ep.rating, ep.score ? '(' + ep.score + ')' : ''].filter(Boolean).join(' '))], ['Certificate no.', esc(ep.certNo || '')], ['Lodged', esc(fmt(ep.lodged))], ['Valid until', esc(fmt(epcExpiry(ep)))], ['Found', ep.auto ? 'Automatically, on the EPC register' : ep.source === 'manual' ? 'Typed in by the landlord' : 'Chosen from the EPC register']]) : '<p class="sub">Not added.</p>'}</div>
+<div><h3>Gas Safety</h3>${g && g.date ? rows([['Last check', esc(fmt(g.date))], ['Valid until', esc(fmt(gasExpiry(g)))], ['Engineer', esc(g.engineer || '')], ['Gas Safe no.', esc(g.gasSafeNo || '')], ['Certificate', fl(g.file)]]) : '<p class="sub">Not added.</p>'}</div>
+<div><h3>EICR</h3>${e && e.date ? rows([['Inspected', esc(fmt(e.date))], ['Next due', esc(fmt(eicrDue(e)))], ['Result', e.result === 'unsatisfactory' ? 'Unsatisfactory' + (e.remedialDate ? ', remedial work done ' + esc(fmt(e.remedialDate)) : ', remedial work not recorded') : 'Satisfactory'], ['Electrician', esc(e.engineer || '')], ['Report', fl(e.file)]]) : '<p class="sub">Not added.</p>'}</div>
+<div><h3>Licence</h3>${l ? rows([['Type', esc(licText(l.type))], ['Council', esc(l.council || '')], ['Number', esc(l.number || '')], ['Start', esc(fmt(l.start))], ['Expires', esc(fmt(l.expires))], ['Notes', esc(l.notes || '')], ['Certificate', fl(l.file)]]) : '<p class="sub">Not added.</p>'}</div>
+<div class="wide"><h3>Tenancy</h3>${tn ? rows([['Tenants', tenants || esc(tn.names || '')], ['Start', esc(fmt(tn.start))], ['End of fixed term', esc(fmt(tn.end))], ['Periodic', tn.periodic ? 'Yes' : ''], ['Rent', money.rentPence(tn) ? esc(money.gbp(money.rentPence(tn)) + ' ' + money.perText(tn)) + (tn.dueDay ? ', due on the ' + tn.dueDay + ([, 'st', 'nd', 'rd'][tn.dueDay % 100 > 10 && tn.dueDay % 100 < 14 ? 0 : tn.dueDay % 10] || 'th') : '') : ''], ['First rent date', esc(fmt(tn.rentStart))], ['Deposit', tn.deposit > 0 ? esc(pounds(tn.deposit)) : ''], ['Scheme', esc(tn.scheme || '')], ['Protected on', esc(fmt(tn.protectedOn))], ['Deposit reference', esc(tn.depositRef || '')], ['Notes', esc(tn.notes || '')]]) : '<p class="sub">No tenancy added.</p>'}</div>
+<div class="wide"><h3>Rent</h3>${L && L.planned ? rows([['Owed now', esc(money.gbp(L.arrears))], ['Of which late', esc(money.gbp(L.overdue))], ['Paid up to', esc(fmt(L.paidUpTo))], ['Next due', L.next ? esc(fmt(L.next.due) + ' · ' + money.gbp(L.next.amt)) : ''], ['Received in total', esc(money.gbp(L.received))]]) : '<p class="sub">Rent not set up.</p>'}
+${pays ? '<table class="list"><tr><th>Received</th><th>Amount</th><th>Method</th><th>Receipt</th></tr>' + pays + '</table>' : ''}${rems ? '<h4>Rent reminders sent</h4><ul>' + rems + '</ul>' : ''}</div>
+<div class="wide"><h3>Expenses</h3>${exps ? '<table class="list"><tr><th>Date</th><th>Category</th><th>Details</th><th>Amount</th><th>Receipt</th></tr>' + exps + '</table>' : '<p class="sub">None recorded.</p>'}</div>
+</div>${p.notes ? '<h3>Notes</h3><p class="pre">' + esc(p.notes) + '</p>' : ''}</section>`;
+    }).join('');
+    const general = (a.expenses || []).filter(x => !x.propId).length;
+    res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(a.name)} · Landlord account</title>
+<style>:root{color-scheme:light dark;--bg:#F5EFE4;--card:#fff;--ink:#13213A;--soft:#5A6475;--line:#E4D9C6;--navy:#1B2E4B}@media(prefers-color-scheme:dark){:root{--bg:#0F1A2D;--card:#16233B;--ink:#F1EADF;--soft:#B9B2A5;--line:#2A3B5A;--navy:#E8D5B5}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,system-ui,Segoe UI,Helvetica,Arial,sans-serif}main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}a{color:inherit}
+h1{margin:6px 0 4px;font-size:26px}h2{margin:0;font-size:19px}h3{margin:14px 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:var(--soft)}h4{margin:12px 0 4px;font-size:14px}.sub{color:var(--soft);margin:2px 0}
+.prop{background:var(--card);border-radius:16px;padding:18px;margin-top:16px;border:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 22px}.wide{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--soft);font-weight:600;width:40%}.list th{width:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0;font-size:13px}.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:600;background:#E8EEF7;color:#1B2E4B}.chip.ok{background:#DCF2E3;color:#145A2E}.chip.due{background:#FCEFD3;color:#7A4B00}.chip.exp{background:#FBE0DD;color:#8A1C12}.chip.none{background:#ECE7DE;color:#5A5348}
+.pre{white-space:pre-wrap}.back{font-size:14px}@media(max-width:600px){.list{display:block;overflow-x:auto}}</style></head><body><main>
+<a class="back" href="/admin#landlords">← Back to the admin page</a>
+<h1>${esc(a.name)}</h1><p class="sub"><a href="mailto:${esc(a.email)}">${esc(a.email)}</a> · joined ${esc(fmt(String(a.createdAt).slice(0, 10)))} · ${a.properties.length} propert${a.properties.length === 1 ? 'y' : 'ies'} · email reminders ${st.reminders === false ? 'off' : 'on'}${st.rentReminders ? ' · rent overdue reminders on' : ''}${st.extraEmail ? ' · also to ' + esc(st.extraEmail) : ''}${general ? ' · ' + general + ' general expense' + (general === 1 ? '' : 's') : ''}</p>
+${props || '<p class="sub">No properties added yet.</p>'}</main></body></html>`);
+  });
+  app.get('/admin/landlords/:id/files/:fid', (req, res) => {
+    if (!isOwner(req)) return res.redirect(303, '/admin');
+    const a = readAcc(String(req.params.id)), fid = String(req.params.fid);
+    const f = a && /^[a-f0-9]{24}$/.test(fid) && a.properties.flatMap(p => [p.gas && p.gas.file, p.eicr && p.eicr.file, p.licence && p.licence.file]).concat((a.expenses || []).map(e => e.file)).find(x => x && x.id === fid);
+    if (!f) return res.status(404).type('text/plain').send('File not found.');
+    res.set({ 'Content-Disposition': `inline; filename="${String(f.name).replace(/["\\]/g, '')}"`, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex' });
+    res.type(f.type).sendFile(path.join(FILE_DIR, a.id, f.id + '.' + f.ext), err => { if (err && !res.headersSent) res.status(404).type('text/plain').send('File not found.'); });
+  });
   app.post('/admin/landlords/:id/delete', urlenc, (req, res) => {
     res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' });
     if (!isOwner(req)) return res.status(401).type('text/plain').send('Sign in to /admin first.');
