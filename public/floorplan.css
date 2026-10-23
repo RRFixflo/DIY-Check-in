@@ -169,3 +169,11 @@ html.fp-lock, html.fp-lock body { overflow: hidden; }
 @media (max-width: 560px) { .fp-close { width: 44px; padding: 0; justify-content: center; flex: none; } .fp-close span { display: none; } }
 @media (max-width: 380px) { .fp-step { padding: 8px 6px; font-size: 13.5px; gap: 5px; } .fp-in input { font-size: 20px; } }
 @media (prefers-reduced-motion: reduce) { .fp-toast, .fp-room { transition: none; } }
+
+/* Adding a door or window: big buttons under the plan, then tap the wall */
+.fp-add-open { margin-top: 8px; }
+.fp-add-open button { flex: 1; }
+.fp-svg.placing { cursor: crosshair; }
+
+.fp-q { margin: 10px 0 6px; font-weight: 700; font-size: 14.5px; } .fp-q span { font-weight: 500; color: var(--fp-ink-soft); }
+.fp-walls button { min-height: 46px; font-size: 15px; }

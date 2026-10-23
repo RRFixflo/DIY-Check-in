@@ -219,9 +219,10 @@
     rs.forEach(function (r) {
       var L = fitLabel(r, p.unit), fs = L.fs, lh = fs * 1.28, cx = r.x + r.w / 2, cy = r.y + r.l / 2, top = -((L.lines.length - 1) * lh) / 2;
       var t = L.lines.map(function (ln, i) {
-        return '<text x="0" y="' + f3(top + i * lh) + '" font-size="' + f3(ln.b ? fs * 1.05 : fs * 0.88) + '" font-weight="' + (ln.b ? 700 : 400) + '" fill="' + (ln.b ? pal.text : pal.soft) + '" text-anchor="middle" dominant-baseline="central"' + (r.stairs ? ' stroke="' + pal.room + '" stroke-width="' + f3(fs * 0.3) + '" paint-order="stroke"' : '') + '>' + esc(ln.t) + '</text>';
+        return '<text x="0" y="' + f3((top + i * lh) * 100) + '" font-size="' + f3((ln.b ? fs * 1.05 : fs * 0.88) * 100) + '" font-weight="' + (ln.b ? 700 : 400) + '" fill="' + (ln.b ? pal.text : pal.soft) + '" text-anchor="middle" dominant-baseline="central"' + (r.stairs ? ' stroke="' + pal.room + '" stroke-width="' + f3(fs * 0.3) + '" paint-order="stroke"' : '') + '>' + esc(ln.t) + '</text>';
       }).join('');
-      out.push('<g transform="translate(' + f3(cx) + ' ' + f3(cy) + ')' + (L.rot ? ' rotate(-90)' : '') + '" font-family="' + FONT + '" text-rendering="geometricPrecision" pointer-events="none">' + t + '</g>');
+      // Drawn at 100× and scaled down: iPhone Safari leaves out SVG text with a very small font size.
+      out.push('<g transform="translate(' + f3(cx) + ' ' + f3(cy) + ') scale(0.01)' + (L.rot ? ' rotate(-90)' : '') + '" font-family="' + FONT + '" text-rendering="geometricPrecision" pointer-events="none">' + t + '</g>');
     });
     var s2 = rs.filter(function (r) { return r.id === sel.room && !sel.open; })[0];
     if (s2) out.push('<rect x="' + f3(s2.x + 0.1) + '" y="' + f3(s2.y + 0.1) + '" width="' + f3(Math.max(0.05, s2.w - 0.2)) + '" height="' + f3(Math.max(0.05, s2.l - 0.2)) + '" fill="none" stroke="' + pal.sel + '" stroke-width="0.06" stroke-dasharray="0.18 0.1" pointer-events="none"/>');
@@ -242,7 +243,7 @@
   function northSVG(x, y, size, pal) {
     return '<g transform="translate(' + f3(x) + ' ' + f3(y) + ')"><circle r="' + f3(size / 2) + '" fill="none" stroke="' + pal.soft + '" stroke-width="' + f3(size * 0.04) + '"/>' +
       '<path d="M0 ' + f3(-size * 0.4) + ' L' + f3(size * 0.16) + ' ' + f3(size * 0.22) + ' L0 ' + f3(size * 0.1) + ' L' + f3(-size * 0.16) + ' ' + f3(size * 0.22) + 'Z" fill="' + pal.wall + '"/>' +
-      '<text y="' + f3(-size * 0.62) + '" font-size="' + f3(size * 0.32) + '" font-weight="700" fill="' + pal.text + '" text-anchor="middle" font-family="' + FONT + '">N</text></g>';
+      '<text y="' + f3(-size * 62) + '" font-size="' + f3(size * 32) + '" font-weight="700" fill="' + pal.text + '" text-anchor="middle" font-family="' + FONT + '" transform="scale(0.01)">N</text></g>';
   }
   // One floor as a self-contained SVG (previews, the sample on /floor-plan).
   function floorPreview(p, fi, o) {
@@ -497,7 +498,7 @@
       buyTitle: 'Download your floor plan', buyText: 'Drawing it is free. Pay once to download it as a PDF and a picture.',
       buyBtn: 'Pay ' + PRICE_TEXT + ' and download', unlocked: '', closeLabel: 'Close'
     }, opts.copy || {});
-    var step = opts.step || (hasPlan(plan) ? 'plan' : 'rooms'), cur = 0, sel = {}, past = [], future = [], vb = null, svg = null, gesture = null, pointers = new Map(), inputSnap = null, toastT = null, pbT = null, built = null, closed = false;
+    var step = opts.step || (hasPlan(plan) ? 'plan' : 'rooms'), cur = 0, sel = {}, placing = null, past = [], future = [], vb = null, svg = null, gesture = null, pointers = new Map(), inputSnap = null, toastT = null, pbT = null, built = null, closed = false;
 
     function save() { plan.updatedAt = new Date().toISOString(); built = null; if (step === 'finish') { clearTimeout(pbT); pbT = setTimeout(prebuild, 700); } if (opts.onChange) opts.onChange(plan); }
     function snapshot() { return JSON.stringify(plan); }
@@ -570,7 +571,10 @@
       var r = sel.room && room(sel.room);
       if (!r) {
         var st = stats(plan), f = st.floors[cur];
-        return '<p class="fp-hint"><b>' + esc(plan.floors[cur]) + ': ' + areaText(f.area) + '</b> · ' + areaFt(f.area) + '<br>Your plan is ready. If you like, drag a room to move it, or tap one to turn it or add a door or window.</p>';
+        if (placing) return '<div class="fp-sheet-t"><b>Tap the wall where the ' + placing + ' goes</b><button type="button" class="fp-link" data-act="cancelPlace">Cancel</button></div><p class="fp-hint">Tap on or next to any wall. You can slide it along the wall and change its width afterwards.</p>';
+        return '<p class="fp-hint"><b>' + esc(plan.floors[cur]) + ': ' + areaText(f.area) + '</b> · ' + areaFt(f.area) + '</p>' +
+          '<div class="fp-acts fp-add-open"><button type="button" data-act="place" data-v="door">' + ICON.door + '<span>Add a door</span></button><button type="button" data-act="place" data-v="window">' + ICON.win + '<span>Add a window</span></button></div>' +
+          '<p class="fp-hint" style="margin-top:8px">Drag a room to move it. Tap a room to turn it or add stairs.</p>';
       }
       var op = sel.open && r.openings.filter(function (o) { return o.id === sel.open; })[0];
       if (op) {
@@ -578,7 +582,7 @@
         return '<div class="fp-sheet-t"><b>' + (op.type === 'door' ? 'Door' : 'Window') + '</b> · ' + esc(r.name) +
           (op.type === 'door' ? '<button type="button" class="fp-icon" data-act="flip" aria-label="Flip the door">' + ICON.flip + '</button>' : '') +
           '<button type="button" class="fp-icon danger" data-act="delOpen" aria-label="Remove the ' + op.type + '">' + ICON.bin + '</button><button type="button" class="fp-link" data-act="unsel">Done</button></div>' +
-          '<div class="fp-seg" role="group" aria-label="Which wall">' + [['n', 'Top'], ['e', 'Right'], ['s', 'Bottom'], ['w', 'Left']].map(function (w) { return '<button type="button" class="' + (op.wall === w[0] ? 'on' : '') + '" data-act="wall" data-v="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div>' +
+          '<p class="fp-q">Which wall is it on? <span>Or drag it round the room.</span></p><div class="fp-seg fp-walls" role="group" aria-label="Which wall">' + [['n', 'Top'], ['e', 'Right'], ['s', 'Bottom'], ['w', 'Left']].map(function (w) { return '<button type="button" class="' + (op.wall === w[0] ? 'on' : '') + '" data-act="wall" data-v="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div>' +
           '<label class="fp-range"><span>Move</span><input type="range" data-f="opos" min="' + round2(g.wd / 2) + '" max="' + round2(g.w.len - g.wd / 2) + '" step="0.05" value="' + round2(g.pos) + '" aria-label="Position along the wall"></label>' +
           '<label class="fp-range"><span>Width <output>' + fmtM(op.width) + '</output></span><input type="range" data-f="owidth" min="0.4" max="' + round2(maxW) + '" step="0.05" value="' + round2(op.width) + '"></label>';
       }
@@ -680,6 +684,26 @@
       }
       if (pointers.size > 2) return;
       var t = e.target.closest ? e.target.closest('[data-open],[data-room]') : null, p = toSvg(e.clientX, e.clientY);
+      if (placing) {
+        // The wall nearest the tap (within about 40 px on screen, or anywhere inside a room).
+        var best = null, tol = 40 * vb.w / rect().width;
+        floorRooms(plan, cur).filter(function (x) { return x.x != null; }).forEach(function (rm) {
+          var inside = p.x >= rm.x && p.x <= rm.x + rm.w && p.y >= rm.y && p.y <= rm.y + rm.l;
+          [['n', Math.abs(p.y - rm.y), p.x >= rm.x - tol && p.x <= rm.x + rm.w + tol], ['s', Math.abs(p.y - rm.y - rm.l), p.x >= rm.x - tol && p.x <= rm.x + rm.w + tol],
+           ['w', Math.abs(p.x - rm.x), p.y >= rm.y - tol && p.y <= rm.y + rm.l + tol], ['e', Math.abs(p.x - rm.x - rm.w), p.y >= rm.y - tol && p.y <= rm.y + rm.l + tol]].forEach(function (c) {
+            if (!c[2] || (!inside && c[1] > tol)) return;
+            if (!best || c[1] < best.d || (inside && !best.inside)) best = { rm: rm, wall: c[0], d: c[1], inside: inside };
+          });
+        });
+        pointers.delete(e.pointerId);
+        if (!best) { toast('Tap on or next to a wall of a room.'); return; }
+        var W = wallOf(best.rm, best.wall), isDoor = placing === 'door', width = Math.min(isDoor ? 0.8 : 1.2, Math.max(0.4, W.len - 0.2));
+        var along = W.ax ? p.x - best.rm.x : p.y - best.rm.y, o = { id: uid('fo'), type: placing, wall: best.wall, pos: round2(clamp(along, width / 2, W.len - width / 2)), width: width, flip: false };
+        change(function () { best.rm.openings.push(o); });
+        placing = null; svg.classList.remove('placing'); sel = { room: best.rm.id, open: o.id }; draw(); updateSheet();
+        toast((isDoor ? 'Door' : 'Window') + ' added to the ' + best.rm.name.toLowerCase() + '.', 'undo');
+        return;
+      }
       if (t && t.getAttribute('data-open')) {
         var ids = t.getAttribute('data-open').split(':');
         gesture = { kind: 'open', rid: ids[0], oid: ids[1], snap: snapshot(), moved: false, cx: e.clientX, cy: e.clientY };
@@ -716,6 +740,11 @@
       }
       if (gesture.kind === 'open') {
         var rm = room(gesture.rid), op = rm && rm.openings.filter(function (o) { return o.id === gesture.oid; })[0]; if (!op) return;
+        // Slide along the wall, or round the corner onto whichever wall of the room the finger is nearest.
+        var dn = [['n', Math.abs(p.y - rm.y)], ['s', Math.abs(p.y - rm.y - rm.l)], ['w', Math.abs(p.x - rm.x)], ['e', Math.abs(p.x - rm.x - rm.w)]]
+          .map(function (c) { var out = c[0] === 'n' || c[0] === 's' ? Math.max(0, rm.x - p.x, p.x - rm.x - rm.w) : Math.max(0, rm.y - p.y, p.y - rm.y - rm.l); return [c[0], Math.hypot(c[1], out)]; })
+          .sort(function (a, b) { return a[1] - b[1]; })[0][0];
+        if (dn !== op.wall) { var nw = wallOf(rm, dn); op.wall = dn; op.width = Math.min(op.width, Math.max(0.4, nw.len - 0.1)); }
         var w = wallOf(rm, op.wall);
         op.pos = round2(clamp(w.ax ? p.x - rm.x : p.y - rm.y, op.width / 2, w.len - op.width / 2)); draw();
       }
@@ -755,6 +784,8 @@
         case 'zin': zoom(1 / 1.3); break;
         case 'zout': zoom(1.3); break;
         case 'unsel': sel = {}; updateSheet(); draw(); break;
+        case 'place': placing = v === 'window' ? 'window' : 'door'; sel = {}; updateSheet(); draw(); if (svg) svg.classList.add('placing'); break;
+        case 'cancelPlace': placing = null; updateSheet(); if (svg) svg.classList.remove('placing'); break;
         case 'turn': if (r) { change(function () { rotate(r); }); draw(); updateSheet(); } break;
         case 'addDoor': case 'addWin':
           if (!r) return;
@@ -772,7 +803,10 @@
       }
     }
     function toastHide() { var t = el.querySelector('.fp-toast'); if (t) t.classList.remove('on'); }
-    function scrollTop() { var b = el.querySelector('.fp-body'); if (b) b.scrollTop = 0; if (!overlay && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start' }); }
+    function scrollTop() {
+      var b = el.querySelector('.fp-body'); if (b) b.scrollTop = 0;
+      if (!overlay) { var hd = document.querySelector('header.top'), off = hd ? hd.getBoundingClientRect().height + 8 : 0, top = el.getBoundingClientRect().top; if (top < off) window.scrollBy(0, top - off); }
+    }
     function focusLast() {
       var list = el.querySelectorAll('.fp-room'), last = list[list.length - 1]; if (!last) return;
       var inp = last.querySelector('[data-f^="w"]');
