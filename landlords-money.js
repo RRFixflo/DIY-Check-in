@@ -317,20 +317,137 @@ async function summaryPDF(acc, y){
   return Buffer.from(await k.doc.save());
 }
 
+/* ------------------------------ rent reminders and late-rent letters ------------------------------ */
+// Three steps, each written from the rent ledger and edited by the landlord before it goes: a friendly reminder,
+// a formal late-rent letter (the arrears, each period, and a date to pay by), and a final letter before further
+// action. Factual and polite: no threats and no legal advice; the final letter says it isn't a legal notice.
+const REMIND = [['friendly', 'Friendly reminder', 'A short, friendly note that the rent hasn’t arrived yet.'],
+  ['formal', 'Late rent letter', 'A formal letter with the arrears, each period, and a date to pay by.'],
+  ['final', 'Final letter before further action', 'For when earlier reminders haven’t worked. It says plainly that it isn’t a legal notice.']];
+const remindName = k => (REMIND.find(x => x[0] === k) || REMIND[0])[1];
+const VIA = { email: 'Sent by email from DIY Inventory', mailto: 'Opened in their email app', outlook: 'Opened in Outlook on the web', copy: 'Copied and sent another way', letter: 'Downloaded as a letter (PDF)', post: 'Posted or handed over', other: 'Sent another way' };
+const fmtLongD = s => s ? new Date(toUTC(s)).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '';
+function tenantNames(tn){
+  const list = tn && Array.isArray(tn.tenants) ? tn.tenants.map(x => x.name).filter(Boolean) : String((tn && tn.names) || '').split(/\s*,\s*/).filter(Boolean);
+  return list;
+}
+const andList = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0] || '';
+function owedNow(p, today){
+  const L = ledger(p, today), owing = L.sch.filter(s => !s.future && s.left > 0);
+  return { L, owing, total: L.arrears };
+}
+function reminderText(acc, p, type, payBy, today, last){
+  const { owing, total } = owedNow(p, today), tn = p.tenancy || {}, names = tenantNames(tn), who = (acc.settings && acc.settings.receiptName) || acc.name;
+  const first = andList(names.map(n => n.split(/\s+/)[0])) || 'there', full = andList(names) || 'Tenant';
+  const shown = owing.slice(-12), lines = shown.map(s => '- Rent for ' + periodText(s) + ': ' + gbp(s.left, true) + (s.paid > 0 ? ' still to pay' : '') + ' (due ' + fmt(s.due) + ')');
+  if (owing.length > shown.length) lines.unshift('- ' + plural(owing.length - shown.length, 'earlier period') + ': ' + gbp(sum(owing.slice(0, -12), s => s.left), true));
+  const addr = addrFull(p), when = fmtLongD(today), by = fmtLongD(payBy);
+  let subject, body;
+  if (type === 'final') {
+    subject = 'Final letter before further action: rent arrears at ' + addrLine(p);
+    body = [`Dear ${full},`, '', `Rent arrears: ${addr}`, '',
+      `I have written to you before about the rent for this property${last ? ', most recently on ' + fmtLongD(last) : ''}. According to my records, the following rent is still outstanding:`, ''].concat(lines, ['',
+      `Total outstanding: ${gbp(total, true)} as at ${when}.`, '',
+      `Please pay the full amount, or contact me to agree a plan to pay it, by ${by}. If I don’t hear from you by then, I will need to consider the further steps open to me to recover the arrears.`, '',
+      'This letter is a request for payment. It is not a legal notice (such as a Section 8 notice) and it does not end your tenancy.', '',
+      'If you are having difficulty paying, please contact me straight away. Free, confidential advice is available, for example from Citizens Advice or Shelter.', '',
+      'Yours sincerely,', who, acc.email]);
+  } else if (type === 'formal') {
+    subject = 'Late rent: ' + gbp(total, true) + ' outstanding at ' + addrLine(p);
+    body = [`Dear ${full},`, '', `Rent arrears: ${addr}`, '',
+      'I am writing about the rent for the property above. According to my records, the following rent has not been received:', ''].concat(lines, ['',
+      `Total outstanding: ${gbp(total, true)} as at ${when}.`, '',
+      `Please pay the full amount by ${by}, by your usual method. If you have already paid, please let me know the date and the amount so that I can check my records.`, '',
+      'If you are having difficulty paying, please contact me as soon as possible so that we can talk about it. Free, confidential advice is also available, for example from Citizens Advice or Shelter.', '',
+      'Yours sincerely,', who, acc.email]);
+  } else {
+    subject = 'Rent reminder: ' + addrLine(p);
+    body = [`Hello ${first},`, '', `I hope you’re well. This is a friendly reminder that the rent for ${addr} hasn’t reached me yet. My records show ${gbp(total, true)} outstanding:`, ''].concat(lines, ['',
+      'If you’ve already paid, thank you, and please ignore this message: it may not have reached me yet. If not, I’d be grateful if you could pay as soon as you can.', '',
+      'If anything is making it difficult to pay, please let me know so we can talk about it.', '',
+      'Kind regards,', who]);
+  }
+  return { subject, body: body.join('\n'), total, periods: owing.map(s => ({ due: s.due, to: s.to, left: s.left })) };
+}
+async function letterPDF(r){
+  const k = await pdfKit(), { W, M } = k; k.add();
+  k.page.drawRectangle({ x: 0, y: k.H - 8, width: W, height: 8, color: NAVY });
+  let y = k.y - 8;
+  [r.from, r.fromEmail].filter(Boolean).forEach((l, i) => { k.text(l, W - M, y, { size: 10.5, right: true, bold: i === 0, color: i ? SOFT : INK }); y -= 14; });
+  y -= 16; k.text(fmtLongD(r.date), M, y, { size: 11 }); y -= 28;
+  [r.toNames].concat(r.address.split(',').map(x => x.trim()).filter(Boolean)).forEach(l => { k.text(l, M, y, { size: 11 }); y -= 15; });
+  k.y = y - 18;
+  const width = W - 2 * M;
+  for (const para of String(r.text || '').split('\n')) {
+    if (!para.trim()) { k.y -= 8; continue; }
+    const bold = /^(Rent arrears:|Total outstanding:)/.test(para);
+    for (const l of k.wrap(para, bold ? k.bold : k.font, 11, width)) { k.need(16); k.text(l, M, k.y, { size: 11, bold }); k.y -= 15.5; }
+  }
+  const n = k.doc.getPageCount(); k.doc.getPages().forEach((pg, i) => { k.page = pg; k.text('Made with the DIY Inventory landlord dashboard', M, M - 10, { size: 8.5, color: FAINT }); if (n > 1) k.text('Page ' + (i + 1) + ' of ' + n, W - M, M - 10, { size: 8.5, color: FAINT, right: true }); });
+  k.doc.setTitle(pdfText(r.subject)); k.doc.setAuthor(pdfText(r.from)); k.doc.setCreator('DIY Inventory');
+  return Buffer.from(await k.doc.save());
+}
+
+/* ------------------------------ email from the landlord's own app ------------------------------ */
+// "Email to tenant": a mailto: link that opens the landlord's own email app (Outlook, Gmail, Apple Mail…) with
+// the tenants in To, a subject and a plain-text body, plus "Open in Outlook on the web" and "Copy text" for
+// when mailto opens nothing. Bodies are kept within MAIL_MAX characters so every app takes the whole link.
+const MAIL_MAX = 1800;
+const escH = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function mailBody(text){
+  let t = String(text || '').replace(/\r\n?/g, '\n');
+  if (t.length > MAIL_MAX) { t = t.slice(0, MAIL_MAX - 2); const cut = t.lastIndexOf('\n'); t = (cut > MAIL_MAX * 0.6 ? t.slice(0, cut) : t) + '\n…'; }
+  return t;
+}
+const encAddr = a => encodeURIComponent(a).replace(/%40/g, '@');
+const encText = t => encodeURIComponent(t.replace(/\n/g, '\r\n'));
+function mailLinks(m){
+  const to = (m.to || []).filter(Boolean), body = mailBody(m.body), subject = String(m.subject || '').replace(/[\r\n]+/g, ' ').slice(0, 200);
+  return {
+    to, subject, body,
+    mailto: 'mailto:' + to.map(encAddr).join(',') + '?subject=' + encText(subject) + '&body=' + encText(body),
+    outlook: 'https://outlook.office.com/mail/deeplink/compose?' + (to.length ? 'to=' + to.map(encAddr).join(',') + '&' : '') + 'subject=' + encText(subject) + '&body=' + encText(body),
+    text: (to.length ? 'To: ' + to.join(', ') + '\n' : '') + 'Subject: ' + subject + '\n\n' + body,
+  };
+}
+function mailBlock(m){
+  const L = mailLinks(m);
+  return `<div class="mail" data-mail>
+    <div class="mail-act"><a class="${m.cls || 'btn ghost'}" href="${escH(L.mailto)}" data-mailto>${escH(m.label || 'Email to tenant')}</a>
+      <a class="linkbtn" href="${escH(L.outlook)}" target="_blank" rel="noopener">Open in Outlook on the web</a>
+      <button type="button" class="linkbtn" data-copy hidden>Copy text</button><span class="mail-ok" data-copied aria-live="polite"></span></div>
+    <p class="small">${L.to.length ? 'Opens a new email to ' + escH(L.to.join(', ')) + ' in your own email app, such as Outlook, with everything written in. Check it, then send.' : escH(m.none || 'There’s no email address for the tenant yet: add who it’s to in your email app.')}${m.note ? ' ' + m.note : ''}</p>
+    <textarea class="mail-text" readonly rows="8" data-text hidden aria-label="The email text">${escH(L.text)}</textarea></div>`;
+}
+// Once per page: Copy text (clipboard, else the text shown and selected to copy by hand).
+const MAIL_UI = `<script>
+(function(){
+  [].forEach.call(document.querySelectorAll('[data-mail]'), function(box){
+    var b = box.querySelector('[data-copy]'), t = box.querySelector('[data-text]'), ok = box.querySelector('[data-copied]');
+    if (!b || !t) return; b.hidden = false;
+    function hand(){ t.hidden = false; t.focus(); t.select(); ok.textContent = 'Select the text and copy it.'; }
+    b.addEventListener('click', function(){
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).then(function(){ ok.textContent = 'Copied. Paste it into a new email.'; }, hand);
+      else hand();
+    });
+  });
+})();
+</script>`;
+
 /* ===================================== pages and routes ===================================== */
 function mount(app, h){
   const { need, send, head, inp, sel, area, stHTML, esc, line, text, todayLondon, readAcc, writeAcc, prop, update, multipart, takeFile, FILE_DIR, emailOn, sendEmail, emailHTML,
     limiter, clientIp, urlenc, EMAIL_RE, rid, NOTES } = h;
   Object.assign(NOTES, { received: 'Rent marked as received.', already: 'That rent was already marked as received.', paydel: 'Payment deleted.', rent: 'Rent saved.',
-    receipt: 'Receipt sent.', expense: 'Expense saved.', expdel: 'Expense deleted.' });
+    receipt: 'Receipt sent.', expense: 'Expense saved.', expdel: 'Expense deleted.', reminded: 'Reminder recorded.' });
   const writes = limiter(600, 3600000), sends = limiter(20, 3600000), sendsIp = limiter(40, 3600000);
   const MAX_PAYS = 3000, MAX_EXP = 5000;
   const busy = (req, res) => { if (writes(req.acc.id)) return false; res.status(429).type('text/plain').send('Too many changes in a short time. Please wait a few minutes and try again.'); return true; };
   const hidden = o => Object.entries(o).map(([k, v]) => `<input type="hidden" name="${k}" value="${esc(v)}">`).join('');
   const postForm = (action, fields, label, cls, confirmText) => `<form method="post" action="${action}" class="inline"${confirmText ? ` onsubmit="return confirm('${esc(confirmText)}')"` : ''}>${hidden(fields)}<button class="${cls || 'linkbtn'}">${label}</button></form>`;
-  const BACKS = { p: id => '/account/p/' + id, rent: id => '/account/p/' + id + '/rent' };
+  const BACKS = { p: id => '/account/p/' + id, rent: id => '/account/p/' + id + '/rent', all: () => '/account/rent' };
   const backTo = (b, id, m, hash) => (BACKS[b] || BACKS.p)(id) + '?m=' + m + (hash ? '#' + hash : '');
-  const tenantEmails = tn => String((tn && tn.emails) || '').split(/[,;\s]+/).filter(e => EMAIL_RE.test(e)).slice(0, 5);
+  const tenantEmails = tn => (tn && Array.isArray(tn.tenants) ? tn.tenants.map(x => x.email || '') : String((tn && tn.emails) || '').split(/[,;\s]+/)).filter(e => EMAIL_RE.test(e)).slice(0, 8);
   const lastMethod = p => { const l = (p.payments || []).slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))[0]; return l ? l.method : 'bank'; };
   const payBase = (p, x) => '/account/p/' + p.id + '/rent/pay/' + x.id;
 
@@ -410,6 +527,151 @@ function mount(app, h){
       <div><span>Rent received</span><b>${esc(gbp(s.total.income))}</b></div><div><span>Expenses</span><b>${esc(gbp(s.total.expenses))}</b></div><div><span>Net</span><b>${esc(gbp(s.total.net))}</b></div>
       <a class="arrow" href="/account/money">Tax summary</a></div>`;
   }
+
+  /* ------------------------------ rent reminders ------------------------------ */
+  // On the property's Rent tab: send one (when rent is owed) and every reminder sent so far.
+  function remindersBlock(p, t){
+    const list = p.rentReminders || [], { total, owing } = plan(p.tenancy) ? owedNow(p, t) : { total: 0, owing: [] };
+    if (!plan(p.tenancy) && !list.length) return '';
+    const st = list.length ? { cls: 'ok', text: 'Last sent ' + fmt(String(list[0].at).slice(0, 10)) } : { cls: 'none', text: 'None sent' };
+    const send = total > 0 ? `<p class="muted"><b>${esc(gbp(total))} owed</b> for ${plural(owing.length, 'rent period')}. Choose a reminder: you can read and change it before it goes.</p>
+      <div class="rem-types">${REMIND.map(([k, l, d]) => `<a class="rem-type" href="/account/p/${p.id}/rent/remind?type=${k}"><b>${esc(l)}</b><small>${esc(d)}</small></a>`).join('')}</div>`
+      : '<p class="muted">Nothing is owed right now. If rent is late, you can send a reminder or a late-rent letter from here.</p>';
+    const hist = list.length ? `<h3 class="rem-h">Reminders sent</h3><ul class="rem-list">${list.slice(0, 20).map(r => `<li><div class="rem-top"><b>${esc(remindName(r.type))}</b><span>${esc(fmtIsoDay(r.at))} ${esc(String(r.at).slice(0, 4))}</span></div>
+      <small>${esc(gbp(r.owed || 0))} owed at the time · ${esc(VIA[r.via] || VIA.other)}${r.to && r.to.length ? ' · to ' + esc(r.to.join(', ')) : ''}</small>
+      <details class="rem-copy"><summary>See what was sent</summary><p class="rem-subj">${esc(r.subject || '')}</p><pre>${esc(r.text || '')}</pre></details>
+      ${postForm('/account/p/' + p.id + '/rent/reminders/' + r.id + '/delete', {}, 'Remove from the record', 'linkbtn danger', 'Remove this reminder from the record?')}</li>`).join('')}</ul>${list.length > 20 ? `<p class="small">And ${list.length - 20} earlier.</p>` : ''}` : '';
+    return `<div class="acc-sec" id="reminders"><div class="acc-sec-h"><h2>Rent reminders</h2>${stHTML(st)}<p>Friendly reminders and late-rent letters, written from the rent record. Each one you send is kept here with a copy of what it said.</p></div>
+      <div class="acc-sec-b"><div class="acc-box">${send}${hist}</div></div></div>`;
+  }
+  const remindLimit = limiter(60, 3600000);
+  function recordReminder(req, p0, v){
+    const t = todayLondon(), { total, periods } = reminderText(req.acc, p0, v.type, v.payBy, t, '');
+    const rec = { id: rid(6), at: new Date().toISOString(), type: v.type, owed: total, periods: periods.slice(-24), via: VIA[v.via] ? v.via : 'other', to: v.to || [], subject: line(v.subject, 200), text: text(v.text, 6000) };
+    update(req, p => { p.rentReminders = [rec].concat(p.rentReminders || []).slice(0, 200); });
+    return rec;
+  }
+  function remindPage(req, res, p, o = {}){
+    const t = todayLondon(), q = req.query || {}, type = REMIND.some(x => x[0] === (o.type || q.type)) ? (o.type || q.type) : 'friendly';
+    const payBy = validDate(o.payBy || q.by) || addDays(t, type === 'final' ? 14 : 7);
+    const last = (p.rentReminders || [])[0], draft = reminderText(req.acc, p, type, payBy, t, last && String(last.at).slice(0, 10));
+    const to = tenantEmails(p.tenancy), subj = o.subject != null ? o.subject : draft.subject, body = o.text != null ? o.text : draft.body;
+    const L = mailLinks({ to, subject: subj, body });
+    const canSend = emailOn() && to.length;
+    const page = head(esc(addrLine(p)), 'Send a rent reminder', draft.total > 0 ? esc(gbp(draft.total) + ' owed now, for ' + plural(draft.periods.length, 'rent period')) : 'Nothing is owed right now.', '', [addrLine(p), '/account/p/' + p.id + '#reminders']) + `
+<section class="tight"><div class="wrap narrow">
+  <nav class="rem-pick" aria-label="Kind of reminder">${REMIND.map(([k, l]) => `<a href="/account/p/${p.id}/rent/remind?type=${k}"${k === type ? ' class="on" aria-current="page"' : ''}>${esc(l)}</a>`).join('')}</nav>
+  ${type !== 'friendly' ? `<form class="rem-by" method="get" action="/account/p/${p.id}/rent/remind" data-nodraft><input type="hidden" name="type" value="${type}"><label>Pay by<input type="date" name="by" value="${payBy}"></label><button class="btn ghost sm">Update the letter</button><small>Updating the date writes the letter again.</small></form>` : ''}
+  <form class="card form acc-form rem-form" method="post" action="/account/p/${p.id}/rent/remind" data-remind>
+    <input type="hidden" name="type" value="${type}"><input type="hidden" name="payBy" value="${payBy}">
+    <p class="rem-to"><span>To</span> ${to.length ? esc(to.join(', ')) : '<em>No email address for the tenants yet.</em> <a href="/account/p/' + p.id + '#tenancy">Add one</a>, or choose who to send it to in your email app.'}</p>
+    ${inp('Subject', 'subject', subj, { max: 200, attrs: ' data-subj' })}
+    <label>The ${type === 'friendly' ? 'message' : 'letter'}<textarea name="text" rows="18" maxlength="6000" data-body>${esc(body)}</textarea><small class="hint">Read it through and change anything you like. It’s written from your rent record${draft.periods.length > 12 ? ' (the last 12 periods are listed)' : ''}. This is a template, not legal advice.</small></label>
+    <div class="rem-send">
+      <a class="btn primary" href="${esc(L.mailto)}" data-via="mailto">Open in my email app</a>
+      <a class="btn ghost" href="${esc(L.outlook)}" target="_blank" rel="noopener" data-via="outlook">Open in Outlook on the web</a>
+      ${canSend ? '<button class="btn ghost" name="action" value="email">Send by email now</button>' : ''}
+      <button class="btn ghost" name="action" value="letter">Download as a PDF letter</button>
+      <button type="button" class="linkbtn" data-copy hidden>Copy text</button>
+    </div>
+    <p class="rem-done" data-done role="status" hidden></p>
+    <details class="edit"><summary>Sent it another way? Record it</summary><div class="row">${sel('How it was sent', 'via', [['post', 'Posted or handed over'], ['copy', 'Copied and sent another way'], ['mailto', 'From my email app'], ['other', 'Another way']], 'post')}</div><button class="btn ghost sm" name="action" value="record">Record as sent</button></details>
+    <p class="small">The email app, Outlook and download buttons record the reminder as sent, with a copy of the text, on the property’s Rent tab. ${emailOn() ? '' : 'Sending straight from DIY Inventory isn’t switched on for this site yet.'}</p>
+  </form>
+</div></section>
+<script>
+(function(){
+  var f = document.querySelector('[data-remind]'); if (!f || !window.fetch) return;
+  var to = ${JSON.stringify(to).replace(/</g, '\\u003c')}, MAX = ${MAIL_MAX}, done = f.querySelector('[data-done]');
+  function body(){ var t = f.elements.text.value.replace(/\\r\\n?/g, '\\n'); if (t.length > MAX) { t = t.slice(0, MAX - 2); var c = t.lastIndexOf('\\n'); t = (c > MAX * 0.6 ? t.slice(0, c) : t) + '\\n…'; } return t; }
+  function enc(t){ return encodeURIComponent(t.replace(/\\n/g, '\\r\\n')); }
+  function addr(){ return to.map(function(a){ return encodeURIComponent(a).replace(/%40/g, '@'); }).join(','); }
+  function links(){
+    var s = enc(f.elements.subject.value.replace(/[\\r\\n]+/g, ' ')), b = enc(body());
+    f.querySelector('[data-via=mailto]').href = 'mailto:' + addr() + '?subject=' + s + '&body=' + b;
+    f.querySelector('[data-via=outlook]').href = 'https://outlook.office.com/mail/deeplink/compose?' + (to.length ? 'to=' + addr() + '&' : '') + 'subject=' + s + '&body=' + b;
+  }
+  f.addEventListener('input', links); links();
+  function record(via){
+    var d = new URLSearchParams(); d.set('action', 'record'); d.set('ajax', '1'); d.set('via', via); ['type', 'payBy', 'subject', 'text'].forEach(function(k){ d.set(k, f.elements[k].value); });
+    return fetch(f.getAttribute('action'), { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: d.toString() }).then(function(r){ return r.json(); }).then(function(r){
+      if (!r.ok) throw 0;
+      done.hidden = false; done.innerHTML = '';
+      var sp = document.createElement('span'); sp.textContent = '✓ Recorded as sent today (' + r.via + '). '; done.appendChild(sp);
+      var u = document.createElement('button'); u.type = 'button'; u.className = 'linkbtn'; u.textContent = 'Undo'; done.appendChild(u);
+      u.onclick = function(){ fetch(f.getAttribute('action').replace(/\\/remind$/, '/reminders/' + r.id + '/delete'), { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'ajax=1' }).then(function(x){ return x.json(); }).then(function(x){ if (x.ok) { done.textContent = 'Removed from the record.'; } }); };
+    }).catch(function(){ done.hidden = false; done.textContent = 'Couldn’t record it just now. Use “Record it” below once you’ve sent it.'; });
+  }
+  [].forEach.call(f.querySelectorAll('[data-via]'), function(a){ a.addEventListener('click', function(){ links(); record(a.getAttribute('data-via')); }); });
+  var c = f.querySelector('[data-copy]'); c.hidden = false;
+  c.addEventListener('click', function(){
+    var t = (to.length ? 'To: ' + to.join(', ') + '\\n' : '') + 'Subject: ' + f.elements.subject.value + '\\n\\n' + f.elements.text.value;
+    var ok = function(){ done.hidden = false; done.textContent = 'Copied. Once you’ve sent it, record it below (“Sent it another way?”).'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, function(){ f.elements.text.select(); });
+    else { f.elements.text.select(); }
+  });
+})();
+</script>`;
+    send(req, res, { path: '/account/p/' + p.id + '/rent/remind', title: 'Send a rent reminder', body: page, status: o.status, notice: o.error ? { text: o.error } : null });
+  }
+  app.get('/account/p/:id/rent/remind', need, (req, res) => {
+    const p = prop(req.acc, req.params.id); if (!p) return res.redirect(303, '/account');
+    if (!plan(p.tenancy)) return res.redirect(303, '/account/p/' + p.id + '#rent');
+    remindPage(req, res, p);
+  });
+  app.post('/account/p/:id/rent/remind', need, urlenc, async (req, res) => {
+    const b = req.body || {}, p = prop(req.acc, req.params.id); if (!p) return b.ajax ? res.status(404).json({ ok: false }) : res.redirect(303, '/account');
+    if (!remindLimit(req.acc.id)) return b.ajax ? res.status(429).json({ ok: false }) : res.status(429).type('text/plain').send('Too many reminders in a short time. Please try again later.');
+    const v = { type: REMIND.some(x => x[0] === b.type) ? b.type : 'friendly', payBy: validDate(b.payBy), subject: line(b.subject, 200), text: text(b.text, 6000), via: String(b.via || ''), to: tenantEmails(p.tenancy) };
+    if (!v.text) return b.ajax ? res.status(400).json({ ok: false }) : remindPage(req, res, p, Object.assign({}, v, { error: 'Please write the reminder first.', status: 400 }));
+    if (b.action === 'letter') {
+      const rec = recordReminder(req, p, Object.assign({}, v, { via: 'letter' }));
+      const pdf = await letterPDF({ from: (req.acc.settings && req.acc.settings.receiptName) || req.acc.name, fromEmail: req.acc.email, toNames: andList(tenantNames(p.tenancy)) || 'The tenant', address: addrFull(p), date: todayLondon(), subject: v.subject, text: v.text });
+      res.set({ 'Content-Disposition': `attachment; filename="${remindName(v.type)} ${String(rec.at).slice(0, 10)}.pdf"`, 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff' });
+      return res.type('pdf').send(pdf);
+    }
+    if (b.action === 'email') {
+      if (!emailOn() || !v.to.length) return remindPage(req, res, p, Object.assign({}, v, { error: !emailOn() ? 'Sending by email isn’t switched on for this site yet. Use your email app instead.' : 'There’s no email address for the tenants. Add it to the tenancy first.', status: 400 }));
+      if (!sends(req.acc.id) || !sendsIp(clientIp(req))) return remindPage(req, res, p, Object.assign({}, v, { error: 'Too many emails sent in the last hour. Please try again later.', status: 429 }));
+      const who = (req.acc.settings && req.acc.settings.receiptName) || req.acc.name;
+      const out = await sendEmail({ to: v.to, subject: v.subject, text: v.text, html: emailHTML(v.text.split(/\n{2,}/).map(x => esc(x).replace(/\n/g, '<br>')), null, `Sent by ${esc(who)} with the DIY Inventory landlord dashboard. Reply to this email to answer ${esc(who)}.`), replyTo: req.acc.email, fromName: nameOnly(who) + ' via DIY Inventory' });
+      if (!out || !out.ok) return remindPage(req, res, p, Object.assign({}, v, { error: 'The email couldn’t be sent just now. Please try again in a few minutes, or use your email app.', status: 502 }));
+      recordReminder(req, p, Object.assign({}, v, { via: 'email' }));
+      return res.redirect(303, '/account/p/' + p.id + '?m=reminded#reminders');
+    }
+    // "record": from the email app / Outlook buttons (ajax), or "Record it".
+    const rec = recordReminder(req, p, v);
+    if (b.ajax) return res.json({ ok: true, id: rec.id, at: rec.at, via: (VIA[rec.via] || '').replace(/^Opened in /, '').toLowerCase() || rec.via });
+    res.redirect(303, '/account/p/' + p.id + '?m=reminded#reminders');
+  });
+  app.post('/account/p/:id/rent/reminders/:rid/delete', need, urlenc, (req, res) => {
+    const b = req.body || {}, rid0 = String(req.params.rid); let hit = false;
+    const p = update(req, p => { const n = (p.rentReminders || []).length; p.rentReminders = (p.rentReminders || []).filter(r => r.id !== rid0); hit = p.rentReminders.length < n; });
+    if (b.ajax) return res.status(p && hit ? 200 : 404).json({ ok: !!(p && hit) });
+    res.redirect(303, p ? '/account/p/' + p.id + '?m=cleared#reminders' : '/account');
+  });
+
+  /* ------------------------------ all rent, every property ------------------------------ */
+  app.get('/account/rent', need, (req, res) => {
+    const acc = req.acc, t = todayLondon(), list = acc.properties.slice().sort((a, b) => addrLine(a).localeCompare(addrLine(b), 'en', { numeric: true }));
+    let owed = 0, overdue = 0, month = 0;
+    const rows = list.map(p => {
+      const rs = rentStatus(p, t), L = rs.L;
+      (p.payments || []).forEach(x => { if (x.date.slice(0, 7) === t.slice(0, 7)) month += x.amt; });
+      if (!L) return `<li class="rv"><div class="rv-main"><a href="/account/p/${p.id}#rent"><b>${esc(addrLine(p))}</b></a><small>${esc(p.address.postcode)}</small></div><div class="rv-st">${stHTML(rs)}</div><div class="rv-act"><a class="btn ghost sm" href="/account/p/${p.id}#rent">Add the rent</a></div></li>`;
+      owed += L.arrears; overdue += L.overdue;
+      const s = L.sch.filter(x => !x.future && x.left > 0)[0] || (L.next && L.next.left > 0 ? L.next : null), last = (p.rentReminders || [])[0];
+      return `<li class="rv"><div class="rv-main"><a href="/account/p/${p.id}#rent"><b>${esc(addrLine(p))}</b></a><small>${esc(gbp(rentPence(p.tenancy)))} ${esc(perText(p.tenancy))}${L.next ? ' · next due ' + esc(fmt(L.next.due)) : ''}${last ? ' · reminder sent ' + esc(fmtIsoDay(last.at)) : ''}</small></div>
+        <div class="rv-st">${stHTML(rs)}</div>
+        <div class="rv-act">${s ? quickBtn(p, s, 'all', t) : ''}${L.arrears > 0 ? `<a class="rp-other" href="/account/p/${p.id}/rent/remind">Send a reminder</a>` : ''}</div></li>`;
+    }).join('');
+    const body = head('Rent', 'Rent, every property', 'What’s owed and what’s next. Mark rent as received here, or open a property for its receipts and reminders.', '', ['All properties', '/account']) + `
+<section class="tight"><div class="wrap">
+  <div class="rent-figs"><div><span>Received this month</span><b>${esc(gbp(month))}</b></div><div class="${owed > 0 ? 'warn' : ''}"><span>Owed now</span><b>${esc(gbp(owed))}</b></div><div class="${overdue > 0 ? 'bad' : ''}"><span>More than ${GRACE} days late</span><b>${esc(gbp(overdue))}</b></div></div>
+  ${list.length ? `<ul class="rvs">${rows}</ul>` : '<p class="muted">Add a property first.</p>'}
+</div></section>`;
+    send(req, res, { path: '/account/rent', title: 'Rent', body });
+  });
 
   /* ------------------------------ rent terms ------------------------------ */
   app.post('/account/p/:id/rent/terms', need, urlenc, (req, res) => {
@@ -525,16 +787,25 @@ function mount(app, h){
       <dl>${receiptRows(r).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
       <p class="rc-foot">This receipt confirms that the landlord named above received the payment shown. Please keep it for your records.</p></div>`;
   }
+  // The receipt as a plain-text email, for the landlord's own email app.
+  function receiptMail(r, to){
+    const body = [`Hello ${greet(r.tenants)},`, '', 'Thank you for your payment. Here is your receipt.', '', 'RENT RECEIPT No. ' + r.no, 'Received with thanks: ' + gbp(r.amount, true), '']
+      .concat(receiptRows(r).map(([k, v]) => k + ': ' + v), ['', 'Please keep this receipt for your records. If anything here isn’t right, just reply to this email.', '', 'Kind regards,', r.landlord]);
+    return { to, subject: `Rent receipt: ${gbp(r.amount, true)} received ${fmt(r.date)}, ${r.address.split(',')[0]}`, body: body.join('\n') };
+  }
   app.get('/account/p/:id/rent/pay/:pid/receipt', need, (req, res) => {
     const p = prop(req.acc, req.params.id), x = findPay(p, req.params.pid); if (!x) return res.redirect(303, '/account');
     const r = receiptData(req.acc, p, x), to = tenantEmails(p.tenancy);
-    const mail = !emailOn() ? '<p class="acc-note">Sending receipts by email isn’t switched on for this site yet. You can download the PDF or print this page and give it to your tenant.</p>'
-      : !to.length ? `<p class="acc-note">There’s no email address for the tenant. <a href="/account/p/${p.id}#tenancy">Add it to the tenancy</a> to send receipts, or download the PDF.</p>`
-      : `${postForm(payBase(p, x) + '/receipt/send', { back: 'receipt' }, x.sentAt ? 'Send to the tenant again' : 'Email to the tenant', 'btn primary')}`;
+    const server = emailOn() && to.length ? postForm(payBase(p, x) + '/receipt/send', { back: 'receipt' }, x.sentAt ? 'Send receipt again' : 'Send receipt', 'btn primary') : '';
+    const note = !emailOn() ? '' : !to.length ? `<p class="acc-note">There’s no email address for the tenant. <a href="/account/p/${p.id}#tenancy">Add it to the tenancy</a> to send receipts.</p>` : '';
+    const mail = mailBlock(Object.assign(receiptMail(r, to), { label: 'Email to tenant', cls: server ? 'btn ghost' : 'btn primary',
+      none: 'There’s no email address for the tenant yet. Add it to the tenancy, or choose who to send it to in your email app.',
+      note: 'To attach the PDF too, <a href="' + payBase(p, x) + '/receipt.pdf">download it</a> first, then attach it to the email.' }));
     const body = head(esc(addrLine(p)), 'Rent receipt', x.sentAt ? 'Sent to ' + esc(x.sentTo || 'the tenant') + ' on ' + esc(fmtIsoDay(x.sentAt)) : to.length && emailOn() ? 'Not sent yet. It will go to ' + esc(to.join(', ')) + '.' : '', '', ['Rent and receipts', '/account/p/' + p.id + '/rent#pay-' + x.id]) + `
 <section class="tight"><div class="wrap narrow">${receiptHTML(r)}
-  <div class="acc-row rc-actions no-print">${mail}<a class="btn ghost" href="${payBase(p, x)}/receipt.pdf">Download PDF</a><button type="button" class="btn ghost" onclick="window.print()">Print</button></div>
-</div></section>`;
+  <div class="rc-actions no-print">${note}<div class="acc-row">${server}${mail.replace('<div class="mail" data-mail>', '<div class="mail" data-mail data-inline>')}</div>
+  <div class="acc-row"><a class="btn ghost" href="${payBase(p, x)}/receipt.pdf">Download PDF</a><button type="button" class="btn ghost" onclick="window.print()">Print</button></div></div>
+</div></section>${MAIL_UI}`;
     send(req, res, { path: payBase(p, x) + '/receipt', title: 'Rent receipt ' + r.no, body });
   });
   app.get('/account/p/:id/rent/pay/:pid/receipt.pdf', need, async (req, res) => {
@@ -686,7 +957,7 @@ function mount(app, h){
     res.type('pdf').send(pdf);
   });
 
-  return { rentSection, expenseSection, dashCell, dashStrip };
+  return { rentSection, expenseSection, dashCell, dashStrip, remindersBlock };
 }
 
 // For /admin: counts only, never amounts.
@@ -696,5 +967,5 @@ function adminCounts(accs){
   return { rentProps, payments, receipts, expenses };
 }
 
-module.exports = { mount, adminCounts, rentStatus, rentReminderItems, applyRent, parsePence, gbp, rentPence, freqOf, perText, FREQ, STEP, GRACE,
+module.exports = { mount, mailBlock, mailLinks, MAIL_UI, MAIL_MAX, reminderText, letterPDF, taxYearOf, inTY, tyLabel, summary, methodText, receiptNo, catText, adminCounts, rentStatus, rentReminderItems, applyRent, parsePence, gbp, rentPence, freqOf, perText, FREQ, STEP, GRACE,
   _test: { plan, schedule, ledger, rentOn, applyRent, parsePence, gbp, taxYearOf, tyRange, tyLabel, summary, incomeCSV, expensesCSV, summaryCSV, csv, receiptData, receiptPDF, summaryPDF, pdfText, periodText, rentStatus, rentReminderItems } };

@@ -252,10 +252,11 @@ function renderPage(pg, req, notice){
   for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
-  const base = canonicalBase(req);
+  const base = canonicalBase(req), inAcc = require('./landlords').signedIn(req);   // signed-in landlords see "My dashboard"
   // Functions as replacements, so a "$" in a title (e.g. a landlord's own address) is taken literally. pg.head: a page's own <head> extras.
   return fill(html).replace('{{TITLE}}', () => escHtml(pg.title)).replace('{{OG_TITLE}}', () => escHtml(pg.og || pg.title))
     .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base) + (pg.head ? '\n' + pg.head : ''))
+    .split('{{ACCOUNT_LINK_TEXT}}').join(inAcc ? 'My dashboard' : 'Sign in').split('{{ACCOUNT_MENU_TEXT}}').join(inAcc ? 'My landlord dashboard' : 'Sign in (landlords)')
     .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).replace('{{CSS_V}}', CSS_V);
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
