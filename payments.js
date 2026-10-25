@@ -135,10 +135,10 @@ function mount(app, ctx){
   const ROOT = path.join(__dirname, 'public');
   const V = crypto.createHash('sha1').update(fs.readFileSync(path.join(ROOT, 'floorplan.js'))).update(fs.readFileSync(path.join(ROOT, 'floorplan.css'))).digest('hex').slice(0, 10);
 
-  // Free for the owner and for the shared access code (the diy_access cookie SHARED-…); one-off codes are for one report only.
+  // Free for the owner, the shared access code (the diy_access cookie SHARED-…) and agent links (AGT-…); one-off codes are for one report only.
   function freeFor(req){
     if (isOwner && isOwner(req)) return 'owner';
-    const m = /(?:^|;\s*)diy_access=(SHARED-[\w-]{10,40})/.exec(req.headers.cookie || '');
+    const m = /(?:^|;\s*)diy_access=((?:SHARED|AGT)-[\w-]{10,40})/.exec(req.headers.cookie || '');
     if (m && codeAccess) { const a = codeAccess(m[1]); if (a && a.valid) return 'code'; }
     return '';
   }

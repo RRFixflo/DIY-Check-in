@@ -262,7 +262,7 @@ function renderPage(pg, req, notice){
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
-  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : '';
+  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : reason === 'removed' ? 'This link is no longer active. Please ask for a new one.' : '';
   return sitePage('home', req, msg ? { text: msg } : null);
 }
 for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.path, pg.path + '/'], (req, res) => {
@@ -378,7 +378,7 @@ app.post('/api/access', async (req, res) => {
   const a = await checkAccess(q);
   if (!a.valid) {
     if (a.reason !== 'used') codeTries.wrong(req);
-    return res.status(402).json({ error: a.reason === 'used' ? 'That link has already been used for another report.' : a.reason === 'expired' ? 'That link has expired.' : a.reason === 'changed' ? 'That access code has changed.' : 'We don’t recognise that link or code. Check it and try again.' });
+    return res.status(402).json({ error: a.reason === 'used' ? 'That link has already been used for another report.' : a.reason === 'expired' ? 'That link has expired.' : a.reason === 'changed' ? 'That access code has changed.' : a.reason === 'removed' ? 'That link is no longer active.' : 'We don’t recognise that link or code. Check it and try again.' });
   }
   if (reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);
   res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');

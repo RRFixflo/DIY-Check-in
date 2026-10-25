@@ -54,6 +54,15 @@ function readShared(){
 function writeShared(d){ fs.writeFileSync(SHARED_FILE + '.tmp', JSON.stringify(d, null, 1)); fs.renameSync(SHARED_FILE + '.tmp', SHARED_FILE); }
 const sharedToken = d => 'SHARED-' + crypto.createHmac('sha256', d.secret).update('code:' + d.code).digest('hex').slice(0, 30);
 
+// Agent links: a named link per estate agent (or anyone the owner chooses), /?access=AGT-…, that lets them
+// use the app without paying or typing a code, for as many reports as they like, until the owner removes it.
+// Made and removed on /admin; kept in REPORTS_DIR/agent-links.json with how often each has been used.
+const AGENTS_FILE = path.join(REPORTS_DIR, 'agent-links.json');
+const AGENT_RE = /^AGT-[\w-]{24}$/;
+function readAgents(){ try { return JSON.parse(fs.readFileSync(AGENTS_FILE, 'utf8')); } catch (e) { return []; } }
+function writeAgents(list){ fs.writeFileSync(AGENTS_FILE + '.tmp', JSON.stringify(list, null, 1)); fs.renameSync(AGENTS_FILE + '.tmp', AGENTS_FILE); }
+const agentFor = token => AGENT_RE.test(String(token)) ? readAgents().find(a => a.token === token) || null : null;
+
 // A typed code in any case or spacing, with or without "DIY" ("diy 7k4m q2px", "7K4MQ2PX") → its
 // stored form, or '' if it isn't one. (Codes made before were FREE-XXXX-XXXX; they still work.)
 function canonicalCode(raw){
@@ -65,6 +74,7 @@ function canonicalCode(raw){
   return [(m[1] || 'DIY') + '-' + m[2] + '-' + m[3]].concat(m[1] ? [] : ['FREE-' + m[2] + '-' + m[3]]).find(k => codes.some(c => c.code === k)) || '';
 }
 function codeAccess(code){
+  if (/^AGT-/.test(code)) return agentFor(code) ? { valid: true, reason: '' } : { valid: false, reason: 'removed' };
   if (/^SHARED-/.test(code)) return code === sharedToken(readShared()) ? { valid: true, reason: '' } : { valid: false, reason: 'changed' };
   const c = readCodes().find(c => c.code === code);
   if (!c) return null;
@@ -85,7 +95,7 @@ function deviceName(ua){
 function logCode(req, kind, code, address){
   try {
     const d = readLog();
-    d.entries.push({ at: new Date().toISOString(), kind, code: /^SHARED-/.test(code) ? readShared().code : code, device: deviceName(req.headers['user-agent']), ...(address ? { address: clip(address, 200) } : {}) });
+    d.entries.push({ at: new Date().toISOString(), kind, code: /^SHARED-/.test(code) ? readShared().code : /^AGT-/.test(code) ? 'agent link: ' + ((agentFor(code) || {}).name || 'removed') : code, device: deviceName(req.headers['user-agent']), ...(address ? { address: clip(address, 200) } : {}) });
     if (d.entries.length > 300) d.entries = d.entries.slice(-300);
     writeLog(d);
   } catch (e) { console.error('access log failed:', e.message); }
@@ -98,6 +108,11 @@ function useCode(code, address, req){
   if (/^SHARED-/.test(code)) {
     const d = readShared(); d.uses = (d.uses || 0) + 1; d.lastUsedAt = new Date().toISOString(); d.lastUsedFor = clip(address, 200);
     writeShared(d); console.log('access code used: ' + d.code); return;
+  }
+  if (/^AGT-/.test(code)) {
+    const list = readAgents(), a = list.find(a => a.token === code); if (!a) return;
+    a.uses = (a.uses || 0) + 1; a.lastUsedAt = new Date().toISOString(); a.lastUsedFor = clip(address, 200);
+    writeAgents(list); console.log('agent link used: ' + a.name); return;
   }
   const list = readCodes(), c = list.find(c => c.code === code);
   if (!c || c.usedAt) return;
@@ -524,8 +539,8 @@ ${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">Messages sent from the websit
     const when = d => new Date(d).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const ins = fresh.filter(e => e.kind === 'in').length, reps = fresh.filter(e => e.kind === 'report').length;
     const banner = fresh.length ? `<a class="news" href="#activity" onclick="document.getElementById('activity').open=true">🔔 ${[ins ? ins + ' new login' + (ins === 1 ? '' : 's') + ' with the access code' : '', reps ? reps + ' new report' + (reps === 1 ? '' : 's') + ' made with it' : ''].filter(Boolean).join(' and ')} since your last visit</a>` : '';
-    const rows = entries.slice(0, 100).map(e => `<li${isNew(e) ? ' class="isnew"' : ''}><div><strong>${e.kind === 'report' ? '📄 Made a report' + (e.address ? ': ' + esc(e.address) : '') : '🔓 Logged in with the access code'}</strong>${isNew(e) ? ' <span class="pill new">New</span>' : ''}
-      <div class="sub">${esc(when(e.at))} · ${esc(e.device)} · code ${esc(e.code)}</div></div></li>`).join('');
+    const rows = entries.slice(0, 100).map(e => `<li${isNew(e) ? ' class="isnew"' : ''}><div><strong>${e.kind === 'report' ? '📄 Made a report' + (e.address ? ': ' + esc(e.address) : '') : '🔓 Logged in with ' + (/^agent link: /.test(e.code) ? 'the ' + esc(e.code) : 'the access code')}</strong>${isNew(e) ? ' <span class="pill new">New</span>' : ''}
+      <div class="sub">${esc(when(e.at))} · ${esc(e.device)} · ${/^agent link: /.test(e.code) ? esc(e.code) : 'code ' + esc(e.code)}</div></div></li>`).join('');
     return banner + `<details class="codes" id="activity"${fresh.length ? ' open' : ''}><summary>👥 Who has used the access code <span class="sub" style="display:inline">— ${entries.length ? entries.filter(e => e.kind === 'in').length + ' login' + (entries.filter(e => e.kind === 'in').length === 1 ? '' : 's') + ', ' + entries.filter(e => e.kind === 'report').length + ' report' + (entries.filter(e => e.kind === 'report').length === 1 ? '' : 's') : 'nobody yet'}</span></summary>
 ${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">When someone gets in with the access code, it shows here with the time and their device.</p>'}</details>`;
   }
@@ -543,6 +558,34 @@ ${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">When someone gets in with the
 <form method="post" action="/admin/code" class="newcode" onsubmit="return confirm('Change the access code? The old one will stop working, including for anyone part-way through a report with it.')"><input name="code" required pattern="[A-Za-z0-9]{4,20}" maxlength="20" placeholder="New code (4–20 letters or numbers)" autocomplete="off"><button class="btn">Change code</button></form>
 ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><ul>' + rows + '</ul>' : ''}</details>`;
   }
+
+  function agentsHTML(req){
+    const base = (PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/?access=';
+    const day = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
+    const list = readAgents().slice().reverse();
+    const rows = list.map(a => `<li><div style="flex:1;min-width:0"><strong>${esc(a.name)}</strong>
+      <div class="sub">Made ${esc(day(a.createdAt))} · ${a.uses ? 'used for ' + a.uses + ' report' + (a.uses === 1 ? '' : 's') + ', last ' + esc(day(a.lastUsedAt)) + (a.lastUsedFor ? ' (' + esc(a.lastUsedFor) + ')' : '') : 'not used yet'}</div>
+      <input readonly value="${esc(base + a.token)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace"></div>
+      <div class="actions"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + a.token)}')">Copy link</button><form method="post" action="/admin/agents/${esc(a.id)}/delete" onsubmit="return confirm('Remove the link for ${esc(String(a.name).replace(/'/g, ''))}? It will stop working straight away.')"><button class="btn danger">Remove</button></form></div></li>`).join('');
+    return `<details class="codes" id="agents"><summary>🏢 Agent links <span class="sub" style="display:inline">— ${list.length ? list.length + ' link' + (list.length === 1 ? '' : 's') : 'none yet'}</span></summary>
+<p class="sub">A link of their own for an estate agent (or anyone you choose) to do check-ins, check-outs and inspections without paying or typing a code, as many as they like. Opening it once on their phone is enough; it keeps working until you remove it. Their reports arrive here like any other.</p>
+<form method="post" action="/admin/agents" class="newcode"><input name="name" required maxlength="80" placeholder="Who is it for? e.g. Smith &amp; Co Lettings" autocomplete="off"><button class="btn primary">Make a link</button></form>
+${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
+  }
+  app.post('/admin/agents', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Make links from the reports page.');
+    const name = clip(req.body && req.body.name, 80);
+    if (!name) return res.status(400).type('text/plain').send('Please say who the link is for.');
+    const list = readAgents();
+    list.push({ id: crypto.randomBytes(6).toString('hex'), name, token: 'AGT-' + crypto.randomBytes(18).toString('base64url'), createdAt: new Date().toISOString(), uses: 0 });
+    writeAgents(list);
+    res.redirect(303, '/admin#agents');
+  });
+  app.post('/admin/agents/:id/delete', requireAdmin, (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Remove links from the reports page.');
+    writeAgents(readAgents().filter(a => a.id !== String(req.params.id)));
+    res.redirect(303, '/admin#agents');
+  });
 
   app.post('/admin/code', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Change the code from the reports page.');
@@ -618,6 +661,7 @@ ${messagesHTML()}
 ${drafts.draftsHTML()}
 ${activityHTML()}
 ${codesHTML(req)}
+${agentsHTML(req)}
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
