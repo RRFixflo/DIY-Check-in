@@ -341,7 +341,9 @@ if (PAYWALL) {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
     const isRoot = req.path === '/';
     if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
-    const startQ = req.query.start === 'checkin' ? '?start=checkin' : '';   // a tenant's check-in link goes straight to a check-in
+    // A tenant's check-in link goes straight to a check-in; an agency can add the property (&address=…) to fill it in.
+    const addrQ = req.query.start === 'checkin' && typeof req.query.address === 'string' && req.query.address.trim() ? '&address=' + encodeURIComponent(req.query.address.replace(/\s+/g, ' ').trim().slice(0, 200)) : '';
+    const startQ = req.query.start === 'checkin' ? '?start=checkin' + addrQ : '';
     if (reports.isOwner(req)) return isRoot ? (req.query.access ? res.redirect(302, '/app' + startQ) : res.type('html').send(sitePage('home', req))) : next(); // the owner (signed in to /admin) needs no paid link
     const isApp = /^\/app\/?$/.test(req.path);
     if (isApp && !req.query.access) return next();
