@@ -341,7 +341,8 @@ if (PAYWALL) {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
     const isRoot = req.path === '/';
     if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
-    if (reports.isOwner(req)) return isRoot ? res.type('html').send(sitePage('home', req)) : next(); // the owner (signed in to /admin) needs no paid link
+    const startQ = req.query.start === 'checkin' ? '?start=checkin' : '';   // a tenant's check-in link goes straight to a check-in
+    if (reports.isOwner(req)) return isRoot ? (req.query.access ? res.redirect(302, '/app' + startQ) : res.type('html').send(sitePage('home', req))) : next(); // the owner (signed in to /admin) needs no paid link
     const isApp = /^\/app\/?$/.test(req.path);
     if (isApp && !req.query.access) return next();
     const raw = String(req.query.access || '').trim();
@@ -353,7 +354,7 @@ if (PAYWALL) {
       if (!q && isApp) return next();
       const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
     if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
-    if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, isRoot ? '/app' : req.path); }
+    if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, isRoot ? '/app' + startQ : req.path); }
     if (isRoot) return res.type('html').send(sitePage('home', req));
     next();
   });

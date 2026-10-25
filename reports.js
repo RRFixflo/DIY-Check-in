@@ -560,16 +560,16 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
   }
 
   function agentsHTML(req){
-    const base = (PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/?access=';
+    const base = (PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/?access=', end = '&start=checkin';
     const day = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
     const list = readAgents().slice().reverse();
     const rows = list.map(a => `<li><div style="flex:1;min-width:0"><strong>${esc(a.name)}</strong>
       <div class="sub">Made ${esc(day(a.createdAt))} · ${a.uses ? 'used for ' + a.uses + ' report' + (a.uses === 1 ? '' : 's') + ', last ' + esc(day(a.lastUsedAt)) + (a.lastUsedFor ? ' (' + esc(a.lastUsedFor) + ')' : '') : 'not used yet'}</div>
-      <input readonly value="${esc(base + a.token)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace"></div>
-      <div class="actions"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + a.token)}')">Copy link</button><form method="post" action="/admin/agents/${esc(a.id)}/delete" onsubmit="return confirm('Remove the link for ${esc(String(a.name).replace(/'/g, ''))}? It will stop working straight away.')"><button class="btn danger">Remove</button></form></div></li>`).join('');
-    return `<details class="codes" id="agents"><summary>🏢 Agent links <span class="sub" style="display:inline">— ${list.length ? list.length + ' link' + (list.length === 1 ? '' : 's') : 'none yet'}</span></summary>
-<p class="sub">A link of their own for an estate agent (or anyone you choose) to do check-ins, check-outs and inspections without paying or typing a code, as many as they like. Opening it once on their phone is enough; it keeps working until you remove it. Their reports arrive here like any other.</p>
-<form method="post" action="/admin/agents" class="newcode"><input name="name" required maxlength="80" placeholder="Who is it for? e.g. Smith &amp; Co Lettings" autocomplete="off"><button class="btn primary">Make a link</button></form>
+      <input readonly value="${esc(base + a.token + end)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace"></div>
+      <div class="actions"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + a.token + end)}')">Copy link</button><form method="post" action="/admin/agents/${esc(a.id)}/delete" onsubmit="return confirm('Remove the link for ${esc(String(a.name).replace(/'/g, ''))}? It will stop working straight away.')"><button class="btn danger">Remove</button></form></div></li>`).join('');
+    return `<details class="codes" id="agents"><summary>🏢 Check-in links for tenants <span class="sub" style="display:inline">— ${list.length ? list.length + ' link' + (list.length === 1 ? '' : 's') : 'none yet'}</span></summary>
+<p class="sub">A link for tenants to do their own check-in, without paying or typing a code. It opens straight on a new check-in. Make one per estate agent (or landlord) and they can send the same link to every tenant; it keeps working until you remove it, and each report made with it is counted here. The reports arrive here like any other.</p>
+<form method="post" action="/admin/agents" class="newcode"><input name="name" required maxlength="80" placeholder="Which agent or landlord is it for? e.g. Smith &amp; Co Lettings" autocomplete="off"><button class="btn primary">Make a link</button></form>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   }
   app.post('/admin/agents', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
