@@ -4602,8 +4602,14 @@ track('app_open');
   // A tenant's check-in link: check-ins only on this phone from now on.
   if (new URLSearchParams(location.search).get('start') === 'checkin') {
     try { localStorage.setItem('diyCheckinOnly', '1'); } catch (e) {}
+    // The agency's link can carry the property (&address=…): fill in the address fields (still editable).
+    const linkAddr = String(new URLSearchParams(location.search).get('address') || '').replace(/\s+/g, ' ').trim().slice(0, 200);
     history.replaceState(null, '', location.pathname);
-    if (state.view === 'setup') { pendingSetup.basedOn = null; pendingSetup.inspectionType = 'Check-In'; render(); }
+    if (state.view === 'setup') {
+      pendingSetup.basedOn = null; pendingSetup.inspectionType = 'Check-In';
+      if (linkAddr) { const la = splitAddressLine(linkAddr); if (la.postcode && POSTCODE_RE.test(la.postcode)) pendingSetup.country = 'GB'; setAddressFields(la); pendingSetup.lookup = null; pendingSetup.picked = true; pendingSetup.manualAddress = true; saveSetupDraft(); }
+      render();
+    }
   }
   // Back from paying on /buy (/app?paid=1): the cookie is set, so check access again and unlock the finished report.
   const backFromPaying = new URLSearchParams(location.search).get('paid');
