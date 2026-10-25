@@ -843,6 +843,13 @@ function makeItems(type){
   const labels = ROOM_TYPE_ITEMS[type] || ROOM_TYPE_ITEMS.other;
   return labels.map((label, i) => ({ id: 'it' + i + '_' + Math.random().toString(36).slice(2,6), label, notApplicable: false, naReason: '', photos: [], custom: false, mandatory: /front door/i.test(label), condition: '', conditionNote: '', desc: '', defects: [], clean: '', working: '', qty: '' }));
 }
+// Rooms in the order you walk round: outside, the hallway, the living areas and kitchen, then bedrooms and
+// bathrooms, then any others. A stable sort, so bedrooms and bathrooms keep their numbers' order.
+const WALK_ORDER = ['garden', 'hallway', 'living', 'kitchen', 'utility', 'wc', 'bedroom', 'bathroom'];
+function walkOrder(rooms){
+  const rank = r => { const k = WALK_ORDER.indexOf(r.type); return k < 0 ? WALK_ORDER.length : k; };
+  return rooms.map((r, i) => [r, i]).sort((a, b) => rank(a[0]) - rank(b[0]) || a[1] - b[1]).map(x => x[0]);
+}
 function makeRoom(name, type){
   return { id: 'r' + Math.random().toString(36).slice(2,8), name, type, items: makeItems(type), extraPhotos: [], notes: '', condition: { cleanliness: '', hasDamage: false, damageNotes: '' } };
 }
@@ -2082,14 +2089,15 @@ function submitSetup(){
   const rooms = [];
   if (basedOn) basedOn.rooms.forEach(er => rooms.push(copyRoom(er)));   // the earlier report's rooms, in its order
   else {
-  for (let i = 1; i <= bedrooms; i++) rooms.push(makeRoom(bedrooms > 1 ? `Bedroom ${i}` : 'Bedroom', 'bedroom'));
-  for (let i = 1; i <= bathrooms; i++) rooms.push(makeRoom(bathrooms > 1 ? `Bathroom ${i}` : 'Bathroom', 'bathroom'));
-  if (pendingSetup.common.kitchen) rooms.push(makeRoom('Kitchen', 'kitchen'));
-  if (pendingSetup.common.living) rooms.push(makeRoom('Living / Reception Room', 'living'));
-  if (pendingSetup.common.hallway) rooms.push(makeRoom('Hallway / Entrance', 'hallway'));
+  // In the order you walk round: outside, the hallway, the living areas and kitchen, then bedrooms and bathrooms.
   if (pendingSetup.common.garden) rooms.push(makeRoom('Garden / Outdoor Space', 'garden'));
+  if (pendingSetup.common.hallway) rooms.push(makeRoom('Hallway / Entrance', 'hallway'));
+  if (pendingSetup.common.living) rooms.push(makeRoom('Living / Reception Room', 'living'));
+  if (pendingSetup.common.kitchen) rooms.push(makeRoom('Kitchen', 'kitchen'));
   if (pendingSetup.common.utility) rooms.push(makeRoom('Utility Room', 'utility'));
   if (pendingSetup.common.wc) rooms.push(makeRoom('Separate WC', 'wc'));
+  for (let i = 1; i <= bedrooms; i++) rooms.push(makeRoom(bedrooms > 1 ? `Bedroom ${i}` : 'Bedroom', 'bedroom'));
+  for (let i = 1; i <= bathrooms; i++) rooms.push(makeRoom(bathrooms > 1 ? `Bathroom ${i}` : 'Bathroom', 'bathroom'));
   pendingSetup.customRooms.forEach(name => rooms.push(makeRoom(name, 'other')));
   }
 
@@ -2106,8 +2114,8 @@ function submitSetup(){
   setupError = '';
   rememberAddress(address);
   state.earlier = basedOn;
-  state.rooms = rooms;
-  state.activeRoomId = rooms[0].id;
+  state.rooms = basedOn ? rooms : walkOrder(rooms);
+  state.activeRoomId = state.rooms[0].id;
   state.view = 'capture';
   clearSetupDraft();
   state.tracked = {}; track('report_started', 1);
@@ -4009,7 +4017,7 @@ function renderSetup(){
       ${ps.basedOn ? `<div class="section-title">Rooms</div><div class="room-count-hint">${ps.basedOn.rooms.map(r => escapeHtml(r.name)).join(' · ')}<br>Copied from the earlier report. You can add items in each room as you go.</div>` : `
       <div class="section-title">Other rooms to include</div>
       <div class="checklist">
-        ${[['kitchen','Kitchen'],['living','Living / Reception Room'],['hallway','Hallway / Entrance'],['garden','Garden / Outdoor Space'],['utility','Utility Room'],['wc','Separate WC']].map(([key,label]) => `
+        ${[['garden','Garden / Outdoor Space'],['hallway','Hallway / Entrance'],['living','Living / Reception Room'],['kitchen','Kitchen'],['utility','Utility Room'],['wc','Separate WC']].map(([key,label]) => `
           <div class="check-row">
             <input type="checkbox" id="common_${key}" ${ps.common[key] ? 'checked' : ''} onchange="pendingSetup.common.${key}=this.checked; updateRoomCountHint();">
             <label for="common_${key}">${label}</label>
@@ -4568,6 +4576,7 @@ track('app_open');
       render();
     } else if (saved && Array.isArray(saved.rooms) && saved.rooms.length && !saved.finalizedAt) {
       savedDraft = normalizeState(saved);
+      if (!savedDraft.earlier) savedDraft.rooms = walkOrder(savedDraft.rooms);
       state = defaultState();
       state.view = 'resume';
       render();
