@@ -134,8 +134,10 @@ function limiter(max, windowMs){
 const uploadAllowed = limiter(20, 60 * 60 * 1000);
 const loginFailures = limiter(10, 15 * 60 * 1000);
 
+// A report's details, or null. The folder also holds settings and logs (access-code.json, agent-links.json, …):
+// only a file whose own id matches its name is a report, so those are never listed, opened or deleted as one.
 function readMeta(id){
-  try { return JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, id + '.json'), 'utf8')); } catch (e) { return null; }
+  try { const m = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, id + '.json'), 'utf8')); return m && !Array.isArray(m) && m.id === id ? m : null; } catch (e) { return null; }
 }
 function listReports(){
   return fs.readdirSync(REPORTS_DIR).filter(f => f.endsWith('.json')).map(f => readMeta(f.slice(0, -5))).filter(Boolean)
