@@ -69,9 +69,13 @@ function mount(app, ctx){
   const guideIndex = () => ({ key: 'guides', path: '/guides', title: 'Inventory and inspection guides · DIY Inventory', og: 'Inventory and inspection guides', desc: 'Practical guides to property inventories, check-ins, check-outs, inspections and inventory photos, for tenants, landlords and agents anywhere.',
     body: head('Guides', 'Inventory and inspection guides', 'Practical help for tenants, landlords and agents, wherever the property is.') +
       `<section class="tight"><div class="wrap"><div class="timeline">${GUIDES.map(g => `<a class="card" style="display:block;text-decoration:none;color:inherit" href="/guides/${g.slug}"><h3 style="margin:0 0 6px">${escHtml(g.title)}</h3><p style="margin:0;color:var(--ink-soft)">${escHtml(g.desc)}</p></a>`).join('')}
+      <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-template"><h3 style="margin:0 0 6px">Free inventory template (PDF and Word)</h3><p style="margin:0;color:var(--ink-soft)">A room-by-room check-in inventory to print or edit, plus check-out and inspection templates.</p></a>
+      <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-clerk"><h3 style="margin:0 0 6px">Inventory clerk, or do it yourself?</h3><p style="margin:0;color:var(--ink-soft)">What a clerk does and costs, and doing the inventory yourself for £30.</p></a>
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/checklists"><h3 style="margin:0 0 6px">Room-by-room inventory checklists</h3><p style="margin:0;color:var(--ink-soft)">What to photograph in every room, with a tip for each item.</p></a></div></div></section>` + cta,
     jsonld: base => [crumbs(base, [['Home', '/'], ['Guides', '/guides']])] });
 
+  // Free inventory, check-out and inspection templates, and the inventory clerk page: templates.js.
+  const TPL = require('./templates').mount(app, { C, renderPage, escHtml, head, crumbs, PUBLIC_BASE });
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get(['/checklists', '/checklists/'], send(checklistIndex()));
   types.forEach(t => app.get(['/checklists/' + ROOM_SLUGS[t], '/checklists/' + ROOM_SLUGS[t] + '/'], send(checklistPage(t))));
@@ -79,10 +83,10 @@ function mount(app, ctx){
   GUIDES.forEach(g => app.get(['/guides/' + g.slug, '/guides/' + g.slug + '/'], send(guidePage(g))));
 
   /* ------------------------- sitemap, robots, IndexNow ------------------------- */
-  const sitePaths = ctx.sitePaths.concat(['/guides'], GUIDES.map(g => '/guides/' + g.slug), ['/checklists'], types.map(t => '/checklists/' + ROOM_SLUGS[t]));
+  const sitePaths = ctx.sitePaths.concat(['/guides'], GUIDES.map(g => '/guides/' + g.slug), ['/checklists'], types.map(t => '/checklists/' + ROOM_SLUGS[t]), TPL.paths);
   // A fingerprint of everything the pages are made from: it changes when a deploy changes them.
   const version = crypto.createHash('sha1').update(sitePaths.join('|')).update(fs.readFileSync(path.join(ROOT, 'views', 'layout.html')))
-    .update(ctx.siteBodies.join('|')).update(GUIDES.map(g => g.body).join('|')).update(JSON.stringify(C.ROOM_TYPE_ITEMS)).digest('hex');
+    .update(ctx.siteBodies.join('|')).update(TPL.bodies.join('|')).update(GUIDES.map(g => g.body).join('|')).update(JSON.stringify(C.ROOM_TYPE_ITEMS)).digest('hex');
   const seoFile = path.join(REPORTS_DIR, 'seo.json');
   const readSeo = () => { try { return JSON.parse(fs.readFileSync(seoFile, 'utf8')); } catch (e) { return {}; } };
   const seo = readSeo();
@@ -119,8 +123,8 @@ function mount(app, ctx){
       '- Floor plans: type each room’s width and length and a clean, measured floor plan is drawn, with room sizes and the total floor area, as a PDF and a picture. Free to draw, £9.55 to download, on its own or added to a report: ' + base + '/floor-plan',
       '- UK landlords can also book a Gas Safety certificate (CP12), an electrical safety report (EICR) or an EPC at fixed prices: ' + base + '/certificates', '',
       '## Pages',
-      '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Inventory, move-in and condition reports by area, worldwide: UK, USA, Canada, Australia, New Zealand, Ireland, UAE, South Africa](' + base + '/inventory-reports)', '- [Gas Safety, EICR and EPC certificates for landlords](' + base + '/certificates)', '- [Floor plans](' + base + '/floor-plan)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
-      '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Questions and answers'], faq, ['', 'Reports are made to be used as evidence, including in deposit disputes (TDS, DPS, mydeposits): dated photos, both sides’ signatures, and check-out compared with check-in.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
+      '- [Home](' + base + '/)', '- [How it works](' + base + '/how-it-works)', '- [Pricing](' + base + '/pricing)', '- [FAQ](' + base + '/faq)', '- [Guides](' + base + '/guides)', '- [Room-by-room checklists](' + base + '/checklists)', '- [Free inventory template, PDF and Word](' + base + '/inventory-template)', '- [Inventory clerk, or do it yourself for £30](' + base + '/inventory-clerk)', '- [Inventory, move-in and condition reports by area, worldwide: UK, USA, Canada, Australia, New Zealand, Ireland, UAE, South Africa](' + base + '/inventory-reports)', '- [Gas Safety, EICR and EPC certificates for landlords](' + base + '/certificates)', '- [Floor plans](' + base + '/floor-plan)', '- [Start a report (free)](' + base + '/app)', '- [Contact](' + base + '/contact)', '',
+      '## Guides'].concat(GUIDES.map(g => '- [' + g.title + '](' + base + '/guides/' + g.slug + '): ' + g.desc), ['', '## Free templates and inventory clerks'], TPL.llms(base), ['', '## Questions and answers'], faq, ['', 'Reports are made to be used as evidence, including in deposit disputes (TDS, DPS, mydeposits): dated photos, both sides’ signatures, and check-out compared with check-in.', '']).filter(l => l !== '').join('\n').replace(/\n## /g, '\n\n## ').replace(/\n- \[Home/, '\n- [Home'));
   });
   app.get('/' + seo.indexNowKey + '.txt', (req, res) => res.type('text/plain').send(seo.indexNowKey));
 

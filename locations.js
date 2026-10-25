@@ -222,9 +222,12 @@ function mount(app, { renderPage, escHtml }){
     const N = NATION[p.nation], near = nearest(p, 6), w = where(p), place = p.name.replace(/^the /, '');
     const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
     const title = (N.uk ? 'DIY inventory and check-in reports' : cap(N.report)) + ' in ' + place;
+    // UK: people search for an inventory clerk; the page answers that (do it yourself instead).
+    const seoTitle = N.uk ? 'Inventory clerk in ' + place + '? Do your own inventory for £30' : title + ' · £30';
     const basics = N.basics.concat(p.state && STATES[p.state] ? [STATES[p.state]] : []);
     const faqs = [
       ['How much does ' + (N.uk ? 'an inventory report' : 'a ' + N.thing + ' report') + ' cost in ' + w + '?', 'With DIY Inventory it’s ' + N.price + ', whatever the size of the property: a ' + N.checkin + ', a ' + N.checkout + ' or an inspection during the tenancy. It’s free to start, and you pay when the finished report is downloaded.'],
+      ...(N.uk ? [['How much does an inventory clerk cost in ' + w + '?', 'Inventory clerks in ' + w + ' usually charge for each visit, more for bigger or furnished homes, so a check-in and a check-out together can cost a few hundred pounds. With DIY Inventory each report is £30, whatever the size, and you can do it as soon as you have the keys.']] : []),
       ['Do I need ' + N.clerk + ' in ' + w + '?', 'No. You can do the ' + N.thing + ' yourself on your phone, or send your ' + N.who + ' a link to do it. The app gives every room a photo checklist, stamps the date and time on every photo, and both sides sign the report.'],
       ['Will the report help with a ' + N.money + ' dispute in ' + N.label + '?', N.disputes + ' Your report gives you that evidence: dated photos of every room, the condition of every item, meter readings and keys, signed by both sides.'],
     ].concat(N.uk ? [['Can I book a Gas Safety certificate, EICR or EPC in ' + w + '?', 'You can request one on our landlord services page at a fixed price. We’ll check we cover the area and confirm a date with you.']]
@@ -236,6 +239,7 @@ function mount(app, { renderPage, escHtml }){
       <li>No appointment to wait for: do it whenever you have the keys, before the ${e(N.who)} moves in or with them there.</li>
       <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every check-in, inspection and check-out.' : 'A fixed £30 a report instead of paying ' + N.clerk + ' for every visit.')}</li>
       <li>The report is ready instantly, so it can be sent and signed on move-in day.</li>
+      ${N.uk ? '<li>Prefer paper? Use our <a href="/inventory-template">free inventory template</a> (PDF and Word).</li>' : ''}
       <li>The ${e(N.checkout)} starts from the ${e(N.checkin)} and shows what has changed, with photos side by side.</li>
     </ul></div>
     <div class="card"><h3>Renting in ${e(N.label)}: the basics</h3><ul>
@@ -262,7 +266,7 @@ function mount(app, { renderPage, escHtml }){
   <p style="text-align:center;line-height:2.2">${near.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}/${q.slug}">${e(q.name.replace(/^the /, ''))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p>
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Ready when you have the keys</h2><p>Start your ${e(place)} ${e(N.thing)} today, on your phone. It’s free until you download it.</p><a class="btn" href="/app">Start free</a></div></div></div>`;
-    return { key: 'locations', path: BASE_PATH + '/' + p.slug, title: title + ' · £30 · DIY Inventory', og: title,
+    return { key: 'locations', path: BASE_PATH + '/' + p.slug, title: seoTitle + ' · DIY Inventory', og: N.uk ? seoTitle : title,
       desc: 'Do your own ' + N.thing + ' and ' + N.checkout + ' report in ' + w + ' on your phone: dated photos, every item’s condition, signed by both sides, ready instantly. £30 per report, free to start.', body,
       jsonld: base => [
         { '@type': 'Service', name: cap(N.report) + ' in ' + place, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' },
