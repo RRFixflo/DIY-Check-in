@@ -198,6 +198,13 @@ section.tight { padding: 28px 0 64px; }
 .prose h2 { font-size: 22px; margin: 30px 0 8px; } .prose h2:first-child { margin-top: 0; }
 .prose p, .prose li { color: var(--ink-soft); } .prose ul { padding-left: 20px; }
 .prose .updated { color: var(--ink-faint); font-size: 14px; }
+.prose table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 15px; display: block; overflow-x: auto; }
+.prose th, .prose td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-soft); }
+.prose th { color: var(--ink); font-weight: 700; border-bottom-width: 2px; }
+.prose details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+.prose details summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+.prose details p { margin: 8px 0 0; }
+.prose h3 { font-size: 18px; margin: 22px 0 6px; }
 
 .faq h2.group { font-size: 15px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); margin: 26px 0 4px; }
 .faq h2.group:first-child { margin-top: 0; }

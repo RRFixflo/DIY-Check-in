@@ -11,12 +11,13 @@ const path = require('path');
 const crypto = require('crypto');
 
 const GUIDES = [
-  { slug: 'how-to-do-a-check-in-inventory', title: 'How to do a check-in inventory yourself', desc: 'A step-by-step guide to doing your own property check-in inventory on your phone: what to photograph, how to record condition, and how to get it signed.', date: '2026-10-22' },
-  { slug: 'how-to-photograph-a-rental-property', title: 'How to photograph a rental property for an inventory', desc: 'Practical tips for inventory photos that hold up later: light, angles, wide shots and close-ups, and the date and time on every photo.', date: '2026-10-22' },
-  { slug: 'check-out-inspection-guide', title: 'Check-out inspections: comparing a property with the check-in', desc: 'How to do a check-out inspection, compare each item with the check-in report, and record what has changed fairly.', date: '2026-10-22' },
-  { slug: 'mid-tenancy-inspection-checklist', title: 'Mid-tenancy inspection checklist for landlords', desc: 'What to check during a routine inspection: damp, leaks, safety alarms, appliances and wear, room by room.', date: '2026-10-22' },
-  { slug: 'fair-wear-and-tear-vs-damage', title: 'Fair wear and tear vs damage: what’s the difference?', desc: 'How inventories usually tell normal wear from damage, with examples for carpets, walls, furniture and appliances. General information, not legal advice.', date: '2026-10-22' },
-];
+  { slug: 'how-to-do-a-check-in-inventory', cat: 'Inventories', title: 'How to do a check-in inventory yourself', desc: 'A step-by-step guide to doing your own property check-in inventory on your phone: what to photograph, how to record condition, and how to get it signed.', date: '2026-10-22' },
+  { slug: 'how-to-photograph-a-rental-property', cat: 'Inventories', title: 'How to photograph a rental property for an inventory', desc: 'Practical tips for inventory photos that hold up later: light, angles, wide shots and close-ups, and the date and time on every photo.', date: '2026-10-22' },
+  { slug: 'check-out-inspection-guide', cat: 'Inventories', title: 'Check-out inspections: comparing a property with the check-in', desc: 'How to do a check-out inspection, compare each item with the check-in report, and record what has changed fairly.', date: '2026-10-22' },
+  { slug: 'mid-tenancy-inspection-checklist', cat: 'Inventories', title: 'Mid-tenancy inspection checklist for landlords', desc: 'What to check during a routine inspection: damp, leaks, safety alarms, appliances and wear, room by room.', date: '2026-10-22' },
+  { slug: 'fair-wear-and-tear-vs-damage', cat: 'Deposits and moving', title: 'Fair wear and tear vs damage: what’s the difference?', desc: 'How inventories usually tell normal wear from damage, with examples for carpets, walls, furniture and appliances. General information, not legal advice.', date: '2026-10-22' },
+].concat(require('./views/guides/guides.json'));
+const CATS = ['Inventories', 'Deposits and moving', 'Landlord rules'];
 const ROOM_NAMES = { bedroom: 'Bedroom', bathroom: 'Bathroom', kitchen: 'Kitchen', living: 'Living room', hallway: 'Hallway and entrance', garden: 'Garden and outdoor space', utility: 'Utility room', wc: 'Separate WC', other: 'Any other room' };
 const ROOM_SLUGS = { bedroom: 'bedroom', bathroom: 'bathroom', kitchen: 'kitchen', living: 'living-room', hallway: 'hallway', garden: 'garden', utility: 'utility-room', wc: 'wc', other: 'other-rooms' };
 
@@ -62,13 +63,20 @@ function mount(app, ctx){
     jsonld: base => [crumbs(base, [['Home', '/'], ['Room checklists', '/checklists']])] });
 
   /* --------------------------------- guides --------------------------------- */
+  // Questions in a guide's <details> blocks become FAQPage structured data (rich results in Google).
+  const faqOf = body => [...body.matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => ({ q: m[1].replace(/<[^>]+>/g, '').trim(), a: m[2].replace(/<[^>]+>/g, '').trim() }));
+  // Related guides: the same topic first, then the rest, so every guide links on to several others.
+  const related = g => GUIDES.filter(x => x !== g && x.cat === g.cat).concat(GUIDES.filter(x => x !== g && x.cat !== g.cat)).slice(0, 5);
   const guidePage = g => ({ key: 'guides', path: '/guides/' + g.slug, title: g.title + ' · DIY Inventory', og: g.title, desc: g.desc,
-    body: head('Guide', g.title, escHtml(g.desc), ['All guides', '/guides']) + `<section class="tight"><div class="wrap"><article class="card prose">${g.body}<p class="updated">Updated ${new Date(g.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p></article></div></section>` + cta,
+    body: head('Guide · ' + escHtml(g.cat), g.title, escHtml(g.desc), ['All guides', '/guides']) + `<section class="tight"><div class="wrap"><article class="card prose">${g.body}<p class="updated">Updated ${new Date(g.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p></article>
+      <div class="card prose" style="margin-top:18px"><h2>Related guides</h2><ul>${related(g).map(x => `<li><a href="/guides/${x.slug}">${escHtml(x.title)}</a></li>`).join('')}<li><a href="/inventory-template">Free inventory template (PDF and Word)</a></li></ul></div></div></section>` + cta,
     jsonld: base => [crumbs(base, [['Home', '/'], ['Guides', '/guides'], [g.title, '/guides/' + g.slug]]),
-      { '@type': 'Article', headline: g.title, description: g.desc, datePublished: g.date, dateModified: g.date, inLanguage: 'en', mainEntityOfPage: base + '/guides/' + g.slug, author: { '@id': base + '/#org' }, publisher: { '@id': base + '/#org' }, image: base + '/icons/icon-512.png' }] });
-  const guideIndex = () => ({ key: 'guides', path: '/guides', title: 'Inventory and inspection guides · DIY Inventory', og: 'Inventory and inspection guides', desc: 'Practical guides to property inventories, check-ins, check-outs, inspections and inventory photos, for tenants, landlords and agents anywhere.',
-    body: head('Guides', 'Inventory and inspection guides', 'Practical help for tenants, landlords and agents, wherever the property is.') +
-      `<section class="tight"><div class="wrap"><div class="timeline">${GUIDES.map(g => `<a class="card" style="display:block;text-decoration:none;color:inherit" href="/guides/${g.slug}"><h3 style="margin:0 0 6px">${escHtml(g.title)}</h3><p style="margin:0;color:var(--ink-soft)">${escHtml(g.desc)}</p></a>`).join('')}
+      { '@type': 'Article', headline: g.title, description: g.desc, datePublished: g.date, dateModified: g.updated || g.date, inLanguage: 'en-GB', articleSection: g.cat, mainEntityOfPage: base + '/guides/' + g.slug, author: { '@id': base + '/#org' }, publisher: { '@id': base + '/#org' }, image: base + '/img/og.jpg' }]
+      .concat(faqOf(g.body).length ? [{ '@type': 'FAQPage', mainEntity: faqOf(g.body).map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) }] : []) });
+  const guideIndex = () => ({ key: 'guides', path: '/guides', title: 'Landlord and tenant guides: inventories, deposits, rules · DIY Inventory', og: 'Landlord and tenant guides', desc: 'Free guides for landlords and tenants: inventories, check-ins and check-outs, deposit deductions and disputes, safety certificates, EPCs and the Renters’ Rights Act.',
+    body: head('Guides', 'Guides for landlords and tenants', 'Practical help for tenants, landlords and agents: inventories, deposits, moving in and out, and the rules landlords must follow.') +
+      CATS.map(c => `<section class="tight"><div class="wrap"><h2 style="margin:0 0 14px">${escHtml(c)}</h2><div class="timeline">${GUIDES.filter(g => g.cat === c).map(g => `<a class="card" style="display:block;text-decoration:none;color:inherit" href="/guides/${g.slug}"><h3 style="margin:0 0 6px">${escHtml(g.title)}</h3><p style="margin:0;color:var(--ink-soft)">${escHtml(g.desc)}</p></a>`).join('')}</div></div></section>`).join('') +
+      `<section class="tight"><div class="wrap"><h2 style="margin:0 0 14px">Templates and checklists</h2><div class="timeline">
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-template"><h3 style="margin:0 0 6px">Free inventory template (PDF and Word)</h3><p style="margin:0;color:var(--ink-soft)">A room-by-room check-in inventory to print or edit, plus check-out and inspection templates.</p></a>
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-clerk"><h3 style="margin:0 0 6px">Inventory clerk, or do it yourself?</h3><p style="margin:0;color:var(--ink-soft)">What a clerk does and costs, and doing the inventory yourself for £30.</p></a>
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/checklists"><h3 style="margin:0 0 6px">Room-by-room inventory checklists</h3><p style="margin:0;color:var(--ink-soft)">What to photograph in every room, with a tip for each item.</p></a></div></div></section>` + cta,

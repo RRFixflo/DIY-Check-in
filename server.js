@@ -9,6 +9,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
 const certs = require('./certs');
@@ -29,6 +30,8 @@ const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY 
 
 const app = express();
 app.disable('x-powered-by');
+// Smaller pages load faster (Core Web Vitals); PDFs and photos are already compressed.
+app.use(compression({ filter: (req, res) => !/^\/(p|ip)\//.test(req.path) && compression.filter(req, res) }));
 app.use(express.json({ limit: '15mb' }));
 
 app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
@@ -312,7 +315,7 @@ app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (re
 const PREVIEW_BOT = /facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely/i;
 app.use((req, res, next) => {
   if ((req.method !== 'GET' && req.method !== 'HEAD') || !PREVIEW_BOT.test(String(req.headers['user-agent'] || ''))) return next();
-  if (/^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
+  if (req.path !== '/' && !/^\/app\/?$/.test(req.path)) return next();   // anything else is a real page or a 404
   res.set('Cache-Control', 'public, max-age=3600').type('html').send(sitePage('home', req));
 });
 
@@ -351,6 +354,7 @@ if (PAYWALL) {
     const isApp = /^\/app\/?$/.test(req.path);
     if (isApp && !req.query.access) return next();
     const raw = String(req.query.access || '').trim();
+    if (!isRoot && !isApp && !raw) return next();   // other addresses: their own page, or a 404
     if (raw && codeTries.blocked(req)) return res.status(429).type('html').send(paywallPage('tries', req));
     const q = reports.canonicalCode(raw) || (TOKEN_RE.test(raw) ? raw : ''), token = q || cookieToken(req);
     if (raw && !q) { codeTries.wrong(req); return res.status(402).type('html').send(paywallPage('unknown', req)); }
@@ -397,8 +401,29 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 
 /* ----------------------------- client ----------------------------- */
 const PUBLIC = path.join(__dirname, 'public');
-app.use(express.static(PUBLIC, { index: 'index.html' }));
-app.use((req, res) => res.sendFile(path.join(PUBLIC, 'index.html')));
+// The app's page is for people, not search results (its address, /app, is also kept out in robots.txt).
+app.use(express.static(PUBLIC, { index: 'index.html', setHeaders: (res, file) => {
+  if (file === path.join(PUBLIC, 'index.html')) res.set('X-Robots-Tag', 'noindex');
+  else if (/\.(jpe?g|png|webp|svg|woff2?)$/i.test(file)) res.set('Cache-Control', 'public, max-age=604800');   // pictures: a week (faster repeat visits)
+} }));
+// The app at /app (and / when the paywall is off); any other address is a real 404, so search engines
+// don't index made-up addresses as copies of the app.
+const NOT_FOUND = { key: '', path: '/404', title: 'Page not found · DIY Inventory', og: 'Page not found', desc: 'This page doesn’t exist. Try our guides, free templates and checklists, or start a report.', head: '<meta name="robots" content="noindex">',
+  body: `<div class="page-head"><div class="wrap"><span class="kicker">404</span><h1>We can’t find that page</h1><p>The link may be old or mistyped. These might help:</p></div></div>
+  <section class="tight"><div class="wrap"><div class="card prose"><ul>
+    <li><a href="/app">Start an inventory, check-in or check-out (free to start)</a></li>
+    <li><a href="/guides">Guides for landlords and tenants</a></li>
+    <li><a href="/inventory-template">Free inventory template (PDF and Word)</a></li>
+    <li><a href="/checklists">Room-by-room checklists</a></li>
+    <li><a href="/property-report">Free property report for any UK postcode</a></li>
+    <li><a href="/landlords">Free landlord dashboard</a></li>
+    <li><a href="/pricing">Pricing</a> · <a href="/faq">FAQ</a> · <a href="/contact">Contact</a></li>
+  </ul><p><a class="btn" href="/">Go to the home page</a></p></div></div></section>` };
+app.use((req, res) => {
+  if (req.path === '/' || /^\/app(\/|$)/.test(req.path)) { res.set('X-Robots-Tag', 'noindex'); return res.sendFile(path.join(PUBLIC, 'index.html')); }
+  if ((req.method === 'GET' || req.method === 'HEAD') && req.accepts('html')) return res.status(404).type('html').send(renderPage(NOT_FOUND, req));
+  res.status(404).type('text').send('Not found');
+});
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Check-in report app listening on port ${PORT} (AI ${anthropic ? 'on, ' + ANTHROPIC_MODEL : 'off'}, address lookup ${address.provider() || 'off'})`);
