@@ -20,7 +20,10 @@ function mount(app, { renderPage, escHtml: e, PLACES, BASE_PATH, REPORTS_DIR }){
   let master = []; try { master = JSON.parse(fs.readFileSync(LIST, 'utf8')); } catch (e) {}
   const old = {}; PLACES.forEach(p => { old[p.slug] = p; });
   // An area that already had a page keeps its short name ("Hull", "Bath"); its official name is shown too.
-  const list = master.filter(a => D[a.slug]).map(a => Object.assign({}, a, { official: a.name, name: old[a.slug] ? old[a.slug].name : a.name, london: a.type === 'london borough' }));
+  // Only areas with enough verified local facts get a hub (otherwise the page would be thin): at least two of
+  // rent, price, renting share, council tax and licensing.
+  const solid = d => [d.rent && d.rent.text, d.price && d.price.text, d.privateRentedShare && d.privateRentedShare.text, d.councilTax && d.councilTax.text, d.licensing && (d.licensing.selective || d.licensing.additional)].filter(Boolean).length >= 2;
+  const list = master.filter(a => D[a.slug] && solid(D[a.slug])).map(a => Object.assign({}, a, { official: a.name, name: old[a.slug] ? old[a.slug].name : a.name, london: a.type === 'london borough' }));
   const byslug = {}; list.forEach(a => { byslug[a.slug] = a; });
   if (!list.length) return { slugs: [], paths: [], areas: [] };
   const R = d => d * Math.PI / 180, dist = (a, b) => Math.hypot(R(b.lon - a.lon) * Math.cos(R((a.lat + b.lat) / 2)), R(b.lat - a.lat));
