@@ -4,19 +4,31 @@
   "council": {
     "name": "Broadland District Council",
     "url": "https://www.southnorfolkandbroadland.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.southnorfolkandbroadland.gov.uk/licensing/licences/houses-multiple-occupation/broadland-hmo"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from more than one household sharing facilities).",
+    "fee": "£835.88 for a five-year HMO licence for up to five lettings, plus £38.91 for each extra letting",
+    "source": "https://www.southnorfolkandbroadland.gov.uk/licensing/licences/houses-multiple-occupation/broadland-hmo",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£939 a month (ONS, May 2026), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000144/"
+  },
+  "price": {
+    "text": "£313,000 (UK HPI, April 2026, provisional), up 7.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000144/"
+  },
+  "privateRentedShare": {
+    "text": "12.3% of households rent privately (Census 2021), up from 10.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000144/"
+  },
+  "councilTax": {
+    "text": "£2,438 average Band D (2026/27), including Norfolk County Council, police and parish precepts; Broadland froze its own share",
+    "source": "https://www.southnorfolkandbroadland.gov.uk/asset-library/council-tax-and-budget-information-bdc-2627.pdf"
+  },
   "postcodes": [
     "NR7",
     "NR8",

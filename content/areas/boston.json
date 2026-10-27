@@ -4,19 +4,25 @@
   "council": {
     "name": "Boston Borough Council",
     "url": "https://www.boston.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.boston.gov.uk/article/21146/HMO-License-Applications"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the joint HMO Licensing Policy 2026–2029 says the council does not run one but may introduce one. National mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": "£1,046 for a five-year HMO licence, paid in two instalments",
+    "source": "https://democracy.boston.gov.uk/documents/s24416/Appendix%202%20-%20Draft%20HMO%20Licensing%20Policy.pdf",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "20.3% of households rent privately (Census 2021), up from 15.7% in 2011",
+    "source": "https://www.sleafordstandard.co.uk/lincolnshire/boston/census-2021-rise-in-private-renting-in-boston-3977343"
+  },
+  "councilTax": {
+    "text": "£2,309 average Band D (2026/27), including Lincolnshire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/boston"
+  },
   "postcodes": [
     "PE20",
     "PE21",

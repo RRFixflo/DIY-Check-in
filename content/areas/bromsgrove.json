@@ -7,16 +7,19 @@
     "privateRentingUrl": null
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found (the council’s HMO standards said in 2020 there were no firm proposals for one); national mandatory HMO licensing applies (five or more people from two or more households), run by Worcestershire Regulatory Services.",
     "fee": null,
-    "source": null,
+    "source": "https://moderngovwebpublic.bromsgrove.gov.uk/documents/s44061/Redditch-Bromsgrove-Amenity-Standards-Document%201.pdf",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,440 Band D (2026/27) outside parished areas, including Worcestershire County Council, police and fire; about £2,479 on average with parish precepts",
+    "source": "https://www.bromsgrove.gov.uk/residents/money-education-skills/council-tax/more-about-council-tax/how-much-is-my-council-tax"
+  },
   "postcodes": [
     "B60",
     "B61",

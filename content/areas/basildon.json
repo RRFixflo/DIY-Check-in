@@ -4,19 +4,28 @@
   "council": {
     "name": "Basildon Council",
     "url": "https://www.basildon.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.basildon.gov.uk/article/878/Houses-in-Multiple-Occupation-HMO"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme in force. The council’s cabinet has approved further work on whether a selective licensing scheme is feasible; any scheme would need a full public consultation first.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": "£202 per letting room for an HMO licence (up to six rooms; £101 per room after that)",
+    "source": "https://www.basildon.gov.uk/article/6665/Licence-House-In-Multiple-Occupation-HMO",
     "checked": "October 2026"
   },
   "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "price": {
+    "text": "£356,000 (UK HPI / HM Land Registry, March 2026)",
+    "source": "https://propertyinvestmentsuk.co.uk/basildon-buy-to-let/"
+  },
+  "privateRentedShare": {
+    "text": "14.5% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=608"
+  },
+  "councilTax": {
+    "text": "£2,327 average Band D (2026/27), including Essex County Council, police, fire and parish precepts; Basildon froze its own share at £304.56",
+    "source": "https://housecheckup.co.uk/council-tax/basildon"
+  },
   "postcodes": [
     "CM11",
     "CM12",

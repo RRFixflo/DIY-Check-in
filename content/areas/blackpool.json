@@ -7,16 +7,25 @@
     "privateRentingUrl": "https://www.blackpool.gov.uk/Business/Licensing-and-permits/Housing-licences/Selective-licensing/Selective-licensing.aspx"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "Selective licensing in eight inner wards (Bloomfield, Brunswick, Claremont, Talbot, Tyldesley, Victoria, Warbreck and Waterloo) from 1 April 2025 to 31 March 2030. The council has also published a public notice for a Central area selective licensing designation: check its page for the dates.",
+    "additional": "No additional HMO licensing scheme in force (earlier schemes ran in South Shore, Claremont and Central from 2012); national mandatory HMO licensing applies.",
+    "fee": "£772 for a selective licence on a home let to one household, with discounts (for example £200 off where the home meets the Blackpool Standard) (council fee page, 2025)",
+    "source": "https://www.blackpool.gov.uk/Business/Licensing-and-permits/Housing-licences/Selective-licensing/Selective-licensing.aspx",
     "checked": "October 2026"
   },
-  "rent": null,
+  "rent": {
+    "text": "£700 a month (ONS Price Index of Private Rents, May 2026 edition), up 6.6% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/FY1"
+  },
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "31.8% of households rent privately (Census 2021), up from 26.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000009/"
+  },
+  "councilTax": {
+    "text": "£2,513 Band D (2026/27), including the police and fire precepts",
+    "source": "https://www.blackpool.gov.uk/your-council/transparency-and-open-data/budget-spending-and-procurement/council-tax-further-information-for-recipients-of-council-tax-demands"
+  },
   "postcodes": [
     "FY1",
     "FY2",

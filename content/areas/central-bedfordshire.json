@@ -4,13 +4,13 @@
   "council": {
     "name": "Central Bedfordshire Council",
     "url": "https://www.centralbedfordshire.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.centralbedfordshire.gov.uk/housing/houses-multiple-occupation-hmo/hmo-information-landlords"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s housing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s pages describe only national mandatory HMO licensing (five or more people forming two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://www.centralbedfordshire.gov.uk/housing/houses-multiple-occupation-hmo/hmo-information-landlords",
     "checked": "October 2026"
   },
   "rent": {
@@ -26,8 +26,8 @@
     "source": null
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,516 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/central-bedfordshire"
   },
   "postcodes": [
     "LU5",

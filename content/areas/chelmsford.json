@@ -4,30 +4,30 @@
   "council": {
     "name": "Chelmsford City Council",
     "url": "https://www.chelmsford.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.chelmsford.gov.uk/business/licensing/licensing-a-house-in-multiple-occupation/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme: the council says it has no additional or selective licensing schemes.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": "£900 for a five-year HMO licence for up to five units, plus £55 for each extra unit",
+    "source": "https://www.chelmsford.gov.uk/business/licensing/licensing-a-house-in-multiple-occupation/",
     "checked": "October 2026"
   },
   "rent": {
-    "text": null,
-    "source": null
+    "text": "£1,442 a month (ONS Price Index of Private Rents, May 2026 edition), up 7.3% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/CM1"
   },
   "price": {
-    "text": null,
-    "source": null
+    "text": "£376,000 (UK HPI / HM Land Registry, March 2026)",
+    "source": "https://www.propertyinvestmentsuk.co.uk/chelmsford-buy-to-let/"
   },
   "privateRentedShare": {
     "text": null,
     "source": null
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,300 average Band D (2026/27), including Essex County Council, police, fire and parish precepts",
+    "source": "https://www.chelmsford.gov.uk/media/k4cc5oop/council-tax-charges-for-2026-27-accessible-document-v3-final.pdf"
   },
   "postcodes": [
     "CM1",

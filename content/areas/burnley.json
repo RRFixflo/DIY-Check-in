@@ -4,19 +4,22 @@
   "council": {
     "name": "Burnley Borough Council",
     "url": "https://www.burnley.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://burnley.gov.uk/housing/private-rented-sector/selective-licensing/"
   },
   "licensing": {
-    "selective": null,
+    "selective": "Selective licensing in parts of Burnley Wood with Healey Wood and the Leyland Road area (July 2022 to July 2027), and in parts of Trinity, Daneshouse, Gannow, Queensgate and Padiham (a later designation following a 2024 consultation). A consultation on changes to the schemes closed on 18 October 2026; the existing schemes continue meanwhile.",
     "additional": null,
-    "fee": null,
-    "source": null,
+    "fee": "£736 (Burnley Wood and Leyland Road) or £774 (Trinity, Daneshouse, Gannow, Queensgate and Padiham) for an online selective licence application, with discounts for accredited landlords",
+    "source": "https://burnley.gov.uk/housing/private-rented-sector/selective-licensing/",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,549 average Band D (2026/27), including Lancashire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/burnley"
+  },
   "postcodes": [
     "BB10",
     "BB11",

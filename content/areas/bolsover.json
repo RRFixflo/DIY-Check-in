@@ -7,16 +7,22 @@
     "privateRentingUrl": null
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme in force.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://committees.bolsover.gov.uk/documents/g4921/Public%20reports%20pack%2015th-Apr-2024%2010.00%20Executive.pdf?T=10",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "17.4% of households rent privately (Census 2021), up 2.8 percentage points since 2011",
+    "source": "https://observatory.derbyshire.gov.uk/wp-content/uploads/reports/profiles/2021_census_profiles/summary_profile/districts/bolsover.pdf"
+  },
+  "councilTax": {
+    "text": "£2,559 average Band D (2026/27), including Derbyshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/bolsover"
+  },
   "postcodes": [
     "S43",
     "S44",

@@ -4,13 +4,13 @@
   "council": {
     "name": "Charnwood Borough Council",
     "url": "https://www.charnwood.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.charnwood.gov.uk/pages/selective_licensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "Selective licensing in Loughborough, covering roads in the former Loughborough Hastings and Loughborough Lemyngton wards (the boundaries as they were before the May 2023 ward changes).",
+    "additional": "Borough-wide additional HMO licensing for HMOs of three or four unrelated people (and some converted buildings) not needing a mandatory licence, from 1 April 2023 to 31 March 2028.",
     "fee": null,
-    "source": null,
+    "source": "https://www.charnwood.gov.uk/pages/public_notice_designation_of_an_area_for_additional_licensing_of_hmos",
     "checked": "October 2026"
   },
   "rent": {
@@ -22,12 +22,12 @@
     "source": null
   },
   "privateRentedShare": {
-    "text": null,
-    "source": null
+    "text": "17.4% of households rent privately (Census 2021)",
+    "source": "https://www.charnwood.gov.uk/pages/charnwood_the_borough"
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,406 average Band D (2026/27), including Leicestershire County Council, police, fire, parish precepts and the Loughborough special rate",
+    "source": "https://housecheckup.co.uk/council-tax/charnwood"
   },
   "postcodes": [
     "LE11",

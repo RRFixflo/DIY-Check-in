@@ -4,19 +4,22 @@
   "council": {
     "name": "Babergh District Council",
     "url": "https://www.babergh.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.babergh.gov.uk/w/houses-in-multiple-occupation"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households). The councils’ 2024 housing strategy says they plan to review their approach to HMO licensing.",
+    "fee": "The council’s HMO page gives the licence fee as £578.55 (an older version says £551)",
+    "source": "https://www.babergh.gov.uk/w/houses-in-multiple-occupation",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,236 average Band D (2026/27) for Babergh, Suffolk County Council and the police, before parish precepts",
+    "source": "https://babergh.gov.uk/documents/d/babergh/bdc-council-tax-financial-information-2026_27"
+  },
   "postcodes": [
     "CO6",
     "CO7",

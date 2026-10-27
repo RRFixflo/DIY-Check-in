@@ -4,13 +4,13 @@
   "council": {
     "name": "Castle Point Borough Council",
     "url": "https://www.castlepoint.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.castlepoint.gov.uk/private-sector-housing/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s private sector housing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s pages describe only national mandatory HMO licensing (five or more people from more than one household).",
     "fee": null,
-    "source": null,
+    "source": "https://www.castlepoint.gov.uk/houses-in-multiple-occupation",
     "checked": "October 2026"
   },
   "rent": {
@@ -26,8 +26,8 @@
     "source": null
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,309 Band D (2026/27) outside Canvey Island, including Essex County Council, police and fire; £2,335 on Canvey Island with the town council precept",
+    "source": "https://castlepoint.gov.uk/documents/d/guest/financial-information-2026-27-1"
   },
   "postcodes": [
     "SS7",

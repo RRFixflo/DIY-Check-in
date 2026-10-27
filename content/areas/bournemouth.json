@@ -7,16 +7,25 @@
     "privateRentingUrl": null
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme in force. A scheme for part of the area was consulted on in 2020 but not brought in; the council’s 2025–2027 housing strategy plan says a decision is still needed on whether to pursue discretionary licensing.",
+    "additional": "No additional HMO licensing scheme in force (an area-wide scheme was consulted on in 2020); national mandatory HMO licensing applies (five or more people from two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://democracy.bcpcouncil.gov.uk/documents/s56871/Appendix%20B%20-%20Revised%20Housing%20Strategy%20Delivery%20Plan%202025-2027.pdf",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,349 a month (ONS, March 2025), up 7.7% on a year earlier",
+    "source": "https://ons.gov.uk/visualisations/housingpriceslocal/E06000058"
+  },
+  "price": {
+    "text": "£310,000 (UK HPI, January 2026)",
+    "source": "https://www.mortgageonefinance.co.uk/bournemouth-mortgage-guide"
+  },
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,400 Band D (2026/27) outside parished areas, including the police and fire precepts, after a 6.74% rise in BCP Council’s share; about £2,436 on average with parish precepts",
+    "source": "https://www.bcpcouncil.gov.uk/council-tax/council-tax-explained/council-tax-bands-and-charges"
+  },
   "postcodes": [
     "BH1",
     "BH2",

@@ -4,19 +4,25 @@
   "council": {
     "name": "Bracknell Forest Council",
     "url": "https://www.bracknell-forest.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.bracknell-forest.gov.uk/housing/living-standards-rented-homes"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households), run by the Public Protection Partnership shared with West Berkshire and Wokingham.",
     "fee": null,
-    "source": null,
+    "source": "https://www.bracknell-forest.gov.uk/sites/default/files/2023-03/housing-strategy-2023-to-2028.pdf",
     "checked": "October 2026"
   },
-  "rent": null,
+  "rent": {
+    "text": "£1,499 a month (ONS Price Index of Private Rents, 2026), up 6% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/RG12"
+  },
   "price": null,
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,265 average Band D (2026/27), including Thames Valley police, Royal Berkshire fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/bracknell-forest"
+  },
   "postcodes": [
     "RG12",
     "RG40",

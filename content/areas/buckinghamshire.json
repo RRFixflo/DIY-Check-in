@@ -4,19 +4,25 @@
   "council": {
     "name": "Buckinghamshire Council",
     "url": "https://www.buckinghamshire.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.buckinghamshire.gov.uk/council-tax-benefits-housing/housing-support-and-landlords/guide-to-hmo-licensing/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s housing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s pages describe only national mandatory HMO licensing (five or more people from two or more households).",
+    "fee": "£1,050 for an HMO licence applied for before enforcement, plus £50 for each bedroom over five (£1,575 through enforcement)",
+    "source": "https://www.buckinghamshire.gov.uk/council-tax-benefits-housing/housing-support-and-landlords/guide-to-hmo-licensing/",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "15.7% of households rent privately (Census 2021), up from 12.9% in 2011",
+    "source": "https://cy.ons.gov.uk/visualisations/censusareachanges/E06000060"
+  },
+  "councilTax": {
+    "text": "£2,527 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/buckinghamshire"
+  },
   "postcodes": [
     "HP5",
     "HP6",

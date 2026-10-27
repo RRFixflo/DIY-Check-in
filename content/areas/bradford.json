@@ -4,19 +4,28 @@
   "council": {
     "name": "City of Bradford Metropolitan District Council",
     "url": "https://www.bradford.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.bradford.gov.uk/housing/houses-in-multiple-occupation/hmo-licence-fees/"
   },
   "licensing": {
     "selective": null,
     "additional": null,
-    "fee": null,
-    "source": null,
+    "fee": "£1,625.05 for a mandatory HMO licence for five to seven occupiers (2026/27, paid in two parts)",
+    "source": "https://www.bradford.gov.uk/housing/houses-in-multiple-occupation/hmo-licence-fees/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£742 a month (ONS, April 2026), up 4.5% on a year earlier",
+    "source": "https://housecheckup.co.uk/average-rent/bradford"
+  },
+  "price": {
+    "text": "£185,000 (UK HPI, June 2026, provisional), up 6.0% on a year earlier",
+    "source": "https://www.hunters.com/guides/bradford/bradford-house-prices-2026-best-areas-for-buyers/"
+  },
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,333 Band D (2026/27) before parish precepts, including the West Yorkshire Mayor’s police and fire precepts; about £2,361 on average with parish precepts",
+    "source": "https://www.bradford.gov.uk/council-tax/bands-and-charges/council-tax-bands-and-amounts/"
+  },
   "postcodes": [
     "BD1",
     "BD2",

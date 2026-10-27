@@ -4,19 +4,31 @@
   "council": {
     "name": "Bath & North East Somerset Council",
     "url": "https://www.bathnes.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.bathnes.gov.uk/hmo-licence-types"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme in force: the council says the Bath additional licensing scheme (2019–2023) ended on 31 December 2023, and any new scheme would need a consultation first. National mandatory HMO licensing covers the whole area.",
     "fee": null,
-    "source": null,
+    "source": "https://www.bathnes.gov.uk/hmo-licence-types",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,863 a month (ONS, February 2026), up 8.2% on a year earlier",
+    "source": "https://cy.ons.gov.uk/visualisations/housingpriceslocal/E06000022"
+  },
+  "price": {
+    "text": "£402,000 (UK HPI, January 2026, provisional), roughly unchanged on a year earlier",
+    "source": "https://cy.ons.gov.uk/visualisations/housingpriceslocal/E06000022"
+  },
+  "privateRentedShare": {
+    "text": "19% of households rent privately (Census 2021), up from 12,447 to 15,309 households since 2011",
+    "source": "https://bathnes.gov.uk/sites/default/files/SEB%20Housing%20Apr25_0.pdf"
+  },
+  "councilTax": {
+    "text": "£2,383 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://democracy.bathnes.gov.uk/documents/s90389/Annex 13 Council Tax setting.pdf"
+  },
   "postcodes": [
     "BA1",
     "BA2",

@@ -4,30 +4,30 @@
   "council": {
     "name": "Cheltenham Borough Council",
     "url": "https://www.cheltenham.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.cheltenham.gov.uk/housing/private-housing/houses-in-multiple-occupation/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s private housing pages.",
+    "additional": "No additional HMO licensing scheme is listed: the council’s HMO page describes national mandatory HMO licensing (five or more people from two or more households). An Article 4 direction in St Paul’s means converting a house to an HMO there needs planning permission.",
+    "fee": "£400 (part 1) plus £570 (part 2) for a standard HMO licence, with extra charges for larger HMOs",
+    "source": "https://www.cheltenham.gov.uk/housing/private-housing/houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
   "rent": {
-    "text": null,
-    "source": null
+    "text": "£1,240 a month (ONS Price Index of Private Rents, May 2026 edition), up 2.1% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/GL50"
   },
   "price": {
-    "text": null,
-    "source": null
+    "text": "£329,000 (UK HPI, May 2026), up 3.7% on a year earlier",
+    "source": "https://housecheckup.co.uk/sold-prices/GL50"
   },
   "privateRentedShare": {
-    "text": null,
-    "source": null
+    "text": "23.4% of households rent privately (Census 2021), up from 21.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000078"
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,356 Band D (2026/27) outside parished areas, including Gloucestershire County Council (which runs the fire service) and police; £2,371 to £2,412 in the parishes",
+    "source": "https://democracy.cheltenham.gov.uk/documents/s53467/Appendix 2 - Council Tax Resolution 2026-27.pdf"
   },
   "postcodes": [
     "GL50",

@@ -4,19 +4,31 @@
   "council": {
     "name": "Bristol City Council",
     "url": "https://www.bristol.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.bristol.gov.uk/business/licences-and-permits/property-licences/types-of-licence"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "Selective licensing in Bishopston and Ashley Down, Cotham and Easton wards from 6 August 2024 (to August 2029), and in Bedminster and Brislington West from 6 April 2022 (to April 2027).",
+    "additional": "City-wide additional HMO licensing from 6 August 2024 (to August 2029), covering most HMOs not under mandatory licensing.",
+    "fee": "£1,861 for a first additional HMO licence and £912 for a selective licence (council fee page)",
+    "source": "https://www.bristol.gov.uk/business/licences-and-permits/property-licences/licence-fees-extra-charges-and-discounts/additional-hmo-and-selective-property-licence-fees",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,880 a month (ONS, July 2026), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000023/"
+  },
+  "price": {
+    "text": "£357,000 (UK HPI, June 2026, provisional), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000023/"
+  },
+  "privateRentedShare": {
+    "text": "26.2% of households rent privately (Census 2021)",
+    "source": "https://www.bristol.gov.uk/files/documents/1521-jsna-housing/file"
+  },
+  "councilTax": {
+    "text": "£2,714 Band D (2026/27), including the police and fire precepts",
+    "source": "https://www.bristol.gov.uk/files/documents/10635-bristol-council-tax-notice-2026-to-2027"
+  },
   "postcodes": [
     "BS1",
     "BS2",

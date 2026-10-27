@@ -4,7 +4,7 @@
   "council": {
     "name": "Barnsley Council",
     "url": "https://www.barnsley.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.barnsley.gov.uk/services/housing/private-landlords/"
   },
   "licensing": {
     "selective": null,
@@ -13,10 +13,19 @@
     "source": null,
     "checked": "October 2026"
   },
-  "rent": null,
+  "rent": {
+    "text": "£664 a month (ONS, January 2026), up 5.4% on a year earlier: the lowest in Yorkshire",
+    "source": "https://www.thestar.co.uk/lifestyle/homes-and-gardens/how-the-cost-of-renting-compares-across-yorkshire-6035763?page=4"
+  },
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "17.2% of households rent privately (Census 2021), up from 12.8% in 2011",
+    "source": "https://barnsleychronicle.com/article/24479/number-of-private-renters-sky-rockets"
+  },
+  "councilTax": {
+    "text": "£2,326 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/barnsley"
+  },
   "postcodes": [
     "S36",
     "S63",

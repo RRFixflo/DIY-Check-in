@@ -4,19 +4,25 @@
   "council": {
     "name": "Broxtowe Borough Council",
     "url": "https://www.broxtowe.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.broxtowe.gov.uk/for-business/licences-permits/business-licences/house-in-multiple-occupation-hmo/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; the council runs only national mandatory HMO licensing (five or more people from two or more households). Separately, an Article 4 direction since 26 March 2022 means converting a house to a small HMO in parts of Beeston and Beeston Rylands needs planning permission.",
     "fee": null,
-    "source": null,
+    "source": "https://www.broxtowe.gov.uk/for-business/licences-permits/business-licences/house-in-multiple-occupation-hmo/",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "17.3% of households rent privately (Census 2021), up from 14.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000172/"
+  },
+  "councilTax": {
+    "text": "£2,582 Band D (2026/27) before parish precepts, including Nottinghamshire County Council, police and fire; about £2,618 on average with parish precepts",
+    "source": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf"
+  },
   "postcodes": [
     "NG9",
     "NG16",

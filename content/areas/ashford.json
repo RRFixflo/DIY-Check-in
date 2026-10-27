@@ -4,19 +4,22 @@
   "council": {
     "name": "Ashford Borough Council",
     "url": "https://www.ashford.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.ashford.gov.uk/housing/landlord-advice/houses-in-multiple-occupation/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s housing or licensing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s HMO page describes only national mandatory HMO licensing (five or more people from two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://www.ashford.gov.uk/housing/landlord-advice/houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
   "rent": null,
   "price": null,
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,410 average Band D (2026/27), including Kent County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/ashford"
+  },
   "postcodes": [
     "TN23",
     "TN24",

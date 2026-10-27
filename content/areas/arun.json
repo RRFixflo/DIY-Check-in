@@ -7,16 +7,25 @@
     "privateRentingUrl": null
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing in three wards (Hotham, Marine and River, covering central Bognor Regis and Littlehampton) from 1 February 2025, for five years (to 31 January 2030).",
     "fee": null,
-    "source": null,
+    "source": "https://publicnoticeportal.uk/notice/planning/672c156b05f117ce5327bb1a",
     "checked": "October 2026"
   },
-  "rent": null,
+  "rent": {
+    "text": "£1,231 a month (ONS, August 2026), up 3.1% on a year earlier",
+    "source": "https://www.sussexexpress.co.uk/news/politics/council/private-rents-in-arun-have-risen-faster-than-south-east-average-9272815"
+  },
   "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "privateRentedShare": {
+    "text": "18.2% of households rent privately (Census 2021), up from 15.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000224/"
+  },
+  "councilTax": {
+    "text": "£2,487 average Band D (2026/27), including West Sussex County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/arun"
+  },
   "postcodes": [
     "BN12",
     "BN16",

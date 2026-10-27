@@ -4,30 +4,30 @@
   "council": {
     "name": "Canterbury City Council",
     "url": "https://www.canterbury.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.canterbury.gov.uk/housing/houses-multiple-occupation-hmo/find-out-if-you-need-hmo-licence"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s housing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s pages describe only national mandatory HMO licensing (five or more people from more than one household). Separately, an Article 4 direction means converting a house to a small HMO (three to six sharers) needs planning permission.",
+    "fee": "£1,498.97 for a five-year HMO licence for up to five people, plus £86.64 for each extra person",
+    "source": "https://www.canterbury.gov.uk/housing/houses-multiple-occupation-hmo/find-out-if-you-need-hmo-licence",
     "checked": "October 2026"
   },
   "rent": {
-    "text": null,
-    "source": null
+    "text": "£1,268 a month (ONS Price Index of Private Rents, 2026)",
+    "source": "https://housecheckup.co.uk/invest/CT1"
   },
   "price": {
-    "text": null,
-    "source": null
+    "text": "£341,000 (UK HPI / HM Land Registry, March 2026)",
+    "source": "https://propertyinvestmentsuk.co.uk/canterbury-buy-to-let/"
   },
   "privateRentedShare": {
     "text": null,
     "source": null
   },
   "councilTax": {
-    "text": null,
-    "source": null
+    "text": "£2,398 Band D (2026/27) in Canterbury, Whitstable and Herne Bay (no parish), including Kent County Council, police and fire; parish precepts are added elsewhere",
+    "source": "https://www.canterbury.gov.uk/index%2ephp/budgets-and-transparency/council-tax-budget-summary-20262027"
   },
   "postcodes": [
     "CT1",

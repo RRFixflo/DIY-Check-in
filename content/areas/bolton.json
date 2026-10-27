@@ -4,19 +4,28 @@
   "council": {
     "name": "Bolton Council",
     "url": "https://www.bolton.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.bolton.gov.uk/private-rented-owner-occupied-housing/home-multiple-occupation-licence"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme in force (an earlier scheme in Tonge Moor began in 2008 and ran for five years).",
+    "additional": "Borough-wide additional HMO licensing agreed by the Cabinet in August 2026 (covering smaller HMOs of three or four people and some converted buildings), expected to be fully running in early 2027; until then only national mandatory HMO licensing applies. An Article 4 direction since 2025 means small HMO conversions need planning permission.",
+    "fee": "£1,211 per property for a five-year licence under the planned additional HMO scheme",
+    "source": "https://www.bolton.gov.uk/news/article/2094/bolton-introduces-minimum-quality-standards-for-hmos",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£883 a month (ONS, May 2026), up 9.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000001/"
+  },
+  "price": {
+    "text": "£200,000 (UK HPI, April 2026, provisional), up about 1.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000001/"
+  },
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,392 Band D (2026/27) outside parished areas, including the police and Greater Manchester mayoral (fire) precepts; about £2,400 on average with parish precepts",
+    "source": "https://www.bolton.gov.uk/downloads/file/1945/council-tax-bill-band-d-202627"
+  },
   "postcodes": [
     "BL1",
     "BL2",

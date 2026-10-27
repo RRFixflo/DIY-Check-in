@@ -4,19 +4,25 @@
   "council": {
     "name": "Broxbourne Borough Council",
     "url": "https://www.broxbourne.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.broxbourne.gov.uk/housing/private-renting-simple-lets-landlords/2"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme: none is listed on the council’s housing or licensing pages.",
+    "additional": "No additional HMO licensing scheme; the council’s pages describe only national mandatory HMO licensing (five or more people from two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://www.broxbourne.gov.uk/licensing/i-want-apply-renew-house-multiple-occupation-hmo-licence",
     "checked": "October 2026"
   },
   "rent": null,
-  "price": null,
+  "price": {
+    "text": "£408,000 (UK HPI, October 2025, provisional), up 3.1% on a year earlier",
+    "source": "https://www.broxbourne.gov.uk/downloads/file/5124/bbc-appendix-3-small-housing-sites-cil-viability-market-value-research"
+  },
   "privateRentedShare": null,
-  "councilTax": null,
+  "councilTax": {
+    "text": "£2,306 Band D (2026/27), including Hertfordshire County Council and police precepts",
+    "source": "https://housecheckup.co.uk/council-tax/broxbourne"
+  },
   "postcodes": [
     "EN8",
     "EN10",
