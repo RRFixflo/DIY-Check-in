@@ -573,7 +573,8 @@ a.card.fp-home-art { display: block; padding: 14px; color: inherit; text-decorat
 .area-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 18px; }
 .area-nav a { padding: 8px 14px; border-radius: 999px; background: var(--panel); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 14.5px; box-shadow: 0 0 0 1px var(--line); }
 .area-nav a.on { background: var(--grad); color: #fff; box-shadow: none; }
-.area-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.area-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+@media (max-width: 600px) { .area-facts .af { padding: 13px 14px; } .area-facts b { font-size: 22px; } .area-facts .t { font-size: 12.5px; } }
 .area-facts .af { background: var(--panel); border-radius: 18px; padding: 16px 18px; box-shadow: var(--shadow); }
 .area-facts .l { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
 .area-facts b { display: block; font: 800 30px/1.15 'Plus Jakarta Sans', Inter, sans-serif; color: var(--ink); margin: 6px 0 4px; }
