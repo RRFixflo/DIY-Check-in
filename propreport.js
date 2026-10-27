@@ -144,7 +144,7 @@ async function selfTest(){
   const t = async (name, fn) => { try { const v = await fn(); out.push(name + ' ' + v); } catch (e) { out.push(name + ' FAILED ' + (e && e.message)); } };
   let g = null;
   await t('postcodes', async () => { g = await geo(pc); return g ? 'ok' : 'empty'; });
-  await t('epc', async () => (await epcweb.search(pc)).length + ' certificates');
+  await t('epc', async () => { const n = []; for (const x of ['SW11 6QS', 'M14 5RX', 'BS6 5JX']) n.push(x + ' ' + (await epcweb.search(x)).length); return n.join(', '); });
   await t('police', async () => { const c = await crime(g); return c ? c.total + ' crimes' : 'empty'; });
   await t('flood', async () => { const f = await flood(g); return f ? f.count + ' areas' : 'empty'; });
   await t('land registry', async () => (await sales([pc])).count + ' sales');
