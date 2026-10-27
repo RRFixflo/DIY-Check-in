@@ -1,0 +1,112 @@
+{
+  "slug": "westminster",
+  "name": "Westminster",
+  "council": {
+    "name": "Westminster City Council",
+    "url": "https://www.westminster.gov.uk",
+    "privateRentingUrl": "https://www.westminster.gov.uk/housing/private-sector-housing/landlords/houses-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers 15 of the 18 wards (all except Pimlico South, St James's and Vincent Square) in two designations from 24 November 2025 until 23 November 2030, for privately rented homes that aren't HMOs.",
+    "additional": "Additional licensing covers the whole city for smaller shared houses and flats (three or more people in two or more households); the renewed scheme runs from 31 August 2026 until 30 August 2031, and existing licences stay valid until they expire.",
+    "fee": "Additional HMO licence £1,540 for five years; selective licence £995 (Part A £543, Part B £452), with discounts for accredited landlords and EPC B or above.",
+    "source": "https://www.westminster.gov.uk/housing/private-sector-housing/houses-multiple-occupation-hmo/additional-licensing-designation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£3,196 a month (ONS, August 2026), down 0.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000033/"
+  },
+  "price": {
+    "text": "£887,206 (UK HPI, August 2026), down 14.3% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "43.3% of households rent privately (Census 2021), up from 39.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000033/"
+  },
+  "councilTax": {
+    "text": "£1,047.85 (Band D, 2026/27, including the GLA precept of £510.51); higher in Queen’s Park and Montpelier Square, which pay a local precept",
+    "source": "https://www.westminster.gov.uk/council-tax/council-tax-bands-and-charges"
+  },
+  "postcodes": [
+    "W1",
+    "W2",
+    "W9",
+    "W10",
+    "NW1",
+    "NW8",
+    "SW1",
+    "WC2"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Marylebone",
+      "postcodes": "W1, NW1",
+      "housing": "Georgian terraces and red-brick mansion blocks, most divided into flats."
+    },
+    {
+      "name": "Mayfair",
+      "postcodes": "W1",
+      "housing": "Georgian and Victorian townhouses and mansion flats, many high-value lets."
+    },
+    {
+      "name": "Soho and Covent Garden",
+      "postcodes": "W1, WC2",
+      "housing": "Flats above shops, bars and offices, plus some mansion blocks and housing association homes."
+    },
+    {
+      "name": "Pimlico",
+      "postcodes": "SW1",
+      "housing": "White stucco Victorian terraces split into flats, and the Churchill Gardens estate."
+    },
+    {
+      "name": "Belgravia",
+      "postcodes": "SW1",
+      "housing": "Grand stucco terraces and mews houses, many on long leases."
+    },
+    {
+      "name": "Bayswater",
+      "postcodes": "W2",
+      "housing": "Victorian stucco terraces converted into flats and some hotels, with mansion blocks."
+    },
+    {
+      "name": "Paddington",
+      "postcodes": "W2",
+      "housing": "Victorian terraces and new apartment towers around Paddington Basin."
+    },
+    {
+      "name": "Maida Vale",
+      "postcodes": "W9",
+      "housing": "Edwardian red-brick mansion blocks and canal-side Victorian villas."
+    },
+    {
+      "name": "St John’s Wood",
+      "postcodes": "NW8",
+      "housing": "Regency and Victorian villas and large mansion blocks."
+    },
+    {
+      "name": "Queen’s Park",
+      "postcodes": "W10",
+      "housing": "Victorian terraced cottages on the Queen’s Park estate and post-war council blocks."
+    }
+  ],
+  "housing": "Westminster had the second-highest share of private renting in England in 2021 (43.3% of households, after the City of London), and its social rented sector grew too (28.3%). Most homes are flats: Georgian and Victorian terraces split into flats, red-brick mansion blocks, and post-war estates such as Churchill Gardens and Lisson Green. Lets range from studios above shops in Soho to high-value furnished flats in Mayfair and Belgravia, and many properties are leasehold with managing agents and porters.",
+  "checkinTips": [
+    "Mansion blocks in Marylebone, Maida Vale and St John’s Wood: photograph the communal entrance, lift, porterage and post arrangements, and record every key and fob.",
+    "Stucco terraces in Pimlico and Bayswater: photograph sash windows, shutters, cornicing and any damp in basement flats.",
+    "Furnished high-value lets: photograph each item of furniture, soft furnishings, artwork and appliance, with close-ups of any marks.",
+    "Flats above shops in Soho and Covent Garden: photograph the street door, stairs and any rear fire escape, and note who holds the keys to the communal door.",
+    "Lower-ground and basement flats: photograph lightwells, drains and walls for damp, and any window bars or security grilles.",
+    "Note the building’s rules on moving in, parking and bike storage, and photograph the meter readings, which are often in a communal cupboard."
+  ],
+  "tenantHelp": "Westminster City Council’s private sector housing and environmental health service can inspect privately rented homes for disrepair and hazards; tenants can contact it through the council’s housing pages.",
+  "nearby": [
+    "camden",
+    "kensington-and-chelsea",
+    "brent",
+    "city-of-london",
+    "lambeth",
+    "wandsworth"
+  ]
+}

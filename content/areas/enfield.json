@@ -1,0 +1,39 @@
+{
+  "slug": "enfield",
+  "name": "Enfield",
+  "council": { "name": "Enfield Council", "url": "https://www.enfield.gov.uk", "privateRentingUrl": "https://www.enfield.gov.uk/services/housing/private-rented-property-licensing" },
+  "licensing": {
+    "selective": "A new selective licensing scheme started on 1 September 2026 and runs until 31 August 2031. It covers homes let to one or two people or a single family in 17 wards, in two designations: Bowes, Brimsdown, Bullsmoor, Carterhatch, Edmonton Green, Enfield Lock, Haselbury, Jubilee, Lower Edmonton, Ponders End, Southbury, Upper Edmonton and Whitewebbs; and New Southgate, Palmers Green, Southgate and Town. It replaces the earlier 14-ward scheme; licences issued under that scheme stay valid until their own expiry date.",
+    "additional": "Borough-wide additional HMO licensing has applied since 1 September 2025, for shared homes with three or four people from two or more households.",
+    "fee": "The new selective licence was proposed at £750 (in two parts, with discounts) in the council's scrutiny papers; check the final fee with the council.",
+    "source": "https://www.enfield.gov.uk/services/housing/private-rented-property-licensing",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£1,827 a month (ONS, August 2026), up 5.1% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000010/" },
+  "price": { "text": "£471,000 (UK HPI, July 2026, provisional), up 0.6% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000010/" },
+  "privateRentedShare": { "text": "29.3% of households rent privately (Census 2021), up from 22.2% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000010/" },
+  "councilTax": { "text": "£2,267.67 (Band D, 2026/27, including the GLA precept)", "source": "https://www.enfield.gov.uk/__data/assets/pdf_file/0012/130044/Public-notice-Council-Tax-2026-2027-Council-Tax.pdf" },
+  "postcodes": ["EN1", "EN2", "EN3", "EN4", "N9", "N11", "N13", "N14", "N18", "N21"],
+  "neighbourhoods": [
+    { "name": "Enfield Town", "postcodes": "EN1, EN2", "housing": "Victorian and Edwardian terraces and semis around the town centre, with purpose-built flats near the stations." },
+    { "name": "Edmonton", "postcodes": "N9, N18", "housing": "Late Victorian and inter-war terraces, many split into flats, alongside large council estates and newer blocks at Meridian Water." },
+    { "name": "Palmers Green", "postcodes": "N13", "housing": "Edwardian terraced houses and conversions, plus some 1930s mansion flats." },
+    { "name": "Southgate", "postcodes": "N14", "housing": "Inter-war semi-detached houses and low-rise flats around the Tube station." },
+    { "name": "Winchmore Hill", "postcodes": "N21", "housing": "Victorian and Edwardian family houses and 1930s semis on quiet residential roads." },
+    { "name": "Ponders End", "postcodes": "EN3", "housing": "Terraced streets, council estates and new-build flats near the Lea Valley." },
+    { "name": "Enfield Lock and Enfield Highway", "postcodes": "EN3", "housing": "Terraces and post-war estates, with newer developments on former industrial land near the canal." },
+    { "name": "Bush Hill Park", "postcodes": "EN1", "housing": "Late Victorian and Edwardian terraces and semis around the station." },
+    { "name": "Cockfosters", "postcodes": "EN4", "housing": "Inter-war semis and detached houses on the edge of the Green Belt." }
+  ],
+  "housing": "Enfield is an outer borough where inter-war semis and Edwardian terraces dominate the west and south, while the east, around Edmonton and Ponders End, has more Victorian terraces split into flats and large post-war council estates. Private renting rose sharply between the 2011 and 2021 censuses, to more than a quarter of households. Big regeneration schemes, such as Meridian Water in Upper Edmonton, are adding new-build flats. The council has widened selective licensing to 17 wards from September 2026 and licenses smaller HMOs borough-wide.",
+  "checkinTips": [
+    "Edwardian and Victorian terraces converted into flats: photograph the shared hallway, the meter cupboard and any fire doors, and record which keys open the communal front door.",
+    "Inter-war semis with original or replaced bay windows: photograph each window's locks, seals and any condensation marks on the sills.",
+    "Front and back gardens on family houses: photograph the lawn, fences, gates and any shed, as the garden's condition is a common check-out dispute.",
+    "Council and housing association blocks in Edmonton and Ponders End: note the fob count, the bin store and any lift or entry-phone faults on the day.",
+    "New-build flats at Meridian Water and other developments: photograph the sealed worktops, flooring joints and any snagging marks so they aren't charged later.",
+    "Older terraces with suspended timber floors: check skirting boards and corners for damp or mould and photograph them close up."
+  ],
+  "tenantHelp": "Private tenants with disrepair, damp or safety problems can contact Enfield Council's private sector housing team, which can inspect and take action against landlords under the Housing Act 2004.",
+  "nearby": ["barnet", "haringey", "waltham-forest"]
+}

@@ -1,0 +1,105 @@
+{
+  "slug": "newham",
+  "name": "Newham",
+  "council": {
+    "name": "Newham Council",
+    "url": "https://www.newham.gov.uk",
+    "privateRentingUrl": "https://www.newham.gov.uk/landlords-newham/rented-property-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers every ward except Royal Victoria and Stratford Olympic Park, from 1 June 2023 for five years, for privately rented homes that do not need an HMO licence.",
+    "additional": "Additional HMO licensing covers every ward except Royal Victoria and Stratford Olympic Park, for homes let to three or more people forming two or more households, from 1 January 2023 until 31 December 2027.",
+    "fee": "A selective licence costs £750 (£400 on application, £350 later) and an additional HMO licence £1,250 (£400 and £850), each for up to five years; homes not let before with an EPC of C or better pay less (£400 and £800).",
+    "source": "https://www.newham.gov.uk/landlords-newham/rented-property-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,931 a month (ONS, September 2026), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000025/"
+  },
+  "price": {
+    "text": "£388,000 (UK HPI, August 2026, provisional), down 4.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000025/"
+  },
+  "privateRentedShare": {
+    "text": "38.5% of households rent privately (Census 2021), up from 34.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000025/"
+  },
+  "councilTax": {
+    "text": "£1,944.23 (Band D, 2026/27, including the GLA precept), one of the lowest in London",
+    "source": "https://www.newham.gov.uk/news/article/1527/newham-mayor-welcomes-2026-27-council-budget-low-council-tax-stable-finances-investment-in-people"
+  },
+  "postcodes": [
+    "E6",
+    "E7",
+    "E12",
+    "E13",
+    "E15",
+    "E16",
+    "E20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stratford",
+      "postcodes": "E15",
+      "housing": "Victorian terraces, post-war estates and many new tower blocks around the town centre."
+    },
+    {
+      "name": "Queen Elizabeth Olympic Park and East Village",
+      "postcodes": "E20",
+      "housing": "New-build blocks of flats, many let by build-to-rent landlords."
+    },
+    {
+      "name": "Forest Gate",
+      "postcodes": "E7",
+      "housing": "Victorian and Edwardian terraced houses, many split into flats or let as shared homes."
+    },
+    {
+      "name": "Manor Park",
+      "postcodes": "E12",
+      "housing": "Late Victorian and Edwardian terraces, many extended and let as family or shared homes."
+    },
+    {
+      "name": "East Ham",
+      "postcodes": "E6",
+      "housing": "Victorian and Edwardian terraced houses and flats above shops along the High Street."
+    },
+    {
+      "name": "Plaistow and West Ham",
+      "postcodes": "E13",
+      "housing": "Victorian terraces and post-war council estates."
+    },
+    {
+      "name": "Canning Town and Custom House",
+      "postcodes": "E16",
+      "housing": "Post-war estates being redeveloped with new blocks of flats."
+    },
+    {
+      "name": "Royal Docks and Silvertown",
+      "postcodes": "E16",
+      "housing": "Riverside and dockside new-build flats and towers."
+    },
+    {
+      "name": "Beckton",
+      "postcodes": "E6",
+      "housing": "1980s and 1990s houses and low-rise flats built on former docklands and gas works land."
+    }
+  ],
+  "housing": "Newham has one of the highest shares of private renting in London, with nearly four in ten households renting from a private landlord in 2021. Much of the private stock is Victorian and Edwardian terraced houses in Forest Gate, Manor Park and East Ham, often let to sharers or large households, while Stratford, the Olympic Park and the Royal Docks have thousands of new-build flats, many of them build-to-rent. Canning Town and Custom House are going through large estate regeneration.",
+  "checkinTips": [
+    "Terraced houses let to sharers: photograph each bedroom, its lock and furniture, the fire doors and the smoke and heat alarms.",
+    "Extended Victorian terraces: photograph rear extensions, loft rooms and the joins between old and new walls for cracks or damp.",
+    "Build-to-rent flats in Stratford and E20: record fobs, parcel room and bike store access, and photograph the heating unit, balcony and any fitted appliances.",
+    "Damp and mould in older terraces: photograph bathroom ceilings, window reveals and the corners of outside walls.",
+    "Dockside flats in the Royal Docks: photograph windows, balcony doors and seals, and note any communal heating meter readings."
+  ],
+  "tenantHelp": "Newham Council's private housing team can inspect privately rented homes for disrepair and hazards and deals with landlord licensing; contact it through newham.gov.uk.",
+  "nearby": [
+    "tower-hamlets",
+    "hackney",
+    "waltham-forest",
+    "redbridge",
+    "barking-and-dagenham",
+    "greenwich"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "slug": "islington",
+  "name": "Islington",
+  "council": {
+    "name": "Islington Council",
+    "url": "https://www.islington.gov.uk",
+    "privateRentingUrl": "https://www.islington.gov.uk/housing/private-sector-housing/landlords/property-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers Finsbury Park, Hillrise and Tollington wards (20 May 2024 to 19 May 2029). A second scheme for Barnsbury, Caledonian, Highbury, Junction, Laycock, Mildmay and Tufnell Park wards starts on 23 November 2026 (applications opened 7 September 2026); it covers homes let to one or two people or a single family.",
+    "additional": "Borough-wide additional HMO licensing for homes shared by three or more people from more than one household, renewed from 1 February 2026 for five years.",
+    "fee": "Around £850 per property for a selective licence and £900 plus £100 a bedroom for an additional HMO licence, paid in two parts (council fee list; check the current figures before applying).",
+    "source": "https://www.islington.gov.uk/housing/private-sector-housing/landlords/property-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,884 a month (ONS, September 2026), up 6.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000019/"
+  },
+  "price": {
+    "text": "£654,000 (UK HPI, August 2026, provisional), down 8.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000019/"
+  },
+  "privateRentedShare": {
+    "text": "31.2% of households rent privately (Census 2021), up from 27.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000019/"
+  },
+  "councilTax": {
+    "text": "£2,108.15 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://islington.moderngov.co.uk/documents/s44680/DRAFTminsExecutive12Feb26.pdf"
+  },
+  "postcodes": [
+    "N1",
+    "N4",
+    "N5",
+    "N6",
+    "N7",
+    "N19",
+    "EC1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Angel and Barnsbury",
+      "postcodes": "N1",
+      "housing": "Georgian and early Victorian terraces and squares, many divided into flats, alongside council estates."
+    },
+    {
+      "name": "Canonbury",
+      "postcodes": "N1",
+      "housing": "Georgian and Victorian terraced houses and garden squares, with some purpose-built council blocks."
+    },
+    {
+      "name": "Clerkenwell",
+      "postcodes": "EC1",
+      "housing": "Converted warehouses and industrial buildings, mansion blocks and post-war estates."
+    },
+    {
+      "name": "Highbury",
+      "postcodes": "N5",
+      "housing": "Large Victorian houses, many split into flats, and new flats at the former Arsenal stadium site."
+    },
+    {
+      "name": "Holloway",
+      "postcodes": "N7",
+      "housing": "Victorian terraces converted into flats, with large council estates and new-build blocks along the main roads."
+    },
+    {
+      "name": "Finsbury Park",
+      "postcodes": "N4",
+      "housing": "Victorian terraces and mansion conversions, many let as flats and shared homes."
+    },
+    {
+      "name": "Archway and Tufnell Park",
+      "postcodes": "N19",
+      "housing": "Victorian terraces split into flats, with post-war council estates on the hills around Archway."
+    },
+    {
+      "name": "Highgate (Islington side)",
+      "postcodes": "N6, N19",
+      "housing": "Victorian and Edwardian terraces and some mansion blocks on the slopes below Highgate village."
+    }
+  ],
+  "housing": "Islington is small and densely built: Georgian and Victorian terraces, most of them long since split into flats, sit beside large council estates and newer blocks. Social renting is unusually high here, so many private lets are flats in converted houses or resold former council flats. Rents are among the highest in inner London, and the council licenses most private lets, either as HMOs borough-wide or through selective licensing in ten wards from November 2026.",
+  "checkinTips": [
+    "Flats in converted Georgian and Victorian houses: photograph sash windows, cords and locks, and any cracks over doors and in cornices.",
+    "Ex-council flats on estates: note the number of entry fobs and keys, and photograph the communal door, the meter cupboard and the bin store.",
+    "Basement and lower-ground flats: photograph walls at floor level, window wells and any signs of damp or mould.",
+    "Shared top-floor flats: photograph the loft hatch, roof lights and ceilings under the roof for water stains.",
+    "Selective or HMO licence: photograph the licence and any fire doors, alarms and fire blankets the licence conditions require."
+  ],
+  "tenantHelp": "Islington Council's private sector housing team can inspect privately rented homes for disrepair and hazards and enforces its licensing schemes; start from the private sector housing pages of islington.gov.uk.",
+  "nearby": [
+    "camden",
+    "haringey",
+    "hackney",
+    "city-of-london"
+  ]
+}

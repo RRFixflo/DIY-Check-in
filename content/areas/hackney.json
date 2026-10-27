@@ -1,0 +1,38 @@
+{
+  "slug": "hackney",
+  "name": "Hackney",
+  "council": { "name": "Hackney Council", "url": "https://hackney.gov.uk", "privateRentingUrl": "https://www.hackney.gov.uk/housing/private-tenants-and-landlords/private-landlords/apply-property-licence" },
+  "licensing": {
+    "selective": "Selective licensing came into force on 1 May 2026 and runs until 30 April 2031. It covers privately rented homes in 17 of Hackney's 21 wards, about three-quarters of the borough's private rented homes.",
+    "additional": "Additional HMO licensing also started on 1 May 2026, for shared homes with three or more people from two or more households. The consultation described it as borough-wide, while the council's later news release says it covers the four wards left out of selective licensing; check the address with the council.",
+    "fee": "£925 for a selective licence and £1,400 for an additional HMO licence, each paid in two parts (2026)",
+    "source": "https://www.hackney.gov.uk/housing/private-tenants-and-landlords/private-landlords/apply-property-licence",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£2,658 a month (ONS, August 2026), up 3.6% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000012/" },
+  "price": { "text": "£606,000 (UK HPI, July 2026, provisional), down 2.6% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000012/" },
+  "privateRentedShare": { "text": "32.2% of households rent privately (Census 2021), up from 29.0% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000012" },
+  "councilTax": { "text": "£2,060.30 (Band D, 2026/27, including the GLA precept)", "source": "https://www.hackneycitizen.co.uk/2026/03/06/hackney-council-budget-2026/" },
+  "postcodes": ["E2", "E5", "E8", "E9", "N1", "N4", "N16", "EC2A"],
+  "neighbourhoods": [
+    { "name": "Dalston", "postcodes": "E8", "housing": "Victorian terraces split into flats, council estates and newer blocks over shops near the stations." },
+    { "name": "Stoke Newington", "postcodes": "N16", "housing": "Victorian terraced houses, many converted into flats, around Church Street and Clissold Park." },
+    { "name": "Hackney Central", "postcodes": "E8", "housing": "A mix of Victorian terraces, Georgian houses near Mare Street and large post-war council estates." },
+    { "name": "Clapton", "postcodes": "E5", "housing": "Victorian terraces and conversions, with council estates and mansion blocks near the Lea marshes." },
+    { "name": "Homerton", "postcodes": "E9", "housing": "Post-war council estates and Victorian terraces, with newer flats near the station." },
+    { "name": "Hackney Wick", "postcodes": "E9", "housing": "Converted warehouses and new-build flats on former industrial land beside the Olympic Park." },
+    { "name": "Shoreditch and Hoxton", "postcodes": "N1, E2, EC2A", "housing": "Warehouse conversions, new-build towers and large council estates close to the City." },
+    { "name": "Stamford Hill", "postcodes": "N16", "housing": "Large Victorian and Edwardian houses, many shared by large families, and inter-war council blocks." },
+    { "name": "Haggerston and De Beauvoir", "postcodes": "E2, E8, N1", "housing": "Early Victorian villas in De Beauvoir Town, estates and canal-side flats in Haggerston." }
+  ],
+  "housing": "Hackney has one of the highest shares of social housing in England, with large post-war estates across the borough, and fewer than a quarter of households own their home. The private rented sector, about a third of households in 2021, is mostly Victorian terraces converted into flats, warehouse conversions and new-build blocks in Shoreditch, Dalston and Hackney Wick. Many homes are flat-shares and HMOs let to young sharers. From May 2026 most privately rented homes need a licence from the council.",
+  "checkinTips": [
+    "Victorian terraces converted into flats: photograph the shared hallway and stairs, the fire doors and the meter cupboard, and count the keys for the street door and the flat.",
+    "Flat-shares and HMOs: photograph each bedroom's lock and smoke alarm, the shared kitchen appliances and the fridge and cupboard space given to each tenant.",
+    "Warehouse conversions in Shoreditch and Hackney Wick: photograph exposed brick, concrete floors and large steel-framed windows, where marks and condensation are common.",
+    "Estate flats: note entry-phone and lift working on the day, the fob count and the condition of balconies and bin chutes.",
+    "Older sash windows in Stoke Newington and De Beauvoir: check cords, locks and draughts and photograph any rot on the sills."
+  ],
+  "tenantHelp": "Private tenants in Hackney can report disrepair, damp or unsafe conditions to the council's private sector housing team, and check whether their home should be licensed through the council's property licensing service.",
+  "nearby": ["islington", "haringey", "waltham-forest", "newham", "tower-hamlets", "city-of-london"]
+}

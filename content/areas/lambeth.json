@@ -1,0 +1,106 @@
+{
+  "slug": "lambeth",
+  "name": "Lambeth",
+  "council": {
+    "name": "Lambeth Council",
+    "url": "https://www.lambeth.gov.uk",
+    "privateRentingUrl": "https://www.lambeth.gov.uk/housing/landlords-licensing/selective-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers every ward except Vauxhall and Waterloo & South Bank (phase 1 in Knight’s Hill, Streatham Hill East, Streatham Common & Vale and Streatham St Leonards from 2 September 2024, phase 2 in the other wards from 1 September 2025), for privately rented homes that do not need an HMO licence.",
+    "additional": "Additional HMO licensing covers the whole borough for HMOs let to three or more people forming two or more households (larger ones need a mandatory licence), from 9 December 2021 until 8 December 2026; no renewal had been announced at October 2026.",
+    "fee": "A selective licence costs £923 for five years: £650 (Part A) on application and £273 (Part B) once the draft licence is issued, with £75 off Part B for accredited landlords and £50 off for an EPC rating of C or better.",
+    "source": "https://www.lambeth.gov.uk/housing/landlords-licensing/selective-licensing-scheme",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,525 a month (ONS, August 2026), up 3.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000022/"
+  },
+  "price": {
+    "text": "£537,000 (UK HPI, July 2026, provisional), down 6.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000022/"
+  },
+  "privateRentedShare": {
+    "text": "31.4% of households rent privately (Census 2021), up from 29.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000022/"
+  },
+  "councilTax": {
+    "text": "£2,047.11 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69aeee3c8694bc1774ab0dac"
+  },
+  "postcodes": [
+    "SE1",
+    "SE11",
+    "SE24",
+    "SE27",
+    "SW2",
+    "SW4",
+    "SW8",
+    "SW9",
+    "SW16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Waterloo",
+      "postcodes": "SE1",
+      "housing": "Georgian and Victorian terraces, mansion blocks and post-war council estates close to the South Bank."
+    },
+    {
+      "name": "Kennington",
+      "postcodes": "SE11",
+      "housing": "Georgian terraces and squares, with large council estates and mansion blocks."
+    },
+    {
+      "name": "Vauxhall",
+      "postcodes": "SE11, SW8",
+      "housing": "Riverside tower blocks and new-build flats beside older estates and Victorian streets."
+    },
+    {
+      "name": "Stockwell",
+      "postcodes": "SW8, SW9",
+      "housing": "Victorian terraces split into flats, alongside large post-war council estates."
+    },
+    {
+      "name": "Brixton",
+      "postcodes": "SW2, SW9",
+      "housing": "Victorian terraces and villas converted into flats, mansion blocks and council estates around the town centre."
+    },
+    {
+      "name": "Clapham",
+      "postcodes": "SW4",
+      "housing": "Victorian terraced houses, many converted into flats, and mansion blocks near the Common."
+    },
+    {
+      "name": "Herne Hill",
+      "postcodes": "SE24",
+      "housing": "Victorian and Edwardian terraced family houses, some split into flats."
+    },
+    {
+      "name": "Streatham",
+      "postcodes": "SW16",
+      "housing": "Edwardian houses and large 1930s mansion blocks along the High Road."
+    },
+    {
+      "name": "West Norwood and Tulse Hill",
+      "postcodes": "SE27, SW2",
+      "housing": "Victorian terraces, inter-war houses and post-war estates on the hills."
+    }
+  ],
+  "housing": "Lambeth stretches from the South Bank down to Streatham and West Norwood. Much of its private rented housing is Victorian and Edwardian terraces converted into flats, plus mansion blocks in Clapham, Brixton and Streatham, while large council estates make up a big part of the stock and only about a third of households own their home. A study for the council estimated private renting at about a third of homes in 2022, rising to over half in Vauxhall, where riverside towers have been built in recent years.",
+  "checkinTips": [
+    "Flats in converted Victorian houses: photograph shared hallways, fire doors, sash windows and any cracks above doorways.",
+    "Mansion blocks in Streatham and Clapham: note communal door keys, post box keys and lift access, and photograph radiators and old timber floors.",
+    "New-build towers in Vauxhall: record fobs, parking and concierge arrangements, and photograph balconies, extractor fans and the heating interface unit.",
+    "Ex-council flats on estates: photograph the entry system, meter cupboard and any communal heating controls.",
+    "Basement and garden flats: photograph walls at floor level, window wells and outside drains for damp or blockages."
+  ],
+  "tenantHelp": "Lambeth Council's private sector housing team can inspect privately rented homes for disrepair and hazards; contact it through lambeth.gov.uk.",
+  "nearby": [
+    "southwark",
+    "wandsworth",
+    "merton",
+    "croydon",
+    "westminster"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "slug": "havering",
+  "name": "Havering",
+  "council": { "name": "Havering Council", "url": "https://www.havering.gov.uk", "privateRentingUrl": "https://www.havering.gov.uk/news/article/1737/new-property-licensing-schemes-launched" },
+  "licensing": {
+    "selective": "Selective licensing started on 18 March 2026 in seven of the borough's 20 wards: Beam Park, Harold Wood, Rainham and Wennington, Rush Green and Crowlands, Squirrels Heath, St Albans, and St Edwards. Licences run for up to five years.",
+    "additional": "Borough-wide additional HMO licensing also started on 18 March 2026, for shared houses and flats with three or four people from two or more households.",
+    "fee": null,
+    "source": "https://www.havering.gov.uk/news/article/1737/new-property-licensing-schemes-launched",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£1,564 a month (ONS, July 2026), up 2.2% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000016/" },
+  "price": { "text": "£457,000 (UK HPI, June 2026, provisional), up 3.9% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000016/" },
+  "privateRentedShare": { "text": "15.8% of households rent privately (Census 2021), one of the lowest shares in London", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000016/" },
+  "councilTax": { "text": "£2,424.66 (Band D, 2026/27, including the GLA precept)", "source": "https://democracy.havering.gov.uk/documents/s83061/2 - ANNEX C Council Tax Statement.pdf" },
+  "postcodes": ["RM1", "RM2", "RM3", "RM5", "RM7", "RM11", "RM12", "RM13", "RM14"],
+  "neighbourhoods": [
+    { "name": "Romford", "postcodes": "RM1, RM7", "housing": "Inter-war terraces and semis, with flats above shops and new-build blocks around the town centre and station." },
+    { "name": "Gidea Park", "postcodes": "RM2", "housing": "Early 20th-century garden-suburb houses and inter-war semis." },
+    { "name": "Hornchurch", "postcodes": "RM11, RM12", "housing": "Inter-war semi-detached and terraced houses, plus some modern flats near the stations." },
+    { "name": "Emerson Park", "postcodes": "RM11", "housing": "Large detached houses on private and tree-lined roads." },
+    { "name": "Upminster", "postcodes": "RM14", "housing": "Inter-war semis and detached family houses at the end of the District line." },
+    { "name": "Harold Hill", "postcodes": "RM3", "housing": "A large post-war council estate of houses and low-rise flats, many now privately owned or let." },
+    { "name": "Harold Wood", "postcodes": "RM3", "housing": "Inter-war and post-war houses and new-build homes on the former hospital site." },
+    { "name": "Collier Row", "postcodes": "RM5", "housing": "Inter-war and post-war semis and terraces, with some council housing." },
+    { "name": "Rainham", "postcodes": "RM13", "housing": "Post-war houses and new-build estates, including Beam Park, near the Thames marshes." },
+    { "name": "Elm Park", "postcodes": "RM12", "housing": "1930s terraces and semis built around the station." }
+  ],
+  "housing": "Havering has the highest rate of home ownership in London, and only about one household in six rented privately in 2021, though that share grew over the decade. Most homes are inter-war semis and terraces with gardens, alongside the large post-war Harold Hill estate and flats around Romford town centre. New-build estates at Beam Park and other sites in the south of the borough are adding homes. Since March 2026 the council licenses HMOs borough-wide and runs selective licensing in seven wards.",
+  "checkinTips": [
+    "Inter-war semis and terraces with gardens: photograph the lawn, fences, gates, sheds and any garage, as gardens are a common check-out dispute.",
+    "Driveways and dropped kerbs: photograph the drive surface, any oil stains and the front wall at check-in.",
+    "Former council houses in Harold Hill: photograph the boiler, radiators and windows, and any damp in bathrooms and bedrooms.",
+    "Flats above shops in Romford: photograph the rear entrance, external stairs and bin area, and count the keys for every door.",
+    "New-build homes at Beam Park and Rainham: photograph flooring joints, worktops and any snagging marks, and record parking-permit and fob details."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp or unsafe conditions to Havering Council's private sector housing team, which can inspect and use Housing Act 2004 notices against landlords.",
+  "nearby": ["barking-and-dagenham", "redbridge", "bexley"]
+}

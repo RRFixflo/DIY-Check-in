@@ -1,0 +1,110 @@
+{
+  "slug": "southwark",
+  "name": "Southwark",
+  "council": {
+    "name": "Southwark Council",
+    "url": "https://www.southwark.gov.uk",
+    "privateRentingUrl": "https://www.southwark.gov.uk/housing/private-rented-housing/private-rented-property-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers 19 wards in four designations for homes let to one household: designations 1 and 2 (Newington, Champion Hill, Faraday, St Giles and Goose Green) from 1 March 2022 until 28 February 2027, and designations 3 and 4 (including Peckham, Old Kent Road, North Walworth, Nunhead & Queens Road, Rotherhithe, Rye Lane and Camberwell Green) from 1 November 2023 until 31 October 2028.",
+    "additional": "Additional licensing covers the whole borough for smaller HMOs not covered by mandatory licensing, from 1 March 2022 until 28 February 2027.",
+    "fee": "Selective licence £945 (Part A £661.50, Part B £283.50); additional HMO licence £1,433 from 1 April 2026 (Part A £1,017.50, Part B £415.50). Paper applications cost £179.70 more.",
+    "source": "https://www.southwark.gov.uk/housing/private-tenants-and-landlords/apply-private-rented-property-licence/licence-fees",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,516 a month (ONS, September 2026), up 7.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000028/"
+  },
+  "price": {
+    "text": "£569,160 (UK HPI, August 2026), down 2.1% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "28.7% of households rent privately (Census 2021), up from 23.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000028/"
+  },
+  "councilTax": {
+    "text": "£1,967.26 (Band D, 2026/27, including the GLA precept of £510.51)",
+    "source": "https://moderngov.southwark.gov.uk/mgAi.aspx?ID=76427"
+  },
+  "postcodes": [
+    "SE1",
+    "SE5",
+    "SE15",
+    "SE16",
+    "SE17",
+    "SE21",
+    "SE22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Borough and Bankside",
+      "postcodes": "SE1",
+      "housing": "Converted warehouses, new-build apartment blocks and some older council and housing association flats."
+    },
+    {
+      "name": "Bermondsey",
+      "postcodes": "SE1, SE16",
+      "housing": "Warehouse conversions around Shad Thames, large council estates and Victorian terraces."
+    },
+    {
+      "name": "Rotherhithe and Canada Water",
+      "postcodes": "SE16",
+      "housing": "Riverside warehouse flats, 1980s Docklands houses and new high-rise blocks at Canada Water."
+    },
+    {
+      "name": "Elephant and Castle",
+      "postcodes": "SE1, SE17",
+      "housing": "New towers and blocks built on the former Heygate estate and around the shopping centre site, alongside older council estates."
+    },
+    {
+      "name": "Walworth",
+      "postcodes": "SE17",
+      "housing": "Large post-war council estates, including the Aylesbury estate under regeneration, and Georgian and Victorian terraces."
+    },
+    {
+      "name": "Camberwell",
+      "postcodes": "SE5",
+      "housing": "Georgian and Victorian terraces, many split into flats, next to council estates."
+    },
+    {
+      "name": "Peckham",
+      "postcodes": "SE15",
+      "housing": "Victorian terraces converted into flats, council estates and new blocks near Rye Lane."
+    },
+    {
+      "name": "Nunhead",
+      "postcodes": "SE15",
+      "housing": "Victorian terraced houses, often let whole or as flat conversions."
+    },
+    {
+      "name": "East Dulwich",
+      "postcodes": "SE22",
+      "housing": "Rows of Victorian and Edwardian terraces, many divided into upper and lower flats."
+    },
+    {
+      "name": "Dulwich",
+      "postcodes": "SE21",
+      "housing": "Larger Victorian and interwar houses, with homes on the Dulwich Estate subject to its own scheme of management."
+    }
+  ],
+  "housing": "Southwark has one of the largest stocks of council and social housing in England (39.7% of households rented socially in 2021), but private renting is growing fast, from 23.7% to 28.7% of households between 2011 and 2021. Many leaseholders on council estates let their flats privately, and Victorian terraces in Peckham, Camberwell and East Dulwich are often split into flats. The north of the borough has converted warehouses and many new-build towers, with major regeneration at Elephant and Castle, the Aylesbury estate and Canada Water.",
+  "checkinTips": [
+    "Ex-council flats on estates: photograph the front door, entry phone, communal landing and bin chute or store, and record every fob and key.",
+    "Victorian terrace conversions in Peckham, Camberwell and East Dulwich: photograph sash windows, shared hallways and the meter cupboard, and note which meters belong to the flat.",
+    "Warehouse conversions in Bermondsey and Shad Thames: photograph exposed brick, timber floors and large metal-framed windows, where marks and condensation show.",
+    "New-build towers at Elephant and Castle and Canada Water: photograph integrated appliances, extractor and ventilation units, and balcony doors and decking.",
+    "In older terraces, photograph any damp or mould on bathroom ceilings and behind furniture, as these are common in converted flats.",
+    "Note bike store access, parking permits and concierge or parcel room arrangements in managed blocks."
+  ],
+  "tenantHelp": "Southwark Council’s private housing and environmental health service can inspect privately rented homes for disrepair and hazards; council leaseholders’ tenants can also report communal repairs to the council as freeholder.",
+  "nearby": [
+    "lambeth",
+    "lewisham",
+    "bromley",
+    "city-of-london",
+    "tower-hamlets"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "slug": "kingston-upon-thames",
+  "name": "Kingston upon Thames",
+  "council": {
+    "name": "Royal Borough of Kingston upon Thames",
+    "url": "https://www.kingston.gov.uk",
+    "privateRentingUrl": "https://www.kingston.gov.uk/housing/landlords-and-private-sector/houses-multiple-occupation-hmo/apply-vary-or-renew-a-licence"
+  },
+  "licensing": {
+    "selective": "There is no selective licensing scheme in Kingston; only mandatory HMO licensing applies.",
+    "additional": "There is no additional licensing scheme: the borough-wide scheme (from 1 March 2018, mainly HMOs of three or more storeys with three or four people) ended on 28 February 2023 and was not replaced. Mandatory HMO licensing still covers homes let to five or more people forming two or more households.",
+    "fee": "A mandatory HMO licence costs £319.40 per letting for a new application and £250 per letting to renew; a late renewal costs the new-application fee plus a £300 penalty.",
+    "source": "https://www.kingston.gov.uk/housing/landlords-and-private-sector/houses-multiple-occupation-hmo/apply-vary-or-renew-a-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,821 a month (ONS, September 2026), little changed on a year earlier (£1,829)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000021/"
+  },
+  "price": {
+    "text": "£598,000 (UK HPI, August 2026, provisional), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000021/"
+  },
+  "privateRentedShare": {
+    "text": "27.3% of households rent privately (Census 2021), up from 22.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000021/"
+  },
+  "councilTax": {
+    "text": "£2,609.20 (Band D, 2026/27, including the GLA precept), the highest Band D in London",
+    "source": "https://housecheckup.co.uk/council-tax/kingston-upon-thames"
+  },
+  "postcodes": [
+    "KT1",
+    "KT2",
+    "KT3",
+    "KT4",
+    "KT5",
+    "KT6",
+    "KT9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kingston town centre",
+      "postcodes": "KT1",
+      "housing": "Flats above shops, new-build riverside blocks and Victorian terraces, with many student lets."
+    },
+    {
+      "name": "Norbiton",
+      "postcodes": "KT1, KT2",
+      "housing": "Victorian terraces and the Cambridge Road council estate, which is being redeveloped."
+    },
+    {
+      "name": "North Kingston and Canbury",
+      "postcodes": "KT2",
+      "housing": "Victorian and Edwardian terraced and semi-detached houses near the river."
+    },
+    {
+      "name": "Coombe",
+      "postcodes": "KT2, KT3",
+      "housing": "Large detached houses in private roads and some inter-war family homes."
+    },
+    {
+      "name": "Surbiton",
+      "postcodes": "KT5, KT6",
+      "housing": "Victorian villas split into flats, mansion blocks and 1930s semis around the station."
+    },
+    {
+      "name": "Berrylands and Tolworth",
+      "postcodes": "KT5, KT6",
+      "housing": "Inter-war semi-detached houses and newer flats around Tolworth Broadway."
+    },
+    {
+      "name": "New Malden",
+      "postcodes": "KT3",
+      "housing": "Inter-war semi-detached and terraced houses and flats around the High Street."
+    },
+    {
+      "name": "Old Malden and Worcester Park",
+      "postcodes": "KT4",
+      "housing": "1930s suburban semis and bungalows."
+    },
+    {
+      "name": "Chessington",
+      "postcodes": "KT9",
+      "housing": "Post-war and inter-war family houses and small estates on the edge of the Green Belt."
+    }
+  ],
+  "housing": "Kingston is a suburban borough of mostly inter-war semi-detached and terraced houses, with older Victorian streets and conversions around Kingston and Surbiton. Kingston University brings a large student market, with shared houses in Kingston, Norbiton and Surbiton, and the town centre has many new riverside flats. Private renting grew by almost five percentage points between 2011 and 2021. Family lets of 1930s semis with gardens and garages are common further south.",
+  "checkinTips": [
+    "Student shared houses near the university: photograph each bedroom, its door lock and furniture, and the shared kitchen appliances and worktops.",
+    "1930s semis: photograph bay windows, the original tiled porch or path, and the condition of the garage door.",
+    "Riverside flats near the Thames: note any flood defence features, and photograph balconies, door seals and ground-floor walls.",
+    "Victorian conversions in Surbiton: photograph sash windows, fire doors between flats and any shared hallway carpets.",
+    "Gardens: photograph lawns, fences, sheds and the condition of patios and paths, since most houses here have one."
+  ],
+  "tenantHelp": "The council's environmental health (private sector housing) team can inspect privately rented homes for disrepair and hazards; contact it through kingston.gov.uk.",
+  "nearby": [
+    "richmond-upon-thames",
+    "wandsworth",
+    "merton",
+    "sutton"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "slug": "brent",
+  "name": "Brent",
+  "council": {
+    "name": "Brent Council",
+    "url": "https://www.brent.gov.uk",
+    "privateRentingUrl": "https://www.brent.gov.uk/housing/landlords/property-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers every ward except Wembley Park, under two designations: Dollis Hill, Harlesden & Kensal Green and Willesden Green from 1 August 2023 (to 31 July 2028), and the other 18 wards from 1 April 2024 (to 31 March 2029).",
+    "additional": "A new borough-wide additional HMO licensing scheme came into force in February 2026 (approved by Cabinet on 13 October 2025) and runs for five years.",
+    "fee": "£640 for a new selective licence (£340 on application + £300 on grant) and £1,040 for an additional HMO licence (Brent fee page, February 2026).",
+    "source": "https://www.brent.gov.uk/housing/landlords/property-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,014 a month (ONS, August 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000005/"
+  },
+  "price": {
+    "text": "£546,000 (UK HPI, July 2026, provisional), down 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000005/"
+  },
+  "privateRentedShare": {
+    "text": "36% of households rent privately (Census 2021), up from 30.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000005/"
+  },
+  "councilTax": {
+    "text": "£2,235.27 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.brent.gov.uk/council-tax/council-tax-bands-and-charges"
+  },
+  "postcodes": [
+    "NW2",
+    "NW6",
+    "NW9",
+    "NW10",
+    "HA0",
+    "HA3",
+    "HA9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kilburn",
+      "postcodes": "NW6",
+      "housing": "Victorian terraces and large houses mostly split into flats, along with council estates."
+    },
+    {
+      "name": "Queen's Park",
+      "postcodes": "NW6",
+      "housing": "Victorian terraced houses, many converted into flats."
+    },
+    {
+      "name": "Kensal Rise",
+      "postcodes": "NW10",
+      "housing": "Late Victorian and Edwardian terraces, often divided into upper and lower flats."
+    },
+    {
+      "name": "Willesden",
+      "postcodes": "NW10",
+      "housing": "Victorian and Edwardian terraces with some interwar houses and council blocks."
+    },
+    {
+      "name": "Harlesden",
+      "postcodes": "NW10",
+      "housing": "Victorian terraces, many split into flats or let as shared houses, alongside large estates."
+    },
+    {
+      "name": "Wembley",
+      "postcodes": "HA9, HA0",
+      "housing": "Interwar semis and terraces, with many new-build towers of flats around Wembley Park and the stadium."
+    },
+    {
+      "name": "Alperton",
+      "postcodes": "HA0",
+      "housing": "Interwar houses and a fast-growing cluster of new-build flat blocks by the Grand Union Canal."
+    },
+    {
+      "name": "Kingsbury",
+      "postcodes": "NW9",
+      "housing": "Interwar semis and terraces, including the Arts and Crafts Roe Green Village."
+    },
+    {
+      "name": "Neasden",
+      "postcodes": "NW10",
+      "housing": "Interwar terraced and semi-detached houses near the North Circular."
+    },
+    {
+      "name": "South Kilburn",
+      "postcodes": "NW6",
+      "housing": "Post-war council estate being rebuilt as new mixed-tenure flat blocks."
+    }
+  ],
+  "housing": "Brent has one of London's largest private rented sectors, with Victorian terraces in Kilburn, Harlesden and Willesden widely split into flats or shared houses. Further north, interwar semis dominate Wembley, Kingsbury and Neasden, while Wembley Park and Alperton have thousands of new-build flats in tall blocks. The council licenses private lets in almost every ward and all HMOs.",
+  "checkinTips": [
+    "In Victorian terraces converted into flats in Kilburn and Harlesden, photograph the shared hallway, the front door and meter cupboards, and note which meters belong to the flat.",
+    "In shared houses, photograph each room's door lock, smoke alarm and fire door closers, and the condition of the shared kitchen and bathroom.",
+    "In Wembley Park and Alperton new-build flats, record fob, parking and post box key counts and photograph the heat interface unit, appliances and any balcony.",
+    "Check sash or older timber windows in Victorian flats for broken cords, rot and draughts, and photograph each window's lock.",
+    "Photograph ceilings and corners in each room for mould, as condensation is common in converted flats with small bathrooms and kitchens."
+  ],
+  "tenantHelp": "Brent Council's private housing services team investigates disrepair and unsafe conditions in private rented homes and enforces its licensing schemes.",
+  "nearby": [
+    "barnet",
+    "camden",
+    "westminster",
+    "kensington-and-chelsea",
+    "hammersmith-and-fulham",
+    "ealing",
+    "harrow"
+  ]
+}

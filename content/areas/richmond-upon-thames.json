@@ -1,0 +1,111 @@
+{
+  "slug": "richmond-upon-thames",
+  "name": "Richmond upon Thames",
+  "council": {
+    "name": "Richmond upon Thames Council",
+    "url": "https://www.richmond.gov.uk",
+    "privateRentingUrl": "https://www.richmond.gov.uk/landlord_licences"
+  },
+  "licensing": {
+    "selective": "None found: the council’s licensing page describes no selective licensing scheme.",
+    "additional": "The council’s page describes mandatory HMO licensing only (five or more people in two or more households sharing facilities). One commercial guide claims an additional scheme from 1 February 2026, but the council’s own pages do not show one, so check with the council before relying on either.",
+    "fee": null,
+    "source": "https://www.richmond.gov.uk/landlord_licences",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,333 a month (ONS, August 2026), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000027/"
+  },
+  "price": {
+    "text": "£813,931 (UK HPI, August 2026), unchanged on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "24.7% of households rent privately (Census 2021), up from 21.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000027/"
+  },
+  "councilTax": {
+    "text": "£2,486.10 (Band D, 2026/27, including the GLA precept of £510.51)",
+    "source": "https://ukcounciltax.co.uk/councils/richmond-upon-thames/"
+  },
+  "postcodes": [
+    "TW1",
+    "TW2",
+    "TW9",
+    "TW10",
+    "TW11",
+    "TW12",
+    "SW13",
+    "SW14",
+    "KT1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Richmond",
+      "postcodes": "TW9, TW10",
+      "housing": "Georgian and Victorian houses near the Green and the Hill, many split into flats, plus riverside apartment blocks."
+    },
+    {
+      "name": "Kew",
+      "postcodes": "TW9",
+      "housing": "Victorian and Edwardian family houses on quiet streets near the Gardens and station."
+    },
+    {
+      "name": "Twickenham",
+      "postcodes": "TW1, TW2",
+      "housing": "Victorian and Edwardian terraces and semis, with flats near the town centre and the stadium."
+    },
+    {
+      "name": "St Margarets",
+      "postcodes": "TW1",
+      "housing": "Late-Victorian and Edwardian terraces and semis, some converted into flats."
+    },
+    {
+      "name": "Whitton",
+      "postcodes": "TW2",
+      "housing": "Mostly interwar semi-detached and terraced houses."
+    },
+    {
+      "name": "Teddington",
+      "postcodes": "TW11",
+      "housing": "Victorian and Edwardian terraces and family houses, with riverside flats near the lock."
+    },
+    {
+      "name": "Hampton",
+      "postcodes": "TW12",
+      "housing": "A mix of Victorian cottages, interwar semis and post-war houses near Bushy Park and the river."
+    },
+    {
+      "name": "Ham",
+      "postcodes": "TW10",
+      "housing": "Post-war estates, including Ham Close, alongside older cottages and larger houses near Ham Common."
+    },
+    {
+      "name": "Barnes",
+      "postcodes": "SW13",
+      "housing": "Victorian and Edwardian terraces and larger detached houses near the river and the Common."
+    },
+    {
+      "name": "East Sheen and Mortlake",
+      "postcodes": "SW14",
+      "housing": "Edwardian and interwar family houses, with riverside flats in Mortlake."
+    }
+  ],
+  "housing": "Richmond upon Thames has one of the lowest shares of private renting among London’s riverside boroughs (24.7% in 2021) and most homes are owner-occupied. The stock is dominated by Victorian and Edwardian terraces and semis, with Georgian houses around Richmond and Twickenham and many conservation areas. Lets are often whole family houses or flats in period conversions; there are also riverside apartment blocks and some student lets near St Mary’s University in Strawberry Hill. Prices are among the highest in outer London.",
+  "checkinTips": [
+    "Sash windows in the Georgian and Victorian houses: photograph cords, catches, locks and any rot or flaking paint on sills.",
+    "Period features such as fireplaces, cornicing and original floorboards: photograph them close up, as marks and chips here are often disputed.",
+    "Gardens are a big part of many lets: photograph lawns, borders, fences, sheds and any garden furniture, and note who maintains them.",
+    "Homes near the Thames in Kew, Barnes, Twickenham and Teddington: photograph walls, skirting and any cellar for signs of damp, and note any flood barriers or sandbags provided.",
+    "Riverside apartment blocks: photograph the communal entrance, lift, parking space and bin store, and record fob, key and remote counts.",
+    "In period conversions, photograph the shared hallway and stairs and note who is responsible for them."
+  ],
+  "tenantHelp": "Richmond Council’s private sector housing team can inspect rented homes for disrepair and hazards; tenants can contact it through the council’s private housing pages.",
+  "nearby": [
+    "hounslow",
+    "kingston-upon-thames",
+    "wandsworth",
+    "hammersmith-and-fulham"
+  ]
+}

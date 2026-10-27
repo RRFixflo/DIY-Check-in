@@ -1,0 +1,113 @@
+{
+  "slug": "camden",
+  "name": "Camden",
+  "council": {
+    "name": "Camden Council",
+    "url": "https://www.camden.gov.uk",
+    "privateRentingUrl": "https://www.camden.gov.uk/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "None in force: Camden licenses HMOs only. In early 2025 the council said a selective scheme could follow after more data and a consultation, but none had been confirmed at the time of checking.",
+    "additional": "Borough-wide additional HMO licensing for homes with three or more people in two or more households, renewed from 8 December 2025 to December 2030 (it replaced the 2020-2025 scheme).",
+    "fee": "About £1,570 for an HMO licence, paid in two parts (£1,318 on application + £252 on grant, Camden's 2025 fee table).",
+    "source": "https://www.camden.gov.uk/houses-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,819 a month (ONS, August 2026), up 1.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000007/"
+  },
+  "price": {
+    "text": "£815,000 (UK HPI, July 2026, provisional), down 10.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000007/"
+  },
+  "privateRentedShare": {
+    "text": "35.6% of households rent privately (Census 2021), up from 32.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000007/"
+  },
+  "councilTax": {
+    "text": "£2,207.12 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.camden.gov.uk/council-tax-guide"
+  },
+  "postcodes": [
+    "NW1",
+    "NW3",
+    "NW5",
+    "NW6",
+    "N6",
+    "N7",
+    "N19",
+    "WC1",
+    "WC2",
+    "N1C"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kentish Town",
+      "postcodes": "NW5",
+      "housing": "Victorian terraces split into flats, alongside large council estates."
+    },
+    {
+      "name": "Camden Town",
+      "postcodes": "NW1",
+      "housing": "Victorian terraces and flats above shops, with council estates and new-build blocks near the canal."
+    },
+    {
+      "name": "Hampstead",
+      "postcodes": "NW3",
+      "housing": "Georgian and Victorian houses, mansion blocks and large houses converted into flats."
+    },
+    {
+      "name": "Belsize Park",
+      "postcodes": "NW3",
+      "housing": "Large Victorian stucco villas, most divided into flats."
+    },
+    {
+      "name": "West Hampstead",
+      "postcodes": "NW6",
+      "housing": "Red-brick Victorian and Edwardian mansion blocks and terraces converted into flats."
+    },
+    {
+      "name": "Kilburn",
+      "postcodes": "NW6",
+      "housing": "Victorian terraces split into flats and post-war council estates on the Camden side of Kilburn High Road."
+    },
+    {
+      "name": "Gospel Oak",
+      "postcodes": "NW5",
+      "housing": "Post-war council estates with some Victorian terraces near Hampstead Heath."
+    },
+    {
+      "name": "Bloomsbury",
+      "postcodes": "WC1",
+      "housing": "Georgian terraces converted into flats, mansion blocks and many student halls."
+    },
+    {
+      "name": "Somers Town",
+      "postcodes": "NW1",
+      "housing": "Council estates from the 1900s to the 1970s between Euston and St Pancras, with new-build flats."
+    },
+    {
+      "name": "King's Cross",
+      "postcodes": "N1C, WC1",
+      "housing": "New-build flats in the King's Cross redevelopment beside older terraces and estates."
+    }
+  ],
+  "housing": "Camden has a large private rented sector made up mostly of flats: Georgian and Victorian terraces and villas in Hampstead, Belsize Park and Bloomsbury have been divided up, and West Hampstead has many red-brick mansion blocks. Around a third of homes are council or housing association, in estates across Kentish Town, Gospel Oak and Somers Town. Student lets and shared houses are common near the universities, and the council licenses every HMO in the borough.",
+  "checkinTips": [
+    "Sash windows in Georgian and Victorian conversions: photograph cords, catches, locks and any rot or draughts at each window.",
+    "In converted houses and mansion blocks, photograph the communal hallway, stairs and entry phone, and count the keys for the street door, flat door and any post box.",
+    "In shared houses and student lets, photograph each bedroom door lock, the fire doors and closers, and every smoke and heat alarm.",
+    "Check basement and lower ground floor flats closely for damp: photograph wall bases, window wells and any lightwell drains.",
+    "In older flats, photograph original fireplaces, cornices and wooden floors, which are easily damaged and costly to repair."
+  ],
+  "tenantHelp": "Camden Council's private sector housing team investigates disrepair, damp and unsafe conditions in private rented homes and enforces HMO licensing.",
+  "nearby": [
+    "barnet",
+    "haringey",
+    "islington",
+    "city-of-london",
+    "westminster",
+    "brent"
+  ]
+}

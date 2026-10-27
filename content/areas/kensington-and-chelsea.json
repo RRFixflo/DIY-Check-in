@@ -1,0 +1,100 @@
+{
+  "slug": "kensington-and-chelsea",
+  "name": "Kensington and Chelsea",
+  "council": {
+    "name": "Royal Borough of Kensington and Chelsea",
+    "url": "https://www.rbkc.gov.uk",
+    "privateRentingUrl": "https://www.rbkc.gov.uk/housing/information-homeowners-private-rented-tenants-and-landlords/houses-multiple-occupation-hmo/additional-hmo-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is in force; homes let to a single household do not need a council licence.",
+    "additional": "A borough-wide additional HMO licensing scheme came into force on 1 June 2023 and expires on 31 May 2028. It covers most HMOs let to three or more people from two or more households sharing a kitchen, bathroom or toilet that fall outside mandatory licensing.",
+    "fee": "About £1,493 for an additional HMO licence (Part A £1,004 on application, Part B £489 once approved, plus £72 for each extra room), with a £200 discount for accredited landlords (council HMO licensing FAQs).",
+    "source": "https://www.rbkc.gov.uk/housing/information-homeowners-private-rented-tenants-and-landlords/houses-multiple-occupation-hmo/hmo-licensing-faqs",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£3,739 a month (ONS, September 2026), up 3.0% on a year earlier; the highest average rent of any local authority in the UK",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000020/"
+  },
+  "price": {
+    "text": "£1,204,000 (UK HPI, August 2026, provisional), down 13.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000020/"
+  },
+  "privateRentedShare": {
+    "text": "39.6% of households rent privately (Census 2021), up from 35.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000020/"
+  },
+  "councilTax": {
+    "text": "£1,643.44 (Band D, 2026/27, including the GLA precept); a little more in the garden square areas, which pay an extra levy",
+    "source": "https://www.rbkc.gov.uk/council-tax/band-values-and-charges"
+  },
+  "postcodes": [
+    "W8",
+    "W10",
+    "W11",
+    "W14",
+    "SW3",
+    "SW5",
+    "SW7",
+    "SW10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Notting Hill",
+      "postcodes": "W11",
+      "housing": "Stucco-fronted Victorian terraces and garden squares, many split into flats, with mews houses behind."
+    },
+    {
+      "name": "North Kensington",
+      "postcodes": "W10",
+      "housing": "Post-war council estates and towers, including Trellick Tower, alongside Victorian terraces."
+    },
+    {
+      "name": "Kensington",
+      "postcodes": "W8",
+      "housing": "Large Victorian houses, mansion blocks and mews cottages around Kensington High Street."
+    },
+    {
+      "name": "Holland Park",
+      "postcodes": "W11, W14",
+      "housing": "Large detached and semi-detached Victorian villas, some divided into lateral flats."
+    },
+    {
+      "name": "South Kensington",
+      "postcodes": "SW7",
+      "housing": "White stucco terraces converted into flats, mansion blocks and mews houses near the museums."
+    },
+    {
+      "name": "Earl's Court",
+      "postcodes": "SW5",
+      "housing": "Tall Victorian terraces divided into many small flats and studios, some let as shared homes."
+    },
+    {
+      "name": "Chelsea",
+      "postcodes": "SW3",
+      "housing": "Georgian and Victorian terraced houses, red-brick mansion blocks and garden squares."
+    },
+    {
+      "name": "West Brompton and World's End",
+      "postcodes": "SW10",
+      "housing": "Victorian terraces and mansion flats beside the World's End council estate."
+    }
+  ],
+  "housing": "Kensington and Chelsea is the most expensive place to rent in the country, and about four in ten households rent privately. Most homes are flats: lateral and duplex flats in stucco terraces, red-brick mansion blocks and mews houses, many with porters, lifts and shared garden squares. North Kensington is different, with large post-war estates and towers, and the borough saw England's biggest rise in social renting between 2011 and 2021. Short and corporate lets and high-value furnished tenancies are common, so inventories tend to list a lot of contents.",
+  "checkinTips": [
+    "Furnished high-value lets: photograph each piece of furniture, rugs, curtains and artwork close up, and record makes of appliances.",
+    "Mansion blocks with porters: note fobs, porter-held keys, post box keys and lift access, and photograph the communal entrance.",
+    "Stucco terraces: photograph the front steps, railings, balconies and any cracked or flaking stucco visible from the flat.",
+    "Mews houses: photograph the garage door, its remote and any cobbled forecourt, and check for damp in ground-floor rooms.",
+    "Garden square access: record the garden key or card and any terms that come with it.",
+    "Basement and lower-ground flats: photograph lightwells, vault storage under the pavement, and walls at floor level for damp."
+  ],
+  "tenantHelp": "The council's environmental health team (private sector housing) can inspect privately rented homes for disrepair and hazards and enforces HMO licensing; contact it through the housing pages of rbkc.gov.uk.",
+  "nearby": [
+    "westminster",
+    "hammersmith-and-fulham",
+    "brent",
+    "wandsworth"
+  ]
+}

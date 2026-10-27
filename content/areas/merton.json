@@ -1,0 +1,102 @@
+{
+  "slug": "merton",
+  "name": "Merton",
+  "council": {
+    "name": "Merton Council",
+    "url": "https://www.merton.gov.uk",
+    "privateRentingUrl": "https://www.merton.gov.uk/council-tax-benefits-and-housing/private-housing/licensing/additional-hmo-licence"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers four wards, Figge’s Marsh, Graveney, Longthornton and Pollards Hill, for privately rented homes that are not HMOs (designated 19 June 2023, in force from September 2023 for five years).",
+    "additional": "Additional HMO licensing covers HMOs let to three or four people forming two or more households in seven wards: Colliers Wood, Cricket Green, Figge’s Marsh, Graveney, Lavender Fields, Longthornton and Pollards Hill (designated 19 June 2023, in force from September 2023 for five years).",
+    "fee": null,
+    "source": "https://www.merton.gov.uk/council-tax-benefits-and-housing/private-housing/licensing/additional-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,172 a month (ONS, August 2026), up 5.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000024/"
+  },
+  "price": {
+    "text": "£616,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000024/"
+  },
+  "privateRentedShare": {
+    "text": "29.1% of households rent privately (Census 2021), up from 24.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000024/"
+  },
+  "councilTax": {
+    "text": "£2,140.52 (Band D, 2026/27, including the GLA precept); homes near Wimbledon Common pay an extra Commons levy",
+    "source": "https://merton.moderngov.co.uk/ieDecisionDetails.aspx?ID=1827"
+  },
+  "postcodes": [
+    "SW19",
+    "SW20",
+    "SM4",
+    "CR4",
+    "SW16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wimbledon Village",
+      "postcodes": "SW19",
+      "housing": "Large Victorian and Edwardian houses and detached homes near the Common."
+    },
+    {
+      "name": "Wimbledon town centre",
+      "postcodes": "SW19",
+      "housing": "Victorian terraces split into flats, mansion blocks and new-build flats near the station."
+    },
+    {
+      "name": "South Wimbledon",
+      "postcodes": "SW19",
+      "housing": "Victorian terraces and the High Path council estate, which is being redeveloped."
+    },
+    {
+      "name": "Colliers Wood",
+      "postcodes": "SW19",
+      "housing": "Victorian and Edwardian terraces and newer blocks of flats near the station."
+    },
+    {
+      "name": "Merton Park",
+      "postcodes": "SW19",
+      "housing": "Late Victorian and Edwardian garden-suburb houses in tree-lined streets."
+    },
+    {
+      "name": "Raynes Park",
+      "postcodes": "SW20",
+      "housing": "Edwardian and inter-war terraced and semi-detached houses."
+    },
+    {
+      "name": "Morden",
+      "postcodes": "SM4",
+      "housing": "Inter-war semi-detached houses and the large St Helier council estate."
+    },
+    {
+      "name": "Mitcham",
+      "postcodes": "CR4",
+      "housing": "Inter-war terraces and semis, post-war estates and older cottages around the town centre."
+    },
+    {
+      "name": "Pollards Hill",
+      "postcodes": "SW16, CR4",
+      "housing": "Post-war estates and 1930s semis on the Croydon side of the borough."
+    }
+  ],
+  "housing": "Merton divides fairly clearly between Wimbledon, with Victorian and Edwardian houses, conversions and mansion flats, and Mitcham and Morden, with inter-war suburbs and large council estates such as St Helier. Private renting rose to nearly three in ten households by 2021, and rents rose faster than the London average over the year to August 2026. Regeneration of estates such as High Path is adding new flats.",
+  "checkinTips": [
+    "Edwardian houses and conversions in Wimbledon: photograph sash and bay windows, original floors and fireplaces, and any cracks in ceilings.",
+    "Inter-war semis in Morden and Mitcham: photograph the garden, garage, side gate and the condition of the original windows and doors.",
+    "Ex-council homes on the St Helier and other estates: photograph outbuildings, fences and the condition of kitchens and bathrooms in detail.",
+    "Wimbledon tennis fortnight lets: note any extra furniture or contents left for a short let and record their condition at the start.",
+    "New-build flats near Wimbledon and Colliers Wood: record fobs and parking, and photograph balconies and the ventilation and heating controls."
+  ],
+  "tenantHelp": "Merton Council's environmental health (private sector housing) team can inspect privately rented homes for disrepair and hazards; contact it through merton.gov.uk.",
+  "nearby": [
+    "wandsworth",
+    "lambeth",
+    "croydon",
+    "sutton",
+    "kingston-upon-thames"
+  ]
+}

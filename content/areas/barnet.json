@@ -1,0 +1,115 @@
+{
+  "slug": "barnet",
+  "name": "Barnet",
+  "council": {
+    "name": "Barnet Council",
+    "url": "https://www.barnet.gov.uk",
+    "privateRentingUrl": "https://www.barnet.gov.uk/housing/private-housing/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "None in force: the council says it has no selective licensing scheme running. A consultation on selective licensing in ten wards (including Burnt Oak, Colindale North and South, Cricklewood, Golders Green, Hendon and West Hendon) ran from 15 June to 15 September 2026; no decision had been published at the time of checking.",
+    "additional": "Borough-wide additional HMO licensing, from 27 October 2022 to 27 October 2027.",
+    "fee": null,
+    "source": "https://www.barnet.gov.uk/HMOlicensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,953 a month (ONS, September 2026), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000003/"
+  },
+  "price": {
+    "text": "£593,000 (UK HPI, August 2026, provisional), down 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000003/"
+  },
+  "privateRentedShare": {
+    "text": "32.7% of households rent privately (Census 2021), up from 25.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000003/"
+  },
+  "councilTax": {
+    "text": "£2,132.60 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.barnet.gov.uk/council-tax/check-how-much-council-tax-you-must-pay"
+  },
+  "postcodes": [
+    "N2",
+    "N3",
+    "N11",
+    "N12",
+    "N14",
+    "N20",
+    "NW4",
+    "NW7",
+    "NW9",
+    "NW11",
+    "EN4",
+    "EN5",
+    "HA8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Finchley",
+      "postcodes": "N3, N12",
+      "housing": "Edwardian and 1930s semi-detached houses, many split into flats, plus mansion blocks along the main roads."
+    },
+    {
+      "name": "Hendon",
+      "postcodes": "NW4",
+      "housing": "Interwar semis and terraces, with purpose-built flats and student lets near the university."
+    },
+    {
+      "name": "Golders Green",
+      "postcodes": "NW11",
+      "housing": "Edwardian houses and mansion flats, many converted into flats."
+    },
+    {
+      "name": "Hampstead Garden Suburb",
+      "postcodes": "NW11",
+      "housing": "Arts and Crafts houses and cottages in a conservation area with strict rules on alterations."
+    },
+    {
+      "name": "Colindale",
+      "postcodes": "NW9",
+      "housing": "Large new-build blocks of flats on former RAF and hospital sites, alongside regenerated estates such as Grahame Park."
+    },
+    {
+      "name": "Burnt Oak",
+      "postcodes": "HA8",
+      "housing": "The interwar Watling Estate of council-built cottages, many now owned and let privately."
+    },
+    {
+      "name": "Mill Hill",
+      "postcodes": "NW7",
+      "housing": "Suburban detached and semi-detached houses with some newer developments."
+    },
+    {
+      "name": "West Hendon",
+      "postcodes": "NW9",
+      "housing": "A council estate being replaced by new-build towers beside the Welsh Harp reservoir."
+    },
+    {
+      "name": "Chipping Barnet",
+      "postcodes": "EN5",
+      "housing": "Victorian and interwar houses around the High Barnet town centre."
+    },
+    {
+      "name": "Friern Barnet",
+      "postcodes": "N11",
+      "housing": "Interwar terraces and flats, including the converted former Friern Hospital buildings."
+    }
+  ],
+  "housing": "Barnet is London's most populous borough and largely suburban, with interwar semis and Edwardian houses across Finchley, Hendon and Mill Hill, many now split into flats. Colindale and West Hendon have seen some of London's largest new-build regeneration, with tall blocks of flats replacing estates and airfield land. About a third of households rent privately, and the council licenses all HMOs borough-wide.",
+  "checkinTips": [
+    "In Edwardian and interwar houses converted into flats in Finchley and Golders Green, photograph the shared hallway, stairs and front door locks, and note which keys open communal doors.",
+    "In Colindale and West Hendon new-build blocks, record fob, parking permit and post box key counts and photograph the heat interface unit or communal heating meter.",
+    "Check bay windows and leaded or original windows in older semis: photograph catches, glazing and any condensation damage to sills.",
+    "In Hampstead Garden Suburb houses, photograph original features such as doors, fireplaces and windows in detail, as alterations there are tightly controlled.",
+    "Photograph gardens, sheds and boundary fences in suburban houses, and note who looks after the garden under the tenancy."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp or unsafe conditions to Barnet Council's private sector housing team, which also enforces HMO licensing.",
+  "nearby": [
+    "enfield",
+    "haringey",
+    "camden",
+    "brent",
+    "harrow"
+  ]
+}

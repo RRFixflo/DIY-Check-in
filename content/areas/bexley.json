@@ -1,0 +1,106 @@
+{
+  "slug": "bexley",
+  "name": "Bexley",
+  "council": {
+    "name": "Bexley Council",
+    "url": "https://www.bexley.gov.uk",
+    "privateRentingUrl": "https://www.bexley.gov.uk/services/housing/property-licensing/property-licensing-schemes"
+  },
+  "licensing": {
+    "selective": "Selective licensing applies only in Belvedere ward, from 13 January 2025 to 12 January 2030.",
+    "additional": "None: the council does not run an additional HMO licensing scheme. Larger HMOs (five or more people in two or more households) need a mandatory HMO licence.",
+    "fee": "£830 for a selective licence (£350 + £480, Bexley fee table, 2026).",
+    "source": "https://www.bexley.gov.uk/services/housing/property-licensing/property-licensing-schemes",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,528 a month (ONS, May 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000004/"
+  },
+  "price": {
+    "text": "£408,000 (UK HPI, April 2026, provisional), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000004/"
+  },
+  "privateRentedShare": {
+    "text": "15.3% of households rent privately (Census 2021), the lowest share in London",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000004/"
+  },
+  "councilTax": {
+    "text": "£2,366.36 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.bexley.gov.uk/news/open-public-notices-11-march-2026"
+  },
+  "postcodes": [
+    "DA1",
+    "DA5",
+    "DA6",
+    "DA7",
+    "DA8",
+    "DA14",
+    "DA15",
+    "DA16",
+    "DA17",
+    "DA18",
+    "SE2",
+    "SE28"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bexleyheath",
+      "postcodes": "DA6, DA7",
+      "housing": "Mostly 1930s semi-detached and terraced houses, with flats near the Broadway."
+    },
+    {
+      "name": "Sidcup",
+      "postcodes": "DA14, DA15",
+      "housing": "Interwar semis and terraces with some Victorian villas and post-war flats."
+    },
+    {
+      "name": "Welling",
+      "postcodes": "DA16",
+      "housing": "Interwar terraced and semi-detached houses along and off the high street."
+    },
+    {
+      "name": "Erith",
+      "postcodes": "DA8",
+      "housing": "Victorian and Edwardian terraces with newer riverside flats and some post-war council blocks."
+    },
+    {
+      "name": "Belvedere",
+      "postcodes": "DA17",
+      "housing": "Victorian and Edwardian terraces, many let privately, in the only ward with selective licensing."
+    },
+    {
+      "name": "Thamesmead",
+      "postcodes": "SE28, SE2",
+      "housing": "A 1960s-70s planned town of concrete blocks, maisonettes and later houses, now partly being redeveloped."
+    },
+    {
+      "name": "Crayford",
+      "postcodes": "DA1",
+      "housing": "Interwar and post-war houses with newer flat developments near the town centre."
+    },
+    {
+      "name": "Bexley Village",
+      "postcodes": "DA5",
+      "housing": "Older cottages and larger detached and semi-detached houses around the old village centre."
+    },
+    {
+      "name": "Abbey Wood",
+      "postcodes": "SE2",
+      "housing": "Post-war houses and maisonettes with new-build flats near the Elizabeth line station."
+    }
+  ],
+  "housing": "Bexley is one of London's most owner-occupied boroughs, with rows of 1930s semis and terraces across Bexleyheath, Welling and Sidcup. Private renting is the lowest in London, but it rose over the decade to 2021, especially in the older terraced streets of Erith and Belvedere, where the council has a selective licensing scheme. Thamesmead and Abbey Wood have large post-war estates and new building around the Elizabeth line.",
+  "checkinTips": [
+    "In 1930s semis, photograph the front garden, driveway, garage door and side gate, as outdoor areas are often included in the let.",
+    "In Victorian terraces in Erith and Belvedere, photograph damp patches at the base of walls, chimney breasts and the back addition, and note any signs of rising or penetrating damp.",
+    "In Thamesmead maisonettes and blocks, record communal door, bin store and balcony access, and photograph walkways or stairwells that serve the flat.",
+    "Photograph the boiler, its last service sticker and every radiator valve, as many houses have older gas central heating systems.",
+    "If the house has a conservatory or rear extension, photograph its roof panels, seals and any leaks or condensation."
+  ],
+  "tenantHelp": "Bexley Council's private sector housing team deals with complaints about disrepair, damp and unsafe conditions in privately rented homes, and runs the Belvedere licensing scheme.",
+  "nearby": [
+    "greenwich",
+    "bromley"
+  ]
+}

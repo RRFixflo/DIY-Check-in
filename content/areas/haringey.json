@@ -1,0 +1,38 @@
+{
+  "slug": "haringey",
+  "name": "Haringey",
+  "council": { "name": "Haringey Council", "url": "https://www.haringey.gov.uk", "privateRentingUrl": "https://haringey.gov.uk/housing/private-sector-renting/property-licensing/selective-property-licensing/selective-property-licensing-fees-discounts" },
+  "licensing": {
+    "selective": "Selective licensing has been in force since 17 November 2022 in 14 wards, mostly in the east of the borough (including Tottenham and Wood Green areas), and is due to end on 17 November 2027 unless renewed.",
+    "additional": "Borough-wide additional HMO licensing, under a five-year scheme that started on 17 June 2024.",
+    "fee": "Around £706 for a selective licence on the council's fees page, with discounts for accredited landlords or a compliant EPC (2026)",
+    "source": "https://haringey.gov.uk/housing/private-sector-renting/property-licensing/selective-property-licensing/selective-property-licensing-fees-discounts",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£2,213 a month (ONS, July 2026), up 1.5% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000014/" },
+  "price": { "text": "£634,000 (UK HPI, June 2026, provisional), up 2.5% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000014/" },
+  "privateRentedShare": { "text": "35.6% of households rent privately (Census 2021), up from 31.5% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000014/" },
+  "councilTax": { "text": "£2,313.78 (Band D, 2026/27, including the GLA precept)", "source": "https://benefitscalculators.com/council-tax/haringey/" },
+  "postcodes": ["N4", "N6", "N8", "N10", "N11", "N15", "N17", "N22"],
+  "neighbourhoods": [
+    { "name": "Tottenham", "postcodes": "N15, N17", "housing": "Victorian and Edwardian terraces, many split into flats, large council estates such as Broadwater Farm, and new blocks around the stadium and Tottenham Hale." },
+    { "name": "Wood Green", "postcodes": "N22", "housing": "Victorian and Edwardian terraces and conversions around the High Road, with flats above shops." },
+    { "name": "Crouch End", "postcodes": "N8", "housing": "Large Victorian and Edwardian houses, many converted into flats, and some mansion blocks." },
+    { "name": "Muswell Hill", "postcodes": "N10", "housing": "Edwardian family houses and purpose-built Edwardian flats on hilly streets." },
+    { "name": "Highgate", "postcodes": "N6", "housing": "Georgian and Victorian houses, mansion flats and some modernist blocks on the Haringey side of the village." },
+    { "name": "Harringay Ladder", "postcodes": "N4, N8", "housing": "Grid of late Victorian terraced houses, many divided into flats or let as shared homes." },
+    { "name": "Hornsey", "postcodes": "N8", "housing": "Victorian and Edwardian terraces, conversions and newer flats near the station." },
+    { "name": "Stroud Green", "postcodes": "N4", "housing": "Tall Victorian houses split into flats and bedsits." },
+    { "name": "Bounds Green", "postcodes": "N11, N22", "housing": "Edwardian and inter-war terraces and semis, with some council blocks." }
+  ],
+  "housing": "Haringey's west, around Highgate, Muswell Hill and Crouch End, is mostly large Victorian and Edwardian houses, many converted into flats, while the east, around Tottenham and Wood Green, has denser terraces, flats above shops and big post-war estates. More than a third of households rented privately in 2021, and shared homes and HMOs are common on the Harringay Ladder and in Tottenham. Regeneration around Tottenham Hale and the High Road is adding new-build towers. The council licenses HMOs borough-wide and runs selective licensing in 14 wards.",
+  "checkinTips": [
+    "Converted Victorian houses in Crouch End, Stroud Green and Harringay: photograph the shared hallway, stairs, fire doors and meter cupboards, and count street-door and flat keys.",
+    "HMOs and shared homes: photograph each room's lock and smoke alarm, the shared kitchen and bathroom, and any furniture provided in each room.",
+    "Flats above shops on Wood Green and Tottenham High Roads: photograph the rear access, external stairs and any damp or mould around windows.",
+    "Edwardian houses in Muswell Hill: photograph original features such as fireplaces, timber floors and stained glass, and any cracks in plaster on the hilly streets.",
+    "New-build towers at Tottenham Hale: record fob and parking counts, photograph the balcony and note any snagging marks on floors and worktops."
+  ],
+  "tenantHelp": "Private tenants can contact Haringey Council's private sector housing team about disrepair, damp or unsafe conditions, and can check whether their home should have a licence.",
+  "nearby": ["enfield", "barnet", "camden", "islington", "hackney", "waltham-forest"]
+}

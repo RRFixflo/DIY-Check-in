@@ -1,0 +1,109 @@
+{
+  "slug": "redbridge",
+  "name": "Redbridge",
+  "council": {
+    "name": "Redbridge Council",
+    "url": "https://www.redbridge.gov.uk",
+    "privateRentingUrl": "https://www.redbridge.gov.uk/housing/landlords/selective-licensing/"
+  },
+  "licensing": {
+    "selective": "Two selective licensing schemes cover most of the borough: Scheme 3 in Ilford Town and Valentines wards (in force since 1 November 2023) and Scheme 4 in 15 further wards (8 April 2024 to 7 April 2029). Check the council’s ward map to see whether a home is included.",
+    "additional": "Borough-wide additional licensing for smaller HMOs (three or four people in two or more households sharing a kitchen, bathroom or toilet), from 18 September 2023 to 17 September 2028. Larger HMOs need a mandatory licence.",
+    "fee": "£997.69 per property for a selective licence (applications from 1 April 2026 to 31 March 2027)",
+    "source": "https://www.redbridge.gov.uk/housing/landlords/selective-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,724 a month (ONS, June 2026), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000026/"
+  },
+  "price": {
+    "text": "£484,378 (UK HPI, August 2026), down 2.8% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "30.4% of households rent privately (Census 2021), up from 22.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000026/"
+  },
+  "councilTax": {
+    "text": "£2,294.58 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.redbridge.gov.uk/council-tax/how-council-tax-works/how-your-council-tax-is-spent"
+  },
+  "postcodes": [
+    "IG1",
+    "IG2",
+    "IG3",
+    "IG4",
+    "IG5",
+    "IG6",
+    "IG7",
+    "IG8",
+    "E11",
+    "E12",
+    "E18",
+    "RM6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ilford",
+      "postcodes": "IG1",
+      "housing": "Edwardian terraces around the town centre alongside newer blocks of flats near the station."
+    },
+    {
+      "name": "Gants Hill",
+      "postcodes": "IG2",
+      "housing": "Interwar semi-detached and terraced houses around the roundabout, with flats above the parades."
+    },
+    {
+      "name": "Seven Kings and Goodmayes",
+      "postcodes": "IG3",
+      "housing": "Long streets of Edwardian and interwar terraced houses, many let to families or sharers."
+    },
+    {
+      "name": "Barkingside",
+      "postcodes": "IG6",
+      "housing": "Interwar semis and terraces, with flats over the High Street shops."
+    },
+    {
+      "name": "Hainault",
+      "postcodes": "IG6, IG7",
+      "housing": "Post-war council-built houses and low-rise blocks, many now privately owned and let."
+    },
+    {
+      "name": "Clayhall",
+      "postcodes": "IG5",
+      "housing": "Mostly interwar semi-detached houses with front drives and rear gardens."
+    },
+    {
+      "name": "Woodford",
+      "postcodes": "IG8",
+      "housing": "Larger Victorian, Edwardian and interwar houses, plus purpose-built flats near the station."
+    },
+    {
+      "name": "South Woodford",
+      "postcodes": "E18",
+      "housing": "Edwardian terraces and mansion-style flats close to George Lane and the Central line."
+    },
+    {
+      "name": "Wanstead",
+      "postcodes": "E11",
+      "housing": "Victorian and Edwardian houses near Wanstead Flats and the High Street, some split into flats."
+    }
+  ],
+  "housing": "Redbridge is mostly suburban, with large estates of interwar semi-detached and terraced houses and older Edwardian terraces nearer Ilford. Private renting grew faster than almost anywhere between 2011 and 2021 (from 22.9% to 30.4% of households) while home ownership fell sharply. Ilford town centre has the most new-build flats, and the Elizabeth line stations at Ilford, Seven Kings, Goodmayes and Chadwell Heath draw commuters. Shared houses are common enough that the council licenses small HMOs across the whole borough.",
+  "checkinTips": [
+    "Interwar semis often have original or early double-glazed bay windows: photograph each window’s seals, handles, locks and any condensation between panes.",
+    "Converted loft rooms and rear extensions are common: photograph ceilings and wall junctions for cracks or damp staining, and note any rooflights.",
+    "In shared houses, photograph every bedroom door lock and note which keys open which rooms, plus the condition of the shared kitchen and bathroom.",
+    "Front drives and side gates: photograph paving, gate latches and the bins provided, and note whose responsibility the garden is.",
+    "Flats over shop parades in Ilford, Gants Hill and Barkingside: photograph the communal entrance, stairs and any rear access, and record fob and key counts.",
+    "Check and photograph the boiler, meter cupboard and smoke and carbon monoxide alarms, which are often in an under-stairs cupboard in these houses."
+  ],
+  "tenantHelp": "Redbridge Council’s private sector housing service deals with disrepair, unsafe conditions and unlicensed rented homes; tenants can report problems through the council’s housing pages.",
+  "nearby": [
+    "waltham-forest",
+    "newham",
+    "barking-and-dagenham",
+    "havering"
+  ]
+}

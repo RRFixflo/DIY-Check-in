@@ -1,0 +1,111 @@
+{
+  "slug": "ealing",
+  "name": "Ealing",
+  "council": {
+    "name": "Ealing Council",
+    "url": "https://www.ealing.gov.uk",
+    "privateRentingUrl": "https://www.ealing.gov.uk/info/201086/housing/3306/private_rented_properties"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers 15 wards under two designations: East Acton, Southall Broadway and Southall Green (1 April 2022 to 31 March 2027) and twelve further wards (3 January 2023 to 2 January 2028). Use the council's licensing map to check a street.",
+    "additional": "Borough-wide additional HMO licensing from 1 April 2022 to 31 March 2027. The council consulted on a new five-year additional scheme from 15 July to 24 September 2026; no decision had been published at the time of checking.",
+    "fee": "£750 for a selective licence and £1,300 for an additional HMO licence (Ealing fee schedule, 2026/27).",
+    "source": "https://www.ealing.gov.uk/info/201086/housing/3306/private_rented_properties",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,109 a month (ONS, August 2026), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000009/"
+  },
+  "price": {
+    "text": "£585,000 (UK HPI, July 2026, provisional), up 0.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000009/"
+  },
+  "privateRentedShare": {
+    "text": "34.0% of households rent privately (Census 2021), up from 27.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000009/"
+  },
+  "councilTax": {
+    "text": "£2,138.53 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://counciltaxbands.com/councils/london/"
+  },
+  "postcodes": [
+    "W3",
+    "W5",
+    "W7",
+    "W13",
+    "UB1",
+    "UB2",
+    "UB5",
+    "UB6",
+    "NW10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ealing Broadway",
+      "postcodes": "W5",
+      "housing": "Victorian and Edwardian houses, many converted into flats, with mansion blocks and new-build flats near the station."
+    },
+    {
+      "name": "West Ealing",
+      "postcodes": "W13",
+      "housing": "Edwardian terraces, many split into flats, and new blocks around the Broadway."
+    },
+    {
+      "name": "Acton",
+      "postcodes": "W3",
+      "housing": "Victorian and Edwardian terraces and conversions, with large estates and new-build flats."
+    },
+    {
+      "name": "South Acton",
+      "postcodes": "W3",
+      "housing": "A large post-war council estate being rebuilt as new mixed-tenure blocks."
+    },
+    {
+      "name": "North Acton",
+      "postcodes": "W3, NW10",
+      "housing": "Tall new-build blocks of flats and student accommodation near Park Royal."
+    },
+    {
+      "name": "Hanwell",
+      "postcodes": "W7",
+      "housing": "Victorian and Edwardian terraces with interwar houses and some council flats."
+    },
+    {
+      "name": "Southall",
+      "postcodes": "UB1, UB2",
+      "housing": "Interwar and Edwardian terraces, many let privately and some with outbuildings in the garden."
+    },
+    {
+      "name": "Greenford",
+      "postcodes": "UB6",
+      "housing": "Interwar semi-detached and terraced houses with post-war flats."
+    },
+    {
+      "name": "Northolt",
+      "postcodes": "UB5",
+      "housing": "Interwar and post-war houses with council estates."
+    },
+    {
+      "name": "Perivale",
+      "postcodes": "UB6",
+      "housing": "Interwar semis and terraces near the A40."
+    }
+  ],
+  "housing": "Ealing has a big private rented sector, with Edwardian and Victorian houses in Ealing, Acton and Hanwell widely split into flats and many interwar terraces and semis let in Southall, Greenford and Northolt. North Acton and the Park Royal fringe have new tall blocks of flats and student housing, and South Acton is a long-running estate regeneration. The council licenses all HMOs and private lets in 15 of its wards.",
+  "checkinTips": [
+    "In Edwardian conversions in Ealing and Acton, photograph the communal hallway, the flat's front door and the meter cupboard, and count the street door and flat keys.",
+    "In Southall and Greenford terraces, photograph any garden outbuildings, extensions and loft rooms, and note which rooms are included in the let.",
+    "In North Acton new-build blocks, record fob, lift and post box key counts and photograph the heat interface unit, appliances and balcony.",
+    "Check bay and sash windows in period houses for rot, broken catches and draughts, and photograph each lock.",
+    "Photograph ceilings and corners in bathrooms and bedrooms for mould, and check extractor fans work, as condensation is common in older terraces."
+  ],
+  "tenantHelp": "Ealing Council's private sector housing team handles complaints about disrepair and unsafe conditions in private rented homes and enforces its licensing schemes.",
+  "nearby": [
+    "brent",
+    "harrow",
+    "hillingdon",
+    "hounslow",
+    "hammersmith-and-fulham"
+  ]
+}

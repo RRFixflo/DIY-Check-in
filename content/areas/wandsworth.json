@@ -1,0 +1,113 @@
+{
+  "slug": "wandsworth",
+  "name": "Wandsworth",
+  "council": {
+    "name": "Wandsworth Council",
+    "url": "https://www.wandsworth.gov.uk",
+    "privateRentingUrl": "https://wandsworth.gov.uk/housing/private-housing/property-licences"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers Furzedown, South Balham, Tooting Bec and Tooting Broadway (designation 1, from 1 July 2025) and East Putney, West Putney and Northcote (designation 2, from 1 April 2026 until 31 March 2031), for privately rented homes that aren't HMOs.",
+    "additional": "Additional licensing covers the whole borough from 1 July 2025 for HMOs not covered by mandatory licensing, including smaller shared homes and flats in multiple occupation in purpose-built blocks of three or more flats.",
+    "fee": "Selective licence £850 per property; additional HMO licence £1,450 per property, each paid in two parts (Part A on application, Part B when granted).",
+    "source": "https://www.wandsworth.gov.uk/housing/private-housing/property-licences/property-licence-fees",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,632 a month (ONS, August 2026), up 4.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000032/"
+  },
+  "price": {
+    "text": "£694,210 (UK HPI, August 2026), down 5.3% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "36.3% of households rent privately (Census 2021), up from 31.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000032/"
+  },
+  "councilTax": {
+    "text": "£1,020.35 (Band D, 2026/27, including the GLA precept of £510.51); £1,061.73 in the area that pays the Wimbledon and Putney Commons levy",
+    "source": "https://www.wandsworth.gov.uk/council-tax/council-tax-bands-and-charges/"
+  },
+  "postcodes": [
+    "SW4",
+    "SW8",
+    "SW11",
+    "SW12",
+    "SW15",
+    "SW17",
+    "SW18",
+    "SW19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Battersea",
+      "postcodes": "SW11",
+      "housing": "Victorian terraces and mansion blocks near the park, with council estates and riverside flats."
+    },
+    {
+      "name": "Nine Elms",
+      "postcodes": "SW8, SW11",
+      "housing": "New high-rise apartment towers around Battersea Power Station and the US Embassy."
+    },
+    {
+      "name": "Clapham Junction",
+      "postcodes": "SW11",
+      "housing": "Victorian terraces, many split into flats or let to sharers, around Northcote Road and the station."
+    },
+    {
+      "name": "Balham",
+      "postcodes": "SW12",
+      "housing": "Victorian and Edwardian terraces and mansion blocks, often converted into flats."
+    },
+    {
+      "name": "Tooting",
+      "postcodes": "SW17",
+      "housing": "Edwardian terraces, many let to sharers, near St George’s Hospital and the Broadway."
+    },
+    {
+      "name": "Earlsfield",
+      "postcodes": "SW18",
+      "housing": "Late-Victorian and Edwardian terraced houses, including the Magdalen Park estate."
+    },
+    {
+      "name": "Wandsworth Town",
+      "postcodes": "SW18",
+      "housing": "Victorian terraces between the commons and new riverside blocks."
+    },
+    {
+      "name": "Southfields",
+      "postcodes": "SW18, SW19",
+      "housing": "Edwardian terraces on the grid of streets near Wimbledon Park."
+    },
+    {
+      "name": "Putney",
+      "postcodes": "SW15",
+      "housing": "Victorian and Edwardian houses and mansion blocks, with riverside flats and estates up the hill."
+    },
+    {
+      "name": "Roehampton",
+      "postcodes": "SW15",
+      "housing": "Large post-war council estates, including the Alton Estate, and student housing for the university."
+    }
+  ],
+  "housing": "Wandsworth has one of the largest private rented sectors in London (36.3% of households in 2021), popular with young professionals sharing Victorian and Edwardian terraces in Clapham Junction, Balham, Tooting and Earlsfield. Many terraces and mansion blocks are split into flats. Nine Elms and the Battersea Power Station area have added thousands of new high-rise flats, while Roehampton’s Alton Estate and other post-war estates are under regeneration. The council’s Band D charge is one of the lowest in the country.",
+  "checkinTips": [
+    "Sharer lets in Victorian terraces: photograph each bedroom, its door lock and furniture, and the shared kitchen, bathroom and garden.",
+    "Mansion block flats in Battersea, Balham and Putney: photograph the communal entrance, lift, stairs and any porter arrangements, and record every key.",
+    "New towers at Nine Elms and Battersea Power Station: photograph integrated appliances, ventilation units, glazing and balcony doors, and record fobs and parking remotes.",
+    "Sash and bay windows: photograph cords, catches, locks and any condensation or rot.",
+    "Riverside flats in Wandsworth Town and Putney: photograph balconies and any signs of damp, and note bike store and parking access.",
+    "Converted flats often share meters or have them in a communal cupboard: photograph each meter with its serial number and reading."
+  ],
+  "tenantHelp": "Wandsworth Council’s private sector housing service can inspect privately rented homes for disrepair and hazards; tenants can contact it through the council’s housing pages.",
+  "nearby": [
+    "lambeth",
+    "merton",
+    "kingston-upon-thames",
+    "richmond-upon-thames",
+    "hammersmith-and-fulham",
+    "kensington-and-chelsea",
+    "westminster"
+  ]
+}

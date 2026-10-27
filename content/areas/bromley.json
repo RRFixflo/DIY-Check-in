@@ -1,0 +1,112 @@
+{
+  "slug": "bromley",
+  "name": "Bromley",
+  "council": {
+    "name": "Bromley Council",
+    "url": "https://www.bromley.gov.uk",
+    "privateRentingUrl": "https://www.bromley.gov.uk/housing-advice-options/houses-multiple-occupation-hmo-advice-landlords"
+  },
+  "licensing": {
+    "selective": "None: Bromley has no selective licensing scheme.",
+    "additional": "None: only mandatory HMO licensing applies (five or more people in two or more households sharing facilities). An Article 4 Direction has required planning permission for new small HMOs since 1 September 2022.",
+    "fee": null,
+    "source": "https://www.bromley.gov.uk/housing-advice-options/houses-multiple-occupation-hmo-advice-landlords",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,684 a month (ONS, August 2026), up 2.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000006/"
+  },
+  "price": {
+    "text": "£512,000 (UK HPI, July 2026, provisional), down 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000006/"
+  },
+  "privateRentedShare": {
+    "text": "17.4% of households rent privately (Census 2021), up from 13.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000006/"
+  },
+  "councilTax": {
+    "text": "£2,140.04 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.bromley.gov.uk/council-tax/council-tax-guide"
+  },
+  "postcodes": [
+    "BR1",
+    "BR2",
+    "BR3",
+    "BR4",
+    "BR5",
+    "BR6",
+    "BR7",
+    "BR8",
+    "SE20",
+    "SE19",
+    "TN16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bromley town",
+      "postcodes": "BR1, BR2",
+      "housing": "Victorian and Edwardian houses, many converted into flats, with purpose-built and new-build flats near the town centre."
+    },
+    {
+      "name": "Beckenham",
+      "postcodes": "BR3",
+      "housing": "Victorian and Edwardian villas and terraces, many split into flats, with interwar houses further out."
+    },
+    {
+      "name": "Penge",
+      "postcodes": "SE20",
+      "housing": "Victorian terraces and large houses mostly converted into flats."
+    },
+    {
+      "name": "Crystal Palace",
+      "postcodes": "SE19, SE20",
+      "housing": "Large Victorian houses converted into flats and some post-war blocks."
+    },
+    {
+      "name": "Orpington",
+      "postcodes": "BR6",
+      "housing": "Interwar and post-war semi-detached houses with flats near the high street."
+    },
+    {
+      "name": "Petts Wood",
+      "postcodes": "BR5",
+      "housing": "1930s detached and semi-detached houses, much of it a conservation area."
+    },
+    {
+      "name": "Chislehurst",
+      "postcodes": "BR7",
+      "housing": "Large detached houses and some older cottages around the commons."
+    },
+    {
+      "name": "West Wickham",
+      "postcodes": "BR4",
+      "housing": "Interwar semis and detached houses."
+    },
+    {
+      "name": "St Paul's Cray",
+      "postcodes": "BR5",
+      "housing": "Post-war council estates of houses and low-rise flats."
+    },
+    {
+      "name": "Biggin Hill",
+      "postcodes": "TN16",
+      "housing": "Detached houses and bungalows on the rural southern edge of the borough."
+    }
+  ],
+  "housing": "Bromley is London's largest borough by area and mostly owner-occupied, with interwar and post-war semis across Orpington, West Wickham and Petts Wood. Private renting is among the lowest in London but is concentrated in the Victorian conversions of Penge, Beckenham and Bromley town. Post-war council-built estates in the Crays and green-belt villages to the south add to a varied stock, and the council runs only the national mandatory HMO licensing.",
+  "checkinTips": [
+    "In Victorian houses split into flats in Penge and Beckenham, photograph the shared entrance, stairs and the flat's front door, and list which keys open which doors.",
+    "In suburban semis, photograph the garden, lawn, hedges, garage and driveway, and note who is responsible for keeping them.",
+    "In larger detached houses, photograph every external door and window lock and count the keys for each, including garages and outbuildings.",
+    "Check bay windows and original timber windows in older houses for rot and broken catches, and photograph the sills.",
+    "Photograph the boiler and its service sticker, the hot water cylinder and any immersion heater, which many older houses still have."
+  ],
+  "tenantHelp": "Bromley Council's environmental health (private sector housing) team handles complaints about disrepair and unsafe conditions in private rented homes.",
+  "nearby": [
+    "bexley",
+    "greenwich",
+    "lewisham",
+    "croydon"
+  ]
+}

@@ -1,15 +1,15 @@
 // Local hubs for England's council areas (London boroughs, metropolitan boroughs, unitaries and districts):
 // /inventory-reports/<area> and three pages under it (landlords, tenants, neighbourhoods). The list of areas is
-// data/area-list.json (ONS local authority districts: name, type, county, region, Land Registry district name,
-// centre); each area's page appears once it has researched facts in data/areas/<slug>.json (council and licensing pages, ONS rents, UK HPI prices,
+// content/area-list.json (ONS local authority districts: name, type, county, region, Land Registry district name,
+// centre); each area's page appears once it has researched facts in content/areas/<slug>.json (council and licensing pages, ONS rents, UK HPI prices,
 // Census 2021 renting share, council tax, postcode districts, neighbourhoods and their homes, check-in tips) and,
 // when the Land Registry answers, sales in the last 12 months by property type (fetched in the background once a
 // month, cached in REPORTS_DIR/area-sales.json). A fact that couldn't be verified is null and simply not shown.
 const fs = require('fs');
 const path = require('path');
 
-const DIR = path.join(__dirname, 'data', 'areas');
-const LIST = path.join(__dirname, 'data', 'area-list.json');
+const DIR = path.join(__dirname, 'content', 'areas');
+const LIST = path.join(__dirname, 'content', 'area-list.json');
 const load = () => { const out = {}; try { fs.readdirSync(DIR).filter(f => f.endsWith('.json')).forEach(f => { try { const d = JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8')); if (d && d.slug) out[d.slug] = d; } catch (e) { console.error('areas: bad ' + f + ': ' + e.message); } }); } catch (e) {} return out; };
 const PTYPE = { detached: 'Detached', 'semi-detached': 'Semi-detached', terraced: 'Terraced', 'flat-maisonette': 'Flat or maisonette', otherPropertyType: 'Other' };
 const gbp = n => '£' + Math.round(n).toLocaleString('en-GB');

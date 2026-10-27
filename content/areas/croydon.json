@@ -1,0 +1,109 @@
+{
+  "slug": "croydon",
+  "name": "Croydon",
+  "council": {
+    "name": "Croydon Council",
+    "url": "https://www.croydon.gov.uk",
+    "privateRentingUrl": "https://www.croydon.gov.uk/housing/landlords/selective-and-additional-hmo-licensing-schemes-2026"
+  },
+  "licensing": {
+    "selective": "A new selective licensing scheme came into force on 25 September 2026 for five years, covering 14 of the 28 wards: Addiscombe East, Addiscombe West, Bensham Manor, Broad Green, Fairfield, Norbury & Pollards Hill, Norbury Park, Selhurst, South Croydon, South Norwood, Thornton Heath, Waddon, West Thornton and Woodside. (One earlier council notice gave 1 September 2026; the council's landlord pages use 25 September.)",
+    "additional": "A new borough-wide additional HMO licensing scheme for HMOs with three or four people in two or more households came into force on 25 September 2026, for five years.",
+    "fee": "£800 for a five-year selective licence (£480 on application + £320 before issue), with discounts for accredited landlords and EPC B or above (Croydon fee page, 2026).",
+    "source": "https://www.croydon.gov.uk/housing/landlords/selective-and-additional-hmo-licensing-schemes-2026",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,586 a month (ONS, September 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000008/"
+  },
+  "price": {
+    "text": "£397,000 (UK HPI, August 2026, provisional), down 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000008/"
+  },
+  "privateRentedShare": {
+    "text": "25.8% of households rent privately (Census 2021), up from 21.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000008/"
+  },
+  "councilTax": {
+    "text": "£2,599.91 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.croydon.gov.uk/council-tax/what-council-tax-and-how-much-it/councils-finances"
+  },
+  "postcodes": [
+    "CR0",
+    "CR2",
+    "CR5",
+    "CR7",
+    "CR8",
+    "SE19",
+    "SE25",
+    "SW16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Central Croydon",
+      "postcodes": "CR0",
+      "housing": "New-build towers and former office buildings converted into flats around the town centre."
+    },
+    {
+      "name": "Thornton Heath",
+      "postcodes": "CR7",
+      "housing": "Victorian and Edwardian terraces, many split into flats."
+    },
+    {
+      "name": "South Norwood",
+      "postcodes": "SE25",
+      "housing": "Victorian terraces and conversions with some post-war council blocks."
+    },
+    {
+      "name": "Norbury",
+      "postcodes": "SW16",
+      "housing": "Edwardian and interwar terraces, many converted into flats."
+    },
+    {
+      "name": "Selhurst",
+      "postcodes": "SE25",
+      "housing": "Victorian and Edwardian terraced houses close to the railway."
+    },
+    {
+      "name": "Addiscombe",
+      "postcodes": "CR0",
+      "housing": "Victorian and Edwardian houses, many converted into flats, with interwar semis."
+    },
+    {
+      "name": "Upper Norwood",
+      "postcodes": "SE19",
+      "housing": "Large Victorian villas converted into flats and post-war estates."
+    },
+    {
+      "name": "Purley",
+      "postcodes": "CR8",
+      "housing": "Interwar and post-war detached and semi-detached houses, with newer flat blocks."
+    },
+    {
+      "name": "Coulsdon",
+      "postcodes": "CR5",
+      "housing": "Suburban semis and detached houses with some new-build estates."
+    },
+    {
+      "name": "New Addington",
+      "postcodes": "CR0",
+      "housing": "A large post-war council estate of houses and low-rise flats."
+    }
+  ],
+  "housing": "Croydon's north has dense Victorian and Edwardian terraces in Thornton Heath, Norbury and South Norwood, many divided into flats or let as shared houses. Central Croydon has many new towers and offices converted into flats, while the south of the borough is leafy suburbs of interwar and post-war houses. About a quarter of households rent privately, and from September 2026 the council licenses private lets in 14 wards and all smaller HMOs.",
+  "checkinTips": [
+    "In flats converted from offices in central Croydon, photograph window openings and restrictors, ventilation grilles and any signs of overheating or condensation in small rooms.",
+    "In new-build towers, record fob, lift, bike store and post box key counts, and photograph the fire door, its closer and the heat interface unit.",
+    "In Victorian terraces split into flats in Thornton Heath and Norbury, photograph the shared entrance and meter cupboards, and note which meters belong to the flat.",
+    "Check sash and older timber windows in period conversions for rot, broken cords and draughts.",
+    "In suburban houses in Purley and Coulsdon, photograph gardens, fences, garages and driveways, and note who maintains them."
+  ],
+  "tenantHelp": "Croydon Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and runs its landlord licensing schemes.",
+  "nearby": [
+    "bromley",
+    "lambeth",
+    "merton",
+    "sutton"
+  ]
+}

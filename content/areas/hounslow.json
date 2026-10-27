@@ -1,0 +1,105 @@
+{
+  "slug": "hounslow",
+  "name": "Hounslow",
+  "council": {
+    "name": "Hounslow Council",
+    "url": "https://www.hounslow.gov.uk",
+    "privateRentingUrl": "https://www.hounslow.gov.uk/houses-multiple-occupation/hmo-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is in force in Hounslow; ordinary single-household lets do not need a council licence.",
+    "additional": "A borough-wide additional HMO licensing scheme came into force on 11 December 2025 and runs until 10 December 2030. It covers HMOs let to three or more people from two or more households, and some converted (section 257) blocks under single ownership. It replaced an older scheme that covered only five wards.",
+    "fee": null,
+    "source": "https://www.hounslow.gov.uk/downloads/file/11545/public-notice-additional-licensing-of-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,945 a month (ONS, July 2026), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000018/"
+  },
+  "price": {
+    "text": "£513,000 (UK HPI, June 2026, provisional), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000018/"
+  },
+  "privateRentedShare": {
+    "text": "30.9% of households rent privately (Census 2021), up from 23.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000018/"
+  },
+  "councilTax": {
+    "text": "£2,185.56 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69ba59f32910b3e7bbefd29e"
+  },
+  "postcodes": [
+    "W4",
+    "TW3",
+    "TW4",
+    "TW5",
+    "TW7",
+    "TW8",
+    "TW13",
+    "TW14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chiswick",
+      "postcodes": "W4",
+      "housing": "Victorian and Edwardian terraced and semi-detached houses, many split into flats, with mansion blocks and riverside homes."
+    },
+    {
+      "name": "Brentford",
+      "postcodes": "TW8",
+      "housing": "Older terraces alongside large new-build blocks of flats by the river and around the town centre."
+    },
+    {
+      "name": "Isleworth",
+      "postcodes": "TW7",
+      "housing": "Victorian terraces near the old riverside village and 1930s semi-detached houses further out."
+    },
+    {
+      "name": "Osterley",
+      "postcodes": "TW7",
+      "housing": "Mostly 1930s semi-detached and terraced family houses."
+    },
+    {
+      "name": "Hounslow town centre",
+      "postcodes": "TW3",
+      "housing": "Flats above shops and in newer town-centre blocks, with terraced streets around them."
+    },
+    {
+      "name": "Hounslow West and Hounslow Heath",
+      "postcodes": "TW4",
+      "housing": "Inter-war terraces and semi-detached houses, some converted into shared homes."
+    },
+    {
+      "name": "Heston and Cranford",
+      "postcodes": "TW5",
+      "housing": "1930s semi-detached and terraced houses close to Heathrow, many with loft or rear extensions."
+    },
+    {
+      "name": "Feltham and Hanworth",
+      "postcodes": "TW13",
+      "housing": "Post-war council estates and inter-war semis, with newer flats near the station."
+    },
+    {
+      "name": "Bedfont",
+      "postcodes": "TW14",
+      "housing": "Inter-war and post-war family houses and low-rise flats on the edge of Heathrow."
+    }
+  ],
+  "housing": "Hounslow runs from Victorian Chiswick in the east to inter-war suburbs around Heston, Hounslow and Feltham in the west, with Heathrow on its western edge. Private renting grew faster here than in most of London between 2011 and 2021 and became the borough's most common tenure. Many 1930s family houses are let as family homes or as shared houses, which is why the council moved to borough-wide HMO licensing in 2025. Brentford and Hounslow town centre have a growing number of new-build flats.",
+  "checkinTips": [
+    "Loft conversions and rear extensions on 1930s semis: photograph ceilings, skylights and the joins between old and new walls for cracks or damp.",
+    "Shared houses: photograph each bedroom door, its lock and the number of keys, and record the condition of the shared kitchen and bathroom separately.",
+    "Double glazing near the Heathrow flight paths: check every window opens, locks and seals, and photograph any misted or cracked units.",
+    "New-build flats in Brentford and the town centre: note fobs, parking permits and bin store access, and photograph the meter cupboard and any communal heating unit.",
+    "Older Chiswick conversions: photograph sash windows, cords and locks, and any damp at the base of walls or under bay windows.",
+    "Front and back gardens: photograph fences, gates, sheds and the lawn, since gardens are common in this borough's houses."
+  ],
+  "tenantHelp": "Hounslow Council's private sector housing team deals with disrepair, unsafe conditions and unlicensed HMOs in privately rented homes; contact it through the housing pages of hounslow.gov.uk.",
+  "nearby": [
+    "ealing",
+    "hillingdon",
+    "hammersmith-and-fulham",
+    "richmond-upon-thames"
+  ]
+}

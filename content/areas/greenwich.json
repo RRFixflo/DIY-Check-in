@@ -1,0 +1,39 @@
+{
+  "slug": "greenwich",
+  "name": "Greenwich",
+  "council": { "name": "Royal Borough of Greenwich", "url": "https://www.royalgreenwich.gov.uk", "privateRentingUrl": "https://royalgreenwich.gov.uk/info/200290/private_rented_property_licensing/937/apply_for_a_private_rented_property_licence" },
+  "licensing": {
+    "selective": "A selective licensing scheme has been in force since 1 October 2022 (for five years) in the Plumstead, Woolwich and Shooters Hill area; sources list the wards slightly differently, so check the address with the council. A larger scheme covering 18 wards, replacing the current one, was consulted on from 21 July to 12 October 2026; no decision had been published when checked.",
+    "additional": "Borough-wide additional HMO licensing has applied since 1 January 2024, for smaller shared homes not covered by mandatory HMO licensing.",
+    "fee": null,
+    "source": "https://communityconversations.royalgreenwich.gov.uk/community-safety-licensing/selective-licensing-2026-consultation",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£1,995 a month (ONS, August 2026), up 6.1% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000011/" },
+  "price": { "text": "£463,000 (UK HPI, July 2026, provisional), down 1.4% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000011/" },
+  "privateRentedShare": { "text": "25.5% of households rent privately (Census 2021), up from 19.8% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000011" },
+  "councilTax": { "text": "About £2,108 (Band D, 2026/27, including the GLA precept; homes around Gloucester Circus, SE10, pay a small extra charge)", "source": "https://greenwich.moderngov.co.uk/documents/s18350/Budget and Council Tax Setting 2026 27.pdf" },
+  "postcodes": ["SE2", "SE3", "SE7", "SE9", "SE10", "SE12", "SE18", "SE28"],
+  "neighbourhoods": [
+    { "name": "Greenwich", "postcodes": "SE10", "housing": "Georgian and Victorian terraces near the park and town centre, many divided into flats, plus riverside apartment blocks." },
+    { "name": "Greenwich Peninsula", "postcodes": "SE10", "housing": "High-rise new-build apartment blocks with concierges, lifts and underground parking." },
+    { "name": "Woolwich", "postcodes": "SE18", "housing": "Victorian terraces, large post-war estates and new flats at the Royal Arsenal riverside development." },
+    { "name": "Plumstead", "postcodes": "SE18", "housing": "Long streets of Victorian and Edwardian terraced houses, many let as flats or shared homes." },
+    { "name": "Eltham", "postcodes": "SE9", "housing": "Inter-war semis and terraces, including the Well Hall garden-suburb estate built for Arsenal workers." },
+    { "name": "Charlton", "postcodes": "SE7", "housing": "Victorian terraces on the hill and newer riverside flats near the Thames Barrier." },
+    { "name": "Blackheath", "postcodes": "SE3", "housing": "Large Georgian and Victorian houses, many split into flats, and the 1950s and 60s Span estates." },
+    { "name": "Kidbrooke", "postcodes": "SE3, SE9", "housing": "A large regeneration area where the former Ferrier Estate has been replaced by new-build flats and houses." },
+    { "name": "Thamesmead", "postcodes": "SE28", "housing": "1960s and 70s concrete estates and later low-rise housing, now being regenerated." },
+    { "name": "Abbey Wood", "postcodes": "SE2", "housing": "Post-war houses and estates, with new flats near the Elizabeth line station." }
+  ],
+  "housing": "Greenwich mixes Georgian and Victorian terraces in Greenwich, Blackheath and Plumstead with some of London's largest post-war estates in Woolwich and Thamesmead. Since the 2000s, riverside regeneration at Greenwich Peninsula, the Royal Arsenal and Kidbrooke has added thousands of new-build flats in towers and mid-rise blocks. About a quarter of households rented privately at the 2021 census, and social renting is still common. The council licenses smaller HMOs borough-wide and runs selective licensing in the Plumstead and Woolwich area, with a larger scheme under consultation.",
+  "checkinTips": [
+    "Tower flats on the Peninsula and at the Royal Arsenal: record fob, parking-fob and post-box key counts and photograph the balcony, its drainage and the glass balustrade.",
+    "Georgian and Victorian sash windows in Greenwich and Blackheath: photograph cords, catches and any rot or flaking paint on the sills.",
+    "Victorian terraces in Plumstead let as shared homes: photograph each room's door lock, smoke alarm and fire door closers, and list which keys open which rooms.",
+    "Post-war estate blocks in Woolwich and Thamesmead: note entry-phone, lift and communal-area condition on the day, and photograph any damp in bathrooms and window reveals.",
+    "Inter-war houses in Eltham: photograph the garden, fences and any outbuildings, and the condition of the boiler and radiators."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp and mould or unsafe conditions to the Royal Borough of Greenwich's private sector housing team, which can inspect and take enforcement action.",
+  "nearby": ["lewisham", "bexley", "bromley", "tower-hamlets", "newham"]
+}

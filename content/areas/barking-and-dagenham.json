@@ -1,0 +1,101 @@
+{
+  "slug": "barking-and-dagenham",
+  "name": "Barking and Dagenham",
+  "council": {
+    "name": "Barking and Dagenham Council",
+    "url": "https://www.lbbd.gov.uk",
+    "privateRentingUrl": "https://www.lbbd.gov.uk/private-sector-housing/property-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers most privately rented homes in three designated areas of the borough, from 6 April 2025 to 5 April 2030 (it replaced the earlier scheme that ended in 2024). Check the council's designation maps for a particular street.",
+    "additional": "Borough-wide additional HMO licensing for smaller HMOs (three or four people in two or more households), launched on 9 January 2025 for five years.",
+    "fee": "About £950 for a selective licence, paid in two parts (£650 on application and £300 on grant, per the council's fee table; another council page shows £470 + £430, so check the current fees).",
+    "source": "https://www.lbbd.gov.uk/private-sector-housing/property-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,693 a month (ONS, June 2026), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000002/"
+  },
+  "price": {
+    "text": "£361,000 (UK HPI, May 2026, provisional), roughly unchanged on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000002/"
+  },
+  "privateRentedShare": {
+    "text": "24.2% of households rent privately (Census 2021), up from 17.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000002/"
+  },
+  "councilTax": {
+    "text": "£2,198.50 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://www.lbbd.gov.uk/council-tax/your-council-tax-account/what-your-council-tax-pays"
+  },
+  "postcodes": [
+    "IG11",
+    "RM6",
+    "RM8",
+    "RM9",
+    "RM10",
+    "RM7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Barking",
+      "postcodes": "IG11",
+      "housing": "Victorian and Edwardian terraces around the town centre, with a growing number of new-build flat blocks near the station."
+    },
+    {
+      "name": "Barking Riverside",
+      "postcodes": "IG11",
+      "housing": "A large new-build district of flats and town houses on former industrial land beside the Thames."
+    },
+    {
+      "name": "Becontree",
+      "postcodes": "RM8, RM9, RM10",
+      "housing": "Part of the interwar Becontree Estate, built as council cottages in short terraces, many since bought under right to buy and now let privately."
+    },
+    {
+      "name": "Dagenham",
+      "postcodes": "RM9, RM10",
+      "housing": "Mostly interwar Becontree Estate terraces and semis, with some post-war council blocks."
+    },
+    {
+      "name": "Chadwell Heath",
+      "postcodes": "RM6",
+      "housing": "Interwar terraced and semi-detached houses along with some newer flats near the station."
+    },
+    {
+      "name": "Gascoigne",
+      "postcodes": "IG11",
+      "housing": "A post-war council estate being rebuilt in phases as new mixed-tenure flat blocks."
+    },
+    {
+      "name": "Thames View",
+      "postcodes": "IG11",
+      "housing": "A 1950s-60s council estate of low-rise houses and flats near the river."
+    },
+    {
+      "name": "Marks Gate",
+      "postcodes": "RM6",
+      "housing": "A post-war council estate of houses and maisonettes on the borough's northern edge."
+    },
+    {
+      "name": "Rush Green",
+      "postcodes": "RM7",
+      "housing": "Interwar terraced and semi-detached houses on the border with Havering."
+    }
+  ],
+  "housing": "Much of the borough is the Becontree Estate, the huge interwar council estate of small brick terraced houses, a large share of which were sold under right to buy and are now let privately. Barking town centre and Barking Riverside have added thousands of new-build flats, while older estates such as Gascoigne are being rebuilt. Private renting grew faster here between 2011 and 2021 than across England, and the council licenses most private lets in its designated areas.",
+  "checkinTips": [
+    "In Becontree Estate cottages, photograph the front and back gardens, fences and sheds, since boundary and outbuilding condition is a common dispute in these small terraced houses.",
+    "Many ex-council houses have later uPVC windows and doors: photograph each handle, lock and any misted double-glazed units, and count the window keys.",
+    "Check for loft and wall extensions or converted garages in ex-council houses and photograph their ceilings and corners for damp or cracks.",
+    "In new-build flats at Barking Riverside and the town centre, record fob, car park and post box key counts, and photograph the meter cupboard and any communal heating unit.",
+    "Photograph bathroom extractor fans, window seals and the corners of ceilings in each room, as condensation mould is common in older, smaller terraced houses."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can report them to Barking and Dagenham Council's private sector housing team, which also runs the borough's property licensing schemes.",
+  "nearby": [
+    "havering",
+    "redbridge",
+    "newham"
+  ]
+}

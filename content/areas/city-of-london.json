@@ -1,0 +1,85 @@
+{
+  "slug": "city-of-london",
+  "name": "the City of London",
+  "council": {
+    "name": "City of London Corporation",
+    "url": "https://www.cityoflondon.gov.uk",
+    "privateRentingUrl": "https://www.cityoflondon.gov.uk/services/environmental-health/housing-standards/private-rented-accommodation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional licensing scheme; only mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": "Mandatory HMO licence: £600 on application, then a grant fee by number of lettings, from £450 (up to 5) to £1,050 (20 or more).",
+    "source": "https://www.cityoflondon.gov.uk/services/licensing/other-licence-and-business-permit-types/houses-in-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": {
+    "text": "£726,633 (UK HPI, August 2026), down 14.6% on a year earlier (based on very few sales)",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "48.3% of households rent privately (Census 2021), the highest share in England, up from 35.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000001/"
+  },
+  "councilTax": {
+    "text": "£1,329.56 (Band D, 2026/27, including the GLA precept of £176.38, lower than elsewhere because the City has its own police force)",
+    "source": "https://www.cityoflondon.gov.uk/services/council-tax/council-tax-bands-and-charges"
+  },
+  "postcodes": [
+    "EC1",
+    "EC2",
+    "EC3",
+    "EC4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Barbican",
+      "postcodes": "EC2",
+      "housing": "Concrete flats in the Barbican Estate’s towers and terrace blocks, mostly leasehold with many let privately."
+    },
+    {
+      "name": "Golden Lane",
+      "postcodes": "EC1",
+      "housing": "The post-war Golden Lane Estate of listed low- and mid-rise flats, owned by the Corporation, with some leaseholders letting."
+    },
+    {
+      "name": "Smithfield and Farringdon",
+      "postcodes": "EC1",
+      "housing": "Flats in converted warehouses and offices, and new apartment blocks."
+    },
+    {
+      "name": "Fleet Street and Temple",
+      "postcodes": "EC4",
+      "housing": "A small number of flats above offices and in converted historic buildings."
+    },
+    {
+      "name": "Aldgate",
+      "postcodes": "EC3",
+      "housing": "New-build apartment towers and some older flats around Aldgate."
+    },
+    {
+      "name": "Portsoken",
+      "postcodes": "E1",
+      "housing": "The Middlesex Street and Mansell Street estates of council flats on the City’s eastern edge."
+    }
+  ],
+  "housing": "The City of London has very few homes (around 8,600 residents in 2021), and almost all are flats. Nearly half of households (48.3%) rented privately in 2021, the highest share in England, many in flats on the Barbican and other estates let by leaseholders. The Corporation owns the Golden Lane, Middlesex Street and Mansell Street estates, and there are newer apartment blocks around Aldgate and Farringdon. The ONS does not publish average rents for the City because too few lets are recorded.",
+  "checkinTips": [
+    "Barbican flats: photograph the original fitted kitchens, Garchey waste units where they survive, underfloor or ceiling heating controls and the balcony planters.",
+    "Listed estate flats in the Barbican and Golden Lane: photograph original fittings and finishes close up, as many cannot be changed without consent.",
+    "Record every fob, key and car park or storage cage key, and note the estate office’s rules on moving in and lift booking.",
+    "Flats in converted warehouses and offices: photograph exposed brick, large windows and any comfort cooling units.",
+    "New apartment towers at Aldgate: photograph integrated appliances, ventilation units and balcony doors, and note concierge and parcel arrangements.",
+    "Photograph meter readings, which are often in a communal cupboard or read remotely, and ask which heating costs are in the service charge."
+  ],
+  "tenantHelp": "The City of London Corporation’s environmental health and housing services can deal with disrepair and hazards in privately rented homes in the Square Mile.",
+  "nearby": [
+    "westminster",
+    "camden",
+    "islington",
+    "hackney",
+    "tower-hamlets",
+    "southwark"
+  ]
+}

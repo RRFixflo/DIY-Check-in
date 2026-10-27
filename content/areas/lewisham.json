@@ -1,0 +1,106 @@
+{
+  "slug": "lewisham",
+  "name": "Lewisham",
+  "council": {
+    "name": "Lewisham Council",
+    "url": "https://lewisham.gov.uk",
+    "privateRentingUrl": "https://lewisham.gov.uk/myservices/housing/private-tenants-and-landlords/advice-private-tenants/renting-in-lewisham"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers most of the borough (three designations, from 1 July 2024 to 30 June 2029) for privately rented homes not covered by HMO licensing; Telegraph Hill and parts of Blackheath are not included.",
+    "additional": "Additional HMO licensing covers the whole borough for HMOs let to three or four unrelated people (larger ones need a mandatory licence), from 5 April 2022 until 4 April 2027.",
+    "fee": "A selective licence costs £640 for five years: £160 on application and £480 when it is granted, with discounts for accredited landlords and charities taken off the second payment.",
+    "source": "https://lewisham.gov.uk/myservices/housing/private-tenants-and-landlords/landlords/selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,832 a month (ONS, September 2026), up 2.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000023/"
+  },
+  "price": {
+    "text": "£486,000 (UK HPI, August 2026, provisional), down 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000023/"
+  },
+  "privateRentedShare": {
+    "text": "27.2% of households rent privately (Census 2021), up from 24.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000023/"
+  },
+  "councilTax": {
+    "text": "£2,237.33 (Band D, 2026/27, including the GLA precept)",
+    "source": "https://lewisham.gov.uk/myservices/counciltax/bands-and-charges/current-bands-and-charges"
+  },
+  "postcodes": [
+    "SE3",
+    "SE4",
+    "SE6",
+    "SE8",
+    "SE12",
+    "SE13",
+    "SE14",
+    "SE23",
+    "SE26",
+    "BR1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Deptford",
+      "postcodes": "SE8",
+      "housing": "Post-war council estates, Victorian terraces and new-build blocks along the river."
+    },
+    {
+      "name": "New Cross",
+      "postcodes": "SE14",
+      "housing": "Victorian terraces, many let as shared houses to Goldsmiths students, and council estates."
+    },
+    {
+      "name": "Brockley",
+      "postcodes": "SE4",
+      "housing": "Large Victorian houses in conservation areas, many split into flats."
+    },
+    {
+      "name": "Lewisham town centre",
+      "postcodes": "SE13",
+      "housing": "New-build towers around the station and Lewisham Gateway, with older terraces nearby."
+    },
+    {
+      "name": "Hither Green and Lee",
+      "postcodes": "SE12, SE13",
+      "housing": "Victorian and Edwardian terraced family houses."
+    },
+    {
+      "name": "Catford",
+      "postcodes": "SE6",
+      "housing": "Victorian and inter-war terraces, flats above shops and a regeneration area around the town centre."
+    },
+    {
+      "name": "Forest Hill and Honor Oak",
+      "postcodes": "SE23",
+      "housing": "Victorian villas converted into flats and Edwardian terraces on the hills."
+    },
+    {
+      "name": "Sydenham",
+      "postcodes": "SE26",
+      "housing": "Victorian houses split into flats, inter-war homes and post-war estates."
+    },
+    {
+      "name": "Bellingham and Downham",
+      "postcodes": "SE6, BR1",
+      "housing": "Inter-war cottage-style council estates of terraced houses with gardens."
+    }
+  ],
+  "housing": "Lewisham has a mix of Victorian terraces and villas, many converted into flats, inter-war cottage estates in Bellingham and Downham, and post-war council blocks in Deptford and New Cross. Social renting is high and more than a quarter of households rented privately at the 2021 Census. Goldsmiths keeps a student market in New Cross, while new towers in Lewisham town centre and along the Deptford riverside have added many rented flats.",
+  "checkinTips": [
+    "Victorian conversions in Brockley and Forest Hill: photograph sash windows, cornices, fireplaces and any cracks in the ceilings.",
+    "Student shared houses in New Cross: photograph each bedroom lock and furniture, the shared kitchen and the fire alarm and fire doors.",
+    "Ex-council houses in Bellingham and Downham: photograph the garden, fences, sheds and outside drains, and check windows and doors close properly.",
+    "New-build flats in Lewisham and Deptford: record fobs, bike store and bin store access, and photograph the ventilation unit and balcony.",
+    "Flats on hillside streets: photograph steps, paths and boundary walls, and look for damp on walls built against the slope."
+  ],
+  "tenantHelp": "Lewisham Council's private sector housing team can inspect privately rented homes for disrepair and hazards; contact it through lewisham.gov.uk.",
+  "nearby": [
+    "southwark",
+    "greenwich",
+    "bromley",
+    "tower-hamlets"
+  ]
+}

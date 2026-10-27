@@ -1,0 +1,109 @@
+{
+  "slug": "tower-hamlets",
+  "name": "Tower Hamlets",
+  "council": {
+    "name": "Tower Hamlets Council",
+    "url": "https://www.towerhamlets.gov.uk",
+    "privateRentingUrl": "https://www.towerhamlets.gov.uk/lgnl/housing/Private-tenants-landlords-and-homeowners/Private-Landlords/Selective_Licensing.aspx"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme since the Weavers, Whitechapel and Spitalfields & Banglatown scheme ended on 30 September 2026; existing licences last until they expire, and the council says it is considering options for a new scheme.",
+    "additional": "Additional licensing covers the whole borough for smaller HMOs, from 1 April 2024 until 31 March 2029.",
+    "fee": "Additional HMO licence £1,323 online from 1 April 2026 (or Part A £618 and Part B £787.50 if split); mandatory HMO licence £977 plus £68.50 per habitable room online.",
+    "source": "https://www.towerhamlets.gov.uk/lgnl/housing/Private-tenants-landlords-and-homeowners/Private-Landlords/Landlord-Licensing-Fees-Charges-and-Refunds.aspx",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£2,462 a month (ONS, September 2026), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000030/"
+  },
+  "price": {
+    "text": "£447,950 (UK HPI, August 2026), down 13.3% on a year earlier (based on a small number of sales)",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "38.2% of households rent privately (Census 2021), up from 32.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000030/"
+  },
+  "councilTax": {
+    "text": "£1,837.78 (Band D, 2026/27, including the GLA precept of £510.51)",
+    "source": "https://www.towerhamlets.gov.uk/lgnl/council_and_democracy/council_tax/Council-Tax-bill/Council-Tax-bands.aspx"
+  },
+  "postcodes": [
+    "E1",
+    "E1W",
+    "E2",
+    "E3",
+    "E14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Whitechapel",
+      "postcodes": "E1",
+      "housing": "Victorian terraces, council estates and new towers around the Elizabeth line station."
+    },
+    {
+      "name": "Spitalfields",
+      "postcodes": "E1",
+      "housing": "Georgian terraced houses and converted warehouses, with flats above shops and offices."
+    },
+    {
+      "name": "Stepney",
+      "postcodes": "E1",
+      "housing": "Post-war council estates mixed with Victorian streets and some newer blocks."
+    },
+    {
+      "name": "Wapping",
+      "postcodes": "E1W",
+      "housing": "Converted riverside warehouses and 1980s Docklands flats and houses."
+    },
+    {
+      "name": "Bethnal Green",
+      "postcodes": "E2",
+      "housing": "Victorian terraces and large council estates, many flats now let privately by leaseholders."
+    },
+    {
+      "name": "Bow",
+      "postcodes": "E3",
+      "housing": "Victorian terraced houses around Roman Road and the parks, alongside council and housing association estates."
+    },
+    {
+      "name": "Mile End",
+      "postcodes": "E1, E3",
+      "housing": "Council estates and Victorian terraces, with many shared student lets near the university."
+    },
+    {
+      "name": "Limehouse",
+      "postcodes": "E14",
+      "housing": "Converted wharves, marina-side flats and council estates."
+    },
+    {
+      "name": "Poplar",
+      "postcodes": "E14",
+      "housing": "Post-war estates, some being rebuilt, and new apartment blocks."
+    },
+    {
+      "name": "Canary Wharf and the Isle of Dogs",
+      "postcodes": "E14",
+      "housing": "High-rise apartment towers with concierges and gyms, plus 1980s and 1990s Docklands housing."
+    }
+  ],
+  "housing": "Tower Hamlets has one of the highest shares of private renting in England (38.2% in 2021) and a large social housing sector (35.9%), with relatively few owner-occupiers. Much of the private rented stock is in flats: high-rise towers at Canary Wharf and the Isle of Dogs, converted warehouses in Wapping and Limehouse, and former council flats let by leaseholders. There are Georgian terraces in Spitalfields and Victorian streets in Bow and Bethnal Green, and Queen Mary University brings student shared houses around Mile End.",
+  "checkinTips": [
+    "High-rise towers at Canary Wharf and the Isle of Dogs: photograph integrated appliances, ventilation units, floor-to-ceiling glazing and balcony doors, and record fobs, keys and parking remotes.",
+    "Ex-council flats on estates: photograph the front door, entry phone, communal landing and bin chute or store, and note which keys open communal doors.",
+    "Converted warehouses in Wapping and Limehouse: photograph timber floors, exposed brick and large windows, where marks and condensation show.",
+    "Georgian houses in Spitalfields: photograph shutters, sash windows, staircases and original panelling close up.",
+    "Student and sharer lets near Mile End: photograph each bedroom lock and door, and the shared kitchen and bathroom, room by room.",
+    "Note any concierge, parcel room or gym access and its fobs, and photograph the meter readings, which are often in a cupboard on the landing."
+  ],
+  "tenantHelp": "Tower Hamlets Council’s private sector housing and environmental health service can inspect privately rented homes for disrepair and hazards; tenants of leaseholders can also report communal repairs to the freeholder.",
+  "nearby": [
+    "city-of-london",
+    "hackney",
+    "newham",
+    "southwark",
+    "greenwich",
+    "lewisham"
+  ]
+}

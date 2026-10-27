@@ -1,0 +1,97 @@
+{
+  "slug": "waltham-forest",
+  "name": "Waltham Forest",
+  "council": {
+    "name": "Waltham Forest Council",
+    "url": "https://www.walthamforest.gov.uk",
+    "privateRentingUrl": "https://www.walthamforest.gov.uk/housing/private-sector-housing/private-rented-property-licensing-prpl/property-licensing-schemes"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers every ward except Hatch Lane, Highams Park North and Endlebury, from May 2025 until 30 April 2030, for privately rented homes that aren't HMOs.",
+    "additional": "Additional licensing covers the whole borough for smaller HMOs (two or three people in two or more households) from 1 April 2025 until 31 March 2030.",
+    "fee": "Selective licence £895 (Part A £300, Part B £595); additional HMO licence £1,200 (Part A £600, Part B £600), with discounts for several homes in one building and for EPC A or B.",
+    "source": "https://www.walthamforest.gov.uk/housing/private-sector-housing/private-rented-property-licensing-prpl/how-much-does-property-licence-cost",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,772 a month (ONS, September 2026), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000031/"
+  },
+  "price": {
+    "text": "£532,212 (UK HPI, August 2026), up 0.7% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "27.8% of households rent privately (Census 2021), up from 25.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000031/"
+  },
+  "councilTax": {
+    "text": "£2,386.96 (Band D, 2026/27, including the GLA precept of £510.51)",
+    "source": "https://civico.net/walthamforest/documents/74236251/download"
+  },
+  "postcodes": [
+    "E4",
+    "E10",
+    "E11",
+    "E17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Walthamstow",
+      "postcodes": "E17",
+      "housing": "Long streets of Victorian and Edwardian terraces, including Warner-built purpose-built flats, many let to sharers and young families."
+    },
+    {
+      "name": "Walthamstow Village",
+      "postcodes": "E17",
+      "housing": "Small Victorian cottages and terraces in a conservation area around Orford Road."
+    },
+    {
+      "name": "Higham Hill",
+      "postcodes": "E17",
+      "housing": "Edwardian and interwar terraces and some post-war council housing."
+    },
+    {
+      "name": "Leyton",
+      "postcodes": "E10",
+      "housing": "Victorian terraces, many split into flats, with new blocks near the stations and the Olympic Park edge."
+    },
+    {
+      "name": "Lea Bridge",
+      "postcodes": "E10",
+      "housing": "New apartment developments along Lea Bridge Road alongside older terraces."
+    },
+    {
+      "name": "Leytonstone",
+      "postcodes": "E11",
+      "housing": "Victorian and Edwardian terraces and conversions near the High Road and the tube."
+    },
+    {
+      "name": "Highams Park",
+      "postcodes": "E4",
+      "housing": "Edwardian and interwar terraced and semi-detached houses near the lake and Epping Forest."
+    },
+    {
+      "name": "Chingford",
+      "postcodes": "E4",
+      "housing": "Mostly interwar semis and terraces, with larger houses near Chingford Mount and the forest."
+    }
+  ],
+  "housing": "Waltham Forest is a borough of Victorian and Edwardian terraces in the south (Leyton, Leytonstone and Walthamstow) and interwar suburbs in the north (Highams Park and Chingford). Private renting covered 27.8% of households in 2021, a little below the London average, with many terraces converted into flats. Walthamstow has many Warner-built purpose-built flats (upper and lower flats in terrace form), and new apartment blocks are going up around Lea Bridge, Blackhorse Road and the town centres.",
+  "checkinTips": [
+    "Upper and lower flats in Victorian and Warner-built terraces: photograph the shared or separate front doors, the garden and who has access to it, and the separate meters.",
+    "Sash and bay windows in the Victorian terraces: photograph cords, catches, locks and any rot on sills.",
+    "Converted terraces often have kitchens or bathrooms in rear extensions: photograph ceilings, walls and around windows for damp and mould.",
+    "New blocks around Lea Bridge and Blackhorse Road: photograph integrated appliances, ventilation units and balconies, and record fob, key and bike store access.",
+    "Interwar houses in Chingford and Highams Park: photograph garages, side gates, fences and the garden, and note who maintains them.",
+    "Photograph the boiler, stopcock and fuse board, which are often in a basement, under-stairs cupboard or loft in these houses."
+  ],
+  "tenantHelp": "Waltham Forest Council’s private sector housing service can inspect privately rented homes for disrepair and hazards, and deals with property licensing; tenants can contact it through the council’s housing pages.",
+  "nearby": [
+    "hackney",
+    "haringey",
+    "enfield",
+    "redbridge",
+    "newham"
+  ]
+}

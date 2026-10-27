@@ -1,0 +1,39 @@
+{
+  "slug": "hammersmith-and-fulham",
+  "name": "Hammersmith and Fulham",
+  "council": { "name": "Hammersmith & Fulham Council", "url": "https://www.lbhf.gov.uk", "privateRentingUrl": "https://www.lbhf.gov.uk/housing/private-housing/property-licensing-landlords-and-letting-agents" },
+  "licensing": {
+    "selective": "Selective licensing applies only to privately rented homes on 24 named streets, under a scheme that runs until 4 June 2027; check the council's street list for a given address.",
+    "additional": "Borough-wide additional HMO licensing for smaller shared homes, in force since 5 June 2017 and extended from 5 June 2022 until 4 June 2027.",
+    "fee": null,
+    "source": "https://www.lbhf.gov.uk/housing/private-housing/property-licensing-landlords-and-letting-agents/hmo-mandatory-additional-and-selective-licensing-faqs",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£2,861 a month (ONS, September 2026), up 4.9% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000013/" },
+  "price": { "text": "£755,000 (UK HPI, August 2026, provisional), down from £795,000 a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000013/" },
+  "privateRentedShare": { "text": "36.4% of households rent privately (Census 2021), the largest tenure in the borough", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000013/" },
+  "councilTax": { "text": "£1,519.51 (Band D, 2026/27, including the GLA precept)", "source": "https://publicnoticeportal.uk/notice/statutory/69aad6415b36955c8bcb0fef" },
+  "postcodes": ["W6", "W12", "W14", "SW6", "W4", "NW10", "SW10"],
+  "neighbourhoods": [
+    { "name": "Hammersmith", "postcodes": "W6", "housing": "Victorian terraces and conversions, mansion blocks and council estates around the town centre and the river." },
+    { "name": "Fulham", "postcodes": "SW6", "housing": "Long streets of Victorian terraced houses, many split into flats, and mansion blocks." },
+    { "name": "Parsons Green", "postcodes": "SW6", "housing": "Victorian and Edwardian family terraces, often extended into the loft and to the rear." },
+    { "name": "Sands End", "postcodes": "SW6", "housing": "Riverside new-build apartment blocks at Imperial Wharf and Fulham Reach, beside older terraces and estates." },
+    { "name": "Shepherd's Bush", "postcodes": "W12", "housing": "Victorian terraces converted into flats, mansion blocks and post-war council estates." },
+    { "name": "White City", "postcodes": "W12", "housing": "The large inter-war White City Estate and new-build towers on former BBC and industrial land." },
+    { "name": "West Kensington", "postcodes": "W14", "housing": "Victorian terraces and mansion flats, many let as flat-shares, and the West Kensington and Gibbs Green estates." },
+    { "name": "Brook Green", "postcodes": "W6, W14", "housing": "Victorian villas and terraces, many divided into flats, around the green." },
+    { "name": "Ravenscourt Park", "postcodes": "W6", "housing": "Victorian and Edwardian family houses and conversions near the park." },
+    { "name": "Barons Court", "postcodes": "W14", "housing": "Red-brick mansion blocks and Victorian terraces split into flats." }
+  ],
+  "housing": "Private renting is the largest tenure in Hammersmith and Fulham, at more than a third of households in 2021. Most of the stock is Victorian and Edwardian terraces, often split into flats, and red-brick mansion blocks, with large council estates in White City, Shepherd's Bush and West Kensington. Riverside developments in Sands End and Fulham Reach and new towers at White City have added many new-build apartments. Rents and prices are among the highest in outer west London, and many lets are flat-shares for young professionals.",
+  "checkinTips": [
+    "Mansion blocks in Barons Court and West Kensington: photograph the communal entrance, lift and stairs, and record keys for the street door, the flat and any porter's fob.",
+    "Victorian terraces split into flats: photograph the shared hallway, meter cupboard and fire doors, and note who is responsible for the front garden and bins.",
+    "Loft and rear extensions in Fulham family houses: photograph rooflights, flat-roof areas visible from windows and any stains on ceilings below.",
+    "Riverside new-builds in Sands End and Fulham Reach: photograph balcony decking and drainage, underfloor heating controls and any marks on integrated appliances.",
+    "Original sash and bay windows: check cords, catches and seals and photograph any condensation or mould on sills and reveals."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp and mould to Hammersmith & Fulham Council's private sector housing team, which first asks the landlord to fix problems and can inspect and serve notices if they don't.",
+  "nearby": ["kensington-and-chelsea", "brent", "ealing", "hounslow", "richmond-upon-thames", "wandsworth"]
+}

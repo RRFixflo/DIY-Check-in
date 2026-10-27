@@ -1,0 +1,39 @@
+{
+  "slug": "harrow",
+  "name": "Harrow",
+  "council": { "name": "Harrow Council", "url": "https://www.harrow.gov.uk", "privateRentingUrl": "https://www.harrow.gov.uk/licences/selective-licensing/6" },
+  "licensing": {
+    "selective": "Selective licensing covers six wards for five years from staggered start dates: Edgware and Roxeth from 2 May 2026, Greenhill and Marlborough from 6 July 2026, and Wealdstone North and Wealdstone South from 1 September 2026.",
+    "additional": "Borough-wide additional HMO licensing ran from 6 August 2021 and was due to end on 5 August 2026. The council consulted on renewing it for five years (19 December 2025 to 27 February 2026); we couldn't confirm whether a new scheme has started, so check with the council.",
+    "fee": null,
+    "source": "https://www.harrow.gov.uk/licences/selective-licensing/6",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£1,778 a month (ONS, August 2026), up 2.9% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000015/" },
+  "price": { "text": "£526,000 (UK HPI, July 2026, provisional), down 2.8% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000015/" },
+  "privateRentedShare": { "text": "29.6% of households rent privately (Census 2021), up from 21.7% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000015/" },
+  "councilTax": { "text": "£2,511.07 (Band D, 2026/27, including the GLA precept)", "source": "https://www.harrow.gov.uk/counciltaxguide" },
+  "postcodes": ["HA1", "HA2", "HA3", "HA5", "HA7", "HA8"],
+  "neighbourhoods": [
+    { "name": "Harrow town centre", "postcodes": "HA1", "housing": "Purpose-built flats and new-build towers near Harrow-on-the-Hill station, with flats above shops." },
+    { "name": "Harrow on the Hill", "postcodes": "HA1", "housing": "Georgian and Victorian houses and cottages around the school and church on the hill." },
+    { "name": "Wealdstone", "postcodes": "HA3", "housing": "Victorian and Edwardian terraces, many converted into flats, and new blocks on former industrial sites." },
+    { "name": "Kenton", "postcodes": "HA3", "housing": "Inter-war semi-detached and terraced houses, many extended." },
+    { "name": "Stanmore", "postcodes": "HA7", "housing": "Inter-war detached and semi-detached houses and newer apartment developments." },
+    { "name": "Pinner", "postcodes": "HA5", "housing": "Metro-land semis and detached houses, with some older cottages around the High Street." },
+    { "name": "Rayners Lane", "postcodes": "HA2, HA5", "housing": "1930s Metro-land semis and terraces built around the station." },
+    { "name": "South Harrow", "postcodes": "HA2", "housing": "Inter-war terraces and semis, plus council and housing association estates." },
+    { "name": "Edgware", "postcodes": "HA8", "housing": "Inter-war semis and terraces and purpose-built flats on the Harrow side of the town." },
+    { "name": "Harrow Weald", "postcodes": "HA3", "housing": "Inter-war and post-war semis and some council estates near the Green Belt." }
+  ],
+  "housing": "Harrow is largely 1920s and 30s Metro-land suburbia: semi-detached and terraced houses built along the Metropolitan line, many since extended into lofts and to the rear. Private renting rose by about 8 percentage points between 2011 and 2021, one of the biggest rises in London, to nearly 30% of households, and many family houses are let whole or as shared homes. Harrow town centre and Wealdstone have new-build flats and towers on former office and industrial sites. Selective licensing now covers six wards, including Edgware, Wealdstone and Greenhill.",
+  "checkinTips": [
+    "Extended inter-war semis: photograph loft-conversion rooms, rear-extension rooflights and flat roofs, and any ceiling stains below them.",
+    "Metro-land houses with front driveways: photograph the drive, front wall, garage door and its keys or remote.",
+    "Rear gardens and sheds: photograph lawns, fences, gates and any outbuildings, and note what is left in them at check-in.",
+    "Family houses let as shared homes: photograph each bedroom's lock and smoke alarm and the shared kitchen appliances.",
+    "New-build flats in Harrow town centre and Wealdstone: record fob, parking and post-box key counts and photograph balconies and integrated appliances."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp, overcrowding or unsafe conditions to Harrow Council's private sector housing team, which can inspect and serve notices on landlords.",
+  "nearby": ["barnet", "brent", "ealing", "hillingdon"]
+}

@@ -1,0 +1,39 @@
+{
+  "slug": "hillingdon",
+  "name": "Hillingdon",
+  "council": { "name": "Hillingdon Council", "url": "https://www.hillingdon.gov.uk", "privateRentingUrl": "https://www.hillingdon.gov.uk/hmo" },
+  "licensing": {
+    "selective": "No selective licensing scheme found in force; check with the council for a specific address.",
+    "additional": "Borough-wide additional HMO licensing took effect on 24 August 2026 and runs until 23 August 2031, for shared homes with fewer than five people from two or more households (the council said to apply by 23 August 2026).",
+    "fee": "£1,401 for a five-year additional HMO licence, paid in two instalments, with 10% off for accredited landlords (2026)",
+    "source": "https://www.hillingdon.gov.uk/hmo/apply-hmo-licence/2",
+    "checked": "October 2026"
+  },
+  "rent": { "text": "£1,581 a month (ONS, September 2026), up 3.4% on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000017/" },
+  "price": { "text": "£482,000 (UK HPI, August 2026, provisional), unchanged on a year earlier", "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000017/" },
+  "privateRentedShare": { "text": "25.9% of households rent privately (Census 2021), up from 18.1% in 2011", "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000017/" },
+  "councilTax": { "text": "£2,045.46 (Band D, 2026/27, including the GLA precept)", "source": "https://modgov.hillingdon.gov.uk/documents/s65868/Appendix J - Council Tax Resolution.pdf" },
+  "postcodes": ["UB3", "UB4", "UB7", "UB8", "UB9", "UB10", "HA4", "HA5", "HA6", "TW6"],
+  "neighbourhoods": [
+    { "name": "Uxbridge", "postcodes": "UB8", "housing": "Town-centre flats and new-build blocks, inter-war semis, and student lets near Brunel University." },
+    { "name": "Hayes", "postcodes": "UB3, UB4", "housing": "Inter-war terraces and semis, post-war estates and new-build flats near the Elizabeth line station and canal." },
+    { "name": "Ruislip", "postcodes": "HA4", "housing": "1930s Metro-land semis and detached houses, with some older cottages near the Manor Farm area." },
+    { "name": "South Ruislip", "postcodes": "HA4", "housing": "Inter-war terraces and semis and purpose-built maisonettes." },
+    { "name": "Northwood", "postcodes": "HA6", "housing": "Large detached Edwardian and inter-war houses and purpose-built flats." },
+    { "name": "Eastcote", "postcodes": "HA5", "housing": "1930s semis and terraces around the station, many extended." },
+    { "name": "West Drayton and Yiewsley", "postcodes": "UB7", "housing": "Inter-war and post-war houses, flats near the station and homes let to airport workers." },
+    { "name": "Ickenham", "postcodes": "UB10", "housing": "Inter-war and post-war detached and semi-detached family houses." },
+    { "name": "Harlington", "postcodes": "UB3", "housing": "Older village cottages, post-war houses and homes close to Heathrow's northern runway." },
+    { "name": "Harefield", "postcodes": "UB9", "housing": "Village houses, post-war council housing and rural cottages near the canal." }
+  ],
+  "housing": "Hillingdon is London's second-largest borough, with 1930s Metro-land semis in Ruislip, Eastcote and Ickenham, larger houses in Northwood, and denser terraces and estates in Hayes and West Drayton. Private renting rose by almost 8 percentage points between 2011 and 2021, one of the biggest rises in London, to about a quarter of households. Heathrow and Brunel University drive demand for shared homes and HMOs, and the council has brought in borough-wide additional HMO licensing and Article 4 planning controls on new HMOs. New-build flats are going up around Hayes and Uxbridge.",
+  "checkinTips": [
+    "Shared homes let to airport workers and Brunel students: photograph each bedroom's lock and smoke alarm, the shared kitchen, and the fire doors and their closers.",
+    "Extended Metro-land semis in Ruislip and Eastcote: photograph loft rooms, rear extensions and their rooflights, and any ceiling stains below flat roofs.",
+    "Homes near Heathrow in Harlington, Hayes and West Drayton: photograph windows, seals and any secondary glazing or acoustic vents fitted against aircraft noise.",
+    "Gardens and driveways on family houses: photograph lawns, fences, sheds and the drive surface at check-in.",
+    "New-build flats in Hayes and Uxbridge: record fob, parking and post-box key counts and photograph balconies and integrated appliances."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp or unsafe conditions to Hillingdon Council's private sector housing team, which takes complaints from tenants and can inspect and take enforcement action.",
+  "nearby": ["harrow", "ealing", "hounslow"]
+}

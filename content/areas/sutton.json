@@ -1,0 +1,97 @@
+{
+  "slug": "sutton",
+  "name": "Sutton",
+  "council": {
+    "name": "Sutton Council",
+    "url": "https://www.sutton.gov.uk",
+    "privateRentingUrl": "https://www.sutton.gov.uk/w/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional licensing covers the whole borough from 22 March 2026 (designated 22 December 2025, for up to five years), for HMOs of three or more people in two or more households that don't need a mandatory licence.",
+    "fee": "£319.40 per letting for a licence of up to five years, under both the mandatory and additional schemes; the council's assisted application service costs £350 per property.",
+    "source": "https://www.sutton.gov.uk/w/houses-in-multiple-occupation-apply-for-vary-or-renew-your-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,553 a month (ONS, July 2026), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E09000029/"
+  },
+  "price": {
+    "text": "£458,954 (UK HPI, August 2026), up 1.5% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": {
+    "text": "20.3% of households rent privately (Census 2021), up from 15.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E09000029/"
+  },
+  "councilTax": {
+    "text": "£2,378.64 (Band D, 2026/27, including the GLA precept of £510.51)",
+    "source": "https://www.sutton.gov.uk/council-tax/bands-and-amounts"
+  },
+  "postcodes": [
+    "SM1",
+    "SM2",
+    "SM3",
+    "SM5",
+    "SM6",
+    "KT4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sutton",
+      "postcodes": "SM1, SM2",
+      "housing": "Purpose-built flats and new blocks around the town centre, with Victorian and interwar houses nearby."
+    },
+    {
+      "name": "Cheam",
+      "postcodes": "SM2, SM3",
+      "housing": "Mostly interwar semi-detached and detached houses, plus a few older cottages in the village."
+    },
+    {
+      "name": "Belmont",
+      "postcodes": "SM2",
+      "housing": "Interwar and post-war semis and detached houses, with newer developments on former hospital land."
+    },
+    {
+      "name": "Carshalton",
+      "postcodes": "SM5",
+      "housing": "Victorian and older cottages around the ponds, with interwar houses further out."
+    },
+    {
+      "name": "St Helier",
+      "postcodes": "SM5, SM4",
+      "housing": "A large interwar cottage estate of brick terraced houses, built by the London County Council."
+    },
+    {
+      "name": "Wallington",
+      "postcodes": "SM6",
+      "housing": "Edwardian and interwar terraces and semis, with flats near the station."
+    },
+    {
+      "name": "Hackbridge",
+      "postcodes": "SM6",
+      "housing": "Newer eco-housing and apartment developments alongside older terraces."
+    },
+    {
+      "name": "Worcester Park",
+      "postcodes": "KT4",
+      "housing": "Interwar semi-detached and terraced houses on a grid of suburban streets."
+    }
+  ],
+  "housing": "Sutton is a mainly suburban borough of interwar semis and terraces, with older Victorian cottages in Carshalton and the large St Helier cottage estate on the Merton border. Home ownership is high (64.4% in 2021) and private renting is below the London average, at 20.3% of households. Sutton town centre has the most flats, including office-to-flat conversions and new blocks, and the borough’s grammar schools draw families who rent whole houses.",
+  "checkinTips": [
+    "Interwar semis: photograph garages, side passages, gates and fences, and the condition of the front and back gardens.",
+    "Bay windows and older double glazing: photograph seals, handles and locks, and any mist between the panes.",
+    "Extensions and loft conversions are common: photograph ceilings and corners for cracks or damp staining, and note rooflights.",
+    "Town-centre flats, including converted offices: photograph the communal entrance, lift, post boxes and bin store, and record fob and key counts.",
+    "Older cottages in Carshalton: photograph solid walls and floors for damp, and any open fireplaces or wood burners.",
+    "Photograph the boiler, stopcock and meters, and test and photograph each smoke and carbon monoxide alarm."
+  ],
+  "tenantHelp": "Sutton Council’s private sector housing service can inspect privately rented homes for disrepair and hazards; tenants can contact it through the council’s housing pages.",
+  "nearby": [
+    "merton",
+    "croydon",
+    "kingston-upon-thames"
+  ]
+}
