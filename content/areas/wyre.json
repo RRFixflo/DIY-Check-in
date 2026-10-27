@@ -1,0 +1,98 @@
+{
+  "slug": "wyre",
+  "name": "Wyre",
+  "council": {
+    "name": "Wyre Council",
+    "url": "https://www.wyre.gov.uk",
+    "privateRentingUrl": "https://www.wyre.gov.uk/private-sector-housing/hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households). An Article 4 Direction now means new HMOs in parts of Fleetwood and Thornton-Cleveleys need planning permission.",
+    "fee": null,
+    "source": "https://www.wyre.gov.uk/downloads/file/2378/article-4-direction-evidence-document",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£713 a month (ONS, February 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000128/"
+  },
+  "price": {
+    "text": "£197,000 (UK HPI, January 2026, provisional), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000128/"
+  },
+  "privateRentedShare": {
+    "text": "18% of households rent privately (Census 2021), up from 14% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000128/"
+  },
+  "councilTax": {
+    "text": "£2,461 average Band D (2026/27), including Lancashire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wyre"
+  },
+  "postcodes": [
+    "FY5",
+    "FY6",
+    "FY7",
+    "PR3",
+    "PR4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Fleetwood",
+      "postcodes": "FY7",
+      "housing": "Victorian terraces and former fishermen's houses, many privately let, with flats over shops on Lord Street."
+    },
+    {
+      "name": "Cleveleys",
+      "postcodes": "FY5",
+      "housing": "Interwar semis and bungalows near the promenade, with flats over shops in the centre."
+    },
+    {
+      "name": "Thornton",
+      "postcodes": "FY5",
+      "housing": "Interwar and post-war semis and bungalows, with newer estates near the old ICI site."
+    },
+    {
+      "name": "Poulton-le-Fylde",
+      "postcodes": "FY6",
+      "housing": "An old market town with Georgian and Victorian houses in the centre and large modern estates."
+    },
+    {
+      "name": "Knott End and Preesall",
+      "postcodes": "FY6",
+      "housing": "Bungalows, cottages and holiday homes across the Wyre estuary from Fleetwood."
+    },
+    {
+      "name": "Garstang",
+      "postcodes": "PR3",
+      "housing": "Stone cottages and Georgian houses in a canal-side market town, with modern estates."
+    },
+    {
+      "name": "Great Eccleston and the Over Wyre villages",
+      "postcodes": "PR3",
+      "housing": "Farmhouses, brick cottages and bungalows on the flat farmland east of the river."
+    },
+    {
+      "name": "Catterall and Bilsborrow",
+      "postcodes": "PR3",
+      "housing": "Village houses and newer estates near the A6 and the Lancaster Canal."
+    }
+  ],
+  "housing": "Wyre stretches from the coastal towns of Fleetwood, Cleveleys and Thornton to the rural Over Wyre villages and Garstang. Fleetwood has many older terraces let privately and a growing number of shared houses, which led the council to bring in planning controls on new HMOs there and in Thornton-Cleveleys. Bungalows and interwar semis are common along the coast, where many residents are retired. Poulton and Garstang are market towns with modern estates around period centres.",
+  "checkinTips": [
+    "Victorian terraces in Fleetwood: photograph back yards, damp in rear kitchens and older sash or replacement windows.",
+    "Seafront homes in Fleetwood, Cleveleys and Knott End: photograph window frames, render and metal fittings for salt and storm damage.",
+    "Low-lying homes near the Wyre estuary and Over Wyre: check for flood damage, airbricks and watermarks.",
+    "Shared houses in Fleetwood: record each bedroom's lock, furniture and fire doors, and check a licence is in place for five or more sharers.",
+    "Bungalows in Cleveleys and Thornton: photograph gardens, garages, conservatories and any mobility adaptations.",
+    "Flats over shops on Lord Street and Victoria Road: note separate entrances, rear access and meter cupboards."
+  ],
+  "tenantHelp": "Wyre Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "fylde",
+    "blackpool",
+    "preston",
+    "lancaster",
+    "ribble-valley"
+  ]
+}

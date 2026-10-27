@@ -1,0 +1,99 @@
+{
+  "slug": "york",
+  "name": "York",
+  "council": {
+    "name": "City of York Council",
+    "url": "https://www.york.gov.uk",
+    "privateRentingUrl": "https://www.york.gov.uk/HMOAdditionalLicencing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing from 1 April 2023 to 31 March 2028 in eight wards: Clifton, Guildhall, Heworth, Micklegate, Fishergate, Hull Road, Fulford & Heslington, and Osbaldwick & Derwent. HMOs with three or four people from two or more households sharing facilities need a licence there; national mandatory HMO licensing covers five or more everywhere.",
+    "fee": null,
+    "source": "https://www.york.gov.uk/downloads/file/8391/public-notice-designation-of-an-area-for-hmo-additional-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,206 a month (ONS, September 2026), up 6.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000014/"
+  },
+  "price": {
+    "text": "£312,000 (UK HPI, August 2026, provisional), up 0.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000014/"
+  },
+  "privateRentedShare": {
+    "text": "20% of households rent privately (Census 2021), up from 18% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000014/"
+  },
+  "councilTax": {
+    "text": "£2,287 average Band D (2026/27), including police, fire, mayoral and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/york"
+  },
+  "postcodes": [
+    "YO1",
+    "YO10",
+    "YO23",
+    "YO24",
+    "YO26",
+    "YO30",
+    "YO31",
+    "YO32",
+    "YO19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "YO1",
+      "housing": "Medieval, Georgian and Victorian buildings inside the walls, many listed, with flats over shops and converted warehouses."
+    },
+    {
+      "name": "South Bank and Clementhorpe",
+      "postcodes": "YO23",
+      "housing": "Long streets of Victorian terraces near the racecourse, popular with renters."
+    },
+    {
+      "name": "Fishergate and Fulford",
+      "postcodes": "YO10",
+      "housing": "Victorian terraces, villas and newer riverside flats south of the centre."
+    },
+    {
+      "name": "Heslington and Badger Hill",
+      "postcodes": "YO10",
+      "housing": "1960s and 1970s houses near the University of York, many let as student houses."
+    },
+    {
+      "name": "Tang Hall and Heworth",
+      "postcodes": "YO31",
+      "housing": "Interwar council estates and Victorian terraces, with many shared houses near the university."
+    },
+    {
+      "name": "The Groves and Clifton",
+      "postcodes": "YO30, YO31",
+      "housing": "Victorian terraces north of the walls and interwar semis in Clifton, with some riverside flats."
+    },
+    {
+      "name": "Acomb and Holgate",
+      "postcodes": "YO24, YO26",
+      "housing": "Victorian terraces in Holgate and interwar and post-war semis and council estates in Acomb."
+    },
+    {
+      "name": "Haxby and Wigginton",
+      "postcodes": "YO32",
+      "housing": "Large villages of post-war and modern semis, detached houses and bungalows north of the city."
+    }
+  ],
+  "housing": "York is a historic city with many listed and Victorian homes, two universities and a large student rental market. Victorian terraces in South Bank, Clementhorpe, Fishergate and the Groves are often let, and shared houses are concentrated around the University of York, which is why eight wards are covered by additional HMO licensing. Tourist demand means many short-term lets in the centre. The Ouse and Foss flood regularly, affecting riverside streets and flats.",
+  "checkinTips": [
+    "Riverside homes along the Ouse and Foss: photograph flood defences, airbricks, flood doors and watermarks, as these streets flood often.",
+    "Shared houses in Heslington, Tang Hall, Hull Road and Fishergate: check the HMO licence even for three or four sharers, and photograph each room's lock, furniture and fire doors.",
+    "Victorian terraces in South Bank and the Groves: photograph back yards, damp in rear kitchens, sash windows and the shared alleys.",
+    "Listed buildings inside the city walls: record original features carefully, as repairs need consent.",
+    "Converted flats and flats over shops in the centre: note communal entrances, fire doors, meters and bin arrangements.",
+    "Interwar council-built homes in Acomb and Tang Hall: photograph fences, gardens and any non-standard construction."
+  ],
+  "tenantHelp": "City of York Council's housing standards and adaptations team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "north-yorkshire",
+    "east-riding-of-yorkshire"
+  ]
+}

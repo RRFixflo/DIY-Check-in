@@ -1,0 +1,100 @@
+{
+  "slug": "west-lancashire",
+  "name": "West Lancashire",
+  "council": {
+    "name": "West Lancashire Borough Council",
+    "url": "https://www.westlancs.gov.uk",
+    "privateRentingUrl": "https://www.westlancs.gov.uk/housing/private-housing/help-advice-for-private-sector-tenants/help-and-advice-for-private-sector-landlords.aspx"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://www.westlancs.gov.uk/housing/private-housing/help-advice-for-private-sector-tenants/house-in-multiple-occupation.aspx",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£805 a month (ONS, August 2026), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000127/"
+  },
+  "price": {
+    "text": "£236,000 (UK HPI, July 2026, provisional), up 5.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000127/"
+  },
+  "privateRentedShare": {
+    "text": "14% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000127/"
+  },
+  "councilTax": {
+    "text": "£2,435 average Band D (2026/27), including Lancashire County Council, police and fire precepts",
+    "source": "https://www.westlancs.gov.uk/bills-benefits/council-tax/rates-and-banding"
+  },
+  "postcodes": [
+    "L39",
+    "L40",
+    "WN8",
+    "WN6",
+    "PR4",
+    "PR9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ormskirk",
+      "postcodes": "L39",
+      "housing": "Victorian terraces and semis around the market town, many let as student houses near Edge Hill University."
+    },
+    {
+      "name": "Aughton",
+      "postcodes": "L39",
+      "housing": "Large interwar and post-war detached and semi-detached houses in a commuter village."
+    },
+    {
+      "name": "Skelmersdale",
+      "postcodes": "WN8",
+      "housing": "A 1960s new town of estates with terraces, maisonettes and footpath layouts, much of it built by the development corporation."
+    },
+    {
+      "name": "Up Holland",
+      "postcodes": "WN8",
+      "housing": "Stone cottages in the old village and post-war estates towards Skelmersdale."
+    },
+    {
+      "name": "Burscough",
+      "postcodes": "L40",
+      "housing": "Victorian terraces by the canal, interwar semis and large new-build estates."
+    },
+    {
+      "name": "Tarleton and Hesketh Bank",
+      "postcodes": "PR4",
+      "housing": "Bungalows, semis and modern estates among market gardens near the Ribble estuary."
+    },
+    {
+      "name": "Parbold and Appley Bridge",
+      "postcodes": "WN8, WN6",
+      "housing": "Stone cottages and larger detached houses in villages along the Douglas valley."
+    },
+    {
+      "name": "Halsall and Scarisbrick",
+      "postcodes": "L39, PR8",
+      "housing": "Farmhouses, cottages and bungalows on flat farmland between Ormskirk and Southport."
+    }
+  ],
+  "housing": "West Lancashire mixes the market town of Ormskirk, the 1960s new town of Skelmersdale and a large area of flat farmland and villages. Edge Hill University makes student lets common in Ormskirk, while Skelmersdale has many former development corporation homes, some now let privately. Burscough and the villages have seen new estates, and the rural north has farm cottages and bungalows. Most households own their home.",
+  "checkinTips": [
+    "Student houses in Ormskirk near Edge Hill University: record each bedroom's lock, furniture and fire doors, and check the HMO licence for five or more sharers.",
+    "1960s homes in Skelmersdale: photograph flat roofs, older windows and communal footpaths, garages and bin areas.",
+    "Victorian terraces in Ormskirk and Burscough: check rear yards, sash or replacement windows and any damp in back kitchens.",
+    "Rural homes on the mossland farms: record oil tanks, septic tanks and any signs of subsidence or cracking on soft ground.",
+    "New-build estates in Burscough: check sealant, flooring and any snagging marks, and who maintains shared green space.",
+    "Stone cottages in Parbold and Up Holland: photograph damp patches, chimneys and timber windows."
+  ],
+  "tenantHelp": "West Lancashire Borough Council's Private Sector Housing team advises private tenants and takes action on disrepair and unsafe conditions.",
+  "nearby": [
+    "sefton",
+    "wigan",
+    "chorley",
+    "south-ribble",
+    "st-helens",
+    "knowsley"
+  ]
+}

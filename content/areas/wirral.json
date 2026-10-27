@@ -1,0 +1,103 @@
+{
+  "slug": "wirral",
+  "name": "Wirral",
+  "council": {
+    "name": "Wirral Council",
+    "url": "https://www.wirral.gov.uk",
+    "privateRentingUrl": "https://www.wirral.gov.uk/housing/housing-information-and-advice/private-landlords-and-managing-agents/selective-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing in ten areas of Birkenhead and Wallasey under two schemes: Birkenhead West, Seacombe St Paul's, Bidston and St James West and Egremont North (1 April 2024 to 31 March 2029), and Birkenhead Central, Egremont South, Hamilton Square B, Lower Tranmere, Tranmere Lairds and Tranmere North (1 October 2025 to 30 September 2030). Every privately rented home in those areas needs a licence.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": "£605 for a selective licence in the 2025 to 2030 scheme (applied for online; £100 more on paper)",
+    "source": "https://www.wirral.gov.uk/selectivelicensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£859 a month (ONS, August 2026), up 7.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000015/"
+  },
+  "price": {
+    "text": "£222,000 (UK HPI, July 2026, provisional), up 6.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000015/"
+  },
+  "privateRentedShare": {
+    "text": "19% of households rent privately (Census 2021), up from 16% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000015/"
+  },
+  "councilTax": {
+    "text": "£2,501 Band D (2026/27), including Merseyside police, fire and Liverpool City Region mayoral precepts",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69bfa20351f32338cf8469d4"
+  },
+  "postcodes": [
+    "CH41",
+    "CH42",
+    "CH43",
+    "CH44",
+    "CH45",
+    "CH46",
+    "CH47",
+    "CH48",
+    "CH49",
+    "CH60",
+    "CH61",
+    "CH62",
+    "CH63"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Birkenhead",
+      "postcodes": "CH41",
+      "housing": "Victorian terraces, grand townhouses around Hamilton Square split into flats, and post-war council estates."
+    },
+    {
+      "name": "Tranmere and Rock Ferry",
+      "postcodes": "CH42",
+      "housing": "Dense Victorian terraces, many privately let, alongside newer social housing."
+    },
+    {
+      "name": "Wallasey, Seacombe and Egremont",
+      "postcodes": "CH44, CH45",
+      "housing": "Victorian and Edwardian terraces and large houses converted to flats near the promenade."
+    },
+    {
+      "name": "New Brighton",
+      "postcodes": "CH45",
+      "housing": "Victorian villas and seafront flats, with new homes from the waterfront regeneration."
+    },
+    {
+      "name": "Bidston and Beechwood",
+      "postcodes": "CH43",
+      "housing": "Post-war council estates and low-rise flats, with ex-council homes now let privately."
+    },
+    {
+      "name": "Hoylake and West Kirby",
+      "postcodes": "CH47, CH48",
+      "housing": "Edwardian and interwar houses and seafront flats in coastal towns."
+    },
+    {
+      "name": "Heswall",
+      "postcodes": "CH60, CH61",
+      "housing": "Large detached houses and bungalows overlooking the Dee estuary."
+    },
+    {
+      "name": "Bebington and Port Sunlight",
+      "postcodes": "CH62, CH63",
+      "housing": "Listed Arts and Crafts cottages in Port Sunlight village and interwar semis in Bebington."
+    }
+  ],
+  "housing": "Wirral runs from the older docks towns of Birkenhead and Wallasey in the east to the more affluent west and Dee coast, with Heswall, West Kirby and Hoylake. The east has dense Victorian terraces, large houses split into flats and many private lets, and the council licenses all private lets in ten areas there. Port Sunlight's listed workers' cottages are a conservation area. The west has larger detached houses, bungalows and seafront flats.",
+  "checkinTips": [
+    "Homes in a selective licensing area of Birkenhead or Wallasey: check the licence is in place and photograph the smoke and carbon monoxide alarms its conditions require.",
+    "Victorian terraces in Tranmere, Rock Ferry and Seacombe: photograph back yards, damp in rear kitchens, alleys and older windows.",
+    "Large houses split into flats near Hamilton Square and the Wallasey promenade: note communal halls, fire doors, meters and the number of keys.",
+    "Seafront homes in New Brighton, Hoylake and West Kirby: photograph window frames, render and metalwork for salt and wind damage.",
+    "Listed cottages in Port Sunlight: record original doors, windows and fittings, which can't be changed without consent.",
+    "Bungalows in Heswall and Greasby: photograph gardens, garages, driveways and any mobility adaptations."
+  ],
+  "tenantHelp": "Wirral Council's private sector housing team handles disrepair, damp and unsafe conditions in private rented homes and runs the selective licensing schemes.",
+  "nearby": [
+    "cheshire-west-and-chester",
+    "liverpool"
+  ]
+}

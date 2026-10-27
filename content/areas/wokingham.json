@@ -1,0 +1,103 @@
+{
+  "slug": "wokingham",
+  "name": "Wokingham",
+  "council": {
+    "name": "Wokingham Borough Council",
+    "url": "https://www.wokingham.gov.uk",
+    "privateRentingUrl": "https://www.wokingham.gov.uk/housing-and-tenants/private-housing/register-hmo-licences"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; the Public Protection Partnership (shared with Bracknell Forest and West Berkshire) operates only national mandatory HMO licensing (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://info.westberks.gov.uk/article/27633",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,480 a month (ONS, February 2026), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000041/"
+  },
+  "price": {
+    "text": "£497,000 (UK HPI, January 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000041/"
+  },
+  "privateRentedShare": {
+    "text": "14% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000041/"
+  },
+  "councilTax": {
+    "text": "£2,498 average Band D (2026/27), including police, fire and average parish precepts",
+    "source": "https://www.wokingham.gov.uk/council-tax/guidance/charges-and-increases"
+  },
+  "postcodes": [
+    "RG40",
+    "RG41",
+    "RG5",
+    "RG6",
+    "RG7",
+    "RG10",
+    "RG2"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wokingham town",
+      "postcodes": "RG40, RG41",
+      "housing": "Victorian and older houses in the centre, with large modern estates such as Montague Park and Arborfield Green nearby."
+    },
+    {
+      "name": "Woodley",
+      "postcodes": "RG5",
+      "housing": "Post-war and 1960s to 1980s estates of semis and terraces on the edge of Reading."
+    },
+    {
+      "name": "Earley",
+      "postcodes": "RG6",
+      "housing": "1960s to 1980s estates and shared houses let to students near the University of Reading's Whiteknights campus."
+    },
+    {
+      "name": "Lower Earley",
+      "postcodes": "RG6",
+      "housing": "A large 1970s and 1980s estate of detached, semi-detached and terraced houses."
+    },
+    {
+      "name": "Winnersh and Sindlesham",
+      "postcodes": "RG41",
+      "housing": "Interwar and modern houses close to the business parks and the M4."
+    },
+    {
+      "name": "Shinfield and Spencers Wood",
+      "postcodes": "RG2, RG7",
+      "housing": "Village houses with large new-build estates added since the 2010s."
+    },
+    {
+      "name": "Arborfield",
+      "postcodes": "RG2",
+      "housing": "New homes at Arborfield Green on the former army garrison, with older village houses."
+    },
+    {
+      "name": "Twyford, Wargrave and Charvil",
+      "postcodes": "RG10",
+      "housing": "Victorian houses, riverside homes by the Thames and Loddon, and modern estates."
+    }
+  ],
+  "housing": "Wokingham is one of the most affluent boroughs in England, with high home ownership and private renting below the national level. Much of the housing is modern, from the large 1970s and 1980s estates of Lower Earley and Woodley to the new communities at Arborfield Green, Shinfield and Montague Park. Earley has many student lets close to the University of Reading. The north of the borough has Thames-side villages such as Wargrave and Twyford.",
+  "checkinTips": [
+    "New-build homes at Arborfield Green, Shinfield and Montague Park: check sealant, flooring and snagging marks, and note who maintains shared land and any estate charges.",
+    "Student lets in Earley near the university: record each bedroom's lock, furniture and fire doors, and check a licence for five or more sharers.",
+    "1970s and 1980s houses in Lower Earley and Woodley: note older double glazing, shared parking courts and garages in blocks.",
+    "Riverside homes along the Thames and Loddon in Wargrave and Twyford: check for flood damage, airbricks and watermarks.",
+    "Large family homes: photograph gardens, fences, driveways and garages, as gardens are often part of the tenancy.",
+    "Homes near the M4 and business parks: check window seals and ventilation."
+  ],
+  "tenantHelp": "Private housing complaints in Wokingham are handled by the Public Protection Partnership, which investigates disrepair and unsafe conditions in rented homes.",
+  "nearby": [
+    "reading",
+    "west-berkshire",
+    "bracknell-forest",
+    "windsor-and-maidenhead",
+    "hart",
+    "south-oxfordshire",
+    "basingstoke-and-deane",
+    "buckinghamshire"
+  ]
+}

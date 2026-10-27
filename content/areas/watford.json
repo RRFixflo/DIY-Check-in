@@ -1,0 +1,95 @@
+{
+  "slug": "watford",
+  "name": "Watford",
+  "council": {
+    "name": "Watford Borough Council",
+    "url": "https://www.watford.gov.uk",
+    "privateRentingUrl": "https://www.watford.gov.uk/private-homes/renting-property"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households). Licences last up to five years.",
+    "fee": "£1,557.70 for a new HMO licence, £1,295.90 to renew (council fee list)",
+    "source": "https://www.watford.gov.uk/licensing-3/licensing-houses-multiple-occupation-hmos/3",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,829 a month (ONS, August 2026), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000103/"
+  },
+  "price": {
+    "text": "£404,000 (UK HPI, July 2026, provisional), down 0.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000103/"
+  },
+  "privateRentedShare": {
+    "text": "28% of households rent privately (Census 2021), up from 20% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000103/"
+  },
+  "councilTax": {
+    "text": "£2,447 average Band D (2026/27), including Hertfordshire County Council and police precepts",
+    "source": "https://housecheckup.co.uk/council-tax/watford"
+  },
+  "postcodes": [
+    "WD17",
+    "WD18",
+    "WD19",
+    "WD24",
+    "WD25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre",
+      "postcodes": "WD17",
+      "housing": "Modern apartment blocks and converted office buildings around the High Street and Clarendon Road, with flats over shops."
+    },
+    {
+      "name": "West Watford",
+      "postcodes": "WD18",
+      "housing": "Dense Victorian and Edwardian terraces, many let to sharers or split into flats."
+    },
+    {
+      "name": "Callow Land and North Watford",
+      "postcodes": "WD24, WD25",
+      "housing": "Edwardian and interwar terraces and semis near the Watford North station."
+    },
+    {
+      "name": "Cassiobury and Nascot",
+      "postcodes": "WD17",
+      "housing": "Larger Edwardian and interwar detached and semi-detached houses near Cassiobury Park."
+    },
+    {
+      "name": "Oxhey",
+      "postcodes": "WD19",
+      "housing": "Victorian terraces and cottages around Bushey station, with newer flats near the river."
+    },
+    {
+      "name": "Garston and Leavesden",
+      "postcodes": "WD25",
+      "housing": "Post-war council estates and private semis, with newer homes on the former aerodrome land."
+    },
+    {
+      "name": "Holywell and Meriden",
+      "postcodes": "WD18, WD25",
+      "housing": "Post-war council-built houses and maisonettes alongside ex-council homes now let privately."
+    },
+    {
+      "name": "Watford Riverwell",
+      "postcodes": "WD18",
+      "housing": "New-build apartments and town houses in the regeneration area by the hospital and football ground."
+    }
+  ],
+  "housing": "Watford is a compact, densely built town with one of the fastest rises in private renting in England between 2011 and 2021. Victorian and Edwardian terraces in West Watford and Callow Land are often split into flats or let as shared houses, while the town centre has gained many new apartment blocks and office-to-flat conversions. Post-war council estates in Garston, Meriden and Holywell include many ex-council homes now let privately. Good rail links to London keep rents close to outer-London levels.",
+  "checkinTips": [
+    "New-build and converted apartment blocks in the town centre: photograph the entry phone, fobs, post box key and any parking or bike store access.",
+    "Office-to-flat conversions: check ventilation, window opening and signs of condensation in smaller rooms.",
+    "Terraces split into flats in West Watford: note meter locations, communal hall condition and fire doors.",
+    "Shared houses: record each bedroom's lock, furniture and smoke alarms, and check whether five or more sharers means an HMO licence is needed.",
+    "Ex-council maisonettes in Garston and Meriden: photograph communal stairs, balconies and bin store arrangements.",
+    "Gardens behind Victorian terraces: photograph fences, sheds and rear access gates."
+  ],
+  "tenantHelp": "Watford Borough Council's environmental health and licensing team looks into disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "three-rivers",
+    "hertsmere"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "slug": "wolverhampton",
+  "name": "Wolverhampton",
+  "council": {
+    "name": "City of Wolverhampton Council",
+    "url": "https://www.wolverhampton.gov.uk",
+    "privateRentingUrl": "https://www.wolverhampton.gov.uk/housing/private-rented-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force when checked. In October 2025 the council said it was exploring a selective licensing scheme for designated areas and an additional licensing scheme for smaller HMOs, with a public consultation planned before any scheme starts.",
+    "additional": "No additional HMO licensing scheme in force when checked; national mandatory HMO licensing applies (five or more tenants from two or more households). A scheme for smaller HMOs is being explored.",
+    "fee": null,
+    "source": "https://www.find-tender.service.gov.uk/Notice/064362-2025",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£948 a month (ONS, September 2026), up 10.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000031/"
+  },
+  "price": {
+    "text": "£216,000 (UK HPI, August 2026, provisional), up 2.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000031/"
+  },
+  "privateRentedShare": {
+    "text": "19% of households rent privately (Census 2021), up from 13% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000031/"
+  },
+  "councilTax": {
+    "text": "£2,539 Band D (2026/27), including West Midlands police and fire precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wolverhampton"
+  },
+  "postcodes": [
+    "WV1",
+    "WV2",
+    "WV3",
+    "WV4",
+    "WV6",
+    "WV10",
+    "WV11",
+    "WV13",
+    "WV14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "WV1",
+      "housing": "Converted office and industrial buildings, student blocks near the University of Wolverhampton, and flats over shops."
+    },
+    {
+      "name": "Whitmore Reans",
+      "postcodes": "WV1, WV6",
+      "housing": "Victorian terraces, many split into flats or let as shared houses."
+    },
+    {
+      "name": "Blakenhall and All Saints",
+      "postcodes": "WV2",
+      "housing": "Dense Victorian terraces near the inner ring road, with a high share of private lets."
+    },
+    {
+      "name": "Tettenhall",
+      "postcodes": "WV6",
+      "housing": "Victorian villas, interwar semis and larger detached houses in a conservation area."
+    },
+    {
+      "name": "Penn",
+      "postcodes": "WV3, WV4",
+      "housing": "Interwar and post-war semis and detached houses on the south-west side of the city."
+    },
+    {
+      "name": "Bilston",
+      "postcodes": "WV14",
+      "housing": "Terraced houses and large council-built estates in a former steel town, with new homes on old industrial land."
+    },
+    {
+      "name": "Wednesfield",
+      "postcodes": "WV11",
+      "housing": "Post-war council estates, interwar semis and newer homes along the canal."
+    },
+    {
+      "name": "Low Hill and Bushbury",
+      "postcodes": "WV10",
+      "housing": "Large interwar council estates of semi-detached and terraced houses."
+    }
+  ],
+  "housing": "Wolverhampton has one of the largest social rented sectors in the West Midlands, alongside a fast-growing private rented sector, which rose by almost six percentage points between 2011 and 2021. Victorian terraces in Whitmore Reans and Blakenhall are often let as flats or shared houses, and the university brings student lets near the city centre. Large interwar and post-war council estates cover Low Hill, Bushbury and Bilston, with many ex-council homes now let privately. Tettenhall and Penn have larger owner-occupied homes.",
+  "checkinTips": [
+    "Victorian terraces in Whitmore Reans and Blakenhall: photograph back yards, damp in rear kitchens, alleys and older windows.",
+    "Shared houses and student lets: record each bedroom's lock, furniture and fire doors, and check the HMO licence for five or more tenants.",
+    "Converted office and industrial buildings in the city centre: note ventilation, window opening, fobs and the condition of shared areas.",
+    "Ex-council semis in Low Hill, Bushbury and Wednesfield: photograph fences, gardens, sheds and any non-standard construction.",
+    "Homes on former industrial land in Bilston: check for cracks or movement in walls and floors.",
+    "Large Victorian villas in Tettenhall: photograph sash windows, fireplaces, cornicing and cellars."
+  ],
+  "tenantHelp": "The City of Wolverhampton Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "walsall",
+    "dudley",
+    "south-staffordshire"
+  ]
+}

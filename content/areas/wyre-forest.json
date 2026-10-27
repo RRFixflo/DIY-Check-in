@@ -1,0 +1,98 @@
+{
+  "slug": "wyre-forest",
+  "name": "Wyre Forest",
+  "council": {
+    "name": "Wyre Forest District Council",
+    "url": "https://www.wyreforestdc.gov.uk",
+    "privateRentingUrl": "https://www.wyreforestdc.gov.uk/housing-and-homes/owning-or-privately-renting/privately-renting/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households). The council has consulted (2025 to 2026) on an Article 4 Direction so that new small HMOs in Kidderminster would need planning permission.",
+    "fee": "£880 for an HMO licence (council page)",
+    "source": "https://www.wyreforestdc.gov.uk/housing-and-homes/owning-or-privately-renting/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£823 a month (ONS, July 2026), down 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000239/"
+  },
+  "price": {
+    "text": "£232,000 (UK HPI, June 2026, provisional), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000239/"
+  },
+  "privateRentedShare": {
+    "text": "16% of households rent privately (Census 2021), up from 13% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000239"
+  },
+  "councilTax": {
+    "text": "£2,512 average Band D (2026/27), including Worcestershire County Council, police, fire and parish precepts",
+    "source": "https://www.wyreforestdc.gov.uk/council-tax-and-benefits/council-tax/what-does-my-council-tax-pay-for/council-tax-financial-breakdown/"
+  },
+  "postcodes": [
+    "DY10",
+    "DY11",
+    "DY12",
+    "DY13",
+    "DY14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kidderminster town centre",
+      "postcodes": "DY10, DY11",
+      "housing": "Victorian terraces and former carpet factory buildings converted to flats, with flats over shops."
+    },
+    {
+      "name": "Foley Park and Habberley",
+      "postcodes": "DY11",
+      "housing": "Interwar and post-war council-built estates and private semis on the west side of the town."
+    },
+    {
+      "name": "Offmore and Comberton",
+      "postcodes": "DY10",
+      "housing": "Post-war estates of semis and terraces on the east side of Kidderminster."
+    },
+    {
+      "name": "Stourport-on-Severn",
+      "postcodes": "DY13",
+      "housing": "Georgian canal basin houses, Victorian terraces and caravan and holiday parks along the river."
+    },
+    {
+      "name": "Bewdley",
+      "postcodes": "DY12",
+      "housing": "Georgian town houses and cottages along the Severn, many listed and some at flood risk."
+    },
+    {
+      "name": "Blakedown and Cookley",
+      "postcodes": "DY10, DY11",
+      "housing": "Village houses and bungalows in the green belt north of Kidderminster."
+    },
+    {
+      "name": "Wolverley and Franche",
+      "postcodes": "DY11",
+      "housing": "Older village cottages in Wolverley and modern estates in Franche."
+    },
+    {
+      "name": "Far Forest and Rock",
+      "postcodes": "DY14",
+      "housing": "Cottages, smallholdings and bungalows in the Wyre Forest woodland."
+    }
+  ],
+  "housing": "Wyre Forest is made up of the former carpet town of Kidderminster, the canal town of Stourport-on-Severn and the riverside town of Bewdley, with villages and woodland around them. Kidderminster has many Victorian terraces and converted mill buildings, and HMOs are concentrated there. Large interwar and post-war estates surround the town, and park homes and holiday caravans are common around Stourport. Bewdley and Stourport sit on the Severn, which floods regularly.",
+  "checkinTips": [
+    "Riverside homes in Bewdley and Stourport-on-Severn: photograph flood defences, airbricks, flood doors and any watermarks.",
+    "Victorian terraces in Kidderminster: photograph back yards, damp in rear kitchens and older windows.",
+    "Converted carpet mill and factory flats: note fobs, ventilation, shared areas and parking.",
+    "Park homes around Stourport: record the pitch, skirting, steps, sheds and the site rules that apply.",
+    "Listed Georgian homes in Bewdley: record original features carefully, as repairs need consent.",
+    "Woodland homes near Far Forest: check gutters, roofs and trees close to the house, and note any oil tank or septic tank."
+  ],
+  "tenantHelp": "Wyre Forest District Council's Private Sector Housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "wychavon",
+    "malvern-hills",
+    "bromsgrove",
+    "south-staffordshire",
+    "shropshire"
+  ]
+}

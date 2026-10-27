@@ -1,0 +1,100 @@
+{
+  "slug": "westmorland-and-furness",
+  "name": "Westmorland and Furness",
+  "council": {
+    "name": "Westmorland and Furness Council",
+    "url": "https://www.westmorlandandfurness.gov.uk",
+    "privateRentingUrl": "https://www.barrowbc.gov.uk/residents/private-sector-housing/multiple-occupancy-homes/licensing-houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Only national mandatory HMO licensing applies at present (five or more people from two or more households). In September 2025 the council agreed in principle to extend HMO licensing in the Barrow area; no start date had been confirmed when checked.",
+    "fee": "£534 for an HMO licence of up to five bedrooms, plus £34 for each extra room (Barrow area fee page)",
+    "source": "https://www.barrowbc.gov.uk/residents/private-sector-housing/multiple-occupancy-homes/licensing-houses-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£816 a month (ONS, August 2026), up 6.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000064/"
+  },
+  "price": {
+    "text": "£230,000 (UK HPI, July 2026, provisional), up 7.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000064/"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,508 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://www.westmorlandandfurness.gov.uk/council-tax/your-council-tax-explained/how-council-tax-calculated"
+  },
+  "postcodes": [
+    "LA9",
+    "LA14",
+    "LA13",
+    "LA12",
+    "LA23",
+    "LA22",
+    "CA10",
+    "CA11",
+    "CA16",
+    "CA17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Barrow-in-Furness",
+      "postcodes": "LA13, LA14",
+      "housing": "Long streets of Victorian red-brick and sandstone terraces built for shipyard workers, with flats and post-war estates."
+    },
+    {
+      "name": "Walney Island",
+      "postcodes": "LA14",
+      "housing": "Vickerstown's early 1900s company-built cottages and terraces, with newer homes and coastal bungalows."
+    },
+    {
+      "name": "Kendal",
+      "postcodes": "LA9",
+      "housing": "Grey limestone terraces and yards in the town centre, with post-war and modern estates on the hillsides."
+    },
+    {
+      "name": "Ulverston",
+      "postcodes": "LA12",
+      "housing": "Stone terraces and cottages in a market town, with newer estates on the edges."
+    },
+    {
+      "name": "Windermere and Bowness",
+      "postcodes": "LA23",
+      "housing": "Victorian stone villas and guest houses, many now holiday lets or split into flats."
+    },
+    {
+      "name": "Ambleside and Grasmere",
+      "postcodes": "LA22",
+      "housing": "Lakeland stone cottages, many second homes or holiday lets, with some flats for local workers."
+    },
+    {
+      "name": "Penrith",
+      "postcodes": "CA11",
+      "housing": "Red sandstone terraces and townhouses in the centre and modern estates around the town."
+    },
+    {
+      "name": "Appleby and the Eden valley",
+      "postcodes": "CA16, CA10, CA17",
+      "housing": "Sandstone cottages, farmhouses and barn conversions in small towns and villages."
+    }
+  ],
+  "housing": "Westmorland and Furness was formed in 2023 from Barrow-in-Furness, Eden and South Lakeland. Barrow has dense Victorian terraces built for the shipyards, a large private rented sector and growing numbers of HMOs. South Lakeland and Eden are dominated by stone cottages, farmhouses and Victorian villas, and in the Lake District many homes are second homes or holiday lets, which keeps long-term lets scarce. Many rural homes are off the gas network.",
+  "checkinTips": [
+    "Victorian terraces in Barrow: photograph damp in back kitchens, rear yards, back alleys and older sash or replacement windows.",
+    "Stone cottages in the Lakes and Eden valley: record damp, condensation and mould, which are common in solid-walled homes in a wet climate.",
+    "Rural homes off the gas network: note the oil tank level, solid-fuel stoves, private water supplies and septic tanks.",
+    "Coastal homes on Walney and around Morecambe Bay: photograph metalwork, window frames and render for salt and storm damage.",
+    "Homes in flood-hit towns such as Kendal and Appleby: check for flood damage, airbricks, flood doors and watermarks.",
+    "Former holiday lets now let long-term: record every item of furniture and equipment, as inventories can be long."
+  ],
+  "tenantHelp": "Westmorland and Furness Council's private sector housing team deals with disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "cumberland",
+    "north-yorkshire",
+    "lancaster",
+    "northumberland",
+    "county-durham"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "slug": "warwick",
+  "name": "Warwick",
+  "council": {
+    "name": "Warwick District Council",
+    "url": "https://www.warwickdc.gov.uk",
+    "privateRentingUrl": "https://www.warwickdc.gov.uk/news/article/1137/additional_licensing_scheme_comes_into_force"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "District-wide additional HMO licensing in force from 18 January 2024 to 17 January 2029: houses and flats (including purpose-built student flats) let to three or more people from two or more households need a licence, on top of national mandatory HMO licensing.",
+    "fee": null,
+    "source": "https://www.warwickdc.gov.uk/download/downloads/id/8186/section_56_designation_-_additional_licensing_of_houses_in_multiple_occupation_hmo.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,244 a month (ONS, September 2026), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000222/"
+  },
+  "price": {
+    "text": "£371,000 (UK HPI, August 2026, provisional), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000222/"
+  },
+  "privateRentedShare": {
+    "text": "19% of households rent privately (Census 2021), up from 18% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000222/"
+  },
+  "councilTax": {
+    "text": "£2,462 average Band D (2026/27), including Warwickshire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/warwick"
+  },
+  "postcodes": [
+    "CV31",
+    "CV32",
+    "CV33",
+    "CV34",
+    "CV35",
+    "CV8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Leamington Spa town centre",
+      "postcodes": "CV31, CV32",
+      "housing": "Regency and Victorian stucco terraces and villas, many split into flats, with flats over shops along the Parade."
+    },
+    {
+      "name": "Old Town and Clarendon, Leamington",
+      "postcodes": "CV31, CV32",
+      "housing": "Victorian terraces popular with students, a large share let as shared houses."
+    },
+    {
+      "name": "Warwick",
+      "postcodes": "CV34",
+      "housing": "Historic timber-framed and Georgian houses in the centre, Victorian terraces nearby and large modern estates such as Chase Meadow and Warwick Gates."
+    },
+    {
+      "name": "Whitnash",
+      "postcodes": "CV31",
+      "housing": "Post-war and modern semi-detached and detached houses, with newer estates on the southern edge."
+    },
+    {
+      "name": "Kenilworth",
+      "postcodes": "CV8",
+      "housing": "Older cottages near the castle and Abbey Fields, interwar semis and many students' shared houses close to the University of Warwick."
+    },
+    {
+      "name": "Lillington",
+      "postcodes": "CV32",
+      "housing": "Post-war council estates with low-rise flats and terraces, alongside private semis."
+    },
+    {
+      "name": "Radford Semele and Bishop's Tachbrook",
+      "postcodes": "CV31, CV33",
+      "housing": "Village cottages with large new-build estates added on the edge of Leamington."
+    },
+    {
+      "name": "Hatton, Lapworth and rural west",
+      "postcodes": "CV35, B94",
+      "housing": "Brick farmhouses, barn conversions and canal-side cottages in small villages."
+    }
+  ],
+  "housing": "Warwick district is centred on Leamington Spa, whose Regency and Victorian terraces have largely been converted to flats, and on the historic county town of Warwick. Students of the University of Warwick live mainly in Leamington and Kenilworth, so shared houses are common, and the council licenses most HMOs district-wide. Large new estates have been built south of Warwick and Leamington, while the rural west has older cottages and farm conversions. Rents are among the highest in the West Midlands.",
+  "checkinTips": [
+    "Stucco-fronted Regency and Victorian flats in Leamington: photograph sash windows, cornicing, high ceilings and any damp in basement flats.",
+    "Student shared houses in Leamington and Kenilworth: record each bedroom's lock, furniture and fire doors, and check the HMO licence is displayed.",
+    "Flats in converted townhouses: note communal hallway condition, fire alarms, entry phones and the number of keys and fobs.",
+    "New-build homes at Warwick Gates, Chase Meadow and south Leamington: photograph flooring, sealant around baths and any snagging marks.",
+    "Older cottages in Warwick and the villages: check low beams, uneven floors, open fireplaces and the condition of timber windows.",
+    "Gardens and parking in terraced streets: photograph bin storage, garden fences and any parking permits handed over."
+  ],
+  "tenantHelp": "Warwick District Council's Private Sector Housing team deals with disrepair, unsafe conditions and HMO licensing in private rented homes.",
+  "nearby": [
+    "coventry",
+    "rugby",
+    "stratford-on-avon",
+    "solihull"
+  ]
+}

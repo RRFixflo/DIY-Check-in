@@ -1,0 +1,99 @@
+{
+  "slug": "west-oxfordshire",
+  "name": "West Oxfordshire",
+  "council": {
+    "name": "West Oxfordshire District Council",
+    "url": "https://www.westoxon.gov.uk",
+    "privateRentingUrl": "https://westoxon.gov.uk/housing/private-housing/information-for-landlords-and-tenants/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households sharing facilities).",
+    "fee": "£242 application fee for an HMO licence, plus an issue fee if granted (council page)",
+    "source": "https://www.westoxon.gov.uk/housing/private-housing/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,284 a month (ONS, June 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000181/"
+  },
+  "price": {
+    "text": "£417,000 (UK HPI, May 2026, provisional), down 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000181/"
+  },
+  "privateRentedShare": {
+    "text": "18% of households rent privately (Census 2021), up from 15% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000181/"
+  },
+  "councilTax": {
+    "text": "£2,567 average Band D (2026/27), including Oxfordshire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/west-oxfordshire"
+  },
+  "postcodes": [
+    "OX28",
+    "OX29",
+    "OX18",
+    "OX7",
+    "OX20",
+    "OX5",
+    "OX8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Witney",
+      "postcodes": "OX28, OX29",
+      "housing": "Cotswold stone cottages in the old town and large post-war and modern estates such as Madley Park."
+    },
+    {
+      "name": "Carterton",
+      "postcodes": "OX18",
+      "housing": "Post-war houses and many RAF Brize Norton service family homes, with newer estates."
+    },
+    {
+      "name": "Chipping Norton",
+      "postcodes": "OX7",
+      "housing": "Stone townhouses and cottages in a hilltop market town, with some post-war estates."
+    },
+    {
+      "name": "Woodstock",
+      "postcodes": "OX20",
+      "housing": "Georgian and older stone houses near Blenheim Palace, many listed."
+    },
+    {
+      "name": "Eynsham",
+      "postcodes": "OX29",
+      "housing": "Stone village houses and post-war estates, close to the A40 and Oxford."
+    },
+    {
+      "name": "Burford",
+      "postcodes": "OX18",
+      "housing": "Medieval and Georgian stone houses and cottages on the steep High Street."
+    },
+    {
+      "name": "Charlbury",
+      "postcodes": "OX7",
+      "housing": "Stone cottages and terraces in a small town in the Evenlode valley."
+    },
+    {
+      "name": "Long Hanborough and Freeland",
+      "postcodes": "OX29",
+      "housing": "Village houses, bungalows and modern estates near the railway station."
+    }
+  ],
+  "housing": "West Oxfordshire is a largely rural district on the edge of the Cotswolds, with Witney, Carterton and Chipping Norton the main towns. Many older homes are built of Cotswold stone, often listed or in conservation areas, while Witney and Carterton have large modern estates. Carterton has many homes linked to RAF Brize Norton. Prices are high because of the Cotswolds and closeness to Oxford, and private renting is a little below the national level.",
+  "checkinTips": [
+    "Cotswold stone cottages: photograph damp at the base of walls, lime plaster, timber windows and any stone roof slates.",
+    "Listed homes in Burford, Woodstock and Chipping Norton: record original features, fireplaces and fixtures carefully, as repairs need consent.",
+    "Rural homes off the gas network: note the oil tank level, wood burner condition and any septic tank or private drainage.",
+    "Riverside homes in the Windrush and Evenlode valleys: check for flood damage, airbricks and watermarks.",
+    "Modern estates in Witney and Carterton: check sealant, flooring and snagging marks, and who maintains shared green space.",
+    "Gardens with dry stone walls: photograph walls, hedges and gates, as they are costly to repair."
+  ],
+  "tenantHelp": "West Oxfordshire District Council's Private Sector Housing team advises private tenants and deals with disrepair and unsafe conditions in rented homes.",
+  "nearby": [
+    "cotswold",
+    "cherwell",
+    "vale-of-white-horse",
+    "stratford-on-avon"
+  ]
+}

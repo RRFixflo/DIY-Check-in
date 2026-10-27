@@ -1,0 +1,101 @@
+{
+  "slug": "winchester",
+  "name": "Winchester",
+  "council": {
+    "name": "Winchester City Council",
+    "url": "https://www.winchester.gov.uk",
+    "privateRentingUrl": "https://www.winchester.gov.uk/housing/private-housing-and-empty-properties/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households). Smaller shared houses of three or four tenants can join the council's voluntary Shared Housing Accreditation Scheme, and Article 4 planning controls on new HMOs apply in Winnall and Stanmore.",
+    "fee": "£1,247 for a new HMO licence and £983 to renew (from 1 April 2026)",
+    "source": "https://www.winchester.gov.uk/housing/private-housing-and-empty-properties/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,504 a month (ONS, June 2026), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000094/"
+  },
+  "price": {
+    "text": "£477,000 (UK HPI, May 2026, provisional), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000094/"
+  },
+  "privateRentedShare": {
+    "text": "18% of households rent privately (Census 2021), up from 14% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000094/"
+  },
+  "councilTax": {
+    "text": "£2,355 average Band D (2026/27), including Hampshire County Council, police, fire and average parish precepts",
+    "source": "https://www.winchester.gov.uk/council-tax/charges"
+  },
+  "postcodes": [
+    "SO21",
+    "SO22",
+    "SO23",
+    "SO24",
+    "SO32",
+    "PO7",
+    "PO17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Winchester city centre",
+      "postcodes": "SO23",
+      "housing": "Medieval, Georgian and Victorian houses in conservation areas, with flats over shops and modern apartments."
+    },
+    {
+      "name": "Fulflood and Hyde",
+      "postcodes": "SO22, SO23",
+      "housing": "Victorian and Edwardian terraces close to the station, popular with professionals and students."
+    },
+    {
+      "name": "Stanmore and Winnall",
+      "postcodes": "SO22, SO23",
+      "housing": "Interwar and post-war council-built houses, many now shared student lets, with Article 4 controls on new HMOs."
+    },
+    {
+      "name": "Badger Farm and Oliver's Battery",
+      "postcodes": "SO22",
+      "housing": "1970s and 1980s estates of detached and semi-detached houses on the southern edge of the city."
+    },
+    {
+      "name": "Kings Worthy and Headbourne Worthy",
+      "postcodes": "SO23",
+      "housing": "Village houses and newer estates such as Barton Farm on the northern edge of the city."
+    },
+    {
+      "name": "Alresford",
+      "postcodes": "SO24",
+      "housing": "Georgian houses and cottages in a small market town, with modern homes on the edges."
+    },
+    {
+      "name": "Bishop's Waltham",
+      "postcodes": "SO32",
+      "housing": "Brick and timber-framed houses in a historic market town, with post-war and modern estates."
+    },
+    {
+      "name": "Whiteley and Denmead",
+      "postcodes": "PO15, PO7",
+      "housing": "Modern estates of detached and semi-detached houses in the south of the district."
+    }
+  ],
+  "housing": "Winchester district is mostly rural, centred on the historic cathedral city, and is one of the more expensive parts of Hampshire. The city has many listed and period homes, Victorian terraces near the station and post-war estates, and the University of Winchester brings student lets, especially in Stanmore and Winnall. The market towns of Alresford and Bishop's Waltham have Georgian and older houses, while the south of the district around Whiteley has large modern estates.",
+  "checkinTips": [
+    "Listed and period homes in the city centre: photograph original windows, fireplaces and floors carefully, as repairs need consent.",
+    "Student houses in Stanmore and Winnall: record each bedroom's lock, furniture and fire doors, and check a licence is in place for five or more sharers.",
+    "Victorian terraces in Fulflood and Hyde: photograph sash windows, damp in cellars and rear gardens.",
+    "Chalk-stream valley homes along the Itchen: check for groundwater flooding, airbricks and watermarks.",
+    "Rural homes off the gas network: note the oil tank level, wood burners and any septic tank.",
+    "Modern estates at Whiteley and Barton Farm: check sealant, flooring and snagging marks, and who maintains shared land."
+  ],
+  "tenantHelp": "Winchester City Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "test-valley",
+    "basingstoke-and-deane",
+    "east-hampshire",
+    "eastleigh",
+    "fareham",
+    "havant"
+  ]
+}

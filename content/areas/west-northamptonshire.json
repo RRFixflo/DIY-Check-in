@@ -1,0 +1,105 @@
+{
+  "slug": "west-northamptonshire",
+  "name": "West Northamptonshire",
+  "council": {
+    "name": "West Northamptonshire Council",
+    "url": "https://www.westnorthants.gov.uk",
+    "privateRentingUrl": "https://www.westnorthants.gov.uk/private-housing-tenants-and-landlords/houses-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing from 24 February 2025 to 2030 in a designated area of central Northampton (the 2020 to 2025 scheme area) extended to further parts of Northampton and Daventry: homes let to three or four people from two or more households, including converted flats, need a licence. National mandatory HMO licensing covers five or more people everywhere.",
+    "fee": null,
+    "source": "https://www.westnorthants.gov.uk/private-housing-tenants-and-landlords/houses-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,084 a month (ONS, August 2026), up 3.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000062/"
+  },
+  "price": {
+    "text": "£292,000 (UK HPI, July 2026, provisional), up 1.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000062/"
+  },
+  "privateRentedShare": {
+    "text": "19% of households rent privately (Census 2021), up from 15% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000062/"
+  },
+  "councilTax": {
+    "text": "£2,487 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/west-northamptonshire"
+  },
+  "postcodes": [
+    "NN1",
+    "NN2",
+    "NN3",
+    "NN4",
+    "NN5",
+    "NN11",
+    "NN12",
+    "NN13",
+    "NN6",
+    "NN7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Northampton town centre",
+      "postcodes": "NN1",
+      "housing": "Victorian terraces, flats over shops and converted office and factory buildings."
+    },
+    {
+      "name": "Abington and Semilong",
+      "postcodes": "NN1, NN2",
+      "housing": "Long streets of Victorian terraces, many split into flats or let as shared houses."
+    },
+    {
+      "name": "St James and Duston",
+      "postcodes": "NN5",
+      "housing": "Victorian terraces in St James and interwar and modern semis in Duston."
+    },
+    {
+      "name": "Eastern District estates",
+      "postcodes": "NN3",
+      "housing": "New town era estates at Lings, Thorplands and Blackthorn with terraces and low-rise flats."
+    },
+    {
+      "name": "Grange Park and Wootton",
+      "postcodes": "NN4",
+      "housing": "Modern estates of detached and semi-detached houses south of the town."
+    },
+    {
+      "name": "Daventry",
+      "postcodes": "NN11",
+      "housing": "An old market town centre with large 1960s and 1970s overspill estates and newer homes."
+    },
+    {
+      "name": "Towcester",
+      "postcodes": "NN12",
+      "housing": "Georgian coaching-town houses in the centre and big new estates around it."
+    },
+    {
+      "name": "Brackley",
+      "postcodes": "NN13",
+      "housing": "Stone houses on the market place and many modern estates built since the 2000s."
+    }
+  ],
+  "housing": "West Northamptonshire covers Northampton, the market towns of Daventry, Towcester and Brackley, and many stone villages. Northampton's Victorian terraces around Abington, Semilong and St James are often let as shared houses or flats, which is why the council licenses smaller HMOs there. The Eastern District has new town era estates, and the south of the town and the market towns have grown with large modern estates. Students of the University of Northampton add to demand in the town.",
+  "checkinTips": [
+    "Victorian terraces in Abington, Semilong and St James: photograph damp in back kitchens, rear yards and sash or replacement windows.",
+    "Shared houses in the designated area: record each room's lock, furniture and fire doors, and check the HMO licence even for three or four sharers.",
+    "Converted flats in Northampton: note communal hallway condition, fire alarms, meters and the number of keys and fobs.",
+    "New-town estates in the Eastern District: photograph communal footpaths, garages in blocks and any flat roofs.",
+    "New-build homes in Towcester, Brackley and Grange Park: check sealant, flooring and snagging marks, and who maintains shared land.",
+    "Ironstone and limestone village cottages: photograph timber windows, damp in solid walls and any oil tank."
+  ],
+  "tenantHelp": "West Northamptonshire Council's private sector housing team handles disrepair, damp and unsafe conditions in private rented homes and enforces HMO licensing.",
+  "nearby": [
+    "north-northamptonshire",
+    "milton-keynes",
+    "buckinghamshire",
+    "cherwell",
+    "stratford-on-avon",
+    "rugby",
+    "harborough"
+  ]
+}

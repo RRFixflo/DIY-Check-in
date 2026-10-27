@@ -1,0 +1,94 @@
+{
+  "slug": "worthing",
+  "name": "Worthing",
+  "council": {
+    "name": "Worthing Borough Council (Adur & Worthing Councils)",
+    "url": "https://www.adur-worthing.gov.uk",
+    "privateRentingUrl": "https://www.adur-worthing.gov.uk/housing/conditions-and-empty-properties/hmo/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found in force. In March 2024 the council agreed to consult on and scope a selective licensing scheme for Heene, Central and Selden wards; no designation had been confirmed when checked.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://democracy.adur-worthing.gov.uk/documents/s12107/2024.03.14 - WJSSC - agenda item 11 - Selective Licensing Scheme for Private Rented Properties in W.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,311 a month (ONS, May 2026), up 2.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000229/"
+  },
+  "price": {
+    "text": "£299,000 (UK HPI, April 2026, provisional), down 5.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000229/"
+  },
+  "privateRentedShare": {
+    "text": "22% of households rent privately (Census 2021), up from 19% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000229/"
+  },
+  "councilTax": {
+    "text": "£2,456 average Band D (2026/27), including West Sussex County Council and police precepts",
+    "source": "https://www.adur-worthing.gov.uk/council-tax/what-your-council-tax-is-used-for/"
+  },
+  "postcodes": [
+    "BN11",
+    "BN12",
+    "BN13",
+    "BN14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Worthing town centre",
+      "postcodes": "BN11",
+      "housing": "Regency and Victorian terraces and villas, many split into flats, with modern seafront apartment blocks."
+    },
+    {
+      "name": "Heene",
+      "postcodes": "BN11",
+      "housing": "Large Victorian and Edwardian houses converted to flats close to the seafront."
+    },
+    {
+      "name": "Broadwater",
+      "postcodes": "BN14",
+      "housing": "Victorian and interwar terraces and semis around Broadwater Green."
+    },
+    {
+      "name": "Tarring",
+      "postcodes": "BN14",
+      "housing": "Old village cottages in West Tarring with interwar and post-war semis around them."
+    },
+    {
+      "name": "Goring-by-Sea",
+      "postcodes": "BN12",
+      "housing": "Interwar and post-war bungalows, chalet houses and semis near the beach."
+    },
+    {
+      "name": "Durrington and Salvington",
+      "postcodes": "BN13",
+      "housing": "Post-war and 1960s to 1980s estates of houses and bungalows on the slopes of the Downs."
+    },
+    {
+      "name": "East Worthing",
+      "postcodes": "BN11, BN14",
+      "housing": "Edwardian terraces, post-war estates and newer flats near the seafront and railway."
+    },
+    {
+      "name": "Findon Valley",
+      "postcodes": "BN14",
+      "housing": "Bungalows and detached houses in a valley at the foot of the South Downs."
+    }
+  ],
+  "housing": "Worthing is a seaside town where private renting is above the South East average, much of it in Regency, Victorian and Edwardian houses split into flats in the town centre, Heene and Central wards. Modern apartment blocks line parts of the seafront. Further out, Goring, Durrington and Findon Valley are mainly interwar and post-war bungalows and semis, with many older owner-occupiers. The council has looked at selective licensing for the central wards where private lets are concentrated.",
+  "checkinTips": [
+    "Victorian and Regency houses split into flats in the centre and Heene: photograph communal halls, fire doors and meters, and count keys and fobs.",
+    "Seafront flats: photograph window frames, balconies and metal fittings for salt and wind damage, and note any condensation or mould.",
+    "Basement and ground-floor flats in converted houses: check for damp, ventilation and the condition of lightwells.",
+    "Bungalows in Goring and Findon Valley: photograph gardens, garages, conservatories and any mobility adaptations.",
+    "Flats over shops on Montague Street and Chapel Road: note separate entrances, rear access and bin storage.",
+    "Homes on the shingle coast: check airbricks and gardens for flood or storm damage."
+  ],
+  "tenantHelp": "Adur & Worthing Councils' private sector housing team investigates disrepair, damp and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "adur",
+    "arun"
+  ]
+}

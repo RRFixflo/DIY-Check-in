@@ -1,0 +1,103 @@
+{
+  "slug": "wealden",
+  "name": "Wealden",
+  "council": {
+    "name": "Wealden District Council",
+    "url": "https://www.wealden.gov.uk",
+    "privateRentingUrl": "https://www.wealden.gov.uk/housing/private-housing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme, and the council says it has no plans for one.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households sharing facilities).",
+    "fee": null,
+    "source": "https://www.wealden.gov.uk/housing/private-housing/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,259 a month (ONS, February 2026), up 2.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000065/"
+  },
+  "price": {
+    "text": "£394,000 (UK HPI, January 2026, provisional), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000065/"
+  },
+  "privateRentedShare": {
+    "text": "14% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000065/"
+  },
+  "councilTax": {
+    "text": "£2,728 average Band D (2026/27), including East Sussex County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wealden"
+  },
+  "postcodes": [
+    "BN26",
+    "BN27",
+    "BN8",
+    "TN6",
+    "TN21",
+    "TN22",
+    "TN5",
+    "TN20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hailsham",
+      "postcodes": "BN27",
+      "housing": "A market town with Victorian terraces in the centre and large post-war and modern housing estates around it."
+    },
+    {
+      "name": "Uckfield",
+      "postcodes": "TN22",
+      "housing": "Victorian and interwar houses near the High Street, with big new-build estates on the edges."
+    },
+    {
+      "name": "Crowborough",
+      "postcodes": "TN6",
+      "housing": "Edwardian and interwar detached houses in wooded roads, with post-war estates and modern flats."
+    },
+    {
+      "name": "Heathfield",
+      "postcodes": "TN21",
+      "housing": "Victorian villas, bungalows and newer estates on the ridge of the High Weald."
+    },
+    {
+      "name": "Polegate and Willingdon",
+      "postcodes": "BN26, BN20",
+      "housing": "Bungalows, chalet houses and interwar semis on the edge of Eastbourne."
+    },
+    {
+      "name": "Pevensey Bay",
+      "postcodes": "BN24",
+      "housing": "Seafront bungalows, chalets and holiday homes on the shingle coast."
+    },
+    {
+      "name": "Wadhurst and Mayfield",
+      "postcodes": "TN5, TN20",
+      "housing": "Tile-hung and weatherboarded cottages and larger country houses in High Weald villages."
+    },
+    {
+      "name": "Forest Row",
+      "postcodes": "RH18",
+      "housing": "Village cottages, Victorian houses and some post-war council housing next to Ashdown Forest."
+    }
+  ],
+  "housing": "Wealden is a large, rural district stretching from the coast at Pevensey Bay to the High Weald, and most homes are owner-occupied. Its towns, Hailsham, Uckfield, Crowborough and Heathfield, have grown with large new-build estates around older centres. Villages have tile-hung and weatherboarded cottages, farmhouses and barn conversions, many off the gas network. Bungalows are common in Polegate, Willingdon and along the coast, where many retired people live.",
+  "checkinTips": [
+    "Rural cottages off the gas network: record the oil tank or LPG level, boiler type and any septic tank or private drainage.",
+    "Tile-hung and weatherboarded cottages in the High Weald: photograph cladding, timber windows, low beams and any damp patches.",
+    "Wood burners and open fires in village homes: note the sweep certificate date and the condition of hearths and stoves.",
+    "Coastal bungalows at Pevensey Bay: photograph window frames, door locks and any salt corrosion on metalwork and outdoor fittings.",
+    "New-build estates in Hailsham and Uckfield: check sealant, flooring and any snagging marks, and note who maintains shared areas.",
+    "Large gardens and driveways: photograph lawns, hedges, gates and outbuildings, as gardens often form part of the tenancy."
+  ],
+  "tenantHelp": "Wealden District Council's Private Housing team advises private tenants and can look into disrepair and unsafe conditions in rented homes.",
+  "nearby": [
+    "eastbourne",
+    "lewes",
+    "rother",
+    "tunbridge-wells",
+    "sevenoaks",
+    "tandridge",
+    "mid-sussex"
+  ]
+}

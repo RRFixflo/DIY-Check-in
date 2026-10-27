@@ -1,0 +1,100 @@
+{
+  "slug": "welwyn-hatfield",
+  "name": "Welwyn Hatfield",
+  "council": {
+    "name": "Welwyn Hatfield Borough Council",
+    "url": "https://www.welhat.gov.uk",
+    "privateRentingUrl": "https://www.welhat.gov.uk/private-renting/landlord-advice"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more unrelated occupiers). New HMOs in Hatfield also need planning permission.",
+    "fee": null,
+    "source": "https://www.welhat.gov.uk/multipleoccupancy",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,496 a month (ONS, June 2026), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000241/"
+  },
+  "price": {
+    "text": "£454,000 (UK HPI, May 2026, provisional), up 6.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000241/"
+  },
+  "privateRentedShare": {
+    "text": "16% of households rent privately (Census 2021), up from 14% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000241/"
+  },
+  "councilTax": {
+    "text": "£2,452 average Band D (2026/27), including Hertfordshire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/welwyn-hatfield"
+  },
+  "postcodes": [
+    "AL6",
+    "AL7",
+    "AL8",
+    "AL9",
+    "AL10",
+    "EN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Welwyn Garden City",
+      "postcodes": "AL7, AL8",
+      "housing": "Planned garden city houses in neo-Georgian style on tree-lined roads, with post-war estates such as Hollybush and Panshanger."
+    },
+    {
+      "name": "Hatfield town centre and South Hatfield",
+      "postcodes": "AL10",
+      "housing": "Post-war new town estates of terraces and low-rise flats, many now let to students and sharers."
+    },
+    {
+      "name": "College Lane and Roe Green",
+      "postcodes": "AL10",
+      "housing": "Student halls and family houses converted to shared lets close to the University of Hertfordshire."
+    },
+    {
+      "name": "Old Hatfield",
+      "postcodes": "AL9",
+      "housing": "Georgian and older brick cottages and townhouses near Hatfield House."
+    },
+    {
+      "name": "Hatfield Business Park area",
+      "postcodes": "AL10",
+      "housing": "Modern estates of houses and flats built on the former aerodrome."
+    },
+    {
+      "name": "Welwyn village and Oaklands",
+      "postcodes": "AL6",
+      "housing": "Old village houses and larger detached homes in Welwyn, Digswell and Oaklands."
+    },
+    {
+      "name": "Brookmans Park and Welham Green",
+      "postcodes": "AL9",
+      "housing": "Large interwar and modern detached houses and bungalows in commuter villages."
+    },
+    {
+      "name": "Cuffley and Northaw",
+      "postcodes": "EN6",
+      "housing": "Detached and semi-detached houses and bungalows in a green belt village."
+    }
+  ],
+  "housing": "Welwyn Hatfield combines Welwyn Garden City, the planned garden city of the 1920s, with the post-war new town of Hatfield. Social renting is unusually high, at about a quarter of households, and many ex-council homes are now let privately. The University of Hertfordshire means many shared houses and student lets around Hatfield, where new HMOs need planning permission. The southern villages are mostly large owner-occupied homes in the green belt.",
+  "checkinTips": [
+    "Student shared houses near the University of Hertfordshire: record each bedroom's lock, furniture and fire doors, and check a licence is in place for five or more sharers.",
+    "Garden city houses in Welwyn Garden City: photograph original windows, hedges and front gardens, which the estate management scheme expects to be kept.",
+    "Post-war terraces and maisonettes in Hatfield: note communal stairs, bin stores, garages in blocks and any fob or key counts.",
+    "Ex-council flats: photograph communal doors, entry phones and drying areas, and ask who maintains them.",
+    "Older cottages in Old Hatfield and Welwyn village: check low ceilings, timber windows and any damp in solid walls.",
+    "Detached homes in Brookmans Park and Cuffley: photograph large gardens, driveways and outbuildings."
+  ],
+  "tenantHelp": "Welwyn Hatfield Borough Council's Private Sector Housing team deals with disrepair, HMO standards and unsafe conditions in private rented homes.",
+  "nearby": [
+    "st-albans",
+    "hertsmere",
+    "east-hertfordshire",
+    "north-hertfordshire",
+    "broxbourne",
+    "enfield"
+  ]
+}

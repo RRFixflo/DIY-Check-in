@@ -1,0 +1,102 @@
+{
+  "slug": "waverley",
+  "name": "Waverley",
+  "council": {
+    "name": "Waverley Borough Council",
+    "url": "https://www.waverley.gov.uk",
+    "privateRentingUrl": "https://www.waverley.gov.uk/services/housing/private-sector-housing/landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies across the borough (five or more people from two or more households).",
+    "fee": "£807.70 for a new HMO licence, £710.50 to renew (council fee list)",
+    "source": "https://www.waverley.gov.uk/services/business-and-licensing/licences-and-registrations/house-in-multiple-occupation-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,470 a month (ONS, September 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000216/"
+  },
+  "price": {
+    "text": "£559,000 (UK HPI, August 2026, provisional), down 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000216/"
+  },
+  "privateRentedShare": {
+    "text": "15% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000216/"
+  },
+  "councilTax": {
+    "text": "£2,605 average Band D (2026/27), including Surrey County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/waverley"
+  },
+  "postcodes": [
+    "GU7",
+    "GU8",
+    "GU9",
+    "GU10",
+    "GU26",
+    "GU27",
+    "GU6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Farnham",
+      "postcodes": "GU9, GU10",
+      "housing": "Georgian townhouses in the centre, Victorian terraces and large interwar and modern houses on the outskirts."
+    },
+    {
+      "name": "Godalming",
+      "postcodes": "GU7",
+      "housing": "Timber-framed and Victorian houses in the old town, with post-war estates such as Binscombe and Ockford Ridge."
+    },
+    {
+      "name": "Haslemere",
+      "postcodes": "GU27",
+      "housing": "Victorian and Edwardian villas, cottages and modern flats near the station."
+    },
+    {
+      "name": "Cranleigh",
+      "postcodes": "GU6",
+      "housing": "Village-centre cottages with large new-build estates added in recent years."
+    },
+    {
+      "name": "Hindhead and Grayshott edge",
+      "postcodes": "GU26",
+      "housing": "Detached houses and bungalows in wooded plots, with some flats in the village centre."
+    },
+    {
+      "name": "Milford and Witley",
+      "postcodes": "GU8",
+      "housing": "Tile-hung cottages, interwar semis and larger country houses in the villages south of Godalming."
+    },
+    {
+      "name": "Elstead and Tilford",
+      "postcodes": "GU8, GU10",
+      "housing": "Older brick and timber cottages and detached houses in rural villages."
+    },
+    {
+      "name": "Bramley",
+      "postcodes": "GU5",
+      "housing": "Victorian villas and cottages with some post-war estates in a commuter village."
+    }
+  ],
+  "housing": "Waverley is one of the most expensive districts in the South East, mostly owner-occupied, with private renting at about one household in seven. Its four towns, Farnham, Godalming, Haslemere and Cranleigh, have period centres with cottages, Georgian and Victorian houses, and many flats over shops. Students of the University for the Creative Arts rent in Farnham. The villages and Surrey Hills have tile-hung cottages and large detached homes, some on septic tanks or oil heating.",
+  "checkinTips": [
+    "Listed and period houses in Farnham and Godalming: photograph timber windows, old floorboards, fireplaces and any damp in cellars.",
+    "Rural homes in the Surrey Hills villages: record the oil tank level and condition, septic tank access and private water supplies where they exist.",
+    "Large detached houses with gardens: photograph lawns, hedges, garden equipment and garages, as garden upkeep is often in the tenancy.",
+    "Student lets in Farnham near the university: note each room's furniture, locks and fire doors.",
+    "Flats over shops in the town centres: check the separate entrance, stairs, intercom and any rear access.",
+    "Wooded plots near Hindhead and Haslemere: photograph gutters, moss on roofs and drives, and any trees close to the house."
+  ],
+  "tenantHelp": "Waverley Borough Council's Private Sector Housing team handles disrepair, damp and mould and unsafe conditions in private rented homes, and licenses HMOs.",
+  "nearby": [
+    "guildford",
+    "east-hampshire",
+    "hart",
+    "rushmoor",
+    "chichester",
+    "horsham",
+    "mole-valley"
+  ]
+}

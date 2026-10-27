@@ -1,0 +1,100 @@
+{
+  "slug": "windsor-and-maidenhead",
+  "name": "Windsor and Maidenhead",
+  "council": {
+    "name": "Royal Borough of Windsor and Maidenhead",
+    "url": "https://www.rbwm.gov.uk",
+    "privateRentingUrl": "https://www.rbwm.gov.uk/home/housing/homeowners-and-landlords/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more occupiers from two or more households sharing facilities).",
+    "fee": "£920.70 for a new HMO licence on a first property, £847 for later properties (council fees from April 2023)",
+    "source": "https://www.rbwm.gov.uk/home/housing/homeowners-and-landlords/houses-multiple-occupation/do-you-need-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,801 a month (ONS, September 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000040/"
+  },
+  "price": {
+    "text": "£584,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000040/"
+  },
+  "privateRentedShare": {
+    "text": "21% of households rent privately (Census 2021), up from 16% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000040/"
+  },
+  "councilTax": {
+    "text": "£1,953 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/windsor-and-maidenhead"
+  },
+  "postcodes": [
+    "SL4",
+    "SL5",
+    "SL6",
+    "SL3",
+    "SL1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Windsor town centre",
+      "postcodes": "SL4",
+      "housing": "Georgian and Victorian terraces and townhouses near the castle, many split into flats, with modern apartments by the river."
+    },
+    {
+      "name": "Clewer and Dedworth",
+      "postcodes": "SL4",
+      "housing": "Victorian terraces near Clewer and large post-war estates in Dedworth."
+    },
+    {
+      "name": "Maidenhead town centre",
+      "postcodes": "SL6",
+      "housing": "New apartment blocks from the town centre regeneration and the Elizabeth line, with older terraces nearby."
+    },
+    {
+      "name": "Furze Platt and Cox Green",
+      "postcodes": "SL6",
+      "housing": "Interwar and post-war semis and 1960s to 1980s estates."
+    },
+    {
+      "name": "Ascot and Sunninghill",
+      "postcodes": "SL5",
+      "housing": "Large detached houses in wooded grounds, gated developments and some flats near the racecourse."
+    },
+    {
+      "name": "Eton",
+      "postcodes": "SL4",
+      "housing": "Historic brick houses and flats along the High Street, many in a flood-risk area."
+    },
+    {
+      "name": "Datchet and Wraysbury",
+      "postcodes": "SL3, TW19",
+      "housing": "Village houses and riverside bungalows next to the Thames and lakes, much of it in the floodplain."
+    },
+    {
+      "name": "Cookham and Bray",
+      "postcodes": "SL6",
+      "housing": "Period cottages, riverside houses and large detached homes in Thames-side villages."
+    }
+  ],
+  "housing": "Windsor and Maidenhead is one of the most expensive areas in the South East, from Ascot's large detached houses to Thames-side villages such as Cookham and Bray. Private renting grew quickly between 2011 and 2021, helped by commuters to London and Heathrow, and by new apartment blocks in Maidenhead town centre near the Elizabeth line. Windsor has many period terraces split into flats. Much of the riverside, including Datchet, Wraysbury and parts of Eton, lies in the Thames floodplain.",
+  "checkinTips": [
+    "Riverside homes in Datchet, Wraysbury, Eton and Cookham: photograph flood defences, airbricks, any watermarks and the condition of ground floors.",
+    "New apartment blocks in Maidenhead town centre: record fobs, parking and bike store access, entry phones and the condition of shared areas.",
+    "Period terraces split into flats in Windsor: photograph sash windows, communal halls and fire doors, and note meter locations.",
+    "Large homes in Ascot and Sunningdale: photograph gardens, gates, alarms, outbuildings and any pool or tennis court in the tenancy.",
+    "Homes under the Heathrow flight path: check window seals and any secondary glazing or noise insulation.",
+    "Listed homes near Windsor Castle and in Eton: record original features carefully, as repairs need consent."
+  ],
+  "tenantHelp": "The Royal Borough's housing standards team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "wokingham",
+    "bracknell-forest",
+    "slough",
+    "buckinghamshire",
+    "runnymede",
+    "spelthorne",
+    "surrey-heath"
+  ]
+}

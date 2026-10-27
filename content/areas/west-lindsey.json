@@ -1,0 +1,100 @@
+{
+  "slug": "west-lindsey",
+  "name": "West Lindsey",
+  "council": {
+    "name": "West Lindsey District Council",
+    "url": "https://www.west-lindsey.gov.uk",
+    "privateRentingUrl": "https://www.west-lindsey.gov.uk/my-business/selective-licensing/"
+  },
+  "licensing": {
+    "selective": "A selective licensing scheme covered Gainsborough South West ward from 18 July 2016 to 18 July 2021 and has ended. The council has since looked at a new designation for that ward, with Gainsborough North, Hemswell Cliff, Wold View and Market Rasen proposed later; check the council's selective licensing page for whether a new scheme is in force.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://www.west-lindsey.gov.uk/my-business/selective-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£671 a month (ONS, July 2025), up 9.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000142/"
+  },
+  "price": {
+    "text": "£199,000 (UK HPI, June 2025, provisional), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000142/"
+  },
+  "privateRentedShare": {
+    "text": "18% of households rent privately (Census 2021), up from 14% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000142"
+  },
+  "councilTax": {
+    "text": "£2,354 average Band D (2026/27), including Lincolnshire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/west-lindsey"
+  },
+  "postcodes": [
+    "DN21",
+    "LN8",
+    "LN1",
+    "LN2",
+    "LN7",
+    "DN20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Gainsborough",
+      "postcodes": "DN21",
+      "housing": "Dense Victorian terraces near the town centre and riverside, many privately let, with post-war estates and new builds on the edges."
+    },
+    {
+      "name": "Market Rasen",
+      "postcodes": "LN8",
+      "housing": "Georgian and Victorian houses around the market place, with bungalows and newer estates."
+    },
+    {
+      "name": "Caistor",
+      "postcodes": "LN7",
+      "housing": "Stone and brick houses in a small hilltop town on the Wolds."
+    },
+    {
+      "name": "Welton and Dunholme",
+      "postcodes": "LN2",
+      "housing": "Large villages of bungalows and modern estates north of Lincoln."
+    },
+    {
+      "name": "Nettleham",
+      "postcodes": "LN2",
+      "housing": "Older stone cottages around the green and larger modern homes, close to Lincoln."
+    },
+    {
+      "name": "Saxilby",
+      "postcodes": "LN1",
+      "housing": "Canal-side village houses, bungalows and new estates west of Lincoln."
+    },
+    {
+      "name": "Hemswell Cliff",
+      "postcodes": "DN21",
+      "housing": "Former RAF married quarters, mostly semi-detached houses, many now let privately."
+    },
+    {
+      "name": "Scotter and Kirton in Lindsey",
+      "postcodes": "DN21",
+      "housing": "Village houses, bungalows and former RAF homes in the north of the district."
+    }
+  ],
+  "housing": "West Lindsey is a large rural district north of Lincoln, with Gainsborough its main town. Gainsborough's Victorian terraces near the town centre have a high share of private lets and were the focus of the council's earlier selective licensing scheme. Former RAF housing at Hemswell Cliff and elsewhere is now largely let privately. The villages close to Lincoln have grown with bungalows and modern estates, while the Wolds have older stone and brick homes.",
+  "checkinTips": [
+    "Victorian terraces in Gainsborough: photograph rear yards, damp in back kitchens, older windows and the condition of shared alleys.",
+    "Former RAF houses at Hemswell Cliff and Kirton in Lindsey: note heating type, insulation, windows and any shared parking or play areas.",
+    "Rural homes off the gas network: record the oil tank or LPG level and any septic tank or soakaway.",
+    "Bungalows in the villages north of Lincoln: photograph gardens, garages, driveways and any mobility adaptations.",
+    "Riverside homes near the Trent: check for any flood damage, airbricks and watermarks.",
+    "Flats over shops in Gainsborough and Market Rasen: note separate entrances, meters and rear access."
+  ],
+  "tenantHelp": "West Lindsey District Council's housing team looks into disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "lincoln",
+    "north-kesteven",
+    "east-lindsey",
+    "north-lincolnshire",
+    "bassetlaw",
+    "newark-and-sherwood"
+  ]
+}

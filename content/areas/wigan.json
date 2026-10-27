@@ -1,0 +1,104 @@
+{
+  "slug": "wigan",
+  "name": "Wigan",
+  "council": {
+    "name": "Wigan Council",
+    "url": "https://www.wigan.gov.uk",
+    "privateRentingUrl": "https://wigan.gov.uk/Business/Property-and-Land/Private-Landlords/Do-I-need-to-apply-for-a-licence.aspx"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in any part of the borough.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://wigan.gov.uk/Business/Property-and-Land/Private-Landlords/Do-I-need-to-apply-for-a-licence.aspx",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£741 a month (ONS, May 2026), up 7.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000010/"
+  },
+  "price": {
+    "text": "£191,000 (UK HPI, April 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000010/"
+  },
+  "privateRentedShare": {
+    "text": "16% of households rent privately (Census 2021), up from 12% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000010/"
+  },
+  "councilTax": {
+    "text": "£2,153 average Band D (2026/27), including Greater Manchester mayoral, police and fire precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wigan"
+  },
+  "postcodes": [
+    "WN1",
+    "WN2",
+    "WN3",
+    "WN4",
+    "WN5",
+    "WN6",
+    "WN7",
+    "M29",
+    "M46",
+    "WA3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wigan town centre and Scholes",
+      "postcodes": "WN1",
+      "housing": "Victorian terraces, flats over shops and post-war council blocks close to the centre."
+    },
+    {
+      "name": "Pemberton and Worsley Mesnes",
+      "postcodes": "WN3, WN5",
+      "housing": "Red-brick terraces and large post-war council estates, with many ex-council homes now let privately."
+    },
+    {
+      "name": "Standish",
+      "postcodes": "WN6",
+      "housing": "Older stone cottages and large modern estates of detached and semi-detached houses."
+    },
+    {
+      "name": "Leigh",
+      "postcodes": "WN7",
+      "housing": "Long rows of terraced houses from the mill era, with newer estates on former colliery land."
+    },
+    {
+      "name": "Atherton and Tyldesley",
+      "postcodes": "M46, M29",
+      "housing": "Victorian terraces and semis in former mill towns, with new estates on the edges."
+    },
+    {
+      "name": "Ashton-in-Makerfield",
+      "postcodes": "WN4",
+      "housing": "Terraced houses, interwar semis and post-war estates in a former mining town."
+    },
+    {
+      "name": "Hindley and Abram",
+      "postcodes": "WN2",
+      "housing": "Terraces and council-built estates with newer homes near the Leeds and Liverpool Canal."
+    },
+    {
+      "name": "Golborne and Lowton",
+      "postcodes": "WA3",
+      "housing": "Semis and bungalows with large modern estates built near the East Lancashire Road."
+    }
+  ],
+  "housing": "Wigan borough is made up of several former mining and mill towns, including Wigan, Leigh, Atherton, Tyldesley and Ashton-in-Makerfield. Red-brick Victorian terraces are common, alongside large post-war council estates and many new estates built on former colliery and industrial land. Prices are among the lowest in Greater Manchester, and private renting rose quickly between 2011 and 2021 though it stays below the national level. Much of the private rented stock is older terraces and ex-council houses.",
+  "checkinTips": [
+    "Victorian terraces: photograph back yards, outhouses, damp in rear kitchens and the condition of back alleys and gates.",
+    "Older homes in former mining areas: note any cracks in walls, sticking doors or uneven floors that could point to movement.",
+    "Ex-council houses and maisonettes: record communal areas, bin stores, fences and any garages in blocks.",
+    "New-build estates in Standish, Leigh and Golborne: check sealant, flooring and snagging marks, and who maintains shared land.",
+    "Flats over shops in town centres: note separate entrances, meter cupboards and rear fire escapes.",
+    "Homes near the canal and flashes: photograph any damp, gutters and gardens prone to waterlogging."
+  ],
+  "tenantHelp": "Wigan Council's private sector housing and HMO team investigates disrepair and unsafe conditions in private rented homes.",
+  "nearby": [
+    "bolton",
+    "salford",
+    "warrington",
+    "st-helens",
+    "west-lancashire",
+    "chorley"
+  ]
+}

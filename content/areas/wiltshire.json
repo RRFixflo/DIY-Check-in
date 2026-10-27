@@ -1,0 +1,112 @@
+{
+  "slug": "wiltshire",
+  "name": "Wiltshire",
+  "council": {
+    "name": "Wiltshire Council",
+    "url": "https://www.wiltshire.gov.uk",
+    "privateRentingUrl": "https://www.wiltshire.gov.uk/housing-houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme (council enforcement policy, 2024); only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://cms.wiltshire.gov.uk/documents/s231873/Appendix%201%20-%20Enforcement%20Policy%20Binder.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,091 a month (ONS, September 2026), up 5.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000054/"
+  },
+  "price": {
+    "text": "£328,000 (UK HPI, August 2026, provisional), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000054/"
+  },
+  "privateRentedShare": {
+    "text": "17% of households rent privately (Census 2021), up from 15% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000054/"
+  },
+  "councilTax": {
+    "text": "£2,572 average Band D (2026/27), including police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wiltshire"
+  },
+  "postcodes": [
+    "SP1",
+    "SP2",
+    "SP4",
+    "SN10",
+    "SN11",
+    "SN12",
+    "SN13",
+    "SN14",
+    "SN15",
+    "BA12",
+    "BA13",
+    "BA14",
+    "BA15",
+    "SN8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Salisbury",
+      "postcodes": "SP1, SP2",
+      "housing": "Medieval and Georgian houses around the cathedral close and market, Victorian terraces and post-war estates such as Bemerton Heath."
+    },
+    {
+      "name": "Trowbridge",
+      "postcodes": "BA14",
+      "housing": "Weavers' cottages and Victorian terraces near the centre with large modern estates to the east and south."
+    },
+    {
+      "name": "Chippenham",
+      "postcodes": "SN14, SN15",
+      "housing": "Stone town houses in the centre, Victorian terraces and big new estates around the edges."
+    },
+    {
+      "name": "Devizes",
+      "postcodes": "SN10",
+      "housing": "Georgian and Victorian brick and stone houses in a market town, with post-war estates."
+    },
+    {
+      "name": "Melksham",
+      "postcodes": "SN12",
+      "housing": "Victorian terraces, interwar semis and many recent new-build estates."
+    },
+    {
+      "name": "Tidworth, Ludgershall and Amesbury",
+      "postcodes": "SP9, SP11, SP4",
+      "housing": "Army service family homes, modern estates and some older village houses on Salisbury Plain."
+    },
+    {
+      "name": "Bradford on Avon",
+      "postcodes": "BA15",
+      "housing": "Bath stone weavers' cottages and terraces climbing the hillside, many listed."
+    },
+    {
+      "name": "Marlborough",
+      "postcodes": "SN8",
+      "housing": "Georgian town houses on the wide High Street and brick and flint cottages in the villages."
+    }
+  ],
+  "housing": "Wiltshire is a large rural county of market towns and villages, with Salisbury, Trowbridge and Chippenham the largest towns. Many older homes are stone, brick and flint or thatched, a lot of them listed or in conservation areas, while the larger towns have grown with big new estates. Army bases around Salisbury Plain, at Tidworth, Bulford, Larkhill and Warminster, bring service family housing and rented homes for military personnel. Private renting is a little below the national level.",
+  "checkinTips": [
+    "Stone and thatched cottages in the villages: photograph thatch, damp at the base of walls and timber windows, and note fire safety advice.",
+    "Listed homes in Salisbury, Bradford on Avon and Marlborough: record original features carefully, as repairs need consent.",
+    "Rural homes off the gas network: note the oil tank level, wood burners and any septic tank or private water supply.",
+    "Homes let to service families near Salisbury Plain: record every appliance and furnishing in detail, as postings can end tenancies at short notice.",
+    "Riverside homes on the Avon in Salisbury and Bradford on Avon: check for flood damage, airbricks and watermarks.",
+    "New-build estates in Trowbridge, Chippenham and Melksham: check sealant, flooring and snagging marks, and who maintains shared land."
+  ],
+  "tenantHelp": "Wiltshire Council's Private Sector Housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "swindon",
+    "south-gloucestershire",
+    "bath",
+    "somerset",
+    "dorset",
+    "new-forest",
+    "test-valley",
+    "west-berkshire",
+    "cotswold",
+    "vale-of-white-horse"
+  ]
+}

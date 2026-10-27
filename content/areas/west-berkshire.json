@@ -1,0 +1,103 @@
+{
+  "slug": "west-berkshire",
+  "name": "West Berkshire",
+  "council": {
+    "name": "West Berkshire Council",
+    "url": "https://www.westberks.gov.uk",
+    "privateRentingUrl": "https://info.westberks.gov.uk/article/27633"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households), run by the Public Protection Partnership.",
+    "fee": "£1,145 for an HMO licence application (council page)",
+    "source": "https://info.westberks.gov.uk/article/27633",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,338 a month (ONS, August 2026), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000037/"
+  },
+  "price": {
+    "text": "£404,000 (UK HPI, July 2026, provisional), up 0.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000037/"
+  },
+  "privateRentedShare": {
+    "text": "17% of households rent privately (Census 2021), up from 14% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000037/"
+  },
+  "councilTax": {
+    "text": "£2,505 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/west-berkshire"
+  },
+  "postcodes": [
+    "RG14",
+    "RG7",
+    "RG8",
+    "RG17",
+    "RG18",
+    "RG19",
+    "RG20",
+    "RG31"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Newbury",
+      "postcodes": "RG14",
+      "housing": "Victorian terraces near the centre, post-war estates and many modern flats and town houses, including Parkway and the racecourse development."
+    },
+    {
+      "name": "Thatcham",
+      "postcodes": "RG18, RG19",
+      "housing": "Large estates of 1960s to 1990s houses and newer developments on the town's edges."
+    },
+    {
+      "name": "Hungerford",
+      "postcodes": "RG17",
+      "housing": "Georgian and Victorian houses along the High Street and canal, with post-war estates around them."
+    },
+    {
+      "name": "Tilehurst, Calcot and Purley",
+      "postcodes": "RG31",
+      "housing": "Suburban semis, bungalows and modern estates on the western edge of Reading."
+    },
+    {
+      "name": "Theale and Burghfield",
+      "postcodes": "RG7",
+      "housing": "Village houses with newer estates, some close to the gravel pits and the M4."
+    },
+    {
+      "name": "Pangbourne and the Thames villages",
+      "postcodes": "RG8",
+      "housing": "Victorian and Edwardian villas and riverside houses, some in flood risk areas."
+    },
+    {
+      "name": "Lambourn",
+      "postcodes": "RG17",
+      "housing": "Racing-yard cottages, flats for stable staff and village houses in the downland valley."
+    },
+    {
+      "name": "Compton and the Downs villages",
+      "postcodes": "RG20",
+      "housing": "Brick and flint cottages, farmhouses and barn conversions in small rural villages."
+    }
+  ],
+  "housing": "West Berkshire is mostly rural, with Newbury and Thatcham holding much of the population and suburbs such as Tilehurst and Calcot on Reading's edge. Newbury has seen many new flats and town houses, including large town centre schemes. The North Wessex Downs villages have brick and flint cottages and farm conversions, and Lambourn has housing tied to the racing industry. HMOs are fairly few, and the council runs only mandatory HMO licensing.",
+  "checkinTips": [
+    "Brick and flint cottages in the Downs villages: photograph timber windows, damp at the base of walls and any oil tank or septic tank.",
+    "Riverside homes in Pangbourne and along the Kennet: note flood defences, airbricks and any watermarks or past flood damage.",
+    "Modern flats in Newbury town centre: record fobs, parking permits, bike store access and the condition of shared areas.",
+    "New-build estates in Thatcham and Newbury: check sealant, flooring and any snagging marks, and who maintains the shared land.",
+    "Racing-yard flats and cottages in Lambourn: photograph shared yards, stores and any furniture supplied with the job.",
+    "Large gardens in village homes: photograph lawns, hedges, fences and outbuildings."
+  ],
+  "tenantHelp": "West Berkshire's private housing work is done by the Public Protection Partnership, which looks into hazards and disrepair in private rented homes and HMOs.",
+  "nearby": [
+    "reading",
+    "wokingham",
+    "basingstoke-and-deane",
+    "test-valley",
+    "wiltshire",
+    "vale-of-white-horse",
+    "south-oxfordshire"
+  ]
+}

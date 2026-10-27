@@ -1,0 +1,97 @@
+{
+  "slug": "woking",
+  "name": "Woking",
+  "council": {
+    "name": "Woking Borough Council",
+    "url": "https://www.woking.gov.uk",
+    "privateRentingUrl": "https://www.woking.gov.uk/housing/private-rented-housing/private-landlords-letting-agents"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing began on 5 January 2026 and runs for five years: shared homes with three or more occupants from two or more households sharing facilities need a licence, on top of national mandatory HMO licensing for five or more.",
+    "fee": "Around £880 for a new HMO licence and £642 to renew (council fees from April 2025)",
+    "source": "https://www.woking.gov.uk/housing/private-rented-housing/houses-multiple-occupation-hmos/hmos-need-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,615 a month (ONS, April 2026), down 1.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000217/"
+  },
+  "price": {
+    "text": "£446,000 (UK HPI, March 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000217/"
+  },
+  "privateRentedShare": {
+    "text": "21% of households rent privately (Census 2021), up from 16% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000217/"
+  },
+  "councilTax": {
+    "text": "£2,598 Band D (2026/27), including Surrey County Council and police precepts",
+    "source": "https://www.woking.gov.uk/your-council/have-your-say/public-notices/council-tax-2026-2027"
+  },
+  "postcodes": [
+    "GU21",
+    "GU22",
+    "GU23",
+    "GU24",
+    "KT14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Woking town centre",
+      "postcodes": "GU21, GU22",
+      "housing": "High-rise and mid-rise apartment blocks from the town centre regeneration, with flats over shops."
+    },
+    {
+      "name": "Maybury and Sheerwater",
+      "postcodes": "GU21, GU22",
+      "housing": "Victorian and Edwardian terraces in Maybury and the post-war Sheerwater estate, which is being rebuilt."
+    },
+    {
+      "name": "Goldsworth Park",
+      "postcodes": "GU21",
+      "housing": "A large 1970s and 1980s estate of terraced, semi-detached and detached houses around a lake."
+    },
+    {
+      "name": "Knaphill and St John's",
+      "postcodes": "GU21",
+      "housing": "Victorian cottages, interwar semis and modern estates on the western side of the town."
+    },
+    {
+      "name": "Horsell",
+      "postcodes": "GU21",
+      "housing": "Edwardian and interwar detached and semi-detached houses near Horsell Common."
+    },
+    {
+      "name": "Hook Heath and Mayford",
+      "postcodes": "GU22",
+      "housing": "Large detached houses in wooded plots, many from the early 1900s."
+    },
+    {
+      "name": "Byfleet and West Byfleet",
+      "postcodes": "KT14",
+      "housing": "Victorian and interwar houses, bungalows near the River Wey and flats near the station."
+    },
+    {
+      "name": "Pyrford and Old Woking",
+      "postcodes": "GU22",
+      "housing": "Older village houses and post-war estates beside the Wey valley."
+    }
+  ],
+  "housing": "Woking is a commuter town with fast trains to London, and its private rented share rose sharply between 2011 and 2021. The town centre has been rebuilt with tall apartment blocks, and many of its rented homes are flats there. Maybury has older terraces, Goldsworth Park and Sheerwater are large planned estates, and Hook Heath and Horsell have big detached houses. The council licenses smaller shared houses as well as large ones since January 2026.",
+  "checkinTips": [
+    "Tall apartment blocks in the town centre: record fobs, parking and bike store access, entry phones and the condition of shared lifts and corridors.",
+    "Shared houses with three or more sharers: check the HMO licence, and photograph each bedroom's lock, furniture and fire doors.",
+    "Victorian terraces in Maybury: photograph sash windows, damp in rear kitchens and rear gardens.",
+    "Homes near the River Wey in Byfleet and Old Woking: check for flood damage, airbricks and watermarks.",
+    "1970s and 1980s houses in Goldsworth Park: note shared parking courts, garages in blocks and older double glazing.",
+    "Large houses in Hook Heath and Horsell: photograph gardens, gates, outbuildings and trees close to the house."
+  ],
+  "tenantHelp": "Woking Borough Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "guildford",
+    "surrey-heath",
+    "runnymede",
+    "elmbridge"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "slug": "west-devon",
+  "name": "West Devon",
+  "council": {
+    "name": "West Devon Borough Council",
+    "url": "https://www.westdevon.gov.uk",
+    "privateRentingUrl": "https://www.westdevon.gov.uk/housing/houses-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://www.westdevon.gov.uk/housing/houses-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£846 a month (ONS, August 2026), up 3.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000047/"
+  },
+  "price": {
+    "text": "£286,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000047/"
+  },
+  "privateRentedShare": {
+    "text": "18% of households rent privately (Census 2021), up from 15% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000047/"
+  },
+  "councilTax": {
+    "text": "£2,705 average Band D (2026/27), including Devon County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/west-devon"
+  },
+  "postcodes": [
+    "PL19",
+    "PL20",
+    "EX20",
+    "EX21",
+    "PL16",
+    "EX17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Tavistock",
+      "postcodes": "PL19",
+      "housing": "Victorian granite and slate houses, including the Duke of Bedford's model cottages, with modern estates on the edges."
+    },
+    {
+      "name": "Okehampton",
+      "postcodes": "EX20",
+      "housing": "Stone and rendered houses in the town centre and growing new-build estates near the A30."
+    },
+    {
+      "name": "Yelverton and Horrabridge",
+      "postcodes": "PL20",
+      "housing": "Detached houses, bungalows and cottages on the edge of Dartmoor."
+    },
+    {
+      "name": "Hatherleigh",
+      "postcodes": "EX20",
+      "housing": "Cob and thatched cottages in a small market town with some newer homes."
+    },
+    {
+      "name": "Lifton and the Tamar villages",
+      "postcodes": "PL16",
+      "housing": "Stone cottages, farmhouses and bungalows in villages near the Cornish border."
+    },
+    {
+      "name": "Princetown",
+      "postcodes": "PL20",
+      "housing": "Granite terraces and former prison staff houses high on Dartmoor."
+    },
+    {
+      "name": "North Tawton",
+      "postcodes": "EX20",
+      "housing": "Older terraces and cob cottages with some post-war council housing."
+    },
+    {
+      "name": "Bere Alston and Bere Ferrers",
+      "postcodes": "PL20",
+      "housing": "Victorian terraces from the mining era and village cottages on the Bere peninsula."
+    }
+  ],
+  "housing": "West Devon is a rural borough taking in much of Dartmoor, with Tavistock and Okehampton as its main towns. Many homes are built of granite, stone or cob, some thatched and listed, and a large share are off the gas network. Private renting is close to the national level, with farm cottages and flats over shops in the market towns. Holiday lets and second homes are common in the moorland villages.",
+  "checkinTips": [
+    "Granite and stone cottages: photograph damp patches, condensation and mould, which are common in solid-walled homes on and around Dartmoor.",
+    "Homes off the gas network: record the oil tank level, LPG bottles, wood burners and any private water supply or septic tank.",
+    "Cob and thatched cottages around Hatherleigh: photograph the thatch, lime render and timber windows, and note any fire safety advice.",
+    "Moorland homes in Princetown and Yelverton: check heating, gutters and windows for weather damage after winter.",
+    "Flats over shops in Tavistock and Okehampton: note the separate entrance, stairs, meters and any shared bin store.",
+    "Farm cottages: photograph yards, gates, outbuildings and the access track if it is part of the tenancy."
+  ],
+  "tenantHelp": "West Devon Borough Council's Environmental Health team deals with disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "south-hams",
+    "teignbridge",
+    "mid-devon",
+    "torridge",
+    "plymouth",
+    "cornwall"
+  ]
+}

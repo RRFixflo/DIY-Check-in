@@ -1,0 +1,104 @@
+{
+  "slug": "wychavon",
+  "name": "Wychavon",
+  "council": {
+    "name": "Wychavon District Council",
+    "url": "https://www.wychavon.gov.uk",
+    "privateRentingUrl": "https://www.wychavon.gov.uk/housing/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from different households sharing facilities).",
+    "fee": "£820 for a new HMO licence and £642 to renew (council fees 2026/27)",
+    "source": "https://www.wychavon.gov.uk/housing/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£954 a month (ONS, August 2026), up 3.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000238/"
+  },
+  "price": {
+    "text": "£323,000 (UK HPI, July 2026, provisional), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000238/"
+  },
+  "privateRentedShare": {
+    "text": "13% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000238/"
+  },
+  "councilTax": {
+    "text": "£2,373 average Band D (2026/27), including Worcestershire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/wychavon"
+  },
+  "postcodes": [
+    "WR9",
+    "WR10",
+    "WR11",
+    "WR7",
+    "WR8",
+    "WR12",
+    "B96",
+    "WR5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Droitwich Spa",
+      "postcodes": "WR9",
+      "housing": "Timber-framed and Victorian houses in the old spa town, with large 1970s and 1980s estates and newer homes."
+    },
+    {
+      "name": "Evesham",
+      "postcodes": "WR11",
+      "housing": "Georgian and Victorian houses near the river, terraces and many modern estates, with homes let to seasonal farm workers."
+    },
+    {
+      "name": "Pershore",
+      "postcodes": "WR10",
+      "housing": "Georgian town houses along Bridge Street and post-war and modern estates."
+    },
+    {
+      "name": "Broadway",
+      "postcodes": "WR12",
+      "housing": "Cotswold stone cottages and houses, many listed, in a busy tourist village."
+    },
+    {
+      "name": "Upton-upon-Severn",
+      "postcodes": "WR8",
+      "housing": "Older brick houses and cottages in a riverside town that floods often."
+    },
+    {
+      "name": "Inkberrow and Feckenham",
+      "postcodes": "WR7, B96",
+      "housing": "Black-and-white timber-framed cottages, farmhouses and modern homes in villages."
+    },
+    {
+      "name": "Norton and Whittington",
+      "postcodes": "WR5",
+      "housing": "Village houses and large new-build estates on the edge of Worcester."
+    },
+    {
+      "name": "Badsey and the Vale villages",
+      "postcodes": "WR11",
+      "housing": "Brick cottages, bungalows and newer estates among market gardens in the Vale of Evesham."
+    }
+  ],
+  "housing": "Wychavon is a rural district of market towns and villages around Worcester, mostly owner-occupied with private renting well below the national level. Droitwich Spa, Evesham and Pershore have period centres and large modern estates, while villages have timber-framed and Cotswold stone cottages, many listed. The Vale of Evesham's farms and packhouses mean some homes are let to seasonal and agricultural workers. Riverside towns on the Avon and Severn, such as Evesham, Pershore and Upton, are prone to flooding.",
+  "checkinTips": [
+    "Riverside homes in Evesham, Pershore and Upton-upon-Severn: photograph flood defences, airbricks and watermarks, as these towns flood often.",
+    "Timber-framed and black-and-white cottages: photograph beams, infill panels, low doorways and any damp or rot.",
+    "Cotswold stone homes in Broadway: check damp at the base of walls, stone slates and timber windows, and record listed features.",
+    "Shared homes for farm and packhouse workers in the Vale: record each room's furniture and locks, and check a licence is in place for five or more sharers.",
+    "Rural homes off the gas network: note the oil tank level, wood burners and any septic tank.",
+    "New-build estates near Worcester and Droitwich: check sealant, flooring and snagging marks, and who maintains shared land."
+  ],
+  "tenantHelp": "Wychavon District Council's Private Sector Housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs.",
+  "nearby": [
+    "worcester",
+    "malvern-hills",
+    "wyre-forest",
+    "bromsgrove",
+    "redditch",
+    "stratford-on-avon",
+    "cotswold",
+    "tewkesbury"
+  ]
+}

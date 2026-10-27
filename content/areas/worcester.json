@@ -1,0 +1,95 @@
+{
+  "slug": "worcester",
+  "name": "Worcester",
+  "council": {
+    "name": "Worcester City Council",
+    "url": "https://www.worcester.gov.uk",
+    "privateRentingUrl": "https://www.worcester.gov.uk/housing/landlord-advice/additional-licensing-of-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "City-wide additional HMO licensing from 1 September 2025 to 31 August 2030 (following earlier schemes from 2020 and 2023): smaller HMOs of three or four people from two or more households need a licence, on top of national mandatory HMO licensing for five or more.",
+    "fee": null,
+    "source": "https://www.worcester.gov.uk/housing/landlord-advice/additional-licensing-of-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£977 a month (ONS, August 2026), up 5.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000237/"
+  },
+  "price": {
+    "text": "£251,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000237/"
+  },
+  "privateRentedShare": {
+    "text": "21% of households rent privately (Census 2021), up from 18% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000237/"
+  },
+  "councilTax": {
+    "text": "£2,401 Band D for most homes (2026/27), including Worcestershire County Council, police and fire precepts",
+    "source": "https://www.worcester.gov.uk/council-tax/how-much-is-my-council-tax/what-your-council-tax-pays-for-2026-27"
+  },
+  "postcodes": [
+    "WR1",
+    "WR2",
+    "WR3",
+    "WR4",
+    "WR5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Cathedral",
+      "postcodes": "WR1",
+      "housing": "Georgian and timber-framed houses, flats over shops and modern riverside apartments."
+    },
+    {
+      "name": "Arboretum",
+      "postcodes": "WR1",
+      "housing": "Victorian terraces and villas north of the centre, many let as flats or shared houses."
+    },
+    {
+      "name": "St John's",
+      "postcodes": "WR2",
+      "housing": "Victorian terraces near the university's St John's campus, with many student lets."
+    },
+    {
+      "name": "Barbourne and Claines",
+      "postcodes": "WR1, WR3",
+      "housing": "Victorian and Edwardian terraces and semis along the Ombersley Road, with larger houses in Claines."
+    },
+    {
+      "name": "Rainbow Hill and Tolladine",
+      "postcodes": "WR3, WR4",
+      "housing": "Victorian terraces on the hill and post-war council estates."
+    },
+    {
+      "name": "Warndon and Warndon Villages",
+      "postcodes": "WR4",
+      "housing": "Post-war council estates and large 1980s and 1990s estates of private houses."
+    },
+    {
+      "name": "St Peter's and Battenhall",
+      "postcodes": "WR5",
+      "housing": "Modern estates in St Peter's and larger Victorian and interwar houses in Battenhall."
+    },
+    {
+      "name": "Ronkswood and Red Hill",
+      "postcodes": "WR5",
+      "housing": "Interwar and post-war council-built houses, many now let privately."
+    }
+  ],
+  "housing": "Worcester is a compact cathedral city where private renting is above the national level. Victorian terraces in the Arboretum, St John's and Barbourne are often let as flats or shared houses, and the University of Worcester brings many student lets, which is why the whole city is covered by additional HMO licensing. Post-war council estates in Warndon, Tolladine and Ronkswood include ex-council homes now let privately, while St Peter's and Warndon Villages are modern estates. Riverside streets near the Severn flood regularly.",
+  "checkinTips": [
+    "Shared houses and student lets in St John's and the Arboretum: check the HMO licence even for three or four sharers, and photograph each room's lock, furniture and fire doors.",
+    "Riverside homes near the Severn and Teme: photograph flood defences, airbricks and any watermarks, as these streets flood often.",
+    "Victorian terraces: photograph back yards, damp in rear kitchens and older sash or replacement windows.",
+    "Flats over shops and in converted buildings in the city centre: note separate entrances, fire doors and meter cupboards.",
+    "Ex-council homes in Warndon and Tolladine: photograph fences, gardens and shared parking areas.",
+    "Listed and timber-framed buildings near the cathedral: record original features carefully, as repairs need consent."
+  ],
+  "tenantHelp": "Worcester City Council's private sector housing team investigates disrepair and unsafe conditions in private rented homes and licenses HMOs city-wide.",
+  "nearby": [
+    "malvern-hills",
+    "wychavon"
+  ]
+}
