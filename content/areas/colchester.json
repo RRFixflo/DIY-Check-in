@@ -4,19 +4,31 @@
   "council": {
     "name": "Colchester City Council",
     "url": "https://www.colchester.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.colchester.gov.uk/private-sector-housing/hmo-licensing/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
     "fee": null,
-    "source": null,
+    "source": "https://www.colchester.gov.uk/private-sector-housing/hmo-licensing/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,203 a month (ONS, June 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000071/"
+  },
+  "price": {
+    "text": "£298,000 (UK HPI, May 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000071/"
+  },
+  "privateRentedShare": {
+    "text": "21.5% of households rent privately (Census 2021), up from 18.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000071/"
+  },
+  "councilTax": {
+    "text": "£2,283 average Band D (2026/27), including Essex County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/colchester"
+  },
   "postcodes": [
     "CO1",
     "CO2",

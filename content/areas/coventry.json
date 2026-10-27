@@ -4,19 +4,31 @@
   "council": {
     "name": "Coventry City Council",
     "url": "https://www.coventry.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.coventry.gov.uk/housing-enforcement/additional-licensing-scheme-2025"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "Citywide additional HMO licensing from 4 May 2025 to 3 May 2030, for HMOs of three or four people and some converted blocks of flats (section 257 HMOs); larger HMOs need a mandatory licence.",
     "fee": null,
-    "source": null,
+    "source": "https://www.coventry.gov.uk/housing-enforcement/additional-licensing-scheme-2025",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,020 a month (ONS, August 2026), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000026/"
+  },
+  "price": {
+    "text": "£228,000 (UK HPI, July 2026, provisional), up 3.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000026/"
+  },
+  "privateRentedShare": {
+    "text": "24.7% of households rent privately (Census 2021), up from 20.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000026/"
+  },
+  "councilTax": {
+    "text": "£2,517 average Band D (2026/27), including police and fire precepts",
+    "source": "https://housecheckup.co.uk/council-tax/coventry"
+  },
   "postcodes": [
     "CV1",
     "CV2",

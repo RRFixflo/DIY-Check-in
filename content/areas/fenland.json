@@ -4,19 +4,31 @@
   "council": {
     "name": "Fenland District Council",
     "url": "https://www.fenland.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.fenland.gov.uk/article/14238/Houses-in-Multiple-Occupation-HMO-Licensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme. A scheme for seven Wisbech wards was consulted on around 2017 but not brought in.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
     "fee": null,
-    "source": null,
+    "source": "https://www.fenland.gov.uk/article/14238/Houses-in-Multiple-Occupation-HMO-Licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£830 a month (ONS, March 2026), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000010/"
+  },
+  "price": {
+    "text": "£228,000 (UK HPI, February 2026, provisional), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000010/"
+  },
+  "privateRentedShare": {
+    "text": "20.0% of households rent privately (Census 2021), up from 15.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000010/"
+  },
+  "councilTax": {
+    "text": "£2,538 average Band D (2026/27), including Cambridgeshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/fenland"
+  },
   "postcodes": [
     "PE13",
     "PE14",

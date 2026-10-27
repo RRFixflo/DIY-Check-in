@@ -7,16 +7,28 @@
     "privateRentingUrl": null
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing of larger HMOs (five or more people from two or more households).",
     "fee": null,
-    "source": null,
+    "source": "https://chorley.moderngov.co.uk/documents/s186845/Appendix 1 for Housing of Multiple Occupation Action Plan_v1 CS.pdf",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£798 a month (ONS, August 2026), up 7.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000118/"
+  },
+  "price": {
+    "text": "£213,000 (UK HPI, July 2026, provisional), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000118/"
+  },
+  "privateRentedShare": {
+    "text": "13.9% of households rent privately (Census 2021), up from 10.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000118"
+  },
+  "councilTax": {
+    "text": "£2,382 Band D (2026/27) before parish precepts, including Lancashire County Council, police and fire",
+    "source": "https://chorley.moderngov.co.uk/documents/s194251/Appendix A Formal Council Tax Resolution including Special Expenses Parish Precepts 202627.pdf"
+  },
   "postcodes": [
     "PR6",
     "PR7",

@@ -4,19 +4,31 @@
   "council": {
     "name": "Derbyshire Dales District Council",
     "url": "https://www.derbyshiredales.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.derbyshiredales.gov.uk/housing/advice-and-support/finding-a-home/private-rented-housing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households (licences last five years).",
+    "fee": "£627 for an HMO licence application (2026/27)",
+    "source": "https://www.derbyshiredales.gov.uk/housing/advice-and-support/finding-a-home/houses-in-multiple-occupation",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£819 a month (ONS, August 2026), up 9.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000035/"
+  },
+  "price": {
+    "text": "£355,000 (UK HPI, July 2026, provisional), up 7.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000035/"
+  },
+  "privateRentedShare": {
+    "text": "14.4% of households rent privately (Census 2021), up from 12.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000035/"
+  },
+  "councilTax": {
+    "text": "£2,445 average Band D (2026/27), including Derbyshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/derbyshire-dales"
+  },
   "postcodes": [
     "DE4",
     "DE6",

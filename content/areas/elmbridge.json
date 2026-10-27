@@ -4,19 +4,31 @@
   "council": {
     "name": "Elmbridge Borough Council",
     "url": "https://www.elmbridge.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.elmbridge.gov.uk/housing/help-private-landlords"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "£600 for a five-year HMO licence (£50 off for members of a landlord association or accreditation scheme), as listed on the council site in October 2026",
+    "source": "https://www.elmbridge.gov.uk/housing/help-private-landlords/houses-multiple-occupation-hmos",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,891 a month (ONS, August 2026), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000207/"
+  },
+  "price": {
+    "text": "£748,000 (UK HPI, July 2026, provisional), up 1.9% on a year earlier: the highest in the South East",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000207/"
+  },
+  "privateRentedShare": {
+    "text": "17.5% of households rent privately (Census 2021), up from 15.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000207/"
+  },
+  "councilTax": {
+    "text": "£2,557 Band D (2026/27) outside Claygate parish, including Surrey County Council (with fire) and police",
+    "source": "https://www.elmbridge.gov.uk/your-council/finance-and-transparency/how-your-council-tax-spent/council-tax-2026-2027"
+  },
   "postcodes": [
     "KT7",
     "KT8",

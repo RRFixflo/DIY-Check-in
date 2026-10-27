@@ -4,19 +4,31 @@
   "council": {
     "name": "City of Doncaster Council",
     "url": "https://www.doncaster.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://doncaster.gov.uk/services/housing/landlord-licences"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "Selective licensing in Hexthorpe only, from 1 March 2022 to 28 February 2027. The Edlington scheme ended in February 2023.",
+    "additional": "No additional HMO licensing scheme in force: only mandatory licensing, for HMOs with five or more people from two or more households.",
     "fee": null,
-    "source": null,
+    "source": "https://www.doncaster.gov.uk/services/business-investment/selective-licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£690 a month (ONS, June 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000017/"
+  },
+  "price": {
+    "text": "£173,000 (UK HPI, May 2026, provisional), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000017/"
+  },
+  "privateRentedShare": {
+    "text": "19.4% of households rent privately (Census 2021), up from 14.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000017/"
+  },
+  "councilTax": {
+    "text": "£2,168 Band D (2026/27) before parish precepts, including police and fire",
+    "source": "https://housecheckup.co.uk/council-tax/doncaster"
+  },
   "postcodes": [
     "DN1",
     "DN2",

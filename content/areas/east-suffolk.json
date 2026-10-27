@@ -7,16 +7,28 @@
     "privateRentingUrl": "https://www.eastsuffolk.gov.uk/housing/private-sector-housing/hmo"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
     "fee": null,
-    "source": null,
+    "source": "https://www.eastsuffolk.gov.uk/housing/privately-rented-housing/houses-multiple-occupation-hmo",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£848 a month (ONS, September 2026)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000244/"
+  },
+  "price": {
+    "text": "£278,000 (UK HPI, August 2026, provisional), down 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000244/"
+  },
+  "privateRentedShare": {
+    "text": "17.6% of households rent privately (Census 2021), up from 14.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000244/"
+  },
+  "councilTax": {
+    "text": "£2,335 average Band D (2026/27), including Suffolk County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/east-suffolk"
+  },
   "postcodes": [
     "IP11",
     "IP12",

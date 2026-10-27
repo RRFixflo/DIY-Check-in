@@ -4,19 +4,31 @@
   "council": {
     "name": "Dudley Metropolitan Borough Council",
     "url": "https://www.dudley.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.dudley.gov.uk/residents/housing/housing-options/private-housing/private-landlords/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people. A borough-wide Article 4 direction since 15 September 2023 means turning a house into a small HMO needs planning permission.",
     "fee": null,
-    "source": null,
+    "source": "https://www.dudley.gov.uk/residents/housing/housing-options/private-housing/private-landlords/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£858 a month (ONS, August 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000027/"
+  },
+  "price": {
+    "text": "£232,000 (UK HPI, July 2026, provisional), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000027/"
+  },
+  "privateRentedShare": {
+    "text": "13.8% of households rent privately (Census 2021), up from 9.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000027"
+  },
+  "councilTax": {
+    "text": "£2,145 average Band D (2026/27), including police and fire precepts",
+    "source": "https://housecheckup.co.uk/council-tax/dudley"
+  },
   "postcodes": [
     "DY1",
     "DY2",

@@ -7,16 +7,28 @@
     "privateRentingUrl": "https://www.eppingforestdc.gov.uk/?p=28220"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "£1,036 for an HMO licence covering five units, plus £41 for each extra unit (council fee page, 2025)",
+    "source": "https://www.eppingforestdc.gov.uk/housing/landlords/hmo-application-process/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,808 a month (ONS, January 2026), up 6.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000072/"
+  },
+  "price": {
+    "text": "£550,000 (UK HPI, December 2025, provisional), up 2.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000072/"
+  },
+  "privateRentedShare": {
+    "text": "14.9% of households rent privately (Census 2021), up from 11.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000072/"
+  },
+  "councilTax": {
+    "text": "£2,277 average Band D (2026/27), including Essex County Council, police, fire and parish precepts",
+    "source": "https://www.eppingforestdc.gov.uk/delivering-value-for-money-for-residents/"
+  },
   "postcodes": [
     "CM16",
     "CM5",

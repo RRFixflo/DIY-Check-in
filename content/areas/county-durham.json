@@ -4,19 +4,31 @@
   "council": {
     "name": "Durham County Council",
     "url": "https://www.durham.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://durham.gov.uk/selectivelicensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "Selective licensing in 103 of the county's 324 small areas (LSOAs), covering about 42% of privately rented homes, from 1 April 2022 to 31 March 2027. A new scheme from 1 April 2027 was consulted on (closed 12 August 2026).",
+    "additional": "No additional HMO licensing scheme: mandatory licensing applies to HMOs with five or more people from two or more households.",
     "fee": null,
-    "source": null,
+    "source": "https://durham.gov.uk/selectivelicensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£653 a month (ONS, September 2026), up 6.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000047/"
+  },
+  "price": {
+    "text": "£141,000 (UK HPI, August 2026, provisional), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000047/"
+  },
+  "privateRentedShare": {
+    "text": "17.1% of households rent privately (Census 2021), up from 12.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000047"
+  },
+  "councilTax": {
+    "text": "£2,622 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/durham"
+  },
   "postcodes": [
     "DH1",
     "DH2",

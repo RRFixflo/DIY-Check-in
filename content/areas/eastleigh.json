@@ -4,19 +4,31 @@
   "council": {
     "name": "Eastleigh Borough Council",
     "url": "https://www.eastleigh.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.eastleigh.gov.uk/business/council-services-for-businesses/licensing-permits-and-registration/house-in-multiple-occupation-licence"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme: the council says it operates only the mandatory licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
+    "fee": "£1,450 for an HMO licence from 1 October 2026 (plus £330 for an optional pre-application visit)",
+    "source": "https://www.eastleigh.gov.uk/housing/landlords-renters-and-homeowners/information-for-landlords/housing-fees-and-charges",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,213 a month (ONS, June 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000086/"
+  },
+  "price": {
+    "text": "£308,000 (UK HPI, May 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000086/"
+  },
+  "privateRentedShare": {
+    "text": "13.9% of households rent privately (Census 2021), up from 12.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000086/"
+  },
+  "councilTax": {
+    "text": "£2,342 average Band D (2026/27), including Hampshire County Council, police, fire and parish precepts",
+    "source": "https://www.eastleigh.gov.uk/latest-news/real-terms-cut-in-eastleigh-borough-element-of-council-tax-for-23rd-year"
+  },
   "postcodes": [
     "SO18",
     "SO30",

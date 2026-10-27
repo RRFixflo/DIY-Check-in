@@ -1,0 +1,104 @@
+{
+  "slug": "dartford",
+  "name": "Dartford",
+  "council": {
+    "name": "Dartford Borough Council",
+    "url": "https://www.dartford.gov.uk",
+    "privateRentingUrl": "https://www.dartford.gov.uk/private-sector-1/private-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households. Separately, Article 4 directions mean turning a house into a small HMO may need planning permission.",
+    "fee": "£905 for a five-year HMO licence and £695 to renew (2025/26)",
+    "source": "https://www.dartford.gov.uk/private-sector-1/houses-multiple-occupancy",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,575 a month (ONS, August 2026), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000107/"
+  },
+  "price": {
+    "text": "£348,000 (UK HPI, July 2026, provisional), down 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000107/"
+  },
+  "privateRentedShare": {
+    "text": "18.1% of households rent privately (Census 2021), up from 15.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000107/"
+  },
+  "councilTax": {
+    "text": "£2,375 average Band D (2026/27), including Kent County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/dartford"
+  },
+  "postcodes": [
+    "DA1",
+    "DA2",
+    "DA3",
+    "DA4",
+    "DA9",
+    "DA10",
+    "DA13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dartford town centre",
+      "postcodes": "DA1",
+      "housing": "Victorian and Edwardian terraces around the centre, with newer blocks of flats near the station and flats over shops on the high street."
+    },
+    {
+      "name": "Temple Hill",
+      "postcodes": "DA1",
+      "housing": "A large post-war estate of council-built houses and low-rise flats, many now privately owned and let."
+    },
+    {
+      "name": "Wilmington",
+      "postcodes": "DA2",
+      "housing": "Mainly interwar and post-war semi-detached and detached houses on residential roads."
+    },
+    {
+      "name": "Joydens Wood",
+      "postcodes": "DA2, DA5",
+      "housing": "A wooded settlement of bungalows, chalet homes and detached houses that grew from 1930s plots."
+    },
+    {
+      "name": "Stone and Greenhithe",
+      "postcodes": "DA9",
+      "housing": "Older village terraces alongside large modern riverside estates of houses and flats, such as Ingress Park."
+    },
+    {
+      "name": "Swanscombe",
+      "postcodes": "DA10",
+      "housing": "Victorian and Edwardian terraces from the town's cement-works era and post-war council housing."
+    },
+    {
+      "name": "Ebbsfleet Valley",
+      "postcodes": "DA10",
+      "housing": "New-build houses and flats in the Ebbsfleet Garden City developments on former quarry land."
+    },
+    {
+      "name": "Longfield and New Barn",
+      "postcodes": "DA3",
+      "housing": "A commuter village of 20th-century semis, bungalows and detached houses, some on large plots."
+    },
+    {
+      "name": "Sutton-at-Hone and Hawley",
+      "postcodes": "DA4",
+      "housing": "Darent valley villages with older cottages, post-war houses and some new-build infill."
+    }
+  ],
+  "housing": "Dartford is one of the fastest-growing districts in England: its population rose by about a fifth between 2011 and 2021, driven by new estates at Ebbsfleet Valley, Greenhithe and around the town. The older stock is Victorian and Edwardian terraces in Dartford, Swanscombe and Stone, with large post-war estates such as Temple Hill. Good rail links to London make it popular with commuters, so rents are high for Kent and many new-build flats and houses are let privately. Rural villages to the south, such as Longfield and the Darent valley, have mainly family houses and bungalows.",
+  "checkinTips": [
+    "New-build homes at Ebbsfleet Valley and Greenhithe: record any snagging still open, allocated parking spaces and the estate management company's rules.",
+    "Riverside and town-centre blocks of flats: note fob, key and post-box key counts and photograph communal entrances, lifts and bin stores.",
+    "Victorian and Edwardian terraces in Dartford, Swanscombe and Stone: check for damp in rear extensions and under bay windows, and photograph original sash or replacement windows.",
+    "Flats over shops on Dartford high street: photograph the separate entrance, stairs, smoke alarms and any noise or smell from the business below.",
+    "Former council houses on estates such as Temple Hill: note the condition of fences, gates and outbuildings, and any later alterations or extensions.",
+    "Bungalows and chalet homes in Joydens Wood: photograph gutters, roofs and paths under the trees, and any moss or leaf build-up."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a privately rented home can contact Dartford Borough Council's private sector housing team.",
+  "nearby": [
+    "bexley",
+    "sevenoaks",
+    "gravesham",
+    "thurrock"
+  ]
+}

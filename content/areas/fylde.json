@@ -4,19 +4,31 @@
   "council": {
     "name": "Fylde Council",
     "url": "https://www.fylde.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://new.fylde.gov.uk/resident/housing/the-licensing-of-houses-in-multiple-occupation/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from more than one household sharing amenities.",
+    "fee": "£1,107 for a new HMO licence (up to five units, plus £45 per extra unit), £850 to renew, as listed on the council site in October 2026",
+    "source": "https://new.fylde.gov.uk/resident/housing/the-licensing-of-houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£870 a month (ONS, August 2026), up 5.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000119/"
+  },
+  "price": {
+    "text": "£236,000 (UK HPI, July 2026, provisional), up 7.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000119/"
+  },
+  "privateRentedShare": {
+    "text": "19.2% of households rent privately (Census 2021), up from 17.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000119/"
+  },
+  "councilTax": {
+    "text": "£2,428 average Band D (2026/27) before parish precepts, including Lancashire County Council, police and fire",
+    "source": "https://new.fylde.gov.uk/wp-content/uploads/2026/03/Fylde-Council-Spending-Plans-2026-27.pdf"
+  },
   "postcodes": [
     "FY8",
     "PR4",

@@ -4,19 +4,31 @@
   "council": {
     "name": "East Cambridgeshire District Council",
     "url": "https://www.eastcambs.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://eastcambs.gov.uk/licensing-and-permits/other-licensing/hmo-licensing-information"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing basic amenities.",
     "fee": null,
-    "source": null,
+    "source": "https://eastcambs.gov.uk/licensing-and-permits/other-licensing/hmo-licensing-information",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,029 a month (ONS, June 2026), about the same as a year earlier (up 0.5%)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000009/"
+  },
+  "price": {
+    "text": "£347,000 (UK HPI, May 2026, provisional), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000009/"
+  },
+  "privateRentedShare": {
+    "text": "16.5% of households rent privately (Census 2021), up from 13.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000009/"
+  },
+  "councilTax": {
+    "text": "£2,485 average Band D (2026/27), including Cambridgeshire County Council, police, fire and parish precepts",
+    "source": "https://eastcambs.gov.uk/sites/default/files/2026-02/Agenda%20Item%2012%20-%20Appendix%201%20%26%20Schedules.pdf"
+  },
   "postcodes": [
     "CB6",
     "CB7",

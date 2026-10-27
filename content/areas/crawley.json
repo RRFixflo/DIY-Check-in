@@ -4,19 +4,31 @@
   "council": {
     "name": "Crawley Borough Council",
     "url": "https://crawley.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://crawley.gov.uk/housing/private-housing/houses-multiple-occupation"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households. Separately, Article 4 directions in 10 areas mean turning a house into a small HMO needs planning permission.",
     "fee": null,
-    "source": null,
+    "source": "https://crawley.gov.uk/housing/private-housing/houses-multiple-occupation",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,488 a month (ONS, August 2026), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000226/"
+  },
+  "price": {
+    "text": "£332,000 (UK HPI, July 2026, provisional), up 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000226/"
+  },
+  "privateRentedShare": {
+    "text": "19.8% of households rent privately (Census 2021), up from 14.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000226/"
+  },
+  "councilTax": {
+    "text": "£2,418 Band D (2026/27), including West Sussex County Council and police precepts",
+    "source": "https://publicnoticeportal.uk/notice/other/69a784eef45820d2831fe12a"
+  },
   "postcodes": [
     "RH10",
     "RH11",

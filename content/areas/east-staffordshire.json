@@ -4,19 +4,31 @@
   "council": {
     "name": "East Staffordshire Borough Council",
     "url": "https://www.eaststaffsbc.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.eaststaffsbc.gov.uk/housing-and-property/landlords"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "Selective licensing on nine streets in central Burton upon Trent (including Branston Road, Shobnall Street, Queen Street and Waterloo Street), from 12 September 2022 to 11 September 2027. In February 2026 the council consulted on renewing it and covering 16 streets.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
     "fee": null,
-    "source": null,
+    "source": "https://www.eaststaffsbc.gov.uk/housing-and-property/landlords/selective-licensing-scheme",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£822 a month (ONS, January 2026), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000193/"
+  },
+  "price": {
+    "text": "£224,000 (UK HPI, December 2025, provisional), up 1.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000193/"
+  },
+  "privateRentedShare": {
+    "text": "19.5% of households rent privately (Census 2021), up from 15.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000193/"
+  },
+  "councilTax": {
+    "text": "£2,351 average Band D (2026/27), including Staffordshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/east-staffordshire"
+  },
   "postcodes": [
     "DE6",
     "DE13",

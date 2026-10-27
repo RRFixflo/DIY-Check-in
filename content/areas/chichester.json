@@ -4,19 +4,31 @@
   "council": {
     "name": "Chichester District Council",
     "url": "https://www.chichester.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://chichester.gov.uk/article/38338/Report-an-unlicensed-HMO"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
     "fee": null,
-    "source": null,
+    "source": "https://chichester.gov.uk/article/38338/Report-an-unlicensed-HMO",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,326 a month (ONS, June 2026), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000225/"
+  },
+  "price": {
+    "text": "£436,000 (UK HPI, May 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000225/"
+  },
+  "privateRentedShare": {
+    "text": "18.1% of households rent privately (Census 2021), up from 14.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000225"
+  },
+  "councilTax": {
+    "text": "£2,470 average Band D (2026/27), including West Sussex County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/chichester"
+  },
   "postcodes": [
     "PO10",
     "PO18",

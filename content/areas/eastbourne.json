@@ -4,19 +4,31 @@
   "council": {
     "name": "Eastbourne Borough Council",
     "url": "https://www.lewes-eastbourne.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.lewes-eastbourne.gov.uk/article/1249/Houses-in-multiple-occupancy"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing amenities.",
     "fee": null,
-    "source": null,
+    "source": "https://www.lewes-eastbourne.gov.uk/article/1249/Houses-in-multiple-occupancy",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,169 a month (ONS, August 2026), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000061/"
+  },
+  "price": {
+    "text": "£255,000 (UK HPI, July 2026, provisional), down 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000061/"
+  },
+  "privateRentedShare": {
+    "text": "26.6% of households rent privately (Census 2021), up from 23.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000061/"
+  },
+  "councilTax": {
+    "text": "£2,654 Band D (2026/27), including East Sussex County Council, police and fire precepts",
+    "source": "https://publicnoticeportal.uk/notice/other/69aa28ad62024420c2e98e8c"
+  },
   "postcodes": [
     "BN20",
     "BN21",

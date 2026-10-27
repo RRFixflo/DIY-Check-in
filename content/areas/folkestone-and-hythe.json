@@ -4,19 +4,31 @@
   "council": {
     "name": "Folkestone and Hythe District Council",
     "url": "https://www.folkestone-hythe.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.folkestone-hythe.gov.uk/licensing/houses-multiple-occupation-hmo-licence-application"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
+    "fee": "£1,130 for an HMO licence application and £960 to renew, as listed on the council site in October 2026",
+    "source": "https://www.folkestone-hythe.gov.uk/licensing/houses-multiple-occupation-hmo-licence-application",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,178 a month (ONS, August 2026), up 10.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000112/"
+  },
+  "price": {
+    "text": "£303,000 (UK HPI, July 2026, provisional), up 0.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000112/"
+  },
+  "privateRentedShare": {
+    "text": "22.5% of households rent privately (Census 2021), up from 22.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000112/"
+  },
+  "councilTax": {
+    "text": "£2,457 Band D (2026/27) before parish precepts, including Kent County Council, police and fire",
+    "source": "https://www.folkestone-hythe.gov.uk/council-tax/council-tax-financial-information-2026-2027/2"
+  },
   "postcodes": [
     "CT18",
     "CT19",

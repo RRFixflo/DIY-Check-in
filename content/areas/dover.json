@@ -4,19 +4,31 @@
   "council": {
     "name": "Dover District Council",
     "url": "https://www.dover.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.dover.gov.uk/Housing/Private-Sector-Housing/Houses-in-Multiple-Occupation/HMO-ApplyforaLicence.aspx"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "£1,298 for a new HMO licence (up to eight habitable rooms) and £995 to renew, as listed on the council site in October 2026",
+    "source": "https://www.dover.gov.uk/Housing/Private-Sector-Housing/Houses-in-Multiple-Occupation/HMO-ApplyforaLicence.aspx",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,029 a month (ONS, July 2026), up 9.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000108/"
+  },
+  "price": {
+    "text": "£276,000 (UK HPI, June 2026, provisional), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000108/"
+  },
+  "privateRentedShare": {
+    "text": "19.0% of households rent privately (Census 2021), up from 17.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000108/"
+  },
+  "councilTax": {
+    "text": "£2,462 average Band D (2026/27), including Kent County Council, police, fire and the average parish precept",
+    "source": "https://www.dover.gov.uk/asset-library/where-your-council-tax-goes-2026-27.pdf"
+  },
   "postcodes": [
     "CT13",
     "CT14",

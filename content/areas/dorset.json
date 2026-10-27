@@ -4,19 +4,31 @@
   "council": {
     "name": "Dorset Council",
     "url": "https://www.dorsetcouncil.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.dorsetcouncil.gov.uk/housing/advice-for-landlords/mandatory-hmo-licensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households.",
+    "fee": "£900 for a new five-year HMO licence and £740 to renew (from April 2026), 10% less for members of a landlord association",
+    "source": "https://www.dorsetcouncil.gov.uk/housing/advice-for-landlords/mandatory-hmo-licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,056 a month (ONS, August 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000059/"
+  },
+  "price": {
+    "text": "£325,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000059/"
+  },
+  "privateRentedShare": {
+    "text": "16.3% of households rent privately (Census 2021), up from 13.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000059/"
+  },
+  "councilTax": {
+    "text": "£2,765 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/dorset"
+  },
   "postcodes": [
     "DT1",
     "DT2",

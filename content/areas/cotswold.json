@@ -4,19 +4,31 @@
   "council": {
     "name": "Cotswold District Council",
     "url": "https://www.cotswold.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://cotswold.gov.uk/media/suge4ueq/hmo-mandatory-licensing-flowchart-cdc.pdf"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households. New fees and a five-year licence period were proposed from September 2025.",
     "fee": null,
-    "source": null,
+    "source": "https://meetings.cotswold.gov.uk/documents/s13140/CDC+Cabinet+Report+HMO+Licence+fee+and+Period+July+2025.pdf",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,263 a month (ONS, September 2026), up 6.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000079/"
+  },
+  "price": {
+    "text": "£426,000 (UK HPI, August 2026, provisional), down 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000079/"
+  },
+  "privateRentedShare": {
+    "text": "17.4% of households rent privately (Census 2021), up from 15.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000079/"
+  },
+  "councilTax": {
+    "text": "£2,392 average Band D (2026/27), including Gloucestershire County Council, police and parish precepts",
+    "source": "https://www.cotswold.gov.uk/about-the-council/our-budget/total-band-d-council-tax"
+  },
   "postcodes": [
     "GL7",
     "GL8",

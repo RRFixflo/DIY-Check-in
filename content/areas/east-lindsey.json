@@ -4,19 +4,31 @@
   "council": {
     "name": "East Lindsey District Council",
     "url": "https://www.e-lindsey.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.e-lindsey.gov.uk/article/6989/Houses-in-Multiple-Occupation-HMOs-and-Licensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households (licences last up to five years).",
+    "fee": "About £716 for a new HMO licence and £521 to renew (2026/27 fees schedule)",
+    "source": "https://www.e-lindsey.gov.uk/article/6989/Houses-in-Multiple-Occupation-HMOs-and-Licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£660 a month (ONS, September 2025), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000137/"
+  },
+  "price": {
+    "text": "£214,000 (UK HPI, August 2025), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000137/"
+  },
+  "privateRentedShare": {
+    "text": "20.2% of households rent privately (Census 2021), up from 17.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000137/"
+  },
+  "councilTax": {
+    "text": "£2,276 average Band D (2026/27), including Lincolnshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/east-lindsey"
+  },
   "postcodes": [
     "LN9",
     "LN11",

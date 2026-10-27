@@ -4,19 +4,31 @@
   "council": {
     "name": "Forest of Dean District Council",
     "url": "https://www.fdean.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.fdean.gov.uk/housing/private-housing/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory licensing, for HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "About £1,333 for a new HMO licence (£241 on application plus £1,092), £1,230 to renew, as listed on the council site in October 2026",
+    "source": "https://www.fdean.gov.uk/housing/private-housing/houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£828 a month (ONS, August 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000080/"
+  },
+  "price": {
+    "text": "£287,000 (UK HPI, July 2026, provisional), down 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000080/"
+  },
+  "privateRentedShare": {
+    "text": "13.5% of households rent privately (Census 2021), up from 11.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000080/"
+  },
+  "councilTax": {
+    "text": "£2,443 average Band D (2026/27), including Gloucestershire County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/forest-of-dean"
+  },
   "postcodes": [
     "GL14",
     "GL15",

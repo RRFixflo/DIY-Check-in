@@ -4,19 +4,31 @@
   "council": {
     "name": "East Riding of Yorkshire Council",
     "url": "https://www.eastriding.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.eastriding.gov.uk/housing/private-housing-landlords/houses-multiple-occupation/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme in force: mandatory licensing applies to HMOs with five or more people from two or more households. HMOs licensed under an earlier additional scheme in Goole stay licensed until renewal.",
+    "fee": "£1,205 for a five-year licence for a five-bedroom HMO (£25 per extra bedroom), £1,015 to renew, as listed on the council site in October 2026",
+    "source": "https://www.eastriding.gov.uk/business/licences-and-registrations/available-licences/other-licences/houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£724 a month (ONS, July 2026), up 4.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000011/"
+  },
+  "price": {
+    "text": "£221,000 (UK HPI, June 2026, provisional), up 3.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000011/"
+  },
+  "privateRentedShare": {
+    "text": "16.9% of households rent privately (Census 2021), up from 13.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000011/"
+  },
+  "councilTax": {
+    "text": "£2,466 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/east-riding-of-yorkshire"
+  },
   "postcodes": [
     "DN14",
     "HU10",

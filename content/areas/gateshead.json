@@ -7,16 +7,28 @@
     "privateRentingUrl": "https://gateshead.gov.uk/article/7131/About-selective-landlord-licensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "Selective licensing in 16 neighbourhoods, in two phases: phase 1 (including Bensham, The Avenues, Windmill Hills, Beacon Lough East, Birtley and Chopwell) from 1 June 2025 to 31 May 2030, and phase 2 (more of central Gateshead, Felling and Swalwell) from 1 October 2025 to 30 September 2030.",
+    "additional": "Additional HMO licensing for smaller HMOs of three or four unrelated people in the same designated neighbourhoods, from 1 June 2025 to 31 May 2030; larger HMOs need a mandatory licence.",
+    "fee": "£850 for a selective licence and £976.30 for an additional HMO licence, with a £75 discount for accredited landlords",
+    "source": "https://www.gateshead.gov.uk/article/31462/Designation-of-selective-and-additional-houses-in-multiple-occupation-HMO-licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£790 a month (ONS, May 2026), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000037/"
+  },
+  "price": {
+    "text": "£159,000 (UK HPI, April 2026, provisional), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000037/"
+  },
+  "privateRentedShare": {
+    "text": "16.4% of households rent privately (Census 2021), up from 12.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000037"
+  },
+  "councilTax": {
+    "text": "£2,716 average Band D (2026/27), including police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/gateshead"
+  },
   "postcodes": [
     "NE8",
     "NE9",
