@@ -1,0 +1,101 @@
+{
+  "slug": "trafford",
+  "name": "Trafford",
+  "council": {
+    "name": "Trafford Council",
+    "url": "https://www.trafford.gov.uk",
+    "privateRentingUrl": "https://www.trafford.gov.uk/housing/housing-advice/houses-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to larger HMOs (five or more people from two or more households).",
+    "fee": "£1,012 to apply for an HMO licence for up to six bedrooms, plus £211 when it is granted",
+    "source": "https://www.trafford.gov.uk/housing/housing-advice/houses-multiple-occupation-hmo/apply-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,362 a month (ONS, May 2026), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000009/"
+  },
+  "price": {
+    "text": "£381,000 (UK HPI, April 2026, provisional), up 2.4% on a year earlier and the highest in the North West",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000009/"
+  },
+  "privateRentedShare": {
+    "text": "15.3% of households rent privately (Census 2021), up from 12.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000009/"
+  },
+  "councilTax": {
+    "text": "£2,290 Band D including the Greater Manchester mayoral police and fire precepts (2026/27)",
+    "source": "https://www.trafford.gov.uk/sites/default/files/2026-03/Council%20Tax%20Booklet%202026-27.pdf"
+  },
+  "postcodes": [
+    "M16",
+    "M17",
+    "M31",
+    "M32",
+    "M33",
+    "M41",
+    "WA13",
+    "WA14",
+    "WA15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Altrincham",
+      "postcodes": "WA14, WA15",
+      "housing": "Victorian and Edwardian terraces and villas near the town centre, flats and large detached houses in Bowdon and Hale."
+    },
+    {
+      "name": "Sale",
+      "postcodes": "M33",
+      "housing": "Victorian and inter-war semis and terraces, with apartments near the Metrolink and canal."
+    },
+    {
+      "name": "Stretford",
+      "postcodes": "M32",
+      "housing": "Inter-war and post-war semis and terraces, with flats near the Mall and Old Trafford."
+    },
+    {
+      "name": "Old Trafford and Gorse Hill",
+      "postcodes": "M16, M32",
+      "housing": "Dense Victorian terraced streets, many privately let, and newer flats near the stadiums."
+    },
+    {
+      "name": "Urmston and Flixton",
+      "postcodes": "M41",
+      "housing": "Edwardian and inter-war semis and terraces popular with families."
+    },
+    {
+      "name": "Hale and Bowdon",
+      "postcodes": "WA15, WA14",
+      "housing": "Large Victorian villas and detached houses on wide tree-lined roads."
+    },
+    {
+      "name": "Timperley",
+      "postcodes": "WA15",
+      "housing": "Mostly inter-war and post-war semi-detached family houses."
+    },
+    {
+      "name": "Partington and Carrington",
+      "postcodes": "M31",
+      "housing": "Post-war overspill estates and new-build homes on former industrial land."
+    }
+  ],
+  "housing": "Trafford has the highest average house price in the North West, driven by Altrincham, Hale and Bowdon, and has some of Greater Manchester's most sought-after school catchments. Private renting is below the regional average and concentrated in Old Trafford, Stretford and Sale, close to the Metrolink into Manchester. Housing ranges from dense Victorian terraces in Old Trafford to large villas in Bowdon and post-war estates in Partington. New apartment blocks are going up around Stretford and Sale.",
+  "checkinTips": [
+    "Victorian terraces in Old Trafford and Gorse Hill: photograph back yards, rear walls and any damp low on the walls.",
+    "Large villas in Hale and Bowdon: record gardens, gates, garages, alarm panels and codes, and any period features such as fireplaces.",
+    "Apartments near Metrolink stops in Sale and Stretford: note fob and key counts, parking permits, bin store access and the intercom handset.",
+    "Family semis in Urmston and Timperley: photograph gardens, fences, sheds and garage doors as lets often include them.",
+    "Homes near the Mersey and the Bridgewater Canal: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Trafford Council's Housing Standards Team about disrepair, damp or unsafe conditions, or report a potentially unlicensed HMO online.",
+  "nearby": [
+    "manchester",
+    "salford",
+    "stockport",
+    "cheshire-east",
+    "warrington"
+  ]
+}

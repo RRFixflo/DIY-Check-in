@@ -1,0 +1,100 @@
+{
+  "slug": "tunbridge-wells",
+  "name": "Tunbridge Wells",
+  "council": {
+    "name": "Tunbridge Wells Borough Council",
+    "url": "https://tunbridgewells.gov.uk",
+    "privateRentingUrl": "https://tunbridgewells.gov.uk/housing/private-sector-housing/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people in two or more households, and every HMO must meet the council's HMO standards.",
+    "fee": "£813 for a new HMO licence for 5 to 7 occupants, £908 for 8 or more (£701 and £748 to renew)",
+    "source": "https://tunbridgewells.gov.uk/housing/private-sector-housing/private-sector-housing-payments",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,543 a month (ONS, September 2026), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000116/"
+  },
+  "price": {
+    "text": "£453,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000116/"
+  },
+  "privateRentedShare": {
+    "text": "19.2% of households rent privately (Census 2021), up from 16.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000116/"
+  },
+  "councilTax": {
+    "text": "£2,446 average Band D including Kent County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/tunbridge-wells"
+  },
+  "postcodes": [
+    "TN1",
+    "TN2",
+    "TN3",
+    "TN4",
+    "TN12",
+    "TN17",
+    "TN18"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Royal Tunbridge Wells town centre",
+      "postcodes": "TN1",
+      "housing": "Regency and Victorian terraces and villas, many split into flats, and flats over shops."
+    },
+    {
+      "name": "St John's and Southborough",
+      "postcodes": "TN4",
+      "housing": "Victorian terraces and semis north of the centre, with post-war estates in Southborough."
+    },
+    {
+      "name": "Sherwood and Showfields",
+      "postcodes": "TN2",
+      "housing": "Post-war council-built estates of houses and flats."
+    },
+    {
+      "name": "Pembury",
+      "postcodes": "TN2",
+      "housing": "A village of older cottages and post-war and modern family houses near the hospital."
+    },
+    {
+      "name": "Paddock Wood",
+      "postcodes": "TN12",
+      "housing": "A railway town of post-war houses with large new-build estates being added."
+    },
+    {
+      "name": "Cranbrook",
+      "postcodes": "TN17",
+      "housing": "A Wealden town of weatherboarded and timber-framed houses, many listed."
+    },
+    {
+      "name": "Hawkhurst",
+      "postcodes": "TN18",
+      "housing": "A village of period cottages, Victorian houses and some post-war estates."
+    },
+    {
+      "name": "Rusthall and Langton Green",
+      "postcodes": "TN3, TN4",
+      "housing": "Victorian cottages and inter-war and post-war houses on the western edge of the town."
+    }
+  ],
+  "housing": "Tunbridge Wells is a spa town with a large stock of Regency and Victorian villas and terraces, many converted into flats, and a private renting share matching the South East average. Many tenants commute to London from Tunbridge Wells and Paddock Wood stations. The rural east of the borough has Wealden weatherboarded and timber-framed houses, oast houses and listed cottages. Paddock Wood is growing with large new-build estates.",
+  "checkinTips": [
+    "Regency and Victorian flat conversions in the town centre: note shared hallways, fire doors, meter cupboards and keys for each door.",
+    "Period homes: photograph sash windows, cornicing, fireplaces and any damp in basements or lower ground floors.",
+    "Weatherboarded and timber-framed houses in Cranbrook and Hawkhurst: check the boarding, beams and any rot or insect damage.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level and boiler service label.",
+    "Homes near the Medway and its streams in Paddock Wood: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Tunbridge Wells Borough Council's Private Sector Housing team about disrepair, damp or unsafe conditions, and its 'Advice for tenants' page.",
+  "nearby": [
+    "tonbridge-and-malling",
+    "sevenoaks",
+    "maidstone",
+    "ashford",
+    "rother",
+    "wealden"
+  ]
+}

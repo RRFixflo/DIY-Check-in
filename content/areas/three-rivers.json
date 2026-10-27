@@ -1,0 +1,101 @@
+{
+  "slug": "three-rivers",
+  "name": "Three Rivers",
+  "council": {
+    "name": "Three Rivers District Council",
+    "url": "https://www.threerivers.gov.uk",
+    "privateRentingUrl": "https://www.threerivers.gov.uk/services/environmental-health/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme in force; mandatory licensing applies to HMOs with five or more people in two or more households. The council has been reviewing whether to license smaller HMOs with fewer than five occupants and whether to use an Article 4 Direction, so check its news page for any consultation.",
+    "fee": null,
+    "source": "https://www.threerivers.gov.uk/news/council-explores-tightened-hmo-rules",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,807 a month (ONS, March 2026), up 3.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000102/"
+  },
+  "price": {
+    "text": "£587,000 (UK HPI, February 2026, provisional), up 2.4% on a year earlier and the second highest in the East of England",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000102/"
+  },
+  "privateRentedShare": {
+    "text": "13.4% of households rent privately (Census 2021), up from 10.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000102/"
+  },
+  "councilTax": {
+    "text": "£2,422 average Band D including Hertfordshire County Council (which runs the fire service), police and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/three-rivers"
+  },
+  "postcodes": [
+    "WD3",
+    "WD4",
+    "WD5",
+    "WD18",
+    "WD19",
+    "WD25",
+    "HA6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rickmansworth",
+      "postcodes": "WD3",
+      "housing": "Victorian and Edwardian houses near the town centre and Metropolitan line station, with flats and large detached homes nearby."
+    },
+    {
+      "name": "Chorleywood",
+      "postcodes": "WD3",
+      "housing": "Arts and Crafts and inter-war detached houses on large plots around the common."
+    },
+    {
+      "name": "Croxley Green",
+      "postcodes": "WD3",
+      "housing": "Mostly inter-war semis and terraces with some older cottages near the green."
+    },
+    {
+      "name": "South Oxhey",
+      "postcodes": "WD19",
+      "housing": "A large post-war London County Council estate of terraced houses and flats, now being regenerated."
+    },
+    {
+      "name": "Carpenders Park",
+      "postcodes": "WD19",
+      "housing": "1950s and 1960s semi-detached and terraced family houses."
+    },
+    {
+      "name": "Abbots Langley and Leavesden",
+      "postcodes": "WD5, WD25",
+      "housing": "An old village core with post-war estates and newer homes on the former Leavesden hospital and aerodrome sites."
+    },
+    {
+      "name": "Kings Langley",
+      "postcodes": "WD4",
+      "housing": "A village of older cottages and terraces with inter-war and post-war houses."
+    },
+    {
+      "name": "Moor Park and Eastbury",
+      "postcodes": "HA6",
+      "housing": "Large detached houses on a private estate around the golf course."
+    }
+  ],
+  "housing": "Three Rivers is an affluent, mostly owner-occupied district on the north-west edge of London, with house prices among the highest in the East of England. Private renting is well below the national average, with lets in Rickmansworth, Croxley Green and South Oxhey, and many tenants commuting on the Metropolitan line. South Oxhey is a large former London County Council estate, while Chorleywood and Moor Park have large detached homes. The council has been looking at tighter rules for small HMOs.",
+  "checkinTips": [
+    "Large detached houses in Chorleywood and Moor Park: photograph gardens, gates, garages, outbuildings and any alarm panels and codes.",
+    "Post-war estate homes in South Oxhey: check window seals, communal areas in flat blocks and any work done under the regeneration.",
+    "Flats near Rickmansworth station: record fob and key counts, allocated parking, bin store access and the intercom handset.",
+    "Homes near the Colne, Gade and Chess rivers and the canal: check ground floors and walls for damp or past flood marks.",
+    "Shared houses near Watford: record each bedroom lock and key, fire doors, alarms and the shared kitchen."
+  ],
+  "tenantHelp": "Private tenants can contact Three Rivers District Council's environmental health team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "watford",
+    "hertsmere",
+    "st-albans",
+    "dacorum",
+    "buckinghamshire",
+    "hillingdon",
+    "harrow"
+  ]
+}

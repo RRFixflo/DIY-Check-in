@@ -1,0 +1,100 @@
+{
+  "slug": "warrington",
+  "name": "Warrington",
+  "council": {
+    "name": "Warrington Borough Council",
+    "url": "https://www.warrington.gov.uk",
+    "privateRentingUrl": "https://www.warrington.gov.uk/information-about-hmos-and-hmo-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only larger HMOs need a mandatory licence. Separately, a borough-wide Article 4 Direction approved by Cabinet on 9 June 2026 (in force by the end of September 2026) means planning permission is needed to turn a family home into an HMO.",
+    "fee": null,
+    "source": "https://www.warrington.gov.uk/news/stronger-borough-wide-controls-hmos-approved",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£894 a month (ONS, July 2026), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000007/"
+  },
+  "price": {
+    "text": "£259,000 (UK HPI, June 2026, provisional), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000007/"
+  },
+  "privateRentedShare": {
+    "text": "15.2% of households rent privately (Census 2021), up from 11.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000007/"
+  },
+  "councilTax": {
+    "text": "£2,448 average Band D including Cheshire police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/warrington"
+  },
+  "postcodes": [
+    "WA1",
+    "WA2",
+    "WA3",
+    "WA4",
+    "WA5",
+    "WA13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Warrington town centre and Bank Quay",
+      "postcodes": "WA1",
+      "housing": "Victorian terraces, flats over shops and newer apartment blocks near the stations."
+    },
+    {
+      "name": "Orford and Bewsey",
+      "postcodes": "WA2, WA5",
+      "housing": "Older terraced streets and post-war council-built estates, many now privately let."
+    },
+    {
+      "name": "Latchford and Stockton Heath",
+      "postcodes": "WA4",
+      "housing": "Victorian terraces in Latchford and Edwardian and inter-war houses in sought-after Stockton Heath."
+    },
+    {
+      "name": "Birchwood",
+      "postcodes": "WA3",
+      "housing": "A new-town district of 1970s and 1980s estates of terraced and semi-detached houses."
+    },
+    {
+      "name": "Great Sankey and Penketh",
+      "postcodes": "WA5",
+      "housing": "Mostly 1970s to 1990s estates of semi-detached and detached family homes."
+    },
+    {
+      "name": "Lymm",
+      "postcodes": "WA13",
+      "housing": "A canal-side village of period cottages and large detached houses."
+    },
+    {
+      "name": "Culcheth and Croft",
+      "postcodes": "WA3",
+      "housing": "Villages of post-war and modern family houses and older cottages."
+    },
+    {
+      "name": "Appleton and Grappenhall",
+      "postcodes": "WA4",
+      "housing": "Large detached and semi-detached houses south of the Manchester Ship Canal."
+    }
+  ],
+  "housing": "Warrington grew from a Victorian industrial town into a new town in the 1970s and 1980s, so its housing ranges from central terraces in Orford, Bewsey and Latchford to new-town estates at Birchwood, Westbrook and Great Sankey. Private renting grew faster than England's average between 2011 and 2021, with lets concentrated near the centre and in former council homes. South Warrington, around Stockton Heath, Appleton and Lymm, is more expensive and mostly owner-occupied. The council has introduced a borough-wide planning control on new HMOs.",
+  "checkinTips": [
+    "Victorian terraces in Orford, Latchford and Bewsey: photograph back yards, rear walls and any damp low on the walls.",
+    "New-town estate homes in Birchwood and Westbrook: check shared paths, garages in blocks, flat roofs and window seals.",
+    "Apartments near Bank Quay and Central stations: record fob and key counts, parking, bin store access and the intercom handset.",
+    "Canal-side homes in Lymm and near the Ship Canal: check ground floors and walls for damp and note any mooring or garden access rules.",
+    "Family homes in Great Sankey and Appleton: photograph gardens, fences, sheds and garage doors as lets often include them."
+  ],
+  "tenantHelp": "Private tenants can contact Warrington Borough Council's private sector housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "halton",
+    "st-helens",
+    "wigan",
+    "salford",
+    "trafford",
+    "cheshire-east",
+    "cheshire-west-and-chester"
+  ]
+}

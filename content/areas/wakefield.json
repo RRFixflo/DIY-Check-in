@@ -1,0 +1,102 @@
+{
+  "slug": "wakefield",
+  "name": "Wakefield",
+  "council": {
+    "name": "Wakefield Council",
+    "url": "https://www.wakefield.gov.uk",
+    "privateRentingUrl": "https://www.wakefield.gov.uk/housing/information-for-landlords/apply-for-a-landlords-hmo-licence"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people in two or more households. Separately, an Article 4 Direction from 24 October 2025 needs planning permission for new small HMOs (3 to 6 occupants) in selected areas.",
+    "fee": null,
+    "source": "https://www.wakefield.gov.uk/housing/information-for-landlords/apply-for-a-landlords-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£806 a month (ONS, August 2026), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000036/"
+  },
+  "price": {
+    "text": "£199,000 (UK HPI, July 2026, provisional), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000036/"
+  },
+  "privateRentedShare": {
+    "text": "14.9% of households rent privately (Census 2021), up from 11.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000036/"
+  },
+  "councilTax": {
+    "text": "£2,259 Band D including the West Yorkshire Mayor's police precept and fire, before parish precepts (2026/27)",
+    "source": "https://wakefield.moderngov.co.uk/documents/s136768/Appendix 3 Council Tax Statutory Resolution 2026-27.pdf"
+  },
+  "postcodes": [
+    "WF1",
+    "WF2",
+    "WF3",
+    "WF4",
+    "WF5",
+    "WF6",
+    "WF7",
+    "WF8",
+    "WF9",
+    "WF10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wakefield city centre",
+      "postcodes": "WF1",
+      "housing": "Georgian and Victorian houses near the cathedral, flats over shops and converted mill and office apartments."
+    },
+    {
+      "name": "Agbrigg and Belle Vue",
+      "postcodes": "WF1",
+      "housing": "Dense Victorian terraced streets, many privately let, part of the council's Better Homes work."
+    },
+    {
+      "name": "Outwood and Stanley",
+      "postcodes": "WF1, WF3",
+      "housing": "Older terraces and inter-war houses with large modern estates."
+    },
+    {
+      "name": "Ossett and Horbury",
+      "postcodes": "WF5, WF4",
+      "housing": "Former mill towns with stone terraces, inter-war semis and newer estates."
+    },
+    {
+      "name": "Castleford",
+      "postcodes": "WF10",
+      "housing": "Brick terraces from the mining era, post-war council estates and new homes near the river."
+    },
+    {
+      "name": "Pontefract",
+      "postcodes": "WF8",
+      "housing": "A historic market town of older houses and terraces with post-war estates."
+    },
+    {
+      "name": "Normanton",
+      "postcodes": "WF6",
+      "housing": "Railway and mining-era terraces and post-war semis."
+    },
+    {
+      "name": "Hemsworth and South Elmsall",
+      "postcodes": "WF9",
+      "housing": "Former colliery terraces and council-built estates in the south of the district."
+    }
+  ],
+  "housing": "Wakefield district combines the city with former mining and mill towns such as Castleford, Pontefract, Normanton, Ossett and the south-east coalfield villages. Housing is dominated by Victorian and early 20th-century brick terraces and large post-war council estates, now partly privately let after right to buy. Private renting is below the regional average but grew between 2011 and 2021, with lets concentrated in central terraces such as Agbrigg. The council has used an Article 4 Direction to control small HMOs in parts of the district.",
+  "checkinTips": [
+    "Victorian terraces in Agbrigg, Belle Vue and Castleford: photograph back yards, cellar walls and any damp low on the walls.",
+    "Former colliery homes in Hemsworth and South Elmsall: note any cracks in walls and record the mining report if one was supplied.",
+    "Former council houses bought under right to buy: check window seals, boiler cupboards and any non-standard construction noted on the paperwork.",
+    "Mill and office conversions in Wakefield centre: record fob counts, parking, bin store access and window ventilation.",
+    "Homes near the Calder and Aire in Castleford and Horbury: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Wakefield Council's Housing Standards team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "leeds",
+    "kirklees",
+    "barnsley",
+    "doncaster",
+    "north-yorkshire"
+  ]
+}

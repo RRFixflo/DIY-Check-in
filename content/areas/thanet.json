@@ -1,0 +1,95 @@
+{
+  "slug": "thanet",
+  "name": "Thanet",
+  "council": {
+    "name": "Thanet District Council",
+    "url": "https://www.thanet.gov.uk",
+    "privateRentingUrl": "https://www.thanet.gov.uk/info-pages/selective-licensing-information/"
+  },
+  "licensing": {
+    "selective": "No current designation found: selective licensing covered parts of Margate Central and Cliftonville West from April 2011 until 20 April 2021. In 2025 the council approved a budget to develop new selective licensing proposals for parts of Margate and Ramsgate; no new scheme had been found in force at the last check.",
+    "additional": "No additional HMO licensing scheme found; larger HMOs need a mandatory licence.",
+    "fee": null,
+    "source": "https://www.thanet.gov.uk/info-pages/selective-licensing-information/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,110 a month (ONS, June 2026), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000114/"
+  },
+  "price": {
+    "text": "£268,000 (UK HPI, May 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000114/"
+  },
+  "privateRentedShare": {
+    "text": "26.3% of households rent privately (Census 2021), up from 23.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000114/"
+  },
+  "councilTax": {
+    "text": "£2,491 average Band D including Kent County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/thanet"
+  },
+  "postcodes": [
+    "CT7",
+    "CT8",
+    "CT9",
+    "CT10",
+    "CT11",
+    "CT12"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Margate",
+      "postcodes": "CT9",
+      "housing": "Georgian and Victorian terraces in the old town, many split into flats, with post-war estates inland."
+    },
+    {
+      "name": "Cliftonville",
+      "postcodes": "CT9",
+      "housing": "Large Victorian and Edwardian former hotels and guest houses, many converted into flats and bedsits."
+    },
+    {
+      "name": "Ramsgate",
+      "postcodes": "CT11, CT12",
+      "housing": "Regency and Victorian terraces around the harbour, many listed, with post-war estates further out."
+    },
+    {
+      "name": "Broadstairs",
+      "postcodes": "CT10",
+      "housing": "Victorian seaside villas and terraces, bungalows and student lets near the university campus."
+    },
+    {
+      "name": "Westgate-on-Sea",
+      "postcodes": "CT8",
+      "housing": "Edwardian and inter-war detached and semi-detached houses near the seafront."
+    },
+    {
+      "name": "Birchington",
+      "postcodes": "CT7",
+      "housing": "Mostly bungalows and inter-war and post-war family houses."
+    },
+    {
+      "name": "Westwood and Northwood",
+      "postcodes": "CT10, CT9",
+      "housing": "Post-war estates and newer homes near the Westwood Cross shopping area."
+    },
+    {
+      "name": "Minster and Monkton",
+      "postcodes": "CT12",
+      "housing": "Villages with older cottages and newer estates on the edge of the marshes."
+    }
+  ],
+  "housing": "Thanet has one of the highest shares of private renters in the South East, with over a quarter of households renting privately. Margate and Cliftonville have many former hotels and large Victorian houses converted into flats and bedsits, which led to one of the country's earliest selective licensing schemes. Ramsgate has a large stock of listed Regency terraces, and Birchington and Westgate are mostly bungalows and family houses. Buyers and renters moving from London have pushed up demand in Margate and Ramsgate.",
+  "checkinTips": [
+    "Converted hotels and guest houses in Cliftonville: record each flat's front door, fire doors, alarms, shared hallways and meter cupboards.",
+    "Seafront homes in Margate, Broadstairs and Ramsgate: check window frames, metal fittings and outside paintwork for salt and wind damage.",
+    "Listed Regency terraces in Ramsgate: photograph sash windows, shutters, plasterwork and basement areas for damp.",
+    "Student lets near the university in Broadstairs: record each bedroom lock and key and the shared kitchen items.",
+    "Bungalows in Birchington and Westgate: note flat-roof extensions, gutters, garages and garden condition."
+  ],
+  "tenantHelp": "Private tenants can contact Thanet District Council's Private Sector Housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "canterbury",
+    "dover"
+  ]
+}

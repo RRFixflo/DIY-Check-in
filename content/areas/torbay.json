@@ -1,0 +1,94 @@
+{
+  "slug": "torbay",
+  "name": "Torbay",
+  "council": {
+    "name": "Torbay Council",
+    "url": "https://www.torbay.gov.uk",
+    "privateRentingUrl": "https://www.torbay.gov.uk/housing/hmo-landlords/apply-for-an-hmo-licence/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force. The council's forward plan lists a business case on selective and/or additional licensing to be considered; no scheme had been agreed at the last check.",
+    "additional": "No additional HMO licensing scheme in force; mandatory licensing applies to HMOs with five or more people in two or more households sharing facilities.",
+    "fee": "£2,007 for a new mandatory HMO licence, paid in two parts (£1,701 to renew)",
+    "source": "https://www.torbay.gov.uk/housing/hmo-landlords/apply-for-an-hmo-licence/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£924 a month (ONS, September 2026), up 3.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000027/"
+  },
+  "price": {
+    "text": "£221,000 (UK HPI, August 2026, provisional), down 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000027/"
+  },
+  "privateRentedShare": {
+    "text": "26.6% of households rent privately (Census 2021), up from 23.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000027/"
+  },
+  "councilTax": {
+    "text": "£2,457 Band D including Devon and Cornwall police and Devon and Somerset fire precepts (2026/27); £2,556 in Brixham with its town council precept",
+    "source": "https://www.torbay.gov.uk/DemocraticServices/documents/s167555/Council Tax 2026-27 Feb26 - Final.pdf"
+  },
+  "postcodes": [
+    "TQ1",
+    "TQ2",
+    "TQ3",
+    "TQ4",
+    "TQ5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Torquay town centre and Ellacombe",
+      "postcodes": "TQ1",
+      "housing": "Victorian terraces and large villas, many split into flats and bedsits, with flats over shops."
+    },
+    {
+      "name": "Babbacombe and St Marychurch",
+      "postcodes": "TQ1",
+      "housing": "Victorian and Edwardian houses, former hotels converted to flats and post-war homes."
+    },
+    {
+      "name": "Chelston and Cockington",
+      "postcodes": "TQ2",
+      "housing": "Victorian villas and inter-war houses, with thatched cottages in Cockington village."
+    },
+    {
+      "name": "Shiphay and Barton",
+      "postcodes": "TQ2",
+      "housing": "Post-war and later estates of semi-detached and terraced family houses."
+    },
+    {
+      "name": "Paignton",
+      "postcodes": "TQ3, TQ4",
+      "housing": "Victorian and Edwardian seaside terraces and guest houses, with bungalows and post-war estates inland."
+    },
+    {
+      "name": "Preston and Goodrington",
+      "postcodes": "TQ3, TQ4",
+      "housing": "Inter-war and post-war houses and bungalows near the beaches."
+    },
+    {
+      "name": "Brixham",
+      "postcodes": "TQ5",
+      "housing": "Fishermen's cottages and terraces on steep streets around the harbour, with post-war estates above."
+    },
+    {
+      "name": "Watcombe and Hele",
+      "postcodes": "TQ2",
+      "housing": "Post-war council-built estates of houses and flats."
+    }
+  ],
+  "housing": "Torbay covers Torquay, Paignton and Brixham, with over a quarter of households renting privately, well above the South West average. Many large Victorian villas and former hotels and guest houses have been converted into flats and bedsits, especially in central Torquay and Paignton. Brixham has steep streets of fishermen's cottages around the harbour, and the bay has many holiday lets and second homes. Prices are below the regional average and fell in the year to August 2026.",
+  "checkinTips": [
+    "Converted hotels and villas in Torquay and Paignton: record each flat's front door, fire doors, alarms, shared hallways and meter cupboards.",
+    "Seafront homes: check window frames, balconies, metal fittings and outside paintwork for salt and wind damage.",
+    "Steep-street cottages in Brixham: photograph steps, handrails, retaining walls and any damp in walls set into the hillside.",
+    "Bedsits and small HMOs: record each room's lock and key, the shared kitchen and bathroom, and the heating in each room.",
+    "Former holiday lets now let long term: note furniture and appliances supplied and their condition, room by room."
+  ],
+  "tenantHelp": "Private tenants can contact Torbay Council's housing standards team about disrepair, damp or unsafe conditions, and its tenants' rights pages for advice.",
+  "nearby": [
+    "teignbridge",
+    "south-hams"
+  ]
+}

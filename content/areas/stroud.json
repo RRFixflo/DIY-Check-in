@@ -1,0 +1,99 @@
+{
+  "slug": "stroud",
+  "name": "Stroud",
+  "council": {
+    "name": "Stroud District Council",
+    "url": "https://www.stroud.gov.uk",
+    "privateRentingUrl": "https://www.stroud.gov.uk/housing/private-housing/information-for-private-landlords/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people from two or more households, and the council publishes a register of licensed HMOs.",
+    "fee": null,
+    "source": "https://www.stroud.gov.uk/business/licensing-permits/houses-in-multiple-occupancy-hmo/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,047 a month (ONS, September 2026), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000082/"
+  },
+  "price": {
+    "text": "£353,000 (UK HPI, August 2026, provisional), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000082/"
+  },
+  "privateRentedShare": {
+    "text": "13.7% of households rent privately (Census 2021), up from 12.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000082/"
+  },
+  "councilTax": {
+    "text": "£2,354 Band D before parish precepts, including Gloucestershire County Council (which runs the fire service) and police (2026/27)",
+    "source": "https://www.stroud.gov.uk/media/y2eltlwp/sdc-council-tax-financial-information-2026-27.pdf"
+  },
+  "postcodes": [
+    "GL5",
+    "GL6",
+    "GL10",
+    "GL11",
+    "GL12",
+    "GL2",
+    "GL4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stroud town",
+      "postcodes": "GL5",
+      "housing": "Cotswold stone terraces and villas on steep hillsides, with flats over shops in the centre."
+    },
+    {
+      "name": "Stonehouse",
+      "postcodes": "GL10",
+      "housing": "Older stone and brick houses near the canal and large new-build estates at Great Oldbury."
+    },
+    {
+      "name": "Dursley",
+      "postcodes": "GL11",
+      "housing": "Stone and brick terraces in the old town with post-war estates on the slopes."
+    },
+    {
+      "name": "Cam",
+      "postcodes": "GL11",
+      "housing": "Mostly post-war and modern semi-detached and terraced family homes."
+    },
+    {
+      "name": "Nailsworth",
+      "postcodes": "GL6",
+      "housing": "Stone cottages and town houses in a steep valley, with some converted mill buildings."
+    },
+    {
+      "name": "Wotton-under-Edge",
+      "postcodes": "GL12",
+      "housing": "A small market town of stone cottages and Georgian houses with newer estates on the edge."
+    },
+    {
+      "name": "Painswick",
+      "postcodes": "GL6",
+      "housing": "A conservation village of listed Cotswold stone houses and cottages."
+    },
+    {
+      "name": "Hardwicke and Quedgeley edge",
+      "postcodes": "GL2",
+      "housing": "Modern estates of family houses on the southern edge of Gloucester."
+    }
+  ],
+  "housing": "Stroud is a district of Cotswold stone towns in the Five Valleys, with old mill buildings, steep terraced streets and many listed or conservation-area homes. Private renting is below the national average, with lets concentrated in Stroud, Stonehouse, Dursley and Cam. Large new-build estates have been added around Stonehouse, Cam and the edge of Gloucester. Rural villages have stone cottages, some off the gas grid.",
+  "checkinTips": [
+    "Cotswold stone cottages and terraces: photograph thick walls, window reveals and any damp patches or flaking limewash.",
+    "Hillside homes in Stroud and Nailsworth: record steps, retaining walls, sloping gardens and access paths.",
+    "Converted mill flats in the valleys: note shared entrances, lifts, parking and any signs of damp near the water.",
+    "Rural homes off the gas grid: photograph the oil tank or LPG supply, fuel level and boiler service label.",
+    "New-build estates at Great Oldbury and Cam: note snagging marks, fences, turf and allocated parking."
+  ],
+  "tenantHelp": "Private tenants can contact Stroud District Council's Private Sector Housing team about disrepair, damp and unsafe conditions.",
+  "nearby": [
+    "gloucester",
+    "cotswold",
+    "tewkesbury",
+    "forest-of-dean",
+    "south-gloucestershire"
+  ]
+}

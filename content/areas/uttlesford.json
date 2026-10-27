@@ -1,0 +1,97 @@
+{
+  "slug": "uttlesford",
+  "name": "Uttlesford",
+  "council": {
+    "name": "Uttlesford District Council",
+    "url": "https://www.uttlesford.gov.uk",
+    "privateRentingUrl": "https://www.uttlesford.gov.uk/article/5334/Information-for-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs let to five or more people from two or more households who share amenities.",
+    "fee": "£1,394 for an HMO licence in 2026/27, paid in two parts, with 5% off when landlords apply without being asked",
+    "source": "https://www.uttlesford.gov.uk/article/6260/Fees-and-charges-Homes-of-multiple-occupancy-licensing-fees",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,286 a month (ONS, October 2025), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000077/"
+  },
+  "price": {
+    "text": "£478,000 (UK HPI, September 2025, provisional), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000077/"
+  },
+  "privateRentedShare": {
+    "text": "14.5% of households rent privately (Census 2021), up from 13.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000077/"
+  },
+  "councilTax": {
+    "text": "£2,334 average Band D including Essex County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://www.uttlesford.gov.uk/article/7454/How-your-Council-Tax-is-set-2026-27"
+  },
+  "postcodes": [
+    "CB10",
+    "CB11",
+    "CM6",
+    "CM22",
+    "CM24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Saffron Walden",
+      "postcodes": "CB10, CB11",
+      "housing": "A medieval market town of timber-framed and pargeted houses, Victorian terraces and newer estates."
+    },
+    {
+      "name": "Great Dunmow",
+      "postcodes": "CM6",
+      "housing": "An old market town with period houses in the centre and large new-build estates around it."
+    },
+    {
+      "name": "Stansted Mountfitchet",
+      "postcodes": "CM24",
+      "housing": "A village of older cottages and Victorian houses with post-war and modern estates, close to the airport."
+    },
+    {
+      "name": "Takeley and Priors Green",
+      "postcodes": "CM22",
+      "housing": "Modern estates of family houses and flats built near Stansted Airport."
+    },
+    {
+      "name": "Elsenham",
+      "postcodes": "CM22",
+      "housing": "A village with older cottages and new-build developments near the railway."
+    },
+    {
+      "name": "Thaxted",
+      "postcodes": "CM6",
+      "housing": "A small medieval town of timber-framed and listed houses around the Guildhall."
+    },
+    {
+      "name": "Newport",
+      "postcodes": "CB11",
+      "housing": "A large village of period houses and cottages along the old London road."
+    },
+    {
+      "name": "Hatfield Heath and the Rodings",
+      "postcodes": "CM22, CM6",
+      "housing": "Rural villages of thatched and timber-framed cottages and farmhouses."
+    }
+  ],
+  "housing": "Uttlesford is a rural district in north-west Essex with high house prices and a private renting share well below the national average. Saffron Walden, Thaxted and many villages have listed timber-framed, thatched and pargeted houses. Stansted Airport is a major employer, and new-build estates at Great Dunmow, Takeley and Elsenham house many airport and commuter households. Many rural homes rely on oil heating.",
+  "checkinTips": [
+    "Timber-framed and thatched cottages: photograph beams, thatch, low doorways and any cracks or damp in plaster.",
+    "Rural homes off the gas grid: record the oil tank, fuel level, septic tank or private drainage and the boiler service label.",
+    "New-build homes in Great Dunmow, Takeley and Elsenham: note snagging marks, fences, turf and management company areas.",
+    "Homes under the Stansted flight path: note window types and any secondary glazing or noise insulation supplied.",
+    "Listed homes in Saffron Walden and Thaxted: photograph original windows, doors and fittings, as changes need consent."
+  ],
+  "tenantHelp": "Private tenants can contact Uttlesford District Council's Environmental Health team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "braintree",
+    "chelmsford",
+    "epping-forest",
+    "east-hertfordshire",
+    "south-cambridgeshire"
+  ]
+}

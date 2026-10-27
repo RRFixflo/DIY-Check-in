@@ -1,0 +1,99 @@
+{
+  "slug": "tonbridge-and-malling",
+  "name": "Tonbridge and Malling",
+  "council": {
+    "name": "Tonbridge and Malling Borough Council",
+    "url": "https://www.tmbc.gov.uk",
+    "privateRentingUrl": "https://www.tmbc.gov.uk/housing/landlords-tenants/3"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people from more than one household.",
+    "fee": "£810 for a new mandatory HMO licence, £727 to renew (from 1 April 2026)",
+    "source": "https://www.tmbc.gov.uk/housing/landlords-tenants/3",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,489 a month (ONS, August 2026), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000115/"
+  },
+  "price": {
+    "text": "£408,000 (UK HPI, July 2026, provisional), up 1.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000115/"
+  },
+  "privateRentedShare": {
+    "text": "12.5% of households rent privately (Census 2021), up from 10.1% in 2011, the second lowest share in the South East",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000115/"
+  },
+  "councilTax": {
+    "text": "£2,472 average Band D including Kent County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://www.tmbc.gov.uk/news/article/194/council-tax-levels-confirmed-for-2026-2027"
+  },
+  "postcodes": [
+    "TN9",
+    "TN10",
+    "TN11",
+    "TN15",
+    "ME6",
+    "ME19",
+    "ME20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Tonbridge",
+      "postcodes": "TN9, TN10",
+      "housing": "Victorian and Edwardian terraces near the High Street and station, with inter-war and post-war semis to the north."
+    },
+    {
+      "name": "Hildenborough",
+      "postcodes": "TN11",
+      "housing": "A village of older cottages, inter-war houses and larger detached homes."
+    },
+    {
+      "name": "West Malling",
+      "postcodes": "ME19",
+      "housing": "A historic market town of Georgian and timber-framed houses, with new estates at Kings Hill nearby."
+    },
+    {
+      "name": "Kings Hill",
+      "postcodes": "ME19",
+      "housing": "A large new community on the former RAF West Malling airfield, built from the 1990s, with houses and flats."
+    },
+    {
+      "name": "Snodland",
+      "postcodes": "ME6",
+      "housing": "Victorian terraces built for the paper and cement works, with large new riverside estates at Holborough Lakes."
+    },
+    {
+      "name": "Aylesford and Larkfield",
+      "postcodes": "ME20",
+      "housing": "An old village by the Medway and post-war and modern estates at Larkfield and Ditton."
+    },
+    {
+      "name": "Borough Green and Wrotham",
+      "postcodes": "TN15",
+      "housing": "Villages of older cottages and post-war houses at the foot of the North Downs."
+    },
+    {
+      "name": "East Peckham and Hadlow",
+      "postcodes": "TN12, TN11",
+      "housing": "Rural villages with oast houses, period cottages and post-war housing."
+    }
+  ],
+  "housing": "Tonbridge and Malling is a largely owner-occupied borough with one of the lowest shares of private renters in the South East. Tonbridge has Victorian and Edwardian terraces popular with London commuters, while the Medway valley towns of Snodland, Aylesford and Larkfield mix older works terraces with large new estates. Kings Hill is a planned community on a former airfield, and the rural villages have oast houses and period cottages. Prices are well above the national average.",
+  "checkinTips": [
+    "Homes near the River Medway in Tonbridge, East Peckham and Aylesford: check ground floors and walls for damp or past flood marks.",
+    "Victorian terraces in Tonbridge and Snodland: photograph back gardens, rear walls, sash or replacement windows and any damp in rear rooms.",
+    "New-build homes at Kings Hill and Holborough Lakes: note snagging marks, fences, turf and management company areas.",
+    "Converted oast houses and rural cottages: photograph roundels, beams, wood burners and any oil tank or LPG supply.",
+    "Flats near Tonbridge station: record fob and key counts, allocated parking and bin store access."
+  ],
+  "tenantHelp": "Private tenants can contact Tonbridge and Malling Borough Council's private sector housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "tunbridge-wells",
+    "sevenoaks",
+    "maidstone",
+    "medway",
+    "gravesham"
+  ]
+}

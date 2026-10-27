@@ -1,0 +1,101 @@
+{
+  "slug": "tewkesbury",
+  "name": "Tewkesbury",
+  "council": {
+    "name": "Tewkesbury Borough Council",
+    "url": "https://tewkesbury.gov.uk",
+    "privateRentingUrl": "https://tewkesbury.gov.uk/services/environmental-health/housing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more occupants forming two or more households who share facilities.",
+    "fee": null,
+    "source": "https://tewkesbury.gov.uk/services/licensing-and-permits/housing/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,086 a month (ONS, July 2026), up 13.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000083/"
+  },
+  "price": {
+    "text": "£330,000 (UK HPI, June 2026, provisional), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000083/"
+  },
+  "privateRentedShare": {
+    "text": "14.3% of households rent privately (Census 2021), up from 12.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000083/"
+  },
+  "councilTax": {
+    "text": "£2,341 average Band D including Gloucestershire County Council (which runs the fire service), police and parish precepts (2026/27)",
+    "source": "https://tewkesbury.gov.uk/wp-content/uploads/2026/03/Tewkesbury-Borough-Council-Council-Tax-Rates-2026-27.pdf"
+  },
+  "postcodes": [
+    "GL20",
+    "GL19",
+    "GL2",
+    "GL3",
+    "GL51",
+    "GL52",
+    "GL54"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Tewkesbury town",
+      "postcodes": "GL20",
+      "housing": "Medieval timber-framed buildings and alleys in the centre, Victorian terraces and post-war estates around it."
+    },
+    {
+      "name": "Northway and Ashchurch",
+      "postcodes": "GL20",
+      "housing": "Post-war and 1960s estates with newer developments near the railway station."
+    },
+    {
+      "name": "Bishop's Cleeve",
+      "postcodes": "GL52",
+      "housing": "A large village that has grown with post-war and modern estates of family homes."
+    },
+    {
+      "name": "Winchcombe",
+      "postcodes": "GL54",
+      "housing": "A Cotswold town of stone cottages and terraces, many listed."
+    },
+    {
+      "name": "Churchdown",
+      "postcodes": "GL3",
+      "housing": "Mostly inter-war and post-war semis and bungalows between Gloucester and Cheltenham."
+    },
+    {
+      "name": "Innsworth and Longford",
+      "postcodes": "GL2, GL3",
+      "housing": "Modern estates and former RAF housing on the edge of Gloucester."
+    },
+    {
+      "name": "Brockworth",
+      "postcodes": "GL3",
+      "housing": "Post-war houses and the large new-build Perrybrook estate."
+    },
+    {
+      "name": "Bredon and Twyning area",
+      "postcodes": "GL20",
+      "housing": "Riverside and rural villages with older brick and timber cottages."
+    }
+  ],
+  "housing": "Tewkesbury Borough wraps around Cheltenham and Gloucester, so much of its housing is suburban estates at Bishop's Cleeve, Churchdown, Brockworth and Innsworth, with many new-build developments. Tewkesbury town has a medieval centre of timber-framed buildings, and Winchcombe and the Cotswold villages have listed stone cottages. Private renting is below the national average, but rents rose sharply in the year to July 2026. Low-lying land near the Severn and Avon floods regularly.",
+  "checkinTips": [
+    "Homes near the Severn and Avon in Tewkesbury: check ground floors, skirting boards and walls for damp or flood marks, and note any flood barriers supplied.",
+    "Timber-framed buildings in Tewkesbury town centre: photograph beams, uneven floors and any cracks in plaster.",
+    "Cotswold stone cottages in Winchcombe: record window reveals, damp patches and the condition of any wood burner.",
+    "New-build homes in Bishop's Cleeve and Brockworth: note snagging marks, fences, turf and any management company areas.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level and boiler service label."
+  ],
+  "tenantHelp": "Private tenants can contact Tewkesbury Borough Council's environmental health housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "gloucester",
+    "cheltenham",
+    "cotswold",
+    "stroud",
+    "forest-of-dean",
+    "wychavon",
+    "malvern-hills"
+  ]
+}

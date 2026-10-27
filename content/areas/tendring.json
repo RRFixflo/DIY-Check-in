@@ -1,0 +1,97 @@
+{
+  "slug": "tendring",
+  "name": "Tendring",
+  "council": {
+    "name": "Tendring District Council",
+    "url": "https://www.tendringdc.gov.uk",
+    "privateRentingUrl": "https://www.tendringdc.gov.uk/content/houses-in-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people from two or more households. The council also has an Article 4 Direction that needs planning permission to turn a house into an HMO in the areas it covers.",
+    "fee": null,
+    "source": "https://www.tendringdc.gov.uk/content/houses-in-multiple-occupation-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,039 a month (ONS, December 2025), up 7.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000076/"
+  },
+  "price": {
+    "text": "£267,000 (UK HPI, November 2025, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000076/"
+  },
+  "privateRentedShare": {
+    "text": "19.8% of households rent privately (Census 2021), up from 16.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000076/"
+  },
+  "councilTax": {
+    "text": "£2,270 average Band D including Essex County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/tendring"
+  },
+  "postcodes": [
+    "CO5",
+    "CO7",
+    "CO11",
+    "CO12",
+    "CO13",
+    "CO14",
+    "CO15",
+    "CO16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Clacton-on-Sea",
+      "postcodes": "CO15, CO16",
+      "housing": "Victorian and Edwardian seaside terraces, many converted to flats, with large areas of bungalows and post-war estates."
+    },
+    {
+      "name": "Jaywick",
+      "postcodes": "CO15",
+      "housing": "Former holiday chalets and small timber and brick bungalows on the low-lying coast, many privately rented."
+    },
+    {
+      "name": "Holland-on-Sea",
+      "postcodes": "CO15",
+      "housing": "Mostly bungalows and post-war detached and semi-detached houses near the seafront."
+    },
+    {
+      "name": "Frinton-on-Sea and Walton-on-the-Naze",
+      "postcodes": "CO13, CO14",
+      "housing": "Edwardian and inter-war houses in Frinton and Victorian terraces and flats in Walton."
+    },
+    {
+      "name": "Harwich and Dovercourt",
+      "postcodes": "CO12",
+      "housing": "Old timber-framed and Georgian houses in Harwich and Victorian terraces and post-war estates in Dovercourt."
+    },
+    {
+      "name": "Brightlingsea",
+      "postcodes": "CO7",
+      "housing": "A waterside town of Victorian terraces, older cottages and newer estates."
+    },
+    {
+      "name": "Manningtree and Mistley",
+      "postcodes": "CO11",
+      "housing": "Georgian and Victorian town houses and cottages beside the Stour estuary."
+    },
+    {
+      "name": "St Osyth and Point Clear",
+      "postcodes": "CO16",
+      "housing": "A village of older cottages with holiday parks and chalets along the coast."
+    }
+  ],
+  "housing": "Tendring is a coastal district with private renting close to the national average, mostly in Clacton, Jaywick, Walton and Dovercourt. Many seaside villas and guest houses have been converted into flats and bedsits, and the area has a very large stock of bungalows. Jaywick's former holiday chalets are among the most deprived homes in England. Inland and along the estuaries are older market towns and villages with period cottages.",
+  "checkinTips": [
+    "Seafront homes in Clacton, Walton and Frinton: check window frames, metal fittings and outside paintwork for salt and wind damage.",
+    "Converted guest houses and bedsits in Clacton: record shared kitchens and bathrooms, fire doors, alarms and keys for each room.",
+    "Chalets and bungalows in Jaywick and Point Clear: photograph roofs, floors, damp patches and any electric or oil heating.",
+    "Bungalows in Holland-on-Sea: note flat-roof extensions, gutters, garages and garden condition.",
+    "Period houses in Harwich and Manningtree: photograph sash windows, old floors, fireplaces and any damp near the estuary."
+  ],
+  "tenantHelp": "Private tenants can contact Tendring District Council's Private Sector Housing Team in Clacton about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "colchester",
+    "babergh"
+  ]
+}

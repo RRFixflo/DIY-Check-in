@@ -1,0 +1,97 @@
+{
+  "slug": "torridge",
+  "name": "Torridge",
+  "council": {
+    "name": "Torridge District Council",
+    "url": "https://www.torridge.gov.uk",
+    "privateRentingUrl": "https://www.torridge.gov.uk/article/11212/Information-for-Private-Landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people from two or more households sharing amenities.",
+    "fee": null,
+    "source": "https://www.torridge.gov.uk/article/11221/Houses-in-Multiple-Occupation-HMOs",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£791 a month (ONS, January 2026), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000046/"
+  },
+  "price": {
+    "text": "£270,000 (UK HPI, December 2025, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000046/"
+  },
+  "privateRentedShare": {
+    "text": "20.2% of households rent privately (Census 2021), up from 17.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000046/"
+  },
+  "councilTax": {
+    "text": "£2,601 average Band D including Devon County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/torridge"
+  },
+  "postcodes": [
+    "EX38",
+    "EX39",
+    "EX20",
+    "EX21",
+    "EX22",
+    "EX23"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bideford",
+      "postcodes": "EX39",
+      "housing": "Georgian and Victorian terraces on the steep streets above the quay, with post-war estates on the edges."
+    },
+    {
+      "name": "East-the-Water",
+      "postcodes": "EX39",
+      "housing": "Terraced houses across the river from Bideford and newer estates on the hillside."
+    },
+    {
+      "name": "Northam and Westward Ho!",
+      "postcodes": "EX39",
+      "housing": "Victorian villas and terraces, holiday flats and chalets near the beach, and bungalows."
+    },
+    {
+      "name": "Appledore",
+      "postcodes": "EX39",
+      "housing": "Narrow streets of colour-washed fishermen's cottages by the estuary."
+    },
+    {
+      "name": "Great Torrington",
+      "postcodes": "EX38",
+      "housing": "A hilltop market town of older terraces and cottages with post-war estates."
+    },
+    {
+      "name": "Holsworthy",
+      "postcodes": "EX22",
+      "housing": "A small market town with older stone houses and modern estates."
+    },
+    {
+      "name": "Hartland",
+      "postcodes": "EX39",
+      "housing": "A remote coastal parish of stone and cob cottages and farmhouses."
+    },
+    {
+      "name": "Shebbear and rural villages",
+      "postcodes": "EX21, EX20",
+      "housing": "Cob and stone cottages, farmhouses and barn conversions, many off the gas grid."
+    }
+  ],
+  "housing": "Torridge is a rural district in north-west Devon, centred on Bideford, with about one in five households renting privately. Bideford and Appledore have steep streets of older terraces and cottages, while Westward Ho! has holiday flats and chalets alongside family homes. The inland villages have cob and stone cottages, farmhouses and barn conversions, many on oil or LPG heating. Rents are among the lowest in the South West.",
+  "checkinTips": [
+    "Coastal homes in Westward Ho!, Appledore and Hartland: check window frames, metal fittings and outside paintwork for salt and wind damage.",
+    "Cob and stone cottages: photograph walls for damp, cracks or crumbling render, and note any limewash or breathable paint.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level, private water supply or septic tank, and boiler service label.",
+    "Steep-street terraces in Bideford: photograph steps, handrails, retaining walls and any damp in rear rooms.",
+    "Former holiday flats let long term: note furniture and appliances supplied and their condition, room by room."
+  ],
+  "tenantHelp": "Private tenants can contact Torridge District Council's housing regulation team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "north-devon",
+    "mid-devon",
+    "west-devon",
+    "cornwall"
+  ]
+}

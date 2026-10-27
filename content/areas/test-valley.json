@@ -1,0 +1,100 @@
+{
+  "slug": "test-valley",
+  "name": "Test Valley",
+  "council": {
+    "name": "Test Valley Borough Council",
+    "url": "https://www.testvalley.gov.uk",
+    "privateRentingUrl": "https://testvalley.gov.uk/housing/housing-information-for-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more occupants, whatever the number of storeys.",
+    "fee": "£466 to apply for a mandatory HMO licence plus £255 once it is granted (£383 to renew), 2026/27",
+    "source": "https://www.testvalley.gov.uk/business/licensingandregulation/licensing/houses-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,235 a month (ONS, August 2026), up 6.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000093/"
+  },
+  "price": {
+    "text": "£368,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000093/"
+  },
+  "privateRentedShare": {
+    "text": "14.8% of households rent privately (Census 2021), up from 12.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000093/"
+  },
+  "councilTax": {
+    "text": "£2,247 Band D before parish precepts, including Hampshire County Council, police and fire (2026/27)",
+    "source": "https://testvalley.gov.uk/benefitsandcounciltax/counciltax/about-council-tax/council-tax-charges"
+  },
+  "postcodes": [
+    "SP10",
+    "SP11",
+    "SO20",
+    "SO51",
+    "SO52",
+    "SO16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Andover",
+      "postcodes": "SP10",
+      "housing": "An old market town core with Victorian terraces, surrounded by large 1960s and 1970s London overspill estates and newer developments."
+    },
+    {
+      "name": "Augusta Park and Picket Twenty",
+      "postcodes": "SP10, SP11",
+      "housing": "Large new-build estates of family houses and flats on the edges of Andover."
+    },
+    {
+      "name": "Romsey",
+      "postcodes": "SO51",
+      "housing": "A historic abbey town of Georgian and Victorian houses, with post-war and modern estates around it."
+    },
+    {
+      "name": "North Baddesley",
+      "postcodes": "SO52",
+      "housing": "Mostly post-war and later semi-detached and detached family houses."
+    },
+    {
+      "name": "Valley Park and Chilworth",
+      "postcodes": "SO53, SO16",
+      "housing": "Modern estates near Southampton and large detached houses in Chilworth."
+    },
+    {
+      "name": "Stockbridge",
+      "postcodes": "SO20",
+      "housing": "A small town of thatched and brick cottages along a wide high street."
+    },
+    {
+      "name": "Ludgershall fringe and Weyhill",
+      "postcodes": "SP11",
+      "housing": "Villages with older cottages and newer housing, some linked to the nearby army bases."
+    },
+    {
+      "name": "Test Valley villages",
+      "postcodes": "SO20, SP11",
+      "housing": "Rural villages of thatched cottages, flint and brick houses and farm buildings."
+    }
+  ],
+  "housing": "Test Valley runs from Andover in the north to Romsey and the edge of Southampton in the south. Andover grew as a London overspill town, so much of its housing is post-war estates, with large new-build areas added recently. Romsey and the river villages have older period homes, and many rural cottages are thatched or listed. Private renting is below the South East average, with some lets to military families from the nearby army bases.",
+  "checkinTips": [
+    "Thatched cottages in the Test valley villages: photograph the thatch, chimneys, low beams and any damp in old walls.",
+    "Overspill estate homes in Andover: check window seals, garages in blocks and shared paths and parking courts.",
+    "New-build homes at Augusta Park and Picket Twenty: note snagging marks, fences, turf and any management company areas.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level and boiler service label.",
+    "Homes near the River Test in Romsey and Stockbridge: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Test Valley Borough Council's Private Sector Housing Team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "wiltshire",
+    "basingstoke-and-deane",
+    "winchester",
+    "eastleigh",
+    "southampton",
+    "new-forest",
+    "west-berkshire"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "slug": "tamworth",
+  "name": "Tamworth",
+  "council": {
+    "name": "Tamworth Borough Council",
+    "url": "https://www.tamworth.gov.uk",
+    "privateRentingUrl": "https://tamworth.gov.uk/council-launches-consultation-new-licensing-smaller-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme in force yet. The council consulted from May to 20 August 2026 on licensing smaller HMOs with three or four occupants; no decision had been announced at the last check. HMOs with five or more occupants already need a mandatory licence.",
+    "fee": null,
+    "source": "https://tamworth.gov.uk/one-month-left-have-your-say-proposed-licensing-smaller-hmos-tamworth",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£925 a month (ONS, August 2026), up 0.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000199/"
+  },
+  "price": {
+    "text": "£229,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000199/"
+  },
+  "privateRentedShare": {
+    "text": "14.1% of households rent privately (Census 2021), up from 11.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000199/"
+  },
+  "councilTax": {
+    "text": "£2,301 Band D including Staffordshire County Council, police and fire (2026/27)",
+    "source": "https://www.tamworth.gov.uk/sites/default/files/council_tax/Council-Tax-Leaflet-2026-27.pdf"
+  },
+  "postcodes": [
+    "B77",
+    "B78",
+    "B79"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre and Castle",
+      "postcodes": "B79",
+      "housing": "Victorian terraces and older houses near the castle, with flats over shops and newer apartments."
+    },
+    {
+      "name": "Glascote",
+      "postcodes": "B77",
+      "housing": "Older terraces and post-war council-built estates."
+    },
+    {
+      "name": "Wilnecote",
+      "postcodes": "B77",
+      "housing": "Post-war and 1970s estates of semi-detached and terraced houses."
+    },
+    {
+      "name": "Belgrave",
+      "postcodes": "B77",
+      "housing": "1970s and 1980s estate housing built during the town's overspill growth."
+    },
+    {
+      "name": "Stonydelph",
+      "postcodes": "B77",
+      "housing": "A 1980s estate of terraced and semi-detached houses and some flats."
+    },
+    {
+      "name": "Amington",
+      "postcodes": "B77",
+      "housing": "Post-war and later estates of semi-detached houses and bungalows."
+    },
+    {
+      "name": "Leyfields and Gillway",
+      "postcodes": "B79",
+      "housing": "Post-war council-built houses and flats north of the centre."
+    },
+    {
+      "name": "Dosthill",
+      "postcodes": "B77",
+      "housing": "A former village with older cottages and modern family houses."
+    }
+  ],
+  "housing": "Tamworth is a compact borough that grew rapidly from the 1960s as an overspill town for Birmingham, so most homes are post-war and 1970s to 1980s estate houses. Private renting is below the West Midlands average and concentrated near the town centre and in former council houses bought under right to buy. The council knows of around 131 HMOs and has consulted on licensing smaller ones. Prices are below the regional average.",
+  "checkinTips": [
+    "1970s and 1980s estate houses in Belgrave and Stonydelph: photograph window seals, garages in blocks and shared paths and parking courts.",
+    "Former council houses bought under right to buy: check boilers, wiring and any non-standard construction noted on the paperwork.",
+    "Small HMOs near the town centre: record each bedroom lock and key, fire doors, alarms and the shared kitchen.",
+    "Victorian terraces near the castle: photograph back yards, rear walls and any damp in rear rooms.",
+    "Homes near the Rivers Tame and Anker: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Tamworth Borough Council's private sector housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "lichfield",
+    "north-warwickshire"
+  ]
+}

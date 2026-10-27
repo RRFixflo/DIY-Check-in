@@ -1,0 +1,105 @@
+{
+  "slug": "walsall",
+  "name": "Walsall",
+  "council": {
+    "name": "Walsall Council",
+    "url": "https://go.walsall.gov.uk",
+    "privateRentingUrl": "https://go.walsall.gov.uk/housing/information-landlords/houses-multiple-occupation-hmo/additional-hmo-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing covers HMOs with three or more tenants from more than one household in Paddock, Palfrey, Pleck and St Matthew's wards, from 1 September 2022 to 31 August 2027. A second scheme for Bentley and Darlaston North, Birchills Leamore, Blakenall, Darlaston South and Willenhall South was approved in 2022, but later council papers say it did not go ahead; check with the council. Larger HMOs elsewhere need a mandatory licence.",
+    "fee": null,
+    "source": "https://go.walsall.gov.uk/housing/information-landlords/houses-multiple-occupation-hmo/additional-hmo-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£924 a month (ONS, August 2026), up 9.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000030/"
+  },
+  "price": {
+    "text": "£215,000 (UK HPI, July 2026, provisional), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000030/"
+  },
+  "privateRentedShare": {
+    "text": "16.3% of households rent privately (Census 2021), up from 11.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000030/"
+  },
+  "councilTax": {
+    "text": "£2,627 Band D including West Midlands police and fire (2026/27)",
+    "source": "https://go.walsall.gov.uk/council-tax/council-tax-charges"
+  },
+  "postcodes": [
+    "WS1",
+    "WS2",
+    "WS3",
+    "WS4",
+    "WS5",
+    "WS8",
+    "WS9",
+    "WV12",
+    "WV13",
+    "WV14",
+    "WS10",
+    "B43"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Walsall town centre and Caldmore",
+      "postcodes": "WS1",
+      "housing": "Dense Victorian terraced streets, many privately let and some converted to HMOs, with flats over shops."
+    },
+    {
+      "name": "Palfrey and Pleck",
+      "postcodes": "WS1, WS2",
+      "housing": "Victorian and Edwardian terraces, in the additional HMO licensing area."
+    },
+    {
+      "name": "Bloxwich and Blakenall",
+      "postcodes": "WS3",
+      "housing": "Older terraces and large post-war council-built estates."
+    },
+    {
+      "name": "Willenhall",
+      "postcodes": "WV12, WV13",
+      "housing": "Victorian terraces from the lock-making industry and post-war semis."
+    },
+    {
+      "name": "Darlaston",
+      "postcodes": "WS10",
+      "housing": "Industrial-era terraces and post-war council housing, with some new builds."
+    },
+    {
+      "name": "Aldridge",
+      "postcodes": "WS9",
+      "housing": "Mostly inter-war and post-war semi-detached and detached family houses."
+    },
+    {
+      "name": "Streetly and Pheasey",
+      "postcodes": "B74, B43",
+      "housing": "Inter-war and post-war semis and detached houses near Sutton Park."
+    },
+    {
+      "name": "Brownhills",
+      "postcodes": "WS8",
+      "housing": "A former mining town with terraces, post-war estates and newer homes."
+    }
+  ],
+  "housing": "Walsall has a large stock of Victorian terraces in the centre and the old industrial towns of Willenhall and Darlaston, and big post-war council estates in Bloxwich and Blakenall. Private renting grew faster than the West Midlands average between 2011 and 2021, and rents rose sharply in the year to August 2026. The council licenses smaller HMOs in central wards such as Paddock, Palfrey, Pleck and St Matthew's. The east of the borough, around Aldridge and Streetly, is mostly owner-occupied family housing.",
+  "checkinTips": [
+    "Small HMOs in Paddock, Palfrey, Pleck and St Matthew's: record each bedroom lock and key, fire doors, alarms and the shared kitchen, and keep the licence with the report.",
+    "Victorian terraces in Caldmore and Willenhall: photograph back yards, rear walls and any damp low on the walls.",
+    "Post-war estate homes in Blakenall and Bloxwich: check window seals, boiler cupboards and any condensation on outside walls.",
+    "Former mining-area homes in Brownhills: note any cracks in walls and record the mining report if one was supplied.",
+    "Family semis in Aldridge and Streetly: photograph gardens, fences, sheds and garage doors as lets often include them."
+  ],
+  "tenantHelp": "Private tenants can contact Walsall Council's housing standards team about disrepair, damp or unsafe conditions, or about an unlicensed HMO.",
+  "nearby": [
+    "wolverhampton",
+    "sandwell",
+    "birmingham",
+    "lichfield",
+    "south-staffordshire",
+    "cannock-chase"
+  ]
+}

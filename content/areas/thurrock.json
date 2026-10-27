@@ -1,0 +1,99 @@
+{
+  "slug": "thurrock",
+  "name": "Thurrock",
+  "council": {
+    "name": "Thurrock Council",
+    "url": "https://www.thurrock.gov.uk",
+    "privateRentingUrl": "https://www.thurrock.gov.uk/news/thurrock-council-introduces-new-selective-licensing-scheme-to-improve-privately-rented-homes-in"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in designated wards (16 wards are reported) from 5 January 2026 to 4 January 2031. A High Court judge refused permission for a judicial review in March 2026, and the deadline to apply was extended to 31 March 2026. Check the council's ward list for a property.",
+    "additional": "Additional HMO licensing is reported to cover 20 wards from 7 September 2025 to 6 September 2030; larger HMOs need a mandatory licence across the borough.",
+    "fee": "around £1,002 for a selective licence (2025/26 fee table), with a higher rate for landlords found operating unlicensed and a £500 surcharge for paper applications",
+    "source": "https://mycare.thurrock.gov.uk/news/thurrock-council%E2%80%99s-selective-licensing-scheme-resumes-after-high-court-ruling",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,372 a month (ONS, June 2026), up 5.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000034/"
+  },
+  "price": {
+    "text": "£327,000 (UK HPI, May 2026, provisional), up 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000034/"
+  },
+  "privateRentedShare": {
+    "text": "18.3% of households rent privately (Census 2021), up from 14.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000034"
+  },
+  "councilTax": {
+    "text": "£2,255 Band D including Essex police and fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/thurrock"
+  },
+  "postcodes": [
+    "RM15",
+    "RM16",
+    "RM17",
+    "RM18",
+    "RM19",
+    "RM20",
+    "SS17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Grays",
+      "postcodes": "RM16, RM17",
+      "housing": "Victorian and Edwardian terraces near the centre, flats over shops and post-war council-built estates."
+    },
+    {
+      "name": "Tilbury",
+      "postcodes": "RM18",
+      "housing": "Terraced streets and post-war estates and flats built for the docks."
+    },
+    {
+      "name": "Chafford Hundred",
+      "postcodes": "RM16",
+      "housing": "A large 1990s and 2000s development of houses and flats in former chalk quarries."
+    },
+    {
+      "name": "South Ockendon and Aveley",
+      "postcodes": "RM15",
+      "housing": "Post-war London overspill estates of terraced houses and flats."
+    },
+    {
+      "name": "Purfleet-on-Thames and West Thurrock",
+      "postcodes": "RM19, RM20",
+      "housing": "Riverside flats and new-build homes, with regeneration under way at Purfleet."
+    },
+    {
+      "name": "Stanford-le-Hope and Corringham",
+      "postcodes": "SS17",
+      "housing": "Inter-war and post-war semis and bungalows, with newer estates."
+    },
+    {
+      "name": "Tilbury and Chadwell St Mary",
+      "postcodes": "RM16",
+      "housing": "Post-war council-built estates and semi-detached houses."
+    },
+    {
+      "name": "Orsett and Horndon-on-the-Hill",
+      "postcodes": "RM16, SS17",
+      "housing": "Villages with period cottages and larger detached houses."
+    }
+  ],
+  "housing": "Thurrock sits on the Thames east of London, with former dock and industrial towns such as Grays and Tilbury, post-war London overspill estates at South Ockendon and Aveley, and large modern developments at Chafford Hundred. Private renting rose faster than the regional average between 2011 and 2021, and the council introduced selective and additional licensing in 2025 and 2026. Many tenants commute into London on the c2c line. Regeneration is under way at Purfleet and around Grays town centre.",
+  "checkinTips": [
+    "Homes in the selective licensing wards: record smoke and carbon monoxide alarms and keep the licence, gas and EICR certificates with the report.",
+    "Flats in Chafford Hundred and Purfleet: note fob and key counts, allocated parking, bin store access and communal area condition.",
+    "Post-war estate homes in South Ockendon and Tilbury: check window seals, boiler cupboards and any condensation or mould on outside walls.",
+    "Victorian terraces in Grays: photograph back yards, rear walls and any damp in rear rooms.",
+    "Small HMOs in the additional licensing wards: record each bedroom lock and key, fire doors and the shared kitchen."
+  ],
+  "tenantHelp": "Private tenants can contact Thurrock Council's private sector housing team about disrepair, damp or unsafe conditions, or about a landlord who should be licensed.",
+  "nearby": [
+    "basildon",
+    "brentwood",
+    "havering",
+    "dartford",
+    "gravesham"
+  ]
+}

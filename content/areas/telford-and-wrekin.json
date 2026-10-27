@@ -1,0 +1,99 @@
+{
+  "slug": "telford-and-wrekin",
+  "name": "Telford and Wrekin",
+  "council": {
+    "name": "Telford & Wrekin Council",
+    "url": "https://www.telford.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme. A scheme for smaller HMOs with three or four occupants, due to start on 25 August 2026, was withdrawn from 15 September 2026 after a challenge from landlords; the council says it will revisit this in 2027. Larger HMOs still need a mandatory licence, and from February 2027 an Article 4 Direction will require planning permission for all new HMOs.",
+    "fee": null,
+    "source": "https://localgovernmentlawyer.co.uk/housing-law/397-housing-news/101766-council-withdraws-plan-for-additional-licensing-scheme-for-smaller-hmos-after-landlords-threaten-legal-action",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£861 a month (ONS, August 2026), up 6.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000020/"
+  },
+  "price": {
+    "text": "£227,000 (UK HPI, July 2026, provisional), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000020/"
+  },
+  "privateRentedShare": {
+    "text": "21.2% of households rent privately (Census 2021), up from 15.0% in 2011, the biggest rise in the West Midlands",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000020/"
+  },
+  "councilTax": {
+    "text": "£2,256 average Band D including West Mercia police, Shropshire fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/telford-and-wrekin"
+  },
+  "postcodes": [
+    "TF1",
+    "TF2",
+    "TF3",
+    "TF4",
+    "TF5",
+    "TF6",
+    "TF7",
+    "TF8",
+    "TF10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wellington",
+      "postcodes": "TF1",
+      "housing": "Victorian terraces and older houses around the market town centre, with post-war estates around it."
+    },
+    {
+      "name": "Telford Town Centre and Hollinswood",
+      "postcodes": "TF3",
+      "housing": "1970s new-town estates and newer flats near the shopping centre."
+    },
+    {
+      "name": "Madeley",
+      "postcodes": "TF7",
+      "housing": "An old mining village core with 1960s and 1970s new-town estates such as Sutton Hill and Woodside."
+    },
+    {
+      "name": "Ironbridge and Coalbrookdale",
+      "postcodes": "TF8",
+      "housing": "Stone and brick cottages on the steep sides of the Severn Gorge, many listed."
+    },
+    {
+      "name": "Oakengates and Donnington",
+      "postcodes": "TF2",
+      "housing": "Victorian terraces from the mining era and post-war council-built estates."
+    },
+    {
+      "name": "Dawley and Lawley",
+      "postcodes": "TF4",
+      "housing": "Older terraces in Dawley and a large new-build development at Lawley Village."
+    },
+    {
+      "name": "Priorslee and Lightmoor",
+      "postcodes": "TF2, TF4",
+      "housing": "Modern estates of detached and semi-detached family houses."
+    },
+    {
+      "name": "Newport",
+      "postcodes": "TF10",
+      "housing": "A small market town of Georgian and Victorian houses with newer estates, and student lets near Harper Adams University."
+    }
+  ],
+  "housing": "Telford was built as a new town from the late 1960s around older mining and iron towns such as Wellington, Madeley, Dawley and Oakengates. Much of the housing is new-town estates of terraces and flats with shared footpaths and garage courts, alongside Victorian terraces and big new-build areas such as Lawley and Priorslee. Private renting grew faster than anywhere else in the West Midlands between 2011 and 2021, and many former council homes are now privately let. The council has tried to license smaller HMOs and plans planning controls on new ones.",
+  "checkinTips": [
+    "New-town estate homes in Woodside, Sutton Hill and Brookside: photograph shared paths, garages in blocks, flat roofs and window seals.",
+    "Ironbridge Gorge cottages: check for cracks, uneven floors and doors that stick, as ground movement affects the slopes.",
+    "Former mining-area homes in Oakengates and Dawley: note any cracks in walls and record the mining report if one was supplied.",
+    "New-build homes in Lawley and Priorslee: note snagging marks, fences, turf and any management company areas.",
+    "Student lets in Newport near Harper Adams University: record each bedroom lock and key, fire doors and the shared kitchen."
+  ],
+  "tenantHelp": "Private tenants can contact Telford & Wrekin Council's housing standards team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "shropshire",
+    "stafford",
+    "south-staffordshire"
+  ]
+}

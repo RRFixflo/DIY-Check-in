@@ -1,0 +1,99 @@
+{
+  "slug": "vale-of-white-horse",
+  "name": "Vale of White Horse",
+  "council": {
+    "name": "Vale of White Horse District Council",
+    "url": "https://www.whitehorsedc.gov.uk",
+    "privateRentingUrl": "https://whitehorsedc.gov.uk/services-and-advice/housing/help-landlords/mandatory-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council runs only mandatory licensing, for HMOs occupied by five or more people.",
+    "fee": "£1,034 for a five-year HMO licence for up to five bedrooms, rising to £1,151 for eight",
+    "source": "https://whitehorsedc.gov.uk/services-and-advice/housing/help-landlords/mandatory-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,336 a month (ONS, June 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000180/"
+  },
+  "price": {
+    "text": "£408,000 (UK HPI, May 2026, provisional), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000180/"
+  },
+  "privateRentedShare": {
+    "text": "15.7% of households rent privately (Census 2021), up from 13.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000180/"
+  },
+  "councilTax": {
+    "text": "£2,577 average Band D including Oxfordshire County Council (which runs the fire service), Thames Valley police and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/vale-of-white-horse"
+  },
+  "postcodes": [
+    "OX2",
+    "OX11",
+    "OX12",
+    "OX13",
+    "OX14",
+    "SN7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Abingdon-on-Thames",
+      "postcodes": "OX14",
+      "housing": "Medieval and Georgian houses in the centre, Victorian terraces and large post-war and modern estates."
+    },
+    {
+      "name": "Wantage",
+      "postcodes": "OX12",
+      "housing": "A market town of older brick and stone houses with large new-build estates such as Grove Airfield and Kingsgrove."
+    },
+    {
+      "name": "Grove",
+      "postcodes": "OX12",
+      "housing": "A large village of post-war and modern houses, with new estates on the former airfield."
+    },
+    {
+      "name": "Faringdon",
+      "postcodes": "SN7",
+      "housing": "A small stone-built market town with new-build estates on its edges."
+    },
+    {
+      "name": "Botley and North Hinksey",
+      "postcodes": "OX2",
+      "housing": "Inter-war and post-war semis on the western edge of Oxford, popular with university and hospital staff."
+    },
+    {
+      "name": "Kennington and Radley",
+      "postcodes": "OX1, OX14",
+      "housing": "Mostly post-war family houses and bungalows close to Oxford."
+    },
+    {
+      "name": "Didcot edge (Great Western Park and Harwell)",
+      "postcodes": "OX11",
+      "housing": "Large new-build estates and homes linked to the Harwell science campus."
+    },
+    {
+      "name": "Cumnor and the villages",
+      "postcodes": "OX2, OX13",
+      "housing": "Stone cottages, thatched houses and farm conversions in villages across the vale."
+    }
+  ],
+  "housing": "The Vale of White Horse runs from the edge of Oxford to the Berkshire Downs, with Abingdon, Wantage and Faringdon as its towns. Private renting is below the South East average, with demand from Oxford, the Harwell and Culham science sites and Milton Park. Large new-build estates have been added at Grove, Wantage, Great Western Park and Faringdon, while the villages have stone and thatched cottages. Prices are well above the national average.",
+  "checkinTips": [
+    "New-build homes at Grove, Kingsgrove and Great Western Park: note snagging marks, fences, turf and management company areas.",
+    "Stone and thatched cottages in the villages: photograph the thatch, beams, low doorways and any damp in old walls.",
+    "Homes near the Thames and Ock in Abingdon: check ground floors and walls for damp or past flood marks.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level and boiler service label.",
+    "Shared houses let to Oxford and Harwell staff in Botley and Abingdon: record each bedroom lock and key, fire doors and the shared kitchen."
+  ],
+  "tenantHelp": "Private tenants can contact Vale of White Horse District Council's housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "oxford",
+    "south-oxfordshire",
+    "west-oxfordshire",
+    "swindon",
+    "west-berkshire",
+    "cotswold"
+  ]
+}

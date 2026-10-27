@@ -1,0 +1,96 @@
+{
+  "slug": "swale",
+  "name": "Swale",
+  "council": {
+    "name": "Swale Borough Council",
+    "url": "https://swale.gov.uk",
+    "privateRentingUrl": "https://swale.gov.uk/business-licensing-and-procurement/licences-permits-and-consents/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more unrelated people sharing facilities.",
+    "fee": "£896 for a five-year mandatory HMO licence, or £761 for accredited landlords",
+    "source": "https://swale.gov.uk/business-licensing-and-procurement/licences-permits-and-consents/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,124 a month (ONS, December 2025), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000113/"
+  },
+  "price": {
+    "text": "£295,000 (UK HPI, November 2025, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000113/"
+  },
+  "privateRentedShare": {
+    "text": "18.4% of households rent privately (Census 2021), up from 15.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000113/"
+  },
+  "councilTax": {
+    "text": "£2,356 Band D before parish precepts, including Kent County Council, police and fire (2026/27); £2,406 with the average parish charge",
+    "source": "https://news.swale.gov.uk/news/what-you-get-for-your-council-tax"
+  },
+  "postcodes": [
+    "ME9",
+    "ME10",
+    "ME11",
+    "ME12",
+    "ME13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sittingbourne",
+      "postcodes": "ME10",
+      "housing": "Victorian terraces near the centre, flats over shops and large post-war and new-build estates around the town."
+    },
+    {
+      "name": "Milton Regis and Kemsley",
+      "postcodes": "ME10",
+      "housing": "An old village core with terraces, and newer estates around Kemsley."
+    },
+    {
+      "name": "Faversham",
+      "postcodes": "ME13",
+      "housing": "A historic market town of timber-framed and Georgian houses, Victorian terraces and newer estates."
+    },
+    {
+      "name": "Sheerness",
+      "postcodes": "ME12",
+      "housing": "Victorian and Edwardian terraces and flats, including the historic dockyard area of Blue Town."
+    },
+    {
+      "name": "Minster-on-Sea",
+      "postcodes": "ME12",
+      "housing": "Bungalows and post-war houses on the Isle of Sheppey's north coast."
+    },
+    {
+      "name": "Leysdown and Eastchurch",
+      "postcodes": "ME12",
+      "housing": "Holiday parks, chalets and bungalows, with village houses at Eastchurch."
+    },
+    {
+      "name": "Queenborough and Rushenden",
+      "postcodes": "ME11",
+      "housing": "Older cottages in Queenborough and new housing on regeneration land at Rushenden."
+    },
+    {
+      "name": "Iwade and Newington",
+      "postcodes": "ME9",
+      "housing": "Villages that have grown with large modern estates of family homes."
+    }
+  ],
+  "housing": "Swale covers Sittingbourne, the market town of Faversham and the Isle of Sheppey. Private renting is close to the national average, with many lets in the Victorian terraces of Sittingbourne and Sheerness and in flats over shops. Sheppey also has large numbers of bungalows, holiday parks and chalets, some lived in all year. Sittingbourne and the villages around it have grown with big new-build estates for Medway and London commuters.",
+  "checkinTips": [
+    "Coastal homes on Sheppey: check window frames, metal fittings, gutters and outside paintwork for salt and wind damage.",
+    "Bungalows and chalets in Minster and Leysdown: photograph roofs, flat-roof extensions, damp patches and any electric storage heaters.",
+    "Victorian terraces in Sittingbourne and Sheerness: record back yards, rear walls and any damp low on the walls.",
+    "Listed and period homes in Faversham: photograph sash windows, old floors, fireplaces and any cracks in plaster.",
+    "New-build estates around Iwade and Sittingbourne: note snagging marks, fences, turf and allocated parking."
+  ],
+  "tenantHelp": "Private tenants can contact Swale Borough Council's Private Sector Housing team about disrepair, damp or unsafe conditions, or use the council's 'Complain about a landlord' page.",
+  "nearby": [
+    "medway",
+    "maidstone",
+    "canterbury",
+    "ashford"
+  ]
+}

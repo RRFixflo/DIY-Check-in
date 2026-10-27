@@ -1,0 +1,100 @@
+{
+  "slug": "tandridge",
+  "name": "Tandridge",
+  "council": {
+    "name": "Tandridge District Council",
+    "url": "https://www.tandridge.gov.uk",
+    "privateRentingUrl": "https://tandridge.gov.uk/Housing/Private-housing/Houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only mandatory licensing applies, for HMOs with five or more people forming two or more households. Separately, an Article 4 Direction from 9 February 2026 means planning permission is needed to turn a house into a small HMO in Caterham Valley, Caterham on the Hill and Whyteleafe.",
+    "fee": "£868.50 for a five-year mandatory HMO licence",
+    "source": "https://tandridge.gov.uk/Housing/Private-housing/Houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,649 a month (ONS, September 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000215/"
+  },
+  "price": {
+    "text": "£507,000 (UK HPI, August 2026, provisional), down 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000215/"
+  },
+  "privateRentedShare": {
+    "text": "13.3% of households rent privately (Census 2021), up from 11.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000215/"
+  },
+  "councilTax": {
+    "text": "£2,595 average Band D including Surrey County Council (with fire), police and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/tandridge"
+  },
+  "postcodes": [
+    "CR3",
+    "CR6",
+    "RH7",
+    "RH8",
+    "RH9",
+    "TN8",
+    "RH1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Caterham",
+      "postcodes": "CR3",
+      "housing": "Victorian and Edwardian houses in the valley, inter-war semis on the hill and flats on the former barracks site."
+    },
+    {
+      "name": "Whyteleafe",
+      "postcodes": "CR3",
+      "housing": "Terraces and semis along the valley road with some newer flats."
+    },
+    {
+      "name": "Warlingham",
+      "postcodes": "CR6",
+      "housing": "Mostly inter-war and post-war detached and semi-detached family houses."
+    },
+    {
+      "name": "Oxted and Hurst Green",
+      "postcodes": "RH8",
+      "housing": "Edwardian and inter-war houses near the station, with post-war estates at Hurst Green."
+    },
+    {
+      "name": "Lingfield",
+      "postcodes": "RH7",
+      "housing": "A village of older cottages and listed buildings with post-war and modern estates."
+    },
+    {
+      "name": "Godstone",
+      "postcodes": "RH9",
+      "housing": "A village green with period cottages and some modern family housing."
+    },
+    {
+      "name": "Edenbridge fringe and Felbridge",
+      "postcodes": "TN8, RH19",
+      "housing": "Rural cottages and detached houses on the Kent and Sussex borders."
+    },
+    {
+      "name": "Smallfield and Burstow",
+      "postcodes": "RH6",
+      "housing": "Post-war and modern houses and bungalows near Gatwick."
+    }
+  ],
+  "housing": "Tandridge is a largely rural, owner-occupied district in the Green Belt on the edge of London, with some of the highest prices in the South East. Private renting is below the regional average, with lets concentrated in Caterham, Whyteleafe and Oxted, close to the railway lines into London. The council has used an Article 4 Direction to control small HMOs in Caterham and Whyteleafe. The villages have many period cottages and large detached houses.",
+  "checkinTips": [
+    "Hillside homes in Caterham and Whyteleafe: photograph steps, driveways, retaining walls and sloping gardens.",
+    "Period cottages in Lingfield and Godstone: check beams, low doorways, small windows and any damp in older walls.",
+    "Rural homes off the gas grid: record the oil tank or LPG supply, fuel level and boiler service label.",
+    "Flats in converted barracks and office buildings in Caterham: note fob counts, parking, bin stores and communal areas.",
+    "Large detached houses: photograph gardens, outbuildings, gates, garage doors and any alarm panels and codes."
+  ],
+  "tenantHelp": "Private tenants can contact Tandridge District Council's environmental health and private sector housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "croydon",
+    "bromley",
+    "sevenoaks",
+    "wealden",
+    "mid-sussex",
+    "reigate-and-banstead"
+  ]
+}

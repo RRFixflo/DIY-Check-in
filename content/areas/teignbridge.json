@@ -1,0 +1,98 @@
+{
+  "slug": "teignbridge",
+  "name": "Teignbridge",
+  "council": {
+    "name": "Teignbridge District Council",
+    "url": "https://www.teignbridge.gov.uk",
+    "privateRentingUrl": "https://www.teignbridge.gov.uk/housing/landlords/renting-out-property/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council operates only the mandatory scheme, for HMOs with five or more people forming two or more households who share facilities.",
+    "fee": null,
+    "source": "https://www.teignbridge.gov.uk/housing/landlords/teignbridge-licensed-hmo-register/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£961 a month (ONS, August 2026), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000045/"
+  },
+  "price": {
+    "text": "£302,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000045/"
+  },
+  "privateRentedShare": {
+    "text": "17.9% of households rent privately (Census 2021), up from 15.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000045/"
+  },
+  "councilTax": {
+    "text": "£2,643 average Band D including Devon County Council, police, fire and parish precepts (2026/27)",
+    "source": "https://democracy.teignbridge.gov.uk/documents/s24756/18. CT App 15a.pdf"
+  },
+  "postcodes": [
+    "TQ12",
+    "TQ13",
+    "TQ14",
+    "EX6",
+    "EX7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Newton Abbot",
+      "postcodes": "TQ12",
+      "housing": "Victorian terraces and villas near the centre, flats over shops and large post-war and new-build estates."
+    },
+    {
+      "name": "Kingsteignton",
+      "postcodes": "TQ12",
+      "housing": "Post-war and modern estates of semi-detached and detached family houses."
+    },
+    {
+      "name": "Teignmouth",
+      "postcodes": "TQ14",
+      "housing": "Georgian and Victorian seaside terraces, many split into flats, with newer homes on the hills."
+    },
+    {
+      "name": "Dawlish",
+      "postcodes": "EX7",
+      "housing": "Victorian villas and terraces near the seafront and railway, with bungalows and estates inland."
+    },
+    {
+      "name": "Bovey Tracey",
+      "postcodes": "TQ13",
+      "housing": "A Dartmoor-edge town of stone cottages and post-war and modern houses."
+    },
+    {
+      "name": "Ashburton and Buckfastleigh",
+      "postcodes": "TQ13, TQ11",
+      "housing": "Small stone-built towns with listed cottages and terraces on the edge of Dartmoor."
+    },
+    {
+      "name": "Chudleigh",
+      "postcodes": "TQ13",
+      "housing": "A small town of older stone houses and post-war estates."
+    },
+    {
+      "name": "Exminster and Kenton",
+      "postcodes": "EX6",
+      "housing": "Villages near Exeter with cob and thatched cottages and newer estates."
+    }
+  ],
+  "housing": "Teignbridge runs from the coast at Dawlish and Teignmouth to the edge of Dartmoor, with Newton Abbot as the main town. Private renting is a little below the national average, with lets in the Victorian terraces and flats of Newton Abbot and the seaside towns. Inland towns and villages have stone, cob and thatched cottages, many listed and some off the gas grid. Holiday and second homes are common on the coast.",
+  "checkinTips": [
+    "Seaside homes in Dawlish and Teignmouth: check window frames, metal fittings and outside paintwork for salt and wind damage.",
+    "Cob and thatched cottages in the villages: photograph the thatch, walls, low beams and any damp or cracks in limewashed walls.",
+    "Dartmoor-edge homes in Bovey Tracey and Ashburton: record oil tanks or LPG, wood burners and the sweep certificate.",
+    "Victorian flat conversions in Teignmouth and Newton Abbot: note shared hallways, fire doors and keys for each door.",
+    "Homes near the Teign estuary and rivers: check ground floors and walls for damp or past flood marks."
+  ],
+  "tenantHelp": "Private tenants can contact Teignbridge District Council's Private Sector Housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "exeter",
+    "east-devon",
+    "mid-devon",
+    "west-devon",
+    "south-hams",
+    "torbay"
+  ]
+}

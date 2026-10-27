@@ -1,0 +1,98 @@
+{
+  "slug": "swindon",
+  "name": "Swindon",
+  "council": {
+    "name": "Swindon Borough Council",
+    "url": "https://www.swindon.gov.uk",
+    "privateRentingUrl": "https://www.swindon.gov.uk/info/20025/homes_and_property/236/houses_in_multiple_occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to properties with five or more people from more than one household.",
+    "fee": "£1,474 for a five-year mandatory HMO licence applied for online, up to 10 occupants (£1,755 on paper; £1,193 to renew online), from 1 April 2026",
+    "source": "https://www.swindon.gov.uk/info/20025/homes_and_property/236/houses_in_multiple_occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,103 a month (ONS, September 2026), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000030/"
+  },
+  "price": {
+    "text": "£264,000 (UK HPI, August 2026, provisional), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000030/"
+  },
+  "privateRentedShare": {
+    "text": "19.3% of households rent privately (Census 2021), up from 16.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000030"
+  },
+  "councilTax": {
+    "text": "£2,438 average Band D including police, fire and average parish precepts (2026/27)",
+    "source": "https://www.swindon.gov.uk/info/20020/council_tax/273/annual_report_2018-19"
+  },
+  "postcodes": [
+    "SN1",
+    "SN2",
+    "SN3",
+    "SN4",
+    "SN5",
+    "SN6",
+    "SN25",
+    "SN26"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre and Railway Village",
+      "postcodes": "SN1",
+      "housing": "Stone-built Victorian railway workers' cottages, flats over shops and office-to-flat conversions."
+    },
+    {
+      "name": "Old Town",
+      "postcodes": "SN1",
+      "housing": "Georgian and Victorian houses and terraces on the hill, some split into flats."
+    },
+    {
+      "name": "Gorse Hill and Rodbourne",
+      "postcodes": "SN2",
+      "housing": "Dense red-brick Victorian and Edwardian terraced streets, many privately let."
+    },
+    {
+      "name": "Penhill and Pinehurst",
+      "postcodes": "SN2",
+      "housing": "Post-war council-built estates of houses and low-rise flats."
+    },
+    {
+      "name": "West Swindon",
+      "postcodes": "SN5",
+      "housing": "1970s and 1980s estates of terraced and semi-detached houses, such as Freshbrook, Toothill and Shaw."
+    },
+    {
+      "name": "North Swindon",
+      "postcodes": "SN25",
+      "housing": "Large estates built from the 1990s onwards, including Abbey Meads, Haydon and Tadpole Garden Village."
+    },
+    {
+      "name": "Wichelstowe and Eastern Villages",
+      "postcodes": "SN1, SN3",
+      "housing": "New-build estates of houses and flats still being developed on the edges of the town."
+    },
+    {
+      "name": "Highworth and Wroughton",
+      "postcodes": "SN6, SN4",
+      "housing": "Small towns with older stone houses in the centre and post-war estates around them."
+    }
+  ],
+  "housing": "Swindon grew around the Great Western Railway works, leaving a large stock of Victorian terraces near the centre, including the stone cottages of the Railway Village. Much of the town is post-war and later: council-built estates, then the large West Swindon and North Swindon developments, and now new-build villages to the south and east. Private renting is close to the national average and higher in the central terraces and town-centre flats. The town is popular with commuters to Reading, Bristol and London.",
+  "checkinTips": [
+    "Victorian terraces in Gorse Hill and Rodbourne: photograph back yards, rear walls, outhouses and any damp in the back rooms.",
+    "Office-to-flat conversions in the town centre: record room sizes, windows, ventilation, fob counts and bin store access.",
+    "1970s and 1980s houses in West Swindon: check window seals, garages in blocks and shared paths and parking courts.",
+    "New-build homes in North Swindon and Wichelstowe: note snagging marks, fences, turf and any management company areas.",
+    "Railway Village cottages in a conservation area: photograph original windows, doors and stonework, as changes may need consent."
+  ],
+  "tenantHelp": "Private tenants can contact Swindon Borough Council's private sector housing team about disrepair, damp or unsafe conditions.",
+  "nearby": [
+    "wiltshire",
+    "cotswold",
+    "vale-of-white-horse"
+  ]
+}

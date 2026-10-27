@@ -1,0 +1,101 @@
+{
+  "slug": "surrey-heath",
+  "name": "Surrey Heath",
+  "council": {
+    "name": "Surrey Heath Borough Council",
+    "url": "https://www.surreyheath.gov.uk",
+    "privateRentingUrl": "https://www.surreyheath.gov.uk/housing/housing-advice/low-cost-home-ownership-and-private-renting/private-rented-accommodation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to properties with five or more people forming two or more households.",
+    "fee": null,
+    "source": "https://www.surreyheath.gov.uk/sites/default/files/2023-04/HMO%20Information%20Sheet.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,510 a month (ONS, September 2026), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000214/"
+  },
+  "price": {
+    "text": "£458,000 (UK HPI, August 2026, provisional), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000214/"
+  },
+  "privateRentedShare": {
+    "text": "15.4% of households rent privately (Census 2021), up from 12.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000214/"
+  },
+  "councilTax": {
+    "text": "£2,554 average Band D before parish precepts, including Surrey County Council (with fire) and police (2026/27)",
+    "source": "https://www.surreyheath.gov.uk/news/2026/surrey-heath-borough-council-agree-council-tax-and-annual-plan-202627"
+  },
+  "postcodes": [
+    "GU15",
+    "GU16",
+    "GU17",
+    "GU18",
+    "GU19",
+    "GU20",
+    "GU24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Camberley",
+      "postcodes": "GU15",
+      "housing": "Victorian and Edwardian houses near the centre, flats over shops and newer apartment blocks, with large post-war estates around."
+    },
+    {
+      "name": "Frimley",
+      "postcodes": "GU16",
+      "housing": "Mostly post-war semis and detached houses, with flats near Frimley Park Hospital."
+    },
+    {
+      "name": "Frimley Green and Mytchett",
+      "postcodes": "GU16",
+      "housing": "Villages of post-war and modern family houses near the Basingstoke Canal."
+    },
+    {
+      "name": "Deepcut",
+      "postcodes": "GU16",
+      "housing": "A large new-build development on the former army barracks site at Mindenhurst."
+    },
+    {
+      "name": "Bagshot",
+      "postcodes": "GU19",
+      "housing": "A village of older cottages and terraces with post-war and modern estates."
+    },
+    {
+      "name": "Lightwater",
+      "postcodes": "GU18",
+      "housing": "Mostly 1960s to 1980s detached and semi-detached family homes."
+    },
+    {
+      "name": "Windlesham",
+      "postcodes": "GU20",
+      "housing": "Large detached houses on wooded plots and some older cottages."
+    },
+    {
+      "name": "Chobham and West End",
+      "postcodes": "GU24",
+      "housing": "Village cottages, period houses and large detached homes on the heathland edge."
+    }
+  ],
+  "housing": "Surrey Heath is a largely owner-occupied borough on the Surrey and Hampshire border, with prices well above the national average. Private renting is concentrated in Camberley and Frimley, where there are flats, older terraces and homes let to hospital and military staff. The former Deepcut barracks has become a large new-build estate. The villages have many large detached houses on wooded plots.",
+  "checkinTips": [
+    "Homes on wooded heathland plots: photograph gutters, roofs, driveways and trees close to the house, as leaves and roots cause problems.",
+    "New-build homes at Mindenhurst, Deepcut: note snagging marks, fences, turf, allocated parking and any management company rules.",
+    "Flats in Camberley town centre: record fob and key counts, parking permits, bin store access and the intercom handset.",
+    "Large detached houses in Windlesham and Chobham: photograph gardens, outbuildings, gates and any alarm panels and codes.",
+    "Lets to hospital or military staff in Frimley: record furniture supplied and its condition, as many are let furnished."
+  ],
+  "tenantHelp": "Private tenants can contact Surrey Heath Borough Council's environmental health team about disrepair, damp or unsafe conditions, and its housing team for advice.",
+  "nearby": [
+    "bracknell-forest",
+    "windsor-and-maidenhead",
+    "runnymede",
+    "woking",
+    "guildford",
+    "rushmoor",
+    "hart"
+  ]
+}

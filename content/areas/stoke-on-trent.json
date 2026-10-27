@@ -1,0 +1,95 @@
+{
+  "slug": "stoke-on-trent",
+  "name": "Stoke-on-Trent",
+  "council": {
+    "name": "Stoke-on-Trent City Council",
+    "url": "https://www.stoke.gov.uk",
+    "privateRentingUrl": "https://www.stoke.gov.uk/info/20041/private_renting_and_landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force: the earlier schemes in Cobridge and Fenton ended on 4 August 2019.",
+    "additional": "Mandatory HMO licensing only for now. In August 2026 the council proposed a citywide additional licensing scheme for smaller HMOs, subject to consultation, alongside a citywide Article 4 Direction limiting new HMOs; no final decision had been found at the last check.",
+    "fee": null,
+    "source": "https://www.stoke.gov.uk/news/article/2118/measures_to_limit_citywide_numbers_of_houses_of_multiple_occupation_and_ensure_they_meet_high_standards",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£718 a month (ONS, September 2026), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000021/"
+  },
+  "price": {
+    "text": "£150,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000021/"
+  },
+  "privateRentedShare": {
+    "text": "20.3% of households rent privately (Census 2021), up from 14.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000021/"
+  },
+  "councilTax": {
+    "text": "£2,183 Band D including Staffordshire police and fire precepts (2026/27)",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69aa97f25b02afd3eaafe552"
+  },
+  "postcodes": [
+    "ST1",
+    "ST2",
+    "ST3",
+    "ST4",
+    "ST6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hanley",
+      "postcodes": "ST1",
+      "housing": "The city centre, with Victorian terraces, flats over shops and newer apartment blocks."
+    },
+    {
+      "name": "Shelton",
+      "postcodes": "ST1, ST4",
+      "housing": "Victorian terraces near the university, many let as student houses and HMOs."
+    },
+    {
+      "name": "Stoke and Hartshill",
+      "postcodes": "ST4",
+      "housing": "Terraced streets and larger Victorian houses near the Royal Stoke hospital, popular with hospital staff."
+    },
+    {
+      "name": "Burslem",
+      "postcodes": "ST6",
+      "housing": "Dense Victorian terraces around the old potbanks, with some post-war council housing."
+    },
+    {
+      "name": "Tunstall",
+      "postcodes": "ST6",
+      "housing": "Red-brick terraced streets with inter-war council estates on the edges."
+    },
+    {
+      "name": "Longton",
+      "postcodes": "ST3",
+      "housing": "Victorian terraces near the town centre and post-war semis towards Meir."
+    },
+    {
+      "name": "Fenton",
+      "postcodes": "ST4",
+      "housing": "Terraced housing close to the old pottery works, much of it privately let."
+    },
+    {
+      "name": "Trentham",
+      "postcodes": "ST4",
+      "housing": "Mostly inter-war and later semi-detached and detached family homes."
+    }
+  ],
+  "housing": "Stoke-on-Trent is a city of six towns with a large stock of Victorian and Edwardian terraces built for pottery workers, many now privately rented. Private renting rose from 14% to 20% of households between 2011 and 2021, one of the biggest rises in the West Midlands. Shelton has many student HMOs near Staffordshire University, and the council has proposed limits on new HMOs across the city. Prices and rents are among the lowest in the region.",
+  "checkinTips": [
+    "Victorian terraces in Burslem, Tunstall and Fenton: photograph back yards, rear walls and any damp or salt marks low on the walls.",
+    "Student HMOs in Shelton: record each bedroom door lock and key, fire doors, alarms and the kitchen equipment shared between tenants.",
+    "Older homes with solid walls: check bedroom corners and behind furniture for condensation and black mould, especially in winter.",
+    "Flats over shops in Hanley and Longton: note the separate entrance, stairs, fire door and any shared meter cupboard.",
+    "Terraced houses with gas fires or back boilers: photograph the appliance and its service label, and attach the gas safety certificate."
+  ],
+  "tenantHelp": "Private tenants can contact Stoke-on-Trent City Council's Private Sector Housing Team about disrepair, damp and unsafe conditions.",
+  "nearby": [
+    "newcastle-under-lyme",
+    "staffordshire-moorlands",
+    "stafford"
+  ]
+}

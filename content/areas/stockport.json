@@ -1,0 +1,101 @@
+{
+  "slug": "stockport",
+  "name": "Stockport",
+  "council": {
+    "name": "Stockport Metropolitan Borough Council",
+    "url": "https://www.stockport.gov.uk",
+    "privateRentingUrl": "https://www.stockport.gov.uk/information-for-landlords/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; only mandatory licensing applies, for HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "£1,190 for a new mandatory HMO licence (£360 on application plus £830 on grant), £1,112 to renew (2026)",
+    "source": "https://www.stockport.gov.uk/information-for-landlords/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,125 a month (ONS, September 2026), up 5.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000007/"
+  },
+  "price": {
+    "text": "£319,000 (UK HPI, August 2026, provisional), up 3.9% on a year earlier and the second highest in the North West",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000007/"
+  },
+  "privateRentedShare": {
+    "text": "14.4% of households rent privately (Census 2021), up from 11.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000007/"
+  },
+  "councilTax": {
+    "text": "£2,619 Band D including the Greater Manchester mayoral police and fire precepts (2026/27)",
+    "source": "https://opengovernment.network/councils/stockport/decisions/190949"
+  },
+  "postcodes": [
+    "SK1",
+    "SK2",
+    "SK3",
+    "SK4",
+    "SK5",
+    "SK6",
+    "SK7",
+    "SK8",
+    "M19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stockport town centre and Edgeley",
+      "postcodes": "SK1, SK3",
+      "housing": "Victorian terraces, flats over shops and newer apartment blocks around the station and Stockport Exchange."
+    },
+    {
+      "name": "Heaton Moor and Heaton Chapel",
+      "postcodes": "SK4",
+      "housing": "Large Victorian and Edwardian semis and terraces, some split into flats."
+    },
+    {
+      "name": "Reddish",
+      "postcodes": "SK5",
+      "housing": "Red-brick terraced streets and inter-war semis around the old mills."
+    },
+    {
+      "name": "Cheadle and Cheadle Hulme",
+      "postcodes": "SK8",
+      "housing": "Inter-war and post-war semis and detached houses, with some newer flats near the centres."
+    },
+    {
+      "name": "Bramhall",
+      "postcodes": "SK7",
+      "housing": "Mostly detached and semi-detached family houses from the 1930s onwards."
+    },
+    {
+      "name": "Hazel Grove",
+      "postcodes": "SK7",
+      "housing": "Post-war semis, terraces and some 1960s and 1970s estates along the A6."
+    },
+    {
+      "name": "Marple and Romiley",
+      "postcodes": "SK6",
+      "housing": "Stone and brick cottages near the canal, with post-war semis and detached homes."
+    },
+    {
+      "name": "Brinnington",
+      "postcodes": "SK5",
+      "housing": "A large post-war council-built estate with houses and low-rise flats."
+    }
+  ],
+  "housing": "Stockport is largely owner-occupied, with private renting concentrated in the town centre, Edgeley, Reddish and the Heatons. The northern and central parts have Victorian terraces and flat conversions, while Bramhall, Cheadle Hulme and Marple are mostly inter-war and later family houses. Town-centre regeneration has added new apartment blocks near the station. Prices are among the highest in the North West, so lets tend to be to commuters into Manchester.",
+  "checkinTips": [
+    "Victorian terraces in Edgeley and Reddish: photograph cellar walls and floors for damp and note any meter or boiler kept there.",
+    "Flat conversions in the Heatons: note shared hallway condition, fire doors and the keys or fobs for each door.",
+    "New apartment blocks in the town centre: record fob counts, parking permits, bin store access and any intercom handset.",
+    "Stone cottages in Marple and Romiley: check window frames, chimney breasts and any condensation or mould in rear rooms.",
+    "Family semis in Bramhall and Cheadle Hulme: photograph gardens, fences, sheds and garage doors as lets often include them."
+  ],
+  "tenantHelp": "Private tenants can contact Stockport Council's Housing Standards team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "manchester",
+    "tameside",
+    "trafford",
+    "cheshire-east",
+    "high-peak"
+  ]
+}

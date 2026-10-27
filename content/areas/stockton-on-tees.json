@@ -1,0 +1,99 @@
+{
+  "slug": "stockton-on-tees",
+  "name": "Stockton-on-Tees",
+  "council": {
+    "name": "Stockton-on-Tees Borough Council",
+    "url": "https://www.stockton.gov.uk",
+    "privateRentingUrl": "https://www.stockton.gov.uk/article/15746/Apply-for-a-selective-landlord-licence"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers parts of Central Stockton, North Thornaby and Newtown: the scheme was agreed by Cabinet in May 2024 to run for five years. Check the council's street list to see if a property is included.",
+    "additional": "No additional HMO licensing scheme found; larger HMOs need a mandatory licence.",
+    "fee": "£653 per property for a selective licence (£178 application plus £95 a year for five years), £50 off for accredited landlords and £100 extra for late applications",
+    "source": "https://www.stockton.gov.uk/article/15440/Selective-Licensing-Fees-and-Landlord-Accreditation-Discounts",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£735 a month (ONS, August 2026), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000004/"
+  },
+  "price": {
+    "text": "£170,000 (UK HPI, July 2026, provisional), up about 3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000004/"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,590 average Band D including police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/stockton-on-tees"
+  },
+  "postcodes": [
+    "TS15",
+    "TS16",
+    "TS17",
+    "TS18",
+    "TS19",
+    "TS20",
+    "TS21",
+    "TS22",
+    "TS23"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stockton town centre and Newtown",
+      "postcodes": "TS18, TS19",
+      "housing": "Victorian and Edwardian terraced streets, with flats over shops along the High Street."
+    },
+    {
+      "name": "Thornaby",
+      "postcodes": "TS17",
+      "housing": "Older terraces in North Thornaby and post-war estates and newer housing further south."
+    },
+    {
+      "name": "Ingleby Barwick",
+      "postcodes": "TS17",
+      "housing": "A large estate of detached and semi-detached houses built from the 1980s onwards."
+    },
+    {
+      "name": "Norton",
+      "postcodes": "TS20",
+      "housing": "A historic village green with Georgian houses, surrounded by inter-war and post-war semis."
+    },
+    {
+      "name": "Billingham",
+      "postcodes": "TS22, TS23",
+      "housing": "Post-war town built for the chemical works, with council-built houses, semis and some flats."
+    },
+    {
+      "name": "Yarm",
+      "postcodes": "TS15",
+      "housing": "Georgian town houses on the High Street and modern family homes on the edges."
+    },
+    {
+      "name": "Eaglescliffe",
+      "postcodes": "TS16",
+      "housing": "Mostly semi-detached and detached houses from the 1930s to today."
+    },
+    {
+      "name": "Hardwick and Roseworth",
+      "postcodes": "TS19",
+      "housing": "Post-war council-built estates, partly redeveloped with newer homes."
+    }
+  ],
+  "housing": "Stockton-on-Tees has a smaller share of private renters than the North East as a whole, but renting is concentrated in Central Stockton and North Thornaby, where the council found around 41 to 50 per cent of homes privately rented. These areas are mostly Victorian terraces, which led to the selective licensing scheme. Billingham and Hardwick are largely post-war estates, while Ingleby Barwick, Yarm and Eaglescliffe are newer family housing. Rents and prices are low compared with England.",
+  "checkinTips": [
+    "Victorian terraces in Central Stockton and Newtown: photograph back yards, outhouses and rear doors, and note any damp in back rooms.",
+    "Licensed homes in the selective licensing streets: record smoke and carbon monoxide alarms, and keep the gas and EICR certificates with the report.",
+    "Post-war houses in Billingham and Hardwick: check window seals, boiler cupboards and any condensation or mould on outside walls.",
+    "Newer estate homes in Ingleby Barwick: photograph gardens, fences, driveways and any snagging marks inside.",
+    "Flats over shops on Stockton High Street: note the separate entrance, stairs, bin arrangements and keys for each door."
+  ],
+  "tenantHelp": "Private tenants can report disrepair or poor conditions to Stockton-on-Tees Borough Council's private sector housing team.",
+  "nearby": [
+    "hartlepool",
+    "middlesbrough",
+    "redcar-and-cleveland",
+    "darlington",
+    "county-durham",
+    "north-yorkshire"
+  ]
+}

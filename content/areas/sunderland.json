@@ -1,0 +1,100 @@
+{
+  "slug": "sunderland",
+  "name": "Sunderland",
+  "council": {
+    "name": "Sunderland City Council",
+    "url": "https://www.sunderland.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£707 a month (ONS, August 2026), up 4.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000024/"
+  },
+  "price": {
+    "text": "£147,000 (UK HPI, July 2026, provisional), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000024/"
+  },
+  "privateRentedShare": {
+    "text": "14.8% of households rent privately (Census 2021), up from 12.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000024/"
+  },
+  "councilTax": {
+    "text": "£2,197 Band D including Northumbria police and Tyne and Wear fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/sunderland"
+  },
+  "postcodes": [
+    "SR1",
+    "SR2",
+    "SR3",
+    "SR4",
+    "SR5",
+    "SR6",
+    "NE37",
+    "NE38",
+    "DH4",
+    "DH5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Ashbrooke",
+      "postcodes": "SR1, SR2",
+      "housing": "Victorian terraces and large villas in Ashbrooke, with flats over shops and student blocks in the centre."
+    },
+    {
+      "name": "Millfield and Pallion",
+      "postcodes": "SR4",
+      "housing": "Dense Victorian terraced streets, including single-storey Sunderland cottages, many privately let."
+    },
+    {
+      "name": "Hendon",
+      "postcodes": "SR2",
+      "housing": "Older terraced streets near the docks, with some newer housing on cleared sites."
+    },
+    {
+      "name": "Roker and Seaburn",
+      "postcodes": "SR6",
+      "housing": "Victorian and Edwardian terraces and semis near the seafront, some converted to flats."
+    },
+    {
+      "name": "Southwick and Monkwearmouth",
+      "postcodes": "SR5",
+      "housing": "Terraced streets and post-war council-built estates north of the river."
+    },
+    {
+      "name": "Washington",
+      "postcodes": "NE37, NE38",
+      "housing": "A new town of numbered villages built from the 1960s, mostly terraced and semi-detached houses."
+    },
+    {
+      "name": "Houghton-le-Spring and Hetton-le-Hole",
+      "postcodes": "DH4, DH5",
+      "housing": "Former mining towns with terraced colliery streets and later estates."
+    },
+    {
+      "name": "Doxford and Silksworth",
+      "postcodes": "SR3",
+      "housing": "Post-war and modern estates of semi-detached and detached family houses."
+    }
+  ],
+  "housing": "Sunderland has a lower share of private renters than most of the North East, with more social housing than the England average. Private lets are concentrated in the inner terraces of Millfield, Pallion, Hendon and Roker, including the single-storey Sunderland cottages unique to the city. The university brings student lets near the city centre and Chester Road, and Washington's new-town villages offer family houses. Prices and rents are among the lowest in England.",
+  "checkinTips": [
+    "Single-storey Sunderland cottages in Millfield and Pallion: photograph the roof space access, back yards and any damp in the rear rooms.",
+    "Seafront homes in Roker and Seaburn: check window frames, outside paintwork and metalwork for salt and weather damage.",
+    "Student lets near the university: record each bedroom lock and key, fire doors, alarms and shared kitchen items.",
+    "Washington new-town houses: note shared paths, garages in blocks and any flat-roof extensions or porches.",
+    "Former colliery terraces in Houghton and Hetton: photograph back lanes, yard walls, outhouses and any signs of damp."
+  ],
+  "tenantHelp": "Private tenants can report disrepair, damp or unsafe conditions to Sunderland City Council's private sector housing team.",
+  "nearby": [
+    "south-tyneside",
+    "gateshead",
+    "county-durham"
+  ]
+}

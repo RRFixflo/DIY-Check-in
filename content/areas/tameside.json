@@ -1,0 +1,99 @@
+{
+  "slug": "tameside",
+  "name": "Tameside",
+  "council": {
+    "name": "Tameside Metropolitan Borough Council",
+    "url": "https://www.tameside.gov.uk",
+    "privateRentingUrl": "https://www.tameside.gov.uk/housing/houses-in-multiple-occupancy-hmo-"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme found; mandatory licensing applies to HMOs with five or more people forming two or more households. Accredited landlords get 10% off the HMO licence fee.",
+    "fee": null,
+    "source": "https://www.tameside.gov.uk/housing/houses-in-multiple-occupancy-hmo-",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£917 a month (ONS, March 2026), up 7.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000008/"
+  },
+  "price": {
+    "text": "£212,000 (UK HPI, February 2026, provisional), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000008/"
+  },
+  "privateRentedShare": {
+    "text": "17.5% of households rent privately (Census 2021), up from 13.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000008/"
+  },
+  "councilTax": {
+    "text": "£2,447 Band D including the Greater Manchester mayoral police and fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/tameside"
+  },
+  "postcodes": [
+    "OL5",
+    "OL6",
+    "OL7",
+    "SK14",
+    "SK15",
+    "SK16",
+    "M34",
+    "M43"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ashton-under-Lyne",
+      "postcodes": "OL6, OL7",
+      "housing": "Victorian terraced streets around the town centre, flats over shops and post-war estates."
+    },
+    {
+      "name": "Stalybridge",
+      "postcodes": "SK15",
+      "housing": "Stone and brick terraces on steep streets near the canal, and newer homes on the hillsides."
+    },
+    {
+      "name": "Hyde",
+      "postcodes": "SK14",
+      "housing": "Red-brick terraces near the old mills, with inter-war and post-war estates."
+    },
+    {
+      "name": "Denton",
+      "postcodes": "M34",
+      "housing": "Inter-war and post-war semis and terraces, with some older terraced streets."
+    },
+    {
+      "name": "Droylsden",
+      "postcodes": "M43",
+      "housing": "Terraced streets and post-war semis, with newer flats near the marina and tram stop."
+    },
+    {
+      "name": "Dukinfield",
+      "postcodes": "SK16",
+      "housing": "Victorian terraces and post-war council-built estates."
+    },
+    {
+      "name": "Mossley",
+      "postcodes": "OL5",
+      "housing": "Stone-built mill workers' terraces and cottages on the edge of the Pennines."
+    },
+    {
+      "name": "Audenshaw",
+      "postcodes": "M34",
+      "housing": "Mostly inter-war and post-war semi-detached family houses."
+    }
+  ],
+  "housing": "Tameside is made up of nine former mill towns east of Manchester, with a large stock of Victorian terraced houses and post-war council-built estates. Private renting grew faster than the regional average between 2011 and 2021, mostly in the older terraces of Ashton, Hyde and Stalybridge. Upland towns such as Mossley and Stalybridge have stone-built terraces on steep streets. Prices and rents are below the Greater Manchester average, attracting renters priced out of the city.",
+  "checkinTips": [
+    "Victorian terraces in Ashton, Hyde and Dukinfield: photograph back yards, cellar walls and any damp low on the walls.",
+    "Stone terraces in Mossley and Stalybridge: check chimney breasts, window reveals and rear walls set into the hillside for damp.",
+    "Flats over shops in town centres: note the separate entrance, stairs, fire door and keys for each door.",
+    "Post-war estate houses in Denton and Hattersley: record window seals, boiler cupboards and any condensation on outside walls.",
+    "Homes on steep streets: photograph steps, handrails, retaining walls and the state of back alleys used for bins."
+  ],
+  "tenantHelp": "Private tenants can contact Tameside Council's Housing Standards team about disrepair, damp and unsafe conditions in a rented home.",
+  "nearby": [
+    "manchester",
+    "oldham",
+    "stockport",
+    "high-peak"
+  ]
+}
