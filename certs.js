@@ -158,26 +158,49 @@ function mountPublic(app, ctx){
   }
 
   app.get(['/certificates', '/certificates/'], (req, res) => res.type('html').send(page(req, req.query.booked ? { ok: true, text: 'Thanks, your booking request has been sent. We’ll be in touch to confirm the date.' } : null)));
-  app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
-    const b = req.body || {};
-    if (clip(b.website, 200)) return res.redirect(303, '/certificates?booked=1#book');   // robots
-    const fail = (msg, code) => res.status(code || 400).type('html').send(page(req, { text: msg }));
+  // One booking from the website's form or a microsite (source = the microsite's domain). Returns { error, code } or { booking }.
+  function book(b, ip, req, source){
     const picks = [].concat(b.svc || []).filter(x => ['gas', 'eicr', 'epc'].includes(x));
     const beds = Math.max(0, Math.min(99, parseInt(b.beds, 10) || 0));
     const m = { name: clip(b.name, 80), email: clip(b.email, 120), phone: clip(b.phone, 30), address: clip(b.address, 200), postcode: clip(b.postcode, 12).toUpperCase(), when: clip(b.when, 120), access: clip(b.access, 40), notes: String(b.notes || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 1500) };
-    if (!picks.length) return fail('Please choose at least one certificate.');
-    if (!m.name || !m.phone || !m.address || !m.postcode) return fail('Please fill in your name, phone number, and the property’s address and postcode.');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return fail('Please enter a valid email address.');
-    if (!bookLimit(clientIp(req))) return fail('Too many booking requests from here. Please try again later, or use the contact form.', 429);
+    if (!picks.length) return { error: 'Please choose at least one certificate.' };
+    if (!m.name || !m.phone || !m.address || !m.postcode) return { error: 'Please fill in your name, phone number, and the property’s address and postcode.' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return { error: 'Please enter a valid email address.' };
+    if (!bookLimit(ip)) return { error: 'Too many booking requests from here. Please try again later, or use the contact form.', code: 429 };
     const list = services();
     const items = picks.map(k => k === 'eicr' ? eicrFor(list, beds) : list.find(s => s.id === k)).map(s => ({ id: s.id, name: s.name, price: s.price }));
     const sub = Math.round(items.reduce((a, i) => a + i.price, 0) * 100) / 100, vat = Math.round(sub * VAT * 100) / 100;
-    const booking = Object.assign({ id: Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), at: new Date().toISOString(), status: 'new', beds, items, subtotal: sub, vat, total: Math.round((sub + vat) * 100) / 100 }, m);
+    const booking = Object.assign({ id: Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), at: new Date().toISOString(), status: 'new', beds, items, subtotal: sub, vat, total: Math.round((sub + vat) * 100) / 100 }, m, source ? { source } : {});
     const all = readJson(bookingsFile(), []); all.push(booking); writeJson(bookingsFile(), all.slice(-1000));
-    console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+'));
-    if (ctx.track) ctx.track(req, 'certificate_booking', booking.total);
-    notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + '), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
+    console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+') + (source ? ' via ' + source : ''));
+    if (ctx.track) ctx.track(req, 'certificate_booking', booking.total, source ? 'microsite' : undefined);
+    notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + ') + (source ? ' (' + source + ')' : ''), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
+    return { booking };
+  }
+
+  app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
+    const b = req.body || {};
+    if (clip(b.website, 200)) return res.redirect(303, '/certificates?booked=1#book');   // robots
+    const r = book(b, clientIp(req), req);
+    if (r.error) return res.status(r.code || 400).type('html').send(page(req, { text: r.error }));
     res.redirect(303, '/certificates?booked=1#book');
+  });
+
+  // Bookings from the microsites (the landlord-microsites repo): each site's Cloudflare Pages Function forwards its
+  // form here, server to server, with the shared key LEADS_KEY in X-Leads-Key, the site's domain and the visitor's IP
+  // (for the same 6 per hour limit). Stored with the website's bookings, marked with the site it came from.
+  app.post('/api/leads', express.json({ limit: '16kb' }), (req, res) => {
+    const want = String(process.env.LEADS_KEY || ''), got = String(req.get('x-leads-key') || '');
+    if (want.length < 16) return res.status(503).json({ ok: false, error: 'not-configured' });
+    const a = crypto.createHash('sha256').update(got).digest(), w = crypto.createHash('sha256').update(want).digest();
+    if (!crypto.timingSafeEqual(a, w)) return res.status(401).json({ ok: false, error: 'key' });
+    const b = req.body || {};
+    const site = clip(b.site, 100).toLowerCase().replace(/[^a-z0-9.-]/g, '');
+    if (!site) return res.status(400).json({ ok: false, error: 'Missing site.' });
+    const ip = clip(b.ip, 64) || clientIp(req);
+    const r = book(b, 'lead:' + ip, req, site);
+    if (r.error) return res.status(r.code || 400).json({ ok: false, error: r.error });
+    res.status(201).json({ ok: true, id: r.booking.id, total: r.booking.total });
   });
   return { paths: ['/certificates'] };
 }
@@ -191,7 +214,7 @@ function mountAdmin(app, ctx){
   function adminHTML(){
     const list = readJson(bookingsFile(), []).slice().reverse(), open = list.filter(b => b.status === 'new').length;
     const rows = list.slice(0, 200).map(b => `<li><div style="flex:1;min-width:0"><strong>${esc(b.items.map(i => i.name).join(' + '))}</strong> <span class="pill ${(STATUS[b.status] || STATUS.new)[1]}">${(STATUS[b.status] || STATUS.new)[0]}</span>
-      <div class="sub">${esc(b.address)}, ${esc(b.postcode)} · ${b.beds === 0 ? 'studio' : b.beds + ' bed'} · <b>${money(b.total)}</b></div>
+      <div class="sub">${b.source ? '<b>via ' + esc(b.source) + '</b> · ' : ''}${esc(b.address)}, ${esc(b.postcode)} · ${b.beds === 0 ? 'studio' : b.beds + ' bed'} · <b>${money(b.total)}</b></div>
       <div class="sub">${esc(b.name)} · <a href="tel:${esc(String(b.phone).replace(/[^\d+]/g, ''))}">${esc(b.phone)}</a> · <a href="mailto:${esc(b.email)}">${esc(b.email)}</a> · access: ${esc(b.access || '—')}${b.when ? ' · wants: ' + esc(b.when) : ''} · ${esc(when(b.at))}</div>
       ${b.notes ? `<div class="msg">${esc(b.notes)}</div>` : ''}</div>
       <div class="actions"><form method="post" action="/admin/bookings/${esc(b.id)}"><select name="status" onchange="this.form.submit()">${Object.entries(STATUS).map(([k, [l]]) => `<option value="${k}"${k === b.status ? ' selected' : ''}>${l}</option>`).join('')}</select></form></div></li>`).join('');
