@@ -13,8 +13,14 @@
     "source": "https://www.buckinghamshire.gov.uk/council-tax-benefits-housing/housing-support-and-landlords/guide-to-hmo-licensing/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,475 a month (ONS, August 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000060/"
+  },
+  "price": {
+    "text": "£480,000 (UK HPI, July 2026), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000060/"
+  },
   "privateRentedShare": {
     "text": "15.7% of households rent privately (Census 2021), up from 12.9% in 2011",
     "source": "https://cy.ons.gov.uk/visualisations/censusareachanges/E06000060"

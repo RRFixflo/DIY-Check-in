@@ -13,8 +13,14 @@
     "source": "https://www.midsussex.gov.uk/housing-council-tax/houses-in-multiple-occupation-hmo/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,423 a month (ONS, August 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000228/"
+  },
+  "price": {
+    "text": "£431,000 (UK HPI, July 2026), down 0.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000228/"
+  },
   "privateRentedShare": {
     "text": "15.3% of households rent privately (Census 2021), up from 12.8% in 2011",
     "source": "https://www.sussexexpress.co.uk/your-sussex/west-sussex/mid-sussex/census-2021-rise-in-private-renting-in-mid-sussex-3977277"

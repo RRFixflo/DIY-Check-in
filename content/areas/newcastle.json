@@ -13,8 +13,14 @@
     "source": "https://new.newcastle.gov.uk/property-licensing-schemes-newcastle/selective-licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,220 a month (ONS, September 2026), up 7.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000021/"
+  },
+  "price": {
+    "text": "£211,000 (UK HPI, August 2026), up 5.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000021/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,540.66 Band D (2026/27), including the adult social care precept, Northumbria police and Tyne and Wear fire",

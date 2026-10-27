@@ -13,8 +13,14 @@
     "source": "https://www.basingstoke.gov.uk/hmo-licensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,318 a month (ONS, January 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000084/"
+  },
+  "price": {
+    "text": "£374,000 (UK HPI, December 2025), up 5.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000084/"
+  },
   "privateRentedShare": {
     "text": "15.4% of households rent privately (Census 2021), up from 11.8% in 2011",
     "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000084/"

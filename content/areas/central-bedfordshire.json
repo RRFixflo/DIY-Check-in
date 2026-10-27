@@ -14,12 +14,12 @@
     "checked": "October 2026"
   },
   "rent": {
-    "text": null,
-    "source": null
+    "text": "£1,250 a month (ONS, June 2026), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000056/"
   },
   "price": {
-    "text": null,
-    "source": null
+    "text": "£354,000 (UK HPI, May 2026), up 1.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000056/"
   },
   "privateRentedShare": {
     "text": null,

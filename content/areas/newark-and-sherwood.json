@@ -13,8 +13,14 @@
     "source": "https://www.gov.uk/find-licences/house-in-multiple-occupation-licence/newark-and-sherwood",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£818 a month (ONS, August 2026), up 5.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000175/"
+  },
+  "price": {
+    "text": "£235,000 (UK HPI, July 2026), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000175/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,682.10 average Band D (2026/27), including Nottinghamshire County Council, police, fire and average parish precepts; the district's own share was frozen at £198.60",

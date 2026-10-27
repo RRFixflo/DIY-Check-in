@@ -13,8 +13,14 @@
     "source": "https://www.manchester.gov.uk/homes-and-property/private-landlords-information/houses-in-multiple-occupation-hmo/check-if-you-need-a-licence-and-apply",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,380 a month (ONS, September 2026), up 4.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000003/"
+  },
+  "price": {
+    "text": "£257,000 (UK HPI, August 2026), up 2.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000003/"
+  },
   "privateRentedShare": {
     "text": "32% of households rent privately (Census 2021), up from 28% in 2011, overtaking social renting",
     "source": "https://manchester.gov.uk/info/500388/census_2021/8582/census_2021_-_housing_summary"

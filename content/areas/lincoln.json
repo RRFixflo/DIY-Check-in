@@ -13,8 +13,14 @@
     "source": "https://www.lincoln.gov.uk/houses-multiple-occupation/houses-multiple-occupation-hmos/4",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£947 a month (ONS, September 2026), up 3.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000138/"
+  },
+  "price": {
+    "text": "£182,000 (UK HPI, August 2026), similar to a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000138/"
+  },
   "privateRentedShare": {
     "text": "27.2% of households rent privately (Census 2021), up from 21.0% in 2011",
     "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000138/"

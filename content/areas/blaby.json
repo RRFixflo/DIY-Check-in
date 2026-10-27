@@ -13,8 +13,14 @@
     "source": "https://www.blaby.gov.uk/housing/private-housing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£957 a month (ONS, November 2025), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000129/"
+  },
+  "price": {
+    "text": "£288,000 (UK HPI, October 2025), down 0.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000129/"
+  },
   "privateRentedShare": {
     "text": "About 13% of households rent privately (Census 2021)",
     "source": "https://areainsights.co.uk/?p=630"

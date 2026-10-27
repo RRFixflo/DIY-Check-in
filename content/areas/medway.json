@@ -13,8 +13,14 @@
     "source": "https://www.medway.gov.uk/PropertyLicensing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,232 a month (ONS, August 2026), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000035/"
+  },
+  "price": {
+    "text": "£299,000 (UK HPI, July 2026), up 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000035/"
+  },
   "privateRentedShare": {
     "text": "20.2% of households rent privately (Census 2021), up from 17.1% in 2011",
     "source": "https://medway.gov.uk/info/200779/our_place_and_our_community"

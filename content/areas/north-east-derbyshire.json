@@ -13,8 +13,14 @@
     "source": "https://www.ne-derbyshire.gov.uk/housing-and-health/houses-of-multiple-occupation",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£787 a month (ONS, July 2026), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000038/"
+  },
+  "price": {
+    "text": "£250,000 (UK HPI, June 2026), up 10.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000038/"
+  },
   "privateRentedShare": {
     "text": "About 10% of households rent privately (Census 2021)",
     "source": "https://areainsights.co.uk/?p=800"

@@ -13,8 +13,14 @@
     "source": "https://moderngovwebpublic.bromsgrove.gov.uk/documents/s44061/Redditch-Bromsgrove-Amenity-Standards-Document%201.pdf",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£992 a month (ONS, August 2026), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000234/"
+  },
+  "price": {
+    "text": "£336,000 (UK HPI, July 2026), up 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000234/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,440 Band D (2026/27) outside parished areas, including Worcestershire County Council, police and fire; about £2,479 on average with parish precepts",

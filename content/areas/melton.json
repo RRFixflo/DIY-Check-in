@@ -13,8 +13,14 @@
     "source": "https://www.melton.gov.uk/housing/private-housing-and-housing-associations/advice-for-landlords/houses-in-multiple-occupation/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£793 a month (ONS, January 2026), up 10.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000133/"
+  },
+  "price": {
+    "text": "£291,000 (UK HPI, December 2025), up 6.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000133/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,429.67 average Band D (2026/27), including Leicestershire County Council, police, fire and parish precepts",

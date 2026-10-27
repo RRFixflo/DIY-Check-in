@@ -13,8 +13,14 @@
     "source": "https://www.newforest.gov.uk/article/999/Private-housing",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,240 a month (ONS, May 2026), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000091/"
+  },
+  "price": {
+    "text": "£370,000 (UK HPI, April 2026), down 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000091/"
+  },
   "privateRentedShare": {
     "text": "14.3% of households rent privately (Census 2021)",
     "source": "https://areainsights.co.uk/?p=793"

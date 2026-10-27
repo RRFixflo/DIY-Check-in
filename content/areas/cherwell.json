@@ -14,12 +14,12 @@
     "checked": "October 2026"
   },
   "rent": {
-    "text": null,
-    "source": null
+    "text": "£1,304 a month (ONS, August 2026), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000177/"
   },
   "price": {
-    "text": null,
-    "source": null
+    "text": "£357,000 (UK HPI, July 2026), up 4.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000177/"
   },
   "privateRentedShare": {
     "text": "19.8% of households rent privately (Census 2021), up from 16.2% in 2011",

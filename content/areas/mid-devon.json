@@ -13,8 +13,14 @@
     "source": "https://www.middevon.gov.uk/residents/private-sector-housing/private-sector-housing-fees-and-charges/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£881 a month (ONS, September 2026), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000042/"
+  },
+  "price": {
+    "text": "£286,000 (UK HPI, August 2026), similar to a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000042/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,656.41 average Band D (2026/27), including Devon County Council, police, fire and average parish precepts",

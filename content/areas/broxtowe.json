@@ -13,8 +13,14 @@
     "source": "https://www.broxtowe.gov.uk/for-business/licences-permits/business-licences/house-in-multiple-occupation-hmo/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£950 a month (ONS, June 2026), similar to a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000172/"
+  },
+  "price": {
+    "text": "£254,000 (UK HPI, May 2026), up 1.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000172/"
+  },
   "privateRentedShare": {
     "text": "17.3% of households rent privately (Census 2021), up from 14.1% in 2011",
     "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000172/"

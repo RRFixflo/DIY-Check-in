@@ -13,8 +13,14 @@
     "source": "https://committees.bolsover.gov.uk/documents/g4921/Public%20reports%20pack%2015th-Apr-2024%2010.00%20Executive.pdf?T=10",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£692 a month (ONS, March 2026), up 7.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000033/"
+  },
+  "price": {
+    "text": "£186,000 (UK HPI, February 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000033/"
+  },
   "privateRentedShare": {
     "text": "17.4% of households rent privately (Census 2021), up 2.8 percentage points since 2011",
     "source": "https://observatory.derbyshire.gov.uk/wp-content/uploads/reports/profiles/2021_census_profiles/summary_profile/districts/bolsover.pdf"

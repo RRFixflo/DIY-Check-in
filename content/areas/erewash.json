@@ -13,8 +13,14 @@
     "source": "https://www.erewash.gov.uk/housing/privately-rented-homes/homes-multiple-occupation-hmos/register-licenced-hmos",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£831 a month (ONS, March 2026), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000036/"
+  },
+  "price": {
+    "text": "£217,000 (UK HPI, February 2026), down 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000036/"
+  },
   "privateRentedShare": {
     "text": "16.9% of households rent privately (Census 2021)",
     "source": "https://observatory.derbyshire.gov.uk/wp-content/uploads/reports/profiles/2021_census_profiles/summary_profile/electoral_division/Erewash/Ilkeston_East_E03.pdf"

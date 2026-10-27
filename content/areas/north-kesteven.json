@@ -13,8 +13,14 @@
     "source": "https://www.n-kesteven.gov.uk/homes-property/im-private-landlord-or-tenant-north-kesteven/houses-multiple-occupation-hmos",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£824 a month (ONS, August 2026), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000139/"
+  },
+  "price": {
+    "text": "£243,000 (UK HPI, July 2026), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000139/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,337.81 average Band D (2026/27), including Lincolnshire County Council, police, fire and average parish precepts",

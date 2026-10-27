@@ -13,8 +13,14 @@
     "source": "https://www.middlesbrough.gov.uk/housing/landlords/selective-landlord-licensing-scheme/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£709 a month (ONS, March 2026), up 8.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000002/"
+  },
+  "price": {
+    "text": "£136,000 (UK HPI, February 2026), up 1.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000002/"
+  },
   "privateRentedShare": {
     "text": "21.0% of households rent privately (Census 2021), up from 16.6% in 2011",
     "source": "https://cy.ons.gov.uk/visualisations/censusareachanges/E06000002"

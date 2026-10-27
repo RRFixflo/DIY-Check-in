@@ -13,8 +13,14 @@
     "source": "https://www.newcastle-staffs.gov.uk/landlords-private-renting/houses-multiple-occupation-hmo-licences/3",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£833 a month (ONS, August 2026), up 7.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000195/"
+  },
+  "price": {
+    "text": "£209,000 (UK HPI, July 2026), up 6.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000195/"
+  },
   "privateRentedShare": {
     "text": "14.5% of households rent privately (Census 2021), up from 10.5% in 2011",
     "source": "https://moderngov.newcastle-staffs.gov.uk/documents/s40785/a. Renters Reform Bill.pdf"

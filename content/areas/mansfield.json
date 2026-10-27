@@ -13,8 +13,14 @@
     "source": "https://www.mansfield.gov.uk/news/article/12972/selective-licensing-in-mansfield-moves-to-next-phase",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£764 a month (ONS, December 2025), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000174/"
+  },
+  "price": {
+    "text": "£187,000 (UK HPI, November 2025), up 0.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000174/"
+  },
   "privateRentedShare": {
     "text": "18.9% of households rent privately (Census 2021): 17.0% from a private landlord or letting agency and 1.9% from another private owner",
     "source": "https://www.mansfield.gov.uk/council-councillors-democracy/key-facts-mansfield/5"

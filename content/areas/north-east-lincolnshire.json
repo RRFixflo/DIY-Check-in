@@ -13,8 +13,14 @@
     "source": "https://www.nelincs.gov.uk/landlords-have-six-months-to-apply-for-selective-licence-to-avoid-late-penalties/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£651 a month (ONS, September 2026), up 7.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000012/"
+  },
+  "price": {
+    "text": "£146,000 (UK HPI, August 2026), up 4.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000012/"
+  },
   "privateRentedShare": {
     "text": "22.4% of households rent privately (Census 2021), up from 18.1% in 2011",
     "source": "https://www.grimsbytelegraph.co.uk/news/local-news/northern-lincolnshire-people-older-more-8111332"

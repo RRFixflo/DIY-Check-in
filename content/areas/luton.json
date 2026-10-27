@@ -13,8 +13,14 @@
     "source": "https://www.luton.gov.uk/news/2026/licensing-schemes-private-rented-properties-launch",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£1,222 a month (ONS, August 2026), up 2.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000032/"
+  },
+  "price": {
+    "text": "£285,000 (UK HPI, July 2026), up 0.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000032/"
+  },
   "privateRentedShare": {
     "text": "29.2% of households rent privately (Census 2021), up from 23.6% in 2011",
     "source": "https://www.luton.gov.uk/Community_and_living/Lists/LutonDocuments/PDF/observatory/Housing-Census-2021-summary-report.pdf"

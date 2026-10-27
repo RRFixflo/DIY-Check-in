@@ -13,8 +13,14 @@
     "source": "https://liverpoolexpress.co.uk/landlord-licensing-consultation-your-questions-answered/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£916 a month (ONS, September 2026), up 5.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000012/"
+  },
+  "price": {
+    "text": "£188,000 (UK HPI, August 2026), up 4.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000012/"
+  },
   "privateRentedShare": null,
   "councilTax": {
     "text": "£2,673.59 Band D (2026/27), including Merseyside police, fire and the Liverpool City Region Combined Authority",

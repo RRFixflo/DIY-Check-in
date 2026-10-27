@@ -13,8 +13,14 @@
     "source": "https://www.north-norfolk.gov.uk/tasks/housing-services/does-my-house-in-multiple-occupation-hmo-need-a-licence/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£865 a month (ONS, August 2026), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000147/"
+  },
+  "price": {
+    "text": "£293,000 (UK HPI, July 2026), down 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000147/"
+  },
   "privateRentedShare": {
     "text": "17.6% of households rent privately (Census 2021), up from 14.5% in 2011",
     "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000147"

@@ -13,8 +13,14 @@
     "source": "https://thenegotiator.co.uk/news/regulation-law-news/warning-that-landlord-may-sell-up-forces-major-northern-town-to-suspend-licensing-plan/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£699 a month (ONS, December 2025), up 8.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000008/"
+  },
+  "price": {
+    "text": "£166,000 (UK HPI, November 2025), up 8.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000008/"
+  },
   "privateRentedShare": {
     "text": "Almost 12,000 households, about one in five, rent privately (Census 2021)",
     "source": "https://blackburn.moderngov.co.uk/documents/s25721/Scrutiny Report Housing 5Aug24.pdf"

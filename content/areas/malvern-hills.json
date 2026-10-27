@@ -13,8 +13,14 @@
     "source": "https://www.malvernhills.gov.uk/housing/houses-in-multiple-occupation",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
+  "rent": {
+    "text": "£955 a month (ONS, September 2026), up 7.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000235/"
+  },
+  "price": {
+    "text": "£350,000 (UK HPI, August 2026), up 4.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000235/"
+  },
   "privateRentedShare": {
     "text": "About 13% of households rent privately (Census 2021)",
     "source": "https://areainsights.co.uk/?p=777"
