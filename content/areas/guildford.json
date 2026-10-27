@@ -1,0 +1,112 @@
+{
+  "slug": "guildford",
+  "name": "Guildford",
+  "council": {
+    "name": "Guildford Borough Council",
+    "url": "https://www.guildford.gov.uk",
+    "privateRentingUrl": "https://www.guildford.gov.uk/article/24854/Housing-licences"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households. A 2023 council review found the evidence did not justify additional licensing at that time.",
+    "fee": null,
+    "source": "https://www.guildford.gov.uk/article/24854/Housing-licences",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,731 a month (ONS, June 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000209/"
+  },
+  "price": {
+    "text": "£522,000 (UK HPI, May 2026, provisional), down 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000209/"
+  },
+  "privateRentedShare": {
+    "text": "19.6% of households rent privately (Census 2021), up from 15.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000209/"
+  },
+  "councilTax": {
+    "text": "£2,547.30 average Band D (2026/27), including Surrey County Council (which runs the fire service), police and parish precepts; the council's own table gives each parish's figure, for example £2,537.70 in Artington and £2,610.50 in Effingham",
+    "source": "https://www.guildford.gov.uk/article/17134/Council-tax-charges-2026-27"
+  },
+  "postcodes": [
+    "GU1",
+    "GU2",
+    "GU3",
+    "GU4",
+    "GU5",
+    "GU12",
+    "GU23",
+    "KT24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Guildford town centre",
+      "postcodes": "GU1",
+      "housing": "Period town houses, flats above shops and newer apartment blocks near the station and the Wey."
+    },
+    {
+      "name": "Onslow Village",
+      "postcodes": "GU2",
+      "housing": "Interwar garden-suburb cottages and semis close to the University of Surrey."
+    },
+    {
+      "name": "Park Barn and Westborough",
+      "postcodes": "GU2",
+      "housing": "Post-war council-built estates, with many homes let to students and hospital staff."
+    },
+    {
+      "name": "Stoughton",
+      "postcodes": "GU2",
+      "housing": "Victorian and Edwardian terraces and interwar semis."
+    },
+    {
+      "name": "Merrow and Burpham",
+      "postcodes": "GU1, GU4",
+      "housing": "Interwar and post-war semis and detached houses, with newer estates."
+    },
+    {
+      "name": "Charlotteville",
+      "postcodes": "GU1",
+      "housing": "Victorian terraces and villas on the hillside east of the town centre."
+    },
+    {
+      "name": "Ash and Ash Vale",
+      "postcodes": "GU12",
+      "housing": "Victorian cottages, post-war estates and large new developments near the Hampshire border."
+    },
+    {
+      "name": "Send and Ripley",
+      "postcodes": "GU23",
+      "housing": "Villages of older cottages, semis and detached houses."
+    },
+    {
+      "name": "Shalford and Chilworth",
+      "postcodes": "GU4",
+      "housing": "Villages of period cottages and detached houses in the Tillingbourne valley."
+    },
+    {
+      "name": "Effingham and the Horsleys",
+      "postcodes": "KT24",
+      "housing": "Large detached houses and bungalows set in woodland and green belt."
+    }
+  ],
+  "housing": "Guildford is a county town with a busy rental market driven by the University of Surrey, the Royal Surrey County Hospital and fast trains to London. Private lets range from Victorian terraces and flats in the town centre to shared student houses in Onslow, Park Barn, Westborough and Stoughton. Outside the town the borough is mostly green belt villages with detached houses and period cottages, and there are large new developments at Ash and on the edges of Guildford. Prices are well above the national average.",
+  "checkinTips": [
+    "Shared student houses near the University of Surrey: photograph each bedroom's lock and furniture, fire doors, alarms and the kitchen appliances.",
+    "Victorian terraces in Stoughton and Charlotteville: check sash or older windows, damp at the base of walls and the condition of rear gardens.",
+    "Flats in the town centre and near the station: note fob and key counts, parking, bike stores and bin store access.",
+    "Hillside homes around the town centre: photograph steps, sloping paths and retaining walls, and note any cracking.",
+    "Period cottages in the villages: record beams, uneven floors, open fireplaces and chimneys, and any oil tank or septic tank.",
+    "New-build homes at Ash and on the town's edges: note snagging still outstanding, meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Guildford Borough Council's housing standards team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "waverley",
+    "woking",
+    "surrey-heath",
+    "rushmoor",
+    "mole-valley",
+    "elmbridge"
+  ]
+}

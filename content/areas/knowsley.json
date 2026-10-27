@@ -1,0 +1,99 @@
+{
+  "slug": "knowsley",
+  "name": "Knowsley",
+  "council": {
+    "name": "Knowsley Council",
+    "url": "https://www.knowsley.gov.uk",
+    "privateRentingUrl": "https://www.knowsley.gov.uk/housing/houses-multiple-occupation-hmo/landlord-guidance"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be confirmed: the council's landlord guidance says it may declare areas for selective licensing, but no current designation is listed.",
+    "additional": "No additional HMO licensing scheme is listed: mandatory licensing applies to HMOs with five or more people from two or more households sharing amenities. The council also runs the voluntary Knowsley Landlord Accreditation Scheme.",
+    "fee": "£875 for a five-year HMO licence for five people (2026/27)",
+    "source": "https://www.knowsley.gov.uk/housing/houses-multiple-occupation-hmo/landlord-guidance",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£858 a month (ONS, August 2026), up 11.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000011/"
+  },
+  "price": {
+    "text": "£189,000 (UK HPI, July 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000011/"
+  },
+  "privateRentedShare": {
+    "text": "14.3% of households rent privately (Census 2021), up from 9.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000011/"
+  },
+  "councilTax": {
+    "text": "£2,488.25 average Band D (2026/27), including Merseyside police and fire, the Liverpool City Region mayoral precept and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/knowsley"
+  },
+  "postcodes": [
+    "L26",
+    "L28",
+    "L32",
+    "L33",
+    "L34",
+    "L35",
+    "L36"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Huyton",
+      "postcodes": "L36",
+      "housing": "Interwar and post-war council-built estates of semis and terraces, with a regenerated town centre."
+    },
+    {
+      "name": "Roby",
+      "postcodes": "L36",
+      "housing": "Interwar and post-war semis and detached houses near the station."
+    },
+    {
+      "name": "Kirkby",
+      "postcodes": "L32, L33",
+      "housing": "A large post-war overspill town of council-built houses and flats, much of it now owned by housing associations."
+    },
+    {
+      "name": "Prescot",
+      "postcodes": "L34",
+      "housing": "A historic town of Victorian terraces and older buildings, with newer estates."
+    },
+    {
+      "name": "Whiston",
+      "postcodes": "L35",
+      "housing": "Victorian terraces, post-war estates and newer houses near the hospital."
+    },
+    {
+      "name": "Halewood",
+      "postcodes": "L26",
+      "housing": "Post-war estates and large modern developments of semis and detached homes."
+    },
+    {
+      "name": "Stockbridge Village",
+      "postcodes": "L28",
+      "housing": "A post-war estate that has been largely rebuilt with new houses."
+    },
+    {
+      "name": "Knowsley Village",
+      "postcodes": "L34",
+      "housing": "A small village of older cottages and semis beside the Knowsley estate."
+    }
+  ],
+  "housing": "Knowsley lies on the eastern edge of Liverpool, made up of Huyton, Kirkby, Prescot, Whiston, Halewood and smaller villages. Much of the borough was built after the war as overspill housing for Liverpool, so council-built estates, now largely run by housing associations, make up a big share of homes, and private renting is below the regional average though it grew quickly between 2011 and 2021. Prescot has an older core of Victorian terraces, and large new private estates have been built at Halewood and elsewhere. Rents rose sharply in the year to August 2026.",
+  "checkinTips": [
+    "Former council houses now privately let in Kirkby and Huyton: record the boiler, windows and external doors, and the state of gardens, sheds and fencing.",
+    "Post-war flats and maisonettes: note communal entrances, stairwells, bin stores and the number of keys and fobs.",
+    "Victorian terraces in Prescot and Whiston: check for damp at the base of walls and in rear kitchens, and photograph yards and back entries.",
+    "New-build homes at Halewood and Stockbridge Village: note snagging still outstanding, meter readings and parking allocations.",
+    "Shared homes: photograph each room's lock and furniture, fire doors and alarms, and note the HMO licence where five or more people share."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Knowsley Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "liverpool",
+    "sefton",
+    "west-lancashire",
+    "st-helens",
+    "halton"
+  ]
+}

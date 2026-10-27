@@ -1,0 +1,101 @@
+{
+  "slug": "herefordshire",
+  "name": "Herefordshire",
+  "council": {
+    "name": "Herefordshire Council",
+    "url": "https://www.herefordshire.gov.uk",
+    "privateRentingUrl": "https://www.herefordshire.gov.uk/directories/licences-and-permissions/house-in-multiple-occupation-hmo-and-licensing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be found on the council's pages.",
+    "additional": "No additional HMO licensing scheme: the county's earlier additional scheme ended in April 2009. Mandatory licensing applies to HMOs with five or more people from two or more households sharing facilities.",
+    "fee": "£1,404 for a five-year HMO licence from 1 April 2026, with discounts for accredited landlords and renewals",
+    "source": "https://www.herefordshire.gov.uk/directories/licences-and-permissions/house-in-multiple-occupation-hmo-and-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£831 a month (ONS, September 2026), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000019/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "18.8% of households rent privately (Census 2021), up from 15.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000019/"
+  },
+  "councilTax": {
+    "text": "£2,574.37 average Band D (2026/27), including police, fire and average parish precepts",
+    "source": "https://livewww.herefordshire.gov.uk/council-tax/what-your-council-tax-pays-for/how-your-council-tax-bill-is-calculated"
+  },
+  "postcodes": [
+    "HR1",
+    "HR2",
+    "HR3",
+    "HR4",
+    "HR5",
+    "HR6",
+    "HR7",
+    "HR8",
+    "HR9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hereford city centre",
+      "postcodes": "HR1, HR4",
+      "housing": "Georgian and Victorian town houses, flats above shops and converted buildings around the cathedral."
+    },
+    {
+      "name": "Whitecross and Westfields",
+      "postcodes": "HR4",
+      "housing": "Victorian terraces and post-war council-built estates on the city's west side."
+    },
+    {
+      "name": "Belmont and Newton Farm",
+      "postcodes": "HR2",
+      "housing": "Post-war and 1970s to 1990s estates south of the Wye."
+    },
+    {
+      "name": "Tupsley and Aylestone",
+      "postcodes": "HR1",
+      "housing": "Interwar and post-war semis and detached houses on the city's east side."
+    },
+    {
+      "name": "Leominster",
+      "postcodes": "HR6",
+      "housing": "A market town of timber-framed and Georgian buildings, Victorian terraces and post-war estates."
+    },
+    {
+      "name": "Ross-on-Wye",
+      "postcodes": "HR9",
+      "housing": "A hilltop market town of sandstone and Georgian houses, with newer estates on the edges."
+    },
+    {
+      "name": "Ledbury",
+      "postcodes": "HR8",
+      "housing": "A historic town of black-and-white timber-framed houses, Georgian terraces and newer estates."
+    },
+    {
+      "name": "Bromyard",
+      "postcodes": "HR7",
+      "housing": "A small market town of period houses and terraces with post-war housing."
+    },
+    {
+      "name": "Kington and the Welsh border villages",
+      "postcodes": "HR5, HR3",
+      "housing": "Stone cottages, farmhouses and small terraces in hill country."
+    }
+  ],
+  "housing": "Herefordshire is a rural county with Hereford as its only city and five market towns: Leominster, Ross-on-Wye, Ledbury, Bromyard and Kington. Much of the rented stock is in Victorian terraces and post-war estates in Hereford and the towns, while the countryside has stone and timber-framed cottages, farmhouses and tied farm homes, many off the mains gas network. Seasonal farm work and a growing student population in Hereford add to demand for shared homes. Private renting rose between 2011 and 2021.",
+  "checkinTips": [
+    "Rural cottages off the gas network: photograph the oil tank and its gauge, the boiler or wood burner, and any septic tank or private water supply.",
+    "Timber-framed houses in Ledbury, Leominster and the villages: record beams, uneven floors, low doorways and any cracks in infill panels.",
+    "Homes near the Wye and the Lugg: look for signs of past flooding or damp in ground-floor rooms, as these rivers flood often.",
+    "Victorian terraces in Hereford: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Stone cottages in the hills: photograph chimneys, slate roofs, deep window sills and any damp patches on thick walls."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Herefordshire Council's environmental health housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "shropshire",
+    "malvern-hills",
+    "forest-of-dean"
+  ]
+}

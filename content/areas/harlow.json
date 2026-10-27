@@ -1,0 +1,94 @@
+{
+  "slug": "harlow",
+  "name": "Harlow",
+  "council": {
+    "name": "Harlow Council",
+    "url": "https://www.harlow.gov.uk",
+    "privateRentingUrl": "https://harlow.gov.uk/housing-and-garages/landlords-and-private-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: mandatory licensing applies to HMOs with five or more people from two or more households. A town-wide Article 4 direction means converting a home to an HMO needs full planning permission, and some council-built homes carry covenants limiting them to single-family use.",
+    "fee": "£850 (or £600 for accredited landlords) for a mandatory HMO licence of up to six bedrooms; licences last one year, renewal £350 (£225)",
+    "source": "https://www.harlow.gov.uk/business/licensing/apply-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,521 a month (ONS, August 2026), up 4.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000073/"
+  },
+  "price": {
+    "text": "£320,000 (UK HPI, July 2026, provisional), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000073/"
+  },
+  "privateRentedShare": {
+    "text": "15.4% of households rent privately (Census 2021), up from 10.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000073/"
+  },
+  "councilTax": {
+    "text": "£2,298.69 Band D (2026/27), including Essex County Council, police and fire precepts",
+    "source": "https://harlow.moderngov.co.uk/documents/s30204/Council Tax Resolution 2026-27.pdf"
+  },
+  "postcodes": [
+    "CM17",
+    "CM18",
+    "CM19",
+    "CM20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre and The Stow",
+      "postcodes": "CM20",
+      "housing": "Post-war new town flats and maisonettes, with office blocks converted into flats near the town centre."
+    },
+    {
+      "name": "Old Harlow",
+      "postcodes": "CM17",
+      "housing": "The original village of period cottages and townhouses, surrounded by post-war housing."
+    },
+    {
+      "name": "Netteswell and Little Parndon",
+      "postcodes": "CM20",
+      "housing": "1950s new town terraces and low-rise flats around green spaces."
+    },
+    {
+      "name": "Great Parndon and Staple Tye",
+      "postcodes": "CM19",
+      "housing": "1960s and 1970s new town estates of terraced houses and flats."
+    },
+    {
+      "name": "Tye Green and Bush Fair",
+      "postcodes": "CM18",
+      "housing": "New town terraces and maisonettes grouped around neighbourhood shopping centres."
+    },
+    {
+      "name": "Potter Street",
+      "postcodes": "CM17",
+      "housing": "Post-war estates and newer housing on the town's southern edge."
+    },
+    {
+      "name": "Church Langley",
+      "postcodes": "CM17",
+      "housing": "Estates of detached and semi-detached houses built from the 1990s."
+    },
+    {
+      "name": "Newhall",
+      "postcodes": "CM17",
+      "housing": "A newer development of contemporary-design houses and flats on the eastern edge."
+    }
+  ],
+  "housing": "Harlow is a post-war new town in west Essex, laid out in neighbourhoods of terraced houses, maisonettes and low-rise flats around local shopping centres, with a high share of social housing. Many former council homes are now privately let, and office blocks in and near the town centre have been converted into flats. Newer estates at Church Langley and Newhall add family houses, and Old Harlow keeps its historic village core. Private renting grew quickly between 2011 and 2021, helped by commuting to London and Cambridge.",
+  "checkinTips": [
+    "New town terraces and maisonettes: record flat roofs, communal walkways, stairwells, garages in separate blocks and the key or fob count for each.",
+    "Office blocks converted into flats near the town centre: note the size of each room, ventilation, fire doors and alarms, and any condensation.",
+    "Former council houses now privately let: photograph the boiler, windows, external doors and the condition of gardens and fencing.",
+    "Shared homes: an HMO needs planning permission under the town-wide Article 4 direction, so check the licence and photograph each room's lock and furniture.",
+    "Newer homes at Newhall and Church Langley: note snagging still outstanding, meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Harlow Council's environmental health (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "epping-forest",
+    "east-hertfordshire",
+    "uttlesford"
+  ]
+}

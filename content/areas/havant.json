@@ -1,0 +1,96 @@
+{
+  "slug": "havant",
+  "name": "Havant",
+  "council": {
+    "name": "Havant Borough Council",
+    "url": "https://www.havant.gov.uk",
+    "privateRentingUrl": "https://havant.gov.uk/houses-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households. Smaller HMOs are covered by a rolling programme of inspections.",
+    "fee": "£817.09 for a five-year HMO licence for up to five occupants, £873.66 for six to ten (2026/27)",
+    "source": "https://havant.gov.uk/houses-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,140 a month (ONS, June 2026), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000090/"
+  },
+  "price": {
+    "text": "£315,000 (UK HPI, May 2026, provisional), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000090/"
+  },
+  "privateRentedShare": {
+    "text": "12.4% of households rent privately (Census 2021), up from 9.9% in 2011: the lowest share in the South East",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000090/"
+  },
+  "councilTax": {
+    "text": "£2,320.28 Band D (2026/27), including Hampshire County Council, police and fire precepts",
+    "source": "https://www.havant.gov.uk/sites/default/files/2026-03/How%20your%20Council%20Tax%20is%20spent%202026-2027.pdf"
+  },
+  "postcodes": [
+    "PO7",
+    "PO8",
+    "PO9",
+    "PO10",
+    "PO11"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Havant town centre",
+      "postcodes": "PO9",
+      "housing": "Victorian and Edwardian terraces near the centre, with flats and post-war housing."
+    },
+    {
+      "name": "Leigh Park",
+      "postcodes": "PO9",
+      "housing": "A large post-war estate built for Portsmouth, of semis, terraces and low-rise flats."
+    },
+    {
+      "name": "Bedhampton",
+      "postcodes": "PO9",
+      "housing": "Interwar and post-war semis and bungalows, with some older village houses."
+    },
+    {
+      "name": "Waterlooville",
+      "postcodes": "PO7",
+      "housing": "Post-war estates of semis and bungalows, with large new developments to the west."
+    },
+    {
+      "name": "Purbrook and Widley",
+      "postcodes": "PO7",
+      "housing": "Interwar and post-war semis and detached houses on the slopes of Portsdown Hill."
+    },
+    {
+      "name": "Cowplain",
+      "postcodes": "PO8",
+      "housing": "Estates of bungalows, chalet homes and semis built from the 1960s."
+    },
+    {
+      "name": "Emsworth",
+      "postcodes": "PO10",
+      "housing": "A historic harbour town of Georgian and Victorian cottages and town houses, with newer estates."
+    },
+    {
+      "name": "Hayling Island",
+      "postcodes": "PO11",
+      "housing": "Bungalows, chalets and seafront flats, with holiday parks along the south shore."
+    }
+  ],
+  "housing": "Havant borough sits between Portsmouth and the West Sussex border, taking in Havant, Waterlooville, Emsworth and Hayling Island. It has a large share of social housing, especially on the Leigh Park estate built after the war for Portsmouth families, and the lowest share of private renting in the South East. Much of the rest is interwar and post-war semis and bungalows, with historic cottages in Emsworth and many bungalows and chalets on Hayling Island. Large new estates have been built around Waterlooville.",
+  "checkinTips": [
+    "Homes on Hayling Island and around Langstone Harbour: look for salt corrosion on window frames and outside metalwork, and any signs of past flooding.",
+    "Former council houses in Leigh Park: record the boiler, windows and external doors, and the condition of gardens, sheds and fencing.",
+    "Bungalows and chalet homes in Cowplain and Hayling: photograph the roof and gutters, loft hatch, conservatory and any flat-roof extension.",
+    "Georgian and Victorian cottages in Emsworth: check sash windows, damp at the base of walls and low ceilings or beams.",
+    "New-build homes west of Waterlooville: note snagging still outstanding, meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Havant Borough Council's environmental health (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "portsmouth",
+    "east-hampshire",
+    "winchester",
+    "chichester"
+  ]
+}

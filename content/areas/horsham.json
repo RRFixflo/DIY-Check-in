@@ -1,0 +1,101 @@
+{
+  "slug": "horsham",
+  "name": "Horsham",
+  "council": {
+    "name": "Horsham District Council",
+    "url": "https://www.horsham.gov.uk",
+    "privateRentingUrl": "https://www.horsham.gov.uk/environmental-health/houses-in-multiple-occupation-hmos/do-i-need-a-hmo-licence"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for homes with five or more people from two or more households.",
+    "fee": "From £1,108 plus a £52 issuing fee (£1,160) for an HMO of up to five bedrooms",
+    "source": "https://www.horsham.gov.uk/environmental-health/houses-in-multiple-occupation-hmos/apply-for-a-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,490 a month (ONS, September 2026), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000227/"
+  },
+  "price": {
+    "text": "£441,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000227/"
+  },
+  "privateRentedShare": {
+    "text": "14.5% of households rent privately (Census 2021), up from 11.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000227/"
+  },
+  "councilTax": {
+    "text": "£2,441.01 average Band D (2026/27), including West Sussex County Council (which runs the fire service), police and parish precepts; each parish's figure is in the council's public notice",
+    "source": "https://housecheckup.co.uk/council-tax/horsham"
+  },
+  "postcodes": [
+    "RH12",
+    "RH13",
+    "RH14",
+    "RH20",
+    "BN5",
+    "BN44"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Horsham town centre",
+      "postcodes": "RH12, RH13",
+      "housing": "Victorian and Edwardian terraces and villas, flats above shops and newer apartment blocks near the station."
+    },
+    {
+      "name": "Roffey and Littlehaven",
+      "postcodes": "RH12",
+      "housing": "Interwar and post-war semis and detached houses on the town's north-east side."
+    },
+    {
+      "name": "Broadbridge Heath",
+      "postcodes": "RH12",
+      "housing": "A village that has grown with large modern estates west of Horsham."
+    },
+    {
+      "name": "Southwater",
+      "postcodes": "RH13",
+      "housing": "A large village of estates built from the 1980s onwards around a newer centre."
+    },
+    {
+      "name": "Billingshurst",
+      "postcodes": "RH14",
+      "housing": "A village of older cottages along the high street and many modern estates."
+    },
+    {
+      "name": "Pulborough and Storrington",
+      "postcodes": "RH20",
+      "housing": "Villages of period cottages, bungalows and detached houses at the foot of the Downs."
+    },
+    {
+      "name": "Steyning",
+      "postcodes": "BN44",
+      "housing": "A small historic town of timber-framed and flint houses with newer estates."
+    },
+    {
+      "name": "Henfield",
+      "postcodes": "BN5",
+      "housing": "A large village of older cottages, post-war semis and bungalows."
+    }
+  ],
+  "housing": "Horsham district is a large, mostly rural part of West Sussex, centred on the market town of Horsham, with big villages such as Southwater, Billingshurst, Storrington and Henfield and the small town of Steyning under the South Downs. Most homes are owner-occupied detached and semi-detached houses, many on estates built since the 1980s, and large new developments have been added north and west of Horsham. Private renting is below the regional average, with rented homes concentrated in Horsham's terraces and flats and in village cottages.",
+  "checkinTips": [
+    "Victorian and Edwardian terraces in Horsham: check sash windows, damp at the base of walls and the condition of rear gardens.",
+    "Flats near Horsham station and the town centre: note fob and key counts, parking spaces, bike stores and bin store access.",
+    "Period cottages in Steyning, Henfield and the villages: record beams, uneven floors, open fireplaces and any flint or timber-framed walls.",
+    "Rural homes off the mains: photograph oil tank gauges, the boiler and any septic tank or private drainage.",
+    "Homes near the Arun and Adur floodplains, such as around Pulborough: look for signs of past flooding or damp in ground-floor rooms.",
+    "New-build homes on the large estates around Horsham and Southwater: note snagging still outstanding, meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Horsham District Council's environmental health (housing standards) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "crawley",
+    "mid-sussex",
+    "adur",
+    "arun",
+    "chichester",
+    "waverley",
+    "mole-valley"
+  ]
+}

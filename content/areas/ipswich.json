@@ -1,0 +1,91 @@
+{
+  "slug": "ipswich",
+  "name": "Ipswich",
+  "council": {
+    "name": "Ipswich Borough Council",
+    "url": "https://www.ipswich.gov.uk",
+    "privateRentingUrl": "https://www.ipswich.gov.uk/housing/private-landlords-and-tenants/houses-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households, including some flats above or below shops. An Article 4 direction since 1 June 2024 means converting a home to a small HMO in parts of the town needs planning permission. The council reported 225 licensed HMOs in January 2026.",
+    "fee": null,
+    "source": "https://www.ipswich.gov.uk/housing/private-landlords-and-tenants/houses-multiple-occupation-shared-housing/hmo-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£995 a month (ONS, August 2026), up 4.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000202/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "23.0% of households rent privately (Census 2021), up from 19.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000202/"
+  },
+  "councilTax": {
+    "text": "£2,468.25 Band D (2026/27), including Suffolk County Council (which runs the fire service) and police precepts",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69aae9c951dde26e22976b56"
+  },
+  "postcodes": [
+    "IP1",
+    "IP2",
+    "IP3",
+    "IP4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre and the Waterfront",
+      "postcodes": "IP1, IP4",
+      "housing": "Modern apartment blocks around the marina, converted warehouses and flats above shops."
+    },
+    {
+      "name": "St Margaret's and Christchurch",
+      "postcodes": "IP4",
+      "housing": "Victorian and Edwardian terraces and villas near Christchurch Park, some split into flats."
+    },
+    {
+      "name": "California",
+      "postcodes": "IP4",
+      "housing": "Victorian and Edwardian terraces on the east side, many privately let."
+    },
+    {
+      "name": "Westgate and Bramford Road",
+      "postcodes": "IP1",
+      "housing": "Dense Victorian terraces west of the centre, with shared homes and flats."
+    },
+    {
+      "name": "Stoke and Maidenhall",
+      "postcodes": "IP2",
+      "housing": "Victorian terraces south of the river, with post-war housing."
+    },
+    {
+      "name": "Chantry and Gainsborough",
+      "postcodes": "IP2, IP3",
+      "housing": "Large interwar and post-war council-built estates of semis and terraces."
+    },
+    {
+      "name": "Whitton and Castle Hill",
+      "postcodes": "IP1",
+      "housing": "Interwar and post-war semis and bungalows on the north side."
+    },
+    {
+      "name": "Ravenswood",
+      "postcodes": "IP3",
+      "housing": "A newer estate of houses and flats on the former airport site."
+    }
+  ],
+  "housing": "Ipswich is Suffolk's county town and port, with a higher share of private renting than the rest of the East of England. The rented stock is concentrated in Victorian and Edwardian terraces around the centre, in districts such as Westgate, California and St Margaret's, and in the modern flats built around the Waterfront. Large interwar and post-war council-built estates such as Chantry and Gainsborough surround the town, and Ravenswood was built on the old airport. An Article 4 direction controls new small HMOs in parts of the town.",
+  "checkinTips": [
+    "Waterfront flats: note fob and key counts, parking spaces, lifts and bin stores, and look for condensation around large windows.",
+    "Victorian terraces in Westgate, California and Stoke: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Shared homes and flats above shops: photograph each room's lock and furniture, fire doors and alarms, and the separate entrance and stairs.",
+    "Homes near the Orwell and the Gipping: look for signs of past flooding or damp in ground-floor rooms.",
+    "Post-war estate houses in Chantry and Gainsborough: record the boiler, windows and doors, and the state of gardens and fencing."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Ipswich Borough Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "east-suffolk",
+    "babergh",
+    "mid-suffolk"
+  ]
+}

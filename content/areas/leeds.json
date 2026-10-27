@@ -1,0 +1,130 @@
+{
+  "slug": "leeds",
+  "name": "Leeds",
+  "council": {
+    "name": "Leeds City Council",
+    "url": "https://www.leeds.gov.uk",
+    "privateRentingUrl": "https://www.leeds.gov.uk/housing/information-for-landlords/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in parts of six wards (Burmantofts and Richmond Hill, Gipton and Harehills, Hunslet and Riverside, Beeston and Holbeck, Armley, and Farnley and Wortley) from 9 February 2026 to 8 February 2031, about 12,500 homes. Earlier schemes in Beeston and Harehills ended on 5 January 2025. Check an address on the council's map.",
+    "additional": "No additional HMO licensing scheme is listed: mandatory licensing applies to HMOs with five or more people from two or more households. An Article 4 direction in the inner north-west (Headingley, Hyde Park and Woodhouse, Kirkstall, Weetwood) means converting a house to an HMO there needs planning permission.",
+    "fee": null,
+    "source": "https://www.leeds.gov.uk/housing/information-for-landlords/selective-licensing/how-to-comply-with-a-selective-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,148 a month (ONS, September 2026), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000035/"
+  },
+  "price": {
+    "text": "£246,000 (UK HPI, August 2026, provisional), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000035/"
+  },
+  "privateRentedShare": {
+    "text": "21.8% of households rent privately (Census 2021), up from 17.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000035/"
+  },
+  "councilTax": {
+    "text": "£2,271.51 Band D (2026/27) outside parished areas, including West Yorkshire police and fire precepts",
+    "source": "https://publicnoticeportal.uk/notice/other/69ae1c306d56c57bf8618878"
+  },
+  "postcodes": [
+    "LS1",
+    "LS2",
+    "LS3",
+    "LS4",
+    "LS5",
+    "LS6",
+    "LS7",
+    "LS8",
+    "LS9",
+    "LS10",
+    "LS11",
+    "LS12",
+    "LS13",
+    "LS14",
+    "LS15",
+    "LS16",
+    "LS17",
+    "LS18",
+    "LS19",
+    "LS20",
+    "LS21",
+    "LS22",
+    "LS23",
+    "LS25",
+    "LS26",
+    "LS27",
+    "LS28",
+    "WF3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "LS1, LS2, LS10, LS11",
+      "housing": "Apartment blocks, converted mills and warehouses, and large purpose-built student and build-to-rent blocks."
+    },
+    {
+      "name": "Headingley",
+      "postcodes": "LS6",
+      "housing": "Victorian terraces and large villas, many let as student shared houses, under an Article 4 direction."
+    },
+    {
+      "name": "Hyde Park and Woodhouse",
+      "postcodes": "LS6, LS2",
+      "housing": "Dense Victorian terraces and back-to-backs near the universities, mostly shared student homes."
+    },
+    {
+      "name": "Harehills",
+      "postcodes": "LS8, LS9",
+      "housing": "Victorian back-to-back and through terraces, with a high share of private lets in the selective licensing area."
+    },
+    {
+      "name": "Beeston and Holbeck",
+      "postcodes": "LS11",
+      "housing": "Victorian back-to-backs and terraces south of the city, in the selective licensing area."
+    },
+    {
+      "name": "Armley",
+      "postcodes": "LS12",
+      "housing": "Victorian terraces and back-to-backs on the hillside west of the centre, with post-war estates."
+    },
+    {
+      "name": "Chapel Allerton and Roundhay",
+      "postcodes": "LS7, LS8",
+      "housing": "Victorian and Edwardian villas, terraces split into flats and interwar semis near Roundhay Park."
+    },
+    {
+      "name": "Horsforth",
+      "postcodes": "LS18",
+      "housing": "A suburb of stone cottages, interwar and post-war semis and detached houses."
+    },
+    {
+      "name": "Morley",
+      "postcodes": "LS27",
+      "housing": "A stone-built former mill town of terraces, with interwar and modern estates."
+    },
+    {
+      "name": "Otley and Wetherby",
+      "postcodes": "LS21, LS22",
+      "housing": "Market towns of stone terraces and cottages, with newer estates on the edges."
+    }
+  ],
+  "housing": "Leeds is a large city with a fast-growing private rented sector, from apartment and build-to-rent blocks in the city centre to student shared houses in Headingley and Hyde Park and older back-to-back and through terraces in Harehills, Beeston, Holbeck and Armley. Leeds has more back-to-back houses than anywhere else in England, many of them privately let, and the inner east, south and west areas are now under selective licensing. The outer suburbs and towns such as Horsforth, Morley, Otley and Wetherby have stone cottages, interwar semis and modern estates.",
+  "checkinTips": [
+    "Back-to-back terraces in Harehills, Beeston and Armley: check for damp on the shared walls and in cellars, and photograph bins, outside toilets and yards where there are any.",
+    "Homes in the selective licensing areas: note the licence number and check the licence conditions on smoke alarms, gas safety and the number of occupiers.",
+    "Student shared houses in Headingley and Hyde Park: photograph each bedroom's lock and furniture, fire doors, alarms and the kitchen appliances.",
+    "City-centre apartments: note fob and key counts, lifts, bin and bike stores, and look for condensation around large windows.",
+    "Stone terraces on hillsides: look for damp on walls built into the slope, and photograph steps and retaining walls.",
+    "Homes near the Aire in Kirkstall and the city centre: look for signs of past flooding or damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Leeds City Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "bradford",
+    "kirklees",
+    "wakefield",
+    "north-yorkshire"
+  ]
+}

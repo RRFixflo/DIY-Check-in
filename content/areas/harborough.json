@@ -1,0 +1,101 @@
+{
+  "slug": "harborough",
+  "name": "Harborough",
+  "council": {
+    "name": "Harborough District Council",
+    "url": "https://www.harborough.gov.uk",
+    "privateRentingUrl": "https://www.harborough.gov.uk/multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households, whatever the number of storeys.",
+    "fee": null,
+    "source": "https://www.harborough.gov.uk/news/article/1036/licence_changes_for_landlords_with_multiple_tenants",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£963 a month (ONS, July 2026), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000131/"
+  },
+  "price": {
+    "text": "£346,000 (UK HPI, June 2026, provisional), up 9.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000131/"
+  },
+  "privateRentedShare": {
+    "text": "13.5% of households rent privately (Census 2021), up from 11.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000131/"
+  },
+  "councilTax": {
+    "text": "£2,354.85 Band D (2026/27) in Market Harborough, including Leicestershire County Council, police, fire and parish precepts; other parishes differ",
+    "source": "https://www.harborough.gov.uk/download/downloads/id/9350/council_tax_charges_2026-2027.pdf"
+  },
+  "postcodes": [
+    "LE16",
+    "LE17",
+    "LE8",
+    "LE7",
+    "LE9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Market Harborough",
+      "postcodes": "LE16",
+      "housing": "Georgian and Victorian houses in the centre, Victorian terraces and large modern estates on the edges."
+    },
+    {
+      "name": "Lutterworth",
+      "postcodes": "LE17",
+      "housing": "A historic market town of period houses and terraces, with new estates to the east."
+    },
+    {
+      "name": "Broughton Astley",
+      "postcodes": "LE9",
+      "housing": "A large village of post-war and modern estates of semis and detached houses."
+    },
+    {
+      "name": "Kibworth",
+      "postcodes": "LE8",
+      "housing": "Two joined villages with older cottages and terraces and many newer estates."
+    },
+    {
+      "name": "Fleckney",
+      "postcodes": "LE8",
+      "housing": "A former framework-knitting village of terraces, post-war housing and newer estates."
+    },
+    {
+      "name": "Great Glen",
+      "postcodes": "LE8",
+      "housing": "A village of older cottages, interwar houses and modern detached homes."
+    },
+    {
+      "name": "Thurnby, Bushby and Scraptoft",
+      "postcodes": "LE7",
+      "housing": "Suburban villages on Leicester's edge with semis, detached houses and new estates."
+    },
+    {
+      "name": "Husbands Bosworth and the southern villages",
+      "postcodes": "LE17",
+      "housing": "Small rural villages of brick and stone cottages, farmhouses and bungalows."
+    }
+  ],
+  "housing": "Harborough is a largely rural district in south Leicestershire, centred on the market towns of Market Harborough and Lutterworth, with large villages such as Broughton Astley, Kibworth and Fleckney and suburban villages on the edge of Leicester. Most homes are owner-occupied semis and detached houses, many on estates built since the 1990s, and private renting is well below the regional average. Older terraces and period houses in the town centres and village cottages make up much of the rest of the rented stock.",
+  "checkinTips": [
+    "Period houses and terraces in Market Harborough and Lutterworth town centres: check sash windows, damp at the base of walls and the condition of rear yards.",
+    "Village cottages: record beams, low ceilings, open fireplaces and chimneys, uneven floors and any oil tank or septic tank.",
+    "Newer estate homes in Market Harborough, Lutterworth and Kibworth: note snagging still outstanding, meter readings and parking allocations.",
+    "Rural homes off the mains: photograph oil tank gauges, the boiler and any private water or drainage equipment.",
+    "Homes near the Welland and the Soar's tributaries: look for signs of past flooding or damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Harborough District Council's environmental health (housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "blaby",
+    "oadby-and-wigston",
+    "leicester",
+    "charnwood",
+    "melton",
+    "rutland",
+    "north-northamptonshire",
+    "west-northamptonshire",
+    "rugby"
+  ]
+}

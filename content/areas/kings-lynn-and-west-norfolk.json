@@ -1,0 +1,105 @@
+{
+  "slug": "kings-lynn-and-west-norfolk",
+  "name": "King's Lynn and West Norfolk",
+  "council": {
+    "name": "Borough Council of King's Lynn and West Norfolk",
+    "url": "https://www.west-norfolk.gov.uk",
+    "privateRentingUrl": "https://www.west-norfolk.gov.uk/info/20114/houses_in_multiple_occupation/413/what_is_an_hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be found on the council's pages.",
+    "additional": "No additional HMO licensing scheme: national mandatory licensing applies to HMOs occupied by five or more people from two or more households, with licences normally for five years.",
+    "fee": null,
+    "source": "https://www.west-norfolk.gov.uk/info/20114/houses_in_multiple_occupation/675/apply_for_an_hmo_licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£941 a month (ONS, August 2026), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000146/"
+  },
+  "price": {
+    "text": "£266,000 (UK HPI, July 2026, provisional), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000146/"
+  },
+  "privateRentedShare": {
+    "text": "18.8% of households rent privately (Census 2021), up from 14.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000146/"
+  },
+  "councilTax": {
+    "text": "£2,430.13 average Band D (2026/27), including Norfolk County Council (which runs the fire service), police, internal drainage board levies and average parish precepts",
+    "source": "https://www.west-norfolk.gov.uk/download/downloads/id/9852/council_tax_explanatory_note_2026_to_2027.pdf"
+  },
+  "postcodes": [
+    "PE30",
+    "PE31",
+    "PE32",
+    "PE33",
+    "PE34",
+    "PE36",
+    "PE38"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "King's Lynn town centre",
+      "postcodes": "PE30",
+      "housing": "Medieval and Georgian merchants' houses, Victorian terraces and flats above shops near the quays."
+    },
+    {
+      "name": "Gaywood",
+      "postcodes": "PE30",
+      "housing": "Interwar and post-war semis and bungalows, with some Victorian terraces."
+    },
+    {
+      "name": "South Lynn",
+      "postcodes": "PE30",
+      "housing": "Victorian terraces and post-war housing near the river and the docks."
+    },
+    {
+      "name": "North Lynn and Fairstead",
+      "postcodes": "PE30",
+      "housing": "Large estates built from the 1960s for London overspill, of terraced houses and low-rise flats."
+    },
+    {
+      "name": "Hunstanton",
+      "postcodes": "PE36",
+      "housing": "A Victorian seaside resort of carrstone villas and terraces, seafront flats and holiday parks."
+    },
+    {
+      "name": "Heacham and Dersingham",
+      "postcodes": "PE31",
+      "housing": "Large villages of bungalows, carrstone cottages and modern estates."
+    },
+    {
+      "name": "Downham Market",
+      "postcodes": "PE38",
+      "housing": "A carrstone market town with Victorian terraces and many new estates."
+    },
+    {
+      "name": "Terrington St Clement and the Marshland villages",
+      "postcodes": "PE34",
+      "housing": "Fenland villages of older cottages, bungalows and farm homes on low-lying land."
+    },
+    {
+      "name": "Burnham Market and the coast",
+      "postcodes": "PE31",
+      "housing": "Flint and brick cottages, many of them second homes and holiday lets."
+    }
+  ],
+  "housing": "King's Lynn and West Norfolk is a large rural borough stretching from the Wash and the north Norfolk coast to the Fens. King's Lynn has a historic port centre of Georgian and older buildings and Victorian terraces, and large estates at North Lynn and Fairstead built for London overspill, while Hunstanton and the coastal villages have many bungalows, carrstone and flint cottages and holiday homes. Much of the south and west is low-lying fenland. Private renting grew faster than the regional average between 2011 and 2021, partly with seasonal and food-processing work.",
+  "checkinTips": [
+    "Fenland homes in the Marshland villages and near the Ouse: look for signs of past flooding, damp in ground-floor rooms and cracks from shrinking soils.",
+    "Coastal homes in Hunstanton and Heacham: look for salt corrosion on window frames and outside metalwork, and damp on exposed walls.",
+    "Carrstone and flint cottages: record damp patches on thick walls, chimneys, open fires and any oil tank or septic tank.",
+    "Victorian terraces in South Lynn and the town centre: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Shared homes let to seasonal workers: photograph each room's lock and furniture, fire doors and alarms, and note the HMO licence where five or more people share."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact the Borough Council of King's Lynn and West Norfolk's housing standards team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "north-norfolk",
+    "breckland",
+    "fenland",
+    "south-holland",
+    "east-cambridgeshire",
+    "west-suffolk"
+  ]
+}

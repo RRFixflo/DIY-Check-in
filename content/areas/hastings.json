@@ -1,0 +1,92 @@
+{
+  "slug": "hastings",
+  "name": "Hastings",
+  "council": {
+    "name": "Hastings Borough Council",
+    "url": "https://www.hastings.gov.uk",
+    "privateRentingUrl": "https://www.hastings.gov.uk/housing/landlord/licensing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force that could be confirmed. The 2015 to 2020 scheme covering seven wards (Braybrooke, Castle, Central St Leonards, Gensing, Old Hastings, Ore and Tressell) ended in October 2020, and the government refused the council's application to renew it in 2021.",
+    "additional": null,
+    "fee": null,
+    "source": "https://www.hastings.gov.uk/news/latest/Housing-scheme-refused",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,008 a month (ONS, September 2026), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000062/"
+  },
+  "price": {
+    "text": "£239,000 (UK HPI, August 2026), down 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000062/"
+  },
+  "privateRentedShare": {
+    "text": "28.6% of households rent privately (Census 2021), almost unchanged from 28.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000062/"
+  },
+  "councilTax": {
+    "text": "£2,676.58 Band D (2026/27), including East Sussex County Council, police and fire precepts",
+    "source": "https://publicnoticeportal.uk/notice/other/69aa27ffe3d9125ff658f1ab"
+  },
+  "postcodes": [
+    "TN34",
+    "TN35",
+    "TN37",
+    "TN38"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Old Town",
+      "postcodes": "TN34",
+      "housing": "Medieval, Tudor and Georgian houses and cottages packed into narrow streets and twittens between the hills."
+    },
+    {
+      "name": "Hastings town centre",
+      "postcodes": "TN34",
+      "housing": "Victorian terraces and large houses split into flats, and flats above shops."
+    },
+    {
+      "name": "Central St Leonards and Warrior Square",
+      "postcodes": "TN37, TN38",
+      "housing": "Grand Regency and Victorian seafront houses, most converted into flats and bedsits."
+    },
+    {
+      "name": "Bohemia and Silverhill",
+      "postcodes": "TN34, TN37",
+      "housing": "Victorian and Edwardian terraces and villas on the hills behind the seafront."
+    },
+    {
+      "name": "West St Leonards",
+      "postcodes": "TN38",
+      "housing": "Victorian and interwar houses, bungalows and seafront flats towards Bexhill."
+    },
+    {
+      "name": "Ore and Clive Vale",
+      "postcodes": "TN35, TN34",
+      "housing": "Victorian terraces on steep streets and post-war estates."
+    },
+    {
+      "name": "Hollington",
+      "postcodes": "TN38",
+      "housing": "Post-war council-built estates and newer housing on the town's northern edge."
+    },
+    {
+      "name": "Baird and Hollington Old Lane",
+      "postcodes": "TN34, TN38",
+      "housing": "Post-war estates of semis, terraces and low-rise flats."
+    }
+  ],
+  "housing": "Hastings and St Leonards is a hilly seaside town with one of the highest shares of private renting outside the big cities. Much of the rented stock is in large Regency and Victorian houses in the town centre and Central St Leonards that have been split into flats and bedsits, many on steep streets close to the sea. The Old Town has historic cottages and timber-framed houses, while Hollington, Baird and Ore have post-war estates. A selective licensing scheme ran in seven central wards from 2015 to 2020.",
+  "checkinTips": [
+    "Regency and Victorian houses split into flats in St Leonards and the town centre: photograph each flat's door, meters, fire doors, alarms and the shared hallway and stairs.",
+    "Seafront homes: look for salt corrosion on window frames, balcony rails and door furniture, and damp on exposed walls.",
+    "Hillside homes on steep streets: photograph steps, sloping paths, retaining walls and any cracking, which can come from ground movement.",
+    "Old Town cottages: record beams, low doorways, uneven floors, open fireplaces and any damp in basements or rear walls.",
+    "Sash windows in period conversions: photograph cords, locks, cracked panes and any rot."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hastings Borough Council's housing renewal (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "rother"
+  ]
+}

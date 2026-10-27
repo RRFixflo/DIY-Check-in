@@ -1,0 +1,97 @@
+{
+  "slug": "halton",
+  "name": "Halton",
+  "council": {
+    "name": "Halton Borough Council",
+    "url": "https://www.halton.gov.uk",
+    "privateRentingUrl": "https://www.halton.gov.uk/business-employer-support-funding/environmental-health/selective-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force yet. A scheme was consulted on from 3 August to 18 October 2026 for Central and West Bank, Appleton, Mersey and Weston and Bridgewater wards and part of Highfield (about 43% of the borough's private rented homes); the council had not decided at the time of checking.",
+    "additional": "No additional HMO licensing scheme is listed: larger HMOs (five or more people from two or more households) need a national mandatory licence.",
+    "fee": null,
+    "source": "https://www.halton.gov.uk/business-employer-support-funding/environmental-health/selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£719 a month (ONS, December 2025), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000006/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "14.3% of households rent privately (Census 2021), up from 9.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000006/"
+  },
+  "councilTax": {
+    "text": "£2,358.34 Band D (2026/27) in Runcorn and Widnes, including police, fire and the Liverpool City Region mayoral precept; more in parishes such as Hale and Preston Brook",
+    "source": "https://www.halton.gov.uk/sites/default/files/2026-07/counciltaxbooklet.pdf"
+  },
+  "postcodes": [
+    "WA7",
+    "WA8",
+    "L24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Widnes town centre and Appleton",
+      "postcodes": "WA8",
+      "housing": "Victorian and Edwardian terraces close to the shops, many of them privately let."
+    },
+    {
+      "name": "West Bank",
+      "postcodes": "WA8",
+      "housing": "Victorian terraces beside the Mersey and the Silver Jubilee Bridge, in an area of regeneration."
+    },
+    {
+      "name": "Farnworth",
+      "postcodes": "WA8",
+      "housing": "An old village core with interwar and post-war semis around it."
+    },
+    {
+      "name": "Ditton and Hough Green",
+      "postcodes": "WA8",
+      "housing": "Interwar and post-war semis and terraces with some newer estates."
+    },
+    {
+      "name": "Runcorn Old Town",
+      "postcodes": "WA7",
+      "housing": "Victorian terraces near the canal and the bridge, with flats above shops."
+    },
+    {
+      "name": "Halton Village and Castlefields",
+      "postcodes": "WA7",
+      "housing": "A historic village core next to new town estates, parts of which have been rebuilt."
+    },
+    {
+      "name": "Palacefields and Windmill Hill",
+      "postcodes": "WA7",
+      "housing": "New town estates of the 1970s with terraced houses and footpath layouts."
+    },
+    {
+      "name": "Sandymoor",
+      "postcodes": "WA7",
+      "housing": "Newer estates of detached and semi-detached houses built from the 1990s onwards."
+    },
+    {
+      "name": "Hale",
+      "postcodes": "L24",
+      "housing": "A small village of older cottages and detached houses near the Mersey estuary."
+    }
+  ],
+  "housing": "Halton is made up of the two towns of Widnes and Runcorn on either side of the Mersey, linked by the Silver Jubilee and Mersey Gateway bridges. The older streets near both town centres and at West Bank are Victorian terraces, which hold much of the private rented stock, while Runcorn has large new town estates of the 1960s and 1970s with footpath layouts and many terraced homes. Private renting is lower than across the North West but grew quickly between 2011 and 2021.",
+  "checkinTips": [
+    "Victorian terraces in Widnes and Runcorn Old Town: check for damp at the base of walls and in rear kitchens, and photograph yards and back entries.",
+    "New town houses in Palacefields, Windmill Hill and Castlefields: record flat roofs, garages or car ports, communal footpaths and fencing.",
+    "Homes near the Mersey at West Bank and Hale: look for signs of damp or past flooding in ground-floor rooms.",
+    "Flats above shops in the town centres: photograph the separate entrance, stairs, fire alarm and meter cupboards.",
+    "Newer homes at Sandymoor: note snagging still outstanding, meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Halton Borough Council's housing standards team (environmental health), after first reporting the problem to their landlord.",
+  "nearby": [
+    "cheshire-west-and-chester",
+    "warrington",
+    "st-helens",
+    "knowsley",
+    "liverpool"
+  ]
+}

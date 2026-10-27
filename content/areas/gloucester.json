@@ -4,19 +4,31 @@
   "council": {
     "name": "Gloucester City Council",
     "url": "https://www.gloucester.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.gloucester.gov.uk/housing/housing-and-multiple-occupancy-hmo/hmo-licensing-information/"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
+    "selective": "No selective licensing scheme.",
+    "additional": "A citywide additional HMO licensing scheme came into force on 21 September 2026 (designated 9 June 2026), covering every ward: shared homes of three or four people from two or more households, and some poorly converted flats (section 257). Larger HMOs (five or more people) need a national mandatory licence. An Article 4 direction on small HMOs in several central wards was also proposed in 2026.",
     "fee": null,
-    "source": null,
+    "source": "https://www.gloucester.gov.uk/housing/housing-and-multiple-occupancy-hmo/hmo-licensing-information/",
     "checked": "October 2026"
   },
-  "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "rent": {
+    "text": "£1,069 a month (ONS, January 2026), up 6.8% on a year earlier",
+    "source": "https://www.thepropertycentres.co.uk/property-advice/gloucester/is-gloucester-still-a-property-investment-hotspot/"
+  },
+  "price": {
+    "text": "About £237,000 (UK HPI, December 2025)",
+    "source": "https://www.thepropertycentres.co.uk/property-advice/gloucester/is-gloucester-still-a-property-investment-hotspot/"
+  },
+  "privateRentedShare": {
+    "text": "21.3% of households rent privately (Census 2021), after a 34.8% rise in privately rented households since 2011",
+    "source": "https://www.gloucestershire.gov.uk/media/octo33i5/gloucester-census-topic-summary.pdf"
+  },
+  "councilTax": {
+    "text": "£2,348.17 Band D (2026/27) outside parished areas, including Gloucestershire County Council (which runs the fire service) and police; more in Quedgeley and other parishes",
+    "source": "https://www.gloucester.gov.uk/council-tax/what-is-council-tax/how-much-do-i-pay"
+  },
   "postcodes": [
     "GL1",
     "GL2",

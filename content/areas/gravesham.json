@@ -1,0 +1,102 @@
+{
+  "slug": "gravesham",
+  "name": "Gravesham",
+  "council": {
+    "name": "Gravesham Borough Council",
+    "url": "https://www.gravesham.gov.uk",
+    "privateRentingUrl": "https://www.gravesham.gov.uk/downloads/file/618/hmo-policy"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council's HMO policy says it does not run one.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for shared homes of five or more people from two or more households. The council reported 107 licensed HMOs at the end of March 2026.",
+    "fee": null,
+    "source": "https://www.gravesham.gov.uk/downloads/file/618/hmo-policy",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,336 a month (ONS, August 2026), up 5.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000109/"
+  },
+  "price": {
+    "text": "£345,000 (UK HPI, July 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000109/"
+  },
+  "privateRentedShare": {
+    "text": "19.1% of households rent privately (Census 2021), up from 16.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000109/"
+  },
+  "councilTax": {
+    "text": "£2,408.24 average Band D (2026/27), including Kent County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/gravesham"
+  },
+  "postcodes": [
+    "DA11",
+    "DA12",
+    "DA13",
+    "ME2",
+    "ME3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Gravesend town centre",
+      "postcodes": "DA11, DA12",
+      "housing": "Georgian and Victorian terraces, flats above shops and newer riverside apartments."
+    },
+    {
+      "name": "Northfleet",
+      "postcodes": "DA11",
+      "housing": "Victorian terraces near the river and former cement works, with post-war estates and new homes."
+    },
+    {
+      "name": "Windmill Hill",
+      "postcodes": "DA11, DA12",
+      "housing": "Victorian and Edwardian terraces and villas, many split into flats."
+    },
+    {
+      "name": "Riverview Park",
+      "postcodes": "DA12",
+      "housing": "A 1960s and 1970s estate of houses and low-rise flats."
+    },
+    {
+      "name": "Singlewell",
+      "postcodes": "DA12",
+      "housing": "Interwar and post-war semis and terraces on the town's southern edge."
+    },
+    {
+      "name": "Springhead and Ebbsfleet",
+      "postcodes": "DA11",
+      "housing": "New-build houses and flats in the Ebbsfleet Garden City developments."
+    },
+    {
+      "name": "Istead Rise",
+      "postcodes": "DA13",
+      "housing": "A post-war village of detached houses and bungalows."
+    },
+    {
+      "name": "Meopham",
+      "postcodes": "DA13",
+      "housing": "A long rural village of detached houses, bungalows and older cottages."
+    },
+    {
+      "name": "Higham",
+      "postcodes": "ME3",
+      "housing": "A village of older cottages, semis and post-war houses near the Thames marshes."
+    }
+  ],
+  "housing": "Gravesham runs from the Thames at Gravesend and Northfleet south into the villages of the North Downs. The towns have dense Victorian terraces, many of them privately let or split into flats, alongside post-war estates such as Riverview Park and new homes at Springhead as part of Ebbsfleet Garden City. The southern villages of Meopham, Istead Rise and Vigo are mostly owner-occupied detached houses and bungalows. Private renting rose between 2011 and 2021, helped by fast trains to London from Gravesend and Ebbsfleet.",
+  "checkinTips": [
+    "Victorian terraces in Gravesend and Northfleet split into flats: photograph each flat's meters, door entry system, shared hallway and any fire doors.",
+    "Riverside flats in Gravesend: note fob and key counts, parking spaces, lifts and bin stores, and look for condensation around large windows.",
+    "New-build homes at Springhead and Ebbsfleet: record any snagging still outstanding, plus meter readings and parking allocations.",
+    "Older terraces near the river: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Rural homes in Meopham, Vigo and Higham: photograph septic tanks or oil tanks where there are any, gardens, fences and outbuildings."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Gravesham Borough Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "dartford",
+    "sevenoaks",
+    "tonbridge-and-malling",
+    "medway",
+    "thurrock"
+  ]
+}

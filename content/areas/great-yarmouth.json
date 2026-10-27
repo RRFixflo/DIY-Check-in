@@ -1,0 +1,100 @@
+{
+  "slug": "great-yarmouth",
+  "name": "Great Yarmouth",
+  "council": {
+    "name": "Great Yarmouth Borough Council",
+    "url": "https://www.great-yarmouth.gov.uk",
+    "privateRentingUrl": "https://www.great-yarmouth.gov.uk/selective-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in Central and Northgate, Nelson, Southtown and Cobholm, and Yarmouth North wards, from 1 April 2026 to 31 March 2031. After a challenge by landlords in 2026 the council withdrew a set of extra licence conditions, but the scheme stays in place.",
+    "additional": "No additional HMO licensing scheme is listed: larger HMOs (five or more people from two or more households) need a national mandatory licence.",
+    "fee": "£694 per self-contained home for a five-year selective licence (2026)",
+    "source": "https://www.great-yarmouth.gov.uk/selective-licensing-scheme/frequently-asked-questions",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£839 a month (ONS, June 2026), up 8.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000145/"
+  },
+  "price": {
+    "text": "£205,000 (UK HPI, May 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000145/"
+  },
+  "privateRentedShare": {
+    "text": "21.5% of households rent privately (Census 2021), up from 16.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000145/"
+  },
+  "councilTax": {
+    "text": "£2,414 average Band D (2026/27), including Norfolk County Council (which runs the fire service), police and average parish precepts",
+    "source": "https://www.great-yarmouth.gov.uk/counciltax/overview"
+  },
+  "postcodes": [
+    "NR29",
+    "NR30",
+    "NR31"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Great Yarmouth town centre and Northgate",
+      "postcodes": "NR30",
+      "housing": "Dense Victorian terraces, large houses split into flats and flats above shops."
+    },
+    {
+      "name": "Nelson and the seafront",
+      "postcodes": "NR30",
+      "housing": "Victorian guest houses and terraces near the seafront, many converted into flats or shared homes."
+    },
+    {
+      "name": "Southtown and Cobholm",
+      "postcodes": "NR31",
+      "housing": "Victorian terraces on low-lying land across the River Yare, with some post-war housing."
+    },
+    {
+      "name": "Gorleston-on-Sea",
+      "postcodes": "NR31",
+      "housing": "Victorian and Edwardian terraces and villas near the cliffs, with interwar and post-war estates inland."
+    },
+    {
+      "name": "Bradwell",
+      "postcodes": "NR31",
+      "housing": "Large estates of houses and bungalows built from the 1960s onwards."
+    },
+    {
+      "name": "Caister-on-Sea",
+      "postcodes": "NR30",
+      "housing": "Bungalows, semis and newer estates, with holiday parks along the coast."
+    },
+    {
+      "name": "Hemsby",
+      "postcodes": "NR29",
+      "housing": "A coastal village of bungalows, chalets and holiday homes, with dunes affected by erosion."
+    },
+    {
+      "name": "Martham",
+      "postcodes": "NR29",
+      "housing": "A Broads village of older cottages, bungalows and newer estates."
+    },
+    {
+      "name": "Hopton-on-Sea",
+      "postcodes": "NR31",
+      "housing": "A coastal village of bungalows and newer houses, with holiday parks."
+    }
+  ],
+  "housing": "Great Yarmouth is a seaside and port town at the mouth of the Yare, with Gorleston across the river and a string of coastal and Broads villages. The central wards have dense Victorian terraces and large former guest houses, many converted into flats and shared homes, and a high share of private renting; this is where the selective licensing scheme applies. Gorleston and Bradwell have more interwar and post-war family housing, while the villages are mostly bungalows and holiday homes. Private renting grew faster than the regional average between 2011 and 2021.",
+  "checkinTips": [
+    "Former guest houses near the seafront converted into flats: photograph each flat's door, meters, fire doors, alarms and the shared hallway.",
+    "Coastal homes: look for salt corrosion on window frames, door furniture and outside metalwork, and damp on exposed walls.",
+    "Low-lying homes in Southtown and Cobholm: look for signs of past flooding or damp in ground-floor rooms.",
+    "Victorian terraces in Northgate and the town centre: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Bungalows and chalets in Hemsby and Caister: record the roof, windows and heating, and note any coastal erosion warnings for the area.",
+    "Homes in the selective licensing wards: note the licence number and check the licence conditions on smoke alarms and gas safety are met."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Great Yarmouth Borough Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "broadland",
+    "north-norfolk",
+    "south-norfolk",
+    "east-suffolk"
+  ]
+}

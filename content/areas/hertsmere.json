@@ -1,0 +1,99 @@
+{
+  "slug": "hertsmere",
+  "name": "Hertsmere",
+  "council": {
+    "name": "Hertsmere Borough Council",
+    "url": "https://www.hertsmere.gov.uk",
+    "privateRentingUrl": "https://www.hertsmere.gov.uk/housing-private-property/private-sector-housing/multiple-occupancy-homes"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council says it has not used this power. Mandatory licensing applies to HMOs with five or more people from two or more households. An Article 4 direction for Potters Bar (2026) means converting a home to a small HMO there needs planning permission, and revised HMO amenity standards apply from 25 November 2026.",
+    "fee": "£1,306 to renew an HMO licence for up to five people, plus £105 for each extra person",
+    "source": "https://www.hertsmere.gov.uk/housing-private-property/private-sector-housing/multiple-occupancy-homes",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,789 a month (ONS, January 2026), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000098/"
+  },
+  "price": {
+    "text": "£553,000 (UK HPI, December 2025, provisional), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000098/"
+  },
+  "privateRentedShare": {
+    "text": "17.3% of households rent privately (Census 2021), up from 12.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000098/"
+  },
+  "councilTax": {
+    "text": "£2,405.83 average Band D (2026/27), including Hertfordshire County Council (which runs the fire service), police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/hertsmere"
+  },
+  "postcodes": [
+    "WD6",
+    "WD7",
+    "WD23",
+    "WD25",
+    "EN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Borehamwood",
+      "postcodes": "WD6",
+      "housing": "Large post-war estates built for London overspill, with newer flats near the film studios and town centre."
+    },
+    {
+      "name": "Elstree",
+      "postcodes": "WD6",
+      "housing": "A small village of period cottages and larger detached houses."
+    },
+    {
+      "name": "Potters Bar",
+      "postcodes": "EN6",
+      "housing": "Interwar semis and detached houses, with post-war estates and town-centre flats."
+    },
+    {
+      "name": "Bushey",
+      "postcodes": "WD23",
+      "housing": "Victorian and Edwardian houses, interwar semis and blocks of flats."
+    },
+    {
+      "name": "Bushey Heath",
+      "postcodes": "WD23",
+      "housing": "Large detached houses and blocks of flats on the hill above Bushey."
+    },
+    {
+      "name": "Radlett",
+      "postcodes": "WD7",
+      "housing": "Large detached Edwardian and interwar houses and newer apartment blocks."
+    },
+    {
+      "name": "Shenley",
+      "postcodes": "WD7",
+      "housing": "A village of older cottages and homes in the converted former hospital site."
+    },
+    {
+      "name": "South Mimms",
+      "postcodes": "EN6",
+      "housing": "A small village of cottages and post-war houses near the M25."
+    }
+  ],
+  "housing": "Hertsmere lies just north of London, made up of Borehamwood, Potters Bar, Bushey, Radlett and green belt villages. Borehamwood's large post-war estates were built for families moving out of London, and many former council homes there are now privately let, alongside newer flats near the film studios. Bushey, Radlett and Potters Bar have interwar and Edwardian family houses and blocks of flats, with some very large detached homes. Prices and rents are high, and private renting grew faster than across the East of England between 2011 and 2021.",
+  "checkinTips": [
+    "Post-war estate houses and maisonettes in Borehamwood: record the boiler, windows and doors, and communal areas, bin stores and garages.",
+    "Flats in Borehamwood, Bushey and Potters Bar town centres: note fob and key counts, parking spaces and any lift or communal heating.",
+    "Large detached houses in Radlett and Bushey Heath: photograph gardens, gates, alarm systems and garden equipment left in place.",
+    "Interwar semis in Potters Bar: record original features, replacement windows, garages and extensions.",
+    "Shared homes in Potters Bar: an Article 4 direction applies to new small HMOs there, so note the licence or planning position and photograph each room's lock and furniture."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hertsmere Borough Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "barnet",
+    "enfield",
+    "harrow",
+    "watford",
+    "three-rivers",
+    "st-albans",
+    "welwyn-hatfield"
+  ]
+}

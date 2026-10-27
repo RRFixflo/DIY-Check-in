@@ -1,0 +1,104 @@
+{
+  "slug": "isle-of-wight",
+  "name": "Isle of Wight",
+  "council": {
+    "name": "Isle of Wight Council",
+    "url": "https://www.iow.gov.uk",
+    "privateRentingUrl": "https://iwc.iow.gov.uk/Council/OtherServices/Homes-in-Multiple-Occupancy-Register/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be found on the council's pages.",
+    "additional": "No additional HMO licensing scheme could be found: the council runs national mandatory licensing, for HMOs with five or more occupants sharing at least one amenity, whatever the number of storeys.",
+    "fee": null,
+    "source": "https://iwc.iow.gov.uk/Council/OtherServices/Homes-in-Multiple-Occupancy-Register/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£953 a month (ONS, September 2026), up 6.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000046/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "20.7% of households rent privately (Census 2021), up from 17.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000046/"
+  },
+  "councilTax": {
+    "text": "£2,625.79 average Band D (2026/27), including police, fire and average town and parish precepts; the Isle of Wight Council's own share is £2,103.77",
+    "source": "https://housecheckup.co.uk/council-tax/isle-of-wight"
+  },
+  "postcodes": [
+    "PO30",
+    "PO31",
+    "PO32",
+    "PO33",
+    "PO34",
+    "PO35",
+    "PO36",
+    "PO37",
+    "PO38",
+    "PO39",
+    "PO40",
+    "PO41"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Newport",
+      "postcodes": "PO30",
+      "housing": "The county town, with Georgian and Victorian terraces, flats above shops and large post-war and modern estates."
+    },
+    {
+      "name": "Ryde",
+      "postcodes": "PO33",
+      "housing": "Regency and Victorian seafront houses, many split into flats, and terraced streets climbing the hill."
+    },
+    {
+      "name": "Cowes",
+      "postcodes": "PO31",
+      "housing": "Victorian terraces and waterside flats around the harbour, with larger villas on the hill."
+    },
+    {
+      "name": "East Cowes",
+      "postcodes": "PO32",
+      "housing": "Victorian terraces, post-war housing and new waterfront development."
+    },
+    {
+      "name": "Sandown",
+      "postcodes": "PO36",
+      "housing": "Victorian guest houses and terraces, many converted into flats and shared homes."
+    },
+    {
+      "name": "Shanklin",
+      "postcodes": "PO37",
+      "housing": "Victorian villas, former hotels converted into flats, and thatched cottages in the old village."
+    },
+    {
+      "name": "Ventnor",
+      "postcodes": "PO38",
+      "housing": "Victorian villas and terraces on steep terraced slopes above the sea, in an area of land movement."
+    },
+    {
+      "name": "Freshwater and Totland",
+      "postcodes": "PO40, PO39",
+      "housing": "Bungalows, Victorian villas and post-war houses in the West Wight."
+    },
+    {
+      "name": "Yarmouth and the rural villages",
+      "postcodes": "PO41, PO30",
+      "housing": "Stone and brick cottages, farmhouses and holiday homes."
+    }
+  ],
+  "housing": "The Isle of Wight's private rented stock is spread across its seaside towns and Newport. Many of the large Victorian houses, guest houses and hotels in Ryde, Sandown and Shanklin have been converted into flats and shared homes, and the council notes that the island has many HMOs, as in other seaside areas. Inland and in the West Wight there are stone cottages, bungalows and holiday homes. Private renting grew between 2011 and 2021, and rents rose faster than the South East average in 2026.",
+  "checkinTips": [
+    "Seafront homes in Ryde, Sandown and Shanklin: look for salt corrosion on window frames, balcony rails and door furniture, and damp on exposed walls.",
+    "Former guest houses and hotels converted into flats: photograph each flat's door, meters, fire doors, alarms and the shared hallway.",
+    "Homes in Ventnor and on the Undercliff: photograph any cracks in walls, sticking doors and garden walls, as the area has known ground movement.",
+    "Thatched or stone cottages in the villages: record the roof, chimneys, beams and any damp in thick walls, and the oil tank if there is one.",
+    "Homes near the Medina and low-lying harbours: look for signs of past flooding in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact the Isle of Wight Council's housing renewal (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "portsmouth",
+    "southampton",
+    "new-forest"
+  ]
+}

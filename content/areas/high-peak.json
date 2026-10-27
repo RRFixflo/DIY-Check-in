@@ -1,0 +1,102 @@
+{
+  "slug": "high-peak",
+  "name": "High Peak",
+  "council": {
+    "name": "High Peak Borough Council",
+    "url": "https://www.highpeak.gov.uk",
+    "privateRentingUrl": "https://www.highpeak.gov.uk/article/224/Housing-developers-and-private-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council's housing policy (2022 to 2027) says any proposed scheme would be published and consulted on first.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households.",
+    "fee": "£450 for a five-year HMO licence, £350 to renew, as listed on the council's HMO page",
+    "source": "https://www.highpeak.gov.uk/article/234/Multiple-occupancy-homes-HMO",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£881 a month (ONS, November 2025), up 0.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000037/"
+  },
+  "price": {
+    "text": "£257,000 (UK HPI, October 2025, provisional), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000037/"
+  },
+  "privateRentedShare": {
+    "text": "16.1% of households rent privately (Census 2021), up from 13.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000037/"
+  },
+  "councilTax": {
+    "text": "£2,384.66 average Band D (2026/27), including Derbyshire County Council, police, fire and parish precepts; the borough council's own share is £230.89",
+    "source": "https://housecheckup.co.uk/council-tax/high-peak"
+  },
+  "postcodes": [
+    "SK13",
+    "SK17",
+    "SK22",
+    "SK23",
+    "S33"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Buxton",
+      "postcodes": "SK17",
+      "housing": "A spa town of Georgian crescents, Victorian stone villas and terraces, many split into flats, with post-war estates."
+    },
+    {
+      "name": "Glossop",
+      "postcodes": "SK13",
+      "housing": "A former mill town of gritstone terraces, with newer estates on the hillsides."
+    },
+    {
+      "name": "Hadfield and Gamesley",
+      "postcodes": "SK13",
+      "housing": "Stone mill terraces in Hadfield and a large post-war estate at Gamesley."
+    },
+    {
+      "name": "New Mills",
+      "postcodes": "SK22",
+      "housing": "Stone terraces on steep streets above the Torrs gorge, with post-war housing."
+    },
+    {
+      "name": "Whaley Bridge",
+      "postcodes": "SK23",
+      "housing": "Stone terraces and cottages beside the canal basin, with newer estates."
+    },
+    {
+      "name": "Chapel-en-le-Frith",
+      "postcodes": "SK23",
+      "housing": "A market town of stone cottages and terraces, with post-war and newer estates."
+    },
+    {
+      "name": "Hope Valley villages",
+      "postcodes": "S33",
+      "housing": "Stone cottages, farmhouses and some holiday lets in Castleton, Hope and Bradwell, in the national park."
+    },
+    {
+      "name": "Tintwistle and Charlesworth",
+      "postcodes": "SK13",
+      "housing": "Hillside villages of stone terraces and cottages."
+    }
+  ],
+  "housing": "High Peak covers the north-west of Derbyshire, much of it within the Peak District National Park, with Buxton in the south and Glossop and the former mill towns in the north. Most homes are built of local gritstone or limestone: Victorian terraces in the mill towns, Georgian and Victorian villas in Buxton, many converted into flats, and cottages and farmhouses in the villages. Winters are harsh at this height, and holiday lets are common in the Hope Valley. Private renting grew between 2011 and 2021 but stays below the regional average.",
+  "checkinTips": [
+    "Gritstone terraces in Glossop, New Mills and Hadfield: look for damp on thick stone walls, especially at the back where houses are built into the hillside.",
+    "Hillside homes on steep streets: photograph steps, sloping paths, retaining walls and any cracking.",
+    "Victorian villas in Buxton split into flats: photograph each flat's door, meters, fire doors and alarms, and the shared hallway and stairs.",
+    "Homes at height in a cold climate: record the boiler, radiators, loft insulation and any frost damage to outside pipes, gutters or pointing.",
+    "Homes near the Goyt and in Whaley Bridge: look for signs of past flooding or damp in ground-floor rooms.",
+    "Rural cottages and farmhouses: photograph the oil or LPG tank, any septic tank or private water supply, and wood burners and chimneys."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact High Peak Borough Council's private sector housing (environmental health) service, after first reporting the problem to their landlord.",
+  "nearby": [
+    "derbyshire-dales",
+    "sheffield",
+    "barnsley",
+    "kirklees",
+    "oldham",
+    "tameside",
+    "stockport",
+    "cheshire-east",
+    "staffordshire-moorlands"
+  ]
+}

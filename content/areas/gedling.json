@@ -4,19 +4,28 @@
   "council": {
     "name": "Gedling Borough Council",
     "url": "https://www.gedling.gov.uk",
-    "privateRentingUrl": null
+    "privateRentingUrl": "https://www.gedling.gov.uk/resident/housing/selectivelicensing"
   },
   "licensing": {
-    "selective": null,
-    "additional": null,
-    "fee": null,
-    "source": null,
+    "selective": "Selective licensing covers privately rented homes in two schemes: the whole of Netherfield ward (renewed from 5 January 2025 to 4 January 2030), and parts of Carlton Hill, Colwick, Daybrook and Newstead Village (phase 2, 1 November 2022 to the end of October 2027).",
+    "additional": "No additional HMO licensing scheme is confirmed on the council’s pages: larger HMOs (five or more people from two or more households) need a national mandatory HMO licence.",
+    "fee": "Between about £585 and £700 per property for a selective licence when phase 2 was set up (2022); check the council’s page for current fees",
+    "source": "https://www.gedling.gov.uk/resident/housing/selectivelicensing",
     "checked": "October 2026"
   },
   "rent": null,
-  "price": null,
-  "privateRentedShare": null,
-  "councilTax": null,
+  "price": {
+    "text": "£250,000 (UK HPI, May 2025), up 6.3% on a year earlier",
+    "source": "https://www.gedlingeye.co.uk/average-house-prices-in-gedling-hit-250000-in-may/"
+  },
+  "privateRentedShare": {
+    "text": "About 16% of households rent privately (Census 2021)",
+    "source": "https://locara.co.uk/constituency/gedling/demographics"
+  },
+  "councilTax": {
+    "text": "£2,609.55 average Band D (2026/27), including Nottinghamshire County Council, police, fire and parish precepts; Gedling Borough Council’s own share is £200.32",
+    "source": "https://housecheckup.co.uk/council-tax/gedling"
+  },
   "postcodes": [
     "NG3",
     "NG4",

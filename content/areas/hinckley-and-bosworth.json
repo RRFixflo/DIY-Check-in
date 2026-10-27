@@ -1,0 +1,98 @@
+{
+  "slug": "hinckley-and-bosworth",
+  "name": "Hinckley and Bosworth",
+  "council": {
+    "name": "Hinckley and Bosworth Borough Council",
+    "url": "https://www.hinckley-bosworth.gov.uk",
+    "privateRentingUrl": "https://www.hinckley-bosworth.gov.uk/info/898/house_in_multiple_occupation_hmo/244/house_in_multiple_occupation_hmo_-_licence_fees_and_rules"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households. An Article 4 direction for part of Hinckley, which would need planning permission for new HMOs, was consulted on in 2026.",
+    "fee": "Around £800 for a new five-year licence for a small HMO and £1,000 for a large one, plus £75 for a paper application",
+    "source": "https://www.hinckley-bosworth.gov.uk/info/898/house_in_multiple_occupation_hmo/244/house_in_multiple_occupation_hmo_-_licence_fees_and_rules/4",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£934 a month (ONS, August 2026), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000132/"
+  },
+  "price": {
+    "text": "£260,000 (UK HPI, July 2026, provisional), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000132/"
+  },
+  "privateRentedShare": {
+    "text": "14.4% of households rent privately (Census 2021), up from 11.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000132/"
+  },
+  "councilTax": {
+    "text": "£2,352.33 Band D (2026/27) in Hinckley, including Leicestershire County Council, police, fire and the Hinckley special expenses; parishes range up to about £2,413",
+    "source": "https://www.hinckley-bosworth.gov.uk/download/downloads/id/8758/capital_and_revenue_estimates_2026_-_2027.pdf"
+  },
+  "postcodes": [
+    "LE10",
+    "LE9",
+    "LE6",
+    "LE67",
+    "CV13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hinckley",
+      "postcodes": "LE10",
+      "housing": "Victorian hosiery-era terraces near the centre, interwar semis and large modern estates on the edges."
+    },
+    {
+      "name": "Burbage",
+      "postcodes": "LE10",
+      "housing": "A large village of older cottages, post-war semis and detached houses and newer estates."
+    },
+    {
+      "name": "Earl Shilton",
+      "postcodes": "LE9",
+      "housing": "A former boot and shoe town of Victorian terraces, post-war estates and new housing."
+    },
+    {
+      "name": "Barwell",
+      "postcodes": "LE9",
+      "housing": "Victorian terraces and post-war houses, with a large new development to the west."
+    },
+    {
+      "name": "Market Bosworth",
+      "postcodes": "CV13",
+      "housing": "A small market town of Georgian and older brick houses around the square."
+    },
+    {
+      "name": "Groby and Ratby",
+      "postcodes": "LE6",
+      "housing": "Villages on Leicester's edge with older cottages and many post-war and modern estates."
+    },
+    {
+      "name": "Markfield",
+      "postcodes": "LE67",
+      "housing": "A former quarrying village of stone and brick cottages and newer estates."
+    },
+    {
+      "name": "Desford and Newbold Verdon",
+      "postcodes": "LE9",
+      "housing": "Villages of older terraces, post-war semis and bungalows and modern houses."
+    }
+  ],
+  "housing": "Hinckley and Bosworth is a mostly rural borough in south-west Leicestershire, centred on Hinckley, a former hosiery and boot-making town, with Burbage, Earl Shilton and Barwell close by and villages such as Market Bosworth, Groby and Markfield to the north. The towns have Victorian terraces near their centres and large interwar, post-war and modern estates, while the villages are mostly owner-occupied semis, detached houses and bungalows. Private renting is below the regional average and is concentrated in Hinckley's terraced streets.",
+  "checkinTips": [
+    "Victorian terraces in Hinckley, Earl Shilton and Barwell: check for damp at the base of walls and in rear kitchens, and photograph yards and shared rear passages.",
+    "Shared homes in central Hinckley: photograph each room's lock and furniture, fire doors, alarms and the kitchen, and note the HMO licence if there is one.",
+    "Newer homes on the large estates at Barwell, Earl Shilton and Hinckley: note snagging still outstanding, meter readings and parking allocations.",
+    "Village cottages around Market Bosworth and Markfield: record beams, uneven floors, open fireplaces and chimneys, and any oil tank.",
+    "Homes near the Ashby Canal and brooks: look for signs of past flooding or damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hinckley and Bosworth Borough Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "blaby",
+    "charnwood",
+    "north-west-leicestershire",
+    "nuneaton-and-bedworth",
+    "north-warwickshire",
+    "rugby"
+  ]
+}

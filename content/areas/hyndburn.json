@@ -1,0 +1,91 @@
+{
+  "slug": "hyndburn",
+  "name": "Hyndburn",
+  "council": {
+    "name": "Hyndburn Borough Council",
+    "url": "https://www.hyndburnbc.gov.uk",
+    "privateRentingUrl": "https://www.hyndburnbc.gov.uk/housing-and-regeneration-in-hyndburn/selective-licensing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force: the council says its last selective licensing designation ended on 4 March 2023, and no newer scheme could be confirmed.",
+    "additional": "No additional HMO licensing scheme is listed: larger HMOs (five or more people from two or more households) need a national mandatory licence.",
+    "fee": null,
+    "source": "https://www.hyndburnbc.gov.uk/housing-and-regeneration-in-hyndburn/selective-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£634 a month (ONS, January 2026), up 5.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000120/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "23.1% of households rent privately (Census 2021), up from 18.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000120/"
+  },
+  "councilTax": {
+    "text": "£2,465.34 Band D (2026/27) outside Altham parish, including Lancashire County Council, police and fire precepts; £2,509.67 in Altham",
+    "source": "https://democracy.hyndburnbc.gov.uk/documents/s23579/d Council Tax Resolution 202627.pdf"
+  },
+  "postcodes": [
+    "BB5",
+    "BB6",
+    "BB1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Accrington town centre",
+      "postcodes": "BB5",
+      "housing": "Dense Victorian terraces in brick and stone, with flats above shops."
+    },
+    {
+      "name": "Woodnook and Peel",
+      "postcodes": "BB5",
+      "housing": "Two-up two-down Victorian terraces with back streets, many of them privately let."
+    },
+    {
+      "name": "Church",
+      "postcodes": "BB5",
+      "housing": "Victorian mill terraces beside the Leeds and Liverpool Canal."
+    },
+    {
+      "name": "Oswaldtwistle",
+      "postcodes": "BB5",
+      "housing": "Victorian terraces near the old mills, with interwar and post-war semis on the hillsides."
+    },
+    {
+      "name": "Clayton-le-Moors",
+      "postcodes": "BB5",
+      "housing": "Victorian terraces and post-war estates beside the canal and M65."
+    },
+    {
+      "name": "Great Harwood",
+      "postcodes": "BB6",
+      "housing": "A former mill town of stone terraces, with post-war and newer estates."
+    },
+    {
+      "name": "Rishton",
+      "postcodes": "BB1",
+      "housing": "Victorian terraces near the canal and reservoir, with newer houses."
+    },
+    {
+      "name": "Baxenden and Huncoat",
+      "postcodes": "BB5",
+      "housing": "Villages of stone terraces, semis and newer estates on the edge of the moors."
+    }
+  ],
+  "housing": "Hyndburn is a former cotton-weaving borough in East Lancashire, made up of Accrington, Oswaldtwistle, Church, Clayton-le-Moors, Great Harwood and Rishton. Most homes are Victorian brick and stone terraces built for mill workers, many of them small and with back streets, and private renting is above the national average and grew sharply between 2011 and 2021. House prices are among the most affordable in England. Selective licensing covered parts of Accrington and Church until March 2023.",
+  "checkinTips": [
+    "Two-up two-down terraces in Woodnook, Peel and Church: check for damp at the base of walls and in rear kitchens, and photograph yards, back gates and back streets.",
+    "Stone terraces on the hillsides: look for damp on walls built into the slope, and photograph steps and retaining walls.",
+    "Older terraces with original features: record the boiler and heating, single-glazed windows, chimneys and any cellar.",
+    "Homes near the canal and brooks in Church and Clayton-le-Moors: look for signs of past flooding or damp in ground-floor rooms.",
+    "Flats above shops in Accrington town centre: photograph the separate entrance, stairs, fire alarm and meter cupboards."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hyndburn Borough Council's private rented sector (housing standards) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "blackburn-with-darwen",
+    "burnley",
+    "rossendale",
+    "ribble-valley"
+  ]
+}

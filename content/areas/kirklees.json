@@ -1,0 +1,115 @@
+{
+  "slug": "kirklees",
+  "name": "Kirklees",
+  "council": {
+    "name": "Kirklees Council",
+    "url": "https://www.kirklees.gov.uk",
+    "privateRentingUrl": "https://www.kirklees.gov.uk/beta/housing/houses-in-multiple-occupation.aspx"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be confirmed on the council's pages.",
+    "additional": "No additional HMO licensing scheme could be confirmed: the council's pages describe national mandatory licensing, for HMOs with five or more people from two or more households sharing a kitchen or bathroom.",
+    "fee": "£664 for an HMO licence for five or six people, £764 for seven or eight, £882 for nine or more, as listed on the council's page",
+    "source": "https://www.kirklees.gov.uk/beta/housing/houses-in-multiple-occupation.aspx",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£782 a month (ONS, August 2026), up 12.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000034/"
+  },
+  "price": {
+    "text": "£209,000 (UK HPI, July 2026, provisional), up 6.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000034/"
+  },
+  "privateRentedShare": {
+    "text": "19.1% of households rent privately (Census 2021), up from 15.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000034/"
+  },
+  "councilTax": {
+    "text": "£2,441.07 average Band D (2026/27), including West Yorkshire police and fire precepts and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/kirklees"
+  },
+  "postcodes": [
+    "HD1",
+    "HD2",
+    "HD3",
+    "HD4",
+    "HD5",
+    "HD7",
+    "HD8",
+    "HD9",
+    "WF12",
+    "WF13",
+    "WF14",
+    "WF15",
+    "WF16",
+    "WF17",
+    "BD19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Huddersfield town centre",
+      "postcodes": "HD1",
+      "housing": "Victorian stone buildings, converted mills and new blocks of flats, many let to students."
+    },
+    {
+      "name": "Lindley and Marsh",
+      "postcodes": "HD3",
+      "housing": "Victorian stone terraces and villas west of the centre, with shared homes near the university and hospital."
+    },
+    {
+      "name": "Lockwood and Crosland Moor",
+      "postcodes": "HD4",
+      "housing": "Dense Victorian stone terraces on the hillsides, many privately let."
+    },
+    {
+      "name": "Dewsbury",
+      "postcodes": "WF12, WF13",
+      "housing": "Victorian mill-town terraces, back-to-backs and post-war estates."
+    },
+    {
+      "name": "Batley",
+      "postcodes": "WF17",
+      "housing": "Stone terraces near the old mills, with interwar and post-war estates."
+    },
+    {
+      "name": "Mirfield",
+      "postcodes": "WF14",
+      "housing": "Victorian terraces, interwar semis and newer estates along the Calder."
+    },
+    {
+      "name": "Cleckheaton and Heckmondwike",
+      "postcodes": "BD19, WF16",
+      "housing": "Stone terraces and back-to-backs, with post-war and modern estates."
+    },
+    {
+      "name": "Holmfirth and the Holme Valley",
+      "postcodes": "HD9",
+      "housing": "Weavers' cottages and stone terraces on steep valley sides, with farmhouses above."
+    },
+    {
+      "name": "Slaithwaite and Marsden",
+      "postcodes": "HD7",
+      "housing": "Pennine mill villages of stone terraces and cottages beside the canal."
+    }
+  ],
+  "housing": "Kirklees covers Huddersfield, Dewsbury, Batley and the Spen Valley towns, and the Pennine valleys of the Colne and Holme. Much of the housing is Victorian stone terraces and back-to-backs built for the wool and textile mills, often on steep hillsides, with converted mills and student flats in Huddersfield near the university. The valleys have weavers' cottages and stone farmhouses, while the outskirts of the towns have interwar, post-war and modern estates. Rents rose sharply in the year to August 2026.",
+  "checkinTips": [
+    "Stone terraces and back-to-backs: look for damp on thick walls, especially on walls built into the hillside, and photograph cellars and shared yards.",
+    "Steep hillside homes in Lockwood, Holmfirth and the valleys: photograph steps, sloping paths and retaining walls, and note any cracking.",
+    "Student shared houses near the University of Huddersfield: photograph each bedroom's lock and furniture, fire doors, alarms and the kitchen.",
+    "Converted mills and town-centre flats: note fob and key counts, lifts, bin stores and bike stores, and look for condensation around large windows.",
+    "Homes near the Colne, Holme and Calder: look for signs of past flooding or damp in ground-floor rooms.",
+    "Pennine homes at height: record the boiler, radiators, loft insulation and any frost damage to outside pipes, gutters or pointing."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Kirklees Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "calderdale",
+    "bradford",
+    "leeds",
+    "wakefield",
+    "barnsley",
+    "high-peak",
+    "oldham"
+  ]
+}

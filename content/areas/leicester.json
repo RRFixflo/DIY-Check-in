@@ -1,0 +1,107 @@
+{
+  "slug": "leicester",
+  "name": "Leicester",
+  "council": {
+    "name": "Leicester City Council",
+    "url": "https://www.leicester.gov.uk",
+    "privateRentingUrl": "https://www.leicester.gov.uk/housing/landlords/property-licensing/selective-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in parts of Stoneygate, Westcotes, Fosse, Braunstone Park and Rowley Fields, and Saffron wards, from 10 October 2022 to 9 October 2027 (with a second designation from December 2022 adding streets left out). Check an address on the council's map.",
+    "additional": "No additional HMO licensing scheme is listed: larger HMOs (five or more people from two or more households) need a national mandatory licence. Article 4 directions in parts of the city control new HMOs through planning.",
+    "fee": "£1,290 for a selective licence, paid as £1,032 on application and £258 when the licence is issued",
+    "source": "https://www.leicester.gov.uk/housing/landlords/property-licensing/selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,020 a month (ONS, September 2026), up 0.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000016/"
+  },
+  "price": {
+    "text": "£227,000 (UK HPI, August 2026, provisional), down 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000016/"
+  },
+  "privateRentedShare": {
+    "text": "29.4% of households rent privately (Census 2021), up from 22.7% in 2011: the largest rise in the East Midlands",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000016/"
+  },
+  "councilTax": {
+    "text": "£2,528.75 Band D (2026/27), including Leicestershire police and fire precepts",
+    "source": "https://housecheckup.co.uk/council-tax/leicester"
+  },
+  "postcodes": [
+    "LE1",
+    "LE2",
+    "LE3",
+    "LE4",
+    "LE5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "LE1",
+      "housing": "Converted factories and warehouses, Victorian buildings, and large purpose-built student blocks."
+    },
+    {
+      "name": "Clarendon Park",
+      "postcodes": "LE2",
+      "housing": "Victorian and Edwardian terraces, many let to students of the University of Leicester."
+    },
+    {
+      "name": "Highfields",
+      "postcodes": "LE2",
+      "housing": "Large Victorian houses and terraces, many split into flats."
+    },
+    {
+      "name": "Stoneygate",
+      "postcodes": "LE2",
+      "housing": "Large Victorian and Edwardian villas, some converted into flats, and terraces in the selective licensing area."
+    },
+    {
+      "name": "Westcotes and Fosse",
+      "postcodes": "LE3",
+      "housing": "Dense Victorian terraces west of the centre, many privately let, in the selective licensing area."
+    },
+    {
+      "name": "Braunstone",
+      "postcodes": "LE3",
+      "housing": "A large interwar council-built estate of semis and terraces, partly regenerated."
+    },
+    {
+      "name": "Saffron",
+      "postcodes": "LE2",
+      "housing": "Interwar and post-war council-built estates and terraces in the selective licensing area."
+    },
+    {
+      "name": "Belgrave and Rushey Mead",
+      "postcodes": "LE4",
+      "housing": "Victorian terraces along Belgrave Road and interwar semis to the north."
+    },
+    {
+      "name": "Evington",
+      "postcodes": "LE5",
+      "housing": "Interwar and post-war semis and detached houses, with an old village core."
+    },
+    {
+      "name": "Beaumont Leys",
+      "postcodes": "LE4",
+      "housing": "Estates built from the 1970s of houses and low-rise flats on the north-west edge."
+    }
+  ],
+  "housing": "Leicester has one of the fastest-growing private rented sectors in the country, with nearly three in ten households renting privately in 2021. The rented stock is concentrated in Victorian terraces around the centre, in areas such as Westcotes, Fosse, Highfields and Clarendon Park, in student homes near the two universities, and in converted factories and new flats in the city centre. Large interwar council-built estates such as Braunstone and Saffron and later estates at Beaumont Leys ring the city. Selective licensing applies in parts of five wards until October 2027.",
+  "checkinTips": [
+    "Victorian terraces in Westcotes, Fosse and Highfields: check for damp at the base of walls and in rear kitchens, and photograph yards and back entries.",
+    "Homes in the selective licensing areas: note the licence number and check the licence conditions on smoke alarms, gas safety and the number of occupiers.",
+    "Student shared houses in Clarendon Park and near De Montfort University: photograph each bedroom's lock and furniture, fire doors, alarms and the kitchen.",
+    "Converted factories and city-centre flats: note fob and key counts, lifts, bin and bike stores, and look for condensation around large windows.",
+    "Interwar estate houses in Braunstone and Saffron: record the boiler, windows and doors, and the state of gardens and fencing.",
+    "Homes near the Soar and the canal: look for signs of past flooding or damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Leicester City Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "blaby",
+    "oadby-and-wigston",
+    "charnwood",
+    "harborough"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "slug": "hartlepool",
+  "name": "Hartlepool",
+  "council": {
+    "name": "Hartlepool Borough Council",
+    "url": "https://www.hartlepool.gov.uk",
+    "privateRentingUrl": "https://www.hartlepool.gov.uk/downloads/download/161/houses-in-multiple-occupation-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force: earlier schemes in parts of the town (from 2009) have ended. The council's 2026/27 council tax leaflet says it is considering bringing in a new selective landlord licensing scheme.",
+    "additional": "No additional HMO licensing scheme is listed: larger HMOs (five or more people from two or more households) need a national mandatory licence, with standard licence conditions published in 2025.",
+    "fee": null,
+    "source": "https://www.hartlepool.gov.uk/downloads/file/1473/council-tax-leaflet-2026-27",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£558 a month (ONS, August 2026), up 0.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000001/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "17.6% of households rent privately (Census 2021), up from 14.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000001/"
+  },
+  "councilTax": {
+    "text": "£2,556.88 Band D (2026/27) outside parished areas, including police and Cleveland Fire Authority precepts",
+    "source": "https://www.hartlepool.gov.uk/downloads/file/1473/council-tax-leaflet-2026-27"
+  },
+  "postcodes": [
+    "TS24",
+    "TS25",
+    "TS26",
+    "TS27"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "The Headland",
+      "postcodes": "TS24",
+      "housing": "The old town on the peninsula, with Victorian and Georgian terraces and some post-war council housing."
+    },
+    {
+      "name": "Town centre and Church Street",
+      "postcodes": "TS24",
+      "housing": "Victorian terraces, flats above shops and converted buildings near the marina."
+    },
+    {
+      "name": "Hartlepool Marina",
+      "postcodes": "TS24",
+      "housing": "Waterside apartment blocks and townhouses built from the 1990s."
+    },
+    {
+      "name": "Burn Valley and Elwick Road",
+      "postcodes": "TS26",
+      "housing": "Victorian and Edwardian terraces and larger villas along the park."
+    },
+    {
+      "name": "Stranton and Oxford Road",
+      "postcodes": "TS25",
+      "housing": "Dense Victorian terraces with back lanes, many of them privately let."
+    },
+    {
+      "name": "Owton Manor and Rossmere",
+      "postcodes": "TS25",
+      "housing": "Post-war council-built estates of semis and terraces."
+    },
+    {
+      "name": "Seaton Carew",
+      "postcodes": "TS25",
+      "housing": "A seaside village of Victorian terraces, bungalows and newer estates."
+    },
+    {
+      "name": "Throston and Clavering",
+      "postcodes": "TS26, TS27",
+      "housing": "Estates of modern houses built from the 1970s onwards on the town's north-west edge."
+    },
+    {
+      "name": "Hart, Elwick and Greatham",
+      "postcodes": "TS27, TS25",
+      "housing": "Small villages of older cottages, farmhouses and newer houses."
+    }
+  ],
+  "housing": "Hartlepool is a coastal town and former port with some of the lowest house prices and rents in England. The older streets of Stranton, the Headland and near the town centre are dense Victorian terraces with back lanes, which make up much of the private rented stock, and earlier selective licensing schemes targeted some of these areas. Post-war council-built estates such as Owton Manor sit to the south, and newer estates have been built at Throston, Clavering and around the marina. Private renting rose between 2011 and 2021, though more slowly than across the North East.",
+  "checkinTips": [
+    "Victorian terraces with back lanes in Stranton and Oxford Road: photograph the rear yard, gate, bins and outbuildings, and check for damp at the base of walls.",
+    "Seafront and Headland homes: look for salt corrosion on window frames, door furniture and outside metalwork, and damp on exposed walls.",
+    "Marina apartments: note fob and key counts, parking spaces, lifts and bin stores, and look for condensation around large windows.",
+    "Post-war estate houses in Owton Manor and Rossmere: record the boiler, windows and external doors, and the state of gardens and fencing.",
+    "Empty or long-vacant terraced homes being re-let: photograph meters, signs of past leaks and any security boarding removed."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hartlepool Borough Council's housing standards (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "county-durham",
+    "stockton-on-tees"
+  ]
+}

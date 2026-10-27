@@ -1,0 +1,100 @@
+{
+  "slug": "hart",
+  "name": "Hart",
+  "council": {
+    "name": "Hart District Council",
+    "url": "https://www.hart.gov.uk",
+    "privateRentingUrl": "https://www.hart.gov.uk/housing/private-sector-housing/how-we-work-landlords/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory licensing applies, for HMOs with five or more people from two or more households.",
+    "fee": "£893 for a five-person HMO licence and £1,121 for six to ten people (2026/27), with 10% off for members of a landlord association",
+    "source": "https://www.hart.gov.uk/housing/private-sector-housing/how-we-work-landlords/houses-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,374 a month (ONS, September 2025), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000089/"
+  },
+  "price": {
+    "text": "£465,000 (UK HPI, August 2025, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000089/"
+  },
+  "privateRentedShare": {
+    "text": "13.6% of households rent privately (Census 2021), up from 12.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000089/"
+  },
+  "councilTax": {
+    "text": "£2,423.08 Band D (2026/27) in Fleet, including Hampshire County Council, police, fire and town council precepts; about £2,400 on average across the district",
+    "source": "https://www.hart.gov.uk/sites/default/files/2026-03/Council-Tax-Bands-and-Charges-2026-27-resized.pdf"
+  },
+  "postcodes": [
+    "GU51",
+    "GU52",
+    "GU46",
+    "GU17",
+    "RG27",
+    "RG29"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Fleet",
+      "postcodes": "GU51, GU52",
+      "housing": "Edwardian and interwar houses near the centre, with large estates of detached and semi-detached homes."
+    },
+    {
+      "name": "Church Crookham",
+      "postcodes": "GU52",
+      "housing": "Post-war and modern estates, including new homes on the former Queen Elizabeth Barracks site."
+    },
+    {
+      "name": "Elvetham Heath",
+      "postcodes": "GU51",
+      "housing": "A large estate of houses and flats built from the late 1990s."
+    },
+    {
+      "name": "Yateley",
+      "postcodes": "GU46",
+      "housing": "Estates of 1960s to 1980s houses and bungalows, with some older village houses."
+    },
+    {
+      "name": "Blackwater and Hawley",
+      "postcodes": "GU17",
+      "housing": "Victorian cottages and post-war and modern estates near the Surrey border."
+    },
+    {
+      "name": "Hook",
+      "postcodes": "RG27",
+      "housing": "A village that has grown with estates of modern houses, plus older cottages."
+    },
+    {
+      "name": "Hartley Wintney",
+      "postcodes": "RG27",
+      "housing": "A conservation-area village of Georgian and Victorian houses and cottages around the green."
+    },
+    {
+      "name": "Odiham",
+      "postcodes": "RG29",
+      "housing": "A historic village of timber-framed and Georgian houses, near the RAF station."
+    }
+  ],
+  "housing": "Hart is a mostly suburban and rural district in north-east Hampshire, centred on Fleet, with Yateley, Blackwater, Hook and a ring of historic villages such as Hartley Wintney and Odiham. Most homes are owner-occupied detached and semi-detached houses on estates built from the 1960s onwards, including large newer developments at Elvetham Heath and on former army land at Church Crookham. Private renting is well below the regional average, and rents and prices are high, helped by fast trains to London.",
+  "checkinTips": [
+    "Detached and semi-detached family houses in Fleet and Yateley: record gardens, fences, sheds, garages and the condition of driveways.",
+    "Newer homes at Elvetham Heath and the former barracks at Church Crookham: note snagging still outstanding, meter readings and parking allocations.",
+    "Timber-framed and Georgian houses in Odiham and Hartley Wintney: photograph beams, uneven floors, open fireplaces and sash windows.",
+    "Rural homes off the mains: photograph oil tank gauges, the boiler and any septic tank or private drainage.",
+    "Flats in Fleet town centre: note fob and key counts, parking, bike stores and bin store access."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hart District Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "basingstoke-and-deane",
+    "rushmoor",
+    "surrey-heath",
+    "bracknell-forest",
+    "wokingham",
+    "east-hampshire",
+    "waverley"
+  ]
+}

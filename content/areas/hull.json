@@ -1,0 +1,100 @@
+{
+  "slug": "hull",
+  "name": "Kingston upon Hull",
+  "council": {
+    "name": "Hull City Council",
+    "url": "https://www.hull.gov.uk",
+    "privateRentingUrl": "https://www.hull.gov.uk/private-landlords/houses-multiple-occupation/2"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme could be confirmed on the council's pages.",
+    "additional": "No additional HMO licensing scheme could be confirmed: the council's pages describe national mandatory licensing, for HMOs with five or more people from two or more households sharing a kitchen or bathroom. The council also runs a voluntary Hull Accredited Landlord Scheme.",
+    "fee": "Paid in two stages, starting with a non-refundable £225 on application for an HMO licence",
+    "source": "https://www.hull.gov.uk/private-landlords/houses-multiple-occupation/2",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£694 a month (ONS, August 2026), up 7.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000010/"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "23.9% of households rent privately (Census 2021), up from 20.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000010/"
+  },
+  "councilTax": {
+    "text": "About £2,295 Band D (2026/27), including Humberside police and fire precepts; Hull City Council's own share is £1,873.46",
+    "source": "https://housecheckup.co.uk/council-tax/kingston-upon-hull"
+  },
+  "postcodes": [
+    "HU1",
+    "HU2",
+    "HU3",
+    "HU4",
+    "HU5",
+    "HU6",
+    "HU7",
+    "HU8",
+    "HU9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre, Old Town and the Marina",
+      "postcodes": "HU1, HU2",
+      "housing": "Converted warehouses and Georgian buildings in the Old Town, newer apartment blocks and student flats."
+    },
+    {
+      "name": "The Avenues and Pearson Park",
+      "postcodes": "HU5",
+      "housing": "Large Victorian and Edwardian houses on tree-lined avenues, many split into flats."
+    },
+    {
+      "name": "Newland and Cottingham Road",
+      "postcodes": "HU5, HU6",
+      "housing": "Victorian and interwar terraces near the University of Hull, many let to students as shared houses."
+    },
+    {
+      "name": "Hessle Road and Anlaby Road",
+      "postcodes": "HU3",
+      "housing": "Dense Victorian and Edwardian terraces off long streets, with post-war infill."
+    },
+    {
+      "name": "Holderness Road and East Hull",
+      "postcodes": "HU8, HU9",
+      "housing": "Victorian and interwar terraces and semis, many privately let."
+    },
+    {
+      "name": "Victoria Dock",
+      "postcodes": "HU9",
+      "housing": "A waterside development of modern houses and flats on a former dock."
+    },
+    {
+      "name": "Orchard Park",
+      "postcodes": "HU6",
+      "housing": "A large post-war council-built estate, partly rebuilt in recent regeneration."
+    },
+    {
+      "name": "Bransholme and Kingswood",
+      "postcodes": "HU7",
+      "housing": "A huge 1960s and 1970s estate at Bransholme and newer private estates at Kingswood."
+    },
+    {
+      "name": "Sutton-on-Hull",
+      "postcodes": "HU7",
+      "housing": "An old village core with interwar and post-war semis around it."
+    }
+  ],
+  "housing": "Hull is a port city on the Humber with some of the lowest rents and house prices in England and a large share of renting: nearly a quarter of households rent privately and more than a quarter rent from the council or housing associations. Victorian and Edwardian terraces, many in narrow side streets off the main roads, hold much of the private rented stock, along with the Avenues' large houses split into flats and student lets near the university. Big post-war estates such as Bransholme and Orchard Park ring the city, and the Old Town and marina have converted warehouses and new flats. Much of the city is low-lying.",
+  "checkinTips": [
+    "Low-lying homes across the city: look for signs of past flooding (Hull flooded badly in 2007) or damp in ground-floor rooms, and photograph airbricks and skirting boards.",
+    "Victorian and Edwardian terraces off Hessle Road, Anlaby Road and Holderness Road: check for damp at the base of walls, and photograph yards and shared passages.",
+    "Student shared houses near Cottingham Road: photograph each bedroom's lock and furniture, fire doors, alarms and the kitchen appliances.",
+    "Large houses split into flats in the Avenues: photograph each flat's meters, door entry system and the shared hallway and stairs.",
+    "Converted warehouses and flats in the Old Town and marina: note fob and key counts, lifts and bin stores, and look for condensation around large windows."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Hull City Council's private housing environmental health team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "east-riding-of-yorkshire",
+    "north-lincolnshire"
+  ]
+}

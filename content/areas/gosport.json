@@ -1,0 +1,96 @@
+{
+  "slug": "gosport",
+  "name": "Gosport",
+  "council": {
+    "name": "Gosport Borough Council",
+    "url": "https://www.gosport.gov.uk",
+    "privateRentingUrl": "https://www.gosport.gov.uk/article/1085/Houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council's HMO page describes only national mandatory licensing, for HMOs with five or more people from two or more households sharing facilities (licences last five years).",
+    "fee": null,
+    "source": "https://www.gosport.gov.uk/article/1085/Houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,169 a month (ONS, August 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000088/"
+  },
+  "price": {
+    "text": "£241,000 (UK HPI, July 2026, provisional), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000088/"
+  },
+  "privateRentedShare": {
+    "text": "18.9% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=725"
+  },
+  "councilTax": {
+    "text": "£2,344.29 Band D (2026/27), including Hampshire County Council, police and fire precepts",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69c1077e3546e4bfd1c3968a"
+  },
+  "postcodes": [
+    "PO12",
+    "PO13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Gosport town centre",
+      "postcodes": "PO12",
+      "housing": "Victorian terraces, flats above shops and post-war council-built blocks near the High Street and ferry."
+    },
+    {
+      "name": "Alverstoke",
+      "postcodes": "PO12",
+      "housing": "A conservation-area village of Georgian and Victorian houses and larger detached homes."
+    },
+    {
+      "name": "Forton",
+      "postcodes": "PO12",
+      "housing": "Dense Victorian and Edwardian terraces, many of them privately let."
+    },
+    {
+      "name": "Elson",
+      "postcodes": "PO12",
+      "housing": "Interwar and post-war semis and terraces near the harbour."
+    },
+    {
+      "name": "Bridgemary",
+      "postcodes": "PO13",
+      "housing": "Large post-war estates of houses, maisonettes and flats."
+    },
+    {
+      "name": "Rowner",
+      "postcodes": "PO13",
+      "housing": "Former naval housing estates, much of it rebuilt as new homes in a regeneration scheme."
+    },
+    {
+      "name": "Lee-on-the-Solent",
+      "postcodes": "PO13",
+      "housing": "Seafront flats, bungalows and detached houses along the Solent."
+    },
+    {
+      "name": "Hardway",
+      "postcodes": "PO12",
+      "housing": "Victorian terraces and semis close to the harbour shore."
+    },
+    {
+      "name": "Haslar and Royal Clarence Yard",
+      "postcodes": "PO12",
+      "housing": "Converted naval and hospital buildings and newer waterside apartments."
+    }
+  ],
+  "housing": "Gosport is a compact peninsula town between Portsmouth Harbour and the Solent, with a long naval history. The older streets in Forton, Elson and the town centre are Victorian and Edwardian terraces, while Bridgemary and Rowner have large post-war estates, some of them built for naval families and since regenerated. Lee-on-the-Solent has many bungalows and seafront flats, and former naval sites at Royal Clarence Yard and Haslar have been converted into apartments. Private renting is mostly terraced houses and flats.",
+  "checkinTips": [
+    "Seafront flats in Lee-on-the-Solent: look for salt corrosion on window frames, balcony rails and door furniture, and photograph any damp on exposed walls.",
+    "Victorian terraces in Forton and the town centre: check for damp at the base of walls and in rear kitchens, and photograph yards and rear access.",
+    "Converted naval buildings at Royal Clarence Yard and Haslar: note fob and key counts, communal areas, parking and the condition of large period windows.",
+    "Post-war estate homes in Bridgemary: record the boiler, windows and doors, and the state of gardens and fencing.",
+    "Low-lying homes near the harbour and Solent shore: look for signs of past flooding or tidal damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Gosport Borough Council's environmental health (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "fareham",
+    "portsmouth"
+  ]
+}
