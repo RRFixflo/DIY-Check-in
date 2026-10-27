@@ -1,0 +1,92 @@
+{
+  "slug": "colchester",
+  "name": "Colchester",
+  "council": {
+    "name": "Colchester City Council",
+    "url": "https://www.colchester.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CO1",
+    "CO2",
+    "CO3",
+    "CO4",
+    "CO5",
+    "CO6",
+    "CO7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Colchester city centre",
+      "postcodes": "CO1",
+      "housing": "Victorian and Georgian terraces, flats above shops and modern apartment blocks within and near the Roman walls."
+    },
+    {
+      "name": "New Town",
+      "postcodes": "CO2",
+      "housing": "Victorian terraces south of the centre, many let privately."
+    },
+    {
+      "name": "Lexden",
+      "postcodes": "CO3",
+      "housing": "Larger Edwardian and inter-war houses and detached homes in a mainly owner-occupied area."
+    },
+    {
+      "name": "Greenstead",
+      "postcodes": "CO4",
+      "housing": "A large post-war estate near the University of Essex, with many former council houses let privately."
+    },
+    {
+      "name": "Highwoods",
+      "postcodes": "CO4",
+      "housing": "A 1980s and 1990s estate of semis, terraces and detached houses."
+    },
+    {
+      "name": "Wivenhoe",
+      "postcodes": "CO7",
+      "housing": "A riverside town of old cottages and quayside homes, popular with University of Essex staff and students."
+    },
+    {
+      "name": "Tiptree",
+      "postcodes": "CO5",
+      "housing": "A large village of post-war and modern estates."
+    },
+    {
+      "name": "West Mersea",
+      "postcodes": "CO5",
+      "housing": "An island town of bungalows, chalets and houseboats near the estuary."
+    },
+    {
+      "name": "Stanway",
+      "postcodes": "CO3",
+      "housing": "Fast-growing area of modern estates and new-build homes on the west side of the city."
+    }
+  ],
+  "housing": "Colchester has a large private rented sector driven by the University of Essex, the army garrison and commuters to London. Victorian terraces in New Town and around the centre are often let as student or shared houses, while Greenstead and other post-war estates include many former council homes. The city has grown quickly, with large new-build estates at Stanway, Highwoods and on former garrison land. Rural parts of the borough have old timber-framed and weatherboarded cottages, and West Mersea has coastal bungalows.",
+  "checkinTips": [
+    "Student HMOs near the University of Essex in Greenstead and Wivenhoe: photograph every bedroom's lock and furniture and each shared appliance separately.",
+    "Victorian terraces in New Town: check sash windows, damp on party walls and the condition of back yards and side passages.",
+    "Former garrison and new-build estates at Stanway and the Garrison: record allocated parking, smart meters and any snagging still outstanding.",
+    "Timber-framed and weatherboarded cottages in the villages: photograph cladding, low beams, damp patches and wood burners.",
+    "Coastal homes at West Mersea: look for salt corrosion on metal fittings and check for flooding risk at the Strood causeway.",
+    "Flats above shops in the city centre: note the separate entrance, fire alarm and bin store arrangements."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a private rented home can contact Colchester City Council's private sector housing team, which can inspect and take enforcement action.",
+  "nearby": [
+    "tendring",
+    "braintree",
+    "maldon",
+    "babergh"
+  ]
+}

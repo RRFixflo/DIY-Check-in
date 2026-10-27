@@ -1,0 +1,85 @@
+{
+  "slug": "eastleigh",
+  "name": "Eastleigh",
+  "council": {
+    "name": "Eastleigh Borough Council",
+    "url": "https://www.eastleigh.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "SO18",
+    "SO30",
+    "SO31",
+    "SO32",
+    "SO50",
+    "SO53"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Eastleigh town",
+      "postcodes": "SO50",
+      "housing": "A railway town with Victorian and Edwardian terraces near the centre and post-war estates around it."
+    },
+    {
+      "name": "Chandler's Ford",
+      "postcodes": "SO53",
+      "housing": "A suburb of mostly inter-war, post-war and modern detached and semi-detached houses."
+    },
+    {
+      "name": "Hedge End",
+      "postcodes": "SO30",
+      "housing": "A large suburb that grew from the 1980s with modern estates of family houses."
+    },
+    {
+      "name": "West End",
+      "postcodes": "SO30, SO18",
+      "housing": "A village suburb next to Southampton with mixed post-war and modern housing."
+    },
+    {
+      "name": "Bishopstoke",
+      "postcodes": "SO50",
+      "housing": "A village suburb with older cottages and large post-war estates."
+    },
+    {
+      "name": "Fair Oak",
+      "postcodes": "SO50",
+      "housing": "A large village with modern estates and some older cottages."
+    },
+    {
+      "name": "Hamble-le-Rice",
+      "postcodes": "SO31",
+      "housing": "A riverside village with old cottages near the waterfront and newer homes."
+    },
+    {
+      "name": "Botley",
+      "postcodes": "SO30",
+      "housing": "A historic village with Georgian and older houses and new estates around it."
+    }
+  ],
+  "housing": "Eastleigh borough lies between Southampton and Winchester and is mainly suburban, with the Victorian railway town of Eastleigh at its centre and large modern estates at Hedge End, Fair Oak and around. Most homes are owner-occupied family houses, with private lets in Eastleigh town's terraces and flats and across the newer estates. The borough has grown with many new-build developments in recent years. Proximity to Southampton brings demand from people working at the port, airport and university.",
+  "checkinTips": [
+    "Victorian terraces in Eastleigh town: photograph back yards, damp at the base of walls and the condition of sash or replacement windows.",
+    "New-build estates in Hedge End, Fair Oak and Botley: photograph snagging marks, sealant and grout, and note any estate management charges or parking rules.",
+    "Homes near Southampton Airport and the railway: note window types and any secondary glazing, and photograph trickle vents and seals.",
+    "Riverside homes in Hamble and Bursledon: photograph any damp, outside metalwork and moorings or garden steps to the water.",
+    "Flats in modern blocks: photograph the entry system, bin store and parking space, and note fob and key counts."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Eastleigh Borough Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "southampton",
+    "test-valley",
+    "winchester",
+    "fareham"
+  ]
+}

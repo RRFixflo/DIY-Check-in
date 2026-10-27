@@ -1,0 +1,105 @@
+{
+  "slug": "amber-valley",
+  "name": "Amber Valley",
+  "council": {
+    "name": "Amber Valley Borough Council",
+    "url": "https://www.ambervalley.gov.uk",
+    "privateRentingUrl": "https://www.ambervalley.gov.uk/housing/private-rented-housing/houses-in-multiple-occupancy"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council says it does not operate any selective licensing schemes.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from more than one household).",
+    "fee": "£450.05 for an HMO licence application (as stated on the council's page)",
+    "source": "https://www.ambervalley.gov.uk/housing/private-rented-housing/houses-in-multiple-occupancy",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£799 a month (ONS, August 2026), up 4.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000032/"
+  },
+  "price": {
+    "text": "£233,000 (UK HPI, July 2026), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000032/"
+  },
+  "privateRentedShare": {
+    "text": "15% of households rent privately (Census 2021)",
+    "source": "https://observatory.derbyshire.gov.uk/wp-content/uploads/reports/profiles/2021_census_profiles/summary_profile/districts/amber_valley.pdf"
+  },
+  "councilTax": {
+    "text": "£2,408 average Band D (2026/27), including Derbyshire County Council, police, fire and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/amber-valley"
+  },
+  "postcodes": [
+    "DE4",
+    "DE5",
+    "DE55",
+    "DE56",
+    "DE75",
+    "NG16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ripley",
+      "postcodes": "DE5",
+      "housing": "Victorian and Edwardian terraces around the market place, with post-war estates and newer housing on the edges."
+    },
+    {
+      "name": "Belper",
+      "postcodes": "DE56",
+      "housing": "Stone-built mill workers' terraces and cottages in the World Heritage Site mill town, alongside interwar and modern houses."
+    },
+    {
+      "name": "Alfreton",
+      "postcodes": "DE55",
+      "housing": "Brick terraces from the mining era, council-built estates and newer developments near the A38."
+    },
+    {
+      "name": "Heanor",
+      "postcodes": "DE75",
+      "housing": "Former mining town of red-brick terraces and semis, with post-war council housing."
+    },
+    {
+      "name": "Langley Mill",
+      "postcodes": "NG16",
+      "housing": "Small terraces and semis beside the Erewash valley and the canal."
+    },
+    {
+      "name": "Somercotes",
+      "postcodes": "DE55",
+      "housing": "Terraced and semi-detached houses from the mining and ironworks era, with modern estates."
+    },
+    {
+      "name": "Duffield",
+      "postcodes": "DE56",
+      "housing": "Larger detached and semi-detached houses and older stone cottages in a commuter village near Derby."
+    },
+    {
+      "name": "Crich",
+      "postcodes": "DE4",
+      "housing": "Stone cottages and farmhouses in a hilltop village above the Derwent valley."
+    },
+    {
+      "name": "Codnor",
+      "postcodes": "DE5",
+      "housing": "Brick terraces and semis in a former mining village, with some newer infill."
+    }
+  ],
+  "housing": "Amber Valley mixes former mining and mill towns (Ripley, Alfreton, Heanor) with the stone-built Derwent valley around Belper and rural villages towards the Peak District. Homes are mostly owner-occupied, and private renting is below the England average. Rented homes are typically Victorian brick terraces and ex-council semis in the eastern towns, and stone cottages in the villages. Houses are cheaper than the England average, and new estates have been built on the edges of the main towns.",
+  "checkinTips": [
+    "Stone cottages in Belper, Crich and the Derwent valley: photograph walls and window reveals for damp, and note the condition of any open fire or stove.",
+    "Victorian brick terraces in Ripley, Heanor and Alfreton: photograph back yards, outhouses, rear doors and the condition of shared alleys and gates.",
+    "Rural homes off the mains gas network may have oil tanks or LPG: photograph the tank, its gauge level and any bunding.",
+    "Mill-town terraces on steep streets: photograph cellar steps, cellar walls and any signs of water getting in.",
+    "Ex-council semis: photograph uPVC windows and doors, their locks and the number of keys, and any garden fences and sheds."
+  ],
+  "tenantHelp": "Tenants in Amber Valley can contact the borough council's private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "derby",
+    "erewash",
+    "broxtowe",
+    "ashfield",
+    "bolsover",
+    "north-east-derbyshire",
+    "derbyshire-dales"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "slug": "fenland",
+  "name": "Fenland",
+  "council": {
+    "name": "Fenland District Council",
+    "url": "https://www.fenland.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "PE13",
+    "PE14",
+    "PE15",
+    "PE16",
+    "PE7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wisbech",
+      "postcodes": "PE13",
+      "housing": "Georgian merchants' houses along the river, Victorian terraces, and post-war estates, with many older houses split into flats or shared homes."
+    },
+    {
+      "name": "March",
+      "postcodes": "PE15",
+      "housing": "Victorian railway-era terraces near the centre with large post-war and newer estates around them."
+    },
+    {
+      "name": "Chatteris",
+      "postcodes": "PE16",
+      "housing": "Brick terraces and semis in the town centre, with newer estates on the edges."
+    },
+    {
+      "name": "Whittlesey",
+      "postcodes": "PE7",
+      "housing": "Older brick houses in the historic centre and suburban estates towards Peterborough."
+    },
+    {
+      "name": "Doddington",
+      "postcodes": "PE15",
+      "housing": "A village of older cottages, bungalows and newer detached houses."
+    },
+    {
+      "name": "Leverington",
+      "postcodes": "PE13",
+      "housing": "A village near Wisbech with cottages, bungalows and detached houses."
+    },
+    {
+      "name": "Parson Drove",
+      "postcodes": "PE13",
+      "housing": "A rural fen village of cottages, bungalows and farm properties."
+    },
+    {
+      "name": "Manea",
+      "postcodes": "PE15",
+      "housing": "A fen village with bungalows and newer estates near its station."
+    },
+    {
+      "name": "Coates and Eastrea",
+      "postcodes": "PE7",
+      "housing": "Linear villages of cottages, bungalows and newer homes east of Whittlesey."
+    }
+  ],
+  "housing": "Fenland is a rural district of four market towns, Wisbech, March, Chatteris and Whittlesey, set in flat, low-lying fen farmland. Wisbech has fine Georgian houses but also many older terraces and large houses split into flats and shared homes, often let to agricultural and food-processing workers. Elsewhere bungalows, brick cottages and estates of semis and detached houses are common, and house prices are low for the East of England.",
+  "checkinTips": [
+    "Older terraces and converted houses in Wisbech: check for damp, overcrowding signs and fire safety, and photograph each room's lock and furniture in shared homes.",
+    "Homes on peat and clay fen soils: photograph any cracks in walls, sticking doors and uneven floors, which can come from ground movement.",
+    "Low-lying homes near rivers and drains: note any signs of past flooding or damp in ground-floor rooms and outbuildings.",
+    "Rural cottages and bungalows: record septic tanks or treatment plants, oil tanks and their gauges, and any LPG supply where there is no mains gas.",
+    "Georgian and Victorian houses along the Nene in Wisbech: check sash windows, chimney breasts and cellars for damp.",
+    "Bungalows with large gardens in fen villages: photograph sheds, fences, hedges and drives so their condition is clear at check-out."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Fenland District Council's private sector housing team, after first telling their landlord.",
+  "nearby": [
+    "kings-lynn-and-west-norfolk",
+    "east-cambridgeshire",
+    "huntingdonshire",
+    "peterborough",
+    "south-holland"
+  ]
+}

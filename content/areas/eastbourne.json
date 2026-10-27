@@ -1,0 +1,80 @@
+{
+  "slug": "eastbourne",
+  "name": "Eastbourne",
+  "council": {
+    "name": "Eastbourne Borough Council",
+    "url": "https://www.lewes-eastbourne.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BN20",
+    "BN21",
+    "BN22",
+    "BN23"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town Centre",
+      "postcodes": "BN21",
+      "housing": "Victorian and Edwardian terraces and large villas, many split into flats, with flats over shops."
+    },
+    {
+      "name": "Meads",
+      "postcodes": "BN20",
+      "housing": "A district of large Victorian villas, many converted to flats, and purpose-built blocks near the Downs."
+    },
+    {
+      "name": "Old Town",
+      "postcodes": "BN21",
+      "housing": "The original village, with old flint cottages, Victorian terraces and inter-war houses."
+    },
+    {
+      "name": "Seaside",
+      "postcodes": "BN22",
+      "housing": "A dense area of Victorian terraces near the seafront, many divided into flats."
+    },
+    {
+      "name": "Sovereign Harbour",
+      "postcodes": "BN23",
+      "housing": "A marina development of modern flats and houses built from the 1990s."
+    },
+    {
+      "name": "Langney",
+      "postcodes": "BN23",
+      "housing": "Large post-war and later estates of houses and low-rise flats."
+    },
+    {
+      "name": "Hampden Park",
+      "postcodes": "BN22",
+      "housing": "A suburb of inter-war and post-war semis and terraces."
+    },
+    {
+      "name": "Ratton",
+      "postcodes": "BN21",
+      "housing": "A suburb of larger inter-war and post-war detached houses."
+    }
+  ],
+  "housing": "Eastbourne is a seaside town with a large stock of Victorian and Edwardian houses, many of them converted to flats, especially in the town centre, Seaside and Meads. Purpose-built flats line much of the seafront, and Sovereign Harbour adds modern marina housing. Langney and Hampden Park are mainly post-war estates and suburbs. The town has an older population than average and many retirement flats.",
+  "checkinTips": [
+    "Flats in converted Victorian villas: photograph sash windows, the communal hall and stairs, fire doors and smoke alarms, and note key and fob counts.",
+    "Seafront flats: photograph window frames, balcony rails and outside metalwork for salt corrosion, and any damp on outside walls.",
+    "Purpose-built blocks: photograph the lift, bin store and entry system, and note fob and key counts and any service charge rules given to the tenant.",
+    "Sovereign Harbour homes: photograph balconies, parking spaces and gate fobs, and note marina or estate rules given to the tenant.",
+    "Flats over shops in the town centre: photograph the separate entrance, stairs and fire doors, and note the key count for each door."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Eastbourne Borough Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "wealden"
+  ]
+}

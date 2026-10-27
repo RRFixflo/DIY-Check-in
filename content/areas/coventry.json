@@ -1,0 +1,91 @@
+{
+  "slug": "coventry",
+  "name": "Coventry",
+  "council": {
+    "name": "Coventry City Council",
+    "url": "https://www.coventry.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CV1",
+    "CV2",
+    "CV3",
+    "CV4",
+    "CV5",
+    "CV6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "CV1",
+      "housing": "Post-war rebuilt blocks, flats above shops and many purpose-built student towers for Coventry University."
+    },
+    {
+      "name": "Earlsdon",
+      "postcodes": "CV5",
+      "housing": "Victorian and Edwardian terraces popular with professionals and students."
+    },
+    {
+      "name": "Hillfields",
+      "postcodes": "CV1",
+      "housing": "Victorian terraces and post-war council-built blocks close to the centre, with many shared houses."
+    },
+    {
+      "name": "Foleshill",
+      "postcodes": "CV6",
+      "housing": "Long streets of Victorian and early 20th-century terraces, many privately rented."
+    },
+    {
+      "name": "Canley",
+      "postcodes": "CV4",
+      "housing": "Post-war council-built estates near the University of Warwick, with many student lets."
+    },
+    {
+      "name": "Tile Hill",
+      "postcodes": "CV4",
+      "housing": "Post-war estates of houses and tower blocks, some regenerated."
+    },
+    {
+      "name": "Stoke",
+      "postcodes": "CV2",
+      "housing": "Victorian and Edwardian terraces east of the centre."
+    },
+    {
+      "name": "Allesley",
+      "postcodes": "CV5",
+      "housing": "Suburban semis and detached homes and some new estates."
+    },
+    {
+      "name": "Cheylesmore",
+      "postcodes": "CV3",
+      "housing": "Inter-war and post-war semis and terraces south of the centre."
+    }
+  ],
+  "housing": "Coventry's centre was rebuilt after wartime bombing, so the city mixes post-war blocks and estates with surviving Victorian and Edwardian terraces in Earlsdon, Foleshill, Stoke and Hillfields. Two universities, Coventry and Warwick, create a large student market, with many HMOs and purpose-built student towers in and around the city centre, Canley and Tile Hill. The private rented sector has grown quickly and includes many terraced houses converted to shared housing. Regeneration has replaced some post-war estates and added new apartment blocks.",
+  "checkinTips": [
+    "Student HMOs near Coventry University and the University of Warwick: photograph each bedroom's lock, furniture and fire door, and every shared appliance separately.",
+    "Victorian terraces in Earlsdon and Foleshill: check damp on party walls and chimney breasts, sash or replacement windows and the back yard.",
+    "Flats in city-centre blocks: note fob and key counts, intercom, bin store and bike store access, and any balcony condition.",
+    "Post-war council-built houses in Tile Hill and Canley: record gardens, fences, sheds, the boiler and consumer unit.",
+    "Shared houses: record the meter readings and who holds which room keys, as several tenants may share one supply."
+  ],
+  "tenantHelp": "Tenants with disrepair or unsafe conditions in a private rented home can contact Coventry City Council's private sector housing team, which can inspect and take enforcement action.",
+  "nearby": [
+    "warwick",
+    "rugby",
+    "nuneaton-and-bedworth",
+    "north-warwickshire",
+    "solihull"
+  ]
+}

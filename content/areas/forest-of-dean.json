@@ -1,0 +1,90 @@
+{
+  "slug": "forest-of-dean",
+  "name": "Forest of Dean",
+  "council": {
+    "name": "Forest of Dean District Council",
+    "url": "https://www.fdean.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "GL14",
+    "GL15",
+    "GL16",
+    "GL17",
+    "GL18",
+    "NP16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cinderford",
+      "postcodes": "GL14",
+      "housing": "Stone and brick terraces from the mining era, with post-war council-built estates."
+    },
+    {
+      "name": "Coleford",
+      "postcodes": "GL16",
+      "housing": "A market town of stone cottages and terraces, with post-war and newer estates."
+    },
+    {
+      "name": "Lydney",
+      "postcodes": "GL15",
+      "housing": "Victorian terraces near the harbour and station, with large newer estates on its edges."
+    },
+    {
+      "name": "Newent",
+      "postcodes": "GL18",
+      "housing": "A small market town of older timber-framed and brick houses and modern estates."
+    },
+    {
+      "name": "Mitcheldean and Drybrook",
+      "postcodes": "GL17",
+      "housing": "Former mining villages of stone cottages and terraces with some newer infill."
+    },
+    {
+      "name": "Newnham on Severn",
+      "postcodes": "GL14",
+      "housing": "A riverside village of Georgian and older houses along the main road."
+    },
+    {
+      "name": "Tidenham and Sedbury",
+      "postcodes": "NP16",
+      "housing": "Villages near Chepstow with post-war and modern estates and older stone houses."
+    },
+    {
+      "name": "Berry Hill and Christchurch",
+      "postcodes": "GL16",
+      "housing": "Forest villages of stone cottages and bungalows."
+    },
+    {
+      "name": "Bream and Yorkley",
+      "postcodes": "GL15",
+      "housing": "Former mining villages of stone cottages, terraces and bungalows."
+    }
+  ],
+  "housing": "The Forest of Dean is a rural district between the Severn and the Wye, with small towns such as Cinderford, Coleford, Lydney and Newent and many scattered villages. Much of the older housing is local stone, built for the coal and iron industries, alongside post-war estates and newer developments, particularly around Lydney. Many homes are off the gas grid, and private lets range from town terraces to isolated cottages.",
+  "checkinTips": [
+    "Stone cottages from the mining era: check solid walls for damp, and photograph chimneys, wood burners and any sweep certificate.",
+    "Homes off the gas grid: record oil tank levels and condition, LPG bottles or tanks, and storage heaters, and photograph the meters.",
+    "Rural properties: note septic tanks or treatment plants, private water supplies and the condition of long drives and gates.",
+    "Riverside homes near the Severn and Wye: look for signs of past flooding or damp in ground-floor rooms and outbuildings.",
+    "Woodland and forest-edge homes: photograph gutters and roofs for leaf build-up and any overhanging trees.",
+    "Newer estate houses around Lydney: photograph gardens, fences and parking areas, and note any snagging in recent builds."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Forest of Dean District Council's private sector housing team, after first telling their landlord.",
+  "nearby": [
+    "herefordshire",
+    "tewkesbury",
+    "stroud"
+  ]
+}

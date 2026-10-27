@@ -1,0 +1,91 @@
+{
+  "slug": "cotswold",
+  "name": "Cotswold",
+  "council": {
+    "name": "Cotswold District Council",
+    "url": "https://www.cotswold.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "GL7",
+    "GL8",
+    "GL54",
+    "GL55",
+    "GL56"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cirencester",
+      "postcodes": "GL7",
+      "housing": "A market town of Cotswold stone townhouses and cottages in the centre and modern estates around it, including the new Kingshill Meadow and Chesterton developments."
+    },
+    {
+      "name": "Tetbury",
+      "postcodes": "GL8",
+      "housing": "A small market town of stone townhouses and cottages with some post-war estates."
+    },
+    {
+      "name": "Moreton-in-Marsh",
+      "postcodes": "GL56",
+      "housing": "A market town of stone cottages and houses with newer estates on the edges."
+    },
+    {
+      "name": "Bourton-on-the-Water",
+      "postcodes": "GL54",
+      "housing": "A tourist village of stone cottages, holiday lets and some modern homes."
+    },
+    {
+      "name": "Stow-on-the-Wold",
+      "postcodes": "GL54",
+      "housing": "A hilltop market town of stone cottages and townhouses."
+    },
+    {
+      "name": "Chipping Campden",
+      "postcodes": "GL55",
+      "housing": "A historic wool town of honey-coloured stone houses along its high street."
+    },
+    {
+      "name": "Fairford",
+      "postcodes": "GL7",
+      "housing": "A small town of stone cottages and modern estates near RAF Fairford."
+    },
+    {
+      "name": "Lechlade",
+      "postcodes": "GL7",
+      "housing": "A Thames-side town of stone cottages and modern homes."
+    }
+  ],
+  "housing": "Cotswold district is almost all rural, with honey-coloured limestone cottages, farmhouses and converted barns in conservation areas, many of them listed. House prices are among the highest outside the South East, and second homes and holiday lets are common in villages such as Bourton-on-the-Water and Chipping Campden. Cirencester has the largest private rented sector, including Royal Agricultural University students, and has had large new estates. Many homes are off the gas grid and rely on oil, LPG or electric heating.",
+  "checkinTips": [
+    "Listed stone cottages: photograph solid walls for damp, window reveals, beams, flagstone floors and any wood burner or open fire.",
+    "Off-grid homes: record the oil tank or LPG gauge reading, the boiler, and any septic tank or private water supply.",
+    "Converted barns and farm cottages: note the condition of gravel drives, gates, outbuildings and garden walls.",
+    "Student lets near the Royal Agricultural University in Cirencester: photograph each bedroom's lock and furniture and the shared kitchen separately.",
+    "Homes near the Thames and Coln at Lechlade and Fairford: check for signs of past flooding and the state of drains.",
+    "New-build estates at Cirencester and Moreton-in-Marsh: record any open snagging, parking spaces and estate charges."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a private rented home can contact Cotswold District Council's environmental health (private sector housing) team.",
+  "nearby": [
+    "stroud",
+    "tewkesbury",
+    "cheltenham",
+    "wychavon",
+    "stratford-on-avon",
+    "west-oxfordshire",
+    "vale-of-white-horse",
+    "swindon",
+    "wiltshire",
+    "south-gloucestershire"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "basildon",
+  "name": "Basildon",
+  "council": {
+    "name": "Basildon Council",
+    "url": "https://www.basildon.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CM11",
+    "CM12",
+    "SS11",
+    "SS12",
+    "SS13",
+    "SS14",
+    "SS15",
+    "SS16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Basildon town centre",
+      "postcodes": "SS14",
+      "housing": "Post-war new town flats and maisonettes, with modern apartment blocks from regeneration."
+    },
+    {
+      "name": "Pitsea",
+      "postcodes": "SS13",
+      "housing": "New town estates and older houses, with large new developments near the station."
+    },
+    {
+      "name": "Laindon",
+      "postcodes": "SS15",
+      "housing": "Post-war new town housing and plotland-era bungalows."
+    },
+    {
+      "name": "Vange",
+      "postcodes": "SS16",
+      "housing": "New town terraces, maisonettes and low-rise blocks."
+    },
+    {
+      "name": "Billericay",
+      "postcodes": "CM11, CM12",
+      "housing": "Detached and semi-detached houses and some period homes along the high street."
+    },
+    {
+      "name": "Wickford",
+      "postcodes": "SS11, SS12",
+      "housing": "Semis, bungalows and newer estates in a commuter town on the railway line."
+    },
+    {
+      "name": "Noak Bridge",
+      "postcodes": "SS15",
+      "housing": "A 1970s and 1980s estate of houses built in a village style."
+    },
+    {
+      "name": "Langdon Hills",
+      "postcodes": "SS16",
+      "housing": "Larger houses and newer estates on the high ground to the south-west."
+    },
+    {
+      "name": "Crays Hill",
+      "postcodes": "CM11",
+      "housing": "A small rural village of houses and bungalows."
+    }
+  ],
+  "housing": "Basildon borough combines Basildon New Town, built from the late 1940s, with the older commuter towns of Billericay and Wickford. Much of the new town is terraced houses, maisonettes and flats in neighbourhood estates, some now being regenerated, while Billericay and Wickford have mainly owner-occupied semis and detached houses. Private rented homes include ex-council new town houses and flats, and flats in newer blocks near Basildon and Pitsea stations.",
+  "checkinTips": [
+    "New town terraces and maisonettes: photograph flat roofs visible from windows, communal walkways and the condition of shared stair and bin areas.",
+    "Ex-council homes: photograph uPVC windows and doors, their locks and key counts, and any garden fences, sheds and rear gates onto footpaths.",
+    "Flats in newer blocks near the town centre and Pitsea station: note fob, key and parking permit counts and photograph the meter cupboard.",
+    "Former plotland bungalows in Laindon and Langdon Hills: photograph the roof edges, outbuildings and any older extensions.",
+    "Clay soils across south Essex: photograph any cracks in walls and around door frames so later movement can be compared."
+  ],
+  "tenantHelp": "Tenants in Basildon can contact Basildon Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "brentwood",
+    "chelmsford",
+    "rochford",
+    "castle-point",
+    "thurrock"
+  ]
+}

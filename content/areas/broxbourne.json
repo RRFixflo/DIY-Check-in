@@ -1,0 +1,78 @@
+{
+  "slug": "broxbourne",
+  "name": "Broxbourne",
+  "council": {
+    "name": "Broxbourne Borough Council",
+    "url": "https://www.broxbourne.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "EN8",
+    "EN10",
+    "EN11",
+    "EN7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cheshunt",
+      "postcodes": "EN8, EN7",
+      "housing": "Inter-war and post-war semis and terraces, with newer flats near the station."
+    },
+    {
+      "name": "Waltham Cross",
+      "postcodes": "EN8",
+      "housing": "Terraced houses, post-war estates and flats near the town centre."
+    },
+    {
+      "name": "Hoddesdon",
+      "postcodes": "EN11",
+      "housing": "A market town with period houses in the centre and post-war estates around it."
+    },
+    {
+      "name": "Broxbourne",
+      "postcodes": "EN10",
+      "housing": "Detached and semi-detached commuter houses near the station and the Lea Valley."
+    },
+    {
+      "name": "Wormley",
+      "postcodes": "EN10",
+      "housing": "Mainly post-war and modern family houses."
+    },
+    {
+      "name": "Turnford",
+      "postcodes": "EN10",
+      "housing": "Post-war and newer estates between Cheshunt and Wormley."
+    },
+    {
+      "name": "Goffs Oak",
+      "postcodes": "EN7",
+      "housing": "A village of larger detached houses and bungalows on the higher ground."
+    }
+  ],
+  "housing": "Broxbourne is a compact commuter borough in the Lea Valley, just north of London, with rail links into Liverpool Street. Most homes are inter-war and post-war semis and terraces in Cheshunt, Waltham Cross and Hoddesdon, with newer flats near stations. Goffs Oak and the western edge have larger detached houses. The Lea Valley Park runs along the east side, where some homes are near rivers and the glasshouse nurseries once were.",
+  "checkinTips": [
+    "Flats near Cheshunt and Waltham Cross stations: photograph communal doors, entry phones and bin stores, and count every key and fob.",
+    "Post-war semis and terraces: photograph extensions, conservatories and their roofs for leaks.",
+    "Homes near the River Lea and its channels: photograph walls near floor level and garden edges for damp or past flooding.",
+    "Larger houses in Goffs Oak: photograph driveways, gates, garages and garden lighting.",
+    "Flats above shops in Hoddesdon and Waltham Cross: photograph the street door, stairs and meter cupboards."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions to Broxbourne Borough Council's private sector housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "epping-forest",
+    "east-hertfordshire",
+    "welwyn-hatfield",
+    "enfield"
+  ]
+}

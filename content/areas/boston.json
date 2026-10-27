@@ -1,0 +1,86 @@
+{
+  "slug": "boston",
+  "name": "Boston",
+  "council": {
+    "name": "Boston Borough Council",
+    "url": "https://www.boston.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "PE20",
+    "PE21",
+    "PE22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Boston town centre",
+      "postcodes": "PE21",
+      "housing": "Georgian and Victorian town houses and flats over shops, many let privately."
+    },
+    {
+      "name": "Skirbeck",
+      "postcodes": "PE21",
+      "housing": "Victorian terraces and inter-war and post-war semis east of the centre."
+    },
+    {
+      "name": "Fenside",
+      "postcodes": "PE21",
+      "housing": "Post-war council-built estates and terraces."
+    },
+    {
+      "name": "Witham and Staniland",
+      "postcodes": "PE21",
+      "housing": "Terraced streets and inter-war houses north of the centre."
+    },
+    {
+      "name": "Kirton",
+      "postcodes": "PE20",
+      "housing": "A large village of older cottages and post-war and newer estates."
+    },
+    {
+      "name": "Sutterton",
+      "postcodes": "PE20",
+      "housing": "A fenland village of cottages, bungalows and later estates."
+    },
+    {
+      "name": "Swineshead",
+      "postcodes": "PE20",
+      "housing": "A village of older brick cottages and modern homes."
+    },
+    {
+      "name": "Old Leake",
+      "postcodes": "PE22",
+      "housing": "A rural village with farm cottages, bungalows and newer houses."
+    },
+    {
+      "name": "Fishtoft",
+      "postcodes": "PE21",
+      "housing": "A village and suburb with modern estates on the edge of Boston."
+    }
+  ],
+  "housing": "Boston is a market town and port surrounded by flat fenland farming country, and its private rented sector is large for a rural district, driven by agricultural and food-processing work. Many older terraces and town houses in central Boston are let, some as shared houses. The surrounding villages have brick cottages, bungalows and post-war estates, with some tied and farm cottages. Much of the borough is low-lying and protected by flood defences.",
+  "checkinTips": [
+    "Older town houses near the centre let as shared houses: photograph each bedroom lock, fire doors and alarms, and the shared kitchen and bathroom.",
+    "Flats over shops in the Market Place and Strait Bargate: note the separate entrance, the stairs and how many keys are handed over.",
+    "Low-lying fenland homes: photograph any signs of damp, past flooding or tide marks, and note where the stopcock and electricity meter are.",
+    "Farm and rural cottages: record any oil tank, septic tank or cesspit and the condition of outbuildings.",
+    "Bungalows in the villages: photograph gardens, drives, garages and any adaptations such as grab rails."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Boston Borough Council's private sector housing team.",
+  "nearby": [
+    "east-lindsey",
+    "south-holland",
+    "north-kesteven"
+  ]
+}

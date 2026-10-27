@@ -1,0 +1,94 @@
+{
+  "slug": "arun",
+  "name": "Arun",
+  "council": {
+    "name": "Arun District Council",
+    "url": "https://www.arun.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BN12",
+    "BN16",
+    "BN17",
+    "BN18",
+    "PO21",
+    "PO22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bognor Regis",
+      "postcodes": "PO21, PO22",
+      "housing": "Victorian and Edwardian terraces and seafront flats in the town centre, with bungalows and interwar semis further out."
+    },
+    {
+      "name": "Littlehampton",
+      "postcodes": "BN17",
+      "housing": "Terraced houses near the harbour and town centre, post-war estates, and modern flats by the river."
+    },
+    {
+      "name": "Arundel",
+      "postcodes": "BN18",
+      "housing": "Flint and brick cottages and townhouses in a historic hilltop town below the castle."
+    },
+    {
+      "name": "Rustington",
+      "postcodes": "BN16",
+      "housing": "Bungalows and detached houses popular with retired owners, with some seafront flats."
+    },
+    {
+      "name": "East Preston",
+      "postcodes": "BN16",
+      "housing": "Detached houses and bungalows in a coastal village, including private estates by the sea."
+    },
+    {
+      "name": "Angmering",
+      "postcodes": "BN16",
+      "housing": "Village houses and cottages with large new-build estates on its edges."
+    },
+    {
+      "name": "Felpham",
+      "postcodes": "PO22",
+      "housing": "Bungalows, chalets and detached homes along the coast east of Bognor Regis."
+    },
+    {
+      "name": "Middleton-on-Sea",
+      "postcodes": "PO22",
+      "housing": "Detached houses and bungalows on private seafront estates."
+    },
+    {
+      "name": "Barnham",
+      "postcodes": "PO22",
+      "housing": "A village by the railway station with older cottages and extensive new-build housing."
+    },
+    {
+      "name": "Ferring",
+      "postcodes": "BN12",
+      "housing": "Bungalows and detached homes in a quiet coastal village."
+    }
+  ],
+  "housing": "Arun is a stretch of the West Sussex coast between Worthing and Chichester, centred on Bognor Regis and Littlehampton, with Arundel and farmland inland. Much of the housing is bungalows and family houses, and the area has a large retired population. Private rented homes are concentrated in the older terraces and converted flats of Bognor Regis and Littlehampton, and large new estates have been built around Angmering, Barnham and Yapton.",
+  "checkinTips": [
+    "Seafront homes in Bognor Regis, Felpham and Littlehampton: photograph window frames, external door furniture and any rust on railings and balconies from salt air.",
+    "Flats converted from Victorian and Edwardian houses in Bognor Regis: note shared entrance keys, meter locations and the state of communal hallways.",
+    "Bungalows: photograph loft hatches, any rooms in the roof, garages and garden sheds, and count the keys for each.",
+    "Low-lying homes near the River Arun and the coast: photograph the base of walls, airbricks and skirting boards for damp.",
+    "New-build homes in Angmering and Barnham: photograph any snagging marks, sealant around baths and showers, and the condition of turfed gardens."
+  ],
+  "tenantHelp": "Tenants in Arun can contact Arun District Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "chichester",
+    "horsham",
+    "worthing"
+  ]
+}

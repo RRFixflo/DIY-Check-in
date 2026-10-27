@@ -1,0 +1,99 @@
+{
+  "slug": "canterbury",
+  "name": "Canterbury",
+  "council": {
+    "name": "Canterbury City Council",
+    "url": "https://www.canterbury.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "CT1",
+    "CT2",
+    "CT3",
+    "CT4",
+    "CT5",
+    "CT6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Canterbury city centre",
+      "postcodes": "CT1",
+      "housing": "Medieval and Georgian buildings, Victorian terraces and flats over shops inside and around the city walls."
+    },
+    {
+      "name": "Wincheap",
+      "postcodes": "CT1",
+      "housing": "Victorian terraced streets south-west of the centre, many let to students."
+    },
+    {
+      "name": "Hales Place and St Stephens",
+      "postcodes": "CT2",
+      "housing": "Post-war estates and inter-war semis north of the city, close to the University of Kent."
+    },
+    {
+      "name": "Thanington",
+      "postcodes": "CT1",
+      "housing": "Post-war and newer estates of houses and flats on the south-west edge of the city."
+    },
+    {
+      "name": "Whitstable",
+      "postcodes": "CT5",
+      "housing": "Fishermen's cottages and Victorian terraces near the harbour, with larger seaside houses and estates inland."
+    },
+    {
+      "name": "Herne Bay",
+      "postcodes": "CT6",
+      "housing": "Victorian and Edwardian seafront terraces and villas, many converted to flats, with bungalows and post-war estates behind."
+    },
+    {
+      "name": "Sturry",
+      "postcodes": "CT2",
+      "housing": "A village with older cottages and large new estates being built nearby."
+    },
+    {
+      "name": "Bridge",
+      "postcodes": "CT4",
+      "housing": "A rural village of period cottages and later infill houses south of Canterbury."
+    }
+  ],
+  "housing": "Canterbury's rental market is shaped by its universities: many Victorian terraces around Wincheap, St Dunstans and the north of the city are let as student houses, alongside purpose-built student blocks. The coastal towns of Whitstable and Herne Bay have seafront terraces, converted flats and many bungalows, popular with commuters and retirees. Large new estates are being built on the edges of the city and at Sturry and Herne Bay. Inland, the district is rural, with villages of brick and flint cottages.",
+  "checkinTips": [
+    "Student houses near the University of Kent and Canterbury Christ Church: photograph each bedroom's lock and door, fire doors, smoke alarms and the shared kitchen separately.",
+    "Listed and period buildings in the city centre: photograph old timber windows, uneven floors, beams and any damp in cellars.",
+    "Seafront flats in Herne Bay and Whitstable: check window frames, balcony rails and metal fittings for salt corrosion, and walls for damp.",
+    "Converted flats in large Victorian houses: record the communal hallway, door entry system, meters and the number of keys handed over.",
+    "Rural cottages in the villages: photograph wood burners, oil tanks and any septic tank where there is no mains gas or drainage.",
+    "Furnished lets: list and photograph every item of furniture, with mattress condition and fire labels."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Canterbury City Council's private sector housing team.",
+  "nearby": [
+    "swale",
+    "thanet",
+    "dover",
+    "folkestone-and-hythe",
+    "ashford"
+  ]
+}

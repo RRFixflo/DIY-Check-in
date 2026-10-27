@@ -1,0 +1,83 @@
+{
+  "slug": "castle-point",
+  "name": "Castle Point",
+  "council": {
+    "name": "Castle Point Borough Council",
+    "url": "https://www.castlepoint.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "SS7",
+    "SS8",
+    "SS9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Canvey Island",
+      "postcodes": "SS8",
+      "housing": "Bungalows, chalets and post-war houses on low-lying reclaimed land protected by sea walls."
+    },
+    {
+      "name": "South Benfleet",
+      "postcodes": "SS7",
+      "housing": "Inter-war and post-war semis and bungalows, with some older cottages near the station."
+    },
+    {
+      "name": "Thundersley",
+      "postcodes": "SS7",
+      "housing": "Mainly post-war detached and semi-detached houses and bungalows on wooded hills."
+    },
+    {
+      "name": "Hadleigh",
+      "postcodes": "SS7",
+      "housing": "Inter-war and post-war houses and bungalows, with flats over shops on the main road."
+    },
+    {
+      "name": "Daws Heath",
+      "postcodes": "SS7",
+      "housing": "Detached houses and bungalows on large plots near ancient woodland."
+    },
+    {
+      "name": "New Thundersley",
+      "postcodes": "SS7",
+      "housing": "Post-war estates of semis, terraces and bungalows."
+    }
+  ],
+  "housing": "Castle Point is mostly suburban, with a high share of owner-occupied bungalows and semis in Benfleet, Thundersley and Hadleigh. Canvey Island is low-lying land behind sea walls, with many bungalows and chalet-style homes. Flats are mostly found over shops on the main roads and in small modern blocks. Many residents commute to Southend, Basildon and London.",
+  "checkinTips": [
+    "Canvey Island homes sit on low-lying land behind sea walls: photograph floors, skirting boards and gardens for damp or signs of past flooding.",
+    "Bungalows: check loft hatches, roof and gutter condition you can see, and any conservatory roofs and seals.",
+    "Coastal homes near the Thames estuary: look for salt corrosion on metal gates, window fittings and outdoor taps.",
+    "Flats over shops on Hadleigh and Benfleet main roads: note the separate entrance, fire alarm, stair lighting and the number of keys handed over.",
+    "Family houses on the hills of Thundersley and Daws Heath: photograph garden fences, sheds and any trees close to the house."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Castle Point Borough Council's private sector housing or environmental health team.",
+  "nearby": [
+    "basildon",
+    "rochford",
+    "southend-on-sea"
+  ]
+}

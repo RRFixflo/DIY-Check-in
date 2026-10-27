@@ -1,0 +1,90 @@
+{
+  "slug": "chichester",
+  "name": "Chichester",
+  "council": {
+    "name": "Chichester District Council",
+    "url": "https://www.chichester.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "PO10",
+    "PO18",
+    "PO19",
+    "PO20",
+    "GU27",
+    "GU28",
+    "GU29",
+    "RH14",
+    "RH20"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chichester city",
+      "postcodes": "PO19",
+      "housing": "Georgian and Victorian townhouses and terraces inside and near the city walls, with post-war and modern estates around the edge."
+    },
+    {
+      "name": "Selsey",
+      "postcodes": "PO20",
+      "housing": "A seaside town of bungalows, chalets and holiday-park homes with some older cottages."
+    },
+    {
+      "name": "The Witterings",
+      "postcodes": "PO20",
+      "housing": "Coastal villages of bungalows and detached houses, many used as second or holiday homes."
+    },
+    {
+      "name": "Bosham",
+      "postcodes": "PO18",
+      "housing": "A harbourside village of flint and brick cottages and larger detached homes."
+    },
+    {
+      "name": "Midhurst",
+      "postcodes": "GU29",
+      "housing": "A market town of medieval, timber-framed and stone buildings in the South Downs National Park."
+    },
+    {
+      "name": "Petworth",
+      "postcodes": "GU28",
+      "housing": "A small historic town of stone and brick cottages and townhouses beside Petworth Park."
+    },
+    {
+      "name": "Southbourne",
+      "postcodes": "PO10",
+      "housing": "Mainly post-war and modern semis, bungalows and new-build estates along the A259."
+    },
+    {
+      "name": "Tangmere",
+      "postcodes": "PO20",
+      "housing": "A former RAF village with mid-century homes and a large new-build development."
+    }
+  ],
+  "housing": "Chichester district stretches from Chichester Harbour and the Manhood Peninsula north into the South Downs National Park. The city has Georgian and Victorian terraces, many let to University of Chichester students and young workers, plus modern flats and estates. The coast around Selsey and the Witterings has many bungalows, holiday lets and second homes, while the north of the district has flint and stone cottages in villages and the market towns of Midhurst and Petworth. House prices are high for West Sussex and a lot of new housing has been built at Tangmere, Southbourne and west of the city.",
+  "checkinTips": [
+    "Student lets near the University of Chichester: photograph each bedroom's lock, furniture and the shared kitchen and bathroom separately.",
+    "Georgian and Victorian terraces in the city: check sash windows, cords and catches, and any damp in basements or on chimney breasts.",
+    "Coastal homes in Selsey and the Witterings: look for salt corrosion on metal window frames, gates and outdoor lights, and sand or damp at doorsteps.",
+    "Flint and stone cottages in the Downs villages: photograph solid walls for damp, low beams, wood burners and the oil tank level.",
+    "Homes near the harbour and low-lying coast: note any signs of past flooding or high-water marks and the condition of drains.",
+    "New-build estates at Tangmere and Southbourne: record any snagging still open, parking spaces and estate management arrangements."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a private rented home can contact Chichester District Council's housing standards (private sector housing) team.",
+  "nearby": [
+    "arun",
+    "horsham",
+    "waverley",
+    "east-hampshire",
+    "havant"
+  ]
+}

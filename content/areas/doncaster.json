@@ -1,0 +1,100 @@
+{
+  "slug": "doncaster",
+  "name": "Doncaster",
+  "council": {
+    "name": "City of Doncaster Council",
+    "url": "https://www.doncaster.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DN1",
+    "DN2",
+    "DN3",
+    "DN4",
+    "DN5",
+    "DN6",
+    "DN7",
+    "DN8",
+    "DN9",
+    "DN10",
+    "DN11",
+    "DN12",
+    "S64"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hyde Park and town centre",
+      "postcodes": "DN1",
+      "housing": "Victorian terraces and flats over shops close to the centre, with a high share of private lets."
+    },
+    {
+      "name": "Balby",
+      "postcodes": "DN4",
+      "housing": "Victorian and Edwardian terraces near the centre and inter-war semis further out."
+    },
+    {
+      "name": "Wheatley and Intake",
+      "postcodes": "DN2",
+      "housing": "Inter-war and post-war semis and council-built estates."
+    },
+    {
+      "name": "Bessacarr",
+      "postcodes": "DN4",
+      "housing": "Mostly larger semis and detached houses from the inter-war years onwards."
+    },
+    {
+      "name": "Bentley",
+      "postcodes": "DN5",
+      "housing": "Terraces and estates built for the colliery, now mostly mixed private and social housing."
+    },
+    {
+      "name": "Mexborough",
+      "postcodes": "S64",
+      "housing": "Terraced streets and post-war estates in a former mining and railway town."
+    },
+    {
+      "name": "Thorne",
+      "postcodes": "DN8",
+      "housing": "A market town of older brick terraces and newer estates near the Humberhead peatlands."
+    },
+    {
+      "name": "Armthorpe",
+      "postcodes": "DN3",
+      "housing": "A former pit village with colliery terraces and large modern estates."
+    },
+    {
+      "name": "Edlington",
+      "postcodes": "DN12",
+      "housing": "Former colliery village housing, much of it terraced."
+    }
+  ],
+  "housing": "Doncaster has a large stock of Victorian terraces near the town centre and many former colliery villages with pit terraces and council-built estates, where private renting has grown as homes have been sold on. Bessacarr and the southern suburbs have larger inter-war and post-war homes. Low-lying areas along the River Don, including Bentley and the north and east of the borough, flooded in 2007 and 2019.",
+  "checkinTips": [
+    "Colliery terraces in former pit villages: photograph back yards, rear walls and any cracking that could be from settlement.",
+    "Homes in low-lying areas near the Don and Ea Beck: note flood-protection products and photograph tide marks or damp on low walls.",
+    "Victorian terraces near the town centre: photograph cellars, chimney breasts and window frames for damp and rot.",
+    "Flats over shops in the town centre: photograph the street door, stairs, smoke alarms and any shared meter cupboard.",
+    "Post-war estate homes: photograph fences, sheds and garden condition, which are often disputed at check-out."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact City of Doncaster Council's private sector housing team.",
+  "nearby": [
+    "barnsley",
+    "rotherham",
+    "wakefield",
+    "bassetlaw",
+    "north-lincolnshire",
+    "east-riding-of-yorkshire",
+    "north-yorkshire"
+  ]
+}

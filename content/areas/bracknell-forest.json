@@ -1,0 +1,90 @@
+{
+  "slug": "bracknell-forest",
+  "name": "Bracknell Forest",
+  "council": {
+    "name": "Bracknell Forest Council",
+    "url": "https://www.bracknell-forest.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "RG12",
+    "RG40",
+    "RG42",
+    "RG45",
+    "GU47",
+    "SL5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bracknell town centre",
+      "postcodes": "RG12",
+      "housing": "Modern apartment blocks built with the town centre's regeneration."
+    },
+    {
+      "name": "Great Hollands and Wildridings",
+      "postcodes": "RG12",
+      "housing": "New town neighbourhoods of 1960s and 1970s terraces and maisonettes."
+    },
+    {
+      "name": "Harmans Water and Birch Hill",
+      "postcodes": "RG12",
+      "housing": "1970s and 1980s new-town estates of terraced and semi-detached houses."
+    },
+    {
+      "name": "Priestwood and Bullbrook",
+      "postcodes": "RG12, RG42",
+      "housing": "Early new-town terraces and semis from the 1950s and 1960s."
+    },
+    {
+      "name": "Binfield",
+      "postcodes": "RG42",
+      "housing": "A village with older cottages and large modern estates."
+    },
+    {
+      "name": "Warfield",
+      "postcodes": "RG42",
+      "housing": "Rural parishes with large new-build housing developments."
+    },
+    {
+      "name": "Crowthorne",
+      "postcodes": "RG45",
+      "housing": "A village of Victorian and Edwardian houses and later estates."
+    },
+    {
+      "name": "Sandhurst",
+      "postcodes": "GU47",
+      "housing": "Suburban semis, detached houses and newer estates."
+    },
+    {
+      "name": "Ascot and Sunninghill (part)",
+      "postcodes": "SL5",
+      "housing": "Large detached houses in wooded grounds."
+    }
+  ],
+  "housing": "Bracknell is a post-war new town, so much of its housing is terraced and semi-detached houses and maisonettes built from the 1950s to the 1980s in planned neighbourhoods. The regenerated town centre has added apartment blocks, many let to commuters. Large new estates have been built at Warfield and Binfield, while Crowthorne, Sandhurst and the Ascot fringe have older and larger houses. Demand for rented homes comes from commuters to Reading, London and the Thames Valley's employers.",
+  "checkinTips": [
+    "New-town terraces and maisonettes: photograph the shared paths, garage courts, communal bin stores and any shared entrances.",
+    "Town-centre apartment blocks: record fob and key counts, parking spaces, and the intercom and bike store.",
+    "New-build homes at Warfield and Binfield: note snagging marks, sealant around baths and showers, and new fences and turf.",
+    "Flat-roofed garages and extensions common in 1960s and 1970s houses: photograph the roof edges and ceilings for leaks.",
+    "Homes near the woods around Crowthorne and Ascot: check gutters, moss on roofs and damp on north-facing walls."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Bracknell Forest Council's private sector housing (environmental health) team.",
+  "nearby": [
+    "wokingham",
+    "windsor-and-maidenhead",
+    "surrey-heath",
+    "hart"
+  ]
+}

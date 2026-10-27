@@ -1,0 +1,99 @@
+{
+  "slug": "barnsley",
+  "name": "Barnsley",
+  "council": {
+    "name": "Barnsley Council",
+    "url": "https://www.barnsley.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "S36",
+    "S63",
+    "S70",
+    "S71",
+    "S72",
+    "S73",
+    "S74",
+    "S75"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Barnsley town centre",
+      "postcodes": "S70",
+      "housing": "Victorian terraces and flats around the centre, with student and young professional lets."
+    },
+    {
+      "name": "Penistone",
+      "postcodes": "S36",
+      "housing": "Stone-built houses and cottages in a Pennine market town, with modern estates."
+    },
+    {
+      "name": "Wombwell",
+      "postcodes": "S73",
+      "housing": "Former mining town of brick terraces and ex-council semis."
+    },
+    {
+      "name": "Hoyland",
+      "postcodes": "S74",
+      "housing": "Terraced and semi-detached homes with new-build estates near the M1."
+    },
+    {
+      "name": "Cudworth",
+      "postcodes": "S72",
+      "housing": "Pit terraces and post-war council housing in a former mining village."
+    },
+    {
+      "name": "Royston",
+      "postcodes": "S71",
+      "housing": "Former mining village of terraces and semis, with newer estates."
+    },
+    {
+      "name": "Goldthorpe",
+      "postcodes": "S63",
+      "housing": "Brick terraces from the mining era in the Dearne valley."
+    },
+    {
+      "name": "Mapplewell and Staincross",
+      "postcodes": "S75",
+      "housing": "Semis, bungalows and detached houses on the north-west side of the borough."
+    },
+    {
+      "name": "Darfield",
+      "postcodes": "S73",
+      "housing": "A village of stone and brick cottages and post-war housing."
+    },
+    {
+      "name": "Dodworth",
+      "postcodes": "S75",
+      "housing": "Terraces and modern estates near the M1 junction west of the town."
+    }
+  ],
+  "housing": "Barnsley is a former coalfield borough in South Yorkshire, running from the Dearne valley in the east to Pennine moorland around Penistone in the west. Much of the housing is brick terraces from the mining era, inter- and post-war council estates and new-build estates near the M1. Prices are well below the England average. Private rented homes are often older terraces in the Dearne towns and around the town centre, while Penistone and the western villages have stone-built houses.",
+  "checkinTips": [
+    "Brick terraces in the Dearne towns: photograph back yards, rear doors, outhouses and the shared ginnels behind the rows.",
+    "Former mining areas: photograph any cracks in walls, sticking doors or uneven floors so later movement can be compared.",
+    "Stone-built homes around Penistone and the Pennine villages: photograph window reveals, walls and chimney breasts for damp, and any stove or open fire.",
+    "Exposed hill properties: photograph gutters, downpipes and roof edges visible from the ground, and note heating controls and how they work.",
+    "Ex-council semis: photograph uPVC windows and doors, their locks and the number of keys, and garden fences and sheds."
+  ],
+  "tenantHelp": "Tenants in Barnsley can contact Barnsley Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "sheffield",
+    "rotherham",
+    "doncaster",
+    "wakefield",
+    "kirklees",
+    "high-peak"
+  ]
+}

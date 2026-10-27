@@ -1,0 +1,98 @@
+{
+  "slug": "dudley",
+  "name": "Dudley",
+  "council": {
+    "name": "Dudley Metropolitan Borough Council",
+    "url": "https://www.dudley.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DY1",
+    "DY2",
+    "DY3",
+    "DY5",
+    "DY6",
+    "DY8",
+    "DY9",
+    "B62",
+    "B63",
+    "B64",
+    "B65",
+    "WV14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dudley town",
+      "postcodes": "DY1, DY2",
+      "housing": "Victorian terraces near the centre and large post-war council-built estates."
+    },
+    {
+      "name": "Netherton",
+      "postcodes": "DY2",
+      "housing": "Terraced streets and post-war estates in a former industrial area."
+    },
+    {
+      "name": "Brierley Hill",
+      "postcodes": "DY5",
+      "housing": "Victorian terraces, post-war estates and newer flats near the Merry Hill centre and Waterfront."
+    },
+    {
+      "name": "Stourbridge",
+      "postcodes": "DY8",
+      "housing": "Victorian and Edwardian terraces and villas, with inter-war semis around the town."
+    },
+    {
+      "name": "Halesowen",
+      "postcodes": "B62, B63",
+      "housing": "Inter-war and post-war semis and estates, with some older terraces near the centre."
+    },
+    {
+      "name": "Kingswinford and Wall Heath",
+      "postcodes": "DY6",
+      "housing": "Mostly inter-war and post-war semis and detached houses."
+    },
+    {
+      "name": "Sedgley and Gornal",
+      "postcodes": "DY3",
+      "housing": "Older stone and brick cottages in the villages and post-war estates."
+    },
+    {
+      "name": "Cradley Heath",
+      "postcodes": "B64",
+      "housing": "Victorian terraces from the chain-making era and later estates."
+    },
+    {
+      "name": "Coseley",
+      "postcodes": "WV14",
+      "housing": "Terraces and post-war estates in a former mining and canal area."
+    }
+  ],
+  "housing": "Dudley borough is part of the Black Country, with Victorian terraces built for its industries, large post-war council-built estates and inter-war suburbs such as Kingswinford and Halesowen. Stourbridge has more Victorian and Edwardian villas. Past mining and limestone workings under parts of the borough mean some homes have suffered subsidence, and canals run through many neighbourhoods.",
+  "checkinTips": [
+    "Victorian terraces: photograph back yards, outhouses and any damp low on walls or in cellars.",
+    "Areas with past mining or limestone workings: photograph any cracks in walls, ceilings and around door frames so later movement can be compared.",
+    "Post-war estate homes: photograph fences, gates, sheds and garden condition, which are often disputed at check-out.",
+    "Flats near Brierley Hill and Merry Hill: photograph the communal entrance, bin store and parking bay, and count fobs and keys.",
+    "Canal-side homes: photograph gardens and boundaries near the water and any damp on low walls."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact Dudley Council's private sector housing team.",
+  "nearby": [
+    "sandwell",
+    "wolverhampton",
+    "birmingham",
+    "south-staffordshire",
+    "bromsgrove",
+    "wyre-forest"
+  ]
+}

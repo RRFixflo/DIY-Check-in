@@ -1,0 +1,88 @@
+{
+  "slug": "bromsgrove",
+  "name": "Bromsgrove",
+  "council": {
+    "name": "Bromsgrove District Council",
+    "url": "https://www.bromsgrove.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "B60",
+    "B61",
+    "B45",
+    "B47",
+    "B48",
+    "DY9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bromsgrove town",
+      "postcodes": "B60, B61",
+      "housing": "Victorian terraces near the centre, post-war estates and newer housing at the edges."
+    },
+    {
+      "name": "Catshill",
+      "postcodes": "B61",
+      "housing": "A large village of post-war and modern semis and detached houses."
+    },
+    {
+      "name": "Rubery",
+      "postcodes": "B45",
+      "housing": "Inter-war and post-war semis on the edge of Birmingham."
+    },
+    {
+      "name": "Wythall and Hollywood",
+      "postcodes": "B47",
+      "housing": "Commuter villages of mostly detached and semi-detached houses."
+    },
+    {
+      "name": "Alvechurch",
+      "postcodes": "B48",
+      "housing": "A canalside village with older cottages and post-war homes."
+    },
+    {
+      "name": "Hagley",
+      "postcodes": "DY9",
+      "housing": "A commuter village of large detached houses and post-war estates."
+    },
+    {
+      "name": "Barnt Green",
+      "postcodes": "B45",
+      "housing": "A wealthy village of large Edwardian and inter-war detached houses."
+    },
+    {
+      "name": "Aston Fields",
+      "postcodes": "B60",
+      "housing": "Victorian terraces and semis near Bromsgrove station."
+    }
+  ],
+  "housing": "Bromsgrove is a mostly owner-occupied district between Birmingham and Worcestershire's countryside, much of it Green Belt. Bromsgrove town has Victorian terraces near the centre and post-war and modern estates around it. The northern villages such as Rubery, Hagley and Wythall are commuter areas with family houses for Birmingham. Private lets are mainly terraced and semi-detached houses and some flats in the town.",
+  "checkinTips": [
+    "Victorian terraces near Bromsgrove town centre and Aston Fields: photograph rear yards, outside drains and any damp in rear kitchens.",
+    "Larger detached houses in Barnt Green and Hagley: photograph driveways, gates, garages and gardens as well as the rooms.",
+    "Canalside homes in Alvechurch: photograph garden boundaries and any damp near ground level.",
+    "Post-war semis in Rubery and Catshill: photograph any extensions, conservatories and their roofs for leaks.",
+    "Gardens next to Green Belt fields: photograph fences, hedges and gates, which often need repair after winter."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe homes to the council's private sector housing team, which can inspect and require landlords to put things right.",
+  "nearby": [
+    "birmingham",
+    "dudley",
+    "redditch",
+    "wychavon",
+    "wyre-forest",
+    "stratford-on-avon",
+    "solihull"
+  ]
+}

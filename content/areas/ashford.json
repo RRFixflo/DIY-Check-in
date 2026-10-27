@@ -1,0 +1,97 @@
+{
+  "slug": "ashford",
+  "name": "Ashford",
+  "council": {
+    "name": "Ashford Borough Council",
+    "url": "https://www.ashford.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "TN23",
+    "TN24",
+    "TN25",
+    "TN26",
+    "TN27",
+    "TN30"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ashford town centre",
+      "postcodes": "TN23, TN24",
+      "housing": "Victorian terraces and flats around the centre, with modern apartment blocks near the international station."
+    },
+    {
+      "name": "Kennington",
+      "postcodes": "TN24",
+      "housing": "Interwar and post-war semis and detached houses on the north side of the town."
+    },
+    {
+      "name": "Willesborough",
+      "postcodes": "TN24",
+      "housing": "A mix of older cottages, post-war estates and newer housing to the east of the town."
+    },
+    {
+      "name": "Singleton and Park Farm",
+      "postcodes": "TN23",
+      "housing": "Estates of modern houses built from the 1980s onwards on the edge of Ashford."
+    },
+    {
+      "name": "Tenterden",
+      "postcodes": "TN30",
+      "housing": "Weatherboarded and brick period houses along the high street, with newer homes around it."
+    },
+    {
+      "name": "Wye",
+      "postcodes": "TN25",
+      "housing": "Period cottages and village houses below the North Downs."
+    },
+    {
+      "name": "Charing",
+      "postcodes": "TN27",
+      "housing": "Historic village houses and cottages on the edge of the downs."
+    },
+    {
+      "name": "Hamstreet",
+      "postcodes": "TN26",
+      "housing": "Village houses and bungalows near the Romney Marsh edge."
+    },
+    {
+      "name": "Woodchurch",
+      "postcodes": "TN26",
+      "housing": "Cottages and detached houses in a rural Weald village."
+    },
+    {
+      "name": "Appledore",
+      "postcodes": "TN26",
+      "housing": "Period cottages and village houses near the Royal Military Canal."
+    }
+  ],
+  "housing": "Ashford borough is a growing market town surrounded by Weald and Romney Marsh countryside. The town has expanded fast, with large new-build estates and apartment blocks near the international station, alongside Victorian terraces in the centre. Outside the town are timber-framed, weatherboarded and brick cottages in villages such as Tenterden, Wye and Charing. Private rented homes range from town-centre flats let to commuters to rural cottages.",
+  "checkinTips": [
+    "Weatherboarded and timber-framed cottages in Tenterden and the Weald villages: photograph external boarding, window frames and any rot or flaking paint.",
+    "Rural homes off mains gas: photograph oil tanks, the gauge reading and any septic tank or treatment plant access cover.",
+    "Apartment blocks near the international station: note fob, key and parking permit counts, and photograph the meter cupboard and bin store.",
+    "New-build estates such as Singleton and Park Farm: photograph sealant around baths and showers, settlement cracks and the condition of gardens and fences.",
+    "Old cottages with low beams and uneven floors: photograph beams, floorboards and door frames so later damage can be compared."
+  ],
+  "tenantHelp": "Tenants in Ashford can contact Ashford Borough Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "maidstone",
+    "swale",
+    "canterbury",
+    "folkestone-and-hythe",
+    "rother",
+    "tunbridge-wells"
+  ]
+}

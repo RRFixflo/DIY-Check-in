@@ -1,0 +1,100 @@
+{
+  "slug": "charnwood",
+  "name": "Charnwood",
+  "council": {
+    "name": "Charnwood Borough Council",
+    "url": "https://www.charnwood.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "LE11",
+    "LE12",
+    "LE4",
+    "LE7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Loughborough town centre",
+      "postcodes": "LE11",
+      "housing": "Victorian terraces, flats over shops and purpose-built student blocks."
+    },
+    {
+      "name": "Storer and Ashby roads area",
+      "postcodes": "LE11",
+      "housing": "Dense Victorian terraced streets near Loughborough University, many let as student houses."
+    },
+    {
+      "name": "Shepshed",
+      "postcodes": "LE12",
+      "housing": "A small town with older terraces and cottages and large modern estates."
+    },
+    {
+      "name": "Syston",
+      "postcodes": "LE7",
+      "housing": "A commuter town with Victorian terraces, inter-war semis and new estates."
+    },
+    {
+      "name": "Birstall",
+      "postcodes": "LE4",
+      "housing": "Mainly inter-war and post-war suburban houses on the edge of Leicester."
+    },
+    {
+      "name": "Thurmaston",
+      "postcodes": "LE4",
+      "housing": "Post-war semis and terraces with newer estates by the A46."
+    },
+    {
+      "name": "Quorn",
+      "postcodes": "LE12",
+      "housing": "A village of period cottages and later houses near Charnwood Forest."
+    },
+    {
+      "name": "Anstey",
+      "postcodes": "LE7",
+      "housing": "A large village with older terraces and post-war and modern estates."
+    }
+  ],
+  "housing": "Loughborough, home to Loughborough University, has a large student rental market, with many Victorian terraces near the campus let as shared houses and a growing number of purpose-built student blocks. South of the borough, Birstall, Thurmaston and Syston are suburbs of Leicester with inter-war and post-war family homes. Shepshed and the villages around Charnwood Forest mix older stone and brick cottages with large new-build estates.",
+  "checkinTips": [
+    "Student houses in Loughborough: photograph each bedroom's lock and door, fire doors, smoke alarms and the shared kitchen separately.",
+    "Victorian terraces near the town centre: check sash or replacement windows, rear extensions, back yards and any damp in cellars.",
+    "Furnished student lets: list and photograph every item of furniture, with mattress condition and fire labels, and note bins and recycling at check-out.",
+    "New-build estates in Shepshed and Syston: note snagging marks, sealant around baths and showers, and new garden fences.",
+    "Homes near the River Soar and its brooks: photograph ground floors and gardens for signs of damp or past flooding.",
+    "Stone cottages around Charnwood Forest: photograph beams, fireplaces, wood burners and any damp in thick walls."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Charnwood Borough Council's private sector housing team.",
+  "nearby": [
+    "north-west-leicestershire",
+    "rushcliffe",
+    "melton",
+    "harborough",
+    "blaby",
+    "leicester",
+    "hinckley-and-bosworth",
+    "oadby-and-wigston"
+  ]
+}

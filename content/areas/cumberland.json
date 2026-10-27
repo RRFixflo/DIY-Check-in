@@ -1,0 +1,111 @@
+{
+  "slug": "cumberland",
+  "name": "Cumberland",
+  "council": {
+    "name": "Cumberland Council",
+    "url": "https://www.cumberland.gov.uk",
+    "privateRentingUrl": "https://www.cumberland.gov.uk/housing/housing-advice/home-multiple-occupancy-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council says it does not operate selective licensing for private rented homes.",
+    "additional": "No additional HMO licensing scheme; only mandatory licensing of larger HMOs (five or more people forming two or more households) applies.",
+    "fee": null,
+    "source": "https://www.cumberland.gov.uk/housing/housing-advice/home-multiple-occupancy-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£666 a month (ONS, May 2026), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000063/"
+  },
+  "price": {
+    "text": "£172,000 (UK HPI, April 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000063/"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,444.72 Band D (2026/27) for Cumberland Council, Cumbria Fire and Rescue and the Police and Crime Commissioner, or £2,511.32 with the average parish precept",
+    "source": "https://www.cumberland.gov.uk/sites/default/files/2026-03/council_tax_booklet_26-27.pdf"
+  },
+  "postcodes": [
+    "CA1",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8",
+    "CA12",
+    "CA13",
+    "CA14",
+    "CA15",
+    "CA18",
+    "CA19",
+    "CA20",
+    "CA22",
+    "CA25",
+    "CA26",
+    "CA27",
+    "CA28"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Carlisle",
+      "postcodes": "CA1, CA2, CA3",
+      "housing": "Victorian and Edwardian red-brick terraces near the centre, inter-war and post-war council estates such as Raffles and Harraby, and newer estates on the edges of the city."
+    },
+    {
+      "name": "Workington",
+      "postcodes": "CA14",
+      "housing": "Long rows of industrial-era terraces built for the steel and mining workforce, with post-war council estates around the town."
+    },
+    {
+      "name": "Whitehaven",
+      "postcodes": "CA28",
+      "housing": "A Georgian planned town centre with listed townhouses and flats, surrounded by terraced streets and hillside estates."
+    },
+    {
+      "name": "Maryport",
+      "postcodes": "CA15",
+      "housing": "Harbourside Georgian and Victorian terraces and post-war estates on the higher ground above the town."
+    },
+    {
+      "name": "Cockermouth",
+      "postcodes": "CA13",
+      "housing": "Georgian and Victorian stone town houses and cottages in the centre, some in the flood zone near the rivers Derwent and Cocker, with modern estates on the edges."
+    },
+    {
+      "name": "Keswick",
+      "postcodes": "CA12",
+      "housing": "Slate and stone Victorian houses and cottages, many used as holiday lets, in the Lake District National Park."
+    },
+    {
+      "name": "Wigton",
+      "postcodes": "CA7",
+      "housing": "A market town of stone and brick terraces with farmhouses and cottages in the surrounding villages of the Solway Plain."
+    },
+    {
+      "name": "Egremont and Cleator Moor",
+      "postcodes": "CA22, CA25",
+      "housing": "Former iron-mining towns of stone and brick terraces, with homes let to workers at the nearby Sellafield site."
+    },
+    {
+      "name": "Brampton and Longtown",
+      "postcodes": "CA8, CA6",
+      "housing": "Small sandstone market towns with terraced cottages and rural farm properties near the Scottish border."
+    }
+  ],
+  "housing": "Cumberland covers Carlisle, the west Cumbrian coast and the northern Lake District. Rents and prices are low by national standards, and much of the private rented stock is older terraced housing in the coastal towns and Carlisle, some of it solid-walled and hard to heat. Demand from contractors at Sellafield keeps the rental market busy around Whitehaven, Egremont and Seascale, while Keswick and the national park villages have many second homes and holiday lets. Parts of Carlisle, Cockermouth and Keswick have flooded badly in the past.",
+  "checkinTips": [
+    "Solid stone and brick terraces on the west coast: photograph any damp patches, mould in corners and condensation round windows, room by room.",
+    "Homes near the rivers in Carlisle, Cockermouth and Keswick: note any flood boards, air-brick covers or sump pumps and photograph that they are present and working.",
+    "Rural cottages off the gas grid: photograph the oil tank, its gauge reading and the boiler, or any solid-fuel stove and its hearth.",
+    "Coastal homes in Maryport, Workington and Whitehaven: photograph external paint, window frames and metal fittings for salt and wind damage.",
+    "Contractor lets near Sellafield: count and photograph every key and fob and the furniture in each bedroom, as these are often furnished rooms or whole-house lets."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or unsafe conditions can contact Cumberland Council's private sector housing team, which can inspect and take enforcement action under its private sector housing enforcement policy.",
+  "nearby": [
+    "westmorland-and-furness",
+    "northumberland"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "blackburn-with-darwen",
+  "name": "Blackburn with Darwen",
+  "council": {
+    "name": "Blackburn with Darwen Borough Council",
+    "url": "https://www.blackburn.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "Not confirmed. The council has run selective licensing in parts of Blackburn before; a new scheme for the Hollins Bank area (mainly Ewood and Mill Hill & Moorgate wards), consulted on from May to July 2024, was put on hold in 2025. Check with the council whether any area is designated now.",
+    "additional": null,
+    "fee": null,
+    "source": "https://thenegotiator.co.uk/news/regulation-law-news/warning-that-landlord-may-sell-up-forces-major-northern-town-to-suspend-licensing-plan/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "Almost 12,000 households, about one in five, rent privately (Census 2021)",
+    "source": "https://blackburn.moderngov.co.uk/documents/s25721/Scrutiny Report Housing 5Aug24.pdf"
+  },
+  "councilTax": {
+    "text": "£2,450 Band D including police and fire, in areas without a parish council (2026/27)",
+    "source": "https://www.central.radio/news/east-lancashire-news/blackburn-with-darwen-residents-set-for-4-99-council-tax-rise/"
+  },
+  "postcodes": [
+    "BB1",
+    "BB2",
+    "BB3",
+    "BB6",
+    "BL7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Blackburn town centre",
+      "postcodes": "BB1, BB2",
+      "housing": "Victorian terraces and flats over shops, with some newer apartment blocks."
+    },
+    {
+      "name": "Mill Hill and Ewood",
+      "postcodes": "BB2",
+      "housing": "Long rows of Victorian two-up two-down terraced houses, many privately rented."
+    },
+    {
+      "name": "Audley and Queen's Park",
+      "postcodes": "BB1",
+      "housing": "Dense Victorian terraced streets east of the centre."
+    },
+    {
+      "name": "Wensley Fold and Higher Croft",
+      "postcodes": "BB2",
+      "housing": "Terraced streets and post-war council-built estates."
+    },
+    {
+      "name": "Livesey and Feniscowles",
+      "postcodes": "BB2",
+      "housing": "Mainly owner-occupied semis and detached houses on the western edge of Blackburn."
+    },
+    {
+      "name": "Darwen",
+      "postcodes": "BB3",
+      "housing": "A mill town of stone and brick Victorian terraces on the hillsides, with post-war and newer estates."
+    },
+    {
+      "name": "Lammack and Beardwood",
+      "postcodes": "BB1, BB2",
+      "housing": "Suburban semis and larger detached houses in the north-west of Blackburn."
+    },
+    {
+      "name": "Edgworth and North Turton",
+      "postcodes": "BL7",
+      "housing": "Moorland villages with stone cottages, farmhouses and some modern homes."
+    }
+  ],
+  "housing": "Blackburn with Darwen's housing is dominated by Victorian terraced houses built for the cotton mills, many of them cheap to buy and let privately. Inner areas such as Mill Hill, Ewood and Audley have the highest share of private renting and older homes in poorer condition, which is why the council has used and proposed selective licensing there. Darwen has stone terraces climbing the valley sides, while the western suburbs and the moorland villages of North Turton are mostly owner-occupied. The council estimates that around one in five homes in the borough is privately rented.",
+  "checkinTips": [
+    "Victorian two-up two-down terraces in Mill Hill and Ewood: photograph damp at the base of walls, cellar heads and any rising damp or mould in back bedrooms.",
+    "Back yards and alleys behind terraced rows: record the yard gate, walls, outside toilets or stores and where the bins are kept.",
+    "Stone terraces on Darwen's hillsides: check and photograph slate roofs seen from the street, gutters, chimney stacks and any water marks on ceilings.",
+    "Flats over shops in Blackburn town centre: note the separate entrance, the stairs, fire alarms and how many keys are handed over.",
+    "Moorland cottages in Edgworth and North Turton: photograph solid-fuel stoves, any oil tank or LPG supply, and exposed walls and window frames.",
+    "Older gas fires and back boilers in terraced homes: photograph the appliance and the gas safety certificate date at check-in."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Blackburn with Darwen Council's private sector housing team.",
+  "nearby": [
+    "hyndburn",
+    "ribble-valley",
+    "south-ribble",
+    "chorley",
+    "bolton",
+    "rossendale"
+  ]
+}

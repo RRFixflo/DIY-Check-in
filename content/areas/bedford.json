@@ -1,0 +1,104 @@
+{
+  "slug": "bedford",
+  "name": "Bedford",
+  "council": {
+    "name": "Bedford Borough Council",
+    "url": "https://www.bedford.gov.uk",
+    "privateRentingUrl": "https://www.bedford.gov.uk/files/designation-v3.pdf/download"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing covers the whole borough: smaller privately rented HMOs (three or more people from more than one household sharing facilities) need a licence. The designation was made on 25 January 2023, runs from 21 May 2023 and ends on 20 May 2028. Larger HMOs need a mandatory licence as everywhere in England.",
+    "fee": null,
+    "source": "https://www.bedford.gov.uk/files/designation-v3.pdf/download",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,168 a month (ONS, May 2026), up 3.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000055/"
+  },
+  "price": {
+    "text": "£331,000 (UK HPI, April 2026, provisional)",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000055/"
+  },
+  "privateRentedShare": {
+    "text": "About 19% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=627"
+  },
+  "councilTax": {
+    "text": "£2,472 average Band D including parish, police and fire (2026/27)",
+    "source": "https://www.bedfordindependent.co.uk/bedford-council-tax-rises-approved-with-budget-only-balanced-by-government-support/"
+  },
+  "postcodes": [
+    "MK40",
+    "MK41",
+    "MK42",
+    "MK43",
+    "MK44",
+    "MK45",
+    "PE19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bedford town centre and Castle",
+      "postcodes": "MK40",
+      "housing": "Victorian and Edwardian terraces and town houses, many split into flats, with flats over shops and newer riverside apartment blocks."
+    },
+    {
+      "name": "Queens Park",
+      "postcodes": "MK40",
+      "housing": "Dense late-Victorian terraced streets west of the centre, many privately let."
+    },
+    {
+      "name": "Putnoe and Brickhill",
+      "postcodes": "MK41",
+      "housing": "Mainly post-war and 1960s–80s semi-detached and detached family houses."
+    },
+    {
+      "name": "Kempston",
+      "postcodes": "MK42",
+      "housing": "Older terraces near the centre alongside large post-war estates and newer housing to the south."
+    },
+    {
+      "name": "Goldington",
+      "postcodes": "MK41",
+      "housing": "Post-war estates of semis and terraces, including former council homes."
+    },
+    {
+      "name": "Wixams",
+      "postcodes": "MK42",
+      "housing": "A new town of modern new-build houses and flats built since the late 2000s."
+    },
+    {
+      "name": "Great Denham and Biddenham",
+      "postcodes": "MK40",
+      "housing": "Modern new-build estates of detached and semi-detached houses with some apartment blocks."
+    },
+    {
+      "name": "Sharnbrook",
+      "postcodes": "MK44",
+      "housing": "A rural village of stone cottages, period houses and later infill homes."
+    },
+    {
+      "name": "Wootton",
+      "postcodes": "MK43",
+      "housing": "A large village with older cottages and extensive modern estates."
+    }
+  ],
+  "housing": "Bedford's private rental market is concentrated in the Victorian terraces around the town centre, Queens Park and Castle, where many houses are let as flats or shared houses. Large new-build areas such as Wixams, Great Denham and Wootton add modern family homes and flats, often let by individual landlords. North of the town the borough is rural, with stone villages along the Great Ouse. Because additional HMO licensing covers the whole borough, even small shared houses need a licence.",
+  "checkinTips": [
+    "Victorian terraces in Queens Park and Castle: photograph sash or replacement windows, chimney breasts and any damp at the base of walls or in cellars.",
+    "Converted flats in large town houses: record the communal hallway, shared meters, door entry system and how many keys and fobs are handed over.",
+    "Shared houses (HMOs need a licence across the borough): photograph each bedroom's door lock, the fire doors, smoke alarms and the shared kitchen separately.",
+    "New-build homes in Wixams and Great Denham: note snagging marks, sealant around baths and showers, and the condition of turf and fences in new gardens.",
+    "Riverside flats near the Embankment: check for condensation, extractor fans working and any signs of damp in ground-floor units.",
+    "Stone cottages in the northern villages: photograph uneven floors, beams, fireplaces and any oil tank or septic tank where there is no mains gas or drainage."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Bedford Borough Council's private sector housing team, which also enforces HMO licensing.",
+  "nearby": [
+    "central-bedfordshire",
+    "milton-keynes",
+    "north-northamptonshire",
+    "huntingdonshire"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "slug": "cornwall",
+  "name": "Cornwall",
+  "council": {
+    "name": "Cornwall Council",
+    "url": "https://www.cornwall.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "TR1",
+    "TR7",
+    "TR11",
+    "TR14",
+    "TR15",
+    "TR18",
+    "TR26",
+    "PL12",
+    "PL25",
+    "PL26",
+    "PL31",
+    "PL15",
+    "EX23"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Truro",
+      "postcodes": "TR1",
+      "housing": "A small cathedral city of Georgian townhouses, Victorian terraces and modern estates on the edges."
+    },
+    {
+      "name": "Falmouth",
+      "postcodes": "TR11",
+      "housing": "Harbour town of Victorian terraces and townhouses, with many student lets for Falmouth University."
+    },
+    {
+      "name": "Newquay",
+      "postcodes": "TR7",
+      "housing": "A resort town of guest houses, holiday flats, terraces and modern apartment blocks."
+    },
+    {
+      "name": "Camborne and Redruth",
+      "postcodes": "TR14, TR15",
+      "housing": "Former mining towns with granite and brick terraces and post-war estates."
+    },
+    {
+      "name": "Penzance",
+      "postcodes": "TR18",
+      "housing": "Victorian and Georgian terraces and granite houses around the harbour and seafront."
+    },
+    {
+      "name": "St Ives",
+      "postcodes": "TR26",
+      "housing": "Fishermen's cottages and holiday lets on steep narrow streets."
+    },
+    {
+      "name": "St Austell",
+      "postcodes": "PL25",
+      "housing": "A former china clay town of terraces, post-war estates and newer housing."
+    },
+    {
+      "name": "Bodmin",
+      "postcodes": "PL31",
+      "housing": "A market town of Victorian terraces and large modern estates."
+    },
+    {
+      "name": "Saltash",
+      "postcodes": "PL12",
+      "housing": "A commuter town for Plymouth with terraces and modern estates above the Tamar."
+    },
+    {
+      "name": "Bude",
+      "postcodes": "EX23",
+      "housing": "A seaside town of Victorian houses, bungalows and holiday homes."
+    }
+  ],
+  "housing": "Cornwall's housing ranges from granite and slate cottages in fishing villages to Victorian mining-town terraces and large post-war and modern estates around Truro, St Austell, Bodmin and Camborne. Holiday lets and second homes are a big part of the market in coastal towns such as St Ives, Padstow and Newquay, which squeezes long-term private renting. Falmouth and Penryn have many student lets for Falmouth University. Many rural homes are off the gas grid, with oil, LPG or electric heating, and solid-walled stone houses are prone to damp.",
+  "checkinTips": [
+    "Granite and stone cottages: photograph solid walls and window reveals for damp and mould, and the condition of slate roofs visible from outside.",
+    "Off-grid homes: record the oil tank or LPG gauge reading, the boiler, any septic tank or private water supply, and wood burner condition.",
+    "Coastal properties: look for salt corrosion on window frames, door furniture, gates and outdoor lights, and wind damage to fences.",
+    "Student lets in Falmouth and Penryn: photograph each bedroom's lock and furniture and the shared kitchen and bathroom separately.",
+    "Former mining areas around Camborne and Redruth: note any cracks in walls so ground movement can be compared later.",
+    "Homes switched from holiday let to long-term let: list furniture, linen and kitchen items carefully, as inventories often change."
+  ],
+  "tenantHelp": "Tenants with disrepair or unsafe conditions in a private rented home can contact Cornwall Council's private sector housing team, which can inspect and enforce standards.",
+  "nearby": [
+    "torridge",
+    "west-devon",
+    "plymouth",
+    "isles-of-scilly"
+  ]
+}

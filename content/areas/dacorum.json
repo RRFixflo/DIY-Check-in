@@ -1,0 +1,93 @@
+{
+  "slug": "dacorum",
+  "name": "Dacorum",
+  "council": {
+    "name": "Dacorum Borough Council",
+    "url": "https://www.dacorum.gov.uk",
+    "privateRentingUrl": "https://www.dacorum.gov.uk/home/housing/private-housing/private-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council's private landlord pages describe only mandatory HMO licensing.",
+    "additional": "No additional HMO licensing scheme; mandatory licensing applies to HMOs with five or more people in two or more households.",
+    "fee": "£1,347 for a mandatory HMO licence of up to five rooms (£841 application plus £506 second part, 2024/25 fees; £18 per extra room)",
+    "source": "https://www.dacorum.gov.uk/home/housing/private-housing/private-landlords/hmo-licences",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,577 a month (ONS Price Index of Private Rents, May 2026 release), up 2.3% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/HP1"
+  },
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,408.51 average Band D (2026/27), including Hertfordshire County Council, the Police and Crime Commissioner and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/dacorum"
+  },
+  "postcodes": [
+    "HP1",
+    "HP2",
+    "HP3",
+    "HP4",
+    "HP23",
+    "LU6",
+    "AL3",
+    "WD4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hemel Hempstead Old Town",
+      "postcodes": "HP1",
+      "housing": "Listed timber-framed and Georgian buildings along the High Street, with Victorian terraces and cottages on the surrounding streets."
+    },
+    {
+      "name": "Hemel Hempstead new town neighbourhoods (Adeyfield, Bennetts End, Grovehill, Highfield, Warners End)",
+      "postcodes": "HP1, HP2, HP3",
+      "housing": "Post-war new town estates of brick terraces, maisonettes and low-rise flats, many former council homes now privately let."
+    },
+    {
+      "name": "Apsley and Nash Mills",
+      "postcodes": "HP3",
+      "housing": "Canal-side apartment blocks on former paper-mill land alongside older Victorian terraces."
+    },
+    {
+      "name": "Berkhamsted",
+      "postcodes": "HP4",
+      "housing": "Victorian and Edwardian terraces and villas, period cottages and canal-side flats in a commuter market town."
+    },
+    {
+      "name": "Tring",
+      "postcodes": "HP23",
+      "housing": "A market town of Victorian brick terraces and period cottages with newer estates on its edges."
+    },
+    {
+      "name": "Kings Langley",
+      "postcodes": "WD4",
+      "housing": "A commuter village of Victorian cottages, inter-war semis and some modern flats near the station and canal."
+    },
+    {
+      "name": "Bovingdon",
+      "postcodes": "HP3",
+      "housing": "A large village of post-war semis and bungalows with some older cottages around the green."
+    },
+    {
+      "name": "Markyate",
+      "postcodes": "AL3",
+      "housing": "A village of older brick cottages along the High Street with later estates around it."
+    }
+  ],
+  "housing": "Most of Dacorum's population lives in Hemel Hempstead, a post-war new town whose estates of terraces, maisonettes and flats make up much of the private rented stock, alongside office-to-flat conversions in the town centre. Berkhamsted, Tring and Kings Langley are older commuter towns with Victorian terraces and period cottages, and higher rents and prices. Rural Chilterns villages have flint and brick cottages, some listed. The council has estimated that the borough has several hundred HMOs.",
+  "checkinTips": [
+    "New town maisonettes and flats in Hemel Hempstead: photograph communal doors, bin stores and any shared drying areas, and record the number of entry fobs and keys.",
+    "Office-to-flat conversions in central Hemel Hempstead: photograph ventilation fans, trickle vents and any signs of condensation in small rooms.",
+    "Victorian terraces in Berkhamsted and Tring: photograph sash windows, cords and locks, and any cracks or damp in cellars and chimney breasts.",
+    "Flint and brick cottages in Chilterns villages: photograph low beams, uneven floors, open fireplaces and any wood-burner with its hearth and flue.",
+    "Canal-side flats at Apsley, Berkhamsted and Kings Langley: photograph allocated parking bays, balcony surfaces and any damp near ground-floor walls."
+  ],
+  "tenantHelp": "Private tenants can contact Dacorum Borough Council's private housing team about disrepair or unsafe conditions, and can report a suspected unlicensed HMO online.",
+  "nearby": [
+    "buckinghamshire",
+    "central-bedfordshire",
+    "st-albans",
+    "three-rivers"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "epping-forest",
+  "name": "Epping Forest",
+  "council": {
+    "name": "Epping Forest District Council",
+    "url": "https://www.eppingforestdc.gov.uk",
+    "privateRentingUrl": "https://www.eppingforestdc.gov.uk/?p=28220"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CM16",
+    "CM5",
+    "EN9",
+    "IG7",
+    "IG10",
+    "CM17",
+    "CM18",
+    "IG9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Loughton",
+      "postcodes": "IG10",
+      "housing": "A large town with inter-war semis, post-war estates including Debden, and Victorian houses near the station."
+    },
+    {
+      "name": "Epping",
+      "postcodes": "CM16",
+      "housing": "A market town with older buildings on the high street, Victorian houses and later suburbs."
+    },
+    {
+      "name": "Waltham Abbey",
+      "postcodes": "EN9",
+      "housing": "A historic town with old buildings near the abbey and large post-war estates."
+    },
+    {
+      "name": "Chigwell",
+      "postcodes": "IG7",
+      "housing": "A suburb of large detached houses and inter-war and post-war homes."
+    },
+    {
+      "name": "Buckhurst Hill",
+      "postcodes": "IG9",
+      "housing": "A suburb of Victorian and Edwardian houses and modern flats near the station."
+    },
+    {
+      "name": "Ongar",
+      "postcodes": "CM5",
+      "housing": "A small town with older buildings on its high street and later estates."
+    },
+    {
+      "name": "Theydon Bois",
+      "postcodes": "CM16",
+      "housing": "A village of Victorian and inter-war houses around a large green."
+    },
+    {
+      "name": "North Weald Bassett",
+      "postcodes": "CM16",
+      "housing": "A village of post-war and modern houses near the old airfield."
+    }
+  ],
+  "housing": "Epping Forest district lies on London's north-east edge, with the forest itself, Green Belt countryside and Central line towns such as Loughton, Buckhurst Hill and Epping. Homes range from Victorian and Edwardian houses near the stations to inter-war semis, large post-war estates such as Debden and Waltham Abbey, and big detached houses in Chigwell. Private lets are mostly flats and terraced and semi-detached houses near the Tube. Many tenants commute into London.",
+  "checkinTips": [
+    "Homes next to the forest: photograph gutters, roofs, fences and gardens for damage from trees and leaf fall, and any damp on shaded walls.",
+    "Flats in converted Victorian houses near the Central line: photograph the communal hall, fire doors and smoke alarms, and note key and fob counts.",
+    "Former council houses on the Debden and Waltham Abbey estates: photograph windows and doors, any loft and outbuildings, and the meters.",
+    "Large detached houses in Chigwell: photograph every room from fixed points, plus gates, garages and alarm panels, and note keys, remotes and fobs.",
+    "Rural homes off the gas grid: photograph the oil tank, its gauge and level, and the boiler service label."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Epping Forest District Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "harlow",
+    "east-hertfordshire",
+    "broxbourne",
+    "enfield",
+    "waltham-forest",
+    "redbridge",
+    "havering",
+    "brentwood",
+    "chelmsford",
+    "uttlesford"
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "slug": "bournemouth",
+  "name": "Bournemouth, Christchurch and Poole",
+  "council": {
+    "name": "BCP Council",
+    "url": "https://www.bcpcouncil.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BH1",
+    "BH2",
+    "BH3",
+    "BH4",
+    "BH5",
+    "BH6",
+    "BH7",
+    "BH8",
+    "BH9",
+    "BH10",
+    "BH11",
+    "BH12",
+    "BH13",
+    "BH14",
+    "BH15",
+    "BH17",
+    "BH23"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bournemouth town centre",
+      "postcodes": "BH1, BH2",
+      "housing": "Purpose-built flats, converted Victorian villas and new apartment blocks."
+    },
+    {
+      "name": "Boscombe",
+      "postcodes": "BH1, BH5",
+      "housing": "Large Victorian houses, many split into flats and bedsits."
+    },
+    {
+      "name": "Winton and Charminster",
+      "postcodes": "BH8, BH9",
+      "housing": "Edwardian terraces and bungalows, with many student and shared houses near the university."
+    },
+    {
+      "name": "Westbourne",
+      "postcodes": "BH4",
+      "housing": "Victorian villas and purpose-built flats near the Chines."
+    },
+    {
+      "name": "Southbourne",
+      "postcodes": "BH6",
+      "housing": "Inter-war bungalows and semis and seafront flats."
+    },
+    {
+      "name": "Kinson and West Howe",
+      "postcodes": "BH10, BH11",
+      "housing": "Post-war estates and suburban semis."
+    },
+    {
+      "name": "Poole town centre and Old Town",
+      "postcodes": "BH15",
+      "housing": "Georgian and older houses, quayside flats and modern apartment blocks."
+    },
+    {
+      "name": "Parkstone",
+      "postcodes": "BH12, BH14",
+      "housing": "Victorian and Edwardian houses and inter-war semis."
+    },
+    {
+      "name": "Sandbanks and Canford Cliffs",
+      "postcodes": "BH13",
+      "housing": "Large detached houses and luxury apartment blocks."
+    },
+    {
+      "name": "Christchurch",
+      "postcodes": "BH23",
+      "housing": "Older town-centre houses, bungalows and retirement flats."
+    }
+  ],
+  "housing": "Bournemouth, Christchurch and Poole is a large coastal conurbation with a big private rented sector, especially in central Bournemouth and Boscombe, where many Victorian villas and hotels have been converted into flats. Bournemouth University and the Arts University bring a large student market around Winton, Charminster and Talbot. Poole has quayside apartment blocks and older terraces, while Christchurch and the eastern suburbs have many bungalows and retirement flats. Seafront and clifftop blocks are exposed to salt air and wind.",
+  "checkinTips": [
+    "Converted Victorian villas in Boscombe and central Bournemouth: photograph each flat's door, fire doors and alarms, and the shared hallway and meters.",
+    "Student houses in Winton and Charminster: photograph every bedroom, its lock and furniture, and the shared kitchen and bathroom, at the start and end of each year.",
+    "Seafront and clifftop flats: photograph window seals, balcony doors and railings for salt corrosion, and any mould on outside walls.",
+    "Purpose-built apartment blocks: record fob and key counts, parking permits or spaces, bike and bin stores.",
+    "Bungalows in Christchurch and Southbourne: note gardens, garages, drives and any adaptations such as grab rails.",
+    "Quayside flats in Poole: check for condensation and mould, and that extractor fans and window vents work."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to BCP Council's private sector housing team.",
+  "nearby": [
+    "dorset",
+    "new-forest"
+  ]
+}

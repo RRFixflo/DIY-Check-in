@@ -1,0 +1,89 @@
+{
+  "slug": "elmbridge",
+  "name": "Elmbridge",
+  "council": {
+    "name": "Elmbridge Borough Council",
+    "url": "https://www.elmbridge.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "KT7",
+    "KT8",
+    "KT10",
+    "KT11",
+    "KT12",
+    "KT13",
+    "KT22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Walton-on-Thames",
+      "postcodes": "KT12",
+      "housing": "A town with Victorian and inter-war houses, modern flats near the centre and riverside homes."
+    },
+    {
+      "name": "Weybridge",
+      "postcodes": "KT13",
+      "housing": "A town of large Victorian and Edwardian houses, gated developments and modern flats."
+    },
+    {
+      "name": "Esher",
+      "postcodes": "KT10",
+      "housing": "A town of large detached houses and flats near the high street."
+    },
+    {
+      "name": "Cobham",
+      "postcodes": "KT11",
+      "housing": "A town with large detached houses on private estates and some older cottages."
+    },
+    {
+      "name": "Molesey",
+      "postcodes": "KT8",
+      "housing": "East and West Molesey: inter-war and post-war semis and terraces near the Thames."
+    },
+    {
+      "name": "Hersham",
+      "postcodes": "KT12",
+      "housing": "A village suburb with Victorian cottages, post-war estates and modern housing."
+    },
+    {
+      "name": "Claygate",
+      "postcodes": "KT10",
+      "housing": "A village with Victorian cottages and inter-war and post-war houses."
+    },
+    {
+      "name": "Thames Ditton",
+      "postcodes": "KT7",
+      "housing": "A riverside village with period cottages and inter-war houses."
+    }
+  ],
+  "housing": "Elmbridge is a commuter borough beside the Thames, south-west of London, with some of the highest house prices outside the capital. Homes range from large detached houses on private estates in Weybridge, Cobham and Esher to inter-war semis in Molesey and Hersham and modern flats near the town centres. Private lets include high-value family houses as well as flats. Homes near the Thames, Mole and Wey are in areas at risk of flooding.",
+  "checkinTips": [
+    "Large detached houses: photograph every room from fixed points, plus gardens, gates, garages and any alarm panels, and note the number of keys, remotes and fobs.",
+    "Riverside homes near the Thames, Mole and Wey: photograph any damp tide marks, air bricks and flood barriers left for the tenant.",
+    "Homes with high-end fittings: photograph appliance makes and models, worktops and wooden floors closely, as damage to them is costly to dispute.",
+    "Modern flats near the town centres: photograph the entry system, bin store and parking space, and note fob and key counts.",
+    "Gardens, which are often large: photograph lawns, hedges, patios and sheds, and note any gardener included in the rent."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Elmbridge Borough Council's environmental health team, which deals with private rented housing and can take action against landlords.",
+  "nearby": [
+    "kingston-upon-thames",
+    "richmond-upon-thames",
+    "spelthorne",
+    "runnymede",
+    "woking",
+    "guildford",
+    "mole-valley"
+  ]
+}

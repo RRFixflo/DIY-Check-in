@@ -1,0 +1,94 @@
+{
+  "slug": "cheltenham",
+  "name": "Cheltenham",
+  "council": {
+    "name": "Cheltenham Borough Council",
+    "url": "https://www.cheltenham.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "GL50",
+    "GL51",
+    "GL52",
+    "GL53",
+    "GL54"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Montpellier",
+      "postcodes": "GL50",
+      "housing": "Regency terraces and villas, many converted into flats, with flats over shops."
+    },
+    {
+      "name": "The Suffolks",
+      "postcodes": "GL50",
+      "housing": "Regency and Victorian terraces and town houses near the centre, often let as flats."
+    },
+    {
+      "name": "Pittville",
+      "postcodes": "GL52",
+      "housing": "Large Regency and Victorian villas, many split into flats, around Pittville Park."
+    },
+    {
+      "name": "St Paul's",
+      "postcodes": "GL50",
+      "housing": "Victorian terraces near the University of Gloucestershire's Francis Close Hall campus, many let to students."
+    },
+    {
+      "name": "Leckhampton",
+      "postcodes": "GL53",
+      "housing": "Victorian and Edwardian houses, inter-war semis and newer homes below Leckhampton Hill."
+    },
+    {
+      "name": "Charlton Kings",
+      "postcodes": "GL53",
+      "housing": "Mainly inter-war and post-war semis and detached houses, with older cottages."
+    },
+    {
+      "name": "Hesters Way",
+      "postcodes": "GL51",
+      "housing": "Post-war estates of former council houses and low-rise flats in the west of the town."
+    },
+    {
+      "name": "Up Hatherley",
+      "postcodes": "GL51",
+      "housing": "Mainly 1970s–90s estates of houses and bungalows."
+    }
+  ],
+  "housing": "Cheltenham is known for its Regency architecture: large stucco terraces and villas in Montpellier, Pittville and the Suffolks, many of them listed and split into flats. Victorian terraces around St Paul's and the Tewkesbury Road area are let to students and young professionals, while the west of the town has post-war estates. New building has added apartment blocks in the centre and family estates on the edges. GCHQ, the University of Gloucestershire and the racecourse all add demand for lets.",
+  "checkinTips": [
+    "Regency flats in Montpellier and Pittville: photograph sash windows and shutters, ornate ceilings, cornices and any cracks.",
+    "Listed buildings: record original features such as fireplaces and doors carefully, as changes may need consent.",
+    "Basement and lower-ground flats in the Regency terraces: check for damp, condensation and working extractor fans.",
+    "Shared houses near the University of Gloucestershire campuses: photograph each bedroom's lock, the fire doors, smoke alarms and the shared kitchen.",
+    "Communal hallways in converted villas: note shared meters, door entry systems, bins and the number of keys and fobs handed over."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Cheltenham Borough Council's private sector housing team.",
+  "nearby": [
+    "tewkesbury",
+    "cotswold"
+  ]
+}

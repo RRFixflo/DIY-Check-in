@@ -1,0 +1,84 @@
+{
+  "slug": "broxtowe",
+  "name": "Broxtowe",
+  "council": {
+    "name": "Broxtowe Borough Council",
+    "url": "https://www.broxtowe.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "NG9",
+    "NG16",
+    "NG8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Beeston",
+      "postcodes": "NG9",
+      "housing": "Victorian terraces and inter-war semis, with many student lets near the University of Nottingham."
+    },
+    {
+      "name": "Chilwell",
+      "postcodes": "NG9",
+      "housing": "Inter-war and post-war semis and bungalows."
+    },
+    {
+      "name": "Stapleford",
+      "postcodes": "NG9",
+      "housing": "Victorian terraces near the centre and post-war estates."
+    },
+    {
+      "name": "Bramcote",
+      "postcodes": "NG9",
+      "housing": "Larger inter-war and post-war detached and semi-detached houses."
+    },
+    {
+      "name": "Eastwood",
+      "postcodes": "NG16",
+      "housing": "A former mining town with miners' terraces and post-war estates."
+    },
+    {
+      "name": "Kimberley",
+      "postcodes": "NG16",
+      "housing": "A small town of Victorian terraces and post-war and modern houses."
+    },
+    {
+      "name": "Attenborough",
+      "postcodes": "NG9",
+      "housing": "A riverside village of larger detached houses near the nature reserve."
+    },
+    {
+      "name": "Toton",
+      "postcodes": "NG9",
+      "housing": "Post-war and modern family estates, with new building planned around the tram terminus."
+    }
+  ],
+  "housing": "Broxtowe lies on the western edge of Nottingham. Beeston, next to the University of Nottingham, has a large student and young professional rental market in Victorian terraces and inter-war houses. Stapleford, Chilwell and Toton are mainly inter-war and post-war semis and bungalows. The north of the borough, around Eastwood and Kimberley, is former coalfield with terraced miners' housing.",
+  "checkinTips": [
+    "Student houses in Beeston near the university: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen in detail.",
+    "Victorian and miners' terraces in Eastwood, Kimberley and Stapleford: photograph rear yards, outside drains and any damp in rear rooms.",
+    "Homes near the River Trent in Attenborough and Beeston Rylands: photograph walls near floor level and gardens for signs of flooding.",
+    "Inter-war semis in Chilwell and Bramcote: photograph extensions, conservatories and garages.",
+    "New homes near the Toton tram stop: note snagging marks, parking spaces and management company areas."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe homes to Broxtowe Borough Council's private sector housing team, which can inspect and take enforcement action.",
+  "nearby": [
+    "nottingham",
+    "gedling",
+    "ashfield",
+    "erewash",
+    "rushcliffe",
+    "amber-valley"
+  ]
+}

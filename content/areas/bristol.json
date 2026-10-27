@@ -1,0 +1,96 @@
+{
+  "slug": "bristol",
+  "name": "Bristol, City of",
+  "council": {
+    "name": "Bristol City Council",
+    "url": "https://www.bristol.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BS1",
+    "BS2",
+    "BS3",
+    "BS4",
+    "BS5",
+    "BS6",
+    "BS7",
+    "BS8",
+    "BS9",
+    "BS13",
+    "BS14",
+    "BS16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Clifton",
+      "postcodes": "BS8",
+      "housing": "Georgian and Regency terraces and villas, many divided into flats."
+    },
+    {
+      "name": "Redland and Cotham",
+      "postcodes": "BS6",
+      "housing": "Large Victorian houses and terraces, many converted to flats or let to sharers."
+    },
+    {
+      "name": "Bedminster and Southville",
+      "postcodes": "BS3",
+      "housing": "Streets of Victorian terraced houses, with newer flats near the river."
+    },
+    {
+      "name": "Easton",
+      "postcodes": "BS5",
+      "housing": "Dense Victorian terraces with some post-war council housing."
+    },
+    {
+      "name": "Bishopston",
+      "postcodes": "BS7",
+      "housing": "Victorian and Edwardian terraced family houses."
+    },
+    {
+      "name": "Stokes Croft and St Pauls",
+      "postcodes": "BS2",
+      "housing": "Georgian and Victorian buildings, flats above shops and post-war council blocks."
+    },
+    {
+      "name": "Harbourside and Temple Quarter",
+      "postcodes": "BS1",
+      "housing": "Modern apartment blocks and converted warehouses around the docks."
+    },
+    {
+      "name": "Fishponds",
+      "postcodes": "BS16",
+      "housing": "Victorian and inter-war terraces and semis."
+    },
+    {
+      "name": "Hartcliffe and Withywood",
+      "postcodes": "BS13",
+      "housing": "Post-war council-built estates of houses and low-rise flats."
+    }
+  ],
+  "housing": "Bristol is a large city with a big private rented sector, driven by two universities and strong demand from young workers. Much of the inner city is Victorian terraces and Georgian houses converted into flats, while the centre and Harbourside have many modern apartment blocks. Shared student houses are concentrated in areas such as Redland, Cotham and Bishopston. The outer south and north of the city have large post-war council-built estates.",
+  "checkinTips": [
+    "Georgian conversions in Clifton and Hotwells: photograph sash windows, high ceilings and cornices for cracks, and any damp on the steep hillside walls.",
+    "Student and shared houses in Redland, Cotham and Bishopston: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen.",
+    "Victorian terraces in Bedminster, Southville and Easton: photograph rear yards, outside drains and any damp in the back addition kitchen.",
+    "Apartment blocks at Harbourside and Temple Quarter: photograph the entry system and parking space, and record fobs, post box and bike store keys.",
+    "Basement and lower-ground flats: photograph walls near floor level and window wells for damp and mould.",
+    "Flats above shops on main roads such as Gloucester Road: photograph the separate street door, stairs and meter cupboards."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions to Bristol City Council's private housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "south-gloucestershire",
+    "north-somerset",
+    "bath"
+  ]
+}

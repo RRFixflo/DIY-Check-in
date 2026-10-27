@@ -1,0 +1,86 @@
+{
+  "slug": "east-staffordshire",
+  "name": "East Staffordshire",
+  "council": {
+    "name": "East Staffordshire Borough Council",
+    "url": "https://www.eaststaffsbc.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DE6",
+    "DE13",
+    "DE14",
+    "DE15",
+    "ST14",
+    "WS15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Burton upon Trent",
+      "postcodes": "DE14, DE15, DE13",
+      "housing": "The main town: dense Victorian terraced streets built for brewery workers near the centre, with post-war estates and new developments on the edges."
+    },
+    {
+      "name": "Uttoxeter",
+      "postcodes": "ST14",
+      "housing": "A market town with older terraces and houses in the centre and modern estates around it."
+    },
+    {
+      "name": "Stretton",
+      "postcodes": "DE13",
+      "housing": "A suburb north of Burton with post-war and modern family houses."
+    },
+    {
+      "name": "Horninglow",
+      "postcodes": "DE13",
+      "housing": "A Burton suburb with Victorian and inter-war terraces and semis."
+    },
+    {
+      "name": "Winshill",
+      "postcodes": "DE15",
+      "housing": "A Burton suburb east of the Trent with Victorian terraces and post-war estates."
+    },
+    {
+      "name": "Barton-under-Needwood",
+      "postcodes": "DE13",
+      "housing": "A large village with older cottages and modern estates."
+    },
+    {
+      "name": "Rocester",
+      "postcodes": "ST14",
+      "housing": "A small village by the Dove with terraced cottages and newer housing."
+    },
+    {
+      "name": "Tutbury",
+      "postcodes": "DE13",
+      "housing": "A historic village below its castle with brick cottages and some newer homes."
+    }
+  ],
+  "housing": "East Staffordshire is centred on Burton upon Trent, a brewing town with large areas of Victorian terraced housing, and the market town of Uttoxeter, with villages across a rural north. Private lets in Burton are mostly older terraces and flats near the town centre, alongside new-build estates on the edges. Some terraced streets in central Burton have been converted to shared housing. Homes near the Trent and Dove are in areas at risk of flooding.",
+  "checkinTips": [
+    "Victorian terraces in central Burton: photograph back yards, rear outbuildings, damp at the base of walls and the condition of windows and doors.",
+    "Shared houses in Burton: photograph each bedroom and its lock, the shared kitchen and fire doors, and note the key count for each room.",
+    "Homes near the Trent and Dove: photograph any damp tide marks, air bricks and flood barriers left for the tenant.",
+    "New-build estates around Burton and Uttoxeter: photograph snagging marks and meter readings, and note any estate management charges or parking rules.",
+    "Rural cottages off the gas grid: photograph the oil tank, its gauge and level, and the boiler service label."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Staffordshire Borough Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "stafford",
+    "lichfield",
+    "staffordshire-moorlands",
+    "south-derbyshire",
+    "derbyshire-dales"
+  ]
+}

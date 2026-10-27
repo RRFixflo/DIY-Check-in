@@ -1,0 +1,86 @@
+{
+  "slug": "derby",
+  "name": "Derby",
+  "council": {
+    "name": "Derby City Council",
+    "url": "https://www.derby.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DE1",
+    "DE3",
+    "DE21",
+    "DE22",
+    "DE23",
+    "DE24",
+    "DE65",
+    "DE73"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Cathedral Quarter",
+      "postcodes": "DE1",
+      "housing": "Georgian and Victorian buildings, flats over shops and converted mills and offices."
+    },
+    {
+      "name": "Normanton",
+      "postcodes": "DE23",
+      "housing": "Dense Victorian and Edwardian terraces, many privately let."
+    },
+    {
+      "name": "Arboretum",
+      "postcodes": "DE23",
+      "housing": "Victorian terraces and larger villas near the Derby Arboretum, many split into flats or shared houses."
+    },
+    {
+      "name": "Pear Tree",
+      "postcodes": "DE23",
+      "housing": "Rows of late Victorian and Edwardian terraced houses."
+    },
+    {
+      "name": "Allestree",
+      "postcodes": "DE22",
+      "housing": "Mostly post-war semis and detached houses on large estates in the north of the city."
+    },
+    {
+      "name": "Littleover and Mickleover",
+      "postcodes": "DE23, DE3",
+      "housing": "Inter-war and post-war suburbs with large modern estates on the edges."
+    },
+    {
+      "name": "Chaddesden and Spondon",
+      "postcodes": "DE21",
+      "housing": "Post-war council-built estates and private semis in the east of the city."
+    },
+    {
+      "name": "Alvaston",
+      "postcodes": "DE24",
+      "housing": "Inter-war and post-war semis and terraces near the River Derwent."
+    }
+  ],
+  "housing": "Derby has a large stock of Victorian and Edwardian terraces in inner areas such as Normanton, Arboretum and Pear Tree, where private renting and shared houses are common. The University of Derby brings student lets around the Kedleston Road campus and the city centre. Further out are inter-war and post-war suburbs and council-built estates, with large new-build estates on the city's edges.",
+  "checkinTips": [
+    "Victorian terraces in Normanton and Pear Tree: photograph cellars, back yards and any damp on ground-floor walls.",
+    "Student and shared houses near the university: photograph each bedroom's lock, furniture and the shared kitchen appliances, and count every key.",
+    "Converted mill and office flats in the city centre: photograph ventilation, window restrictors and the communal entry system.",
+    "Homes near the River Derwent: note any flood boards or air-brick covers and photograph them in place.",
+    "Larger villas split into flats in the Arboretum area: photograph fire doors, door closers and alarms in shared hallways."
+  ],
+  "tenantHelp": "Private tenants with disrepair or safety problems can contact Derby City Council's private sector housing team.",
+  "nearby": [
+    "amber-valley",
+    "erewash",
+    "south-derbyshire"
+  ]
+}

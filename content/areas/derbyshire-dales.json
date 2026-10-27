@@ -1,0 +1,87 @@
+{
+  "slug": "derbyshire-dales",
+  "name": "Derbyshire Dales",
+  "council": {
+    "name": "Derbyshire Dales District Council",
+    "url": "https://www.derbyshiredales.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DE4",
+    "DE6",
+    "DE45",
+    "S32",
+    "SK17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Matlock",
+      "postcodes": "DE4",
+      "housing": "Stone-built Victorian villas and terraces on steep hillsides, with post-war estates around the town."
+    },
+    {
+      "name": "Matlock Bath",
+      "postcodes": "DE4",
+      "housing": "Victorian stone houses and cottages in a narrow gorge beside the River Derwent."
+    },
+    {
+      "name": "Ashbourne",
+      "postcodes": "DE6",
+      "housing": "A market town of Georgian and older brick houses in the centre with modern estates on the edges."
+    },
+    {
+      "name": "Wirksworth",
+      "postcodes": "DE4",
+      "housing": "Stone cottages and terraces in a former lead-mining and quarrying town."
+    },
+    {
+      "name": "Bakewell",
+      "postcodes": "DE45",
+      "housing": "Stone-built cottages and town houses in the Peak District National Park."
+    },
+    {
+      "name": "Darley Dale",
+      "postcodes": "DE4",
+      "housing": "Stone houses along the A6 with post-war and newer estates."
+    },
+    {
+      "name": "Cromford",
+      "postcodes": "DE4",
+      "housing": "Gritstone mill workers' terraces built for Arkwright's mills."
+    },
+    {
+      "name": "Hathersage",
+      "postcodes": "S32",
+      "housing": "A stone-built Peak District village of cottages and larger Victorian houses."
+    }
+  ],
+  "housing": "Derbyshire Dales is a rural district, much of it in the Peak District National Park, where homes are mostly built of local gritstone and limestone. Many are older cottages and terraces, some listed or in conservation areas, and many villages are off the mains gas grid. Holiday lets and second homes are common in the national park villages, which limits the supply of long-term lets. Matlock, Ashbourne and Wirksworth have most of the district's rented homes.",
+  "checkinTips": [
+    "Stone cottages: photograph damp patches, lime plaster, low beams and any uneven stone floors, room by room.",
+    "Homes off the gas grid: photograph the oil tank and gauge reading, LPG bottles or the solid-fuel stove, hearth and flue.",
+    "Older properties with open fires or wood-burners: photograph the chimney breast, hearth and any carbon monoxide alarm.",
+    "Riverside homes in Matlock, Matlock Bath and Cromford: note flood-protection products and photograph tide marks or damp on low walls.",
+    "Hillside homes: photograph steps, retaining walls, gutters and drainage, which suffer in heavy rain."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact Derbyshire Dales District Council's housing or environmental health team.",
+  "nearby": [
+    "high-peak",
+    "north-east-derbyshire",
+    "amber-valley",
+    "south-derbyshire",
+    "staffordshire-moorlands",
+    "east-staffordshire",
+    "sheffield"
+  ]
+}

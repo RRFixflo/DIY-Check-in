@@ -1,0 +1,86 @@
+{
+  "slug": "chorley",
+  "name": "Chorley",
+  "council": {
+    "name": "Chorley Council",
+    "url": "https://chorley.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "PR6",
+    "PR7",
+    "PR25",
+    "PR26",
+    "BL6",
+    "WN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chorley town centre",
+      "postcodes": "PR7",
+      "housing": "Victorian terraces from the cotton-mill era and flats above shops around the market."
+    },
+    {
+      "name": "Buckshaw Village",
+      "postcodes": "PR7",
+      "housing": "A large new-build development of houses and apartments on a former ordnance factory site, with its own railway station."
+    },
+    {
+      "name": "Adlington",
+      "postcodes": "PR6, PR7",
+      "housing": "A former mill village of terraces with post-war and modern estates."
+    },
+    {
+      "name": "Coppull",
+      "postcodes": "PR7",
+      "housing": "A former mining village of terraces, semis and newer estates."
+    },
+    {
+      "name": "Euxton",
+      "postcodes": "PR7",
+      "housing": "Mainly post-war and modern semis and detached houses near Buckshaw."
+    },
+    {
+      "name": "Clayton-le-Woods",
+      "postcodes": "PR6",
+      "housing": "Suburban estates of semis and detached homes built from the 1970s onwards."
+    },
+    {
+      "name": "Whittle-le-Woods",
+      "postcodes": "PR6",
+      "housing": "A village of older stone cottages and modern detached houses."
+    },
+    {
+      "name": "Eccleston",
+      "postcodes": "PR7",
+      "housing": "A rural village of cottages, bungalows and family homes."
+    }
+  ],
+  "housing": "Chorley is a market town with Victorian mill-workers' terraces near the centre and a mix of former mining and mill villages around it. Since the 2000s Buckshaw Village has added thousands of new-build homes, many of them let privately to commuters to Preston, Manchester and Bolton. The east of the borough runs up to the West Pennine Moors, with stone cottages and farmhouses in villages such as Rivington and Brinscall. Much of the private rented stock is two and three-bedroom terraces and newer semis.",
+  "checkinTips": [
+    "Victorian terraces in Chorley town: photograph the back yard, outhouse and any shared ginnel, plus damp on chimney breasts and in the cellar.",
+    "New-build homes at Buckshaw Village: record allocated parking, any open snagging, smart meters and the estate management charge details.",
+    "Stone cottages near the West Pennine Moors: check solid walls for damp, wood burners, and any oil tank or LPG supply.",
+    "Former mining villages such as Coppull: photograph any cracks around doors and windows so movement can be compared at check-out.",
+    "Flats above shops in the town centre: note the separate entrance, fire alarm, meter cupboards and bin arrangements."
+  ],
+  "tenantHelp": "Tenants with disrepair or unsafe conditions in a private rented home can contact Chorley Council's environmental health (private sector housing) team.",
+  "nearby": [
+    "south-ribble",
+    "blackburn-with-darwen",
+    "bolton",
+    "wigan",
+    "west-lancashire"
+  ]
+}

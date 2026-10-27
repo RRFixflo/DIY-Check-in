@@ -1,0 +1,111 @@
+{
+  "slug": "county-durham",
+  "name": "County Durham",
+  "council": {
+    "name": "Durham County Council",
+    "url": "https://www.durham.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DH1",
+    "DH2",
+    "DH3",
+    "DH6",
+    "DH7",
+    "DH8",
+    "DH9",
+    "DL4",
+    "DL5",
+    "DL12",
+    "DL13",
+    "DL14",
+    "DL15",
+    "DL16",
+    "SR7",
+    "SR8",
+    "TS27"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Durham City",
+      "postcodes": "DH1",
+      "housing": "Georgian and Victorian terraces near the cathedral and university, many of them student HMOs, with purpose-built student blocks and suburban estates."
+    },
+    {
+      "name": "Chester-le-Street",
+      "postcodes": "DH2, DH3",
+      "housing": "Victorian terraces near the centre and post-war and modern estates."
+    },
+    {
+      "name": "Consett",
+      "postcodes": "DH8",
+      "housing": "A former steel town of terraces, post-war estates and new housing on the old works site."
+    },
+    {
+      "name": "Stanley",
+      "postcodes": "DH9",
+      "housing": "A former mining town of colliery terraces and post-war estates."
+    },
+    {
+      "name": "Bishop Auckland",
+      "postcodes": "DL14",
+      "housing": "A market town with Victorian terraces, former colliery housing and post-war estates."
+    },
+    {
+      "name": "Newton Aycliffe",
+      "postcodes": "DL5",
+      "housing": "A post-war new town of planned estates of terraces and semis."
+    },
+    {
+      "name": "Peterlee",
+      "postcodes": "SR8",
+      "housing": "A post-war new town of planned estates near the coast."
+    },
+    {
+      "name": "Seaham",
+      "postcodes": "SR7",
+      "housing": "A coastal town of colliery terraces and newer estates and harbour developments."
+    },
+    {
+      "name": "Barnard Castle",
+      "postcodes": "DL12",
+      "housing": "A historic market town of stone houses and cottages in Teesdale."
+    },
+    {
+      "name": "Spennymoor",
+      "postcodes": "DL16",
+      "housing": "A former mining town of terraces and post-war and modern estates."
+    }
+  ],
+  "housing": "County Durham has a large stock of former colliery terraces in towns and villages such as Stanley, Horden, Easington and Ferryhill, many of them now privately rented and some long-term empty. Durham City has a big student market, with Victorian terraces turned into HMOs and purpose-built student blocks. Post-war new towns at Newton Aycliffe and Peterlee have planned estates, while Teesdale and Weardale in the west have stone cottages and farmhouses. House prices are among the lowest in England.",
+  "checkinTips": [
+    "Colliery terraces in former mining villages: photograph back yards, outhouses, rear lanes and any damp in the back kitchen or on chimney breasts.",
+    "Former mining areas: note any cracks in walls and around frames so ground movement can be compared at check-out.",
+    "Student HMOs in Durham City: photograph each bedroom's lock and furniture, fire doors, alarms and every shared appliance separately.",
+    "Stone cottages in Teesdale and Weardale: check solid walls for damp, record the oil tank level, wood burners and any private water supply.",
+    "Coastal homes at Seaham: look for salt corrosion on metal frames, gates and outdoor fittings.",
+    "Long-empty terraces brought back into use: record the condition of every room in detail, including windows, doors and the boiler."
+  ],
+  "tenantHelp": "Tenants with disrepair or unsafe conditions in a private rented home can contact Durham County Council's housing standards team, which can inspect and enforce standards.",
+  "nearby": [
+    "northumberland",
+    "gateshead",
+    "sunderland",
+    "hartlepool",
+    "stockton-on-tees",
+    "darlington",
+    "north-yorkshire",
+    "westmorland-and-furness"
+  ]
+}

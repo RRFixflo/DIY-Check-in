@@ -1,0 +1,95 @@
+{
+  "slug": "fareham",
+  "name": "Fareham",
+  "council": {
+    "name": "Fareham Borough Council",
+    "url": "https://www.fareham.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "PO14",
+    "PO15",
+    "PO16",
+    "PO17",
+    "SO31"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Fareham town centre",
+      "postcodes": "PO16",
+      "housing": "Georgian and Victorian houses on High Street and West Street, with flats above shops and newer apartment blocks near the station."
+    },
+    {
+      "name": "Portchester",
+      "postcodes": "PO16",
+      "housing": "Mainly interwar and post-war semi-detached houses and bungalows, with older cottages near the castle."
+    },
+    {
+      "name": "Titchfield",
+      "postcodes": "PO14",
+      "housing": "A historic village of timber-framed and Georgian cottages, with post-war estates around it."
+    },
+    {
+      "name": "Stubbington",
+      "postcodes": "PO14",
+      "housing": "Post-war and later suburban estates of semis, detached houses and bungalows."
+    },
+    {
+      "name": "Hill Head",
+      "postcodes": "PO14",
+      "housing": "Coastal detached houses and bungalows facing the Solent."
+    },
+    {
+      "name": "Locks Heath",
+      "postcodes": "SO31",
+      "housing": "Large estates of detached and semi-detached houses built from the 1970s to the 1990s."
+    },
+    {
+      "name": "Warsash",
+      "postcodes": "SO31",
+      "housing": "Detached houses and bungalows near the Hamble estuary, with some older village properties."
+    },
+    {
+      "name": "Park Gate and Sarisbury",
+      "postcodes": "SO31",
+      "housing": "Suburban estates of detached and semi-detached homes from the late 20th century."
+    },
+    {
+      "name": "Whiteley (Fareham part)",
+      "postcodes": "PO15",
+      "housing": "Modern estates of houses and flats built since the 1990s."
+    },
+    {
+      "name": "Welborne",
+      "postcodes": "PO17",
+      "housing": "A new garden village under construction north of the M27, with new-build houses."
+    }
+  ],
+  "housing": "Fareham is a largely owner-occupied suburban borough between Portsmouth and Southampton, dominated by post-war and late 20th-century estates of semis, detached houses and bungalows, particularly in the Western Wards around Locks Heath and Park Gate. The historic town centre and Titchfield have Georgian and older listed homes, and flats above shops line the main streets. Private renting is mostly family houses and flats let to people working in the naval, defence and aerospace industries around Portsmouth Harbour and Solent, and the large new settlement at Welborne is adding new-build homes.",
+  "checkinTips": [
+    "Coastal homes in Hill Head and Warsash: check window frames, door furniture and external metalwork for salt corrosion, and photograph garden fences exposed to the wind.",
+    "Late 20th-century estate houses in Locks Heath and Park Gate: photograph conservatories, garages and drives, which are often included in the let.",
+    "Listed and older cottages in Titchfield and the town centre: check timber windows, low ceilings and beams for cracks or damp, and note any original features.",
+    "Bungalows in Portchester and Stubbington: photograph lofts and boarding if accessible, and gardens, sheds and patios.",
+    "New-build homes at Welborne and Whiteley: record any snagging still outstanding, plus meter readings, bin storage and parking allocations.",
+    "Flats above shops on West Street: note shared entrances, fire doors, entry phones and any ventilation problems in kitchens and bathrooms."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a private let can contact Fareham Borough Council's environmental health (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "gosport",
+    "portsmouth",
+    "winchester",
+    "eastleigh"
+  ]
+}

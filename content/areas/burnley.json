@@ -1,0 +1,83 @@
+{
+  "slug": "burnley",
+  "name": "Burnley",
+  "council": {
+    "name": "Burnley Borough Council",
+    "url": "https://www.burnley.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BB10",
+    "BB11",
+    "BB12"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Burnley town centre",
+      "postcodes": "BB11",
+      "housing": "Victorian terraces, flats above shops and converted mill buildings."
+    },
+    {
+      "name": "Burnley Wood",
+      "postcodes": "BB10",
+      "housing": "Streets of Victorian terraced houses close to the town centre."
+    },
+    {
+      "name": "Daneshouse and Stoneyholme",
+      "postcodes": "BB10",
+      "housing": "Dense terraces of two-up two-down houses built for mill workers."
+    },
+    {
+      "name": "Padiham",
+      "postcodes": "BB12",
+      "housing": "A small town of stone terraces and post-war and modern houses."
+    },
+    {
+      "name": "Briercliffe",
+      "postcodes": "BB10",
+      "housing": "Larger terraces, semis and post-war houses on the edge of town."
+    },
+    {
+      "name": "Rosegrove",
+      "postcodes": "BB12",
+      "housing": "Victorian terraced streets and post-war estates near the station."
+    },
+    {
+      "name": "Worsthorne",
+      "postcodes": "BB10",
+      "housing": "A moorland-edge village of stone cottages and modern houses."
+    },
+    {
+      "name": "Hapton",
+      "postcodes": "BB12",
+      "housing": "A village of terraced houses and newer homes near the M65."
+    }
+  ],
+  "housing": "Burnley's housing is dominated by Victorian terraced houses built for the cotton mills, many of them two-up two-down, and house prices are among the lowest in England. A large share of these terraces are privately rented, and some streets have high numbers of empty homes. The outer areas such as Briercliffe and Worsthorne have semis, newer houses and stone cottages. Check with the council whether any licensing scheme applies to a property before letting it.",
+  "checkinTips": [
+    "Victorian stone and brick terraces: photograph back yards, outside toilets or stores, gutters and any damp on party walls.",
+    "Two-up two-down houses: photograph the boiler, meters (often in the cellar or under the stairs) and the cellar for damp.",
+    "Cellar dwellings and basements: photograph walls and floors for damp and record any dehumidifier or pump.",
+    "Stone cottages in Worsthorne and the moorland villages: photograph windows, roofs and walls for wind-driven rain damage.",
+    "Converted mill buildings and flats above shops in the town centre: photograph the communal entrance, stairs and meter cupboards, and count every key and fob."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe homes to Burnley Borough Council's private sector housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "pendle",
+    "hyndburn",
+    "rossendale",
+    "calderdale",
+    "ribble-valley"
+  ]
+}

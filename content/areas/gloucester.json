@@ -1,0 +1,92 @@
+{
+  "slug": "gloucester",
+  "name": "Gloucester",
+  "council": {
+    "name": "Gloucester City Council",
+    "url": "https://www.gloucester.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "GL1",
+    "GL2",
+    "GL3",
+    "GL4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and the Docks",
+      "postcodes": "GL1",
+      "housing": "Flats in converted Victorian warehouses at the Docks, newer apartment blocks and flats above shops."
+    },
+    {
+      "name": "Barton and Tredworth",
+      "postcodes": "GL1",
+      "housing": "Dense Victorian terraces with many private lets and houses split into flats."
+    },
+    {
+      "name": "Kingsholm",
+      "postcodes": "GL1",
+      "housing": "Victorian and Edwardian terraces and villas near the rugby ground."
+    },
+    {
+      "name": "Longlevens",
+      "postcodes": "GL2",
+      "housing": "Interwar and post-war semi-detached houses and bungalows."
+    },
+    {
+      "name": "Hucclecote",
+      "postcodes": "GL3",
+      "housing": "Interwar and post-war semis with newer estates."
+    },
+    {
+      "name": "Tuffley",
+      "postcodes": "GL4",
+      "housing": "Post-war semis and terraces with some council-built housing."
+    },
+    {
+      "name": "Matson",
+      "postcodes": "GL4",
+      "housing": "A large post-war council-built estate of houses and flats, under regeneration."
+    },
+    {
+      "name": "Quedgeley",
+      "postcodes": "GL2",
+      "housing": "Large estates of houses built from the 1980s onwards on the city's southern edge."
+    },
+    {
+      "name": "Kingsway",
+      "postcodes": "GL2",
+      "housing": "A newer development of houses and flats on a former RAF site."
+    },
+    {
+      "name": "Abbeydale and Abbeymead",
+      "postcodes": "GL4",
+      "housing": "Estates of houses built from the 1970s to the 1990s."
+    }
+  ],
+  "housing": "Gloucester is a cathedral city with a dense Victorian core, where terraced streets in Barton, Tredworth and Kingsholm hold much of the private rented stock, including houses split into flats and shared homes. The historic Docks have been regenerated with warehouse conversions and new apartments, while the outer city is made up of interwar and post-war estates and large later developments at Quedgeley and Kingsway. Private renting grew noticeably between 2011 and 2021, one of the larger rises in the South West.",
+  "checkinTips": [
+    "Victorian terraces in Barton and Tredworth: check for damp at the base of walls and in rear kitchens, and photograph back yards and rear access.",
+    "Houses split into flats or shared homes: photograph each room's lock and furniture, fire doors, alarms and the fire blanket.",
+    "Warehouse conversions and apartments at the Docks: note fob and key counts, lifts, bike stores, parking and any condensation around large windows.",
+    "Homes in low-lying areas near the Severn: look for signs of past flooding or damp in ground-floor rooms.",
+    "Post-war estate houses in Matson and Tuffley: record the boiler, windows and doors, and the condition of gardens and fencing.",
+    "Newer homes at Kingsway and Quedgeley: note any snagging still outstanding, plus meter readings and parking allocations."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Gloucester City Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "tewkesbury",
+    "stroud"
+  ]
+}

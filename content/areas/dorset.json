@@ -1,0 +1,103 @@
+{
+  "slug": "dorset",
+  "name": "Dorset",
+  "council": {
+    "name": "Dorset Council",
+    "url": "https://www.dorsetcouncil.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DT1",
+    "DT2",
+    "DT3",
+    "DT4",
+    "DT5",
+    "DT6",
+    "DT7",
+    "DT8",
+    "DT9",
+    "DT10",
+    "DT11",
+    "BH16",
+    "BH19",
+    "BH20",
+    "BH21",
+    "BH31",
+    "SP7",
+    "SP8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dorchester and Poundbury",
+      "postcodes": "DT1",
+      "housing": "Georgian and Victorian town houses in Dorchester, and the Poundbury extension of new traditional-style houses and flats."
+    },
+    {
+      "name": "Weymouth",
+      "postcodes": "DT3, DT4",
+      "housing": "Georgian and Victorian seafront terraces, many split into flats, with inter-war and post-war estates inland."
+    },
+    {
+      "name": "Portland",
+      "postcodes": "DT5",
+      "housing": "Portland stone cottages and terraces, and post-war estates on the island."
+    },
+    {
+      "name": "Bridport and West Bay",
+      "postcodes": "DT6",
+      "housing": "A market town of older brick and stone houses, with harbourside flats at West Bay."
+    },
+    {
+      "name": "Lyme Regis",
+      "postcodes": "DT7",
+      "housing": "Steep streets of period cottages and houses on an unstable coastline."
+    },
+    {
+      "name": "Sherborne",
+      "postcodes": "DT9",
+      "housing": "A historic town of honey-coloured stone houses, many listed."
+    },
+    {
+      "name": "Blandford Forum",
+      "postcodes": "DT11",
+      "housing": "A Georgian market town centre with modern estates around it."
+    },
+    {
+      "name": "Wimborne Minster and Ferndown",
+      "postcodes": "BH21, BH22",
+      "housing": "Period houses in Wimborne and large post-war estates and bungalows around Ferndown."
+    },
+    {
+      "name": "Swanage and Wareham",
+      "postcodes": "BH19, BH20",
+      "housing": "Victorian stone houses and seaside flats in Swanage, and a historic walled town at Wareham."
+    }
+  ],
+  "housing": "Dorset Council covers the county outside Bournemouth, Christchurch and Poole: market towns, coast and a large rural area with many thatched, cob and stone cottages, often listed or in conservation areas and off the gas grid. Weymouth has many Georgian and Victorian seafront houses converted to flats, and Portland has its own stone-built housing. Second homes and holiday lets are common on the coast, and there is military housing around Bovington, Blandford and Portland.",
+  "checkinTips": [
+    "Thatched cottages: photograph the thatch, ridge and any netting from the outside, and check smoke and heat alarms inside.",
+    "Cob and stone cottages: photograph damp patches, lime render and any cracks, room by room.",
+    "Seafront flats in Weymouth and Swanage: photograph window frames, balconies and metal fittings for salt corrosion.",
+    "Rural homes off the gas grid: photograph the oil tank and gauge reading, the boiler, and any septic tank or private water supply.",
+    "Homes near the coast at Lyme Regis and West Bay: photograph any cracks in walls and paths, as parts of this coast are unstable."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact Dorset Council's housing standards team.",
+  "nearby": [
+    "bournemouth",
+    "somerset",
+    "wiltshire",
+    "east-devon",
+    "new-forest"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "slug": "bassetlaw",
+  "name": "Bassetlaw",
+  "council": {
+    "name": "Bassetlaw District Council",
+    "url": "https://www.bassetlaw.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DN10",
+    "DN11",
+    "DN22",
+    "NG22",
+    "S80",
+    "S81"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Worksop",
+      "postcodes": "S80, S81",
+      "housing": "Victorian terraces near the centre, with large post-war estates and newer private estates."
+    },
+    {
+      "name": "Retford",
+      "postcodes": "DN22",
+      "housing": "Georgian and Victorian houses around the market square, terraces and modern estates."
+    },
+    {
+      "name": "Harworth and Bircotes",
+      "postcodes": "DN11",
+      "housing": "Pit terraces and post-war housing, with large new estates on the former colliery site."
+    },
+    {
+      "name": "Carlton in Lindrick",
+      "postcodes": "S81",
+      "housing": "A village of older stone cottages and post-war housing."
+    },
+    {
+      "name": "Langold",
+      "postcodes": "S81",
+      "housing": "A former mining village of terraced and semi-detached houses."
+    },
+    {
+      "name": "Tuxford",
+      "postcodes": "NG22",
+      "housing": "A small market town of period houses and newer estates near the A1."
+    },
+    {
+      "name": "Misterton",
+      "postcodes": "DN10",
+      "housing": "A village of houses and bungalows on the edge of the Isle of Axholme."
+    },
+    {
+      "name": "Blyth",
+      "postcodes": "S81",
+      "housing": "Period cottages and houses in a historic village."
+    },
+    {
+      "name": "Ranskill",
+      "postcodes": "DN22",
+      "housing": "A village of semis, bungalows and older cottages on the old Great North Road."
+    }
+  ],
+  "housing": "Bassetlaw is a large rural district in north Nottinghamshire, centred on the towns of Worksop and Retford, with former mining settlements such as Harworth, Langold and Shireoaks. Housing is mainly brick terraces and ex-council estates in the towns and pit villages, with older cottages and farmhouses in the countryside. Prices are well below the England average, and private rented homes are mostly older terraces in Worksop and Retford.",
+  "checkinTips": [
+    "Victorian terraces in Worksop and Retford: photograph back yards, rear doors, outhouses and any cellars for damp.",
+    "Former mining villages: photograph any cracks in walls, sticking doors or uneven floors so later movement can be compared.",
+    "Rural homes off mains gas: photograph oil tanks and the gauge reading, and the cover of any septic tank or treatment plant.",
+    "Homes near the River Idle and the Trent: photograph the base of walls, airbricks and skirting boards for damp.",
+    "Ex-council semis: photograph uPVC windows and doors, their locks and key counts, and garden fences and sheds."
+  ],
+  "tenantHelp": "Tenants in Bassetlaw can contact Bassetlaw District Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "doncaster",
+    "rotherham",
+    "bolsover",
+    "newark-and-sherwood",
+    "west-lindsey",
+    "north-lincolnshire"
+  ]
+}

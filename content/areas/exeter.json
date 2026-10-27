@@ -1,0 +1,104 @@
+{
+  "slug": "exeter",
+  "name": "Exeter",
+  "council": {
+    "name": "Exeter City Council",
+    "url": "https://exeter.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,319 a month (ONS, January 2026)",
+    "source": "https://www.torbayweekly.co.uk/news/around-devon/exeter-faces-rising-rents-and-house-prices-as-demand-for-affordable-homes-surges-8294530"
+  },
+  "price": {
+    "text": "£281,197 (UK HPI, May 2026), down 2.2% on a year earlier",
+    "source": "https://housecheckup.co.uk/area/exeter"
+  },
+  "privateRentedShare": {
+    "text": "24.9% of households rent privately (Census 2021), up from 21.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000041"
+  },
+  "councilTax": {
+    "text": "£2,495.36 average Band D (2026/27), including Devon County Council, police and fire",
+    "source": "https://www.northdevongazette.co.uk/news/around-devon/exeter-council-tax-to-rise-as-devon-county-council-approves-increase-in-202627-budget-6618340"
+  },
+  "postcodes": [
+    "EX1",
+    "EX2",
+    "EX4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "St Leonard's",
+      "postcodes": "EX2",
+      "housing": "Georgian and Regency terraces and villas, many converted into flats, close to the city centre."
+    },
+    {
+      "name": "Heavitree",
+      "postcodes": "EX1",
+      "housing": "Victorian and Edwardian terraces and semis along and off Fore Street."
+    },
+    {
+      "name": "Newtown and Mount Pleasant",
+      "postcodes": "EX1, EX4",
+      "housing": "Dense Victorian terraced streets, many let to students and young professionals."
+    },
+    {
+      "name": "St David's",
+      "postcodes": "EX4",
+      "housing": "Victorian terraces near the university and St David's station, with a high share of student shared houses."
+    },
+    {
+      "name": "Pennsylvania",
+      "postcodes": "EX4",
+      "housing": "Larger Victorian and interwar houses and post-war semis on the hill north of the centre, popular with students and families."
+    },
+    {
+      "name": "St Thomas",
+      "postcodes": "EX2, EX4",
+      "housing": "Victorian terraces west of the river, with post-war housing towards Exwick."
+    },
+    {
+      "name": "Exwick",
+      "postcodes": "EX4",
+      "housing": "Post-war and later estates of houses and flats on the hillside west of the Exe."
+    },
+    {
+      "name": "Whipton and Beacon Heath",
+      "postcodes": "EX1, EX4",
+      "housing": "Interwar and post-war council-built houses, many now privately owned or let."
+    },
+    {
+      "name": "Alphington and Marsh Barton",
+      "postcodes": "EX2",
+      "housing": "Village core cottages with suburban estates and newer developments on the city's south-west edge."
+    },
+    {
+      "name": "Newcourt and Topsham Road",
+      "postcodes": "EX2",
+      "housing": "Large new-build estates of houses and flats from the 2000s onwards, near the Topsham Road corridor."
+    }
+  ],
+  "housing": "Exeter is a compact cathedral and university city where about a quarter of households rent privately, a share that rose noticeably between 2011 and 2021. Student shared houses are concentrated in the terraced streets around the University of Exeter's Streatham campus, including St David's, Pennsylvania and Newtown, where an Article 4 Direction has controlled new HMOs since 2012. Georgian and Victorian terraces near the centre are often split into flats, while the eastern edge has large new estates around Newcourt, and purpose-built student blocks have been added across the city.",
+  "checkinTips": [
+    "Student shared houses near the university: photograph each bedroom's lock, furniture and fire door separately, and note smoke alarms and fire blankets.",
+    "Georgian and Regency conversions in St Leonard's: check sash windows, cornices and ceilings for cracks, and photograph shared hallways and meter cupboards.",
+    "Victorian terraces in Heavitree and Newtown: look for damp at the base of walls and in rear kitchens, and photograph back yards and rear access lanes.",
+    "Hillside homes in Pennsylvania and Exwick: photograph steps, retaining walls and sloping gardens, and note any guttering or drainage problems.",
+    "New-build flats around Newcourt: record fob and key counts, parking permits, bin stores and any snagging still outstanding.",
+    "Homes near the river and the Exeter Canal in St Thomas and Alphington: note any signs of past flooding or damp in ground-floor rooms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Exeter City Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "east-devon",
+    "teignbridge",
+    "mid-devon"
+  ]
+}

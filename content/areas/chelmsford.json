@@ -1,0 +1,98 @@
+{
+  "slug": "chelmsford",
+  "name": "Chelmsford",
+  "council": {
+    "name": "Chelmsford City Council",
+    "url": "https://www.chelmsford.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "CM1",
+    "CM2",
+    "CM3",
+    "CM4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chelmsford city centre",
+      "postcodes": "CM1, CM2",
+      "housing": "Victorian terraces, flats over shops and many modern apartment blocks near the station and river."
+    },
+    {
+      "name": "Springfield",
+      "postcodes": "CM1",
+      "housing": "Mainly 1960s–90s estates of houses and flats, with large new developments at Beaulieu."
+    },
+    {
+      "name": "Moulsham",
+      "postcodes": "CM2",
+      "housing": "Victorian and Edwardian terraces and villas south of the centre."
+    },
+    {
+      "name": "Great Baddow",
+      "postcodes": "CM2",
+      "housing": "A large village suburb of post-war and modern semis and bungalows."
+    },
+    {
+      "name": "Chelmer Village",
+      "postcodes": "CM2",
+      "housing": "A 1970s–80s planned estate of houses and small flats."
+    },
+    {
+      "name": "South Woodham Ferrers",
+      "postcodes": "CM3",
+      "housing": "A planned town from the 1970s–80s, with Essex Design Guide brick houses and newer estates."
+    },
+    {
+      "name": "Writtle",
+      "postcodes": "CM1",
+      "housing": "A historic village with period cottages around a green and later suburban houses."
+    },
+    {
+      "name": "Danbury",
+      "postcodes": "CM3",
+      "housing": "A hilltop village of detached houses and older cottages."
+    }
+  ],
+  "housing": "Chelmsford is a commuter city with a strong rental market for flats near the station, where many modern apartment blocks have been built. Older terraces in Moulsham and the centre are popular with renters and sharers, and Anglia Ruskin University adds student lets. Large new neighbourhoods are being built at Beaulieu and Channels to the north-east. Around the city are villages such as Writtle, Danbury and Great Baddow, and the planned town of South Woodham Ferrers.",
+  "checkinTips": [
+    "Apartment blocks near the station and river: record fob and key counts, parking permits, bike and bin store access and the post box.",
+    "Victorian terraces in Moulsham: photograph sash or replacement windows, chimney breasts, rear extensions and any damp.",
+    "New-build homes at Beaulieu and Channels: note snagging marks, sealant around baths and showers, and new garden fences and turf.",
+    "Shared houses near Anglia Ruskin University: photograph each bedroom's lock, the fire doors, smoke alarms and the shared kitchen separately.",
+    "Homes near the Rivers Chelmer and Can: photograph ground floors and gardens for signs of damp or past flooding."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Chelmsford City Council's private sector housing team.",
+  "nearby": [
+    "braintree",
+    "maldon",
+    "rochford",
+    "basildon",
+    "brentwood",
+    "epping-forest",
+    "uttlesford"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "slug": "gateshead",
+  "name": "Gateshead",
+  "council": {
+    "name": "Gateshead Council",
+    "url": "https://www.gateshead.gov.uk",
+    "privateRentingUrl": "https://gateshead.gov.uk/article/7131/About-selective-landlord-licensing"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "NE8",
+    "NE9",
+    "NE10",
+    "NE11",
+    "NE16",
+    "NE21",
+    "NE39",
+    "NE40",
+    "DH3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Gateshead town centre",
+      "postcodes": "NE8",
+      "housing": "Flats in older and newly built blocks, alongside regeneration sites close to the Tyne."
+    },
+    {
+      "name": "Bensham and Saltwell",
+      "postcodes": "NE8",
+      "housing": "Dense streets of Tyneside flats and Victorian terraces near Saltwell Park, with many private lets."
+    },
+    {
+      "name": "Low Fell",
+      "postcodes": "NE9",
+      "housing": "Victorian and Edwardian terraces and semis along Durham Road and its side streets."
+    },
+    {
+      "name": "Felling",
+      "postcodes": "NE10",
+      "housing": "Tyneside flats and terraces with post-war council-built estates."
+    },
+    {
+      "name": "Dunston",
+      "postcodes": "NE11",
+      "housing": "Terraces and post-war estates near the riverside and the MetroCentre."
+    },
+    {
+      "name": "Whickham",
+      "postcodes": "NE16",
+      "housing": "Mainly owner-occupied interwar and post-war semis and detached houses."
+    },
+    {
+      "name": "Blaydon",
+      "postcodes": "NE21",
+      "housing": "Terraced streets and post-war estates near the river."
+    },
+    {
+      "name": "Ryton",
+      "postcodes": "NE40",
+      "housing": "Older stone houses and suburban semis and detached homes in the west of the borough."
+    },
+    {
+      "name": "Birtley",
+      "postcodes": "DH3",
+      "housing": "Brick terraces and post-war estates on the southern edge of the borough."
+    },
+    {
+      "name": "Rowlands Gill",
+      "postcodes": "NE39",
+      "housing": "A Derwent valley village of terraces, semis and detached houses."
+    }
+  ],
+  "housing": "Gateshead stretches from the Tyne riverside to the rural Derwent valley. Inner areas such as Bensham, Saltwell and Felling are built up with Tyneside flats (pairs of upstairs and downstairs flats behind separate front doors) and Victorian terraces, where much of the private renting is found, while large post-war council estates surround the town and western areas such as Whickham and Ryton are more suburban. The council has used selective landlord licensing in parts of the inner borough and publishes information about its schemes on its website.",
+  "checkinTips": [
+    "Tyneside flats in Bensham and Saltwell: record which yard, outhouse and bin belong to the flat, and photograph the separate front door, stairs and back lane access.",
+    "Victorian terraces in Low Fell and Felling: check for damp at the base of walls and in rear kitchens, and photograph sash or replacement windows.",
+    "Back lanes behind terraces: photograph rear gates, yard walls and bins, and note any fly-tipping at the start of the tenancy.",
+    "Post-war estate houses: record the boiler, windows and doors, and the condition of gardens and fencing.",
+    "Flats in town centre blocks: note fob and key counts, lifts, communal entrances and bin stores.",
+    "Homes in the Derwent valley and on hillsides: photograph gutters, steps and retaining walls, and any damp on exposed walls."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Gateshead Council's private sector housing team, which also runs its landlord licensing, after first reporting the problem to their landlord.",
+  "nearby": [
+    "newcastle",
+    "south-tyneside",
+    "sunderland",
+    "county-durham",
+    "northumberland"
+  ]
+}

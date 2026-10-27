@@ -1,0 +1,96 @@
+{
+  "slug": "east-riding-of-yorkshire",
+  "name": "East Riding of Yorkshire",
+  "council": {
+    "name": "East Riding of Yorkshire Council",
+    "url": "https://www.eastriding.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "DN14",
+    "HU10",
+    "HU11",
+    "HU12",
+    "HU13",
+    "HU15",
+    "HU16",
+    "HU17",
+    "HU18",
+    "YO15",
+    "YO16",
+    "YO25",
+    "YO42",
+    "YO43",
+    "HU19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bridlington",
+      "postcodes": "YO15, YO16",
+      "housing": "A seaside town with Victorian and Edwardian terraces, many converted to flats, and post-war estates."
+    },
+    {
+      "name": "Beverley",
+      "postcodes": "HU17",
+      "housing": "A historic market town with Georgian and Victorian houses in the centre and suburban estates around it."
+    },
+    {
+      "name": "Goole",
+      "postcodes": "DN14",
+      "housing": "A port town with dense Victorian terraced streets and post-war council-built estates."
+    },
+    {
+      "name": "Driffield",
+      "postcodes": "YO25",
+      "housing": "A Wolds market town with Victorian terraces and newer estates."
+    },
+    {
+      "name": "Hornsea",
+      "postcodes": "HU18",
+      "housing": "A small coastal town of Victorian and inter-war houses and bungalows."
+    },
+    {
+      "name": "Cottingham",
+      "postcodes": "HU16",
+      "housing": "A large village on the edge of Hull with period houses, inter-war semis and student lets near the university halls."
+    },
+    {
+      "name": "Hessle",
+      "postcodes": "HU13",
+      "housing": "A town by the Humber Bridge with Victorian terraces and post-war and modern estates."
+    },
+    {
+      "name": "Withernsea",
+      "postcodes": "HU19",
+      "housing": "A coastal town in Holderness with Victorian terraces and bungalows."
+    }
+  ],
+  "housing": "The East Riding is a large, mainly rural area with market towns, the Holderness coast and commuter towns and villages around Hull. Most homes are owner-occupied, with private lets concentrated in Bridlington, Goole, Beverley and the towns on Hull's edge. Bridlington and Withernsea have many Victorian terraces and former guest houses split into flats, while Goole has dense terraced streets. Parts of Holderness are affected by coastal erosion and low-lying land near the Humber is at risk of flooding.",
+  "checkinTips": [
+    "Former guest houses split into flats in Bridlington: photograph fire doors, smoke alarms, the communal stairs and each flat's meters.",
+    "Coastal homes in Bridlington, Hornsea and Withernsea: photograph window frames and outside metalwork for salt corrosion and any damp on walls.",
+    "Victorian terraces in Goole: photograph back yards, outbuildings, damp at the base of walls and the condition of sash or replacement windows.",
+    "Rural homes off the gas grid on the Wolds and in Holderness: photograph the oil tank, its gauge and level, and the boiler service label.",
+    "Low-lying homes near the Humber and rivers: photograph any damp tide marks, air bricks and flood barriers left for the tenant.",
+    "Student lets in Cottingham: photograph each bedroom and its lock, and note the key count for every room and the front door."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Riding of Yorkshire Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "hull",
+    "york",
+    "north-yorkshire",
+    "doncaster",
+    "north-lincolnshire"
+  ]
+}

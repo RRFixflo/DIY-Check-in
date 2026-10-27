@@ -1,0 +1,110 @@
+{
+  "slug": "bradford",
+  "name": "Bradford",
+  "council": {
+    "name": "City of Bradford Metropolitan District Council",
+    "url": "https://www.bradford.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BD1",
+    "BD2",
+    "BD3",
+    "BD4",
+    "BD5",
+    "BD6",
+    "BD7",
+    "BD8",
+    "BD9",
+    "BD10",
+    "BD13",
+    "BD15",
+    "BD16",
+    "BD17",
+    "BD18",
+    "BD20",
+    "BD21",
+    "BD22",
+    "LS29"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bradford city centre and Little Germany",
+      "postcodes": "BD1",
+      "housing": "Converted Victorian warehouses and newer apartment blocks."
+    },
+    {
+      "name": "Manningham",
+      "postcodes": "BD8",
+      "housing": "Large Victorian stone villas and terraces, many split into flats or let as shared houses."
+    },
+    {
+      "name": "Great Horton and the university area",
+      "postcodes": "BD7",
+      "housing": "Stone back-to-back and through terraces, with student lets near the University of Bradford."
+    },
+    {
+      "name": "Little Horton and West Bowling",
+      "postcodes": "BD5",
+      "housing": "Stone terraces and post-war council-built estates."
+    },
+    {
+      "name": "Bradford Moor and Barkerend",
+      "postcodes": "BD3",
+      "housing": "Dense Victorian stone terraced streets, many privately rented."
+    },
+    {
+      "name": "Shipley and Saltaire",
+      "postcodes": "BD17, BD18",
+      "housing": "Stone terraces, including the listed model village of Saltaire."
+    },
+    {
+      "name": "Keighley",
+      "postcodes": "BD20, BD21",
+      "housing": "A mill town of stone terraces, with larger houses and post-war estates on its edges."
+    },
+    {
+      "name": "Ilkley",
+      "postcodes": "LS29",
+      "housing": "Victorian stone villas and terraces, mostly owner-occupied."
+    },
+    {
+      "name": "Bingley",
+      "postcodes": "BD16",
+      "housing": "Stone terraces, semis and newer estates in the Aire valley."
+    },
+    {
+      "name": "Haworth and Queensbury",
+      "postcodes": "BD22, BD13",
+      "housing": "Hilltop villages of stone terraces and cottages."
+    }
+  ],
+  "housing": "Bradford's housing is built largely of local stone: Victorian through terraces and back-to-backs in the inner city, large villas in Manningham and the mill-town terraces of Keighley, Shipley and Bingley. Private renting is concentrated in the inner wards, where many terraces and villas are let to families or as shared houses, and around the University of Bradford. The city centre has warehouse conversions and newer flats. The north and west of the district, including Ilkley and the Worth Valley, are moorland towns and villages with older stone homes.",
+  "checkinTips": [
+    "Stone back-to-back and through terraces: photograph damp on solid walls, cellar condition and any mould in bedrooms built into the slope.",
+    "Large Victorian villas in Manningham split into flats: record the shared hallway, fire doors, meters and how many keys each tenant holds.",
+    "Student lets near the University of Bradford: photograph each bedroom lock and furniture, the alarms and the shared kitchen separately.",
+    "Stone-slate and slate roofs, gutters and chimney stacks on older terraces: photograph them from the street and note any water marks on ceilings.",
+    "Hilltop homes in Queensbury, Haworth and the moorland villages: check windows and doors for draughts and condensation, and photograph stoves or open fires.",
+    "Warehouse conversions in Little Germany: note fob and key counts, the intercom and any condensation around large windows."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Bradford Council's housing standards team.",
+  "nearby": [
+    "leeds",
+    "calderdale",
+    "kirklees",
+    "north-yorkshire",
+    "pendle"
+  ]
+}

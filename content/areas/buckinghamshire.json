@@ -1,0 +1,106 @@
+{
+  "slug": "buckinghamshire",
+  "name": "Buckinghamshire",
+  "council": {
+    "name": "Buckinghamshire Council",
+    "url": "https://www.buckinghamshire.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "HP5",
+    "HP6",
+    "HP7",
+    "HP9",
+    "HP10",
+    "HP11",
+    "HP12",
+    "HP13",
+    "HP19",
+    "HP20",
+    "HP21",
+    "MK18",
+    "SL7",
+    "SL0",
+    "SL9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "High Wycombe",
+      "postcodes": "HP11, HP12, HP13",
+      "housing": "Victorian terraces near the centre, large post-war estates on the hillsides and flats around the station."
+    },
+    {
+      "name": "Aylesbury",
+      "postcodes": "HP19, HP20, HP21",
+      "housing": "Post-war overspill estates, period houses in the old town and large new-build estates."
+    },
+    {
+      "name": "Amersham",
+      "postcodes": "HP6, HP7",
+      "housing": "Victorian and inter-war houses in Amersham-on-the-Hill and listed buildings in the old town."
+    },
+    {
+      "name": "Chesham",
+      "postcodes": "HP5",
+      "housing": "Victorian terraces in the valley and post-war and modern houses on the hills."
+    },
+    {
+      "name": "Beaconsfield",
+      "postcodes": "HP9",
+      "housing": "Large detached houses and some flats close to the town centre."
+    },
+    {
+      "name": "Marlow",
+      "postcodes": "SL7",
+      "housing": "A Thames town of Georgian and Victorian houses, cottages and modern flats."
+    },
+    {
+      "name": "Buckingham",
+      "postcodes": "MK18",
+      "housing": "A market town with Georgian buildings, student lets near the university and newer estates."
+    },
+    {
+      "name": "Gerrards Cross",
+      "postcodes": "SL9",
+      "housing": "Large detached inter-war and later houses for London commuters."
+    },
+    {
+      "name": "Iver",
+      "postcodes": "SL0",
+      "housing": "Villages of post-war and inter-war houses near the M25 and Heathrow."
+    }
+  ],
+  "housing": "Buckinghamshire is a large county-wide council area, mostly owner-occupied, with high house prices in the south near London. High Wycombe and Aylesbury are the main towns, with a mix of Victorian terraces, post-war estates and large new developments. The south of the county, around Beaconsfield, Gerrards Cross and Amersham, has many large detached homes. Much of the Chilterns is protected countryside, with brick and flint cottages in the villages.",
+  "checkinTips": [
+    "Brick and flint cottages in the Chiltern villages: photograph walls, beams, open fireplaces and any damp patches at low level.",
+    "Large detached houses in the south of the county: photograph driveways, electric gates, garages and garden lighting as well as the rooms.",
+    "Hillside terraces and post-war estates in High Wycombe: photograph steps, retaining walls and rear gardens.",
+    "New-build estates around Aylesbury: note snagging marks, shared parking and management company areas.",
+    "Riverside homes in Marlow and along the Thames: photograph walls near floor level and gardens for signs of past flooding.",
+    "Rural homes off the gas network: photograph the oil tank, its gauge level and the boiler."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions to Buckinghamshire Council's private sector housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "milton-keynes",
+    "central-bedfordshire",
+    "dacorum",
+    "three-rivers",
+    "hillingdon",
+    "slough",
+    "windsor-and-maidenhead",
+    "west-northamptonshire",
+    "cherwell",
+    "south-oxfordshire"
+  ]
+}

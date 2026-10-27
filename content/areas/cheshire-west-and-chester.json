@@ -1,0 +1,111 @@
+{
+  "slug": "cheshire-west-and-chester",
+  "name": "Cheshire West and Chester",
+  "council": {
+    "name": "Cheshire West and Chester Council",
+    "url": "https://www.cheshirewestandchester.gov.uk",
+    "privateRentingUrl": "https://www.cheshirewestandchester.gov.uk/residents/housing/private-rented-sector/private-rented-sector-service"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed on the council's website.",
+    "additional": "No additional HMO licensing: only mandatory licensing of HMOs with five or more unrelated people sharing. Accredited landlords get 10% off the HMO licence fee.",
+    "fee": null,
+    "source": "https://www.cheshirewestandchester.gov.uk/residents/housing/private-rented-sector/landlord-and-tenant-information/house-in-multiple-occupation/hmo-licencing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£991 a month (ONS, August 2026), up 6.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000050/"
+  },
+  "price": {
+    "text": "£270,000 (UK HPI, July 2026, provisional), up 5.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000050/"
+  },
+  "privateRentedShare": {
+    "text": "15.7% of households rent privately (Census 2021), up from 12.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000050/"
+  },
+  "councilTax": {
+    "text": "£2,472 Band D (2026/27) including police and fire, before any town or parish charge",
+    "source": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/your-council-tax-explained"
+  },
+  "postcodes": [
+    "CH1",
+    "CH2",
+    "CH3",
+    "CH4",
+    "CH64",
+    "CH65",
+    "CH66",
+    "CW6",
+    "CW7",
+    "CW8",
+    "CW9",
+    "WA6",
+    "WA7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chester city centre",
+      "postcodes": "CH1",
+      "housing": "Georgian and Victorian townhouses, many split into flats, with modern apartment blocks along the river and canal."
+    },
+    {
+      "name": "Hoole",
+      "postcodes": "CH2",
+      "housing": "Victorian and Edwardian terraces, popular with young professionals and students."
+    },
+    {
+      "name": "Handbridge and Curzon Park",
+      "postcodes": "CH4",
+      "housing": "Victorian terraces and larger period villas just south of the River Dee."
+    },
+    {
+      "name": "Ellesmere Port",
+      "postcodes": "CH65, CH66",
+      "housing": "Post-war council-built estates, inter-war semis and newer estates near the motorway."
+    },
+    {
+      "name": "Northwich",
+      "postcodes": "CW8, CW9",
+      "housing": "Victorian terraces and black-and-white revival buildings in the centre, with post-war and modern estates around it."
+    },
+    {
+      "name": "Winsford",
+      "postcodes": "CW7",
+      "housing": "Mainly 1960s and 1970s overspill estates with newer housing on the edges."
+    },
+    {
+      "name": "Frodsham",
+      "postcodes": "WA6",
+      "housing": "Period cottages and townhouses along the main street, with semis and detached homes on the hillside."
+    },
+    {
+      "name": "Neston and Parkgate",
+      "postcodes": "CH64",
+      "housing": "Older cottages and seafront houses in Parkgate, with suburban semis and detached homes in Neston."
+    },
+    {
+      "name": "Tarporley",
+      "postcodes": "CW6",
+      "housing": "A village of brick and sandstone cottages and larger detached homes surrounded by farmland."
+    }
+  ],
+  "housing": "The borough mixes the historic city of Chester with the industrial towns of Ellesmere Port, Northwich and Winsford and a large rural area. Chester's private rented sector is busy, with University of Chester students and young professionals renting Victorian terraces in Hoole, Boughton and Garden Quarter, plus HMOs and city-centre flats. Ellesmere Port and Winsford have large post-war estates, with former council homes now often let privately. Rural lets include farm cottages and sandstone village houses across the Cheshire Plain.",
+  "checkinTips": [
+    "Student HMOs near the University of Chester: photograph each bedroom's lock and furniture, the fire doors and alarms, and the shared kitchen and bathroom separately.",
+    "Georgian and Victorian conversions in central Chester: check sash windows, shared hallway condition and any intercom or entry fob counts.",
+    "Riverside and canal-side flats: note any damp or condensation, balcony condition and allocated parking or bike store fobs.",
+    "Former council houses in Ellesmere Port and Winsford: photograph gardens, fences, sheds and the boiler and consumer unit.",
+    "Rural sandstone cottages: record oil tank levels, septic tank or private water supply, wood burners and any damp on solid walls.",
+    "Northwich has a history of salt-related subsidence: photograph any cracks in walls and around door and window frames."
+  ],
+  "tenantHelp": "Tenants can contact the council's Private Rented Sector Service about disrepair, unsafe conditions or a landlord who won't carry out repairs.",
+  "nearby": [
+    "cheshire-east",
+    "warrington",
+    "halton",
+    "wirral",
+    "shropshire"
+  ]
+}

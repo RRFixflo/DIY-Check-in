@@ -1,0 +1,83 @@
+{
+  "slug": "crawley",
+  "name": "Crawley",
+  "council": {
+    "name": "Crawley Borough Council",
+    "url": "https://crawley.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "RH10",
+    "RH11",
+    "RH6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Three Bridges",
+      "postcodes": "RH10",
+      "housing": "Victorian and Edwardian houses near the station, with post-war neighbourhood housing and newer flats."
+    },
+    {
+      "name": "West Green",
+      "postcodes": "RH11",
+      "housing": "One of the first new town neighbourhoods, with 1950s terraces and flats near the centre."
+    },
+    {
+      "name": "Tilgate",
+      "postcodes": "RH10",
+      "housing": "1950s and 1960s new town terraces, semis and flats next to Tilgate Park."
+    },
+    {
+      "name": "Broadfield",
+      "postcodes": "RH11",
+      "housing": "1970s and 1980s estates of terraces and flats."
+    },
+    {
+      "name": "Bewbush",
+      "postcodes": "RH11",
+      "housing": "1970s and 1980s estates of terraced houses and flats."
+    },
+    {
+      "name": "Pound Hill",
+      "postcodes": "RH10",
+      "housing": "Mainly 1960s to 1980s semis and detached houses in a mainly owner-occupied area."
+    },
+    {
+      "name": "Langley Green",
+      "postcodes": "RH11",
+      "housing": "1950s new town houses and flats close to Gatwick Airport."
+    },
+    {
+      "name": "Forge Wood",
+      "postcodes": "RH10",
+      "housing": "A new neighbourhood of modern houses and apartments built since the 2010s."
+    }
+  ],
+  "housing": "Crawley is a post-war new town, built in neighbourhoods each with its own shops, so most homes are 1950s to 1980s terraces, semis and low-rise flats, with a large council-owned stock. Gatwick Airport is a major employer and drives demand for private lets, including shared houses and rooms. The town centre has seen many office-to-flat conversions and new apartment blocks, and Forge Wood is the newest neighbourhood. Older Victorian homes survive mainly around Three Bridges and the old high street.",
+  "checkinTips": [
+    "Former new town council houses: photograph gardens, fences, sheds, the boiler and the consumer unit.",
+    "Office-to-flat conversions in the town centre: check room sizes, window opening, ventilation and any condensation, and note fob and post box keys.",
+    "Shared houses let to airport workers: photograph each room's lock and furniture and the shared kitchen appliances separately.",
+    "Homes under the Gatwick flight path: note window and door seals and any secondary glazing.",
+    "New-build flats and houses at Forge Wood: record allocated parking, bin and bike stores and any snagging still open."
+  ],
+  "tenantHelp": "Tenants with disrepair or unsafe conditions in a private rented home can contact Crawley Borough Council's private sector housing team.",
+  "nearby": [
+    "horsham",
+    "mid-sussex",
+    "reigate-and-banstead",
+    "mole-valley",
+    "tandridge"
+  ]
+}

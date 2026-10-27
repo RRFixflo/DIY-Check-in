@@ -1,0 +1,99 @@
+{
+  "slug": "brentwood",
+  "name": "Brentwood",
+  "council": {
+    "name": "Brentwood Borough Council",
+    "url": "https://www.brentwood.gov.uk",
+    "privateRentingUrl": "https://www.brentwood.gov.uk/private-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; mandatory licensing applies to HMOs with five or more people forming more than one household.",
+    "fee": "£890 for a new HMO licence and £603 for a renewal, each for five years (council's HMO page).",
+    "source": "https://brentwood.gov.uk/w/houses-in-multiple-occupation-hmo-s-",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,620 a month (ONS, August 2026), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000068/"
+  },
+  "price": {
+    "text": "£514,000 (UK HPI, July 2026, provisional), down 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000068/"
+  },
+  "privateRentedShare": {
+    "text": "16.0% of households rent privately (Census 2021), up from 11.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000068/"
+  },
+  "councilTax": {
+    "text": "£2,258 average Band D including county, police, fire and parish precepts (2026/27, MHCLG figure as reported)",
+    "source": "https://housecheckup.co.uk/council-tax/brentwood"
+  },
+  "postcodes": [
+    "CM13",
+    "CM14",
+    "CM15",
+    "CM4",
+    "CM5",
+    "RM4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Brentwood town centre",
+      "postcodes": "CM14, CM15",
+      "housing": "Victorian and Edwardian houses, purpose-built flats and newer apartment blocks near the station and High Street."
+    },
+    {
+      "name": "Shenfield",
+      "postcodes": "CM15",
+      "housing": "A commuter area of large detached and semi-detached inter-war and post-war houses, with flats near the Elizabeth line station."
+    },
+    {
+      "name": "Hutton",
+      "postcodes": "CM13",
+      "housing": "Mainly post-war and 1960s semis, bungalows and some former council estates."
+    },
+    {
+      "name": "Warley",
+      "postcodes": "CM14",
+      "housing": "Inter-war semis, the former Warley Hospital converted into flats and houses, and newer infill homes."
+    },
+    {
+      "name": "Ingatestone",
+      "postcodes": "CM4",
+      "housing": "A village with period cottages on the High Street and post-war and modern family houses around it."
+    },
+    {
+      "name": "Doddinghurst",
+      "postcodes": "CM15",
+      "housing": "A village of chalet bungalows, detached houses and some post-war homes."
+    },
+    {
+      "name": "Herongate and Ingrave",
+      "postcodes": "CM13",
+      "housing": "Small villages of period cottages and larger detached houses in Green Belt countryside."
+    },
+    {
+      "name": "Pilgrims Hatch",
+      "postcodes": "CM15",
+      "housing": "A suburb of post-war semis, terraces and bungalows north-west of the town."
+    }
+  ],
+  "housing": "Brentwood is a mostly owner-occupied commuter borough on the Elizabeth line, with house prices well above the regional average. Private renting grew faster here than across the region between 2011 and 2021, reaching about one in six households. Rented homes are mainly flats and apartments near Brentwood and Shenfield stations and family houses in the suburbs, with large detached homes in Shenfield and the villages. Much of the borough is Green Belt, so new building is limited and mostly infill or conversions.",
+  "checkinTips": [
+    "Purpose-built and converted flats near Brentwood and Shenfield stations: photograph communal doors, entry phones and bike and bin stores, and count every key and fob.",
+    "Large detached houses in Shenfield and the villages: photograph driveways, gates, garages and garden lighting as well as the rooms.",
+    "Flats in converted older buildings such as the Warley Hospital site: note shared areas, parking permits and any service-charge rules on decoration.",
+    "Chalet bungalows in Doddinghurst and Pilgrims Hatch: photograph the eaves storage and sloping ceilings for damp or condensation.",
+    "Period cottages in Ingatestone: photograph open fireplaces, timber windows and uneven floors so their existing condition is on record.",
+    "Gardens backing onto Green Belt fields: photograph fences, hedges and gates, which often need repair after winter."
+  ],
+  "tenantHelp": "Tenants can contact Brentwood Borough Council's private housing team about disrepair, damp or unsafe conditions; it can inspect and take action against landlords.",
+  "nearby": [
+    "epping-forest",
+    "chelmsford",
+    "basildon",
+    "thurrock",
+    "havering"
+  ]
+}

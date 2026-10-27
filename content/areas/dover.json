@@ -1,0 +1,84 @@
+{
+  "slug": "dover",
+  "name": "Dover",
+  "council": {
+    "name": "Dover District Council",
+    "url": "https://www.dover.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CT13",
+    "CT14",
+    "CT15",
+    "CT16",
+    "CT17",
+    "CT3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dover town centre",
+      "postcodes": "CT16, CT17",
+      "housing": "Victorian terraces and flats over shops, with many older houses split into flats."
+    },
+    {
+      "name": "Tower Hamlets and Maxton",
+      "postcodes": "CT17",
+      "housing": "Steep streets of Victorian terraces west of the town centre."
+    },
+    {
+      "name": "River and Temple Ewell",
+      "postcodes": "CT17",
+      "housing": "Villages north of Dover with older cottages and post-war housing."
+    },
+    {
+      "name": "Deal",
+      "postcodes": "CT14",
+      "housing": "Georgian and Victorian houses in a conservation area by the sea, with later estates inland."
+    },
+    {
+      "name": "Walmer",
+      "postcodes": "CT14",
+      "housing": "Victorian villas and terraces with inter-war and post-war homes."
+    },
+    {
+      "name": "Sandwich",
+      "postcodes": "CT13",
+      "housing": "A medieval town with many listed timber-framed and brick houses."
+    },
+    {
+      "name": "Aylesham",
+      "postcodes": "CT3",
+      "housing": "A planned coalfield village with large modern estates added recently."
+    },
+    {
+      "name": "St Margaret's at Cliffe",
+      "postcodes": "CT15",
+      "housing": "A clifftop village of older cottages and detached houses."
+    }
+  ],
+  "housing": "Dover district has the port town of Dover, with steep streets of Victorian terraces and many houses converted to flats, the coastal towns of Deal and Walmer, the medieval town of Sandwich, and former East Kent coalfield villages such as Aylesham. Older housing is common, much of it in conservation areas. Coastal homes face wind and salt exposure, and some housing in Dover sits on steep chalk slopes.",
+  "checkinTips": [
+    "Victorian houses split into flats in Dover: photograph fire doors, alarms and the shared hallway, and record the keys for each door.",
+    "Seafront homes in Deal and Walmer: photograph window frames, render and metal fittings for salt and wind damage.",
+    "Steep hillside streets in Dover: photograph steps, retaining walls, gutters and any damp on walls built into the slope.",
+    "Listed homes in Sandwich: photograph original windows, doors, beams and floors as they are, since repairs need consent.",
+    "Former coalfield homes in Aylesham and nearby villages: photograph walls for cracking and the condition of gardens and fences."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact Dover District Council's private sector housing team.",
+  "nearby": [
+    "thanet",
+    "canterbury",
+    "folkestone-and-hythe"
+  ]
+}

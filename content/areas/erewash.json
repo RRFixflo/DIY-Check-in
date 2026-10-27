@@ -1,0 +1,98 @@
+{
+  "slug": "erewash",
+  "name": "Erewash",
+  "council": {
+    "name": "Erewash Borough Council",
+    "url": "https://www.erewash.gov.uk",
+    "privateRentingUrl": "https://www.erewash.gov.uk/housing/privately-rented-homes/homes-multiple-occupation-hmos/register-licenced-hmos"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": "Mandatory HMO licensing applies (five or more people from two or more households); the council keeps a public register of licensed HMOs and said in February 2026 it was stepping up action to make sure all HMOs are licensed. No additional HMO licensing scheme was found.",
+    "fee": null,
+    "source": "https://www.erewash.gov.uk/housing/privately-rented-homes/homes-multiple-occupation-hmos/register-licenced-hmos",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "16.9% of households rent privately (Census 2021)",
+    "source": "https://observatory.derbyshire.gov.uk/wp-content/uploads/reports/profiles/2021_census_profiles/summary_profile/electoral_division/Erewash/Ilkeston_East_E03.pdf"
+  },
+  "councilTax": {
+    "text": "£2,360.64 average Band D (2026/27), including Derbyshire County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/erewash"
+  },
+  "postcodes": [
+    "DE7",
+    "NG10",
+    "DE72",
+    "DE21",
+    "NG9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ilkeston",
+      "postcodes": "DE7",
+      "housing": "Victorian and Edwardian terraces around the town centre, with interwar and post-war council-built estates and newer estates on the edges."
+    },
+    {
+      "name": "Long Eaton",
+      "postcodes": "NG10",
+      "housing": "Rows of Victorian and Edwardian terraces from the lace and furniture-making era, with interwar semis and some converted mills."
+    },
+    {
+      "name": "Sandiacre",
+      "postcodes": "NG10",
+      "housing": "Terraced and semi-detached houses alongside the Erewash Canal, with some newer infill estates."
+    },
+    {
+      "name": "Kirk Hallam",
+      "postcodes": "DE7",
+      "housing": "A large post-war estate of former council houses and flats south-west of Ilkeston."
+    },
+    {
+      "name": "Sawley",
+      "postcodes": "NG10",
+      "housing": "Older village houses near the Trent with suburban semis and bungalows."
+    },
+    {
+      "name": "Borrowash and Ockbrook",
+      "postcodes": "DE72",
+      "housing": "Villages of semi-detached and detached houses and bungalows between Derby and Long Eaton."
+    },
+    {
+      "name": "Draycott and Breaston",
+      "postcodes": "DE72",
+      "housing": "Villages with brick cottages and terraces in their centres and post-war suburban housing around them."
+    },
+    {
+      "name": "West Hallam",
+      "postcodes": "DE7",
+      "housing": "A largely owner-occupied village of post-war semis and detached houses."
+    },
+    {
+      "name": "Spondon fringe and Breadsall",
+      "postcodes": "DE21",
+      "housing": "Small villages of older cottages and larger detached houses on the edge of Derby."
+    }
+  ],
+  "housing": "Erewash is centred on two former industrial towns, Ilkeston and Long Eaton, where Victorian and Edwardian terraces make up much of the rented stock. Large post-war estates such as Kirk Hallam sit alongside newer private estates, while the villages between Derby and Nottingham are mostly owner-occupied semis and bungalows. Private renting is close to the Derbyshire average overall but higher in central Ilkeston, and the council has been working to bring unlicensed HMOs into licensing.",
+  "checkinTips": [
+    "Victorian terraces in Ilkeston and Long Eaton: photograph rear yards, outhouses, shared alleys (gennels) and any damp at the base of walls.",
+    "Older terraced houses often have solid walls and small rear kitchens: check for condensation and mould in kitchens, bathrooms and back bedrooms.",
+    "Homes near the Trent and the Erewash Canal in Sawley and Sandiacre: note any signs of past flooding or damp in ground-floor rooms.",
+    "Post-war ex-council houses in Kirk Hallam: record the boiler, windows and doors, and the condition of gardens and fencing.",
+    "Shared houses in Ilkeston town centre: photograph each room's lock, furniture and fire door, and note smoke alarms and the fire blanket.",
+    "Village bungalows in Borrowash and Breaston: check garages, drives and garden sheds, which are often included in the let."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Erewash Borough Council's private sector housing team (environmental health), after first telling their landlord.",
+  "nearby": [
+    "amber-valley",
+    "broxtowe",
+    "derby",
+    "south-derbyshire",
+    "rushcliffe",
+    "north-west-leicestershire"
+  ]
+}

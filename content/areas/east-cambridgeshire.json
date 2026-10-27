@@ -1,0 +1,84 @@
+{
+  "slug": "east-cambridgeshire",
+  "name": "East Cambridgeshire",
+  "council": {
+    "name": "East Cambridgeshire District Council",
+    "url": "https://www.eastcambs.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CB6",
+    "CB7",
+    "CB8",
+    "CB25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Ely",
+      "postcodes": "CB6, CB7",
+      "housing": "A cathedral city of period houses and terraces in the centre, with large modern estates to the north and east."
+    },
+    {
+      "name": "Soham",
+      "postcodes": "CB7",
+      "housing": "A market town of older brick houses and many newer estates, with a reopened railway station."
+    },
+    {
+      "name": "Littleport",
+      "postcodes": "CB6",
+      "housing": "A fen town of Victorian terraces and growing new-build estates."
+    },
+    {
+      "name": "Burwell",
+      "postcodes": "CB25",
+      "housing": "A large village of older cottages and post-war and newer estates."
+    },
+    {
+      "name": "Sutton",
+      "postcodes": "CB6",
+      "housing": "A fen-edge village of older houses with modern estates."
+    },
+    {
+      "name": "Haddenham",
+      "postcodes": "CB6",
+      "housing": "A hilltop village with period houses and later estates."
+    },
+    {
+      "name": "Bottisham",
+      "postcodes": "CB25",
+      "housing": "A village near Cambridge with older cottages and inter-war and post-war homes."
+    },
+    {
+      "name": "Cheveley and Kirtling",
+      "postcodes": "CB8",
+      "housing": "Villages near Newmarket with cottages and homes linked to the horse-racing industry."
+    }
+  ],
+  "housing": "East Cambridgeshire is a rural district around the city of Ely, with fen towns and villages that have grown with new estates for people working in and around Cambridge. Older homes include brick terraces and cottages, some timber-framed or thatched, while large new-build estates in Ely, Soham and Littleport make up a growing share of rented homes. The south of the district near Newmarket has homes linked to the horse-racing industry, and many fen villages are off the gas grid.",
+  "checkinTips": [
+    "Homes on fen peat and clay: photograph cracks in walls, ceilings and door frames, since the ground shrinks and swells.",
+    "New-build estates in Ely, Soham and Littleport: photograph any snagging, the meters and allocated parking, and note who maintains shared green spaces.",
+    "Older cottages, some thatched: photograph the roof from outside, beams, uneven floors and any damp patches.",
+    "Rural homes off the gas grid: photograph the oil tank and gauge reading, the boiler, and any septic tank or treatment plant.",
+    "Riverside and fen homes near the Great Ouse: note any flood-protection products and photograph damp on low walls."
+  ],
+  "tenantHelp": "Private tenants with disrepair or unsafe conditions can contact East Cambridgeshire District Council's environmental health team.",
+  "nearby": [
+    "south-cambridgeshire",
+    "fenland",
+    "huntingdonshire",
+    "west-suffolk",
+    "kings-lynn-and-west-norfolk"
+  ]
+}

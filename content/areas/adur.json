@@ -1,0 +1,95 @@
+{
+  "slug": "adur",
+  "name": "Adur",
+  "council": {
+    "name": "Adur District Council (Adur & Worthing Councils)",
+    "url": "https://www.adur-worthing.gov.uk",
+    "privateRentingUrl": "https://www.adur-worthing.gov.uk/housing/conditions-and-empty-properties/hmo/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in Adur. A selective scheme was scoped in 2024 for three Worthing wards (Heene, Central and Selden), not for Adur.",
+    "additional": "No additional HMO licensing scheme; only national mandatory HMO licensing applies (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://democracy.adur-worthing.gov.uk/documents/s12107/2024.03.14 - WJSSC - agenda item 11 - Selective Licensing Scheme for Private Rented Properties in W.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,410 a month (ONS, August 2026), up 3.2% on a year earlier",
+    "source": "https://www.sussexexpress.co.uk/news/politics/council/private-rent-cap-propose-as-housing-pressures-persist-in-worthing-and-adur-9275493"
+  },
+  "price": {
+    "text": "£369,000 (UK HPI, July 2025), up 2.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000223/"
+  },
+  "privateRentedShare": {
+    "text": "15% of households rent privately (Census 2021), up from 11% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000223"
+  },
+  "councilTax": {
+    "text": "£2,548 average Band D (2026/27), including West Sussex County Council, police and parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/adur"
+  },
+  "postcodes": [
+    "BN15",
+    "BN41",
+    "BN42",
+    "BN43"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Shoreham-by-Sea",
+      "postcodes": "BN43",
+      "housing": "Victorian and Edwardian terraces near the old town and harbour, with interwar semis further north."
+    },
+    {
+      "name": "Shoreham Beach",
+      "postcodes": "BN43",
+      "housing": "Detached houses and modern blocks of flats on the shingle spit facing the sea and the River Adur."
+    },
+    {
+      "name": "Southwick",
+      "postcodes": "BN42",
+      "housing": "Terraced and semi-detached houses around the green, with council-built homes towards the downs."
+    },
+    {
+      "name": "Fishersgate",
+      "postcodes": "BN41",
+      "housing": "Small terraces and post-war council housing beside the harbour and the railway."
+    },
+    {
+      "name": "Kingston Buci",
+      "postcodes": "BN43",
+      "housing": "Mainly post-war and interwar semis and bungalows."
+    },
+    {
+      "name": "Lancing",
+      "postcodes": "BN15",
+      "housing": "Bungalows, chalet bungalows and interwar semis, with seafront flats along the coast road."
+    },
+    {
+      "name": "Sompting",
+      "postcodes": "BN15",
+      "housing": "Post-war estates and newer developments below the downs, with an older village core."
+    },
+    {
+      "name": "Coombes",
+      "postcodes": "BN15",
+      "housing": "A tiny rural parish of farms and cottages in the downs."
+    }
+  ],
+  "housing": "Adur is a narrow coastal district between Brighton and Hove and Worthing, made up of Shoreham-by-Sea, Southwick, Lancing and Sompting. Most homes are owner-occupied houses and bungalows, and private renting is low for the South East, though it rose between 2011 and 2021. Rented homes are often flats in converted houses or modern seafront blocks in Shoreham, and family homes in Lancing and Sompting. New housing has been built on former industrial land along Shoreham harbour.",
+  "checkinTips": [
+    "Seafront and Shoreham Beach homes face salt spray: photograph window frames, door hinges, external locks and any rust on balconies and railings.",
+    "Bungalows and chalet bungalows in Lancing and Sompting often have rooms in the roof: photograph sloping ceilings and dormer windows for damp or staining.",
+    "Homes on shingle and near the river can be damp at ground level: photograph skirting boards, the base of walls and behind furniture.",
+    "Modern harbourside flats: note fob, key and car park permit counts, and photograph the meter cupboard and the bin store.",
+    "Older Shoreham terraces: photograph sash or timber windows, their locks and any rot or condensation on sills."
+  ],
+  "tenantHelp": "Tenants in Adur can contact the Adur & Worthing Councils' Private Sector Housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "worthing",
+    "horsham",
+    "mid-sussex",
+    "brighton"
+  ]
+}

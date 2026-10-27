@@ -1,0 +1,115 @@
+{
+  "slug": "cheshire-east",
+  "name": "Cheshire East",
+  "council": {
+    "name": "Cheshire East Council",
+    "url": "https://www.cheshireeast.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme. The council looked at a targeted scheme around Nantwich Road in Crewe, but in March 2024 decided to wait for the Renters' Rights reforms and the national landlord database instead of going ahead.",
+    "additional": "No additional HMO licensing: only mandatory licensing of HMOs with five or more people from two or more households. Article 4 directions in three Crewe wards mean new small HMOs there need planning permission.",
+    "fee": null,
+    "source": "https://moderngov.cheshireeast.gov.uk/ieDecisionDetails.aspx?AIId=72139",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£992 a month (ONS, September 2026), up 7.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000049/"
+  },
+  "price": {
+    "text": "£312,000 (UK HPI, August 2026, provisional), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000049/"
+  },
+  "privateRentedShare": {
+    "text": "15.5% of households rent privately (Census 2021), up from 12.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000049/"
+  },
+  "councilTax": {
+    "text": "About £2,371 Band D (2026/27) for the council, police and fire, before any town or parish charge",
+    "source": "https://www.cheshireeast.gov.uk/council_tax/about-council-tax/council-tax-bill-increase-calculations.aspx"
+  },
+  "postcodes": [
+    "CW1",
+    "CW2",
+    "CW4",
+    "CW5",
+    "CW10",
+    "CW11",
+    "CW12",
+    "SK9",
+    "SK10",
+    "SK11",
+    "SK12",
+    "ST7",
+    "WA16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Crewe",
+      "postcodes": "CW1, CW2",
+      "housing": "Victorian and Edwardian railway-era terraces near the centre, with inter-war and post-war estates and newer estates on the edges."
+    },
+    {
+      "name": "Macclesfield",
+      "postcodes": "SK10, SK11",
+      "housing": "Stone and brick terraces from the silk-mill era near the town centre, with suburban semis and detached homes towards the hills."
+    },
+    {
+      "name": "Nantwich",
+      "postcodes": "CW5",
+      "housing": "A historic market town with timber-framed and Georgian buildings in the centre and newer estates around it."
+    },
+    {
+      "name": "Congleton",
+      "postcodes": "CW12",
+      "housing": "Terraces and former mill buildings near the centre, with post-war and modern estates around the town."
+    },
+    {
+      "name": "Wilmslow",
+      "postcodes": "SK9",
+      "housing": "Large detached and semi-detached houses and modern apartment blocks, among the most expensive in the North West."
+    },
+    {
+      "name": "Sandbach",
+      "postcodes": "CW11",
+      "housing": "A market town with period cottages in the centre and large new-build estates built in the last 15 years."
+    },
+    {
+      "name": "Knutsford",
+      "postcodes": "WA16",
+      "housing": "Period cottages and townhouses in the old town and large detached homes in the surrounding villages."
+    },
+    {
+      "name": "Alsager",
+      "postcodes": "ST7",
+      "housing": "Mainly post-war and modern semis and detached houses, with some new-build estates."
+    },
+    {
+      "name": "Middlewich",
+      "postcodes": "CW10",
+      "housing": "A salt town with Victorian terraces near the canal and modern estates on the edges."
+    }
+  ],
+  "housing": "Cheshire East is a largely owner-occupied area of market towns and countryside, with private renting concentrated in Crewe and Macclesfield. Crewe has many Victorian terraces near the station and town centre, some converted to HMOs, which is why the council has used Article 4 directions there. The north of the borough (Wilmslow, Alderley Edge, Knutsford, Poynton) has high-value detached homes and apartments, while rural parishes have farm cottages and converted barns. Large new-build estates have been added around Crewe, Sandbach, Congleton and Middlewich.",
+  "checkinTips": [
+    "Victorian terraces in Crewe: photograph the back yard, outbuildings and the condition of any rear extension roof.",
+    "HMO lets near Crewe town centre: record each room's lock, fire door closers, smoke alarms and the shared kitchen appliances separately.",
+    "Older stone and brick terraces in Macclesfield: check for damp on chimney breasts and party walls and photograph any mould around windows.",
+    "Rural cottages and barn conversions: note oil tank or LPG gauge readings, septic tank access and the state of wood burners.",
+    "New-build estates around Sandbach and Middlewich: photograph snagging items still open, and note any estate management or parking permits.",
+    "Higher-value homes around Wilmslow and Knutsford: record gardens, gates, alarm codes and fitted appliances in detail."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems in a private rented home can contact Cheshire East Council's private sector housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "cheshire-west-and-chester",
+    "warrington",
+    "trafford",
+    "manchester",
+    "stockport",
+    "high-peak",
+    "staffordshire-moorlands",
+    "newcastle-under-lyme",
+    "shropshire"
+  ]
+}

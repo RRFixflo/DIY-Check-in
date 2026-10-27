@@ -1,0 +1,89 @@
+{
+  "slug": "fylde",
+  "name": "Fylde",
+  "council": {
+    "name": "Fylde Council",
+    "url": "https://www.fylde.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "FY8",
+    "PR4",
+    "FY3",
+    "FY4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "St Annes",
+      "postcodes": "FY8",
+      "housing": "Victorian and Edwardian villas and terraces, many split into flats, with seafront apartment blocks and interwar semis."
+    },
+    {
+      "name": "Lytham",
+      "postcodes": "FY8",
+      "housing": "Georgian and Victorian houses and cottages in the town centre and large detached houses along the green."
+    },
+    {
+      "name": "Ansdell and Fairhaven",
+      "postcodes": "FY8",
+      "housing": "Interwar and Edwardian semis and detached houses around the lake and promenade."
+    },
+    {
+      "name": "Kirkham",
+      "postcodes": "PR4",
+      "housing": "A market town of older brick terraces and post-war and newer estates."
+    },
+    {
+      "name": "Wesham",
+      "postcodes": "PR4",
+      "housing": "Brick terraces near the station and large new estates."
+    },
+    {
+      "name": "Freckleton",
+      "postcodes": "PR4",
+      "housing": "A village of older cottages and post-war and modern housing near the Ribble."
+    },
+    {
+      "name": "Warton",
+      "postcodes": "PR4",
+      "housing": "Village housing and newer estates near the aerospace site."
+    },
+    {
+      "name": "Wrea Green",
+      "postcodes": "PR4",
+      "housing": "A village of cottages and detached houses around a large green."
+    },
+    {
+      "name": "Staining",
+      "postcodes": "FY3",
+      "housing": "A small village of bungalows and detached houses on the edge of Blackpool."
+    }
+  ],
+  "housing": "Fylde is a coastal and rural borough on the Lancashire coast, centred on the twin resort of Lytham St Annes, where large Victorian villas and many seafront flats sit alongside interwar suburbs. Inland, Kirkham and Wesham are older market and mill towns that have grown with large new estates, and villages such as Freckleton and Warton house workers at the aerospace site at Warton. Bungalows are common and the area is popular with retired people, while private lets include converted flats in St Annes and family homes inland.",
+  "checkinTips": [
+    "Seafront flats and villas in St Annes and Lytham: check window frames, door ironmongery and external metalwork for salt and wind damage, and photograph communal areas.",
+    "Victorian villas split into flats in St Annes: record fire doors, alarms, meter cupboards and shared bin stores, and note fob and key counts.",
+    "Bungalows across the borough: photograph lofts if accessible, conservatories, garages and gardens, which are often part of the let.",
+    "Homes near the Ribble estuary in Freckleton and Lytham: look for damp and condensation on exposed walls and any signs of past flooding.",
+    "New-build estates in Wesham and Kirkham: note any snagging still outstanding, plus meter readings and parking allocations.",
+    "Older brick terraces in Kirkham: check rear yards, outhouses and the base of walls for damp."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Fylde Council's environmental health (private sector housing) team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "blackpool",
+    "wyre",
+    "preston",
+    "south-ribble"
+  ]
+}

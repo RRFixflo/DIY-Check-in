@@ -1,0 +1,95 @@
+{
+  "slug": "blaby",
+  "name": "Blaby",
+  "council": {
+    "name": "Blaby District Council",
+    "url": "https://www.blaby.gov.uk",
+    "privateRentingUrl": "https://www.blaby.gov.uk/housing/private-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only mandatory HMO licensing applies (5 or more people from more than one household sharing facilities).",
+    "fee": null,
+    "source": "https://www.blaby.gov.uk/housing/private-housing",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "About 13% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=630"
+  },
+  "councilTax": {
+    "text": "£2,490 average Band D including parish, county, police and fire (2026/27)",
+    "source": "https://www.blaby.gov.uk/your-council/news-and-awards/news/budget-and-council-tax-approved-for-2026-27"
+  },
+  "postcodes": [
+    "LE2",
+    "LE3",
+    "LE8",
+    "LE9",
+    "LE19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Blaby",
+      "postcodes": "LE8",
+      "housing": "A large village with older cottages in the centre and post-war and modern estates around it."
+    },
+    {
+      "name": "Glen Parva",
+      "postcodes": "LE2",
+      "housing": "Suburban semis and modern estates on the southern edge of Leicester."
+    },
+    {
+      "name": "Braunstone Town",
+      "postcodes": "LE3",
+      "housing": "Inter-war and post-war semis and terraces bordering Leicester."
+    },
+    {
+      "name": "Narborough",
+      "postcodes": "LE19",
+      "housing": "A village of older terraces and cottages with post-war and newer estates, close to the railway station."
+    },
+    {
+      "name": "Enderby",
+      "postcodes": "LE19",
+      "housing": "Older stone and brick cottages in the village centre with extensive post-war estates."
+    },
+    {
+      "name": "Whetstone",
+      "postcodes": "LE8",
+      "housing": "A large village of mainly post-war and modern family houses."
+    },
+    {
+      "name": "Countesthorpe",
+      "postcodes": "LE8",
+      "housing": "A village of older cottages in the centre and later estates of semis and bungalows."
+    },
+    {
+      "name": "Lubbesthorpe",
+      "postcodes": "LE19",
+      "housing": "A new garden village of new-build houses and flats under construction since the late 2010s."
+    },
+    {
+      "name": "Kirby Muxloe",
+      "postcodes": "LE9",
+      "housing": "A village of larger detached and semi-detached houses and bungalows."
+    }
+  ],
+  "housing": "Blaby is a mostly owner-occupied district of suburbs and large villages on the south-west edge of Leicester, so private renting is a smaller share than in the city. Rented homes are mainly post-war and modern family houses, with some older terraces and cottages in village centres. The Lubbesthorpe garden village and other new estates are adding modern homes, some of them let. Commuters to Leicester and the M1 and M69 corridor make up much of the rental demand.",
+  "checkinTips": [
+    "New-build homes at Lubbesthorpe and other recent estates: photograph snagging marks, sealant around baths and showers, and fences and turf in new gardens.",
+    "Post-war semis in Braunstone Town and Glen Parva: check and photograph replacement windows, garage doors and any damp or condensation in back bedrooms.",
+    "Older cottages in Enderby, Narborough and Countesthorpe village centres: note uneven floors, low beams, chimney breasts and any damp at the base of walls.",
+    "Bungalows let to older tenants in Kirby Muxloe and Countesthorpe: record grab rails, ramps and the condition of gardens, paths and drives.",
+    "Family homes with gardens: photograph sheds, fences, patios and the lawn, and list any garden tools or furniture left for the tenant."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Blaby District Council's environmental health (private housing) team.",
+  "nearby": [
+    "leicester",
+    "oadby-and-wigston",
+    "harborough",
+    "hinckley-and-bosworth"
+  ]
+}

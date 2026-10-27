@@ -1,0 +1,87 @@
+{
+  "slug": "east-lindsey",
+  "name": "East Lindsey",
+  "council": {
+    "name": "East Lindsey District Council",
+    "url": "https://www.e-lindsey.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "LN9",
+    "LN11",
+    "LN12",
+    "LN13",
+    "PE22",
+    "PE23",
+    "PE24",
+    "PE25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Skegness",
+      "postcodes": "PE25",
+      "housing": "A seaside resort with Victorian and Edwardian terraces, guest houses converted to flats and large caravan and chalet parks nearby."
+    },
+    {
+      "name": "Louth",
+      "postcodes": "LN11",
+      "housing": "A Georgian market town with listed houses and terraces in the centre and post-war and modern estates around it."
+    },
+    {
+      "name": "Mablethorpe",
+      "postcodes": "LN12",
+      "housing": "A coastal resort of bungalows, chalets and older terraces, with many holiday and park homes."
+    },
+    {
+      "name": "Sutton-on-Sea",
+      "postcodes": "LN12",
+      "housing": "A small seaside village of bungalows and detached houses popular with retired people."
+    },
+    {
+      "name": "Horncastle",
+      "postcodes": "LN9",
+      "housing": "A market town on the edge of the Wolds with Georgian and Victorian houses and newer estates."
+    },
+    {
+      "name": "Alford",
+      "postcodes": "LN13",
+      "housing": "A small market town with older brick houses and cottages and some post-war housing."
+    },
+    {
+      "name": "Spilsby",
+      "postcodes": "PE23",
+      "housing": "A small market town with Georgian and Victorian houses around the market place."
+    },
+    {
+      "name": "Ingoldmells",
+      "postcodes": "PE25",
+      "housing": "A resort village dominated by caravan and holiday parks, with bungalows and chalets."
+    }
+  ],
+  "housing": "East Lindsey is a large, sparsely populated rural district stretching from the Lincolnshire Wolds to the coast, with an older population than average. Private lets range from flats in converted guest houses and terraces in Skegness and Mablethorpe to period houses in Louth and farm cottages inland. The coast has many caravan, chalet and park homes, some lived in year-round. Many rural homes are off the gas grid and some low-lying areas near the coast are at risk of flooding.",
+  "checkinTips": [
+    "Former guest houses split into flats in Skegness and Mablethorpe: photograph fire doors, smoke alarms, the communal stairs and the meters for each flat.",
+    "Coastal homes: photograph window frames, door furniture and outside metalwork for salt corrosion, and any damp or mould on outside walls.",
+    "Homes off the gas grid: photograph the oil tank, its gauge and level, or the LPG tank, and the boiler service label.",
+    "Bungalows and park homes near the coast: photograph the roof edges, guttering, skirting panels and any storm damage to fences and sheds.",
+    "Older brick farm cottages inland: photograph walls inside for rising damp and condensation, and note how the home is heated."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Lindsey District Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "west-lindsey",
+    "north-east-lincolnshire",
+    "north-kesteven",
+    "boston"
+  ]
+}

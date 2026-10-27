@@ -1,0 +1,94 @@
+{
+  "slug": "cambridge",
+  "name": "Cambridge",
+  "council": {
+    "name": "Cambridge City Council",
+    "url": "https://www.cambridge.gov.uk",
+    "privateRentingUrl": "https://www.cambridge.gov.uk/licensing-of-houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme. A council feasibility study concluded selective licensing was not an appropriate tool for Cambridge at that time.",
+    "additional": "No additional HMO licensing scheme. Larger HMOs (five or more people from more than one household) need a mandatory licence, as everywhere in England; the city has several hundred licensed HMOs.",
+    "fee": "£1,133 for a mandatory HMO licence, or £1,000 when renewing at least eight weeks before the current licence expires (applications from 1 April 2026 to 31 March 2027)",
+    "source": "https://www.cambridge.gov.uk/licensing-of-houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,805 a month (ONS, August 2026), up 1.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000008/"
+  },
+  "price": {
+    "text": "£475,000 (UK HPI, July 2026, provisional), roughly flat on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000008/"
+  },
+  "privateRentedShare": {
+    "text": "31.4% of households rent privately (Census 2021), up from 26.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000008/"
+  },
+  "councilTax": {
+    "text": "£2,467 average Band D including county, police, fire and combined authority precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/cambridge"
+  },
+  "postcodes": [
+    "CB1",
+    "CB2",
+    "CB3",
+    "CB4",
+    "CB5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Mill Road and Romsey",
+      "postcodes": "CB1",
+      "housing": "Long streets of Victorian terraced houses, many let to students and young professionals."
+    },
+    {
+      "name": "Petersfield",
+      "postcodes": "CB1",
+      "housing": "Victorian and Edwardian terraces close to the station and the centre, with new apartment blocks around CB1."
+    },
+    {
+      "name": "Chesterton",
+      "postcodes": "CB4",
+      "housing": "A mix of Victorian terraces near the river, inter-war semis and newer flats."
+    },
+    {
+      "name": "Arbury and King's Hedges",
+      "postcodes": "CB4",
+      "housing": "Post-war estates of former council houses and low-rise flats in the north of the city."
+    },
+    {
+      "name": "Cherry Hinton",
+      "postcodes": "CB1",
+      "housing": "Inter-war and post-war semi-detached houses around an old village core."
+    },
+    {
+      "name": "Newnham",
+      "postcodes": "CB3",
+      "housing": "Large Victorian and Edwardian houses and villas near the colleges and the Backs."
+    },
+    {
+      "name": "Trumpington and Clay Farm",
+      "postcodes": "CB2",
+      "housing": "A village core with large new-build estates of houses and apartment blocks near the Biomedical Campus."
+    },
+    {
+      "name": "Eddington",
+      "postcodes": "CB3",
+      "housing": "A new university-led district of modern flats and houses on the north-west edge of the city."
+    }
+  ],
+  "housing": "Cambridge has one of the highest shares of private renting in the East of England, driven by its universities, research campuses and hospital. Victorian terraces in Romsey, Petersfield and Chesterton are widely let as shared houses and flats, while the north of the city has post-war estates. Large new-build districts at Trumpington, Clay Farm, Eddington and around the station have added many modern flats. Rents and prices are among the highest outside London.",
+  "checkinTips": [
+    "Shared houses in Romsey and Petersfield: photograph each bedroom's lock and door, the fire doors, smoke alarms and the shared kitchen separately.",
+    "Victorian terraces: check sash or replacement windows, chimney breasts and any damp or mould in rear extensions and bathrooms.",
+    "New-build flats around the station, Trumpington and Eddington: record fob and key counts, bike store access, the post box and any snagging marks.",
+    "Bicycles are everywhere: photograph bike sheds, racks and gates and note anything left behind at check-out.",
+    "Furnished student and professional lets: list and photograph every item of furniture, with mattress condition and labels.",
+    "Homes near the Cam and its streams: photograph ground-floor rooms and gardens for signs of damp or past flooding."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Cambridge City Council's residential environmental health team, which also licenses larger HMOs.",
+  "nearby": [
+    "south-cambridgeshire"
+  ]
+}

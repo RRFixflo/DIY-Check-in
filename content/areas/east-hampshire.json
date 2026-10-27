@@ -1,0 +1,97 @@
+{
+  "slug": "east-hampshire",
+  "name": "East Hampshire",
+  "council": {
+    "name": "East Hampshire District Council",
+    "url": "https://www.easthants.gov.uk",
+    "privateRentingUrl": "https://www.easthants.gov.uk/media/4973/download"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory HMO licensing applies (five or more people forming two or more households).",
+    "fee": null,
+    "source": "https://www.easthants.gov.uk/media/4973/download",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": {
+    "text": "£440,599 (UK HPI, August 2026), down 1.7% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-august-2026/uk-house-price-index-england-august-2026"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,343.92 average Band D (2026/27), including Hampshire County Council, police, fire and an average town or parish charge",
+    "source": "https://www.easthants.gov.uk/sites/default/files/2026-03/Council%20tax%20per%20valuation%20band%202026-27.pdf"
+  },
+  "postcodes": [
+    "GU26",
+    "GU30",
+    "GU31",
+    "GU32",
+    "GU33",
+    "GU34",
+    "GU35",
+    "PO8",
+    "PO9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Alton",
+      "postcodes": "GU34",
+      "housing": "A market town with Georgian and Victorian houses in the centre, flats over shops and large post-war and modern estates."
+    },
+    {
+      "name": "Petersfield",
+      "postcodes": "GU31, GU32",
+      "housing": "A market town in the South Downs with older terraces and period houses near the centre and suburban estates around it."
+    },
+    {
+      "name": "Whitehill and Bordon",
+      "postcodes": "GU35",
+      "housing": "A former army town being regenerated, with former military housing alongside large new-build developments."
+    },
+    {
+      "name": "Liphook",
+      "postcodes": "GU30",
+      "housing": "A large village of Victorian and inter-war houses, bungalows and modern estates."
+    },
+    {
+      "name": "Horndean",
+      "postcodes": "PO8",
+      "housing": "A large village on the edge of the Portsmouth area, mainly post-war and modern semi-detached and detached houses."
+    },
+    {
+      "name": "Clanfield",
+      "postcodes": "PO8",
+      "housing": "A village that has grown with modern estates of family houses on the edge of the South Downs."
+    },
+    {
+      "name": "Four Marks",
+      "postcodes": "GU34",
+      "housing": "A village of mostly detached houses and bungalows from the 20th century onwards."
+    },
+    {
+      "name": "Grayshott",
+      "postcodes": "GU26",
+      "housing": "A village of Victorian and Edwardian houses and cottages near the Surrey border."
+    }
+  ],
+  "housing": "East Hampshire is largely rural, with much of it in the South Downs National Park, and most homes are owner-occupied family houses. Private lets are concentrated in Alton, Petersfield, Whitehill and Bordon and the larger villages, from flats over shops and period cottages to new-build estates. Whitehill and Bordon is the main growth area, with large new developments on former army land. Many village and rural homes are older brick, flint or stone cottages, some off the gas grid.",
+  "checkinTips": [
+    "Flint and brick cottages in the villages: photograph inside walls for damp, any timber beams and low doorways, and note open fires and chimney sweeping records.",
+    "Homes off the gas grid: photograph the oil tank, its gauge and level, or the LPG tank, and the boiler service label.",
+    "New-build homes in Whitehill and Bordon: photograph any snagging marks, sealant and grout, and the meter readings, and note any estate management charges or shared areas.",
+    "Flats over shops in Alton and Petersfield: photograph the separate entrance, stairs, fire doors and smoke alarms, and note the key count for each door.",
+    "Rural homes with private drainage: photograph the septic tank or treatment plant cover and note when it was last emptied.",
+    "Large gardens common in the district: photograph lawns, hedges, sheds and fences from fixed points so they can be compared at check-out."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Hampshire District Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "hart",
+    "basingstoke-and-deane",
+    "winchester",
+    "havant",
+    "waverley",
+    "chichester"
+  ]
+}

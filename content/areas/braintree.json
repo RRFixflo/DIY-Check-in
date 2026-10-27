@@ -1,0 +1,101 @@
+{
+  "slug": "braintree",
+  "name": "Braintree",
+  "council": {
+    "name": "Braintree District Council",
+    "url": "https://www.braintree.gov.uk",
+    "privateRentingUrl": "https://www.braintree.gov.uk/housing/private-rented-sector"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed on the council's site; only mandatory HMO licensing applies.",
+    "additional": "No additional HMO licensing scheme is listed; mandatory licensing applies to HMOs with five or more people forming more than one household.",
+    "fee": "For an HMO licence the council lists a £595 application fee plus a £445 issue fee for a new licence (renewal £550), 2026/27.",
+    "source": "https://www.braintree.gov.uk/licensing/houses-multiple-occupatlon-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,217 a month (ONS, July 2026), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000067/"
+  },
+  "price": {
+    "text": "£331,000 (UK HPI, June 2026, provisional), up 2.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000067/"
+  },
+  "privateRentedShare": {
+    "text": "15.1% of households rent privately (Census 2021), up from 13.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000067/"
+  },
+  "councilTax": {
+    "text": "About £2,216 Band D before parish precepts (2026/27): district £206.01, Essex County £1,641.96, police £275.31, fire £92.52",
+    "source": "https://www.braintree.gov.uk/downloads/file/4397/budget-book-2026-27"
+  },
+  "postcodes": [
+    "CM7",
+    "CM77",
+    "CM8",
+    "CO9",
+    "CO6",
+    "CO10",
+    "CM3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Braintree town",
+      "postcodes": "CM7",
+      "housing": "Victorian and Edwardian terraces near the centre, large post-war estates and new-build estates on the edges."
+    },
+    {
+      "name": "Great Notley",
+      "postcodes": "CM77",
+      "housing": "A planned village of 1990s and 2000s detached and semi-detached houses."
+    },
+    {
+      "name": "Witham",
+      "postcodes": "CM8",
+      "housing": "Former London overspill estates of the 1960s and 70s, older terraces in the town centre and new estates around the station."
+    },
+    {
+      "name": "Halstead",
+      "postcodes": "CO9",
+      "housing": "Period cottages and terraces on the hilly town centre streets, with post-war and modern estates around them."
+    },
+    {
+      "name": "Coggeshall",
+      "postcodes": "CO6",
+      "housing": "A historic small town with many listed timber-framed and brick houses and some modern infill."
+    },
+    {
+      "name": "Silver End",
+      "postcodes": "CM8",
+      "housing": "A 1920s model village with flat-roofed Modernist houses, many of them listed, alongside later homes."
+    },
+    {
+      "name": "Hatfield Peverel",
+      "postcodes": "CM3",
+      "housing": "A commuter village of older cottages, post-war semis and newer estates near the railway."
+    },
+    {
+      "name": "Sible Hedingham",
+      "postcodes": "CO9",
+      "housing": "A large rural village of period cottages, council-built houses and bungalows."
+    }
+  ],
+  "housing": "Braintree district is mostly owner-occupied, with about one in seven households renting privately. The rented stock is mainly terraced and semi-detached houses in Braintree, Witham and Halstead, plus flats in the town centres and newer estates. Witham and Braintree draw London and Chelmsford commuters, and large new estates continue to be built around both towns. The rural north of the district has many period and listed cottages, some off the gas network.",
+  "checkinTips": [
+    "Timber-framed and listed cottages in Coggeshall and the villages: photograph beams, uneven floors, plaster cracks and any damp patches at low level.",
+    "Crittall-style metal windows in Silver End and older homes: photograph frames, catches and any rust or condensation on the glazing.",
+    "Rural homes off the gas network: photograph the oil tank or LPG tank, its gauge level and the boiler.",
+    "New-build estates around Witham and Great Notley: note shared parking bays, management company bin areas and any snagging marks.",
+    "Flats above shops in Braintree and Halstead town centres: photograph the shared entrance, stairs, door entry system and keys and fobs.",
+    "Gardens and sheds on larger family houses: photograph fences, lawn condition and outbuildings, as these often cause check-out disputes."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions to Braintree District Council's private sector housing team, which can inspect and take enforcement action against landlords.",
+  "nearby": [
+    "uttlesford",
+    "chelmsford",
+    "maldon",
+    "colchester",
+    "babergh",
+    "west-suffolk"
+  ]
+}

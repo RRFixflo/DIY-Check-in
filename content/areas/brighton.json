@@ -1,0 +1,96 @@
+{
+  "slug": "brighton",
+  "name": "Brighton and Hove",
+  "council": {
+    "name": "Brighton & Hove City Council",
+    "url": "https://www.brighton-hove.gov.uk",
+    "privateRentingUrl": "https://www.brighton-hove.gov.uk/housing/private-housing/selective-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing has applied since 2 September 2024 (to 1 September 2029) in four wards: Kemptown, Moulsecoomb & Bevendean, Queen's Park, and Whitehawk & Brighton Marina. A further 13 areas were approved to be phased in, with Regency and Central Hove designated from 20 October 2026, but the council says that expansion is paused while a legal challenge is reviewed: check with the council before letting there.",
+    "additional": "Citywide additional HMO licensing from 1 July 2024 to 30 June 2029 for HMOs of two or more storeys with three or four unrelated occupiers (single-storey flats with three or four sharers come under the selective scheme); larger HMOs need a mandatory licence.",
+    "fee": "£740 for a standard selective licence (£518 on application, £222 on approval), £590–£665 with discounts, £840 if late (council fees page).",
+    "source": "https://www.brighton-hove.gov.uk/housing/private-housing/private-landlords/selective-licensing/selective-licence-fees-discounts-and-exemptions",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,808 a month (ONS, August 2026), down 1.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000043/"
+  },
+  "price": {
+    "text": "£409,000 (UK HPI, July 2026, provisional), down 1.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000043/"
+  },
+  "privateRentedShare": {
+    "text": "32.7% of households rent privately (Census 2021), up from 29.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000043/"
+  },
+  "councilTax": {
+    "text": "£2,581 Band D including police and fire precepts (2026/27, MHCLG figure as reported)",
+    "source": "https://housecheckup.co.uk/council-tax/brighton-and-hove"
+  },
+  "postcodes": [
+    "BN1",
+    "BN2",
+    "BN3",
+    "BN41",
+    "BN51"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kemptown",
+      "postcodes": "BN2",
+      "housing": "Regency terraces and squares split into flats, with smaller Victorian terraces behind."
+    },
+    {
+      "name": "North Laine",
+      "postcodes": "BN1",
+      "housing": "Small Victorian terraced cottages and flats above shops close to the station."
+    },
+    {
+      "name": "Hove",
+      "postcodes": "BN3",
+      "housing": "Regency and Victorian villas and terraces converted into flats, with mansion blocks along the seafront."
+    },
+    {
+      "name": "Moulsecoomb and Bevendean",
+      "postcodes": "BN2",
+      "housing": "Inter-war and post-war council-built estates, many now shared student houses near the universities."
+    },
+    {
+      "name": "Hanover",
+      "postcodes": "BN2",
+      "housing": "Steep streets of small Victorian terraced houses, many let to sharers."
+    },
+    {
+      "name": "Preston Park and Fiveways",
+      "postcodes": "BN1",
+      "housing": "Larger Victorian and Edwardian terraced and semi-detached family houses."
+    },
+    {
+      "name": "Whitehawk",
+      "postcodes": "BN2",
+      "housing": "Council-built estates of houses and blocks of flats in the valley east of the city centre."
+    },
+    {
+      "name": "Portslade",
+      "postcodes": "BN41",
+      "housing": "Victorian terraces near the harbour and inter-war and post-war semis on the hillside."
+    }
+  ],
+  "housing": "Brighton and Hove has one of the largest private rented sectors outside London, with about a third of households renting privately in 2021. Much of the stock is Regency and Victorian houses converted into flats, alongside small terraces in Hanover and North Laine. Two universities create a large student market, concentrated around Moulsecoomb, Bevendean and the Lewes Road, with many shared houses. Selective and additional licensing schemes cover large parts of the city, so landlords should check a property's licence status.",
+  "checkinTips": [
+    "Regency and Victorian conversions near the seafront: photograph sash windows, cornices, damp patches and any salt staining on window frames and railings.",
+    "Student HMOs around Moulsecoomb, Bevendean and the Lewes Road: photograph each bedroom door lock, fire doors, smoke alarms and the shared kitchen in detail.",
+    "Flats in converted houses: photograph the meter cupboards, communal hallway and stairs, and record keys for the street door and the flat.",
+    "Basement and lower-ground flats in Hove and Kemptown: photograph walls near floor level and light wells for damp and mould.",
+    "Steep Hanover terraces: photograph rear yards, steps and drains, and any cracks in garden walls.",
+    "Licensed properties: photograph the displayed licence or note its number, and check the room count matches the licence."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe homes to Brighton & Hove City Council's private sector housing team, which enforces housing standards and the licensing schemes.",
+  "nearby": [
+    "adur",
+    "mid-sussex",
+    "lewes"
+  ]
+}

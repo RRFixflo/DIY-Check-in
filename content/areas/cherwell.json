@@ -1,0 +1,102 @@
+{
+  "slug": "cherwell",
+  "name": "Cherwell",
+  "council": {
+    "name": "Cherwell District Council",
+    "url": "https://www.cherwell.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "OX15",
+    "OX16",
+    "OX17",
+    "OX25",
+    "OX26",
+    "OX27",
+    "OX5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Banbury town centre",
+      "postcodes": "OX16",
+      "housing": "Victorian terraces, flats over shops and modern apartment blocks near the canal and station."
+    },
+    {
+      "name": "Grimsbury",
+      "postcodes": "OX16",
+      "housing": "Victorian and Edwardian terraces east of the railway, many privately let."
+    },
+    {
+      "name": "Banbury Ruscote and Neithrop",
+      "postcodes": "OX16",
+      "housing": "Large post-war estates of former council houses in the west of the town."
+    },
+    {
+      "name": "Bicester",
+      "postcodes": "OX26",
+      "housing": "A market town with older terraces in the centre and large new-build estates, including Kingsmere and Elmsbrook."
+    },
+    {
+      "name": "Kidlington",
+      "postcodes": "OX5",
+      "housing": "A large village suburb north of Oxford with mainly post-war houses and bungalows."
+    },
+    {
+      "name": "Heyford Park",
+      "postcodes": "OX25",
+      "housing": "A former RAF base being turned into a new settlement, with converted base housing and new homes."
+    },
+    {
+      "name": "Bodicote and Adderbury",
+      "postcodes": "OX15, OX17",
+      "housing": "Villages of ironstone cottages with later estates."
+    },
+    {
+      "name": "Deddington",
+      "postcodes": "OX15",
+      "housing": "A market village of ironstone houses and cottages."
+    }
+  ],
+  "housing": "Cherwell's two towns, Banbury and Bicester, have grown fast, with large new-build estates on their edges and garden town development around Bicester. Banbury has Victorian terraces in Grimsbury and post-war estates to the west, while Kidlington provides suburban homes close to Oxford. The north of the district has villages of honey-coloured ironstone cottages, many listed. Heyford Park, on a former RAF base, includes former service housing and new homes.",
+  "checkinTips": [
+    "Ironstone cottages in the northern villages: photograph soft stone, window sills, beams and any damp at the base of walls.",
+    "New-build homes in Bicester and Banbury: note snagging marks, sealant around baths and showers, and new garden fences and turf.",
+    "Former service houses at Heyford Park: record heating systems, windows and the condition of shared green spaces and parking.",
+    "Victorian terraces in Grimsbury: photograph rear extensions, back yards and any damp in older walls.",
+    "Rural homes without mains gas: photograph oil tanks, LPG bottles and any septic tank or treatment plant.",
+    "Homes near the River Cherwell and the Oxford Canal: check ground floors and gardens for signs of damp or past flooding."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Cherwell District Council's private sector housing team.",
+  "nearby": [
+    "oxford",
+    "south-oxfordshire",
+    "west-oxfordshire",
+    "vale-of-white-horse",
+    "west-northamptonshire",
+    "stratford-on-avon",
+    "buckinghamshire"
+  ]
+}

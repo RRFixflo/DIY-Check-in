@@ -1,0 +1,101 @@
+{
+  "slug": "breckland",
+  "name": "Breckland",
+  "council": {
+    "name": "Breckland Council",
+    "url": "https://www.breckland.gov.uk",
+    "privateRentingUrl": "https://www.breckland.gov.uk/housing-ps-HMO"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme; only mandatory licensing for HMOs with five or more people.",
+    "fee": null,
+    "source": "https://www.breckland.gov.uk/housing-ps-HMO",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£909 a month (ONS, March 2026), up 6.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000143/"
+  },
+  "price": {
+    "text": "£274,000 (UK HPI, February 2026, provisional), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000143/"
+  },
+  "privateRentedShare": {
+    "text": "18.1% of households rent privately (Census 2021), up from 15.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000143"
+  },
+  "councilTax": {
+    "text": "About £2,312 Band D before parish precepts (2026/27): Norfolk County £1,843.38, police £344.79, Breckland £123.48",
+    "source": "https://www.angliarevenues.gov.uk/services/counciltax/about/charges/upload/Breckland-Council-Tax-Amounts-2026_27.pdf"
+  },
+  "postcodes": [
+    "NR19",
+    "NR20",
+    "IP24",
+    "IP25",
+    "PE37",
+    "NR17",
+    "IP26",
+    "NR9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dereham",
+      "postcodes": "NR19, NR20",
+      "housing": "A market town with Georgian and Victorian houses in the centre and large post-war and modern estates around it."
+    },
+    {
+      "name": "Thetford",
+      "postcodes": "IP24",
+      "housing": "An old town that grew with London overspill estates in the 1960s and 70s, now with large new-build developments to the north."
+    },
+    {
+      "name": "Attleborough",
+      "postcodes": "NR17",
+      "housing": "A growing market town with older terraces near the centre and extensive new-build estates."
+    },
+    {
+      "name": "Swaffham",
+      "postcodes": "PE37",
+      "housing": "A Georgian market town with period houses around the market place and newer estates and bungalows on the edges."
+    },
+    {
+      "name": "Watton",
+      "postcodes": "IP25",
+      "housing": "A small town whose housing includes former RAF married quarters alongside older and newer private homes."
+    },
+    {
+      "name": "Mattishall",
+      "postcodes": "NR20",
+      "housing": "A village of period cottages, bungalows and small modern estates."
+    },
+    {
+      "name": "Great Ellingham",
+      "postcodes": "NR17",
+      "housing": "A rural village of brick and flint cottages, bungalows and newer family houses."
+    },
+    {
+      "name": "Hingham",
+      "postcodes": "NR9",
+      "housing": "A small Georgian town with listed brick houses around its greens and some modern homes."
+    }
+  ],
+  "housing": "Breckland is a large rural district of market towns and villages, with nearly one in five households renting privately in 2021. Thetford has a big stock of 1960s and 70s overspill housing, while Dereham, Attleborough and Swaffham mix period town houses with new estates. Former RAF quarters in Watton and homes let to service families near the military bases add to the rented stock. Many village homes are older brick and flint cottages, and some are off the gas network.",
+  "checkinTips": [
+    "Brick and flint cottages in the villages: photograph walls, pointing, damp patches and any condensation on cold north-facing rooms.",
+    "Homes off the gas network: photograph the oil tank, its gauge level and bund, or the LPG tank, and the boiler or stove.",
+    "Septic tanks and private drainage in rural properties: note what the tenancy says about emptying and photograph the access cover.",
+    "1960s and 70s overspill homes in Thetford: photograph flat or shallow roofs where visible, window seals and any mould in bathrooms.",
+    "Former military quarters in Watton: photograph kitchens, floor coverings and gardens, which are often handed back to a set standard.",
+    "Large rural gardens: photograph hedges, lawns, sheds and outbuildings so their condition is clear at check-out."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or other hazards to Breckland Council's private sector housing team, which can inspect homes and require landlords to put things right.",
+  "nearby": [
+    "kings-lynn-and-west-norfolk",
+    "north-norfolk",
+    "broadland",
+    "south-norfolk",
+    "west-suffolk"
+  ]
+}

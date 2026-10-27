@@ -1,0 +1,97 @@
+{
+  "slug": "basingstoke-and-deane",
+  "name": "Basingstoke and Deane",
+  "council": {
+    "name": "Basingstoke and Deane Borough Council",
+    "url": "https://www.basingstoke.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "RG20",
+    "RG21",
+    "RG22",
+    "RG23",
+    "RG24",
+    "RG25",
+    "RG26",
+    "RG28"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Basingstoke town centre",
+      "postcodes": "RG21",
+      "housing": "Victorian terraces in the old town and modern apartment blocks near the station."
+    },
+    {
+      "name": "Brighton Hill",
+      "postcodes": "RG22",
+      "housing": "A 1970s and 1980s estate of terraced and semi-detached houses."
+    },
+    {
+      "name": "Chineham",
+      "postcodes": "RG24",
+      "housing": "Mostly 1980s and 1990s private estates of detached and semi-detached houses."
+    },
+    {
+      "name": "Popley",
+      "postcodes": "RG24",
+      "housing": "Post-war overspill estates, partly regenerated with new homes."
+    },
+    {
+      "name": "Hatch Warren",
+      "postcodes": "RG22",
+      "housing": "Modern estates of family houses on the south side of the town."
+    },
+    {
+      "name": "Tadley",
+      "postcodes": "RG26",
+      "housing": "Post-war and modern houses and bungalows on the Berkshire border."
+    },
+    {
+      "name": "Whitchurch",
+      "postcodes": "RG28",
+      "housing": "A small market town of period houses and cottages, with newer estates."
+    },
+    {
+      "name": "Overton",
+      "postcodes": "RG25",
+      "housing": "Period cottages and village houses along the River Test."
+    },
+    {
+      "name": "Oakley",
+      "postcodes": "RG23",
+      "housing": "A large village of semis, bungalows and detached houses west of Basingstoke."
+    },
+    {
+      "name": "Kingsclere",
+      "postcodes": "RG20",
+      "housing": "Period cottages and houses in a village below the downs."
+    }
+  ],
+  "housing": "Basingstoke grew rapidly as a London overspill town from the 1960s, so much of its housing is planned estates of terraced and semi-detached houses, with newer estates and apartment blocks on the edges and near the station. The rest of the borough is rural north Hampshire, with villages of brick and flint cottages. Private rented homes are mostly in the town’s estates and flats, let to commuters and people working locally.",
+  "checkinTips": [
+    "1960s–1980s estate houses: photograph flat-roofed porches and garages, uPVC windows and doors, and the number of keys and garage fobs.",
+    "Apartment blocks near Basingstoke station: note fob, key and parking permit counts, and photograph the meter cupboard and bin store.",
+    "Brick and flint cottages in the villages: photograph walls and window reveals for damp, and any open fire or stove with its hearth.",
+    "Rural homes off mains gas: photograph oil tanks and the gauge reading, and the cover of any septic tank or treatment plant.",
+    "New-build homes: photograph sealant around baths and showers, settlement cracks in plaster and the state of turfed gardens."
+  ],
+  "tenantHelp": "Tenants in Basingstoke and Deane can contact the borough council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "west-berkshire",
+    "hart",
+    "test-valley",
+    "winchester"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "slug": "ashfield",
+  "name": "Ashfield",
+  "council": {
+    "name": "Ashfield District Council",
+    "url": "https://www.ashfield.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "NG15",
+    "NG16",
+    "NG17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sutton-in-Ashfield",
+      "postcodes": "NG17",
+      "housing": "Victorian red-brick terraces near the centre, with large post-war council estates and newer private estates."
+    },
+    {
+      "name": "Kirkby-in-Ashfield",
+      "postcodes": "NG17",
+      "housing": "Former mining town of terraced houses, ex-council semis and modern estates."
+    },
+    {
+      "name": "Hucknall",
+      "postcodes": "NG15",
+      "housing": "Terraces from the mining era, interwar semis and large new-build estates near the tram line."
+    },
+    {
+      "name": "Huthwaite",
+      "postcodes": "NG17",
+      "housing": "Brick terraces and semis in a former mining village on the Derbyshire border."
+    },
+    {
+      "name": "Skegby",
+      "postcodes": "NG17",
+      "housing": "Semi-detached and detached houses and newer estates on the edge of Sutton."
+    },
+    {
+      "name": "Annesley",
+      "postcodes": "NG15",
+      "housing": "A former colliery village with pit terraces and modern housing."
+    },
+    {
+      "name": "Selston",
+      "postcodes": "NG16",
+      "housing": "A spread-out village of semis, bungalows and older cottages."
+    },
+    {
+      "name": "Jacksdale",
+      "postcodes": "NG16",
+      "housing": "Terraced and semi-detached homes in a former mining village by the Erewash valley."
+    },
+    {
+      "name": "Underwood",
+      "postcodes": "NG16",
+      "housing": "A small village of houses and bungalows with farmland around it."
+    }
+  ],
+  "housing": "Ashfield is a former coalfield district in west Nottinghamshire, made up of Sutton-in-Ashfield, Kirkby-in-Ashfield and Hucknall with villages on the Derbyshire border. Homes are mainly Victorian and early 20th-century brick terraces, ex-council semis and modern estates, and prices are well below the England average. Private rented homes are commonly terraced houses in the older parts of the towns, and Hucknall’s tram link to Nottingham has brought new estates and commuters.",
+  "checkinTips": [
+    "Victorian terraces in Sutton and Kirkby: photograph back yards, outhouses, rear doors and the shared alleys behind them.",
+    "Former mining areas: photograph any cracks in walls, door frames that stick, or uneven floors, so that later movement can be compared.",
+    "Ex-council semis: photograph uPVC windows and doors, their locks and the number of keys, and any garden fences and sheds.",
+    "New-build homes in Hucknall: photograph sealant around baths and showers, any settlement cracks in plaster and the state of turfed gardens.",
+    "Older terraces with solid walls: photograph corners of rooms, behind wardrobes and window reveals for damp and mould."
+  ],
+  "tenantHelp": "Tenants in Ashfield can contact Ashfield District Council’s private sector housing team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "mansfield",
+    "gedling",
+    "nottingham",
+    "broxtowe",
+    "amber-valley",
+    "bolsover"
+  ]
+}

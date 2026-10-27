@@ -1,0 +1,124 @@
+{
+  "slug": "birmingham",
+  "name": "Birmingham",
+  "council": {
+    "name": "Birmingham City Council",
+    "url": "https://www.birmingham.gov.uk",
+    "privateRentingUrl": "https://www.birmingham.gov.uk/info/20175/private_housing/2649/selective_licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers 25 of the city's 69 wards: most privately rented homes in those wards need a licence. The scheme started on 5 June 2023 and runs until 4 June 2028.",
+    "additional": "Additional HMO licensing covers every ward in the city: smaller HMOs with 3 or 4 occupants need a licence. In force from 5 June 2023 until 4 June 2028. Larger HMOs need a mandatory licence as everywhere in England.",
+    "fee": "£700 for a selective licence, paid in two parts (council page)",
+    "source": "https://www.birmingham.gov.uk/download/downloads/id/25380/designation_of_an_area_for_additional_licensing_of_houses_in_multiple_occupation_2023.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,086 a month (ONS, April 2026), up 3.3% on a year earlier",
+    "source": "https://housecheckup.co.uk/average-rent/birmingham"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "22.6% of households rent privately (Census 2021), up from 17.9% in 2011",
+    "source": "https://cityobservatory.birmingham.gov.uk/api/explore/v2.1/catalog/datasets/census-2021-factsheets/files/d3acd16ff3a7a90a5882446174cb4d1b"
+  },
+  "councilTax": {
+    "text": "£2,353 Band D including police and fire (2026/27)",
+    "source": "https://www.birmingham.gov.uk/download/downloads/id/9476/non-domestic_rates_budget_booklet_for_2026_to_2027.pdf"
+  },
+  "postcodes": [
+    "B1",
+    "B5",
+    "B6",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B17",
+    "B18",
+    "B20",
+    "B23",
+    "B24",
+    "B29",
+    "B30",
+    "B31",
+    "B72",
+    "B73",
+    "B75",
+    "B76"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Jewellery Quarter",
+      "postcodes": "B1, B3, B18",
+      "housing": "Apartment blocks and converted warehouses and factories, many let to young professionals."
+    },
+    {
+      "name": "Selly Oak",
+      "postcodes": "B29",
+      "housing": "Victorian and Edwardian terraces, many let as student shared houses for the University of Birmingham."
+    },
+    {
+      "name": "Edgbaston",
+      "postcodes": "B15, B16",
+      "housing": "Large Georgian and Victorian villas, many divided into flats, alongside purpose-built blocks."
+    },
+    {
+      "name": "Harborne",
+      "postcodes": "B17",
+      "housing": "Victorian and inter-war terraces and semis, with flats above the High Street shops."
+    },
+    {
+      "name": "Moseley and Kings Heath",
+      "postcodes": "B13, B14",
+      "housing": "Victorian and Edwardian terraces and large houses, a number converted into flats."
+    },
+    {
+      "name": "Small Heath and Sparkhill",
+      "postcodes": "B10, B11",
+      "housing": "Dense Victorian terraced streets, many privately rented."
+    },
+    {
+      "name": "Erdington",
+      "postcodes": "B23, B24",
+      "housing": "Inter-war semis, Victorian terraces and some converted houses and HMOs."
+    },
+    {
+      "name": "Northfield and Longbridge",
+      "postcodes": "B31",
+      "housing": "Inter-war and post-war semis and terraces, with new-build homes on the former car works site at Longbridge."
+    },
+    {
+      "name": "Sutton Coldfield",
+      "postcodes": "B72, B73, B74, B75, B76",
+      "housing": "Mainly owner-occupied suburban semis and detached houses, with flats near the town centre."
+    },
+    {
+      "name": "Digbeth and Highgate",
+      "postcodes": "B5, B12",
+      "housing": "Former industrial land being redeveloped with new apartment blocks."
+    }
+  ],
+  "housing": "Birmingham has one of the largest private rented sectors in England, with more than one in five households renting privately. The inner wards are dominated by Victorian terraces, many let as family homes or shared houses, while the city centre and Digbeth have seen large numbers of new apartment blocks. Selly Oak and the areas around the universities have a concentration of student HMOs. Every HMO in the city now needs a licence, and most rented homes in 25 wards need a selective licence.",
+  "checkinTips": [
+    "Student shared houses in Selly Oak: photograph each bedroom lock, fire doors and alarms, and the condition of the shared kitchen and bathroom at the start and end of each academic year.",
+    "City centre apartment blocks: record fob and key counts, the parking space or bike store, and the intercom, and note any communal-area damage separately.",
+    "Victorian terraces in the inner wards: check and photograph damp at the base of walls, cellar condition, back-yard walls and outside toilets or stores.",
+    "Converted villas in Edgbaston and Moseley: photograph high ceilings, cornicing and original features, and the shared hallway and meters.",
+    "Warehouse conversions in the Jewellery Quarter and Digbeth: note exposed brick, metal windows and any condensation or mould around them.",
+    "New-build homes at Longbridge and other regeneration sites: record snagging marks, sealant, and whether the extractor fans and heating controls work."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Birmingham City Council's private rented services team, which also runs the city's licensing schemes.",
+  "nearby": [
+    "sandwell",
+    "walsall",
+    "solihull",
+    "dudley",
+    "bromsgrove",
+    "lichfield",
+    "north-warwickshire"
+  ]
+}

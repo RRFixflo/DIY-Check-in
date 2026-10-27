@@ -1,0 +1,101 @@
+{
+  "slug": "bolton",
+  "name": "Bolton",
+  "council": {
+    "name": "Bolton Council",
+    "url": "https://www.bolton.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BL1",
+    "BL2",
+    "BL3",
+    "BL4",
+    "BL5",
+    "BL6",
+    "BL7",
+    "M26",
+    "M38",
+    "M46"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bolton town centre",
+      "postcodes": "BL1",
+      "housing": "Flats over shops, converted mills and newer apartment blocks."
+    },
+    {
+      "name": "Deane and Daubhill",
+      "postcodes": "BL3",
+      "housing": "Dense Victorian terraced streets, many privately rented, close to the university."
+    },
+    {
+      "name": "Great Lever",
+      "postcodes": "BL3",
+      "housing": "Victorian terraces and post-war council-built estates."
+    },
+    {
+      "name": "Halliwell",
+      "postcodes": "BL1",
+      "housing": "Terraced streets and post-war estates north of the centre."
+    },
+    {
+      "name": "Astley Bridge",
+      "postcodes": "BL1",
+      "housing": "Victorian terraces and inter-war semis."
+    },
+    {
+      "name": "Farnworth",
+      "postcodes": "BL4",
+      "housing": "A town of brick terraces and post-war estates south of Bolton."
+    },
+    {
+      "name": "Little Lever and Kearsley",
+      "postcodes": "BL3, BL4",
+      "housing": "Terraces, semis and post-war estates."
+    },
+    {
+      "name": "Horwich",
+      "postcodes": "BL6",
+      "housing": "A former railway town of terraces, with large new estates on the old loco works and near the stadium."
+    },
+    {
+      "name": "Westhoughton",
+      "postcodes": "BL5",
+      "housing": "Terraces, semis and many newer estates."
+    },
+    {
+      "name": "Turton and Bromley Cross",
+      "postcodes": "BL7",
+      "housing": "Suburban semis and detached houses, with stone cottages in the moorland villages."
+    }
+  ],
+  "housing": "Bolton's housing is dominated by Victorian brick terraces built for the cotton mills, especially in the inner areas around Deane, Daubhill and Great Lever, where private renting is common. The University of Bolton brings some student lets close to the town centre. Farnworth, Kearsley and Little Lever have similar terraced streets and post-war estates, while Horwich and Westhoughton have grown with large new-build estates. The north of the borough, around Turton, is mostly owner-occupied with stone villages on the moors.",
+  "checkinTips": [
+    "Victorian terraces in Deane, Daubhill and Great Lever: photograph damp at the base of walls, cellar heads and mould in back bedrooms and bathrooms.",
+    "Back yards and ginnels behind terraced rows: record the yard gate, walls and where the bins are kept.",
+    "Student lets near the University of Bolton: photograph each bedroom lock, fire doors and alarms, and the shared kitchen separately.",
+    "Mill conversions and town-centre flats: note fob and key counts, the intercom and any parking space or bike store.",
+    "New-build estates in Horwich and Westhoughton: record snagging marks, sealant and new gardens and fences.",
+    "Stone cottages in the Turton moorland villages: photograph stoves, any oil or LPG supply and exposed walls and windows."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Bolton Council's private sector housing team.",
+  "nearby": [
+    "wigan",
+    "salford",
+    "bury",
+    "chorley",
+    "blackburn-with-darwen"
+  ]
+}

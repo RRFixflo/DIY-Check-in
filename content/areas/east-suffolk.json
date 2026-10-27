@@ -1,0 +1,92 @@
+{
+  "slug": "east-suffolk",
+  "name": "East Suffolk",
+  "council": {
+    "name": "East Suffolk Council",
+    "url": "https://www.eastsuffolk.gov.uk",
+    "privateRentingUrl": "https://www.eastsuffolk.gov.uk/housing/private-sector-housing/hmo"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "IP11",
+    "IP12",
+    "IP13",
+    "IP15",
+    "IP16",
+    "IP17",
+    "IP18",
+    "IP19",
+    "NR32",
+    "NR33",
+    "NR34",
+    "NR35"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Lowestoft",
+      "postcodes": "NR32, NR33",
+      "housing": "The largest town: Victorian terraces near the centre and harbour, former guest houses split into flats, and post-war estates."
+    },
+    {
+      "name": "Felixstowe",
+      "postcodes": "IP11",
+      "housing": "A port and seaside town with Victorian and Edwardian houses, flats on the seafront and post-war estates."
+    },
+    {
+      "name": "Woodbridge",
+      "postcodes": "IP12",
+      "housing": "A riverside market town with Georgian and older listed houses and modern estates around it."
+    },
+    {
+      "name": "Beccles",
+      "postcodes": "NR34",
+      "housing": "A market town on the Waveney with period houses in the centre and later estates."
+    },
+    {
+      "name": "Bungay",
+      "postcodes": "NR35",
+      "housing": "A small market town with Georgian and timber-framed buildings."
+    },
+    {
+      "name": "Southwold",
+      "postcodes": "IP18",
+      "housing": "A small coastal town with many period cottages, a large share of them second homes and holiday lets."
+    },
+    {
+      "name": "Aldeburgh",
+      "postcodes": "IP15",
+      "housing": "A coastal town with Victorian and older houses and many holiday lets."
+    },
+    {
+      "name": "Leiston",
+      "postcodes": "IP16",
+      "housing": "A small town with Victorian terraces and post-war housing near Sizewell."
+    }
+  ],
+  "housing": "East Suffolk covers the Suffolk coast from Lowestoft to Felixstowe, with market towns and villages inland. Private lets are concentrated in Lowestoft and Felixstowe, from Victorian terraces and converted guest houses to modern flats, while Southwold, Aldeburgh and Walberswick have many second homes and holiday lets. Inland villages have timber-framed and brick cottages, many off the gas grid. Parts of the coast are affected by erosion and low-lying areas near the rivers and coast are at risk of flooding.",
+  "checkinTips": [
+    "Seafront and harbour homes in Lowestoft and Felixstowe: photograph window frames and outside metalwork for salt corrosion and any damp on walls.",
+    "Former guest houses split into flats in Lowestoft: photograph fire doors, smoke alarms, the communal stairs and each flat's meters.",
+    "Timber-framed and listed cottages: photograph beams, uneven floors, old windows and any cracks in plaster so their condition is on record.",
+    "Homes off the gas grid in rural villages: photograph the oil tank, its gauge and level, or the LPG tank, and the boiler service label.",
+    "Rural homes with private drainage: photograph the septic tank or treatment plant cover and note when it was last emptied."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Suffolk Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "ipswich",
+    "mid-suffolk",
+    "babergh",
+    "south-norfolk",
+    "great-yarmouth"
+  ]
+}

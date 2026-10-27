@@ -1,0 +1,88 @@
+{
+  "slug": "broadland",
+  "name": "Broadland",
+  "council": {
+    "name": "Broadland District Council",
+    "url": "https://www.southnorfolkandbroadland.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "NR7",
+    "NR8",
+    "NR10",
+    "NR12",
+    "NR13",
+    "NR6",
+    "NR11"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sprowston",
+      "postcodes": "NR7",
+      "housing": "A suburb of post-war and modern estates on the north-east edge of Norwich."
+    },
+    {
+      "name": "Thorpe St Andrew",
+      "postcodes": "NR7",
+      "housing": "Suburban houses and bungalows, with large Victorian villas near the river."
+    },
+    {
+      "name": "Hellesdon",
+      "postcodes": "NR6",
+      "housing": "Inter-war and post-war semis and bungalows next to Norwich."
+    },
+    {
+      "name": "Taverham and Drayton",
+      "postcodes": "NR8",
+      "housing": "Estates of 1970s and later detached houses and bungalows."
+    },
+    {
+      "name": "Aylsham",
+      "postcodes": "NR11",
+      "housing": "A market town with Georgian houses in the centre and newer estates around it."
+    },
+    {
+      "name": "Wroxham and Hoveton",
+      "postcodes": "NR12",
+      "housing": "Broads villages with bungalows, chalets and riverside homes."
+    },
+    {
+      "name": "Acle",
+      "postcodes": "NR13",
+      "housing": "A village of older cottages, bungalows and modern houses near the Broads."
+    },
+    {
+      "name": "Reepham",
+      "postcodes": "NR10",
+      "housing": "A small Georgian market town surrounded by farmland and villages."
+    }
+  ],
+  "housing": "Broadland wraps around the north of Norwich, so much of its housing is suburban: post-war and modern estates in Sprowston, Hellesdon, Thorpe St Andrew and Taverham. Large new developments are being built in the growth area north-east of Norwich. The rural north has market towns such as Aylsham and Reepham and many villages, some within the Broads. Bungalows are common and the district is mostly owner-occupied.",
+  "checkinTips": [
+    "Bungalows in the suburbs and villages: photograph loft hatches, flat-roofed extensions and garden paths.",
+    "Riverside and Broads homes around Wroxham and Acle: photograph moorings, garden edges and any signs of flooding or damp.",
+    "Rural homes off the gas network: photograph the oil tank, its gauge level and the boiler.",
+    "Septic tanks and private drainage in villages: photograph the access cover and note who is responsible for emptying.",
+    "New-build homes in the growth area north-east of Norwich: note snagging marks, shared parking and management company areas.",
+    "Older brick and flint cottages: photograph walls, beams and window frames for damp and rot."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe homes to the council's private sector housing team, which can inspect and take enforcement action.",
+  "nearby": [
+    "north-norfolk",
+    "great-yarmouth",
+    "norwich",
+    "south-norfolk",
+    "breckland"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "chesterfield",
+  "name": "Chesterfield",
+  "council": {
+    "name": "Chesterfield Borough Council",
+    "url": "https://www.chesterfield.gov.uk",
+    "privateRentingUrl": "https://chesterfield.gov.uk/housing/private-homes/houses-in-multiple-occupation/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed on the council's website.",
+    "additional": "No additional HMO licensing: only mandatory licensing of HMOs with five or more people from two or more households. Licences usually last five years and the council publishes a register.",
+    "fee": null,
+    "source": "https://chesterfield.gov.uk/housing/private-homes/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£754 a month (ONS, July 2026), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000034/"
+  },
+  "price": {
+    "text": "£199,000 (UK HPI, June 2026, provisional), up 4.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000034/"
+  },
+  "privateRentedShare": {
+    "text": "16.2% of households rent privately (Census 2021), up from 12.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000034/"
+  },
+  "councilTax": {
+    "text": "£2,318 Band D (2026/27) in the parts of the borough without a parish council, including county, police and fire",
+    "source": "https://chesterfield.gov.uk/media/ykwbmmdq/notice-of-council-taxes-2026-2027.pdf"
+  },
+  "postcodes": [
+    "S40",
+    "S41",
+    "S43"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chesterfield town centre",
+      "postcodes": "S40, S41",
+      "housing": "Victorian terraces and flats above shops around the market and the Crooked Spire, with some newer apartment blocks."
+    },
+    {
+      "name": "Brampton",
+      "postcodes": "S40",
+      "housing": "Long streets of Victorian and Edwardian terraces west of the centre, many let privately."
+    },
+    {
+      "name": "Walton",
+      "postcodes": "S40",
+      "housing": "Inter-war and post-war semis and detached houses in a mainly owner-occupied suburb."
+    },
+    {
+      "name": "Newbold",
+      "postcodes": "S41",
+      "housing": "A mix of inter-war semis, post-war council-built estates and Victorian terraces."
+    },
+    {
+      "name": "Whittington Moor",
+      "postcodes": "S41",
+      "housing": "Victorian and early 20th-century terraces near the A61, with newer homes on former industrial land."
+    },
+    {
+      "name": "Staveley",
+      "postcodes": "S43",
+      "housing": "A former mining and ironworks town with terraces, post-war council-built estates and new homes on regeneration land."
+    },
+    {
+      "name": "Brimington",
+      "postcodes": "S43",
+      "housing": "Mainly semis and bungalows from the mid 20th century with some older terraces."
+    },
+    {
+      "name": "Hasland",
+      "postcodes": "S41",
+      "housing": "Former mining village of terraces with post-war and modern estates around it."
+    }
+  ],
+  "housing": "Chesterfield's housing is mostly Victorian and early 20th-century terraces near the centre, with large inter-war and post-war estates, a sizeable council-owned stock, and mining-era terraces in Staveley and Hasland. House prices are well below the national average and private renting is mainly two and three-bedroom terraces and semis. Some HMOs exist around the town centre and Brampton. New homes are being built on former industrial land at Staveley and along the Chesterfield Canal.",
+  "checkinTips": [
+    "Victorian terraces in Brampton and Newbold: photograph the cellar for damp, the back yard and any shared passageway or gennel.",
+    "Older terraces: check sash or replacement windows, chimney breasts and loft hatches for signs of leaks.",
+    "Former mining areas such as Staveley and Hasland: photograph any cracks in walls and around frames so movement can be compared later.",
+    "Flats above shops in the town centre: note the separate entrance, stairs, fire alarm and meter cupboard locations.",
+    "Post-war semis and former council houses: record gardens, fences, sheds and the boiler and consumer unit.",
+    "HMOs near the centre: photograph each room's lock and fire door and note shared kitchen appliances one by one."
+  ],
+  "tenantHelp": "Tenants in private rented homes can report disrepair or unsafe conditions to Chesterfield Borough Council's private sector housing team, which can inspect and enforce standards.",
+  "nearby": [
+    "north-east-derbyshire",
+    "bolsover"
+  ]
+}

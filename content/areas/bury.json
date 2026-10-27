@@ -1,0 +1,100 @@
+{
+  "slug": "bury",
+  "name": "Bury",
+  "council": {
+    "name": "Bury Council",
+    "url": "https://www.bury.gov.uk",
+    "privateRentingUrl": "https://www.bury.gov.uk/housing/private-rent/landlords/hmo-licence/mandatory-hmo-licensing-guide"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme. Council reports from early 2026 say Bury runs only the mandatory HMO licensing scheme.",
+    "additional": "No additional HMO licensing scheme. Only larger HMOs (five or more people from more than one household) need a mandatory licence, as everywhere in England. The council has looked at the evidence for additional licensing and has proposed a borough-wide Article 4 Direction to control conversions of homes into HMOs, but neither was in place at the last check.",
+    "fee": null,
+    "source": "https://www.bury.gov.uk/housing/private-rent/landlords/hmo-licence/mandatory-hmo-licensing-guide",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£969 a month (ONS, August 2026), up 0.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000002/"
+  },
+  "price": {
+    "text": "£242,000 (UK HPI, July 2026, provisional), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000002/"
+  },
+  "privateRentedShare": {
+    "text": "17.7% of households rent privately (Census 2021), up from 13.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000002/"
+  },
+  "councilTax": {
+    "text": "£2,555 Band D including the Greater Manchester mayoral police and fire precepts (2026/27)",
+    "source": "https://www.bury.gov.uk/council-tax/council-tax-rates"
+  },
+  "postcodes": [
+    "BL0",
+    "BL8",
+    "BL9",
+    "M25",
+    "M26",
+    "M45",
+    "OL10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bury town centre",
+      "postcodes": "BL9",
+      "housing": "Victorian terraces, flats over shops and newer apartment blocks around the town centre."
+    },
+    {
+      "name": "Ramsbottom",
+      "postcodes": "BL0",
+      "housing": "Stone-built terraces and mill cottages in a Pennine valley town, with some converted mill apartments."
+    },
+    {
+      "name": "Tottington",
+      "postcodes": "BL8",
+      "housing": "Stone terraces in the old village core with later semi-detached estates around it."
+    },
+    {
+      "name": "Radcliffe",
+      "postcodes": "M26",
+      "housing": "Red-brick terraces from the town's industrial past alongside post-war council-built estates."
+    },
+    {
+      "name": "Whitefield",
+      "postcodes": "M45",
+      "housing": "Mainly inter-war and post-war semi-detached houses, with some flats along the main roads."
+    },
+    {
+      "name": "Prestwich",
+      "postcodes": "M25",
+      "housing": "Edwardian and inter-war semis and terraces, with apartment developments near the Metrolink stops."
+    },
+    {
+      "name": "Elton",
+      "postcodes": "BL8",
+      "housing": "Dense Victorian terraced streets west of the town centre, many privately let."
+    },
+    {
+      "name": "Unsworth",
+      "postcodes": "BL9",
+      "housing": "Largely post-war semi-detached and terraced family housing."
+    }
+  ],
+  "housing": "Bury's rented homes are mostly Victorian and Edwardian terraces in Bury town, Radcliffe and Elton, and stone terraces in the Pennine towns of Ramsbottom and Tottington. The south of the borough, Whitefield and Prestwich, has more inter-war semis and apartment blocks close to the Metrolink into Manchester. Social renting makes up about one in seven homes, and the private rented share has grown since 2011. Only larger HMOs need a licence here.",
+  "checkinTips": [
+    "Stone terraces in Ramsbottom and Tottington: photograph window reveals, chimney breasts and any damp or mould on north-facing walls.",
+    "Victorian red-brick terraces in Bury and Radcliffe: record the condition of back yards, rear gates, outhouses and gutters.",
+    "Cellars and under-stairs cupboards in older terraces: photograph any tide marks, damp or stored items left behind.",
+    "Apartment blocks near Prestwich and Whitefield Metrolink stops: note fob and key counts, the post box, bike store and bin store access.",
+    "Converted mill apartments: photograph large windows, exposed brick and any condensation marks around frames.",
+    "Homes near the River Irwell and Roch: check ground floors and gardens for signs of past flooding or damp."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Bury Council's private sector housing team, which can inspect and take action against landlords.",
+  "nearby": [
+    "bolton",
+    "salford",
+    "manchester",
+    "rochdale",
+    "rossendale"
+  ]
+}

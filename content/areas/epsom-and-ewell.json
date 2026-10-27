@@ -1,0 +1,99 @@
+{
+  "slug": "epsom-and-ewell",
+  "name": "Epsom and Ewell",
+  "council": {
+    "name": "Epsom and Ewell Borough Council",
+    "url": "https://www.epsom-ewell.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": "£556,000 (UK HPI, October 2025, provisional)",
+    "source": "https://epsomandewelltimes.com/average-house-price-in-epsom-and-ewell-over-half-million"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,530.84 average Band D (2026/27), including Surrey County Council and Surrey Police",
+    "source": "https://epsom-ewell.gov.uk/sites/default/files/documents/residents/council-tax/EEBC%202026-27.pdf"
+  },
+  "postcodes": [
+    "KT17",
+    "KT18",
+    "KT19",
+    "KT4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Epsom town centre",
+      "postcodes": "KT17, KT18",
+      "housing": "Victorian and Edwardian terraces and villas near the High Street, with flats above shops and newer apartment blocks close to the station."
+    },
+    {
+      "name": "Ewell Village",
+      "postcodes": "KT17",
+      "housing": "A historic village core with period cottages and townhouses, surrounded by interwar semi-detached houses."
+    },
+    {
+      "name": "Stoneleigh",
+      "postcodes": "KT17, KT19",
+      "housing": "Largely 1930s semi-detached and terraced houses built around Stoneleigh station."
+    },
+    {
+      "name": "West Ewell",
+      "postcodes": "KT19",
+      "housing": "Interwar and post-war semis and terraces, with some former council housing."
+    },
+    {
+      "name": "Ewell Court",
+      "postcodes": "KT19",
+      "housing": "Mainly 1930s suburban semi-detached and terraced homes."
+    },
+    {
+      "name": "Worcester Park (Cuddington)",
+      "postcodes": "KT4",
+      "housing": "Interwar semi-detached houses and terraces on the borough's northern edge."
+    },
+    {
+      "name": "Epsom Downs",
+      "postcodes": "KT18",
+      "housing": "Larger detached and semi-detached houses near the racecourse, with some flats."
+    },
+    {
+      "name": "Langley Vale",
+      "postcodes": "KT18",
+      "housing": "A small village of detached and semi-detached houses and bungalows on the downs."
+    },
+    {
+      "name": "Horton (former hospital sites)",
+      "postcodes": "KT19",
+      "housing": "Large housing estates of houses and flats built on the sites of the former Epsom psychiatric hospitals, some in converted hospital buildings."
+    }
+  ],
+  "housing": "Epsom and Ewell is a compact, mostly suburban borough of interwar semi-detached houses, with Victorian and Edwardian homes around Epsom and Ewell Village. Several large estates were built from the 1990s onwards on the former hospital cluster around Horton, mixing new houses with flats in converted Victorian hospital buildings. Prices are high for the region, and lettings are mainly family houses and flats for London commuters, with some shared homes for students at the University for the Creative Arts' Epsom campus.",
+  "checkinTips": [
+    "Interwar semis in Stoneleigh and Ewell Court: photograph original bay windows, any replacement glazing seals, and the condition of garages and side gates.",
+    "Converted hospital buildings and newer blocks around Horton: record communal entrances, fob and key counts, allocated parking and bin store access.",
+    "Victorian and Edwardian homes near Epsom town centre: check sash windows, high ceilings for cracks, and any signs of damp in cellars or rear extensions.",
+    "Gardens are common in this suburban borough: photograph lawns, fences, sheds and patios so their condition is clear at check-out.",
+    "Flats above shops on Epsom High Street: note shared stair access, entry systems and any noise or ventilation issues in the kitchen and bathroom.",
+    "Student shared houses near the creative arts campus: record each bedroom's furniture and lock separately, and note fire doors and alarms."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Epsom and Ewell Borough Council's private sector housing (environmental health) team after first reporting the issue to their landlord.",
+  "nearby": [
+    "kingston-upon-thames",
+    "sutton",
+    "reigate-and-banstead",
+    "mole-valley",
+    "elmbridge"
+  ]
+}

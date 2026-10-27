@@ -1,0 +1,102 @@
+{
+  "slug": "calderdale",
+  "name": "Calderdale",
+  "council": {
+    "name": "Calderdale Council",
+    "url": "https://www.calderdale.gov.uk",
+    "privateRentingUrl": "https://new.calderdale.gov.uk/housing/private-landlords-and-tenants"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed on the council's private landlords pages.",
+    "additional": null,
+    "fee": null,
+    "source": "https://new.calderdale.gov.uk/housing/private-landlords-and-tenants/private-landlords/house-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£760 a month (ONS, September 2026), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000033/"
+  },
+  "price": {
+    "text": "£198,000 (UK HPI, August 2026, provisional), up 7.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000033/"
+  },
+  "privateRentedShare": {
+    "text": "20.4% of households rent privately (Census 2021), up from 16.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000033/"
+  },
+  "councilTax": {
+    "text": "£2,420 average Band D including police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/calderdale"
+  },
+  "postcodes": [
+    "HX1",
+    "HX2",
+    "HX3",
+    "HX4",
+    "HX5",
+    "HX6",
+    "HX7",
+    "HD6",
+    "OL14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Halifax town centre",
+      "postcodes": "HX1",
+      "housing": "Stone-built Victorian terraces, flats over shops and converted mill and commercial buildings."
+    },
+    {
+      "name": "Park and Warley",
+      "postcodes": "HX1, HX2",
+      "housing": "Dense back-to-back and through terraces west of the centre, alongside larger Victorian villas in Warley."
+    },
+    {
+      "name": "Hebden Bridge",
+      "postcodes": "HX7",
+      "housing": "Stone terraces built into the valley sides, including 'top and bottom' houses stacked one above another."
+    },
+    {
+      "name": "Todmorden",
+      "postcodes": "OL14",
+      "housing": "Stone terraces and mill workers' cottages, with some converted mills and farmhouses on the hills."
+    },
+    {
+      "name": "Brighouse",
+      "postcodes": "HD6",
+      "housing": "Victorian terraces near the centre and canal, with newer estates and apartment blocks on former industrial land."
+    },
+    {
+      "name": "Elland",
+      "postcodes": "HX5",
+      "housing": "Stone terraces in the old town and post-war and modern estates on the edges."
+    },
+    {
+      "name": "Sowerby Bridge",
+      "postcodes": "HX6",
+      "housing": "Stone terraces climbing the valley sides, with canal-side mill conversions."
+    },
+    {
+      "name": "Illingworth and Mixenden",
+      "postcodes": "HX2",
+      "housing": "Large post-war estates of former council houses and low-rise flats north of Halifax."
+    }
+  ],
+  "housing": "Calderdale's homes are largely stone-built Victorian terraces running along the steep Calder valley, from Halifax and Sowerby Bridge out to Hebden Bridge and Todmorden. Many old mills have been turned into apartments, and some valley towns have unusual 'top and bottom' houses where one home sits on top of another. North Halifax has large post-war estates, while Brighouse and Elland have seen newer building on old industrial sites. About one in five households rents privately, a share that has grown since 2011.",
+  "checkinTips": [
+    "Stone terraces on the valley sides: photograph damp patches on walls set into the hillside, especially in basements and ground-floor rooms.",
+    "Hebden Bridge, Mytholmroyd and Todmorden sit beside the River Calder, which has flooded several times: note any flood-resilience fittings and photograph skirting boards and floors on ground levels.",
+    "'Top and bottom' houses and back-to-backs: record which entrance, bins and outside space belong to the let home.",
+    "Converted mill apartments: photograph large window frames, communal areas, lifts and the number of fobs and keys handed over.",
+    "Older terraces with solid stone walls: check for condensation and mould behind furniture and in corners of bedrooms.",
+    "Hill farms and cottages above the valleys: photograph wood burners, oil tanks or private water and drainage where there is no mains supply."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Calderdale Council's private sector housing team through its private landlords and tenants pages.",
+  "nearby": [
+    "bradford",
+    "kirklees",
+    "oldham",
+    "rochdale",
+    "burnley"
+  ]
+}

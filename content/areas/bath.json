@@ -1,0 +1,96 @@
+{
+  "slug": "bath",
+  "name": "Bath and North East Somerset",
+  "council": {
+    "name": "Bath & North East Somerset Council",
+    "url": "https://www.bathnes.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "BA1",
+    "BA2",
+    "BA3",
+    "BS31",
+    "BS39",
+    "BS40"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bath city centre",
+      "postcodes": "BA1, BA2",
+      "housing": "Georgian stone townhouses and terraces, many split into flats, all in a World Heritage Site."
+    },
+    {
+      "name": "Oldfield Park",
+      "postcodes": "BA2",
+      "housing": "Victorian stone terraces, many let to students of the city’s two universities."
+    },
+    {
+      "name": "Widcombe",
+      "postcodes": "BA2",
+      "housing": "Georgian and Victorian stone houses on the slopes south of the river."
+    },
+    {
+      "name": "Larkhall",
+      "postcodes": "BA1",
+      "housing": "Victorian and Georgian terraces and cottages in a village-like suburb."
+    },
+    {
+      "name": "Keynsham",
+      "postcodes": "BS31",
+      "housing": "Post-war and modern houses, with older stone cottages near the centre."
+    },
+    {
+      "name": "Saltford",
+      "postcodes": "BS31",
+      "housing": "Detached and semi-detached houses between Bath and Bristol."
+    },
+    {
+      "name": "Midsomer Norton",
+      "postcodes": "BA3",
+      "housing": "Stone terraces from the coalfield era and newer estates."
+    },
+    {
+      "name": "Radstock",
+      "postcodes": "BA3",
+      "housing": "Former mining town of stone terraces, with new homes on old railway land."
+    },
+    {
+      "name": "Peasedown St John",
+      "postcodes": "BA2",
+      "housing": "A former mining village with large modern estates."
+    },
+    {
+      "name": "Chew Magna",
+      "postcodes": "BS40",
+      "housing": "Period stone houses and cottages in the Chew Valley."
+    }
+  ],
+  "housing": "Bath’s housing is dominated by Georgian and Victorian Bath stone terraces and townhouses, many divided into flats, within a World Heritage Site with many listed buildings. Its two universities create a large student rental market, particularly in Oldfield Park and Widcombe, with many shared houses. Outside the city, Keynsham sits between Bath and Bristol, and the Somer valley towns of Midsomer Norton and Radstock are former coalfield settlements with stone terraces and new estates.",
+  "checkinTips": [
+    "Georgian sash windows in Bath’s terraces: photograph cords, catches, glass and any rot on sills and frames.",
+    "Student shared houses in Oldfield Park and Widcombe: photograph each bedroom door lock and key, fire doors, alarms and the shared kitchen and its appliances.",
+    "Basement and lower-ground flats in stone houses: photograph walls, vaults and window wells for damp and mould.",
+    "Listed buildings: photograph original features such as shutters, fireplaces and plasterwork, and do not treat repairs needing listed building consent as tenant faults.",
+    "Stone terraces in Midsomer Norton and Radstock: photograph back yards, rear walls and chimney breasts for damp."
+  ],
+  "tenantHelp": "Tenants in Bath and North East Somerset can contact the council’s housing services team about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "bristol",
+    "south-gloucestershire",
+    "north-somerset",
+    "somerset",
+    "wiltshire"
+  ]
+}

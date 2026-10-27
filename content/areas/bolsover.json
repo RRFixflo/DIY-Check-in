@@ -1,0 +1,94 @@
+{
+  "slug": "bolsover",
+  "name": "Bolsover",
+  "council": {
+    "name": "Bolsover District Council",
+    "url": "https://www.bolsover.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "S43",
+    "S44",
+    "S80",
+    "NG19",
+    "NG20",
+    "DE55",
+    "NG16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bolsover",
+      "postcodes": "S44",
+      "housing": "A small hilltop town of stone and brick terraces, post-war estates and newer housing below the castle."
+    },
+    {
+      "name": "Shirebrook",
+      "postcodes": "NG20",
+      "housing": "A former mining town of brick terraces and colliery housing, many privately rented."
+    },
+    {
+      "name": "South Normanton",
+      "postcodes": "DE55",
+      "housing": "A large village of terraces, post-war estates and new-build homes near the M1."
+    },
+    {
+      "name": "Clowne",
+      "postcodes": "S43",
+      "housing": "A former mining village with terraces, semis and expanding new estates."
+    },
+    {
+      "name": "Creswell",
+      "postcodes": "S80",
+      "housing": "A former pit village with a model village of colliery houses and later estates."
+    },
+    {
+      "name": "Pinxton",
+      "postcodes": "NG16",
+      "housing": "A former mining village of brick terraces and post-war houses."
+    },
+    {
+      "name": "Barlborough",
+      "postcodes": "S43",
+      "housing": "A village with older stone houses and modern estates near the M1."
+    },
+    {
+      "name": "Whitwell",
+      "postcodes": "S80",
+      "housing": "A limestone village of stone cottages and later council-built homes."
+    },
+    {
+      "name": "Pleasley",
+      "postcodes": "NG19",
+      "housing": "A small village of former colliery terraces near the Nottinghamshire border."
+    }
+  ],
+  "housing": "Bolsover is a former coalfield district, and much of its housing is brick terraces and colliery houses built for the pits, alongside post-war council estates. Private renting is concentrated in the older terraces of the mining towns such as Shirebrook, where many former colliery homes were bought by landlords. Villages in the north-east, such as Whitwell and Barlborough, have stone cottages built of the local magnesian limestone. New estates are being built around Clowne, Bolsover and South Normanton near the M1.",
+  "checkinTips": [
+    "Former colliery terraces in Shirebrook and Creswell: photograph damp at the base of walls, chimney breasts and back-yard walls and gates.",
+    "Model village houses in Creswell: note original features, communal greens and any shared paths or alleys behind the homes.",
+    "Stone cottages in Whitwell and Barlborough: photograph solid walls, any damp patches, window frames and open fireplaces or stoves.",
+    "Older homes on former mining land: note any cracks in walls or ceilings and photograph them with a reference point so changes can be compared.",
+    "New-build homes around Clowne and South Normanton: record snagging marks, sealant and the condition of new fences and gardens."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Bolsover District Council's private sector housing team.",
+  "nearby": [
+    "chesterfield",
+    "north-east-derbyshire",
+    "amber-valley",
+    "ashfield",
+    "mansfield",
+    "bassetlaw",
+    "rotherham"
+  ]
+}

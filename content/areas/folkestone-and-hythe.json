@@ -1,0 +1,97 @@
+{
+  "slug": "folkestone-and-hythe",
+  "name": "Folkestone and Hythe",
+  "council": {
+    "name": "Folkestone and Hythe District Council",
+    "url": "https://www.folkestone-hythe.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CT18",
+    "CT19",
+    "CT20",
+    "CT21",
+    "TN28",
+    "TN29",
+    "TN25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Folkestone town centre and the Leas",
+      "postcodes": "CT20",
+      "housing": "Large Victorian and Edwardian villas and terraces, many converted into flats, and seafront apartment blocks."
+    },
+    {
+      "name": "Folkestone Harbour",
+      "postcodes": "CT20",
+      "housing": "Older fishermen's cottages and the new seafront development of flats and houses."
+    },
+    {
+      "name": "Cheriton",
+      "postcodes": "CT19, CT20",
+      "housing": "Victorian and Edwardian terraces and interwar semis west of the town centre."
+    },
+    {
+      "name": "Sandgate",
+      "postcodes": "CT20",
+      "housing": "A seaside village of Georgian and Victorian houses and cottages along the coast road."
+    },
+    {
+      "name": "Hythe",
+      "postcodes": "CT21",
+      "housing": "Historic town centre houses and cottages, Victorian villas and post-war estates near the Royal Military Canal."
+    },
+    {
+      "name": "Hawkinge",
+      "postcodes": "CT18",
+      "housing": "Large modern estates of houses built from the 1990s onwards."
+    },
+    {
+      "name": "New Romney",
+      "postcodes": "TN28",
+      "housing": "Older houses in the town centre with bungalows and estates towards Littlestone."
+    },
+    {
+      "name": "Dymchurch",
+      "postcodes": "TN29",
+      "housing": "Seaside bungalows, holiday chalets and small houses behind the sea wall."
+    },
+    {
+      "name": "Lydd",
+      "postcodes": "TN29",
+      "housing": "A small Romney Marsh town of brick cottages and post-war estates."
+    },
+    {
+      "name": "Lyminge and the Elham Valley",
+      "postcodes": "CT18",
+      "housing": "Downland villages of flint and brick cottages and some newer houses."
+    }
+  ],
+  "housing": "Folkestone and Hythe combines the large coastal town of Folkestone, the smaller resort of Hythe, the low-lying Romney Marsh and the villages of the North Downs. Folkestone has many large Victorian and Edwardian houses divided into flats, alongside regeneration at the harbour and seafront, while Hawkinge has grown with modern estates. On Romney Marsh, bungalows and seaside chalets in Dymchurch and Littlestone are common, and a large new settlement is planned at Otterpool Park.",
+  "checkinTips": [
+    "Seafront homes in Folkestone, Sandgate and Dymchurch: check window frames, door ironmongery and external metalwork for salt corrosion, and look for damp on exposed walls.",
+    "Victorian villas split into flats on and near the Leas: photograph communal hallways, fire doors, meter cupboards and the condition of sash windows.",
+    "Hillside homes in Sandgate and Folkestone: photograph steps, retaining walls and any cracking, as parts of the coast are prone to ground movement.",
+    "Romney Marsh bungalows and chalets: note any signs of damp or past flooding, and record oil tanks, septic tanks or LPG where there is no mains gas or sewer.",
+    "Modern estate houses in Hawkinge: photograph gardens, fences, drives and garages, and note any snagging in newer homes.",
+    "Flint and brick cottages in the Elham Valley: check for damp in solid walls, low ceilings and beams, and record wood burners and chimney sweep certificates."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Folkestone and Hythe District Council's private sector housing team, after first reporting the problem to their landlord.",
+  "nearby": [
+    "dover",
+    "ashford",
+    "canterbury",
+    "rother"
+  ]
+}

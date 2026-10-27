@@ -1,0 +1,82 @@
+{
+  "slug": "blackpool",
+  "name": "Blackpool",
+  "council": {
+    "name": "Blackpool Council",
+    "url": "https://www.blackpool.gov.uk",
+    "privateRentingUrl": "https://www.blackpool.gov.uk/Business/Licensing-and-permits/Housing-licences/Selective-licensing/Selective-licensing.aspx"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "FY1",
+    "FY2",
+    "FY3",
+    "FY4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Central Blackpool and Talbot",
+      "postcodes": "FY1",
+      "housing": "Former guest houses and large Victorian terraces, many converted into small flats and bedsits."
+    },
+    {
+      "name": "South Shore",
+      "postcodes": "FY4",
+      "housing": "Terraces and former holiday guest houses near the Pleasure Beach, with many flats let privately."
+    },
+    {
+      "name": "North Shore",
+      "postcodes": "FY1, FY2",
+      "housing": "Large Victorian and Edwardian houses and former hotels, many split into flats."
+    },
+    {
+      "name": "Bispham",
+      "postcodes": "FY2",
+      "housing": "Inter-war and post-war semis and bungalows, with seafront flats."
+    },
+    {
+      "name": "Layton",
+      "postcodes": "FY3",
+      "housing": "Terraced streets and inter-war semis inland from the centre."
+    },
+    {
+      "name": "Marton",
+      "postcodes": "FY3, FY4",
+      "housing": "Suburban semis, bungalows and newer estates."
+    },
+    {
+      "name": "Claremont",
+      "postcodes": "FY1",
+      "housing": "Dense terraced streets and converted houses north of the town centre."
+    },
+    {
+      "name": "Mereside",
+      "postcodes": "FY4",
+      "housing": "A post-war estate of council-built houses and low-rise flats."
+    }
+  ],
+  "housing": "Blackpool's private rented sector is large and concentrated in the inner wards, where many former guest houses and Victorian terraces have been converted into small flats and bedsits. These areas, such as Claremont, Talbot and South Shore, have some of the poorest-condition housing in England and a high turnover of tenants, which is why the council has used selective licensing there. Away from the seafront, Bispham, Marton and Layton have more owner-occupied semis and bungalows. Seafront flats are exposed to wind and salt air.",
+  "checkinTips": [
+    "Former guest houses split into flats: photograph each flat's front door lock, the fire doors and alarms, and the shared stairs and hallways.",
+    "Bedsits with shared bathrooms or kitchens: record which facilities are shared, their condition and how many keys each tenant holds.",
+    "Seafront flats on the Promenade: photograph window frames, seals and any salt corrosion on metal railings, balconies and door furniture.",
+    "Older terraces inland: check for damp at the base of walls and in back rooms, and photograph the yard, gate and bin area.",
+    "Furnished flats: list and photograph every item of furniture and its condition, including mattresses and their fire labels.",
+    "Bungalows in Bispham and Marton: note the condition of gardens, drives, garages and any adaptations such as grab rails."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Blackpool Council's housing enforcement team, which also runs its licensing scheme.",
+  "nearby": [
+    "fylde",
+    "wyre"
+  ]
+}

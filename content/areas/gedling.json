@@ -1,0 +1,95 @@
+{
+  "slug": "gedling",
+  "name": "Gedling",
+  "council": {
+    "name": "Gedling Borough Council",
+    "url": "https://www.gedling.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "NG3",
+    "NG4",
+    "NG5",
+    "NG14",
+    "NG15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Arnold",
+      "postcodes": "NG5",
+      "housing": "Victorian terraces near the town centre, interwar semis and large post-war estates."
+    },
+    {
+      "name": "Carlton",
+      "postcodes": "NG4",
+      "housing": "Victorian and Edwardian terraces and interwar semis along Carlton Hill and the valley."
+    },
+    {
+      "name": "Netherfield",
+      "postcodes": "NG4",
+      "housing": "Victorian railway-era terraces with newer estates on former railway land."
+    },
+    {
+      "name": "Gedling village",
+      "postcodes": "NG4",
+      "housing": "Older village houses with large estates, including new homes on the former colliery site."
+    },
+    {
+      "name": "Mapperley",
+      "postcodes": "NG3",
+      "housing": "Victorian and interwar houses along the ridge, with post-war semis."
+    },
+    {
+      "name": "Woodthorpe",
+      "postcodes": "NG5",
+      "housing": "Interwar and post-war semis and detached houses."
+    },
+    {
+      "name": "Colwick",
+      "postcodes": "NG4",
+      "housing": "Post-war and newer estates near the racecourse and the Trent."
+    },
+    {
+      "name": "Burton Joyce",
+      "postcodes": "NG14",
+      "housing": "A village of detached and semi-detached houses and bungalows beside the Trent."
+    },
+    {
+      "name": "Calverton",
+      "postcodes": "NG14",
+      "housing": "A former mining village of terraces, post-war estates and newer houses."
+    },
+    {
+      "name": "Ravenshead",
+      "postcodes": "NG15",
+      "housing": "Large detached houses and bungalows set among woodland."
+    }
+  ],
+  "housing": "Gedling is a mostly suburban borough on the north-east side of Nottingham, made up of the built-up areas of Arnold, Carlton, Netherfield and Mapperley and a ring of villages. The housing is largely interwar and post-war semi-detached houses, with Victorian terraces near the older centres and large new estates on former colliery and railway land, such as at Gedling Colliery. Private renting is mainly family houses and terraced homes let to people working in and around Nottingham.",
+  "checkinTips": [
+    "Victorian terraces in Netherfield and Carlton: check for damp at the base of walls and in rear kitchens, and photograph yards and shared rear passages.",
+    "Hillside homes in Mapperley and Carlton: photograph steps, sloping drives and retaining walls, and note any cracking.",
+    "Interwar semis in Arnold and Woodthorpe: record original features, replacement windows, garages and gardens.",
+    "New-build homes on the former colliery site at Gedling: note any snagging still outstanding, plus meter readings and parking allocations.",
+    "Homes near the Trent in Colwick and Burton Joyce: look for signs of past flooding or damp in ground-floor rooms.",
+    "Former mining homes in Calverton: check for cracks that could come from ground movement and photograph the boiler and heating."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a private let can contact Gedling Borough Council's environmental health (private sector housing) team, after first telling their landlord.",
+  "nearby": [
+    "nottingham",
+    "ashfield",
+    "newark-and-sherwood",
+    "rushcliffe"
+  ]
+}

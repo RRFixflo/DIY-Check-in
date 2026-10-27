@@ -1,0 +1,98 @@
+{
+  "slug": "babergh",
+  "name": "Babergh",
+  "council": {
+    "name": "Babergh District Council",
+    "url": "https://www.babergh.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": null,
+  "postcodes": [
+    "CO6",
+    "CO7",
+    "CO10",
+    "IP7",
+    "IP8",
+    "IP9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sudbury",
+      "postcodes": "CO10",
+      "housing": "Victorian terraces and Georgian townhouses in the market town, with post-war estates on its edges."
+    },
+    {
+      "name": "Great Cornard",
+      "postcodes": "CO10",
+      "housing": "Mainly post-war and modern estates of semis and terraces beside Sudbury."
+    },
+    {
+      "name": "Hadleigh",
+      "postcodes": "IP7",
+      "housing": "Timber-framed and Georgian houses along the high street, with newer estates around the town."
+    },
+    {
+      "name": "Long Melford",
+      "postcodes": "CO10",
+      "housing": "Period houses and cottages along a long village street."
+    },
+    {
+      "name": "Lavenham",
+      "postcodes": "CO10",
+      "housing": "Medieval timber-framed and listed cottages in a preserved wool town."
+    },
+    {
+      "name": "East Bergholt",
+      "postcodes": "CO7",
+      "housing": "Period cottages and detached houses in Constable country by the Stour."
+    },
+    {
+      "name": "Capel St Mary",
+      "postcodes": "IP9",
+      "housing": "A village of mostly post-war and modern detached houses and bungalows near the A12."
+    },
+    {
+      "name": "Holbrook",
+      "postcodes": "IP9",
+      "housing": "Village houses and cottages on the Shotley peninsula."
+    },
+    {
+      "name": "Sproughton",
+      "postcodes": "IP8",
+      "housing": "A village on the edge of Ipswich with older cottages and new housing."
+    },
+    {
+      "name": "Nayland",
+      "postcodes": "CO6",
+      "housing": "Timber-framed cottages in a village on the Stour valley."
+    }
+  ],
+  "housing": "Babergh is a rural district in south Suffolk, with the market towns of Sudbury and Hadleigh and many villages in the Stour valley and on the Shotley peninsula. It has a high share of listed and timber-framed buildings, especially in Lavenham, Long Melford and Hadleigh. Homes are mostly owner-occupied; rented homes range from terraces and flats in Sudbury to village cottages, and new estates have been built near Ipswich and Sudbury.",
+  "checkinTips": [
+    "Timber-framed and listed cottages: photograph exposed beams, lime plaster walls and any cracks, and do not record repairs that would need listed building consent as tenant faults.",
+    "Thatched roofs in villages: photograph the visible thatch, the ridge and any signs of birds or wear, and note fire safety equipment.",
+    "Rural homes off mains gas: photograph oil tanks and the gauge level, and the access cover of any septic tank or treatment plant.",
+    "Woodburners and open fires common in cottages: photograph the stove glass, the hearth and the date on the last sweep certificate.",
+    "Older solid-walled homes: photograph window reveals, the bottom of walls and behind furniture for damp and mould."
+  ],
+  "tenantHelp": "Tenants in Babergh can contact Babergh District Council’s private sector housing team (shared with Mid Suffolk) about disrepair, damp or unsafe conditions in a rented home.",
+  "nearby": [
+    "mid-suffolk",
+    "ipswich",
+    "east-suffolk",
+    "west-suffolk",
+    "braintree",
+    "colchester",
+    "tendring"
+  ]
+}

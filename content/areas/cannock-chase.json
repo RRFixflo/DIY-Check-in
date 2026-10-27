@@ -1,0 +1,90 @@
+{
+  "slug": "cannock-chase",
+  "name": "Cannock Chase",
+  "council": {
+    "name": "Cannock Chase District Council",
+    "url": "https://www.cannockchasedc.gov.uk",
+    "privateRentingUrl": "https://www.cannockchasedc.gov.uk/residents/environmental-health/private-sector-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme. Only larger HMOs (five or more people from more than one household sharing facilities) need a mandatory licence, usually for five years, as everywhere in England.",
+    "fee": "£1,028.55 per application for a mandatory HMO licence, as listed on the council's HMO page",
+    "source": "https://cannockchasedc.gov.uk/residents/environmental-health/private-sector-housing/houses-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£867 a month (ONS, August 2026), up 7.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000192/"
+  },
+  "price": {
+    "text": "£237,000 (UK HPI, July 2026, provisional), up 2.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000192/"
+  },
+  "privateRentedShare": {
+    "text": "15.8% of households rent privately (Census 2021), up from 12.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000192/"
+  },
+  "councilTax": {
+    "text": "£2,376 average Band D including county, police, fire and parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/cannock-chase"
+  },
+  "postcodes": [
+    "WS11",
+    "WS12",
+    "WS15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cannock town centre",
+      "postcodes": "WS11",
+      "housing": "Older terraces and flats over shops around the centre, with post-war estates beyond."
+    },
+    {
+      "name": "Hednesford",
+      "postcodes": "WS12",
+      "housing": "Former mining-town terraces alongside large post-war and modern estates."
+    },
+    {
+      "name": "Rugeley",
+      "postcodes": "WS15",
+      "housing": "A market town with Victorian terraces, post-war council-built estates and new homes on the former power station site."
+    },
+    {
+      "name": "Heath Hayes and Wimblebury",
+      "postcodes": "WS12",
+      "housing": "Mainly post-war and 1970s–90s semis and terraces, with newer estates on the edges."
+    },
+    {
+      "name": "Norton Canes",
+      "postcodes": "WS11",
+      "housing": "A former mining village of terraces and semis with modern estates added."
+    },
+    {
+      "name": "Chadsmoor",
+      "postcodes": "WS11",
+      "housing": "Close-packed terraced streets between Cannock and Hednesford, many privately let."
+    },
+    {
+      "name": "Brereton",
+      "postcodes": "WS15",
+      "housing": "A village south of Rugeley with older cottages and post-war housing."
+    }
+  ],
+  "housing": "Cannock Chase is a former coalfield district, and many homes are miners' terraces and post-war estates in Cannock, Hednesford, Chadsmoor and Norton Canes. Rugeley has a market-town centre and large new-build areas, including homes on the site of the old power station. Private renting is lower than the national average, at about one in six households, and most lets are terraced houses and semis rather than flats. The district takes its name from the Cannock Chase forest and heathland to the north.",
+  "checkinTips": [
+    "Former miners' terraces in Hednesford and Chadsmoor: photograph back yards, rear gates, outbuildings and any cracking to walls or ceilings.",
+    "Post-war semis on the estates: record the boiler, any storage heaters and the condition of replacement windows and doors.",
+    "New-build homes in Rugeley and on the district's edges: note snagging marks, sealant around baths and showers and the state of new turf and fences.",
+    "Homes backing onto Cannock Chase woodland: photograph gardens, fences and gutters for leaf build-up and any damage from trees.",
+    "Flats over shops in Cannock and Rugeley town centres: check the separate entrance, the fire alarm, stair lighting and the number of keys handed over.",
+    "Driveways and garages on family estates: photograph the condition of drives, garage doors and any items left in garages or sheds."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Cannock Chase District Council's private sector housing team, part of its environmental health service.",
+  "nearby": [
+    "stafford",
+    "lichfield",
+    "south-staffordshire",
+    "walsall"
+  ]
+}

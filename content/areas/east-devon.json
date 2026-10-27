@@ -1,0 +1,102 @@
+{
+  "slug": "east-devon",
+  "name": "East Devon",
+  "council": {
+    "name": "East Devon District Council",
+    "url": "https://eastdevon.gov.uk",
+    "privateRentingUrl": "https://eastdevon.gov.uk/housing/housing-in-the-private-sector/houses-in-multiple-occupation/licensing-of-houses-in-multiple-occupation/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory HMO licensing applies (five or more people forming two or more households).",
+    "fee": null,
+    "source": "https://eastdevon.gov.uk/housing/housing-in-the-private-sector/houses-in-multiple-occupation/licensing-of-houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£968 a month (ONS, August 2026, provisional), up 6.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/explore-local-statistics/areas/E07000040"
+  },
+  "price": {
+    "text": "£340,000 (UK HPI, July 2026, provisional), up 1.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/explore-local-statistics/areas/E07000040"
+  },
+  "privateRentedShare": {
+    "text": "16% of households rent privately (Census 2021), up from 13.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000040"
+  },
+  "councilTax": {
+    "text": "£2,481 Band D before parish precepts (2026/27): East Devon £176.92, Devon County Council £1,891.17, police £303.20 and fire £109.68; parish and town charges are added on top",
+    "source": "https://www.devon.gov.uk/?p=1017"
+  },
+  "postcodes": [
+    "EX5",
+    "EX8",
+    "EX9",
+    "EX10",
+    "EX11",
+    "EX12",
+    "EX13",
+    "EX14",
+    "EX24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Exmouth",
+      "postcodes": "EX8",
+      "housing": "The district's largest town: Victorian and Edwardian terraces near the seafront and centre, with large post-war and modern estates on the edges."
+    },
+    {
+      "name": "Sidmouth",
+      "postcodes": "EX10",
+      "housing": "A Regency seaside town with listed villas and terraces, many flats in converted houses and a lot of retirement housing."
+    },
+    {
+      "name": "Honiton",
+      "postcodes": "EX14",
+      "housing": "A market town with Georgian and older buildings on the High Street, flats over shops and modern estates around the edges."
+    },
+    {
+      "name": "Seaton",
+      "postcodes": "EX12",
+      "housing": "A seaside town with Victorian and inter-war houses, bungalows and newer homes on the former holiday and tram sites."
+    },
+    {
+      "name": "Axminster",
+      "postcodes": "EX13",
+      "housing": "A small market town with older terraces in the centre and newer estates, surrounded by farmland and villages."
+    },
+    {
+      "name": "Ottery St Mary",
+      "postcodes": "EX11",
+      "housing": "A historic town with cob and stone cottages and Georgian houses in the centre and modern estates around it."
+    },
+    {
+      "name": "Budleigh Salterton",
+      "postcodes": "EX9",
+      "housing": "A small coastal town of Victorian villas, bungalows and flats, with a high share of older residents."
+    },
+    {
+      "name": "Cranbrook",
+      "postcodes": "EX5",
+      "housing": "A new town begun in the 2010s, almost entirely modern houses and flats on new estates."
+    }
+  ],
+  "housing": "East Devon is mostly rural and coastal, with owner-occupation high and a large retired population in the seaside towns. Private lets range from flats in converted Victorian and Regency houses in Exmouth and Sidmouth to modern homes in Cranbrook and on the Exeter fringe, and cottages in villages. Many older rural homes are of cob or stone, some thatched and some off the gas grid. Holiday lets and second homes are common along the Jurassic Coast.",
+  "checkinTips": [
+    "Seafront flats in Exmouth, Sidmouth and Seaton: photograph window frames, metal fittings and external doors for salt corrosion, and any damp on outside walls.",
+    "Cob and stone cottages: photograph walls inside for damp patches, flaking limewash and cracks, and note what the tenant is told about breathable finishes.",
+    "Homes off the gas grid: photograph the oil tank, its gauge and the oil level, or the LPG tank, and the boiler service label.",
+    "Thatched properties: photograph the thatch from the ground, the chimney and any smoke alarms and fire safety notes left for the tenant.",
+    "New-build homes in Cranbrook: photograph snagging marks, the meter cupboards and any district heating meter reading.",
+    "Flats in converted Regency and Victorian houses: photograph the sash windows, the communal hall and the bin and bike stores, and note key and fob counts."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Devon District Council's private sector housing team, which can inspect rented homes and take action against landlords.",
+  "nearby": [
+    "exeter",
+    "mid-devon",
+    "teignbridge",
+    "somerset",
+    "dorset"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "slug": "east-hertfordshire",
+  "name": "East Hertfordshire",
+  "council": {
+    "name": "East Herts Council",
+    "url": "https://www.eastherts.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only national mandatory HMO licensing applies (five or more people forming two or more households), run by the council's environmental health service.",
+    "fee": null,
+    "source": "https://democracy.eastherts.gov.uk/documents/s21063/Private Sector Housing Enforcement Policy - ERP B policy.pdf?J=1",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": {
+    "text": "£457,417 (UK HPI, July 2026), up 3.7% on a year earlier",
+    "source": "https://www.gov.uk/government/statistics/uk-house-price-index-for-july-2026/uk-house-price-index-england-july-2026"
+  },
+  "privateRentedShare": {
+    "text": "16.1% of households rent privately (Census 2021), up from 13.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000242/"
+  },
+  "councilTax": {
+    "text": "£2,345 Band D before town and parish charges (2026/27): East Herts £207.03, Hertfordshire County Council £1,858.19 and police £280.00",
+    "source": "https://democracy.eastherts.gov.uk/documents/s72081/Council Tax Setting 2026-27.pdf?J=1"
+  },
+  "postcodes": [
+    "CM21",
+    "CM23",
+    "SG9",
+    "SG10",
+    "SG11",
+    "SG12",
+    "SG13",
+    "SG14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bishop's Stortford",
+      "postcodes": "CM23",
+      "housing": "The district's largest town: Victorian and Edwardian terraces near the centre, inter-war and post-war suburbs and large new estates on the edges."
+    },
+    {
+      "name": "Hertford",
+      "postcodes": "SG13, SG14",
+      "housing": "The county town, with Georgian and older listed buildings in the centre, Victorian terraces and post-war estates."
+    },
+    {
+      "name": "Ware",
+      "postcodes": "SG12",
+      "housing": "A riverside market town with old maltings and period houses in the centre, Victorian terraces and post-war estates."
+    },
+    {
+      "name": "Sawbridgeworth",
+      "postcodes": "CM21",
+      "housing": "A small market town with timber-framed and Georgian buildings in the centre and modern estates around it."
+    },
+    {
+      "name": "Buntingford",
+      "postcodes": "SG9",
+      "housing": "A small rural town with an old high street and newer estates added in recent decades."
+    },
+    {
+      "name": "Stanstead Abbotts",
+      "postcodes": "SG12",
+      "housing": "A village on the River Lea with older cottages on the high street and post-war housing."
+    },
+    {
+      "name": "Much Hadham",
+      "postcodes": "SG10",
+      "housing": "A village of listed timber-framed and brick houses and cottages surrounded by farmland."
+    },
+    {
+      "name": "Puckeridge and Standon",
+      "postcodes": "SG11",
+      "housing": "Neighbouring villages with period cottages along their main streets and later 20th-century houses."
+    }
+  ],
+  "housing": "East Hertfordshire is a mix of commuter market towns and villages, with high owner-occupation and house prices well above the national average. Private lets are mostly in Bishop's Stortford, Hertford and Ware, ranging from flats in converted Victorian houses and over shops to modern apartments and new-build estates. Bishop's Stortford has grown with large new developments, and the villages have many listed and timber-framed cottages. Stansted Airport just over the border brings demand from airport workers.",
+  "checkinTips": [
+    "Timber-framed and listed cottages in the villages: photograph beams, uneven floors, leaded or old windows and any cracks in plaster so their condition is on record.",
+    "Riverside homes in Ware, Hertford and along the Lea and Stort: photograph any damp tide marks on walls and floors and the condition of any garden next to the water.",
+    "New-build estates in Bishop's Stortford: photograph snagging marks, sealant and grout, and note parking permits, bin rules and any estate management charges.",
+    "Flats in converted Victorian houses: photograph the communal hall, fire doors and smoke alarms, and note the key and fob count for each door.",
+    "Homes off the gas grid in rural villages: photograph the oil tank, its gauge and level, and the boiler service label."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact East Herts Council's environmental health service, which deals with private rented housing and can take action against landlords.",
+  "nearby": [
+    "north-hertfordshire",
+    "stevenage",
+    "welwyn-hatfield",
+    "broxbourne",
+    "epping-forest",
+    "harlow",
+    "uttlesford"
+  ]
+}

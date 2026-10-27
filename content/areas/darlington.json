@@ -1,0 +1,87 @@
+{
+  "slug": "darlington",
+  "name": "Darlington",
+  "council": {
+    "name": "Darlington Borough Council",
+    "url": "https://www.darlington.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£671 a month (ONS Price Index of Private Rents, 2026), up 5.7% on a year earlier",
+    "source": "https://housecheckup.co.uk/invest/DL1"
+  },
+  "price": null,
+  "privateRentedShare": {
+    "text": "20.6% of households rent privately (Census 2021), up from 18.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000005"
+  },
+  "councilTax": null,
+  "postcodes": [
+    "DL1",
+    "DL2",
+    "DL3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Northgate and town centre",
+      "postcodes": "DL1",
+      "housing": "Dense Victorian terraced streets and flats over shops close to the town centre and the railway, with a high share of private lets."
+    },
+    {
+      "name": "Bank Top and Albert Hill",
+      "postcodes": "DL1",
+      "housing": "Victorian railway-era terraces near the main station and older industrial land."
+    },
+    {
+      "name": "Cockerton",
+      "postcodes": "DL3",
+      "housing": "A former village with Victorian terraces around its centre and inter-war and post-war semis around it."
+    },
+    {
+      "name": "Hummersknott and Mowden",
+      "postcodes": "DL3",
+      "housing": "Mostly inter-war and post-war semi-detached and detached houses on the west side of the town."
+    },
+    {
+      "name": "Haughton le Skerne",
+      "postcodes": "DL1",
+      "housing": "An older village core with Georgian and Victorian houses, surrounded by later estates and the Red Hall area."
+    },
+    {
+      "name": "Eastbourne and Firthmoor",
+      "postcodes": "DL1",
+      "housing": "Post-war council-built estates of semis and terraces, some now privately let."
+    },
+    {
+      "name": "Middleton St George",
+      "postcodes": "DL2",
+      "housing": "A large village of post-war and newer estate housing near Teesside Airport."
+    },
+    {
+      "name": "Hurworth",
+      "postcodes": "DL2",
+      "housing": "A riverside village of older stone and brick cottages and larger period houses, with modern infill."
+    }
+  ],
+  "housing": "Darlington is a market and railway town with a large stock of Victorian terraces close to the centre, where private renting is most concentrated; the council has reported that around half of homes in Northgate ward are privately rented. Further out are inter-war and post-war semis and council-built estates, with newer estates on the edges of the town and in villages such as Middleton St George. Rents and prices are low by national standards, and private renting has grown since 2011.",
+  "checkinTips": [
+    "Victorian terraces in Northgate and Bank Top: photograph back yards, outhouses and rear gates, and any damp low on walls or in cellars.",
+    "Flats over shops in the town centre: photograph the street door, stair lighting, smoke alarms on each landing and any shared meters.",
+    "Older terraces with original features: photograph sash or replacement windows, fireplaces (blocked or open) and chimney breasts for damp.",
+    "Post-war estate homes in Eastbourne and Firthmoor: photograph fences, gates and garden condition, which are often disputed at check-out.",
+    "Riverside homes near the Skerne and Tees: note any flood-protection products and photograph damp or tide marks on low walls."
+  ],
+  "tenantHelp": "Private tenants with disrepair, damp or safety problems can ask Darlington Borough Council's private sector housing team to inspect.",
+  "nearby": [
+    "county-durham",
+    "north-yorkshire",
+    "stockton-on-tees"
+  ]
+}

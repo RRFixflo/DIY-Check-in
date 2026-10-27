@@ -1,0 +1,105 @@
+{
+  "slug": "central-bedfordshire",
+  "name": "Central Bedfordshire",
+  "council": {
+    "name": "Central Bedfordshire Council",
+    "url": "https://www.centralbedfordshire.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": null,
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": null,
+    "source": null
+  },
+  "price": {
+    "text": null,
+    "source": null
+  },
+  "privateRentedShare": {
+    "text": null,
+    "source": null
+  },
+  "councilTax": {
+    "text": null,
+    "source": null
+  },
+  "postcodes": [
+    "LU5",
+    "LU6",
+    "LU7",
+    "MK17",
+    "MK45",
+    "SG15",
+    "SG16",
+    "SG17",
+    "SG18",
+    "SG19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Leighton Buzzard",
+      "postcodes": "LU7",
+      "housing": "A market town with Victorian terraces near the centre and large modern estates on its edges."
+    },
+    {
+      "name": "Dunstable",
+      "postcodes": "LU5, LU6",
+      "housing": "Post-war and inter-war housing, flats over shops in the centre, and newer estates."
+    },
+    {
+      "name": "Houghton Regis",
+      "postcodes": "LU5",
+      "housing": "Large post-war estates with major new-build extensions to the north."
+    },
+    {
+      "name": "Biggleswade",
+      "postcodes": "SG18",
+      "housing": "A market town with Victorian terraces and big modern estates to the east."
+    },
+    {
+      "name": "Flitwick",
+      "postcodes": "MK45",
+      "housing": "A commuter town with modern estates around the railway station."
+    },
+    {
+      "name": "Ampthill",
+      "postcodes": "MK45",
+      "housing": "A Georgian market town with period cottages and later suburban housing."
+    },
+    {
+      "name": "Sandy",
+      "postcodes": "SG19",
+      "housing": "A small town of Victorian terraces, post-war estates and newer homes."
+    },
+    {
+      "name": "Arlesey and Stotfold",
+      "postcodes": "SG15, SG5",
+      "housing": "Large villages with older cottages and extensive modern estates."
+    }
+  ],
+  "housing": "Central Bedfordshire is a largely rural unitary area of market towns and villages, with fast growth in new-build estates around Leighton Buzzard, Houghton Regis, Biggleswade and Arlesey. Dunstable and Houghton Regis have more post-war housing and flats, while Ampthill, Woburn and Potton have period cottages and listed buildings. Many residents commute to London, Luton, Milton Keynes and Bedford along the M1, A1 and rail lines. Most private lets are family houses rather than flats.",
+  "checkinTips": [
+    "New-build homes on the large estates: note snagging marks, sealant around baths and showers, and the state of new turf and fences.",
+    "Period cottages in Ampthill, Woburn and Potton: photograph old timber windows, beams, fireplaces and any damp at the base of walls.",
+    "Rural homes without mains gas: photograph oil tanks, LPG bottles, wood burners and any septic tank or treatment plant.",
+    "Flats over shops in Dunstable and Leighton Buzzard: check the separate entrance, fire alarm, stair lighting and key count.",
+    "Family houses with gardens: photograph lawns, borders, sheds and fences, and agree what garden upkeep is expected."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems in a privately rented home can contact Central Bedfordshire Council's private sector housing team.",
+  "nearby": [
+    "bedford",
+    "milton-keynes",
+    "luton",
+    "buckinghamshire",
+    "dacorum",
+    "north-hertfordshire",
+    "south-cambridgeshire",
+    "huntingdonshire"
+  ]
+}
