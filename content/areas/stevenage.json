@@ -1,0 +1,96 @@
+{
+  "slug": "stevenage",
+  "name": "Stevenage",
+  "council": {
+    "name": "Stevenage Borough Council",
+    "url": "https://www.stevenage.gov.uk",
+    "privateRentingUrl": "https://www.stevenage.gov.uk/housing/private-sector-housing/house-in-multiple-occupation/licensing-of-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a licence is needed when a home is rented to five or more people who form more than one household (the national mandatory scheme), handled by the Environmental Health and Licensing Team, which also inspects HMOs.",
+    "fee": null,
+    "source": "https://www.stevenage.gov.uk/housing/private-sector-housing/house-in-multiple-occupation/licensing-of-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,440 a month (ONS, August 2026), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000243/"
+  },
+  "price": {
+    "text": "£316,000 (UK HPI, July 2026, provisional), up 1.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000243/"
+  },
+  "privateRentedShare": {
+    "text": "15.0% of households rent privately (Census 2021), up from 11.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000243/"
+  },
+  "councilTax": {
+    "text": "£2,392 average Band D including Hertfordshire County Council and police precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/stevenage"
+  },
+  "postcodes": [
+    "SG1",
+    "SG2"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Old Town",
+      "postcodes": "SG1",
+      "housing": "The original market town, with Georgian and Victorian houses and cottages along the High Street."
+    },
+    {
+      "name": "Town Centre",
+      "postcodes": "SG1",
+      "housing": "Post-war flats and maisonettes above and around the 1950s pedestrian shopping centre, with new apartment blocks under regeneration."
+    },
+    {
+      "name": "Bedwell",
+      "postcodes": "SG1",
+      "housing": "One of the first new-town neighbourhoods, with 1950s council-built terraces and flats."
+    },
+    {
+      "name": "Shephall",
+      "postcodes": "SG2",
+      "housing": "A 1950s neighbourhood of terraced houses and low-rise flats around a central green."
+    },
+    {
+      "name": "Broadwater",
+      "postcodes": "SG2",
+      "housing": "Post-war terraces, maisonettes and some tower blocks."
+    },
+    {
+      "name": "Chells",
+      "postcodes": "SG2",
+      "housing": "1960s and 70s estates of terraced houses linked by footpaths and cycleways."
+    },
+    {
+      "name": "Pin Green",
+      "postcodes": "SG1",
+      "housing": "1960s new-town housing of terraces and flats in the north-east of the town."
+    },
+    {
+      "name": "St Nicholas and Martins Wood",
+      "postcodes": "SG1",
+      "housing": "1970s and 80s private estates of terraced, semi-detached and detached houses."
+    },
+    {
+      "name": "Symonds Green",
+      "postcodes": "SG1",
+      "housing": "1970s estates of terraced and semi-detached houses on the western side of the town."
+    }
+  ],
+  "housing": "Stevenage was the first post-war new town, designated in 1946, and most homes are 1950s to 1970s terraces, maisonettes and flats built in self-contained neighbourhoods with footpaths and cycleways. Social renting is high, at more than a quarter of households, and many former council homes are now let privately. The Old Town has older period houses, and the town centre is being rebuilt with new apartment blocks. Fast trains to London keep rental demand strong.",
+  "checkinTips": [
+    "Former council terraces and maisonettes in Bedwell, Shephall and Broadwater: photograph the boiler, windows, fencing and any shared garden, bin store and stair areas.",
+    "Homes of non-traditional 1950s and 60s construction: note any cracking, condensation and mould on outside walls, and photograph extractor fans and window vents.",
+    "New apartment blocks in the regenerated town centre: note fob, key and parking permit counts, the post box and bin store, and any balcony furniture.",
+    "Garage courts behind new-town terraces: record whether a garage or parking space is included, its key or remote and its condition.",
+    "Period cottages in the Old Town: photograph sash windows, chimney breasts and any damp on solid walls."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Stevenage Borough Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "north-hertfordshire",
+    "east-hertfordshire"
+  ]
+}

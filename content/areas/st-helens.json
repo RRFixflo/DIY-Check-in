@@ -1,0 +1,110 @@
+{
+  "slug": "st-helens",
+  "name": "St Helens",
+  "council": {
+    "name": "St Helens Borough Council",
+    "url": "https://www.sthelens.gov.uk",
+    "privateRentingUrl": "https://www.sthelens.gov.uk/hmolicensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a mandatory licence is needed for privately rented homes with five or more people forming two or more households who share facilities. The five-year licence is an initial application followed by yearly renewals.",
+    "fee": "£248 a year for an HMO licence (2026/27)",
+    "source": "https://www.sthelens.gov.uk/hmolicensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£790 a month (ONS, May 2026), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000013/"
+  },
+  "price": {
+    "text": "£184,000 (UK HPI, April 2026, provisional), up 7.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000013/"
+  },
+  "privateRentedShare": {
+    "text": "15.1% of households rent privately (Census 2021), up from 10.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000013/"
+  },
+  "councilTax": {
+    "text": "£2,403 Band D including Merseyside police, fire and mayoral precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/st-helens"
+  },
+  "postcodes": [
+    "WA9",
+    "WA10",
+    "WA11",
+    "WA12",
+    "L34",
+    "L35",
+    "WN4",
+    "WN5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "St Helens town centre",
+      "postcodes": "WA10",
+      "housing": "Victorian terraces, flats over shops and newer apartment blocks close to the centre."
+    },
+    {
+      "name": "Thatto Heath",
+      "postcodes": "WA9",
+      "housing": "Dense Victorian and Edwardian terraced streets, many privately let."
+    },
+    {
+      "name": "Parr",
+      "postcodes": "WA9",
+      "housing": "Terraced streets and large post-war council estates east of the centre."
+    },
+    {
+      "name": "Sutton",
+      "postcodes": "WA9",
+      "housing": "Terraces, inter-war semis and newer estates on former industrial land."
+    },
+    {
+      "name": "Newton-le-Willows",
+      "postcodes": "WA12",
+      "housing": "A town of Victorian terraces, inter-war semis and new homes near the station."
+    },
+    {
+      "name": "Haydock",
+      "postcodes": "WA11",
+      "housing": "Terraces, post-war estates and newer housing near the racecourse."
+    },
+    {
+      "name": "Rainhill",
+      "postcodes": "L35",
+      "housing": "A village of Victorian and inter-war houses and semis around the station."
+    },
+    {
+      "name": "Eccleston",
+      "postcodes": "WA10",
+      "housing": "Inter-war and post-war semi-detached and detached family houses."
+    },
+    {
+      "name": "Billinge",
+      "postcodes": "WN5",
+      "housing": "A hilltop village of stone cottages and post-war houses."
+    },
+    {
+      "name": "Rainford",
+      "postcodes": "WA11",
+      "housing": "A large village of post-war semis, bungalows and detached houses."
+    }
+  ],
+  "housing": "St Helens is a former glass-making and coal-mining town between Liverpool and Manchester. Much of the housing is Victorian and Edwardian red-brick terraces in Thatto Heath, Parr and Sutton, with large post-war council estates and inter-war semis in Eccleston, Rainhill and Rainford. Private renting grew faster than the regional average between 2011 and 2021, much of it in the terraced streets. Prices remain well below the North West average.",
+  "checkinTips": [
+    "Victorian terraces in Thatto Heath, Parr and Sutton: record the back yard, rear alley gate, gutters, chimneys and any damp in rear rooms.",
+    "Homes on former mining land: photograph any cracks in walls or ceilings and doors or windows that stick, which may come from ground movement.",
+    "Former council houses in Parr and Haydock: photograph the boiler, fencing, sheds and gardens, and note any non-standard construction.",
+    "Stone cottages in Billinge: check walls inside for damp, and photograph window reveals and chimney breasts.",
+    "New-build homes on former industrial sites in Sutton and Newton-le-Willows: photograph snagging items, sealant, paintwork and the garden."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact St Helens Borough Council's Private Sector Housing Standards Team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "knowsley",
+    "wigan",
+    "warrington",
+    "halton",
+    "west-lancashire"
+  ]
+}

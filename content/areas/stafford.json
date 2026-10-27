@@ -1,0 +1,107 @@
+{
+  "slug": "stafford",
+  "name": "Stafford",
+  "council": {
+    "name": "Stafford Borough Council",
+    "url": "https://www.staffordbc.gov.uk",
+    "privateRentingUrl": "https://www.staffordbc.gov.uk/houses-in-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only larger HMOs, rented to five or more people from more than one household who share facilities, need a mandatory licence.",
+    "fee": "£858.15 for a five-year HMO licence for up to eight bedrooms (first application), £738.70 to renew, 10% off for accredited landlords (2026/27)",
+    "source": "https://www.staffordbc.gov.uk/sites/default/files/cme/DocMan1/Financial%20Planning/Fees-and-Charges-2026.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£902 a month (ONS, September 2026), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000197/"
+  },
+  "price": {
+    "text": "£260,000 (UK HPI, August 2026, provisional), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000197/"
+  },
+  "privateRentedShare": {
+    "text": "15.5% of households rent privately (Census 2021), up from 12.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000197/"
+  },
+  "councilTax": {
+    "text": "£2,270 Band D including Staffordshire County Council, police and fire precepts, before parish charges (2026/27)",
+    "source": "https://www.staffordbc.gov.uk/council-tax-billing-information-2026-2027"
+  },
+  "postcodes": [
+    "ST15",
+    "ST16",
+    "ST17",
+    "ST18",
+    "ST20",
+    "ST21"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stafford town centre",
+      "postcodes": "ST16",
+      "housing": "Victorian terraces, flats over shops and newer apartment blocks near the station and river."
+    },
+    {
+      "name": "Rising Brook and Wildwood",
+      "postcodes": "ST17",
+      "housing": "Post-war estates and 1970s and 80s private housing south of the town."
+    },
+    {
+      "name": "Highfields and Western Downs",
+      "postcodes": "ST17, ST16",
+      "housing": "Post-war council-built estates and semis on the west of Stafford."
+    },
+    {
+      "name": "Baswich and Weeping Cross",
+      "postcodes": "ST17",
+      "housing": "Inter-war and post-war semis, bungalows and detached houses on the east side of town."
+    },
+    {
+      "name": "Stone",
+      "postcodes": "ST15",
+      "housing": "A canal town with Victorian terraces near the centre and large post-war and newer estates."
+    },
+    {
+      "name": "Eccleshall",
+      "postcodes": "ST21",
+      "housing": "A small market town of Georgian and older houses with some later estates."
+    },
+    {
+      "name": "Gnosall",
+      "postcodes": "ST20",
+      "housing": "A large village of period cottages, post-war houses and new estates."
+    },
+    {
+      "name": "Hixon and Great Haywood",
+      "postcodes": "ST18",
+      "housing": "Villages east of Stafford with older cottages and newer homes near the Trent and Mersey Canal."
+    },
+    {
+      "name": "Beaconside",
+      "postcodes": "ST16",
+      "housing": "Modern estates and service family housing near the barracks on the north-east edge of Stafford."
+    }
+  ],
+  "housing": "Stafford borough is the county town of Stafford, the canal town of Stone, and a large rural area of villages and farmland between Cannock Chase and the Shropshire border. Homes range from Victorian terraces near Stafford's centre to large post-war estates and recent new-build developments, with Georgian and older cottages in Eccleshall and the villages. Private renting is a little below average; the barracks at Beaconside add demand for family lets. HMOs are licensed only under the national scheme.",
+  "checkinTips": [
+    "Victorian terraces near Stafford town centre: record the back yard, rear gate, gutters and any damp in rear rooms and cellars.",
+    "Canal-side homes in Stone and Great Haywood: check for damp, condensation and mould in ground-floor rooms and photograph moorings or gardens that run to the towpath.",
+    "Homes near the River Sow and Trent: check ground floors and gardens for signs of past flooding.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "New-build estates around Stafford and Stone: photograph snagging items, sealant, paintwork and the garden, and note any estate management charge areas."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Stafford Borough Council's Housing Standards team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "newcastle-under-lyme",
+    "stoke-on-trent",
+    "staffordshire-moorlands",
+    "east-staffordshire",
+    "cannock-chase",
+    "south-staffordshire",
+    "telford-and-wrekin",
+    "shropshire",
+    "lichfield"
+  ]
+}

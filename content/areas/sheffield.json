@@ -1,0 +1,121 @@
+{
+  "slug": "sheffield",
+  "name": "Sheffield",
+  "council": {
+    "name": "Sheffield City Council",
+    "url": "https://www.sheffield.gov.uk",
+    "privateRentingUrl": "https://www.sheffield.gov.uk/housing/selective-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force. The London Road, Abbeydale Road and Chesterfield Road scheme ended on 31 October 2023, and the earlier Page Hall scheme ran from 2014 to 2019.",
+    "additional": "No additional HMO licensing scheme. HMOs with five or more people from two or more households need a mandatory licence, whatever the number of floors.",
+    "fee": null,
+    "source": "https://www.sheffield.gov.uk/housing/licensing-houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£936 a month (ONS, September 2026), up 4.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000039/"
+  },
+  "price": {
+    "text": "£218,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000039/"
+  },
+  "privateRentedShare": {
+    "text": "18.7% of households rent privately (Census 2021), up from 15.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000019"
+  },
+  "councilTax": {
+    "text": "£2,505 Band D including South Yorkshire police and fire precepts, before parish charges (2026/27)",
+    "source": "https://www.sheffield.gov.uk/council-tax/your-bill/check-council-tax-band"
+  },
+  "postcodes": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "S9",
+    "S10",
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S17",
+    "S20",
+    "S35",
+    "S36"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Kelham Island",
+      "postcodes": "S1, S3",
+      "housing": "Converted works and warehouses, new apartment blocks and purpose-built student accommodation."
+    },
+    {
+      "name": "Broomhall and Broomhill",
+      "postcodes": "S10",
+      "housing": "Large Victorian villas, many split into flats and student shared houses near the University of Sheffield."
+    },
+    {
+      "name": "Crookes and Walkley",
+      "postcodes": "S10, S6",
+      "housing": "Steep streets of Victorian stone and brick terraces, popular with students and young professionals."
+    },
+    {
+      "name": "Ecclesall Road and Sharrow",
+      "postcodes": "S11, S7",
+      "housing": "Victorian terraces and semis close to Ecclesall Road and Abbeydale Road, with flats over shops."
+    },
+    {
+      "name": "Nether Edge",
+      "postcodes": "S7",
+      "housing": "Victorian and Edwardian villas and terraces in a conservation area, some converted into flats."
+    },
+    {
+      "name": "Hillsborough",
+      "postcodes": "S6",
+      "housing": "Victorian terraces and inter-war semis around the football ground and shopping centre."
+    },
+    {
+      "name": "Darnall and Tinsley",
+      "postcodes": "S9",
+      "housing": "Terraced streets and post-war council estates in the industrial east of the city."
+    },
+    {
+      "name": "Page Hall and Firth Park",
+      "postcodes": "S4, S5",
+      "housing": "Dense Victorian terraced streets with a large private rented sector."
+    },
+    {
+      "name": "Gleadless Valley",
+      "postcodes": "S14",
+      "housing": "A 1960s council estate of houses and flats built into a steep wooded valley."
+    },
+    {
+      "name": "Stocksbridge",
+      "postcodes": "S36",
+      "housing": "A former steel town of stone terraces and post-war estates on the edge of the Peak District."
+    }
+  ],
+  "housing": "Sheffield is a hilly city of Victorian stone and brick terraces, large Victorian villas in the south-west, and big post-war council estates. Two universities mean a large student rental market, in shared houses around Broomhill, Crookes and Walkley and in purpose-built blocks in the city centre. The city still has a large council housing stock, though the private rented share grew between 2011 and 2021. There is no selective or additional licensing at present, only mandatory HMO licensing.",
+  "checkinTips": [
+    "Student shared houses in Broomhill, Crookes and Walkley: photograph each bedroom door lock, fire doors, smoke alarms and the shared kitchen, room by room.",
+    "Stone terraces on steep streets: record cellars, rear yards, steps, retaining walls and any damp on walls built into the hillside.",
+    "Victorian villas split into flats in Broomhall and Nether Edge: note which rooms, gardens and storage belong to the flat, and photograph the communal hall and meters.",
+    "Flats over shops on Abbeydale, London and Ecclesall Roads: photograph the fire escape route, smoke alarms and the street door.",
+    "Apartments in the city centre and Kelham Island: note fob, key and parking counts, the post box and bin store, and any marks on exposed brick or concrete.",
+    "Homes in Stocksbridge and the edge of the Peak District: check for damp, frost damage to outside pipes and the condition of gutters after winter."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Sheffield City Council's private housing standards team, which inspects privately rented homes and enforces HMO licensing.",
+  "nearby": [
+    "barnsley",
+    "rotherham",
+    "north-east-derbyshire",
+    "derbyshire-dales",
+    "high-peak"
+  ]
+}

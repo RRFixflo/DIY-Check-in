@@ -1,0 +1,116 @@
+{
+  "slug": "south-norfolk",
+  "name": "South Norfolk",
+  "council": {
+    "name": "South Norfolk Council",
+    "url": "https://www.southnorfolkandbroadland.gov.uk",
+    "privateRentingUrl": "https://www.southnorfolkandbroadland.gov.uk/licensing/licences/houses-multiple-occupation/south-norfolk-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a licence is needed when five or more people from more than one household share facilities, whatever the number of floors (the national mandatory scheme), renewed every five years.",
+    "fee": "£1,098.95 for a five-year HMO licence, £684.29 to renew",
+    "source": "https://www.southnorfolkandbroadland.gov.uk/licensing/licences/houses-multiple-occupation/when-do-you-need-an-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£981 a month (ONS, August 2026), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000149/"
+  },
+  "price": {
+    "text": "£312,000 (UK HPI, July 2026, provisional), up 1.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000149/"
+  },
+  "privateRentedShare": {
+    "text": "13.9% of households rent privately (Census 2021), up from 11.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000149/"
+  },
+  "councilTax": {
+    "text": "£2,483 average Band D including Norfolk County Council, police and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-norfolk"
+  },
+  "postcodes": [
+    "NR4",
+    "NR5",
+    "NR8",
+    "NR9",
+    "NR14",
+    "NR15",
+    "NR16",
+    "NR17",
+    "NR18",
+    "NR35",
+    "IP20",
+    "IP21",
+    "IP22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Wymondham",
+      "postcodes": "NR18",
+      "housing": "A historic market town with timber-framed and Georgian houses and large new-build estates around it."
+    },
+    {
+      "name": "Diss",
+      "postcodes": "IP22",
+      "housing": "A market town by the Mere with period houses in the centre and post-war and newer estates."
+    },
+    {
+      "name": "Long Stratton",
+      "postcodes": "NR15",
+      "housing": "A small town on the A140 with older houses and a large new development planned and under way."
+    },
+    {
+      "name": "Costessey",
+      "postcodes": "NR5, NR8",
+      "housing": "A large suburb west of Norwich with post-war bungalows, semis and modern estates."
+    },
+    {
+      "name": "Cringleford and Hethersett",
+      "postcodes": "NR4, NR9",
+      "housing": "Commuter villages near Norwich with modern estates and older houses, close to the hospital and university."
+    },
+    {
+      "name": "Harleston",
+      "postcodes": "IP20",
+      "housing": "A small market town with Georgian and Victorian houses and later estates."
+    },
+    {
+      "name": "Loddon",
+      "postcodes": "NR14",
+      "housing": "A small town on the River Chet with period cottages and newer homes, near the Broads."
+    },
+    {
+      "name": "Poringland",
+      "postcodes": "NR14",
+      "housing": "A large village south-east of Norwich that has grown with modern estates."
+    },
+    {
+      "name": "Hingham",
+      "postcodes": "NR9",
+      "housing": "A small town of Georgian brick houses around its market place."
+    },
+    {
+      "name": "Brooke",
+      "postcodes": "NR15",
+      "housing": "A village of flint and brick cottages, bungalows and farm conversions around its meres."
+    }
+  ],
+  "housing": "South Norfolk is a rural district of market towns and villages stretching south from the edge of Norwich to the Waveney valley. Older homes are flint, brick and timber-framed cottages and Georgian town houses, while large new estates have been built around Wymondham, Hethersett, Cringleford, Costessey and Poringland. Most households own their home, and private renting is below average; demand near Norwich comes from the hospital, the University of East Anglia and Norwich Research Park. Much of the countryside is off the gas grid.",
+  "checkinTips": [
+    "Flint and timber-framed cottages: photograph walls inside for damp, beams and uneven floors, and the condition of any wood burner or open fire.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover with its last service date.",
+    "New-build estates around Wymondham, Hethersett and Cringleford: photograph snagging items, sealant, paintwork and the garden, and note any estate management charge areas.",
+    "Lets near the hospital and UEA in Cringleford and Costessey: photograph furniture and appliances in detail, as many are furnished and let to staff or students.",
+    "Homes in the Waveney valley and near the Broads: check ground floors, outbuildings and gardens for signs of past flooding."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Norfolk Council's Housing Standards team (shared with Broadland), which can inspect homes and take action against landlords.",
+  "nearby": [
+    "norwich",
+    "broadland",
+    "breckland",
+    "great-yarmouth",
+    "east-suffolk",
+    "mid-suffolk"
+  ]
+}

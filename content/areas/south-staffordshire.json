@@ -1,0 +1,111 @@
+{
+  "slug": "south-staffordshire",
+  "name": "South Staffordshire",
+  "council": {
+    "name": "South Staffordshire Council",
+    "url": "https://www.sstaffs.gov.uk",
+    "privateRentingUrl": "https://www.sstaffs.gov.uk/licensing-and-permits/houses-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people in two or more households need a mandatory licence. Smaller HMOs with three or four sharers need no licence but must follow the HMO management and fire safety rules.",
+    "fee": "£704 for an HMO licence (council page)",
+    "source": "https://www.sstaffs.gov.uk/licensing-and-permits/houses-multiple-occupation-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£945 a month (ONS, May 2026), up 5.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000196/"
+  },
+  "price": {
+    "text": "£309,000 (UK HPI, April 2026, provisional), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000196/"
+  },
+  "privateRentedShare": {
+    "text": "10.6% of households rent privately (Census 2021), up from 8.5% in 2011, one of the lowest shares in England",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000196/"
+  },
+  "councilTax": {
+    "text": "£2,314 average Band D including Staffordshire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-staffordshire"
+  },
+  "postcodes": [
+    "ST19",
+    "WV5",
+    "WV6",
+    "WV7",
+    "WV8",
+    "WV9",
+    "WV10",
+    "WV11",
+    "DY3",
+    "DY7",
+    "WS6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Codsall and Bilbrook",
+      "postcodes": "WV8",
+      "housing": "Commuter villages north-west of Wolverhampton with inter-war and post-war semis, bungalows and newer estates."
+    },
+    {
+      "name": "Perton",
+      "postcodes": "WV6",
+      "housing": "A planned village built from the 1970s on a former airfield, of modern detached and semi-detached houses."
+    },
+    {
+      "name": "Wombourne",
+      "postcodes": "WV5",
+      "housing": "A large village of post-war estates around an older centre and green."
+    },
+    {
+      "name": "Penkridge",
+      "postcodes": "ST19",
+      "housing": "A small market town with older houses near the centre and modern estates."
+    },
+    {
+      "name": "Cheslyn Hay and Great Wyrley",
+      "postcodes": "WS6",
+      "housing": "Former mining villages with terraces, post-war council-built houses and newer estates."
+    },
+    {
+      "name": "Featherstone",
+      "postcodes": "WV10",
+      "housing": "A village of post-war houses and estates near HM Prison Featherstone and the i54 business park."
+    },
+    {
+      "name": "Kinver",
+      "postcodes": "DY7",
+      "housing": "A village under Kinver Edge with period cottages and post-war and newer houses."
+    },
+    {
+      "name": "Brewood",
+      "postcodes": "ST19",
+      "housing": "A small Georgian village of brick houses and cottages by the Shropshire Union Canal."
+    },
+    {
+      "name": "Swindon and Himley",
+      "postcodes": "DY3",
+      "housing": "Small villages near the Black Country edge with older cottages and post-war houses."
+    }
+  ],
+  "housing": "South Staffordshire is a rural and commuter district wrapped around the west and north of Wolverhampton and the Black Country, mostly Green Belt. Homes are mainly inter-war and post-war semis, bungalows and detached houses in large villages such as Codsall, Perton, Wombourne and Penkridge, with Georgian cottages in Brewood and Kinver. Private renting is among the lowest in England, at about one household in ten. There are no towns of any size, so few shared houses.",
+  "checkinTips": [
+    "Post-war semis and bungalows in Codsall, Perton and Wombourne: photograph gardens, fences, garages and driveways, which tenants are often expected to keep up.",
+    "Former mining villages such as Cheslyn Hay and Great Wyrley: record any cracks in walls or ceilings and doors that stick, which may come from old ground movement.",
+    "Period cottages in Brewood and Kinver: photograph damp on solid walls, beams, chimney breasts and any wood burner.",
+    "Canal-side homes along the Shropshire Union and Staffordshire and Worcestershire canals: check for damp, condensation and mould in ground-floor rooms.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Staffordshire Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "wolverhampton",
+    "dudley",
+    "walsall",
+    "stafford",
+    "cannock-chase",
+    "shropshire",
+    "wyre-forest",
+    "telford-and-wrekin"
+  ]
+}

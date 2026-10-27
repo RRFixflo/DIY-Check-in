@@ -1,0 +1,109 @@
+{
+  "slug": "solihull",
+  "name": "Solihull",
+  "council": {
+    "name": "Solihull Metropolitan Borough Council",
+    "url": "https://www.solihull.gov.uk",
+    "privateRentingUrl": "https://www.solihull.gov.uk/housing/homes-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people forming more than one household need a mandatory licence. The council's housing strategy says it will review the need for additional licensing of smaller HMOs.",
+    "fee": "£1,075 for a mandatory HMO licence, with a £108 discount for NRLA members",
+    "source": "https://www.solihull.gov.uk/housing/homes-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,279 a month (ONS, August 2026), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000029/"
+  },
+  "price": {
+    "text": "£337,000 (UK HPI, July 2026, provisional), up 3.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000029/"
+  },
+  "privateRentedShare": {
+    "text": "12.8% of households rent privately (Census 2021), up from 9.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000029/"
+  },
+  "councilTax": {
+    "text": "£2,173 Band D including West Midlands police and fire precepts, before parish charges (2026/27)",
+    "source": "https://www.solihull.gov.uk/sites/default/files/2026-03/SMBC-Council-Tax-Leaflet.pdf"
+  },
+  "postcodes": [
+    "B26",
+    "B33",
+    "B36",
+    "B37",
+    "B40",
+    "B90",
+    "B91",
+    "B92",
+    "B93",
+    "B94",
+    "CV7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Solihull town centre",
+      "postcodes": "B91",
+      "housing": "Flats near Touchwood and the station, with Edwardian and inter-war houses on the surrounding roads."
+    },
+    {
+      "name": "Shirley",
+      "postcodes": "B90",
+      "housing": "Inter-war and post-war semis and terraces along the Stratford Road, with newer estates to the south."
+    },
+    {
+      "name": "Olton",
+      "postcodes": "B92",
+      "housing": "Inter-war semi-detached and detached houses around Olton station and the reservoir."
+    },
+    {
+      "name": "Knowle and Dorridge",
+      "postcodes": "B93",
+      "housing": "Large detached and semi-detached houses, many from the inter-war and post-war years, around village centres."
+    },
+    {
+      "name": "Balsall Common",
+      "postcodes": "CV7",
+      "housing": "Post-war and newer detached and semi-detached houses in a commuter village."
+    },
+    {
+      "name": "Chelmsley Wood",
+      "postcodes": "B37",
+      "housing": "A large 1960s and 70s estate of council-built houses, maisonettes and tower blocks, now with many privately let ex-council homes."
+    },
+    {
+      "name": "Kingshurst and Smith's Wood",
+      "postcodes": "B36, B37",
+      "housing": "Post-war estates of terraced houses and low-rise flats north of Chelmsley Wood."
+    },
+    {
+      "name": "Castle Bromwich",
+      "postcodes": "B36",
+      "housing": "Inter-war and post-war semi-detached family houses on the edge of Birmingham."
+    },
+    {
+      "name": "Elmdon and Marston Green",
+      "postcodes": "B26, B37",
+      "housing": "Inter-war and post-war semis close to Birmingham Airport and the NEC."
+    }
+  ],
+  "housing": "Solihull is one of the most owner-occupied boroughs in the West Midlands. The south, around Solihull town, Knowle, Dorridge and Balsall Common, is mostly inter-war and post-war semi-detached and detached family housing, much of it in the Green Belt. The north, around Chelmsley Wood, Kingshurst and Smith's Wood, was built as overspill housing for Birmingham in the 1960s and 70s and has more social and ex-council homes now let privately. Lets near the airport, the NEC and Jaguar Land Rover draw workers and commuters.",
+  "checkinTips": [
+    "Ex-council houses and maisonettes in Chelmsley Wood and Kingshurst: record the boiler, fencing, communal stairs, bin stores and door entry system.",
+    "Larger family homes in Knowle, Dorridge and Shirley: photograph gardens, hedges, garages, driveways and conservatories, which tenants are often expected to keep up.",
+    "Flats in Solihull town centre: note fob, key and parking permit counts and the post box and bin store arrangements.",
+    "Homes near Birmingham Airport in Elmdon and Marston Green: record the windows and any secondary glazing or acoustic insulation.",
+    "Tower blocks in the north of the borough: photograph fire doors, smoke alarms and any building safety notices in the communal areas."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Solihull Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "birmingham",
+    "north-warwickshire",
+    "coventry",
+    "warwick",
+    "stratford-on-avon",
+    "bromsgrove"
+  ]
+}

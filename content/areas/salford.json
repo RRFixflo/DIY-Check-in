@@ -1,0 +1,112 @@
+{
+  "slug": "salford",
+  "name": "Salford",
+  "council": {
+    "name": "Salford City Council",
+    "url": "https://www.salford.gov.uk",
+    "privateRentingUrl": "https://www.salford.gov.uk/housing/information-for-landlords/landlord-licensing/areas-covered-by-selective-licensing/selective-licensing-in-broughton-kersal-and-broughton-park"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers parts of the city: Broughton, Kersal and Broughton Park (21 January 2026 to 20 January 2031) and Eccles, Barton and Winton (from 1 September 2022, for five years). Check the council's map for the exact streets.",
+    "additional": "The citywide additional licensing scheme for three- and four-person HMOs ended on 19 July 2026 and cannot be renewed. The council consulted from 4 February to 15 April 2026 on a new citywide additional licensing scheme for poorly converted blocks of flats (section 257 HMOs); no decision had been found at the last check. Larger HMOs still need a mandatory licence.",
+    "fee": "£609 for a selective licence in Broughton, Kersal and Broughton Park, or £390 for accredited landlords who apply promptly (2026)",
+    "source": "https://www.salford.gov.uk/housing/information-for-landlords/additional-hmo-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,170 a month (ONS, August 2026), up 3.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000006/"
+  },
+  "price": {
+    "text": "£229,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000006/"
+  },
+  "privateRentedShare": {
+    "text": "26.8% of households rent privately (Census 2021), up from 18.8% in 2011, one of the biggest rises in England",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000006/"
+  },
+  "councilTax": {
+    "text": "£2,594 Band D including the Greater Manchester mayoral police and fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/salford"
+  },
+  "postcodes": [
+    "M3",
+    "M5",
+    "M6",
+    "M7",
+    "M27",
+    "M28",
+    "M30",
+    "M38",
+    "M44",
+    "M50"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Salford Quays and MediaCityUK",
+      "postcodes": "M50",
+      "housing": "High-rise and mid-rise apartment blocks built since the 1990s around the old docks."
+    },
+    {
+      "name": "Chapel Street and Greengate",
+      "postcodes": "M3",
+      "housing": "New-build apartment towers and converted warehouses on the edge of Manchester city centre."
+    },
+    {
+      "name": "Ordsall",
+      "postcodes": "M5",
+      "housing": "Terraced streets and low-rise council-built homes, with newer apartment blocks by the Quays."
+    },
+    {
+      "name": "Pendleton and Seedley",
+      "postcodes": "M6",
+      "housing": "Post-war tower blocks and estates being regenerated, plus Victorian terraces let to students near the university."
+    },
+    {
+      "name": "Broughton and Kersal",
+      "postcodes": "M7",
+      "housing": "Victorian terraces and large Edwardian houses, many split into flats, alongside post-war estates."
+    },
+    {
+      "name": "Eccles",
+      "postcodes": "M30",
+      "housing": "Victorian and Edwardian terraces around the town centre, with inter-war semis further out."
+    },
+    {
+      "name": "Swinton",
+      "postcodes": "M27",
+      "housing": "Mainly inter-war and post-war semi-detached houses with some terraces and flats near the centre."
+    },
+    {
+      "name": "Walkden",
+      "postcodes": "M28",
+      "housing": "Post-war estates and newer private housing, with older terraces near the town centre."
+    },
+    {
+      "name": "Worsley",
+      "postcodes": "M28",
+      "housing": "Larger detached and semi-detached homes and some period cottages around the canal village."
+    },
+    {
+      "name": "Irlam and Cadishead",
+      "postcodes": "M44",
+      "housing": "Terraced and semi-detached houses in small towns by the Manchester Ship Canal, with new estates on former industrial land."
+    }
+  ],
+  "housing": "Salford has one of the fastest-growing private rented sectors in England: more than a quarter of households rented privately in 2021. Much of the growth is in new apartment towers at Salford Quays, MediaCityUK and around Chapel Street, alongside Victorian terraces in Broughton, Ordsall and Eccles where selective licensing applies. Students at the University of Salford rent shared houses around Seedley and Pendleton. Further west, Swinton, Walkden, Worsley and Irlam are mostly owner-occupied suburbs with post-war semis.",
+  "checkinTips": [
+    "Apartment towers at the Quays and Chapel Street: note fob, key and parking counts, the concierge or post room arrangements and any balcony furniture.",
+    "Flats in high-rise blocks: photograph fire doors, smoke alarms and any notices about cladding or building safety works.",
+    "Victorian terraces in Broughton, Eccles and Ordsall: record the back yard, rear gate, outhouse, gutters and any damp in rear rooms and cellars.",
+    "Student shared houses near the university: photograph each bedroom door lock, the shared kitchen appliances and fire blankets, room by room.",
+    "Homes in a selective licensing area: check the licence and note its number in the report, as landlords must hold one."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Salford City Council's housing standards team, which inspects privately rented homes and enforces the licensing schemes.",
+  "nearby": [
+    "manchester",
+    "trafford",
+    "wigan",
+    "bolton",
+    "bury"
+  ]
+}

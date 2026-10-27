@@ -1,0 +1,103 @@
+{
+  "slug": "south-tyneside",
+  "name": "South Tyneside",
+  "council": {
+    "name": "South Tyneside Council",
+    "url": "https://www.southtyneside.gov.uk",
+    "privateRentingUrl": "https://www.southtyneside.gov.uk/article/1784/Selective-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "A selective licensing scheme for the Beach Road and Long Streets areas of South Shields (parts of Beacon and Bents, Simonside and Rekendyke, and Westoe wards) was approved in November 2020, but the council's page says it was paused; no confirmed start date was found. Check with the council before letting there.",
+    "additional": "No additional HMO licensing scheme: the council says there are currently no additional licensing schemes. HMOs with five or more people from two or more households need a mandatory licence.",
+    "fee": null,
+    "source": "https://www.southtyneside.gov.uk/article/7314/Additional-and-selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£737 a month (ONS, July 2026), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000023/"
+  },
+  "price": {
+    "text": "£161,000 (UK HPI, June 2026, provisional), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000023/"
+  },
+  "privateRentedShare": {
+    "text": "13.2% of households rent privately (Census 2021), up from 10.1% in 2011, the lowest share in the North East",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000023/"
+  },
+  "councilTax": {
+    "text": "£2,434 Band D including Northumbria police and Tyne and Wear fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-tyneside"
+  },
+  "postcodes": [
+    "NE31",
+    "NE32",
+    "NE33",
+    "NE34",
+    "NE35",
+    "NE36",
+    "SR6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "South Shields town centre and Beach Road",
+      "postcodes": "NE33",
+      "housing": "Victorian terraces and Tyneside flats, many privately let, near the seafront and town centre."
+    },
+    {
+      "name": "Westoe",
+      "postcodes": "NE33",
+      "housing": "Large Victorian villas in a conservation area, with Edwardian terraces nearby."
+    },
+    {
+      "name": "Harton and Cleadon Park",
+      "postcodes": "NE34",
+      "housing": "Inter-war and post-war council-built estates and semis."
+    },
+    {
+      "name": "Simonside and Rekendyke",
+      "postcodes": "NE34, NE33",
+      "housing": "Terraced streets and post-war estates west of the town centre."
+    },
+    {
+      "name": "Jarrow",
+      "postcodes": "NE32",
+      "housing": "Victorian terraces and Tyneside flats, post-war council estates and riverside housing."
+    },
+    {
+      "name": "Hebburn",
+      "postcodes": "NE31",
+      "housing": "Terraces and post-war council-built houses, with new-build estates on former industrial land."
+    },
+    {
+      "name": "Boldon Colliery and East Boldon",
+      "postcodes": "NE35, NE36",
+      "housing": "Former mining village terraces and inter-war and post-war semis, with larger houses in East Boldon."
+    },
+    {
+      "name": "Whitburn",
+      "postcodes": "SR6",
+      "housing": "A coastal village of older cottages, inter-war semis and bungalows."
+    },
+    {
+      "name": "Cleadon",
+      "postcodes": "SR6",
+      "housing": "A village of period houses and post-war detached and semi-detached homes."
+    }
+  ],
+  "housing": "South Tyneside covers South Shields, Jarrow, Hebburn and the Boldons on the south bank of the Tyne. Much of the housing is Victorian terraces and Tyneside flats (pairs of upper and lower flats in what looks like a terraced house), with big inter-war and post-war council estates. Social renting is very high, at almost three in ten households, and private renting is the lowest in the North East, concentrated in the older streets of South Shields. Prices are among the lowest in England.",
+  "checkinTips": [
+    "Tyneside flats: note which yard, bins and meters belong to the upper or lower flat, and photograph the shared or separate front doors and stairs.",
+    "Seafront homes in South Shields and Whitburn: check window frames, outside paint and metal fittings for salt and wind damage, and photograph any damp on exposed walls.",
+    "Victorian terraces near Beach Road and Westoe: record the back yard, rear lane gate, gutters, chimneys and any damp in rear rooms.",
+    "Former council houses in Jarrow, Hebburn and Harton: photograph the boiler, fencing, sheds and gardens, and note any non-standard construction.",
+    "Older terraces near the river: check for condensation and mould in bathrooms and bedrooms, and photograph extractor fans and window vents."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Tyneside Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "gateshead",
+    "sunderland",
+    "north-tyneside",
+    "newcastle"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "slug": "south-cambridgeshire",
+  "name": "South Cambridgeshire",
+  "council": {
+    "name": "South Cambridgeshire District Council",
+    "url": "https://www.scambs.gov.uk",
+    "privateRentingUrl": "https://www.scambs.gov.uk/housing/renting-privately/private-renting-legislation-and-regulations-for-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only HMOs that fall under the national mandatory scheme (five or more people from two or more households) need a licence.",
+    "fee": "£869 for a five-year HMO licence for up to five bedrooms plus £35 for each extra bedroom; renewal £528 (2025/26)",
+    "source": "https://www.scambs.gov.uk/housing/renting-privately/houses-of-multiple-occupation-hmo/houses-in-multiple-occupation-hmo-guidance/licence-fees",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,407 a month (ONS, September 2026), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000012/"
+  },
+  "price": {
+    "text": "£441,000 (UK HPI, August 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000012/"
+  },
+  "privateRentedShare": {
+    "text": "14.0% of households rent privately (Census 2021), up from 12.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000012/"
+  },
+  "councilTax": {
+    "text": "£2,536 average Band D including Cambridgeshire County Council, police, fire, mayoral and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-cambridgeshire"
+  },
+  "postcodes": [
+    "CB2",
+    "CB21",
+    "CB22",
+    "CB23",
+    "CB24",
+    "CB25",
+    "CB10",
+    "SG8",
+    "PE19",
+    "PE27"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cambourne",
+      "postcodes": "CB23",
+      "housing": "A new town begun in the late 1990s, of modern detached, semi-detached and terraced houses and flats."
+    },
+    {
+      "name": "Northstowe",
+      "postcodes": "CB24",
+      "housing": "A new town under construction on a former airfield, with new-build houses and apartments."
+    },
+    {
+      "name": "Histon and Impington",
+      "postcodes": "CB24",
+      "housing": "Large villages north of Cambridge with Victorian cottages, inter-war semis and newer estates."
+    },
+    {
+      "name": "Sawston",
+      "postcodes": "CB22",
+      "housing": "A large village south of Cambridge with terraces, post-war estates and new-build homes near the science parks."
+    },
+    {
+      "name": "Great Shelford",
+      "postcodes": "CB22",
+      "housing": "A commuter village of Victorian and Edwardian villas, inter-war houses and some flats."
+    },
+    {
+      "name": "Cottenham",
+      "postcodes": "CB24",
+      "housing": "A long village with period cottages, post-war houses and recent estates."
+    },
+    {
+      "name": "Trumpington Meadows",
+      "postcodes": "CB2",
+      "housing": "New-build houses and apartments on the southern edge of Cambridge, partly in the district."
+    },
+    {
+      "name": "Bassingbourn and Melbourn",
+      "postcodes": "SG8",
+      "housing": "Villages near Royston with older cottages, post-war houses and former military housing."
+    },
+    {
+      "name": "Linton",
+      "postcodes": "CB21",
+      "housing": "A village of timber-framed and brick cottages with later estates."
+    }
+  ],
+  "housing": "South Cambridgeshire is a ring of around a hundred villages around Cambridge, with no large town of its own. Older homes are thatched and timber-framed cottages and Victorian brick terraces in the villages, but much of the recent growth is in new settlements such as Cambourne, Northstowe and the edges of Cambridge. Private renting is below the national average, but rents are high because of demand from the city's universities, hospitals and science parks. The council runs its own lettings service for private landlords.",
+  "checkinTips": [
+    "New-build homes in Cambourne, Northstowe and on the edge of Cambridge: photograph snagging items, sealant, paintwork and gardens, and note who maintains shared green spaces.",
+    "Thatched and timber-framed cottages: record the visible condition of the thatch, beams and plaster, and photograph smoke alarms and any wood burner.",
+    "Village homes off the gas grid: photograph the oil tank and gauge level, or the LPG tank, and any septic tank or treatment plant cover.",
+    "Homes near the science parks let to research staff: note the furniture and appliances in detail, as many lets are furnished and short.",
+    "Fenland-edge villages such as Cottenham: check for damp, cracks from ground movement and the condition of drains and gutters."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Cambridgeshire District Council's environmental health team, which can inspect privately rented homes and take action against landlords.",
+  "nearby": [
+    "cambridge",
+    "east-cambridgeshire",
+    "huntingdonshire",
+    "central-bedfordshire",
+    "north-hertfordshire",
+    "east-hertfordshire",
+    "uttlesford",
+    "west-suffolk"
+  ]
+}

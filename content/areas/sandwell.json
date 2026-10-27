@@ -1,0 +1,102 @@
+{
+  "slug": "sandwell",
+  "name": "Sandwell",
+  "council": {
+    "name": "Sandwell Metropolitan Borough Council",
+    "url": "https://www.sandwell.gov.uk",
+    "privateRentingUrl": "https://www.sandwell.gov.uk/info/200223/housing/4777/additional_licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found on the council's pages; a selective scheme for West Bromwich was consulted on earlier but the council went ahead with additional HMO licensing instead.",
+    "additional": "Borough-wide additional licensing for privately rented HMOs with three or more people from two or more households, from 1 October 2024 to 30 September 2029 (it replaced the earlier West Bromwich scheme). Larger HMOs need a mandatory licence.",
+    "fee": "£1,001 for a five-year additional HMO licence, paid in two stages, with discounts of up to £220 for accredited landlords",
+    "source": "https://www.sandwell.gov.uk/downloads/file/2839/additional-licensing-scheme-designation-public-notice-2024",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£937 a month (ONS, February 2026), up 10.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000028/"
+  },
+  "price": {
+    "text": "£203,000 (UK HPI, January 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000028/"
+  },
+  "privateRentedShare": {
+    "text": "18.6% of households rent privately (Census 2021), up from 12.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000028/"
+  },
+  "councilTax": {
+    "text": "£2,244 Band D including West Midlands police and fire precepts (2026/27)",
+    "source": "https://www.sandwell.gov.uk/downloads/file/5417/council-finances-leaflets-2026-27"
+  },
+  "postcodes": [
+    "B43",
+    "B64",
+    "B65",
+    "B66",
+    "B67",
+    "B68",
+    "B69",
+    "B70",
+    "B71",
+    "DY4",
+    "WS10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "West Bromwich",
+      "postcodes": "B70, B71",
+      "housing": "Victorian terraces near the town centre, inter-war council estates and newer town-centre flats."
+    },
+    {
+      "name": "Smethwick",
+      "postcodes": "B66, B67",
+      "housing": "Dense Victorian and Edwardian terraced streets, many privately let, with some post-war blocks."
+    },
+    {
+      "name": "Oldbury",
+      "postcodes": "B68, B69",
+      "housing": "Inter-war and post-war semis and council estates, with terraces near the old town centre."
+    },
+    {
+      "name": "Rowley Regis and Blackheath",
+      "postcodes": "B65",
+      "housing": "Post-war estates and terraced houses on the hills above Cradley Heath."
+    },
+    {
+      "name": "Cradley Heath",
+      "postcodes": "B64",
+      "housing": "Victorian terraces around the high street and later semi-detached estates."
+    },
+    {
+      "name": "Tipton",
+      "postcodes": "DY4",
+      "housing": "Terraces and post-war council estates by the canals, with newer housing on former industrial land."
+    },
+    {
+      "name": "Wednesbury",
+      "postcodes": "WS10",
+      "housing": "Victorian terraces, inter-war semis and post-war council estates."
+    },
+    {
+      "name": "Great Barr",
+      "postcodes": "B43",
+      "housing": "Mainly inter-war and post-war semi-detached family houses on the edge of the borough."
+    }
+  ],
+  "housing": "Sandwell is an industrial Black Country borough made up of six towns: West Bromwich, Smethwick, Oldbury, Rowley Regis, Tipton and Wednesbury. A large share of homes are social rented, and the private rented sector has grown fast, much of it in Victorian terraces in Smethwick and West Bromwich and in former council houses bought under right to buy. Shared houses are common enough that the whole borough has additional HMO licensing. Prices are among the lowest in the West Midlands.",
+  "checkinTips": [
+    "Victorian terraces in Smethwick and West Bromwich: photograph the back yard, entry passage, rear gate, gutters and any damp on rear walls.",
+    "Shared houses: check the HMO licence and photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, as the whole borough needs a licence.",
+    "Former council houses: record the condition of the boiler, fencing, sheds and any non-standard construction such as concrete panel walls.",
+    "Homes by the canals in Tipton and Oldbury: look for and photograph condensation, mould and damp around windows and in corners.",
+    "Flats in post-war blocks: note key and fob counts, the bin store, the door entry system and the communal stairs."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Sandwell Council's private sector housing team, which inspects privately rented homes and enforces HMO licensing.",
+  "nearby": [
+    "birmingham",
+    "dudley",
+    "walsall",
+    "wolverhampton"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "slug": "st-albans",
+  "name": "St Albans",
+  "council": {
+    "name": "St Albans City and District Council",
+    "url": "https://www.stalbans.gov.uk",
+    "privateRentingUrl": "https://www.stalbans.gov.uk/houses-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council's enforcement policy (reviewed 2024) says it has not found a need for one.",
+    "additional": "No additional HMO licensing scheme: the council only requires the national mandatory licence, for HMOs with five or more people from two or more households, for up to five years.",
+    "fee": "£207 per person with a minimum of £1,035 for an HMO licence",
+    "source": "https://www.stalbans.gov.uk/landlords",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,931 a month (ONS, August 2026), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000240/"
+  },
+  "price": {
+    "text": "£647,000 (UK HPI, July 2026, provisional), up 2.3% on a year earlier, the highest in the East of England",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000240/"
+  },
+  "privateRentedShare": {
+    "text": "16.3% of households rent privately (Census 2021), up from 13.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000240/"
+  },
+  "councilTax": {
+    "text": "£2,419 average Band D including Hertfordshire County Council, police and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/st-albans"
+  },
+  "postcodes": [
+    "AL1",
+    "AL2",
+    "AL3",
+    "AL4",
+    "AL5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "St Albans city centre",
+      "postcodes": "AL1, AL3",
+      "housing": "Medieval, Georgian and Victorian houses in the conservation areas, with flats near the City station and over shops."
+    },
+    {
+      "name": "Fleetville and Camp",
+      "postcodes": "AL1",
+      "housing": "Victorian and Edwardian terraces east of the centre, popular with young families and renters."
+    },
+    {
+      "name": "Marshalswick",
+      "postcodes": "AL4",
+      "housing": "Mainly post-war and inter-war semi-detached and detached family houses."
+    },
+    {
+      "name": "Harpenden",
+      "postcodes": "AL5",
+      "housing": "A commuter town of large Edwardian and inter-war houses, with flats near the station."
+    },
+    {
+      "name": "London Colney",
+      "postcodes": "AL2",
+      "housing": "A village of post-war estates and newer housing south of St Albans."
+    },
+    {
+      "name": "Bricket Wood",
+      "postcodes": "AL2",
+      "housing": "A village of inter-war and post-war houses and bungalows among woodland."
+    },
+    {
+      "name": "Redbourn",
+      "postcodes": "AL3",
+      "housing": "A village of period cottages around the common and post-war estates."
+    },
+    {
+      "name": "Wheathampstead",
+      "postcodes": "AL4",
+      "housing": "A village of timber-framed and brick cottages, with later houses on its edges."
+    },
+    {
+      "name": "How Wood and Park Street",
+      "postcodes": "AL2",
+      "housing": "Post-war estates and semis along the Abbey Line railway."
+    }
+  ],
+  "housing": "St Albans is one of the most expensive districts outside London, with fast trains into the capital from St Albans City and Harpenden. The city has a medieval and Georgian core, streets of Victorian and Edwardian terraces in Fleetville and around the stations, and inter-war and post-war suburbs. Harpenden has larger Edwardian and inter-war family houses. Private renting is below the national average and HMOs are few; most lets are flats and family houses for commuters.",
+  "checkinTips": [
+    "Victorian and Edwardian terraces in Fleetville and near the stations: photograph sash or bay windows, chimney breasts, gardens and any damp in rear rooms.",
+    "Listed and conservation-area houses in the city centre: record original features such as fireplaces, shutters and old windows in detail, as repairs need consent.",
+    "Large family houses in Harpenden and Marshalswick: photograph gardens, hedges, garages and driveways, and agree what upkeep the tenant is expected to do.",
+    "Flats near St Albans City and Harpenden stations: note fob, key, parking permit and bike store counts, and the bin store arrangements.",
+    "Period cottages in Redbourn and Wheathampstead: photograph beams, low ceilings, damp on solid walls and any wood burner."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact St Albans City and District Council's Private Sector Housing Team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "dacorum",
+    "hertsmere",
+    "welwyn-hatfield",
+    "north-hertfordshire",
+    "central-bedfordshire",
+    "three-rivers"
+  ]
+}

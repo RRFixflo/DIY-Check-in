@@ -1,0 +1,107 @@
+{
+  "slug": "south-kesteven",
+  "name": "South Kesteven",
+  "council": {
+    "name": "South Kesteven District Council",
+    "url": "https://www.southkesteven.gov.uk",
+    "privateRentingUrl": "https://www.southkesteven.gov.uk/housing/private-renting-and-homeowners/houses-multiple-occupation-hmo-mandatory-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more occupiers from two or more households need a mandatory licence, whatever the number of storeys. Councillors have called for tighter controls on small HMOs in Grantham, but no wider licensing was in force at the last check.",
+    "fee": "£1,133.50 for a new five-bedroom HMO licence (Part A £570.50 plus Part B £563), more for extra bedrooms (2026/27)",
+    "source": "https://www.southkesteven.gov.uk/housing/private-renting-and-homeowners/houses-multiple-occupation-hmo-mandatory-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£841 a month (ONS, June 2026), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000141/"
+  },
+  "price": {
+    "text": "£255,000 (UK HPI, May 2026, provisional), up 1.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000141/"
+  },
+  "privateRentedShare": {
+    "text": "18.0% of households rent privately (Census 2021), up from 14.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000141/"
+  },
+  "councilTax": {
+    "text": "£2,260 average Band D including Lincolnshire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-kesteven"
+  },
+  "postcodes": [
+    "NG31",
+    "NG32",
+    "NG33",
+    "NG34",
+    "NG23",
+    "PE6",
+    "PE9",
+    "PE10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Grantham",
+      "postcodes": "NG31",
+      "housing": "The largest town, with Victorian terraces near the centre and station, inter-war and post-war estates and new-build homes to the south."
+    },
+    {
+      "name": "Stamford",
+      "postcodes": "PE9",
+      "housing": "A stone-built Georgian town, much of it a conservation area, with later estates on the edges."
+    },
+    {
+      "name": "Bourne",
+      "postcodes": "PE10",
+      "housing": "A market town that has grown with large new-build estates around an older centre."
+    },
+    {
+      "name": "The Deepings",
+      "postcodes": "PE6",
+      "housing": "Market Deeping and Deeping St James, with stone cottages along the Welland and large post-war estates."
+    },
+    {
+      "name": "Barrowby",
+      "postcodes": "NG32",
+      "housing": "A village west of Grantham with older stone houses and modern estates."
+    },
+    {
+      "name": "Colsterworth",
+      "postcodes": "NG33",
+      "housing": "A village near the A1 with stone cottages and newer housing."
+    },
+    {
+      "name": "Corby Glen",
+      "postcodes": "NG33",
+      "housing": "A small village of stone houses and some new building."
+    },
+    {
+      "name": "Great Gonerby",
+      "postcodes": "NG31",
+      "housing": "A village on the edge of Grantham with older cottages and post-war houses."
+    },
+    {
+      "name": "Long Bennington",
+      "postcodes": "NG23",
+      "housing": "A long village of brick cottages and modern houses north of Grantham."
+    }
+  ],
+  "housing": "South Kesteven runs from Grantham in the north to Stamford and the Deepings in the south. Grantham has Victorian terraces, post-war estates and large new developments, and is where most HMOs are; Stamford is known for its limestone Georgian houses and is far more expensive. Bourne and the Deepings have grown with new-build estates for commuters to Peterborough. Private renting rose to nearly one in five households by 2021, and RAF bases nearby add demand for family lets.",
+  "checkinTips": [
+    "Victorian terraces in Grantham: record the back yard, rear gate, gutters and any damp on rear walls and in cellars.",
+    "Stone Georgian houses in Stamford: photograph sash windows, shutters, fireplaces and any damp on solid walls; many are listed, so note original features.",
+    "New-build estates in Bourne, the Deepings and south Grantham: photograph snagging items, sealant, paintwork and the garden.",
+    "Shared houses in Grantham: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, and check the HMO licence for five or more sharers.",
+    "Village homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Kesteven District Council's Private Sector Housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "north-kesteven",
+    "south-holland",
+    "peterborough",
+    "rutland",
+    "melton",
+    "newark-and-sherwood",
+    "north-northamptonshire"
+  ]
+}

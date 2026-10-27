@@ -1,0 +1,111 @@
+{
+  "slug": "south-gloucestershire",
+  "name": "South Gloucestershire",
+  "council": {
+    "name": "South Gloucestershire Council",
+    "url": "https://www.southglos.gov.uk",
+    "privateRentingUrl": "https://www.southglos.gov.uk/hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need a mandatory licence. Separately, the council has consulted on planning controls (an Article 4 Direction) on new HMO conversions in Filton and Stoke Park and Cheswick wards.",
+    "fee": null,
+    "source": "https://sites.southglos.gov.uk/newsroom/community/consultation-on-proposed-controls-on-hmo-conversions-in-filton-and-stoke-park-cheswick-wards",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,474 a month (ONS, September 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000025/"
+  },
+  "price": {
+    "text": "£336,000 (UK HPI, August 2026, provisional), up 1.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000025/"
+  },
+  "privateRentedShare": {
+    "text": "15.7% of households rent privately (Census 2021), up from 13.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000025/"
+  },
+  "councilTax": {
+    "text": "£2,551 average Band D including Avon and Somerset police, Avon fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-gloucestershire"
+  },
+  "postcodes": [
+    "BS15",
+    "BS16",
+    "BS30",
+    "BS32",
+    "BS34",
+    "BS35",
+    "BS36",
+    "BS37",
+    "GL12"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Filton",
+      "postcodes": "BS34",
+      "housing": "Inter-war and post-war semis and terraces near the aerospace works, with new homes on the former airfield at Brabazon."
+    },
+    {
+      "name": "Stoke Gifford and Stoke Park",
+      "postcodes": "BS34, BS16",
+      "housing": "Modern estates and apartment blocks near Parkway station and UWE's Frenchay campus, with many student lets."
+    },
+    {
+      "name": "Bradley Stoke",
+      "postcodes": "BS32",
+      "housing": "A new town built from the 1980s of modern houses, townhouses and flats."
+    },
+    {
+      "name": "Kingswood",
+      "postcodes": "BS15",
+      "housing": "Victorian and Edwardian terraces and inter-war semis on the eastern edge of Bristol."
+    },
+    {
+      "name": "Downend and Staple Hill",
+      "postcodes": "BS16",
+      "housing": "Victorian terraces, inter-war semis and post-war houses."
+    },
+    {
+      "name": "Yate",
+      "postcodes": "BS37",
+      "housing": "A post-war new town of 1960s and 70s estates, with new-build homes on its edges."
+    },
+    {
+      "name": "Chipping Sodbury",
+      "postcodes": "BS37",
+      "housing": "A market town of stone cottages and period houses next to Yate."
+    },
+    {
+      "name": "Thornbury",
+      "postcodes": "BS35",
+      "housing": "A market town with period houses in the centre and post-war and new-build estates around it."
+    },
+    {
+      "name": "Emersons Green",
+      "postcodes": "BS16",
+      "housing": "Modern estates of houses and flats built from the 1990s onwards."
+    },
+    {
+      "name": "Longwell Green and Hanham",
+      "postcodes": "BS30, BS15",
+      "housing": "Inter-war and post-war semis and bungalows near the Avon valley."
+    }
+  ],
+  "housing": "South Gloucestershire wraps around the north and east of Bristol, with large suburbs such as Kingswood, Filton and Bradley Stoke, and market towns and villages further out. Much of the housing was built after the war, including the new towns of Yate and Bradley Stoke and recent estates at Emersons Green, Charlton Hayes and Brabazon. Private renting is below average, but shared houses for students and staff are common around UWE's Frenchay campus, Filton and Stoke Gifford. Older stone cottages are found in the Cotswold edge villages.",
+  "checkinTips": [
+    "Student shared houses around Filton, Stoke Gifford and the UWE campus: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, room by room.",
+    "New-build homes at Charlton Hayes, Brabazon and Emersons Green: photograph snagging items, sealant, paintwork and the garden, and note any estate management charge areas.",
+    "Victorian terraces in Kingswood and Staple Hill: record the back garden, rear lane gate, gutters and any damp on rear walls.",
+    "Stone cottages in Chipping Sodbury and the Cotswold edge villages: photograph walls inside for damp, beams and any wood burner.",
+    "Flats near Parkway station and in Bradley Stoke: note fob, key and parking permit counts and the bin and bike store arrangements."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Gloucestershire Council's Private Sector Housing team, which inspects privately rented homes and enforces HMO licensing.",
+  "nearby": [
+    "bristol",
+    "bath",
+    "stroud",
+    "cotswold",
+    "wiltshire"
+  ]
+}

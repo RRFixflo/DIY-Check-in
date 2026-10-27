@@ -1,0 +1,98 @@
+{
+  "slug": "slough",
+  "name": "Slough",
+  "council": {
+    "name": "Slough Borough Council",
+    "url": "https://www.slough.gov.uk",
+    "privateRentingUrl": "https://slough.citizenspace.com/housing/privaterentedpropertylicensing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force: the earlier scheme in Chalvey and Slough Central ran from 2019 to 2024. A borough-wide selective scheme for single-household lets was consulted on from 15 July to September 2026; the Cabinet had not decided at the last check.",
+    "additional": "No additional HMO licensing in force since the earlier borough-wide scheme ended in 2024. A new borough-wide additional scheme (smaller HMOs with three or four sharers, and poorly converted blocks of flats) was consulted on alongside the selective scheme in 2026. Larger HMOs need a mandatory licence.",
+    "fee": null,
+    "source": "https://www.slough.gov.uk/news/article/681/consultation-on-property-licensing-schemes",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,565 a month (ONS, August 2026), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000039/"
+  },
+  "price": {
+    "text": "£336,000 (UK HPI, July 2026, provisional), down 1.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000039/"
+  },
+  "privateRentedShare": {
+    "text": "30.7% of households rent privately (Census 2021), up from 24.3% in 2011, the biggest rise in the South East",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000039/"
+  },
+  "councilTax": {
+    "text": "£2,414 Band D including Thames Valley police and Royal Berkshire fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/slough"
+  },
+  "postcodes": [
+    "SL1",
+    "SL2",
+    "SL3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Slough town centre",
+      "postcodes": "SL1",
+      "housing": "Flats over shops, office-to-residential conversions and new apartment towers near the station."
+    },
+    {
+      "name": "Chalvey",
+      "postcodes": "SL1",
+      "housing": "Victorian and Edwardian terraces, many privately let, with some newer flats."
+    },
+    {
+      "name": "Upton Park",
+      "postcodes": "SL1",
+      "housing": "Victorian and Edwardian villas and terraces south of the town centre, some split into flats."
+    },
+    {
+      "name": "Cippenham",
+      "postcodes": "SL1",
+      "housing": "Inter-war and post-war semis and terraces, with newer estates to the west."
+    },
+    {
+      "name": "Britwell",
+      "postcodes": "SL2",
+      "housing": "A large post-war estate of council-built houses and low-rise flats, partly regenerated."
+    },
+    {
+      "name": "Manor Park",
+      "postcodes": "SL2",
+      "housing": "Post-war council-built houses and inter-war semis north of the town centre."
+    },
+    {
+      "name": "Langley",
+      "postcodes": "SL3",
+      "housing": "Post-war and inter-war semis and terraces around the station, with newer apartment blocks."
+    },
+    {
+      "name": "Colnbrook",
+      "postcodes": "SL3",
+      "housing": "A village near Heathrow with period cottages, post-war houses and homes affected by airport noise."
+    },
+    {
+      "name": "Wexham",
+      "postcodes": "SL2, SL3",
+      "housing": "Inter-war and post-war family houses around the hospital, with some flats."
+    }
+  ],
+  "housing": "Slough has one of the largest private rented sectors in the South East: almost a third of households rented privately in 2021, and the share grew faster here than anywhere else in the region. Much of it is Victorian and Edwardian terraces in Chalvey and Upton, inter-war semis, and office blocks converted to flats in the town centre. Shared houses and houses with outbuildings let as separate homes have been a long-standing concern. Being next to Heathrow and on the Elizabeth line keeps demand high.",
+  "checkinTips": [
+    "Converted office blocks in the town centre: note fob, key and post box counts, and photograph windows, ventilation and any condensation or mould.",
+    "Terraces in Chalvey and Upton: photograph rear gardens and any outbuildings, and note whether any outbuilding is part of the let at all.",
+    "Shared houses: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, and check whether a licence is needed once the 2026 proposals are decided.",
+    "Homes near Heathrow in Colnbrook and Langley: record the windows and any secondary glazing or acoustic insulation provided.",
+    "Post-war estate homes in Britwell and Cippenham: photograph fencing, sheds and gardens, and the condition of the boiler and radiators."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Slough Borough Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "buckinghamshire",
+    "windsor-and-maidenhead",
+    "hillingdon"
+  ]
+}

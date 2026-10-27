@@ -1,0 +1,94 @@
+{
+  "slug": "rutland",
+  "name": "Rutland",
+  "council": {
+    "name": "Rutland County Council",
+    "url": "https://www.rutland.gov.uk",
+    "privateRentingUrl": "https://www.rutland.gov.uk/housing/housing-repairs-standards-enforcement"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": "No additional HMO licensing scheme found: the council's housing standards service (shared with Peterborough City Council) runs the national mandatory licence for HMOs with five or more people from two or more households, and local reports say Rutland has very few, if any, licensed HMOs.",
+    "fee": null,
+    "source": "https://www.rutland.gov.uk/housing/housing-repairs-standards-enforcement",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£969 a month (ONS, February 2026), up 7.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000017/"
+  },
+  "price": {
+    "text": "£311,000 (UK HPI, January 2026, provisional), down 9.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000017/"
+  },
+  "privateRentedShare": {
+    "text": "16.7% of households rent privately (Census 2021), up from 15.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000017/"
+  },
+  "councilTax": {
+    "text": "£2,670 Band D including police and fire precepts, before parish charges (2026/27)",
+    "source": "https://www.rutland.gov.uk/council-tax/about-your-council-tax"
+  },
+  "postcodes": [
+    "LE15",
+    "LE16",
+    "PE9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Oakham",
+      "postcodes": "LE15",
+      "housing": "The county town, with stone cottages and terraces in the centre and later estates and new-build homes around it."
+    },
+    {
+      "name": "Uppingham",
+      "postcodes": "LE15",
+      "housing": "A stone-built market town with period houses and flats, and homes linked to the school."
+    },
+    {
+      "name": "Cottesmore",
+      "postcodes": "LE15",
+      "housing": "A village next to Kendrew Barracks, with stone houses and blocks of former service family homes."
+    },
+    {
+      "name": "Edith Weston",
+      "postcodes": "LE15",
+      "housing": "A village by Rutland Water near St George's Barracks, with stone houses and former military housing."
+    },
+    {
+      "name": "Ketton",
+      "postcodes": "PE9",
+      "housing": "A limestone village near Stamford with stone cottages and some post-war houses."
+    },
+    {
+      "name": "Empingham",
+      "postcodes": "LE15",
+      "housing": "A village of stone cottages and farmhouses on the eastern side of Rutland Water."
+    },
+    {
+      "name": "Great Casterton",
+      "postcodes": "PE9",
+      "housing": "A small village near Stamford with stone houses and some newer homes."
+    },
+    {
+      "name": "Langham",
+      "postcodes": "LE15",
+      "housing": "A village outside Oakham with stone cottages, a few farm conversions and newer infill."
+    }
+  ],
+  "housing": "Rutland is England's smallest county, almost all rural, with Oakham and Uppingham as its only towns. Much of the older housing is built of local limestone and ironstone, often thatched or with Collyweston slate roofs, and many villages are conservation areas. Private renting is below the national average; a large part of the rented stock is family houses near the barracks at Cottesmore and Edith Weston, and cottages in the villages. Prices are high for the East Midlands.",
+  "checkinTips": [
+    "Stone cottages: photograph walls inside for damp, chimney breasts, beams and low doorways, and the condition of any open fire or wood burner.",
+    "Thatched roofs: note the visible condition of the thatch, ridge and netting, and record smoke alarms and any fire-safety notes for the property.",
+    "Rural homes off the gas grid: photograph the oil tank, its gauge level and the boiler, or the LPG tank and meter reading.",
+    "Homes with private drainage: record the location and condition of the septic tank or treatment plant cover and any service record left.",
+    "Former service family homes near the barracks: photograph kitchens, bathrooms, flooring and gardens, as these are often refurbished before letting."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Rutland County Council's housing standards team (run with Peterborough City Council), which can inspect homes and take action against landlords.",
+  "nearby": [
+    "south-kesteven",
+    "north-northamptonshire",
+    "harborough",
+    "melton"
+  ]
+}

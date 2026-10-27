@@ -1,0 +1,108 @@
+{
+  "slug": "sevenoaks",
+  "name": "Sevenoaks",
+  "council": {
+    "name": "Sevenoaks District Council",
+    "url": "https://www.sevenoaks.gov.uk",
+    "privateRentingUrl": "https://www.sevenoaks.gov.uk/info/20048/homeowners_landlords_and_private_tenants/105/houses_in_multiple_occupation_hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council licenses only HMOs with five or more people from two or more households (the national mandatory scheme). Smaller HMOs need no licence but must follow the HMO management regulations.",
+    "fee": "£1,031 for a mandatory HMO licence for up to five units, paid in two stages (council fee page; may be out of date)",
+    "source": "https://www.sevenoaks.gov.uk/info/20048/homeowners_landlords_and_private_tenants/105/houses_in_multiple_occupation_hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,828 a month (ONS, September 2026), up 6.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000111/"
+  },
+  "price": {
+    "text": "£536,000 (UK HPI, August 2026, provisional), up 0.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000111/"
+  },
+  "privateRentedShare": {
+    "text": "13.4% of households rent privately (Census 2021), up from 10.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000111/"
+  },
+  "councilTax": {
+    "text": "£2,402 Band D including Kent County Council, police and fire precepts, before town and parish charges (2026/27)",
+    "source": "https://www.sevenoaks.gov.uk/download/downloads/id/4495/about_your_council_tax_202627.pdf"
+  },
+  "postcodes": [
+    "TN13",
+    "TN14",
+    "TN15",
+    "TN8",
+    "TN16",
+    "BR6",
+    "BR8",
+    "DA3",
+    "DA4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sevenoaks town",
+      "postcodes": "TN13",
+      "housing": "Victorian and Edwardian houses, large detached homes on the outskirts and flats near the station."
+    },
+    {
+      "name": "Riverhead and Dunton Green",
+      "postcodes": "TN13, TN14",
+      "housing": "Victorian cottages, inter-war semis and newer estates north-west of Sevenoaks."
+    },
+    {
+      "name": "Swanley",
+      "postcodes": "BR8",
+      "housing": "Post-war council-built estates, semis and town-centre flats."
+    },
+    {
+      "name": "Edenbridge",
+      "postcodes": "TN8",
+      "housing": "A market town with timber-framed and Victorian houses in the centre and post-war estates around it."
+    },
+    {
+      "name": "Westerham",
+      "postcodes": "TN16",
+      "housing": "A historic town of period cottages and townhouses with some later housing."
+    },
+    {
+      "name": "Otford",
+      "postcodes": "TN14",
+      "housing": "A village of period cottages, Victorian villas and inter-war houses."
+    },
+    {
+      "name": "New Ash Green",
+      "postcodes": "DA3",
+      "housing": "A 1960s planned village of modernist terraced houses and flats."
+    },
+    {
+      "name": "West Kingsdown",
+      "postcodes": "TN15",
+      "housing": "Mainly post-war bungalows and detached houses along the A20."
+    },
+    {
+      "name": "Hartley",
+      "postcodes": "DA3",
+      "housing": "Detached and semi-detached houses and bungalows on large plots."
+    }
+  ],
+  "housing": "Sevenoaks is one of the most expensive districts in Kent, with large detached houses around Sevenoaks town, period cottages in villages such as Otford, Shoreham and Westerham, and post-war estates in Swanley. Most of the district is Green Belt and the Kent Downs, so new building is limited. Fewer households rent privately than the national average; lets are mostly family houses and flats near the stations on the lines into London. Social housing is concentrated in Swanley and parts of Sevenoaks town.",
+  "checkinTips": [
+    "Period cottages in villages such as Otford, Shoreham and Westerham: photograph beams, low ceilings, chimney breasts and any damp on solid walls.",
+    "Large detached houses: record the garden, hedges, gates, garages and any outbuildings, and agree what upkeep the tenant is expected to do.",
+    "Rural homes off the gas grid: photograph the oil tank and gauge level, or the LPG tank, and any septic tank or treatment plant cover.",
+    "Flats near Sevenoaks and Swanley stations: note fob, key and parking permit counts and the bin store arrangements.",
+    "Homes with wood burners or open fires: photograph the stove glass, hearth and any sweep certificate left for the tenant."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Sevenoaks District Council's Private Sector Housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "bromley",
+    "dartford",
+    "gravesham",
+    "tonbridge-and-malling",
+    "tunbridge-wells",
+    "wealden",
+    "tandridge"
+  ]
+}

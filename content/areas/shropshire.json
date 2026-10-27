@@ -1,0 +1,124 @@
+{
+  "slug": "shropshire",
+  "name": "Shropshire",
+  "council": {
+    "name": "Shropshire Council",
+    "url": "https://www.shropshire.gov.uk",
+    "privateRentingUrl": "https://www.shropshire.gov.uk/private-sector-rented-housing-enforcement/houses-in-multiple-occupation/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme (the council's 2026 civil penalty policy notes there are no selective licensing areas).",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need a mandatory licence, whatever the number of storeys.",
+    "fee": "£1,200 for an HMO licence for up to five bedrooms plus £170 for each extra bedroom, valid five years (2024/25 application form)",
+    "source": "https://www.shropshire.gov.uk/private-sector-rented-housing-enforcement/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£823 a month (ONS, August 2026), up 4.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000051/"
+  },
+  "price": {
+    "text": "£275,000 (UK HPI, July 2026, provisional), down 1.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000051/"
+  },
+  "privateRentedShare": {
+    "text": "17.5% of households rent privately (Census 2021), up from 15.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000051/"
+  },
+  "councilTax": {
+    "text": "£2,528 average Band D including West Mercia police, Shropshire fire and average parish precepts (2026/27), after an 8.99% rise in the council's share",
+    "source": "https://housecheckup.co.uk/council-tax/shropshire"
+  },
+  "postcodes": [
+    "SY1",
+    "SY2",
+    "SY3",
+    "SY4",
+    "SY5",
+    "SY6",
+    "SY7",
+    "SY8",
+    "SY9",
+    "SY10",
+    "SY11",
+    "SY12",
+    "SY13",
+    "TF9",
+    "TF11",
+    "TF12",
+    "TF13",
+    "WV15",
+    "WV16"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Shrewsbury",
+      "postcodes": "SY1, SY2, SY3",
+      "housing": "The county town, with timber-framed and Georgian houses in the centre, Victorian terraces and large post-war and new-build estates."
+    },
+    {
+      "name": "Oswestry",
+      "postcodes": "SY10, SY11",
+      "housing": "A market town near the Welsh border with Victorian terraces and post-war estates."
+    },
+    {
+      "name": "Ludlow",
+      "postcodes": "SY8",
+      "housing": "A historic market town of Georgian and timber-framed houses, many listed, with newer estates outside the walls."
+    },
+    {
+      "name": "Bridgnorth",
+      "postcodes": "WV15, WV16",
+      "housing": "High Town and Low Town on the River Severn, with sandstone cottages, Georgian houses and later estates."
+    },
+    {
+      "name": "Market Drayton",
+      "postcodes": "TF9",
+      "housing": "A market town with Victorian terraces, canal-side homes and newer estates."
+    },
+    {
+      "name": "Whitchurch",
+      "postcodes": "SY13",
+      "housing": "A small market town of Victorian terraces and semis close to the Cheshire border."
+    },
+    {
+      "name": "Church Stretton",
+      "postcodes": "SY6",
+      "housing": "Victorian and Edwardian villas in the Shropshire Hills, with some post-war houses."
+    },
+    {
+      "name": "Wem",
+      "postcodes": "SY4",
+      "housing": "A small town of brick terraces and semi-detached houses in north Shropshire."
+    },
+    {
+      "name": "Shifnal",
+      "postcodes": "TF11",
+      "housing": "A market town east of Telford with period houses and large new-build estates."
+    },
+    {
+      "name": "Much Wenlock",
+      "postcodes": "TF13",
+      "housing": "A small town of stone and timber-framed cottages in a conservation area."
+    }
+  ],
+  "housing": "Shropshire is a large rural county with Shrewsbury as its main town and a ring of market towns: Oswestry, Ludlow, Bridgnorth, Market Drayton and Whitchurch. Older homes include timber-framed and Georgian town houses, stone and brick cottages, and farm conversions, many of them listed or in conservation areas. Much of the countryside is off the gas grid. Private renting is a little below the national average, and HMOs are found mainly in Shrewsbury.",
+  "checkinTips": [
+    "Rural homes off the gas grid: photograph the oil tank, its gauge level and the boiler, or the LPG tank and meter, and note any wood burner and its sweep record.",
+    "Cottages and farm conversions with private drainage: record the septic tank or treatment plant cover and any service record left for the tenant.",
+    "Timber-framed and listed houses in Shrewsbury, Ludlow and Much Wenlock: photograph beams, uneven floors, old windows and any damp or cracks in plaster.",
+    "Homes near the Severn in Shrewsbury and Bridgnorth: check ground floors, skirting boards and gardens for signs of past flooding.",
+    "New-build estates around Shrewsbury and Shifnal: photograph snagging items, sealant, paintwork and the garden, and note who maintains shared areas."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Shropshire Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "telford-and-wrekin",
+    "cheshire-east",
+    "newcastle-under-lyme",
+    "stafford",
+    "south-staffordshire",
+    "wyre-forest",
+    "malvern-hills",
+    "herefordshire"
+  ]
+}

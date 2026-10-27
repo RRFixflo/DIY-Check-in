@@ -1,0 +1,106 @@
+{
+  "slug": "southampton",
+  "name": "Southampton",
+  "council": {
+    "name": "Southampton City Council",
+    "url": "https://www.southampton.gov.uk",
+    "privateRentingUrl": "https://www.southampton.gov.uk/moderngov/ieDecisionDetails.aspx?ID=3491"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Additional HMO licensing in nine wards from May 2025, for up to five years: Banister and Polygon, Bargate, Bassett, Bevois, Freemantle, Millbrook, Portswood, Shirley and Swaythling. It covers smaller HMOs (three or four sharers); larger HMOs anywhere in the city need a mandatory licence.",
+    "fee": null,
+    "source": "https://www.southampton.gov.uk/moderngov/ieDecisionDetails.aspx?ID=3491",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,257 a month (ONS, August 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000045/"
+  },
+  "price": {
+    "text": "£236,000 (UK HPI, July 2026, provisional), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000045/"
+  },
+  "privateRentedShare": {
+    "text": "29.2% of households rent privately (Census 2021), up from 24.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000045/"
+  },
+  "councilTax": {
+    "text": "£2,381 Band D including Hampshire police and Hampshire and Isle of Wight fire precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/southampton"
+  },
+  "postcodes": [
+    "SO14",
+    "SO15",
+    "SO16",
+    "SO17",
+    "SO18",
+    "SO19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Portswood and Highfield",
+      "postcodes": "SO17",
+      "housing": "Victorian and Edwardian terraces and villas near the University of Southampton, many let as student HMOs."
+    },
+    {
+      "name": "Swaythling",
+      "postcodes": "SO16, SO18",
+      "housing": "Inter-war and Victorian terraces and semis, many let to students."
+    },
+    {
+      "name": "Bevois Valley",
+      "postcodes": "SO14, SO17",
+      "housing": "Dense Victorian terraces between the city centre and Portswood, with many shared houses."
+    },
+    {
+      "name": "Shirley",
+      "postcodes": "SO15",
+      "housing": "Victorian and Edwardian terraces and semis around the high street, with flats over shops."
+    },
+    {
+      "name": "Freemantle and Polygon",
+      "postcodes": "SO15",
+      "housing": "Victorian terraces and large houses split into flats, close to the city centre and Central station."
+    },
+    {
+      "name": "City centre and Ocean Village",
+      "postcodes": "SO14",
+      "housing": "New-build apartment blocks, purpose-built student housing and post-war council blocks."
+    },
+    {
+      "name": "Bitterne",
+      "postcodes": "SO18",
+      "housing": "Inter-war and post-war semis and terraces on the east side of the Itchen."
+    },
+    {
+      "name": "Woolston and Weston",
+      "postcodes": "SO19",
+      "housing": "Riverside terraces, post-war council estates and tower blocks, and new homes on the former shipyard."
+    },
+    {
+      "name": "Millbrook and Redbridge",
+      "postcodes": "SO15, SO16",
+      "housing": "Large post-war council estates of houses and flats in the west of the city."
+    },
+    {
+      "name": "Bassett",
+      "postcodes": "SO16",
+      "housing": "Larger inter-war and post-war detached and semi-detached houses near the university and common."
+    }
+  ],
+  "housing": "Southampton is a port city with two universities, and almost three in ten households rented privately in 2021. Victorian and Edwardian terraces around Portswood, Bevois Valley, Shirley and Freemantle are heavily let as shared houses, which is why nine wards have additional HMO licensing. The city centre has many new apartment blocks and purpose-built student halls, while Millbrook, Weston and Thornhill have large post-war council estates and tower blocks. Social renting is also high.",
+  "checkinTips": [
+    "Student HMOs in Portswood, Swaythling and Bevois Valley: check the HMO licence and photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, room by room.",
+    "Victorian terraces: record the back garden, rear access, gutters and any damp in rear rooms and bay windows.",
+    "Apartments in the city centre and Ocean Village: note fob, key and parking counts, the post box and bin store, and any balcony furniture.",
+    "Tower blocks in Weston and Millbrook: photograph fire doors, smoke alarms and any building safety notices in the communal areas.",
+    "Homes near the Itchen and Test estuaries: check window frames and outside metal fittings for salt corrosion, and look for condensation and mould."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Southampton City Council's private sector housing team, which inspects privately rented homes and enforces HMO licensing.",
+  "nearby": [
+    "eastleigh",
+    "test-valley",
+    "new-forest"
+  ]
+}

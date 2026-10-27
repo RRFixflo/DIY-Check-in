@@ -1,0 +1,121 @@
+{
+  "slug": "somerset",
+  "name": "Somerset",
+  "council": {
+    "name": "Somerset Council",
+    "url": "https://www.somerset.gov.uk",
+    "privateRentingUrl": "https://www.somerset.gov.uk/housing-support/hmo-licensing/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs let to five or more people from two or more households need a mandatory licence, run by the council's Private Sector Housing and Enforcement Service across Somerset.",
+    "fee": null,
+    "source": "https://www.somerset.gov.uk/housing-support/hmo-licensing/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,016 a month (ONS, August 2026), up 6.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000066/"
+  },
+  "price": {
+    "text": "£282,000 (UK HPI, July 2026, provisional), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000066/"
+  },
+  "privateRentedShare": {
+    "text": "17.7% of households rent privately (Census 2021), up from 14.7% in 2011",
+    "source": "https://www.somersetintelligence.org.uk/somerset-census-2021.html"
+  },
+  "councilTax": {
+    "text": "£2,561 average Band D including Avon and Somerset police, Devon and Somerset fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/somerset"
+  },
+  "postcodes": [
+    "TA1",
+    "TA2",
+    "TA3",
+    "TA6",
+    "TA7",
+    "TA8",
+    "TA9",
+    "TA20",
+    "TA24",
+    "BA4",
+    "BA5",
+    "BA6",
+    "BA11",
+    "BA16",
+    "BA20",
+    "BA21",
+    "BA22"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Taunton",
+      "postcodes": "TA1, TA2",
+      "housing": "The county town, with Victorian terraces, inter-war and post-war estates and large new-build areas such as Monkton Heathfield."
+    },
+    {
+      "name": "Yeovil",
+      "postcodes": "BA20, BA21",
+      "housing": "Victorian terraces near the centre, post-war estates and newer developments linked to the aerospace industry."
+    },
+    {
+      "name": "Bridgwater",
+      "postcodes": "TA6",
+      "housing": "Victorian terraces, post-war council estates and new-build homes, with demand from workers at Hinkley Point C."
+    },
+    {
+      "name": "Frome",
+      "postcodes": "BA11",
+      "housing": "A hilly town of stone cottages and terraces, many in conservation areas, with newer estates on the edges."
+    },
+    {
+      "name": "Wells",
+      "postcodes": "BA5",
+      "housing": "A small cathedral city of stone houses and period terraces, with later estates around it."
+    },
+    {
+      "name": "Glastonbury and Street",
+      "postcodes": "BA6, BA16",
+      "housing": "Stone and brick terraces and post-war estates in two neighbouring towns on the Levels."
+    },
+    {
+      "name": "Burnham-on-Sea",
+      "postcodes": "TA8",
+      "housing": "A seaside town of Victorian villas, bungalows and holiday-let flats."
+    },
+    {
+      "name": "Minehead",
+      "postcodes": "TA24",
+      "housing": "A coastal town on the edge of Exmoor, with Victorian and Edwardian houses and many bungalows."
+    },
+    {
+      "name": "Chard",
+      "postcodes": "TA20",
+      "housing": "A market town with stone and brick terraces and post-war estates."
+    },
+    {
+      "name": "Shepton Mallet",
+      "postcodes": "BA4",
+      "housing": "Stone terraces and cottages in the old town, with newer estates and homes near the former prison site."
+    }
+  ],
+  "housing": "Somerset is a large rural county whose main towns are Taunton, Yeovil, Bridgwater and Frome. Older homes include stone cottages and terraces in the Mendips and south Somerset, Victorian terraces in the towns and seaside villas in Burnham-on-Sea and Minehead, with large new-build estates around Taunton and Bridgwater. The construction of Hinkley Point C has added demand for rooms and shared houses around Bridgwater. Much of the countryside is off the gas grid, and parts of the Somerset Levels flood.",
+  "checkinTips": [
+    "Homes on or near the Somerset Levels: check ground floors, skirting boards, outbuildings and gardens for signs of past flooding.",
+    "Stone cottages in the Mendips, Frome and south Somerset: photograph walls inside for damp, chimney breasts, beams and the condition of any wood burner.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "Shared houses and rooms let to Hinkley Point workers around Bridgwater: photograph each room's lock, fire doors, smoke alarms and the shared kitchen.",
+    "Seaside homes in Burnham-on-Sea and Minehead: check window frames, outside paint and metal fittings for salt and wind damage."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Somerset Council's Private Sector Housing and Enforcement Service, which inspects privately rented homes and takes action against landlords.",
+  "nearby": [
+    "north-somerset",
+    "bath",
+    "wiltshire",
+    "dorset",
+    "east-devon",
+    "mid-devon",
+    "north-devon"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "slug": "south-oxfordshire",
+  "name": "South Oxfordshire",
+  "council": {
+    "name": "South Oxfordshire District Council",
+    "url": "https://www.southoxon.gov.uk",
+    "privateRentingUrl": "http://www.southoxon.gov.uk/services-and-advice/housing/help-landlords/mandatory-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council says it does not run any additional or selective licensing schemes.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people who are not all one household need a mandatory licence for five years. HMOs for more than six people also need planning permission.",
+    "fee": null,
+    "source": "http://www.southoxon.gov.uk/services-and-advice/housing/help-landlords/mandatory-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,402 a month (ONS, August 2026), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000179/"
+  },
+  "price": {
+    "text": "£476,000 (UK HPI, July 2026, provisional), up 3.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000179/"
+  },
+  "privateRentedShare": {
+    "text": "15.9% of households rent privately (Census 2021), up from 13.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000179/"
+  },
+  "councilTax": {
+    "text": "£2,598 average Band D including Oxfordshire County Council, Thames Valley police and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-oxfordshire"
+  },
+  "postcodes": [
+    "OX9",
+    "OX10",
+    "OX11",
+    "OX14",
+    "OX33",
+    "OX39",
+    "OX44",
+    "OX49",
+    "RG4",
+    "RG8",
+    "RG9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Henley-on-Thames",
+      "postcodes": "RG9",
+      "housing": "A Thames-side market town of Georgian and Victorian houses, riverside flats and expensive detached homes."
+    },
+    {
+      "name": "Didcot",
+      "postcodes": "OX11",
+      "housing": "A fast-growing town with Victorian terraces near the station and very large new-build areas such as Great Western Park."
+    },
+    {
+      "name": "Thame",
+      "postcodes": "OX9",
+      "housing": "A market town with timber-framed and Georgian houses along its wide high street and newer estates around it."
+    },
+    {
+      "name": "Wallingford",
+      "postcodes": "OX10",
+      "housing": "A historic Thames town of period houses and terraces, with post-war and new-build estates."
+    },
+    {
+      "name": "Berinsfield",
+      "postcodes": "OX10",
+      "housing": "A post-war village of council-built houses, now partly let privately."
+    },
+    {
+      "name": "Wheatley",
+      "postcodes": "OX33",
+      "housing": "A large village east of Oxford with stone cottages, post-war houses and newer infill."
+    },
+    {
+      "name": "Chinnor",
+      "postcodes": "OX39",
+      "housing": "A village under the Chilterns with older cottages and large post-war and modern estates."
+    },
+    {
+      "name": "Goring and Woodcote",
+      "postcodes": "RG8",
+      "housing": "Thames valley and Chiltern villages with period cottages and large detached houses."
+    },
+    {
+      "name": "Sonning Common",
+      "postcodes": "RG4",
+      "housing": "A village north of Reading of mainly post-war bungalows and detached houses."
+    },
+    {
+      "name": "Watlington",
+      "postcodes": "OX49",
+      "housing": "A small market town of brick and flint cottages at the foot of the Chilterns."
+    }
+  ],
+  "housing": "South Oxfordshire is a largely rural district between Oxford, Reading and the Chilterns, with market towns at Henley, Thame, Wallingford and Didcot. Older homes are brick, flint and timber-framed cottages and Georgian town houses, and many villages are conservation areas; Didcot is the main growth town, with thousands of new-build homes. Private renting is below average and prices are among the highest in Oxfordshire. Science and research jobs at Culham and Harwell nearby bring demand for lets.",
+  "checkinTips": [
+    "New-build homes in Didcot's new estates: photograph snagging items, sealant, paintwork and the garden, and note any estate management charge areas.",
+    "Brick and flint cottages in the Chilterns villages: photograph walls inside for damp, beams, low doorways and the condition of any wood burner.",
+    "Riverside homes in Henley, Wallingford and Goring: check ground floors, cellars and gardens for signs of past flooding from the Thames.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "Larger detached houses: record the garden, hedges, gates, garages and outbuildings, and agree what upkeep the tenant is expected to do."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Oxfordshire District Council's Private Sector Housing Team (shared with the Vale of White Horse), which can inspect homes and take action against landlords.",
+  "nearby": [
+    "oxford",
+    "vale-of-white-horse",
+    "cherwell",
+    "buckinghamshire",
+    "wokingham",
+    "reading",
+    "west-berkshire"
+  ]
+}

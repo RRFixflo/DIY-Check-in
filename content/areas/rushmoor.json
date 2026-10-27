@@ -1,0 +1,94 @@
+{
+  "slug": "rushmoor",
+  "name": "Rushmoor",
+  "council": {
+    "name": "Rushmoor Borough Council",
+    "url": "https://www.rushmoor.gov.uk",
+    "privateRentingUrl": "https://www.rushmoor.gov.uk/housing-benefits-and-support/help-and-advice-for-landlords/houses-in-multiple-occupation-hmos/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence applies, for HMOs let to five or more people from two or more households.",
+    "fee": "£1,108 for a five-year HMO licence for 5 people, rising to £2,214 for 21 or more (council fee list)",
+    "source": "https://www.rushmoor.gov.uk/housing-benefits-and-support/help-and-advice-for-landlords/houses-in-multiple-occupation-hmos/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,342 a month (ONS, November 2025), up 6.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000092/"
+  },
+  "price": {
+    "text": "£326,000 (UK HPI, October 2025, provisional), up 0.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000092/"
+  },
+  "privateRentedShare": {
+    "text": "21.5% of households rent privately (Census 2021)",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000092/"
+  },
+  "councilTax": {
+    "text": "£2,320 Band D including Hampshire County Council, police and fire precepts (2026/27)",
+    "source": "https://www.rushmoor.gov.uk/council-tax/paying-your-council-tax/council-tax-bands"
+  },
+  "postcodes": [
+    "GU11",
+    "GU12",
+    "GU14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Aldershot town centre",
+      "postcodes": "GU11",
+      "housing": "Victorian and Edwardian terraces, flats over shops and newer apartment blocks near the station."
+    },
+    {
+      "name": "Wellesley",
+      "postcodes": "GU11",
+      "housing": "A large new-build development on former army land north of Aldershot, with houses and apartment blocks."
+    },
+    {
+      "name": "North Town",
+      "postcodes": "GU12",
+      "housing": "Terraced and semi-detached houses alongside post-war estates in the north-east of Aldershot."
+    },
+    {
+      "name": "Farnborough town centre",
+      "postcodes": "GU14",
+      "housing": "Flats over shops and recent apartment blocks around the regenerated town centre and station."
+    },
+    {
+      "name": "Cove",
+      "postcodes": "GU14",
+      "housing": "Mainly post-war and 1960s–70s semi-detached and terraced family housing."
+    },
+    {
+      "name": "North Camp",
+      "postcodes": "GU14",
+      "housing": "Victorian and Edwardian terraces near the old army camp, with flats above shops on the main road."
+    },
+    {
+      "name": "Southwood",
+      "postcodes": "GU14",
+      "housing": "Later twentieth-century estates of detached and semi-detached houses on the western edge of Farnborough."
+    },
+    {
+      "name": "West Heath",
+      "postcodes": "GU14",
+      "housing": "Mid-twentieth-century semis and bungalows with some newer infill."
+    }
+  ],
+  "housing": "Rushmoor is made up of the twin towns of Aldershot and Farnborough, both shaped by the army and aviation. Older terraces sit near the town centres and the former military areas, with large post-war estates around them and big new developments such as Wellesley on former army land. Around one in five households rents privately, a share that grew between 2011 and 2021. Many rented homes are flats in converted terraces and newer apartment blocks near the stations.",
+  "checkinTips": [
+    "New-build homes at Wellesley: photograph snagging items, sealant around baths and any marks on fresh paintwork, as these get disputed.",
+    "Apartment blocks near Aldershot and Farnborough stations: note fob, key and parking permit counts, and the bin and bike store access.",
+    "Victorian terraces in Aldershot and North Camp: photograph sash or replacement windows, chimney breasts and any damp in rear rooms.",
+    "Flats over shops in the town centres: record the condition of the street door, stairs, smoke alarms and any noise or smell from the shop below.",
+    "Post-war estate houses in Cove and North Town: photograph fences, sheds, garages and the condition of the garden, as these are often in the inventory."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Rushmoor Borough Council's Private Sector Housing Team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "hart",
+    "surrey-heath",
+    "guildford",
+    "waverley"
+  ]
+}

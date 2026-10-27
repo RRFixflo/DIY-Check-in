@@ -1,0 +1,104 @@
+{
+  "slug": "south-derbyshire",
+  "name": "South Derbyshire",
+  "council": {
+    "name": "South Derbyshire District Council",
+    "url": "https://www.southderbyshire.gov.uk",
+    "privateRentingUrl": "https://www.southderbyshire.gov.uk/our-services/housing/private-tenants-and-landlords/house-in-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more occupiers forming two or more households need a mandatory licence, which runs for up to five years.",
+    "fee": null,
+    "source": "https://www.southderbyshire.gov.uk/our-services/housing/private-tenants-and-landlords/house-in-multiple-occupation-hmo?chapter=2",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£879 a month (ONS, July 2026), up 4.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000039/"
+  },
+  "price": {
+    "text": "£259,000 (UK HPI, June 2026, provisional), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000039/"
+  },
+  "privateRentedShare": {
+    "text": "14.7% of households rent privately (Census 2021), up from 13.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000039/"
+  },
+  "councilTax": {
+    "text": "£2,340 average Band D including Derbyshire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-derbyshire"
+  },
+  "postcodes": [
+    "DE11",
+    "DE12",
+    "DE24",
+    "DE65",
+    "DE72",
+    "DE73"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Swadlincote",
+      "postcodes": "DE11",
+      "housing": "The district's main town, with Victorian terraces from its pottery and mining past and large post-war and new-build estates."
+    },
+    {
+      "name": "Woodville",
+      "postcodes": "DE11",
+      "housing": "Victorian and inter-war terraces and semis, with new estates on former clay and coal land."
+    },
+    {
+      "name": "Melbourne",
+      "postcodes": "DE73",
+      "housing": "A small Georgian market town of brick cottages and townhouses, much of it a conservation area."
+    },
+    {
+      "name": "Hilton",
+      "postcodes": "DE65",
+      "housing": "A large village grown with modern estates on a former army depot site."
+    },
+    {
+      "name": "Etwall",
+      "postcodes": "DE65",
+      "housing": "A village of period cottages and post-war houses near the Toyota plant."
+    },
+    {
+      "name": "Repton",
+      "postcodes": "DE65",
+      "housing": "A historic village of period houses and cottages around the school."
+    },
+    {
+      "name": "Aston-on-Trent",
+      "postcodes": "DE72",
+      "housing": "A village of older cottages and post-war houses near the Trent and the airport."
+    },
+    {
+      "name": "Overseal and Linton",
+      "postcodes": "DE12",
+      "housing": "Former mining villages with terraces, semis and newer infill."
+    },
+    {
+      "name": "Stenson Fields",
+      "postcodes": "DE24",
+      "housing": "Modern estates on the southern edge of Derby."
+    }
+  ],
+  "housing": "South Derbyshire is one of the fastest-growing districts in the East Midlands, with large new-build estates around Swadlincote, Hilton and the southern edge of Derby. Older homes include Victorian terraces in Swadlincote and Woodville from the area's clay, pottery and coal industries, and Georgian brick houses in Melbourne and Repton. Most households own their home and private renting is below average. The National Forest covers much of the south of the district.",
+  "checkinTips": [
+    "New-build estates around Swadlincote, Hilton and Stenson Fields: photograph snagging items, sealant, paintwork and the garden, and note who maintains shared areas.",
+    "Victorian terraces in Swadlincote and Woodville: record the back yard, rear gate, gutters and any cracks or damp, as some homes stand on old mining land.",
+    "Georgian cottages in Melbourne and Repton: photograph sash windows, chimney breasts and any damp on solid walls.",
+    "Homes near the River Trent: check ground floors, gardens and outbuildings for signs of past flooding.",
+    "Village homes off the gas grid: photograph the oil tank and gauge level or LPG tank, and any wood burner."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Derbyshire District Council's Environmental Health team, which can inspect privately rented homes and take action against landlords.",
+  "nearby": [
+    "derby",
+    "erewash",
+    "derbyshire-dales",
+    "north-west-leicestershire",
+    "east-staffordshire",
+    "lichfield"
+  ]
+}

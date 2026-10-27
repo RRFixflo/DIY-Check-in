@@ -1,0 +1,112 @@
+{
+  "slug": "sefton",
+  "name": "Sefton",
+  "council": {
+    "name": "Sefton Council",
+    "url": "https://www.sefton.gov.uk",
+    "privateRentingUrl": "https://modgov.sefton.gov.uk/ieDecisionDetails.aspx?AIId=55450"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers a defined area of Bootle, re-designated from 1 March 2023 for five years. Check the council's map for the exact streets.",
+    "additional": "Two additional HMO licensing schemes, also from 1 March 2023: central Southport, and parts of Waterloo, Seaforth and Brighton-le-Sands. Larger HMOs anywhere in Sefton need a mandatory licence.",
+    "fee": null,
+    "source": "https://modgov.sefton.gov.uk/ieDecisionDetails.aspx?AIId=55450",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£932 a month (ONS, June 2026), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000014/"
+  },
+  "price": {
+    "text": "£222,000 (UK HPI, May 2026, provisional), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000014/"
+  },
+  "privateRentedShare": {
+    "text": "18.2% of households rent privately (Census 2021), up from 13.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000014/"
+  },
+  "councilTax": {
+    "text": "£2,583 average Band D including Merseyside police, fire and mayoral precepts and average parish charges (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/sefton"
+  },
+  "postcodes": [
+    "L10",
+    "L20",
+    "L21",
+    "L22",
+    "L23",
+    "L29",
+    "L30",
+    "L31",
+    "L37",
+    "L38",
+    "PR8",
+    "PR9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Southport",
+      "postcodes": "PR8, PR9",
+      "housing": "Victorian villas and terraces, many converted into flats and HMOs in the centre, with bungalows and semis in the suburbs."
+    },
+    {
+      "name": "Birkdale",
+      "postcodes": "PR8",
+      "housing": "Large Victorian and Edwardian houses near the coast, with terraces around the village centre."
+    },
+    {
+      "name": "Ainsdale",
+      "postcodes": "PR8",
+      "housing": "Inter-war and post-war semis and bungalows near the dunes."
+    },
+    {
+      "name": "Formby",
+      "postcodes": "L37",
+      "housing": "Mainly detached and semi-detached post-war family homes among pine woods."
+    },
+    {
+      "name": "Crosby",
+      "postcodes": "L23",
+      "housing": "Edwardian and inter-war semis and terraces, with flats near the seafront."
+    },
+    {
+      "name": "Waterloo and Seaforth",
+      "postcodes": "L21, L22",
+      "housing": "Victorian terraces and large houses split into flats, near the docks and the beach."
+    },
+    {
+      "name": "Bootle",
+      "postcodes": "L20",
+      "housing": "Dense Victorian terraced streets, many privately let, with post-war council housing and tower blocks."
+    },
+    {
+      "name": "Litherland",
+      "postcodes": "L21",
+      "housing": "Terraces and post-war council-built semis around the Leeds and Liverpool Canal."
+    },
+    {
+      "name": "Netherton",
+      "postcodes": "L30",
+      "housing": "Large post-war estates of council-built houses and flats."
+    },
+    {
+      "name": "Maghull",
+      "postcodes": "L31",
+      "housing": "Mainly post-war private estates of semi-detached and detached houses."
+    }
+  ],
+  "housing": "Sefton stretches along the coast from Bootle on the edge of Liverpool to Southport in the north. In the south, Bootle, Litherland and Seaforth have dense Victorian terraces and post-war estates, and selective licensing applies in part of Bootle. Southport, Waterloo and Crosby have many large Victorian houses converted into flats and shared houses, which is why those areas have additional HMO licensing. Formby, Maghull and Ainsdale are mostly owner-occupied post-war suburbs.",
+  "checkinTips": [
+    "Converted Victorian villas in Southport and Waterloo: note which rooms and fittings belong to the flat, and photograph the communal hall, stairs, meters and fire doors.",
+    "Homes near the seafront at Southport, Ainsdale and Crosby: check window frames, outside paint and metal fittings for salt and wind damage, and look for sand in door tracks.",
+    "Victorian terraces in Bootle: check the selective licence, and photograph the back yard, rear alley gate, gutters and any damp on the back walls.",
+    "Shared houses in the additional licensing areas: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen and bathroom.",
+    "Bungalows and semis in Formby and Maghull: record the garden, fencing, garage and driveway, which tenants are often expected to keep up."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Sefton Council's private sector housing team, which inspects privately rented homes and enforces the licensing schemes.",
+  "nearby": [
+    "liverpool",
+    "knowsley",
+    "west-lancashire"
+  ]
+}

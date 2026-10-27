@@ -1,0 +1,104 @@
+{
+  "slug": "southend-on-sea",
+  "name": "Southend-on-Sea",
+  "council": {
+    "name": "Southend-on-Sea City Council",
+    "url": "https://www.southend.gov.uk",
+    "privateRentingUrl": "https://www.southend.gov.uk/private-housing/selective-licensing-scheme/2"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers designated neighbourhoods in Milton, Kursaal, Victoria and Chalkwell wards from 1 December 2021 until 30 November 2026. The council is consulting (until 31 December 2026) on a renewed and larger scheme, possibly from 1 April 2027, so there will be a gap after the current scheme ends.",
+    "additional": "No additional HMO licensing scheme; the council says it is exploring whether one could help. HMOs with five or more people from two or more households need a mandatory licence.",
+    "fee": null,
+    "source": "https://www.southend.gov.uk/news/article/3608/have-your-say-on-plans-to-renew-and-expand-landlord-licensing-in-southend",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,278 a month (ONS, March 2026), up 5.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000033/"
+  },
+  "price": {
+    "text": "£330,000 (UK HPI, February 2026, provisional), up 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000033/"
+  },
+  "privateRentedShare": {
+    "text": "26.5% of households rent privately (Census 2021), up from 22.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000033/"
+  },
+  "councilTax": {
+    "text": "£2,265 average Band D including Essex police, fire and Leigh-on-Sea town council precepts averaged across the city (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/southend-on-sea"
+  },
+  "postcodes": [
+    "SS0",
+    "SS1",
+    "SS2",
+    "SS3",
+    "SS9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Southend town centre and Victoria",
+      "postcodes": "SS1, SS2",
+      "housing": "Victorian terraces, flats over shops and converted houses, much of it privately let."
+    },
+    {
+      "name": "Westcliff-on-Sea",
+      "postcodes": "SS0",
+      "housing": "Large Victorian and Edwardian houses, many split into flats, close to the seafront."
+    },
+    {
+      "name": "Chalkwell",
+      "postcodes": "SS0, SS9",
+      "housing": "Edwardian terraces and large houses near the seafront, some converted into flats."
+    },
+    {
+      "name": "Leigh-on-Sea",
+      "postcodes": "SS9",
+      "housing": "A popular area of Edwardian terraces and inter-war houses, with fishermen's cottages in Old Leigh."
+    },
+    {
+      "name": "Kursaal and the seafront",
+      "postcodes": "SS1",
+      "housing": "Victorian terraces and seafront flats, including many converted houses."
+    },
+    {
+      "name": "Prittlewell",
+      "postcodes": "SS2",
+      "housing": "Victorian and Edwardian terraces and inter-war semis north of the town centre."
+    },
+    {
+      "name": "Southchurch",
+      "postcodes": "SS1, SS2",
+      "housing": "Inter-war and post-war semis and bungalows with some terraces."
+    },
+    {
+      "name": "Thorpe Bay",
+      "postcodes": "SS1",
+      "housing": "Larger detached houses and bungalows on wide roads near the seafront."
+    },
+    {
+      "name": "Shoeburyness",
+      "postcodes": "SS3",
+      "housing": "Former garrison buildings converted into homes, post-war estates and new-build houses."
+    },
+    {
+      "name": "Eastwood",
+      "postcodes": "SS9",
+      "housing": "Mainly post-war bungalows and semi-detached houses."
+    }
+  ],
+  "housing": "Southend-on-Sea is a seaside city at the mouth of the Thames, and more than a quarter of households rented privately in 2021. The central wards have many Victorian and Edwardian houses split into flats and flats over shops, which is where selective licensing applies. Leigh-on-Sea, Chalkwell and Thorpe Bay have larger Edwardian and inter-war homes, and the outer areas are mostly post-war bungalows and semis. It is a commuter town for London on two railway lines.",
+  "checkinTips": [
+    "Victorian and Edwardian houses split into flats in Westcliff and Victoria: note which rooms, gardens and storage belong to the flat, and photograph the communal hall, meters and fire doors.",
+    "Seafront homes: check window frames, balconies, outside paint and metal fittings for salt and wind damage.",
+    "Flats over shops in the town centre: photograph the street door, stairs, smoke alarms and the escape route.",
+    "Homes in the selective licensing areas: check the licence and note its number in the report, and watch for the change when the scheme is renewed.",
+    "Bungalows in Eastwood and Southchurch: record gardens, fences, garages and driveways, which tenants are often expected to keep up."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Southend-on-Sea City Council's private sector housing team, which inspects privately rented homes and enforces the licensing scheme.",
+  "nearby": [
+    "rochford",
+    "castle-point"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "slug": "spelthorne",
+  "name": "Spelthorne",
+  "council": {
+    "name": "Spelthorne Borough Council",
+    "url": "https://www.spelthorne.gov.uk",
+    "privateRentingUrl": "https://www.spelthorne.gov.uk/page/1881/houses-multiple-occupation-hmo-landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a licence is needed only where five or more people form two or more households (the national mandatory scheme). Since April 2024 licences run for one, three or five years depending on risk. HMOs for seven or more people need planning permission, and an Article 4 Direction has covered three wards since 29 August 2025.",
+    "fee": "£2,225 for a new or renewed HMO licence, with discounts for accredited landlords and association members",
+    "source": "https://www.spelthorne.gov.uk/page/1881/houses-multiple-occupation-hmo-landlords",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,637 a month (ONS, June 2026), up 1.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000213/"
+  },
+  "price": {
+    "text": "£430,000 (UK HPI, May 2026, provisional), down 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000213/"
+  },
+  "privateRentedShare": {
+    "text": "17.9% of households rent privately (Census 2021), up from 12.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000213/"
+  },
+  "councilTax": {
+    "text": "£2,526 Band D including Surrey County Council and Surrey police precepts (2026/27)",
+    "source": "https://www.spelthorne.gov.uk/page/1300/council-tax-bands-2026-27"
+  },
+  "postcodes": [
+    "TW15",
+    "TW16",
+    "TW17",
+    "TW18",
+    "TW19"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Staines-upon-Thames",
+      "postcodes": "TW18",
+      "housing": "The main town, with Victorian terraces, riverside flats and many new apartment blocks, including office-to-flat conversions."
+    },
+    {
+      "name": "Ashford",
+      "postcodes": "TW15",
+      "housing": "Inter-war and post-war semis and terraces, with flats near the station and town centre."
+    },
+    {
+      "name": "Sunbury-on-Thames",
+      "postcodes": "TW16",
+      "housing": "Post-war estates, riverside houses in Lower Sunbury and flats near the station."
+    },
+    {
+      "name": "Shepperton",
+      "postcodes": "TW17",
+      "housing": "A village of riverside homes, inter-war and post-war houses and some period cottages."
+    },
+    {
+      "name": "Stanwell",
+      "postcodes": "TW19",
+      "housing": "Post-war council-built estates and semis close to Heathrow."
+    },
+    {
+      "name": "Stanwell Moor",
+      "postcodes": "TW19",
+      "housing": "A small village of older cottages and post-war houses between reservoirs and the airport."
+    },
+    {
+      "name": "Laleham",
+      "postcodes": "TW18",
+      "housing": "A riverside village of period houses, cottages and later detached homes."
+    },
+    {
+      "name": "Upper Halliford",
+      "postcodes": "TW17",
+      "housing": "Mainly post-war semis and bungalows between Shepperton and Sunbury."
+    }
+  ],
+  "housing": "Spelthorne lies along the Thames next to Heathrow, made up of Staines-upon-Thames, Ashford, Sunbury, Shepperton and Stanwell. Most homes are inter-war and post-war semis and terraces, with riverside houses and bungalows, and Staines town centre has seen many new apartment blocks and office conversions. Private renting rose sharply between 2011 and 2021, and the growth of shared houses near the airport led to planning controls on HMOs in three wards. Much of the borough is at risk of Thames flooding.",
+  "checkinTips": [
+    "Riverside homes in Staines, Laleham, Shepperton and Sunbury: check ground floors, skirting boards, garages and gardens for signs of past flooding, and note any flood barriers provided.",
+    "New and converted apartment blocks in Staines: note fob, key and parking permit counts, the post box and bin store, and photograph windows and ventilation.",
+    "Shared houses near Heathrow in Stanwell and Ashford: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, and check the HMO licence for five or more sharers.",
+    "Homes under the flight path: record the windows and any secondary glazing or acoustic insulation provided.",
+    "Post-war semis and bungalows: photograph gardens, fences, sheds and driveways, which tenants are often expected to keep up."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Spelthorne Borough Council's Environmental Health team, which inspects privately rented homes and enforces HMO licensing.",
+  "nearby": [
+    "hounslow",
+    "hillingdon",
+    "richmond-upon-thames",
+    "elmbridge",
+    "runnymede",
+    "windsor-and-maidenhead"
+  ]
+}

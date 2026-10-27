@@ -1,0 +1,104 @@
+{
+  "slug": "staffordshire-moorlands",
+  "name": "Staffordshire Moorlands",
+  "council": {
+    "name": "Staffordshire Moorlands District Council",
+    "url": "https://www.staffsmoorlands.gov.uk",
+    "privateRentingUrl": "https://www.staffsmoorlands.gov.uk/article/4401/Private-rented-homes"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a licence is needed only for HMOs let to five or more people from more than one household who share a toilet, bathroom or kitchen (the national mandatory scheme).",
+    "fee": "£450 for a five-year HMO licence, £350 for a later application (council page; may be out of date)",
+    "source": "https://www.staffsmoorlands.gov.uk/article/432/Multiple-occupancy-homes-HMO",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£732 a month (ONS, September 2026), up 7.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000198/"
+  },
+  "price": {
+    "text": "£224,000 (UK HPI, August 2026, provisional), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000198/"
+  },
+  "privateRentedShare": {
+    "text": "12.7% of households rent privately (Census 2021), up from 9.8% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000198/"
+  },
+  "councilTax": {
+    "text": "£2,338 average Band D including Staffordshire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/staffordshire-moorlands"
+  },
+  "postcodes": [
+    "ST8",
+    "ST9",
+    "ST10",
+    "ST13",
+    "SK17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Leek",
+      "postcodes": "ST13",
+      "housing": "A former silk-mill town of Victorian terraces, converted mills and stone houses, with post-war estates around it."
+    },
+    {
+      "name": "Biddulph",
+      "postcodes": "ST8",
+      "housing": "A town of terraces, post-war estates and newer homes on the Cheshire border."
+    },
+    {
+      "name": "Cheadle",
+      "postcodes": "ST10",
+      "housing": "A market town with Victorian terraces and large post-war estates."
+    },
+    {
+      "name": "Werrington",
+      "postcodes": "ST9",
+      "housing": "A suburban village on the edge of Stoke-on-Trent with post-war semis and bungalows."
+    },
+    {
+      "name": "Cheddleton",
+      "postcodes": "ST13",
+      "housing": "A village of stone cottages, canal-side homes and later estates."
+    },
+    {
+      "name": "Kingsley",
+      "postcodes": "ST10",
+      "housing": "A village of stone and brick houses above the Churnet valley."
+    },
+    {
+      "name": "Alton",
+      "postcodes": "ST10",
+      "housing": "A village of stone cottages and Victorian houses in the Churnet valley near Alton Towers."
+    },
+    {
+      "name": "Endon",
+      "postcodes": "ST9",
+      "housing": "A village of inter-war and post-war houses along the A53."
+    },
+    {
+      "name": "Longnor and the Staffordshire Peak",
+      "postcodes": "SK17",
+      "housing": "Stone farmhouses, cottages and barn conversions in the upland villages of the Peak District."
+    }
+  ],
+  "housing": "Staffordshire Moorlands runs from the edge of Stoke-on-Trent up into the Peak District, with Leek, Biddulph and Cheadle as its towns. Leek has Victorian terraces and converted silk mills, while the hill villages have stone cottages, farmhouses and barn conversions, many off the gas grid. Private renting is low, at about one in eight households, and few properties need an HMO licence. Affordability worsened sharply between 2019 and 2024.",
+  "checkinTips": [
+    "Stone cottages and farmhouses in the Peak District villages: photograph walls inside for damp, window reveals, chimney breasts and the condition of any wood burner.",
+    "Homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "Upland homes exposed to winter weather: check gutters, roof slates, outside pipes and any frost damage, and note any snow and ice arrangements for access.",
+    "Victorian terraces and converted mills in Leek: record the back yard, rear gate, large mill windows and any condensation marks.",
+    "Homes near the Caldon Canal and the Churnet: check ground floors and gardens for damp or signs of past flooding."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact Staffordshire Moorlands District Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "stoke-on-trent",
+    "newcastle-under-lyme",
+    "stafford",
+    "east-staffordshire",
+    "cheshire-east",
+    "high-peak",
+    "derbyshire-dales"
+  ]
+}

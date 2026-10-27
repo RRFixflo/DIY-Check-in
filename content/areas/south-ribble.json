@@ -1,0 +1,98 @@
+{
+  "slug": "south-ribble",
+  "name": "South Ribble",
+  "council": {
+    "name": "South Ribble Borough Council",
+    "url": "https://southribble.gov.uk",
+    "privateRentingUrl": "https://southribble.gov.uk/environmental-health/hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council has not designated any area.",
+    "additional": "No additional HMO licensing scheme: only HMOs with five or more people from two or more households need a mandatory licence. Since January 2026 a borough-wide Article 4 Direction means turning a house into a small HMO needs planning permission.",
+    "fee": "£846 for a five-year HMO licence for up to five occupants (£484 application plus £362 grant), plus £60 for each extra occupant",
+    "source": "https://southribble.gov.uk/environmental-health/hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£805 a month (ONS, August 2026), up 5.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000126/"
+  },
+  "price": {
+    "text": "£213,000 (UK HPI, July 2026, provisional), up 2.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000126/"
+  },
+  "privateRentedShare": {
+    "text": "12.8% of households rent privately (Census 2021), up from 9.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000126/"
+  },
+  "councilTax": {
+    "text": "£2,443 average Band D including Lancashire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-ribble"
+  },
+  "postcodes": [
+    "PR1",
+    "PR4",
+    "PR5",
+    "PR25",
+    "PR26"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Leyland",
+      "postcodes": "PR25, PR26",
+      "housing": "The main town, with terraces from its vehicle-making past, large post-war estates and new-build homes."
+    },
+    {
+      "name": "Penwortham",
+      "postcodes": "PR1",
+      "housing": "A suburb of Preston across the Ribble with inter-war and post-war semis and bungalows."
+    },
+    {
+      "name": "Bamber Bridge",
+      "postcodes": "PR5",
+      "housing": "Victorian terraces near the old mills, post-war estates and newer housing near the M6."
+    },
+    {
+      "name": "Lostock Hall",
+      "postcodes": "PR5",
+      "housing": "Terraces and semis, with large new-build estates on former railway and industrial land."
+    },
+    {
+      "name": "Walton-le-Dale",
+      "postcodes": "PR5",
+      "housing": "Older cottages and terraces by the Ribble and Darwen, with post-war houses."
+    },
+    {
+      "name": "Longton",
+      "postcodes": "PR4",
+      "housing": "A village of post-war houses and bungalows with some older cottages."
+    },
+    {
+      "name": "Hutton and Howick",
+      "postcodes": "PR4",
+      "housing": "Villages of detached houses and bungalows west of Penwortham."
+    },
+    {
+      "name": "Farington and Moss Side",
+      "postcodes": "PR25, PR26",
+      "housing": "New-build estates and older terraces between Leyland and Lostock Hall."
+    }
+  ],
+  "housing": "South Ribble sits just south of Preston and is mostly suburban: Leyland, Penwortham, Bamber Bridge and Lostock Hall are made up of Victorian mill terraces, inter-war and post-war semis and bungalows, and a lot of recent new-build. It is one of the most owner-occupied districts in the North West, and only about one in eight households rented privately in 2021. HMOs are few, and the council now controls new small HMOs through planning.",
+  "checkinTips": [
+    "Victorian terraces in Bamber Bridge and Leyland: record the back yard, rear gate, gutters and any damp on rear walls.",
+    "New-build estates in Lostock Hall, Farington and Leyland: photograph snagging items, sealant, paintwork and the garden, and note any estate management charge areas.",
+    "Bungalows and semis in Penwortham and Longton: photograph gardens, fences, garages and driveways, which tenants are often expected to keep up.",
+    "Homes near the Ribble and Darwen in Walton-le-Dale: check ground floors and gardens for signs of past flooding.",
+    "Shared houses: photograph each bedroom lock, fire doors and smoke alarms, and check whether planning permission and a licence are in place."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Ribble Borough Council's Environmental Health team, which can inspect privately rented homes and take action against landlords.",
+  "nearby": [
+    "preston",
+    "chorley",
+    "west-lancashire",
+    "fylde",
+    "ribble-valley",
+    "blackburn-with-darwen"
+  ]
+}

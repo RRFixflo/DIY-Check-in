@@ -1,0 +1,100 @@
+{
+  "slug": "south-holland",
+  "name": "South Holland",
+  "council": {
+    "name": "South Holland District Council",
+    "url": "https://www.sholland.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only HMOs with five or more people from two or more households need a mandatory licence. The council's private sector housing team has prosecuted landlords of unlicensed HMOs in Spalding.",
+    "fee": null,
+    "source": "https://letsafeuk.co.uk/guides/holbeach-landlord-compliance-2026",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£759 a month (ONS, March 2026), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000140/"
+  },
+  "price": {
+    "text": "£217,000 (UK HPI, February 2026, provisional), down 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000140/"
+  },
+  "privateRentedShare": {
+    "text": "17.1% of households rent privately (Census 2021), up from 12.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000140/"
+  },
+  "councilTax": {
+    "text": "£2,278 average Band D including Lincolnshire County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://housecheckup.co.uk/council-tax/south-holland"
+  },
+  "postcodes": [
+    "PE6",
+    "PE11",
+    "PE12"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Spalding",
+      "postcodes": "PE11",
+      "housing": "The main town, with Georgian and Victorian houses along the River Welland, terraces, and large post-war and new-build estates."
+    },
+    {
+      "name": "Holbeach",
+      "postcodes": "PE12",
+      "housing": "A market town of Victorian terraces and post-war estates, with newer homes on its edges."
+    },
+    {
+      "name": "Long Sutton",
+      "postcodes": "PE12",
+      "housing": "A small market town with period houses near the square and later estates."
+    },
+    {
+      "name": "Sutton Bridge",
+      "postcodes": "PE12",
+      "housing": "A village by the River Nene with terraces, bungalows and newer houses."
+    },
+    {
+      "name": "Crowland",
+      "postcodes": "PE6",
+      "housing": "A small town of stone and brick houses around the abbey and Trinity Bridge."
+    },
+    {
+      "name": "Donington",
+      "postcodes": "PE11",
+      "housing": "A village of brick cottages and post-war houses in the north of the district."
+    },
+    {
+      "name": "Pinchbeck",
+      "postcodes": "PE11",
+      "housing": "A large village north of Spalding with bungalows and modern estates."
+    },
+    {
+      "name": "Gosberton",
+      "postcodes": "PE11",
+      "housing": "A fenland village of older cottages, bungalows and some new building."
+    },
+    {
+      "name": "Moulton and Weston",
+      "postcodes": "PE12",
+      "housing": "Fenland villages of cottages, bungalows and farm houses between Spalding and Holbeach."
+    }
+  ],
+  "housing": "South Holland is a flat, low-lying fenland district centred on Spalding, with farming and food processing as the main employers. Homes are mostly brick-built terraces, bungalows and post-war and new-build estates, with Georgian houses in the centres of Spalding and Long Sutton. Private renting grew quickly between 2011 and 2021, much of it shared and family houses let to workers in agriculture and food factories. Most of the district is below sea level at high tide and relies on drainage boards.",
+  "checkinTips": [
+    "Shared houses let to farm and factory workers: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen, and note the number of occupiers.",
+    "Homes on low-lying fenland: check ground floors, skirting boards and gardens for damp or past flooding, and photograph drains and soakaways.",
+    "Bungalows and older houses on peat or clay soils: photograph any cracks in walls, door frames that stick and uneven floors, which may come from ground movement.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "New-build estates around Spalding and Holbeach: photograph snagging items, sealant, paintwork and the garden."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Holland District Council's private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "boston",
+    "south-kesteven",
+    "peterborough",
+    "fenland",
+    "kings-lynn-and-west-norfolk"
+  ]
+}

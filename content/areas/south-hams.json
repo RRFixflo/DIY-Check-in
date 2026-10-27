@@ -1,0 +1,104 @@
+{
+  "slug": "south-hams",
+  "name": "South Hams",
+  "council": {
+    "name": "South Hams District Council",
+    "url": "https://www.southhams.gov.uk",
+    "privateRentingUrl": "https://www.southhams.gov.uk/housing/houses-multiple-occupation-hmo/hmo-licensing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: a licence is needed only for HMOs let to five or more people forming two or more households (the national mandatory scheme).",
+    "fee": "£446.40 for a five-year HMO licence plus a £144 fit and proper person fee",
+    "source": "https://www.southhams.gov.uk/housing/houses-multiple-occupation-hmo/hmo-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,005 a month (ONS, June 2026), up 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000044/"
+  },
+  "price": {
+    "text": "£364,000 (UK HPI, May 2026, provisional), down 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000044/"
+  },
+  "privateRentedShare": {
+    "text": "16.1% of households rent privately (Census 2021), up from 14.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000044/"
+  },
+  "councilTax": {
+    "text": "£2,615 Band D including Devon County Council, police, fire and average parish precepts (2026/27)",
+    "source": "https://www.totnes-today.co.uk/news/south-hams-residents-face-higher-council-tax-bills-than-kensington-and-chelsea-878623"
+  },
+  "postcodes": [
+    "PL8",
+    "PL9",
+    "PL21",
+    "TQ6",
+    "TQ7",
+    "TQ8",
+    "TQ9",
+    "TQ10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Totnes",
+      "postcodes": "TQ9",
+      "housing": "A hilly market town of Tudor, Georgian and Victorian houses, with flats over shops on the high street and newer estates."
+    },
+    {
+      "name": "Dartmouth",
+      "postcodes": "TQ6",
+      "housing": "A steep harbour town of period houses, terraces and flats, with many second homes and holiday lets."
+    },
+    {
+      "name": "Kingsbridge",
+      "postcodes": "TQ7",
+      "housing": "A market town at the head of the estuary, with Victorian terraces and post-war and new-build estates."
+    },
+    {
+      "name": "Salcombe",
+      "postcodes": "TQ8",
+      "housing": "A sailing town where a large share of homes are second homes or holiday lets."
+    },
+    {
+      "name": "Ivybridge",
+      "postcodes": "PL21",
+      "housing": "A town on the edge of Dartmoor that grew with large estates from the 1970s onwards."
+    },
+    {
+      "name": "Sherford",
+      "postcodes": "PL9",
+      "housing": "A new town under construction on the edge of Plymouth, with modern houses and flats."
+    },
+    {
+      "name": "Modbury",
+      "postcodes": "PL21",
+      "housing": "A small town of Georgian and older stone and slate-hung houses."
+    },
+    {
+      "name": "South Brent",
+      "postcodes": "TQ10",
+      "housing": "A village on the edge of Dartmoor with stone cottages and post-war houses."
+    },
+    {
+      "name": "Wembury and Yealmpton",
+      "postcodes": "PL9, PL8",
+      "housing": "Coastal and river villages with cottages, bungalows and newer houses near Plymouth."
+    }
+  ],
+  "housing": "South Hams is a rural and coastal district between Plymouth and Torbay, with Dartmoor to the north. Many homes are stone or slate-hung cottages and period town houses in Totnes, Dartmouth, Kingsbridge and Modbury, and a high share in places like Salcombe and Dartmouth are second homes or holiday lets, which keeps long-term rentals scarce. Larger estates are in Ivybridge and the new town of Sherford. Few HMOs need a licence here.",
+  "checkinTips": [
+    "Coastal homes in Dartmouth, Salcombe and the estuary villages: check window frames, outside paint and metal fittings for salt corrosion, and photograph damp in north-facing rooms.",
+    "Stone and cob cottages: photograph walls inside for damp, beams and uneven floors, and the condition of any wood burner or open fire.",
+    "Rural homes off the gas grid: record the oil tank and gauge level or LPG tank, and any septic tank or treatment plant cover.",
+    "Homes on steep streets in Totnes and Dartmouth: photograph steps, handrails, retaining walls and parking arrangements, which are often disputed.",
+    "New-build homes in Sherford and Ivybridge: photograph snagging items, sealant, paintwork and the garden, and note who maintains shared areas."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact South Hams District Council's private sector housing team (shared with West Devon), which can inspect homes and take action against landlords.",
+  "nearby": [
+    "plymouth",
+    "west-devon",
+    "teignbridge",
+    "torbay"
+  ]
+}
