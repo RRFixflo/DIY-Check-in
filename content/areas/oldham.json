@@ -1,0 +1,103 @@
+{
+  "slug": "oldham",
+  "name": "Oldham",
+  "council": {
+    "name": "Oldham Council",
+    "url": "https://www.oldham.gov.uk",
+    "privateRentingUrl": "https://www.oldham.gov.uk/a_to_z/service/487/selective_licensing_of_private_landlords"
+  },
+  "licensing": {
+    "selective": "Selective licensing in five designated areas covering parts of Alexandra, St Mary's, St James', Waterhead, Coldhurst, Werneth, Chadderton South, Hollinwood and Medlock Vale wards, from 4 July 2022 to 3 July 2027; the council's maps show the streets included. A wider scheme covering about 40% of the borough was consulted on in 2024; we could not confirm a decision.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": "£582 per selective licence, as stated on the council's site",
+    "source": "https://www.oldham.gov.uk/a_to_z/service/487/selective_licensing_of_private_landlords",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£931 a month (ONS, July 2026), up 11.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000004/"
+  },
+  "price": {
+    "text": "£215,000 (UK HPI, June 2026, provisional), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000004/"
+  },
+  "privateRentedShare": {
+    "text": "17.7% of households rent privately (Census 2021), up from 12.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000004"
+  },
+  "councilTax": {
+    "text": "About £2,602 Band D (2026/27) including the police, fire and mayoral precepts (MHCLG figures); parished areas such as Saddleworth pay a little more",
+    "source": "https://housecheckup.co.uk/council-tax/oldham"
+  },
+  "postcodes": [
+    "OL1",
+    "OL2",
+    "OL3",
+    "OL4",
+    "OL8",
+    "OL9",
+    "M35"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Oldham town centre",
+      "postcodes": "OL1",
+      "housing": "Flats over shops, some converted buildings and newer apartments."
+    },
+    {
+      "name": "Coldhurst and Westwood",
+      "postcodes": "OL1, OL9",
+      "housing": "Dense Victorian terraced streets and post-war estates north and west of the centre."
+    },
+    {
+      "name": "Werneth and Glodwick",
+      "postcodes": "OL8, OL4",
+      "housing": "Victorian terraces, larger family houses and some mill-era streets."
+    },
+    {
+      "name": "Hollinwood",
+      "postcodes": "OL8, OL9",
+      "housing": "Terraces and post-war estates near the M60 and Metrolink."
+    },
+    {
+      "name": "Chadderton",
+      "postcodes": "OL9",
+      "housing": "Brick terraces, inter-war semis and post-war estates around former mills."
+    },
+    {
+      "name": "Royton and Shaw",
+      "postcodes": "OL2",
+      "housing": "Former mill-town terraces with post-war and newer estates."
+    },
+    {
+      "name": "Failsworth",
+      "postcodes": "M35",
+      "housing": "Terraces and semis on the Manchester side of the borough."
+    },
+    {
+      "name": "Lees and Springhead",
+      "postcodes": "OL4",
+      "housing": "Stone and brick terraces climbing towards the hills."
+    },
+    {
+      "name": "Saddleworth villages",
+      "postcodes": "OL3",
+      "housing": "Stone weavers' cottages and terraces in Uppermill, Delph, Dobcross and Diggle, with larger detached homes."
+    }
+  ],
+  "housing": "Oldham's inner areas, such as Coldhurst, Westwood, Werneth and Glodwick, are dominated by Victorian brick terraces built for the cotton mills, and this is where most private renting and the selective licensing areas are. Chadderton, Royton, Shaw and Failsworth mix terraces with inter-war semis and post-war estates. In the east, the Saddleworth villages on the edge of the Pennines are stone-built and largely owner-occupied. Private renting grew quickly between 2011 and 2021, and rents have risen sharply since.",
+  "checkinTips": [
+    "Terraces inside the selective licensing areas: note the licence number and photograph smoke and carbon monoxide alarms, which are licence conditions.",
+    "Victorian terraces in Coldhurst, Werneth and Glodwick: photograph damp at the base of walls, cellar heads, back yards and alley gates.",
+    "Stone cottages in Saddleworth: photograph damp in thick walls, stoves and chimneys, and window frames exposed to Pennine weather.",
+    "Flats over shops in the town centre: record the separate entrance, stairs, fire doors and where the meters are.",
+    "Hillside terraces in Lees and Shaw: photograph steps, retaining walls, gutters and any damp in back rooms built into the slope."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Oldham Council's private sector housing team.",
+  "nearby": [
+    "rochdale",
+    "manchester",
+    "tameside",
+    "kirklees"
+  ]
+}

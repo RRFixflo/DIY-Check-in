@@ -1,0 +1,96 @@
+{
+  "slug": "pendle",
+  "name": "Pendle",
+  "council": {
+    "name": "Pendle Borough Council",
+    "url": "https://www.pendle.gov.uk",
+    "privateRentingUrl": "https://www.pendle.gov.uk/info/20091/houses_in_multiple_occupation/115/houses_in_multiple_occupation/2"
+  },
+  "licensing": {
+    "selective": null,
+    "additional": null,
+    "fee": null,
+    "source": "https://www.pendle.gov.uk/info/20091/houses_in_multiple_occupation/115/houses_in_multiple_occupation/2",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£634 a month (ONS, October 2025), up 6.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000122/"
+  },
+  "price": {
+    "text": "£142,000 (UK HPI, September 2025, provisional), up 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000122/"
+  },
+  "privateRentedShare": {
+    "text": "23.0% of households rent privately (Census 2021), up from 18.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000122"
+  },
+  "councilTax": {
+    "text": "About £2,640 average Band D (2026/27) including Lancashire County Council, police, fire and parish precepts (for example £2,629.95 in Barnoldswick); Pendle Borough Council's own share is £316.71",
+    "source": "https://publicnoticeportal.uk/notice/other/69b362fb43ac424e8a45e87e"
+  },
+  "postcodes": [
+    "BB8",
+    "BB9",
+    "BB12",
+    "BB18"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Nelson",
+      "postcodes": "BB9",
+      "housing": "Dense streets of stone and brick terraces built for the mills, with post-war estates on the edges."
+    },
+    {
+      "name": "Colne",
+      "postcodes": "BB8",
+      "housing": "Stone terraces climbing the hillside, with Victorian villas and newer estates."
+    },
+    {
+      "name": "Brierfield",
+      "postcodes": "BB9",
+      "housing": "Stone terraces around the former mill, now being regenerated."
+    },
+    {
+      "name": "Barnoldswick",
+      "postcodes": "BB18",
+      "housing": "Stone terraces and semis in a former mill town near the Yorkshire border."
+    },
+    {
+      "name": "Earby",
+      "postcodes": "BB18",
+      "housing": "Stone terraces and cottages in a small town on the edge of the Dales."
+    },
+    {
+      "name": "Barrowford",
+      "postcodes": "BB9",
+      "housing": "Stone cottages, terraces and larger houses along Pendle Water."
+    },
+    {
+      "name": "Trawden",
+      "postcodes": "BB8",
+      "housing": "Stone weavers' cottages and farmhouses in a moorland village."
+    },
+    {
+      "name": "Fence and Higham",
+      "postcodes": "BB12",
+      "housing": "Stone cottages and larger detached homes below Pendle Hill."
+    }
+  ],
+  "housing": "Pendle's towns grew on cotton weaving, so Nelson, Colne, Brierfield and Barnoldswick are filled with rows of Victorian stone and brick terraces, many of them privately rented and some long-term empty. House prices are among the lowest in Lancashire. The council has used selective licensing in the past in parts of Nelson, Brierfield and Colne. Around Pendle Hill and towards the Dales the villages have stone cottages and farmhouses, often off the gas grid.",
+  "checkinTips": [
+    "Stone terraces in Nelson, Colne and Brierfield: photograph damp at the base of walls, cellar heads and mould in back bedrooms.",
+    "Back yards and back streets behind terraced rows: record the yard gate, walls, outside toilet if any and where the bins are kept.",
+    "Hillside terraces in Colne: photograph steps, retaining walls, gutters and any damp in rooms built into the slope.",
+    "Stone cottages in Trawden and the Pendle Hill villages: photograph stoves, chimneys, damp in thick walls and any oil tank or LPG supply with the fuel level.",
+    "Older terraces with original features: record sash or replacement windows, fireplaces and any gas fires."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Pendle Borough Council's housing standards team.",
+  "nearby": [
+    "burnley",
+    "ribble-valley",
+    "north-yorkshire",
+    "bradford",
+    "calderdale"
+  ]
+}

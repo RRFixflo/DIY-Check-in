@@ -1,0 +1,102 @@
+{
+  "slug": "runnymede",
+  "name": "Runnymede",
+  "council": {
+    "name": "Runnymede Borough Council",
+    "url": "https://www.runnymede.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies. Councillors have discussed extending licensing to all HMOs, but no scheme has been confirmed.",
+    "fee": null,
+    "source": "https://runnymede.moderngov.co.uk/mgAi.aspx?ID=5047",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,587 a month (ONS, October 2025), up 0.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000212/"
+  },
+  "price": {
+    "text": "£496,000 (UK HPI, September 2025, provisional), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000212/"
+  },
+  "privateRentedShare": {
+    "text": "19.1% of households rent privately (Census 2021), up from 15.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000212/"
+  },
+  "councilTax": {
+    "text": "£2,492.99 Band D (2026/27), including Surrey County Council (£1,938.42) and Surrey Police (£352.57); the borough council's own share is £202.00",
+    "source": "https://runnymede.gov.uk/council-tax-11/guide-council-tax"
+  },
+  "postcodes": [
+    "KT15",
+    "KT16",
+    "TW18",
+    "TW20",
+    "GU25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Egham",
+      "postcodes": "TW20",
+      "housing": "Victorian terraces, post-war semis and many student shared houses near Royal Holloway."
+    },
+    {
+      "name": "Englefield Green",
+      "postcodes": "TW20",
+      "housing": "A village by Windsor Great Park with cottages, large houses and many student lets."
+    },
+    {
+      "name": "Egham Hythe and Thorpe Lea",
+      "postcodes": "TW18, TW20",
+      "housing": "Inter-war and post-war houses near the Thames, some on low-lying land."
+    },
+    {
+      "name": "Addlestone",
+      "postcodes": "KT15",
+      "housing": "Victorian terraces, post-war estates and new town-centre apartment blocks."
+    },
+    {
+      "name": "New Haw and Woodham",
+      "postcodes": "KT15",
+      "housing": "Inter-war and post-war semis and detached houses near the Wey Navigation."
+    },
+    {
+      "name": "Chertsey",
+      "postcodes": "KT16",
+      "housing": "A historic town of Georgian and Victorian houses, with post-war estates and riverside homes."
+    },
+    {
+      "name": "Ottershaw",
+      "postcodes": "KT16",
+      "housing": "Detached and semi-detached houses on a wooded village edge."
+    },
+    {
+      "name": "Virginia Water",
+      "postcodes": "GU25",
+      "housing": "Large detached houses on the Wentworth estate and leafy private roads."
+    },
+    {
+      "name": "Thorpe",
+      "postcodes": "TW20",
+      "housing": "Village cottages and houses near the lakes and Thorpe Park."
+    }
+  ],
+  "housing": "Runnymede is a Surrey commuter borough along the Thames, with high house prices and some of Surrey's highest private renting, helped by Royal Holloway, University of London in Egham. Egham and Englefield Green have many student shared houses, while Addlestone and Chertsey mix Victorian terraces, post-war estates and new apartment blocks. Virginia Water is known for very large detached houses, and low-lying parts of Egham Hythe, Thorpe and Chertsey near the Thames are prone to flooding.",
+  "checkinTips": [
+    "Student houses in Egham and Englefield Green: photograph each bedroom lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "Homes near the Thames in Egham Hythe, Thorpe and Chertsey: photograph any tide marks, damp low on walls, air bricks and flood barriers.",
+    "Large houses in Virginia Water and Ottershaw: record gates, alarms, garden equipment and any pool or outbuildings included in the let.",
+    "New apartments in Addlestone town centre: note fob and key counts, parking bays, bike stores and balconies.",
+    "Homes under the Heathrow flight paths: note window and door seals and any trickle vents."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Runnymede Borough Council's environmental health team.",
+  "nearby": [
+    "spelthorne",
+    "elmbridge",
+    "woking",
+    "surrey-heath",
+    "windsor-and-maidenhead"
+  ]
+}

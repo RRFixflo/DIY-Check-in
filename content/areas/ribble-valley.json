@@ -1,0 +1,101 @@
+{
+  "slug": "ribble-valley",
+  "name": "Ribble Valley",
+  "council": {
+    "name": "Ribble Valley Borough Council",
+    "url": "https://www.ribblevalley.gov.uk",
+    "privateRentingUrl": "https://www.ribblevalley.gov.uk/news/article/387/new-rules-for-multiple-occupancy-houses-in-ribble-valley"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing (five or more people from two or more households) applies. An Article 4 direction in force since 28 August 2026 means turning a house into an HMO for three to six people needs planning permission.",
+    "fee": null,
+    "source": "https://www.ribblevalley.gov.uk/news/article/387/new-rules-for-multiple-occupancy-houses-in-ribble-valley",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£816 a month (ONS, July 2026), up 5.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000124/"
+  },
+  "price": {
+    "text": "£288,000 (UK HPI, June 2026, provisional), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000124/"
+  },
+  "privateRentedShare": {
+    "text": "15.0% of households rent privately (Census 2021), up from 13.6% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000124/"
+  },
+  "councilTax": {
+    "text": "£2,359.57 Band D (2026/27) including Lancashire County Council, police and fire precepts, before parish precepts; the borough council's own share, frozen, is £170.69, the lowest in Lancashire",
+    "source": "https://www.ribblevalley.gov.uk/downloads/file/4992/council-tax-charges-2026-2027"
+  },
+  "postcodes": [
+    "BB6",
+    "BB7",
+    "BD23",
+    "BD24",
+    "PR3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Clitheroe",
+      "postcodes": "BB7",
+      "housing": "A castle market town of stone terraces and cottages, with suburban estates and new-build homes on the edges."
+    },
+    {
+      "name": "Longridge",
+      "postcodes": "PR3",
+      "housing": "Stone terraces from the town's quarrying and mill days, with large new-build estates."
+    },
+    {
+      "name": "Whalley",
+      "postcodes": "BB7",
+      "housing": "Stone cottages and Victorian houses in a historic village, with newer estates."
+    },
+    {
+      "name": "Billington and Langho",
+      "postcodes": "BB6, BB7",
+      "housing": "Semis, bungalows and newer estates near the A59."
+    },
+    {
+      "name": "Read and Sabden",
+      "postcodes": "BB7, BB12",
+      "housing": "Stone cottages and terraces in villages below Pendle Hill."
+    },
+    {
+      "name": "Chatburn and Grindleton",
+      "postcodes": "BB7",
+      "housing": "Stone cottages and farmhouses in small villages."
+    },
+    {
+      "name": "Ribchester",
+      "postcodes": "PR3",
+      "housing": "Stone cottages and terraces in a riverside village."
+    },
+    {
+      "name": "Bowland villages",
+      "postcodes": "BB7, BD23, BD24",
+      "housing": "Stone cottages and farmhouses in Slaidburn, Waddington, Gisburn and the Forest of Bowland, many off the gas grid."
+    }
+  ],
+  "housing": "Ribble Valley is a rural borough of stone-built market towns and villages, mostly owner-occupied and among the more expensive parts of Lancashire. Clitheroe and Longridge have rows of Victorian stone terraces alongside large new-build estates added in recent years. The villages of the Forest of Bowland and around Pendle Hill have stone cottages and farmhouses, many of them off the gas grid. Private renting is a small share of homes.",
+  "checkinTips": [
+    "Stone terraces in Clitheroe and Longridge: photograph damp in back rooms and cellars, back yards and gutters.",
+    "Rural cottages in the Bowland villages: photograph oil tanks or LPG supply with the fuel level, stoves, chimneys and any septic tank.",
+    "Properties with private water supplies: note the supply, any filter or UV unit and its service record.",
+    "New-build estates in Clitheroe, Longridge and Whalley: record snagging marks, sealant and the state of new turf and fences.",
+    "Farm lets and barn conversions: photograph exposed beams, underfloor heating controls, yards and outbuildings included in the let."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Ribble Valley Borough Council's environmental health team.",
+  "nearby": [
+    "pendle",
+    "burnley",
+    "hyndburn",
+    "blackburn-with-darwen",
+    "south-ribble",
+    "preston",
+    "wyre",
+    "lancaster",
+    "north-yorkshire"
+  ]
+}

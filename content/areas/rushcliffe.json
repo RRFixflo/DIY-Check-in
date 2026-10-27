@@ -1,0 +1,111 @@
+{
+  "slug": "rushcliffe",
+  "name": "Rushcliffe",
+  "council": {
+    "name": "Rushcliffe Borough Council",
+    "url": "https://www.rushcliffe.gov.uk",
+    "privateRentingUrl": "https://www.rushcliffe.gov.uk/environmental-health/housing/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme: the council says there is currently no additional or selective licensing in Rushcliffe.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": null,
+    "source": "https://www.rushcliffe.gov.uk/environmental-health/housing/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,037 a month (ONS, June 2026), up 2.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000176/"
+  },
+  "price": {
+    "text": "£338,000 (UK HPI, May 2026, provisional), up 3.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000176/"
+  },
+  "privateRentedShare": {
+    "text": "14.7% of households rent privately (Census 2021), up from 13.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000176/"
+  },
+  "councilTax": {
+    "text": "About £2,643 average Band D (2026/27) including Nottinghamshire County Council, police, fire and parish precepts (MHCLG figures; for example £2,653.07 in Bingham); the borough council's own share is frozen at £161.77, plus £67.40 special expenses in West Bridgford",
+    "source": "https://www.rushcliffe.gov.uk/council-tax/how-much-will-i-pay/council-tax-band-charges-202627"
+  },
+  "postcodes": [
+    "NG2",
+    "NG11",
+    "NG12",
+    "NG13",
+    "LE12",
+    "NG14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "West Bridgford",
+      "postcodes": "NG2",
+      "housing": "Edwardian and inter-war semis and terraces, with flats and apartments near Trent Bridge and the centre."
+    },
+    {
+      "name": "Lady Bay",
+      "postcodes": "NG2",
+      "housing": "Edwardian terraces by the River Trent, popular with young professionals."
+    },
+    {
+      "name": "Edwalton",
+      "postcodes": "NG12",
+      "housing": "Detached and semi-detached houses and large new-build estates."
+    },
+    {
+      "name": "Gamston and Compton Acres",
+      "postcodes": "NG2",
+      "housing": "1980s–90s estates of family homes."
+    },
+    {
+      "name": "Ruddington",
+      "postcodes": "NG11",
+      "housing": "A large village of period cottages, framework knitters' houses and newer estates."
+    },
+    {
+      "name": "Keyworth",
+      "postcodes": "NG12",
+      "housing": "Post-war and later family houses and bungalows on the Wolds."
+    },
+    {
+      "name": "Bingham",
+      "postcodes": "NG13",
+      "housing": "A market town with older houses in the centre and large new-build estates."
+    },
+    {
+      "name": "Radcliffe on Trent",
+      "postcodes": "NG12",
+      "housing": "Victorian and inter-war houses and newer estates above the river."
+    },
+    {
+      "name": "East Leake",
+      "postcodes": "LE12",
+      "housing": "Village houses and many recent new-build estates in the south."
+    },
+    {
+      "name": "Cotgrave",
+      "postcodes": "NG12",
+      "housing": "A former mining village of post-war estates and new homes on the old colliery site."
+    }
+  ],
+  "housing": "Rushcliffe lies south of the Trent from Nottingham and is one of the most affluent districts in the East Midlands. West Bridgford, Lady Bay and Edwalton are suburbs of Edwardian, inter-war and modern family homes, with flats near Trent Bridge, and they attract renters who work in Nottingham. The rest of the borough is villages and small towns such as Bingham, Radcliffe on Trent, Ruddington, Keyworth and East Leake, many with large new-build estates. Private renting is a modest share and only larger HMOs need a licence.",
+  "checkinTips": [
+    "Edwardian terraces and semis in West Bridgford and Lady Bay: photograph sash or bay windows, original fireplaces and small rear gardens.",
+    "Homes near the Trent in Lady Bay and Radcliffe: photograph any tide marks, damp low on walls and air bricks.",
+    "New-build estates in Edwalton, Bingham and East Leake: record snagging marks, sealant, new turf and fences and any shared management areas.",
+    "Flats near Trent Bridge: note fob and key counts, parking bays.",
+    "Village cottages in Ruddington and the Wolds: photograph stoves, chimneys, damp in older walls and any oil tank."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rushcliffe Borough Council's environmental health team.",
+  "nearby": [
+    "nottingham",
+    "gedling",
+    "broxtowe",
+    "newark-and-sherwood",
+    "melton",
+    "charnwood",
+    "north-west-leicestershire",
+    "erewash"
+  ]
+}

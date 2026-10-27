@@ -1,0 +1,97 @@
+{
+  "slug": "rossendale",
+  "name": "Rossendale",
+  "council": {
+    "name": "Rossendale Borough Council",
+    "url": "https://www.rossendale.gov.uk",
+    "privateRentingUrl": "https://www.rossendale.gov.uk/housing-homelessness/shared-houses-flats-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies, handled by the council's environmental health team.",
+    "fee": "£719.70 on application plus £279.50 on grant for a new mandatory HMO licence, as listed on the council's site",
+    "source": "https://www.rossendale.gov.uk/housing-homelessness/shared-houses-flats-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£811 a month (ONS, August 2026), up 4.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000125/"
+  },
+  "price": {
+    "text": "£200,000 (UK HPI, July 2026, provisional), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000125/"
+  },
+  "privateRentedShare": {
+    "text": "17.0% of households rent privately (Census 2021), up from 14.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000125/"
+  },
+  "councilTax": {
+    "text": "About £2,520 average Band D (2026/27) including Lancashire County Council, police, fire and parish precepts (MHCLG figures); the borough council's own share is £327.16",
+    "source": "https://housecheckup.co.uk/council-tax/rossendale"
+  },
+  "postcodes": [
+    "BB4",
+    "OL13",
+    "OL12",
+    "BL0"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rawtenstall",
+      "postcodes": "BB4",
+      "housing": "Stone terraces, Victorian villas and newer estates around the valley's main town."
+    },
+    {
+      "name": "Bacup",
+      "postcodes": "OL13",
+      "housing": "A well-preserved mill town of stone terraces, many privately rented, high in the valley."
+    },
+    {
+      "name": "Stacksteads",
+      "postcodes": "OL13",
+      "housing": "Stone terraces strung along the valley floor beside the river and main road."
+    },
+    {
+      "name": "Haslingden",
+      "postcodes": "BB4",
+      "housing": "Stone terraces on the hillside, with post-war and newer estates."
+    },
+    {
+      "name": "Whitworth",
+      "postcodes": "OL12",
+      "housing": "Stone terraces and cottages in a former quarrying town on the Rochdale side."
+    },
+    {
+      "name": "Waterfoot",
+      "postcodes": "BB4",
+      "housing": "Stone terraces and mill conversions in the narrow Whitewell valley."
+    },
+    {
+      "name": "Crawshawbooth",
+      "postcodes": "BB4",
+      "housing": "Stone terraces and cottages north of Rawtenstall."
+    },
+    {
+      "name": "Edenfield and Helmshore",
+      "postcodes": "BL0, BB4",
+      "housing": "Stone cottages, terraces and newer family homes at the south of the valley."
+    }
+  ],
+  "housing": "Rossendale's towns fill the narrow Pennine valleys, and most of the housing is Victorian stone terraces built for the cotton and slipper mills, many on steep hillsides. Bacup and Stacksteads have some of the cheapest homes and a sizeable private rented sector, while Rawtenstall, Haslingden and Helmshore mix terraces with post-war and newer estates. Some mills have been converted to flats. Damp and exposure to Pennine weather are common issues in the older stone homes.",
+  "checkinTips": [
+    "Stone terraces in Bacup and Stacksteads: photograph damp at the base of walls, cellars, and mould in back rooms built into the hillside.",
+    "Hillside homes throughout the valley: record steps, retaining walls, gutters and downpipes and any water coming off the slope.",
+    "Terraces near the River Irwell in Stacksteads and Waterfoot: photograph any tide marks, damp low on walls and air bricks.",
+    "Mill conversions: note fob and key counts, intercom, parking and the state of shared corridors.",
+    "Older homes with gas fires or stoves: photograph the appliances, chimneys and carbon monoxide alarms."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rossendale Borough Council's environmental health team.",
+  "nearby": [
+    "burnley",
+    "hyndburn",
+    "blackburn-with-darwen",
+    "bury",
+    "rochdale",
+    "calderdale"
+  ]
+}

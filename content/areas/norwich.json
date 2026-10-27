@@ -1,0 +1,101 @@
+{
+  "slug": "norwich",
+  "name": "Norwich",
+  "council": {
+    "name": "Norwich City Council",
+    "url": "https://www.norwich.gov.uk",
+    "privateRentingUrl": "https://www.norwich.gov.uk/HMO"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme in force. A 2026 review of the private rented sector found evidence that could support selective licensing in Nelson, Mile Cross, Town Close and Sewell wards; councillors were asked only to note it, and any scheme would need a consultation first.",
+    "additional": "No additional HMO licensing in force: only national mandatory HMO licensing (five or more people from two or more households) applies. The same 2026 review suggested a possible citywide additional licensing scheme for three- and four-person HMOs.",
+    "fee": null,
+    "source": "https://www.property118.com/norwich-considers-wider-landlord-licensing-scheme/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,142 a month (ONS, August 2026), up 0.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000148/"
+  },
+  "price": {
+    "text": "£224,000 (UK HPI, July 2026, provisional), down 2.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000148/"
+  },
+  "privateRentedShare": {
+    "text": "26.9% of households rent privately (Census 2021), up from 21.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000148/"
+  },
+  "councilTax": {
+    "text": "£2,503.43 Band D (2026/27), including the county and police precepts",
+    "source": "https://new.norwich.gov.uk/council-tax/about-council-tax"
+  },
+  "postcodes": [
+    "NR1",
+    "NR2",
+    "NR3",
+    "NR4",
+    "NR5",
+    "NR6",
+    "NR7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Golden Triangle",
+      "postcodes": "NR2",
+      "housing": "Victorian and Edwardian terraces, popular with young professionals and students."
+    },
+    {
+      "name": "City centre",
+      "postcodes": "NR1, NR2, NR3",
+      "housing": "Medieval and Georgian buildings, flats over shops and converted warehouses and newer apartment blocks along the river."
+    },
+    {
+      "name": "Thorpe Hamlet and Riverside",
+      "postcodes": "NR1",
+      "housing": "Victorian terraces on the hill and modern riverside apartments near the station."
+    },
+    {
+      "name": "Mile Cross",
+      "postcodes": "NR3",
+      "housing": "Inter-war council-built estate houses, many now privately rented."
+    },
+    {
+      "name": "Earlham",
+      "postcodes": "NR4, NR5",
+      "housing": "Post-war estate homes, many let to students near the University of East Anglia."
+    },
+    {
+      "name": "Eaton",
+      "postcodes": "NR4",
+      "housing": "Inter-war and post-war semis and detached houses."
+    },
+    {
+      "name": "Lakenham and Tuckswood",
+      "postcodes": "NR1, NR4",
+      "housing": "Victorian terraces and post-war estates south of the centre."
+    },
+    {
+      "name": "Sprowston Road and Magdalen Street area",
+      "postcodes": "NR3",
+      "housing": "Victorian terraces and flats over shops north of the river."
+    },
+    {
+      "name": "Heartsease",
+      "postcodes": "NR7",
+      "housing": "A post-war estate of houses and flats in the east of the city."
+    }
+  ],
+  "housing": "Norwich has one of the higher private renting shares in the East of England, driven by the University of East Anglia and Norwich University of the Arts. Students and young professionals rent Victorian terraces in the Golden Triangle and around the centre, and post-war estate homes in Earlham near the UEA campus. The city centre has many listed and older buildings, flats over shops and new riverside apartment blocks, while large inter-war council estates such as Mile Cross still hold many social and privately rented homes.",
+  "checkinTips": [
+    "Student lets in Earlham and the Golden Triangle: photograph each bedroom door lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "Victorian terraces in the Golden Triangle: record sash windows, damp in rear extensions and the state of small back gardens.",
+    "Listed and older buildings in the city centre: photograph uneven floors, old windows, timber beams and any damp, and note what the landlord can and cannot change.",
+    "Riverside apartments near the station: note fob and key counts, the intercom, parking bays and the condition of balconies.",
+    "Inter-war estate homes in Mile Cross: photograph windows, doors, gardens, fences and sheds."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Norwich City Council's private sector housing team.",
+  "nearby": [
+    "broadland",
+    "south-norfolk"
+  ]
+}

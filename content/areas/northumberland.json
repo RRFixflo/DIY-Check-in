@@ -1,0 +1,126 @@
+{
+  "slug": "northumberland",
+  "name": "Northumberland",
+  "council": {
+    "name": "Northumberland County Council",
+    "url": "https://www.northumberland.gov.uk",
+    "privateRentingUrl": "https://www.northumberland.gov.uk/Housing/Landlords.aspx"
+  },
+  "licensing": {
+    "selective": "Selective licensing in the Croft area of Blyth (between Hodgsons Road, Waterloo Road/Bridge Street, Regent Street and Renwick Road) from 14 October 2024 for five years, to October 2029. No selective licensing elsewhere in the county; Ashington Town Council has asked for a scheme there.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": null,
+    "source": "https://publicnoticeportal.uk/notice/other/66e3f9c3166800fcede18d74",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£687 a month (ONS, June 2026), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000057/"
+  },
+  "price": {
+    "text": "£209,000 (UK HPI, May 2026, provisional), up 8.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000057/"
+  },
+  "privateRentedShare": {
+    "text": "16.4% of households rent privately (Census 2021), up from 13.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000057"
+  },
+  "councilTax": {
+    "text": "About £2,597 average Band D (2026/27) including police, fire and parish precepts (MHCLG figures), after a 4.99% rise in the county council's share",
+    "source": "https://housecheckup.co.uk/council-tax/northumberland"
+  },
+  "postcodes": [
+    "NE20",
+    "NE22",
+    "NE23",
+    "NE24",
+    "NE41",
+    "NE42",
+    "NE43",
+    "NE46",
+    "NE47",
+    "NE48",
+    "NE49",
+    "NE61",
+    "NE62",
+    "NE63",
+    "NE64",
+    "NE65",
+    "NE66",
+    "NE67",
+    "NE68",
+    "NE69",
+    "NE70",
+    "NE71",
+    "TD15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Blyth",
+      "postcodes": "NE24",
+      "housing": "Victorian and Edwardian terraces near the port and town centre, post-war estates and newer housing at the edges."
+    },
+    {
+      "name": "Ashington",
+      "postcodes": "NE63",
+      "housing": "Long rows of brick colliery terraces, with post-war estates and new-build homes."
+    },
+    {
+      "name": "Cramlington",
+      "postcodes": "NE23",
+      "housing": "A 1960s–80s new town of estates, with more new-build homes being added."
+    },
+    {
+      "name": "Bedlington",
+      "postcodes": "NE22",
+      "housing": "Former mining terraces, inter-war semis and post-war estates."
+    },
+    {
+      "name": "Morpeth",
+      "postcodes": "NE61",
+      "housing": "A market town of stone town houses and cottages, with suburban estates around it."
+    },
+    {
+      "name": "Hexham",
+      "postcodes": "NE46",
+      "housing": "Stone terraces and Victorian villas in a Tyne Valley market town."
+    },
+    {
+      "name": "Prudhoe",
+      "postcodes": "NE42",
+      "housing": "Terraces, semis and post-war estates above the Tyne."
+    },
+    {
+      "name": "Alnwick",
+      "postcodes": "NE66",
+      "housing": "Stone town houses and cottages, with newer estates on the edges."
+    },
+    {
+      "name": "Berwick-upon-Tweed",
+      "postcodes": "TD15",
+      "housing": "Georgian stone houses inside the town walls and terraces at Tweedmouth and Spittal."
+    },
+    {
+      "name": "Amble",
+      "postcodes": "NE65",
+      "housing": "Harbour-town terraces, newer estates and holiday lets on the coast."
+    }
+  ],
+  "housing": "South-east Northumberland, around Blyth, Ashington and Bedlington, has rows of former colliery terraces with a sizeable private rented sector, and the Croft area of Blyth is now under selective licensing. Cramlington is a new town of estates that is still growing. Further north and west, Morpeth, Hexham, Alnwick and Berwick are stone-built market towns, and the rural uplands and the coast have stone cottages, farm lets and many holiday homes. Many rural homes are off the gas grid.",
+  "checkinTips": [
+    "Colliery terraces in Ashington, Blyth and Bedlington: photograph damp at the base of walls, back yards, outhouses and rear lanes.",
+    "Homes in Blyth's Croft licensing area: note the licence number and check that the smoke and carbon monoxide alarms are there and working.",
+    "Coastal homes in Blyth, Amble and Berwick: record salt marks and rust on window fittings and damp on exposed walls.",
+    "Stone cottages and farm lets in the hills and Tyne Valley: photograph stoves, chimneys, oil tanks or LPG supply with the fuel level, and any septic tank.",
+    "Cramlington's estate homes: note garages, parking bays, fences and any shared paths.",
+    "Former holiday cottages let long term on the coast: list furniture and kitchenware item by item, as much is often included."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Northumberland County Council's housing standards team.",
+  "nearby": [
+    "north-tyneside",
+    "newcastle",
+    "gateshead",
+    "county-durham",
+    "cumberland"
+  ]
+}

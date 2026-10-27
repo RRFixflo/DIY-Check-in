@@ -1,0 +1,103 @@
+{
+  "slug": "north-tyneside",
+  "name": "North Tyneside",
+  "council": {
+    "name": "North Tyneside Council",
+    "url": "https://www.northtyneside.gov.uk",
+    "privateRentingUrl": "https://northtyneside.gov.uk/category/926/multiple-occupancy-homes"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing (five or more people from two or more households) applies. A July 2026 council report recommended a non-immediate Article 4 direction in specified wards so that small HMOs of three or four people would need planning permission.",
+    "fee": null,
+    "source": "https://democracy.northtyneside.gov.uk/documents/s37458/Art%204%20Direction%20HMOs%20July%202026%20-%20final%20version.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£824 a month (ONS, January 2026), up 6.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000022/"
+  },
+  "price": {
+    "text": "£203,000 (UK HPI, December 2025, provisional), up 3.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000022/"
+  },
+  "privateRentedShare": {
+    "text": "15.2% of households rent privately (Census 2021), up from 12.4% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000022"
+  },
+  "councilTax": {
+    "text": "£2,461.77 Band D (2026/27), including the police and fire precepts",
+    "source": "https://www.northtyneside.gov.uk/council-tax/council-tax-2026-2027/what-you-will-pay"
+  },
+  "postcodes": [
+    "NE12",
+    "NE13",
+    "NE25",
+    "NE26",
+    "NE27",
+    "NE28",
+    "NE29",
+    "NE30"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "North Shields",
+      "postcodes": "NE29, NE30",
+      "housing": "Victorian terraces and Tyneside flats, with new apartments along the Fish Quay and riverside."
+    },
+    {
+      "name": "Tynemouth",
+      "postcodes": "NE30",
+      "housing": "Georgian and Victorian terraces and large period houses near the coast."
+    },
+    {
+      "name": "Cullercoats",
+      "postcodes": "NE30",
+      "housing": "Victorian terraces and inter-war homes by the bay."
+    },
+    {
+      "name": "Whitley Bay",
+      "postcodes": "NE26",
+      "housing": "Edwardian terraces and seaside villas, many split into flats, plus inter-war semis."
+    },
+    {
+      "name": "Monkseaton",
+      "postcodes": "NE25",
+      "housing": "Inter-war and post-war semis and detached houses."
+    },
+    {
+      "name": "Wallsend",
+      "postcodes": "NE28",
+      "housing": "Former shipyard terraces and Tyneside flats, with post-war council estates."
+    },
+    {
+      "name": "Longbenton and Forest Hall",
+      "postcodes": "NE12",
+      "housing": "Large post-war estates and inter-war semis."
+    },
+    {
+      "name": "Killingworth",
+      "postcodes": "NE12",
+      "housing": "A 1960s planned township of estates, rebuilt in parts, with newer homes."
+    },
+    {
+      "name": "Backworth and Shiremoor",
+      "postcodes": "NE27",
+      "housing": "Former pit villages with terraces and large new-build estates."
+    }
+  ],
+  "housing": "North Tyneside runs from the riverside towns of Wallsend and North Shields, with their Victorian terraces and two-storey Tyneside flats, to the coast at Tynemouth, Cullercoats and Whitley Bay, where period houses and seaside villas are common and many have been converted into flats. Inland, Longbenton, Killingworth and Forest Hall are dominated by post-war estates. The borough has seen large new-build estates at Backworth, Shiremoor and the former Whitley Bay fringe, and private renting is concentrated in the older terraces and converted flats.",
+  "checkinTips": [
+    "Tyneside flats in Wallsend and North Shields: note whether the flat is upstairs or downstairs, the separate front doors, and which yard and bins belong to it.",
+    "Coastal homes in Tynemouth, Cullercoats and Whitley Bay: photograph salt marks, rust on window fittings and damp on exposed walls.",
+    "Converted flats in Whitley Bay's seaside villas: record communal hallways, meter cupboards, fire doors and the key count.",
+    "Fish Quay and riverside apartments: note fob counts, intercom, parking bays and the condition of balconies.",
+    "New-build estates around Backworth and Shiremoor: photograph snagging marks, sealant and the state of gardens and fences."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to North Tyneside Council's private sector housing team.",
+  "nearby": [
+    "newcastle",
+    "northumberland",
+    "south-tyneside"
+  ]
+}

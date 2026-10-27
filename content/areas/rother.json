@@ -1,0 +1,108 @@
+{
+  "slug": "rother",
+  "name": "Rother",
+  "council": {
+    "name": "Rother District Council",
+    "url": "https://www.rother.gov.uk",
+    "privateRentingUrl": "https://www.rother.gov.uk/environmental-health/private-rented-housing/houses-in-multiple-occupation-hmos-and-mandatory-licensing/houses-in-multiple-occupation-public-register/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; the council licenses HMOs under the national mandatory scheme (five or more people from two or more households) and publishes a public register.",
+    "fee": null,
+    "source": "https://www.rother.gov.uk/environmental-health/private-rented-housing/houses-in-multiple-occupation-hmos-and-mandatory-licensing/houses-in-multiple-occupation-public-register/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,157 a month (ONS, July 2025), up 5.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000064/"
+  },
+  "price": {
+    "text": "£329,000 (UK HPI, June 2025, provisional), down 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000064/"
+  },
+  "privateRentedShare": {
+    "text": "16.2% of households rent privately (Census 2021), up from 14.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000064/"
+  },
+  "councilTax": {
+    "text": "£2,576.64 Band D (2026/27) including East Sussex County Council, police and fire precepts, before town or parish charges; Rother District Council's own share is £216.95",
+    "source": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-introduction"
+  },
+  "postcodes": [
+    "TN31",
+    "TN32",
+    "TN33",
+    "TN35",
+    "TN36",
+    "TN39",
+    "TN40",
+    "TN19",
+    "TN5",
+    "TN18",
+    "TN30"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Bexhill-on-Sea",
+      "postcodes": "TN39, TN40",
+      "housing": "Edwardian and Victorian villas and terraces near the seafront, many split into flats, with inter-war and post-war bungalows and semis inland."
+    },
+    {
+      "name": "Little Common and Cooden",
+      "postcodes": "TN39",
+      "housing": "Bungalows, inter-war houses and larger detached homes on Bexhill's western edge."
+    },
+    {
+      "name": "Sidley",
+      "postcodes": "TN39, TN40",
+      "housing": "Victorian terraces and post-war estates north of Bexhill town centre."
+    },
+    {
+      "name": "Rye",
+      "postcodes": "TN31",
+      "housing": "Medieval and Georgian timber-framed and brick houses in the hilltop old town, with newer homes below."
+    },
+    {
+      "name": "Battle",
+      "postcodes": "TN33",
+      "housing": "A historic market town of period houses and cottages, with newer estates."
+    },
+    {
+      "name": "Camber and Winchelsea Beach",
+      "postcodes": "TN31, TN36",
+      "housing": "Bungalows, chalets and holiday homes by the dunes and shingle."
+    },
+    {
+      "name": "Robertsbridge",
+      "postcodes": "TN32",
+      "housing": "Weatherboarded and tile-hung cottages in a High Weald village."
+    },
+    {
+      "name": "Ticehurst and Burwash",
+      "postcodes": "TN5, TN19",
+      "housing": "Period cottages and larger country houses in the High Weald villages."
+    },
+    {
+      "name": "Fairlight",
+      "postcodes": "TN35",
+      "housing": "Bungalows and detached houses on the cliffs east of Hastings."
+    }
+  ],
+  "housing": "Rother has one of the oldest populations in England, and Bexhill-on-Sea is its main town, with Edwardian and Victorian seafront villas and terraces (many converted into flats) and large areas of bungalows. Rye and Battle are historic towns with listed timber-framed and Georgian houses, while the High Weald villages have weatherboarded and tile-hung cottages and country houses, often off the gas grid. Along the coast at Camber and Winchelsea Beach there are bungalows and holiday homes. Private renting is a modest share of homes.",
+  "checkinTips": [
+    "Converted seafront flats in Bexhill: record communal hallways, meter cupboards, fire doors and salt marks or rust on windows and railings.",
+    "Bungalows across Bexhill and Little Common: photograph loft hatches, flat-roof extensions, gardens and any adaptations such as grab rails.",
+    "Listed timber-framed houses in Rye and Battle: photograph beams, uneven floors, old windows and damp, and note what the tenant must not alter.",
+    "Weald cottages: photograph oil tanks with the fuel level, stoves, chimneys and any septic tank or private drainage.",
+    "Coastal homes at Camber, Winchelsea Beach and Fairlight: record sand and salt wear, exposed walls and signs of flooding or cliff-top weathering."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rother District Council's environmental health team.",
+  "nearby": [
+    "hastings",
+    "wealden",
+    "tunbridge-wells",
+    "ashford",
+    "folkestone-and-hythe"
+  ]
+}

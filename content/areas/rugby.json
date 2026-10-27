@@ -1,0 +1,111 @@
+{
+  "slug": "rugby",
+  "name": "Rugby",
+  "council": {
+    "name": "Rugby Borough Council",
+    "url": "https://www.rugby.gov.uk",
+    "privateRentingUrl": "https://www.rugby.gov.uk/w/register-of-licensed-houses-in-multiple-occupation-hmos-"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; the council licenses HMOs under the national mandatory scheme (five or more people from two or more households) and publishes a register.",
+    "fee": null,
+    "source": "https://www.rugby.gov.uk/w/register-of-licensed-houses-in-multiple-occupation-hmos-",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,046 a month (ONS, July 2026), up 5.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000220/"
+  },
+  "price": {
+    "text": "£276,000 (UK HPI, June 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000220/"
+  },
+  "privateRentedShare": {
+    "text": "18.0% of households rent privately (Census 2021), up from 14.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000220/"
+  },
+  "councilTax": {
+    "text": "£2,494.62 Band D (2026/27) in the Rugby town area, including Warwickshire County Council (£1,903.86) and police (£318.71); the borough council's own share is £230.32 and parish areas vary",
+    "source": "https://www.rugby.gov.uk/-/about-your-council-tax-bill"
+  },
+  "postcodes": [
+    "CV8",
+    "CV21",
+    "CV22",
+    "CV23",
+    "CV47",
+    "LE17"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rugby town centre",
+      "postcodes": "CV21",
+      "housing": "Victorian terraces, flats over shops and new apartment blocks."
+    },
+    {
+      "name": "New Bilton",
+      "postcodes": "CV21",
+      "housing": "Victorian and Edwardian terraced streets, many privately rented."
+    },
+    {
+      "name": "Hillmorton",
+      "postcodes": "CV21",
+      "housing": "Older village houses, post-war estates and newer homes."
+    },
+    {
+      "name": "Bilton",
+      "postcodes": "CV22",
+      "housing": "Inter-war and post-war semis around the old village centre."
+    },
+    {
+      "name": "Brownsover",
+      "postcodes": "CV21, CV23",
+      "housing": "1970s–80s estates north of the town."
+    },
+    {
+      "name": "Overslade and Cawston",
+      "postcodes": "CV22",
+      "housing": "Post-war semis and large newer estates on the south-west edge."
+    },
+    {
+      "name": "Houlton",
+      "postcodes": "CV23",
+      "housing": "A large new-build community on the former radio station site east of the town."
+    },
+    {
+      "name": "Long Lawford",
+      "postcodes": "CV23",
+      "housing": "Village houses and newer estates west of Rugby."
+    },
+    {
+      "name": "Dunchurch",
+      "postcodes": "CV22",
+      "housing": "A historic village of thatched cottages and period houses."
+    },
+    {
+      "name": "Wolston and Brinklow",
+      "postcodes": "CV8, CV23",
+      "housing": "Village cottages, terraces and post-war homes."
+    }
+  ],
+  "housing": "Rugby grew faster than anywhere else in the West Midlands between 2011 and 2021, with large new-build communities such as Houlton and Cawston. Older housing is concentrated in the Victorian terraces of New Bilton and around the town centre, where much of the private renting and a growing number of HMOs are found. Bilton, Hillmorton and Brownsover are mostly inter-war, post-war and 1970s–80s estates, and the rural villages have period cottages, some thatched.",
+  "checkinTips": [
+    "New-build homes in Houlton and Cawston: photograph snagging marks, sealant, new turf and fences, parking spaces and any shared management areas.",
+    "Victorian terraces in New Bilton and near the centre: record damp at the base of walls, rear yards and alleys and where bins are kept.",
+    "Shared houses in the town: note the HMO licence number where needed and photograph each bedroom lock, fire doors and alarms.",
+    "Thatched and period cottages in Dunchurch and the villages: photograph thatch, chimneys, stoves and any oil tank with the fuel level.",
+    "Town-centre apartments: note fob and key counts, the intercom and allocated parking."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rugby Borough Council's private sector housing team.",
+  "nearby": [
+    "coventry",
+    "nuneaton-and-bedworth",
+    "warwick",
+    "stratford-on-avon",
+    "harborough",
+    "blaby",
+    "hinckley-and-bosworth",
+    "west-northamptonshire"
+  ]
+}

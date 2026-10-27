@@ -1,0 +1,132 @@
+{
+  "slug": "north-yorkshire",
+  "name": "North Yorkshire",
+  "council": {
+    "name": "North Yorkshire Council",
+    "url": "https://www.northyorks.gov.uk",
+    "privateRentingUrl": "https://www.northyorks.gov.uk/housing-and-homelessness/selective-licensing/selective-licensing-scarborough-central"
+  },
+  "licensing": {
+    "selective": "Two selective licensing schemes in Scarborough: Scarborough South (parts of the former Weaponness and Ramshill ward, 1 May 2022 to 30 April 2027) and Scarborough Town (parts of the town centre and surrounding streets, June 2024 to May 2029). A renewal of Scarborough South, extended to Valley Road and Esplanade Gardens from 1 May 2027, was consulted on from 3 August to 12 October 2026; the decision is due later in 2026. No selective licensing elsewhere in the county.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": null,
+    "source": "https://www.northyorks.gov.uk/your-council/consultations-and-engagement/current-consultations/scarborough-south-selective-licensing-renewal-and-expansion-consultation",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£849 a month (ONS, August 2026), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000065/"
+  },
+  "price": {
+    "text": "£270,000 (UK HPI, July 2026, provisional), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000065/"
+  },
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,036.32 Band D for North Yorkshire Council (2026/27, up 4.99%); about £2,489 with the police (£335.86) and fire (£116.62) precepts, plus parish precepts averaging £55.54",
+    "source": "https://www.northyorks.gov.uk/council-tax/how-council-tax-spent"
+  },
+  "postcodes": [
+    "DL6",
+    "DL7",
+    "DL8",
+    "DL9",
+    "DL10",
+    "DL11",
+    "HG1",
+    "HG2",
+    "HG3",
+    "HG4",
+    "HG5",
+    "YO7",
+    "YO8",
+    "YO11",
+    "YO12",
+    "YO14",
+    "YO17",
+    "YO18",
+    "YO21",
+    "YO22",
+    "BD23",
+    "BD24",
+    "LS24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Harrogate",
+      "postcodes": "HG1, HG2",
+      "housing": "Victorian stone villas and terraces, many split into flats, with suburban estates on the edges."
+    },
+    {
+      "name": "Scarborough",
+      "postcodes": "YO11, YO12",
+      "housing": "Victorian guest houses and terraces converted into flats near the seafront and centre, with post-war estates inland."
+    },
+    {
+      "name": "Whitby",
+      "postcodes": "YO21, YO22",
+      "housing": "Old fishermen's cottages on the harbour slopes, Victorian terraces on the West Cliff and many holiday lets."
+    },
+    {
+      "name": "Northallerton",
+      "postcodes": "DL6, DL7",
+      "housing": "A market town of Georgian and Victorian houses with newer estates around it."
+    },
+    {
+      "name": "Selby",
+      "postcodes": "YO8",
+      "housing": "Victorian terraces near the centre and large newer estates."
+    },
+    {
+      "name": "Skipton",
+      "postcodes": "BD23",
+      "housing": "Stone terraces and cottages in the gateway town to the Dales."
+    },
+    {
+      "name": "Ripon",
+      "postcodes": "HG4",
+      "housing": "A small cathedral city of period townhouses, terraces and estates."
+    },
+    {
+      "name": "Richmond and Catterick Garrison",
+      "postcodes": "DL9, DL10",
+      "housing": "Georgian stone houses in Richmond, and service family housing and new estates at Catterick Garrison."
+    },
+    {
+      "name": "Malton and Norton",
+      "postcodes": "YO17",
+      "housing": "Stone and brick terraces and Georgian town houses in a market town."
+    },
+    {
+      "name": "Knaresborough",
+      "postcodes": "HG5",
+      "housing": "Stone cottages and terraces above the Nidd gorge and newer estates."
+    }
+  ],
+  "housing": "North Yorkshire is England's largest county by area, mixing spa and market towns, coastal resorts and remote Dales and Moors villages. Harrogate has many large Victorian stone villas converted into flats, while Scarborough and Whitby have converted guest houses, older terraces and a large number of holiday lets. Rural areas have stone cottages, farm lets and homes off the gas grid, and Catterick Garrison and Selby have large newer estates. Rents and prices vary widely between the expensive Harrogate district and the coast.",
+  "checkinTips": [
+    "Converted guest houses and flats in Scarborough and Whitby: photograph communal hallways, fire doors, meter cupboards and the key count, and note if the flat is in a selective licensing area.",
+    "Coastal homes on the cliffs: record salt marks and rust on window fittings, damp on exposed gable walls and the state of gutters.",
+    "Stone cottages in the Dales and on the Moors: photograph stoves, chimneys, damp in thick walls, and any oil tank, LPG supply or septic tank with the fuel level.",
+    "Harrogate's Victorian villa flats: photograph sash windows, high ceilings with any cracks, and shared gardens and bin stores.",
+    "Rural lets with private water or drainage: note the water supply, any treatment unit and the septic tank's location and condition."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to North Yorkshire Council's private sector housing team.",
+  "nearby": [
+    "york",
+    "east-riding-of-yorkshire",
+    "leeds",
+    "bradford",
+    "wakefield",
+    "doncaster",
+    "darlington",
+    "county-durham",
+    "middlesbrough",
+    "redcar-and-cleveland",
+    "stockton-on-tees",
+    "westmorland-and-furness",
+    "lancaster",
+    "ribble-valley",
+    "pendle"
+  ]
+}

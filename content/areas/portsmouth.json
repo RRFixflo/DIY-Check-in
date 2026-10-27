@@ -1,0 +1,109 @@
+{
+  "slug": "portsmouth",
+  "name": "Portsmouth",
+  "council": {
+    "name": "Portsmouth City Council",
+    "url": "https://www.portsmouth.gov.uk",
+    "privateRentingUrl": "https://www.portsmouth.gov.uk/services/development-and-planning/planning-applications/planning-houses-in-multiple-occupation/houses-in-multiple-occupation-hmo-database/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "Citywide additional HMO licensing from 1 September 2023 to 31 August 2028, covering HMOs of three or four people; larger HMOs need a mandatory licence. Planning rules across the city also restrict new HMOs.",
+    "fee": null,
+    "source": "https://democracy.portsmouth.gov.uk/documents/s46929/Mandatory Licensing of Houses in Multiple Occupation.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,368 a month (ONS, August 2026), up 2.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000044/"
+  },
+  "price": {
+    "text": "£251,000 (UK HPI, July 2026, provisional), up 1.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000044/"
+  },
+  "privateRentedShare": {
+    "text": "28.6% of households rent privately (Census 2021), up from 24.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000044/"
+  },
+  "councilTax": {
+    "text": "£2,291.71 Band D (2026/27), including the police (£290.46) and fire (£92.84) precepts",
+    "source": "https://www.portsmouth.gov.uk/?p=119"
+  },
+  "postcodes": [
+    "PO1",
+    "PO2",
+    "PO3",
+    "PO4",
+    "PO5",
+    "PO6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Southsea",
+      "postcodes": "PO4, PO5",
+      "housing": "Victorian and Edwardian terraces and large villas, many split into flats or let as student and shared houses."
+    },
+    {
+      "name": "Fratton",
+      "postcodes": "PO1, PO4",
+      "housing": "Dense Victorian terraced streets, many privately rented."
+    },
+    {
+      "name": "Landport and city centre",
+      "postcodes": "PO1",
+      "housing": "Post-war council-built estates and towers, flats over shops and purpose-built student blocks."
+    },
+    {
+      "name": "Old Portsmouth and Gunwharf",
+      "postcodes": "PO1",
+      "housing": "Georgian houses, post-war rebuilds and modern waterfront apartments."
+    },
+    {
+      "name": "Buckland and Kingston",
+      "postcodes": "PO1, PO2",
+      "housing": "Victorian terraces and post-war estates."
+    },
+    {
+      "name": "North End and Stamshaw",
+      "postcodes": "PO2",
+      "housing": "Edwardian and inter-war terraces in the north of the island."
+    },
+    {
+      "name": "Copnor and Baffins",
+      "postcodes": "PO2, PO3",
+      "housing": "Inter-war terraces and semis on the east side of the island."
+    },
+    {
+      "name": "Milton and Eastney",
+      "postcodes": "PO4",
+      "housing": "Edwardian terraces and post-war homes near Langstone Harbour and the seafront."
+    },
+    {
+      "name": "Cosham and Drayton",
+      "postcodes": "PO6",
+      "housing": "Inter-war and post-war semis and estates on the mainland below Portsdown Hill."
+    },
+    {
+      "name": "Paulsgrove and Wymering",
+      "postcodes": "PO6",
+      "housing": "Large post-war council-built estates."
+    }
+  ],
+  "housing": "Portsmouth is England's most densely populated city outside London, built mostly on Portsea Island with rows of Victorian and Edwardian terraces. Southsea and Fratton have a large private rented sector, with many shared houses let to University of Portsmouth students and young workers, and every HMO in the city needs a licence. The city centre has post-war estates, towers and purpose-built student blocks, while Gunwharf Quays has modern waterfront apartments. On the mainland, Cosham, Drayton and Paulsgrove are mostly inter-war and post-war estates.",
+  "checkinTips": [
+    "Shared houses in Southsea and Fratton: note the HMO licence number and photograph each bedroom lock, fire doors and closers, alarms and the shared kitchen and bathroom separately.",
+    "Seafront homes in Southsea and Eastney: record salt marks, rust on window fittings and damp on exposed walls.",
+    "Victorian terraces with small yards: photograph damp at the base of walls, rear yards and where bins are kept on narrow streets.",
+    "Waterfront apartments at Gunwharf: note fob counts, parking bays and balconies.",
+    "Low-lying streets near the harbours: photograph any damp low on walls and air bricks, as parts of the island can flood.",
+    "Converted Southsea villas split into flats: record communal hallways, meter cupboards and the key count for each door."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Portsmouth City Council's private sector housing team.",
+  "nearby": [
+    "havant",
+    "fareham",
+    "gosport",
+    "winchester",
+    "isle-of-wight"
+  ]
+}

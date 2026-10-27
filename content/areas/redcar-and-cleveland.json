@@ -1,0 +1,106 @@
+{
+  "slug": "redcar-and-cleveland",
+  "name": "Redcar and Cleveland",
+  "council": {
+    "name": "Redcar and Cleveland Borough Council",
+    "url": "https://www.redcar-cleveland.gov.uk",
+    "privateRentingUrl": "https://www.redcar-cleveland.gov.uk/housing/housing-standards/selective-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing ran in South Bank from 2018 until 24 March 2024; we could not confirm a renewal. In 2025 the council said it was reviewing the case for selective licensing in East Cleveland villages such as Brotton and Carlin How.",
+    "additional": null,
+    "fee": null,
+    "source": "https://www.redcar-cleveland.gov.uk/housing/housing-standards/selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£645 a month (ONS, May 2026), up 3.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000003/"
+  },
+  "price": {
+    "text": "£154,000 (UK HPI, April 2026, provisional), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000003/"
+  },
+  "privateRentedShare": {
+    "text": "15.8% of households rent privately (Census 2021), up from 12.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000003"
+  },
+  "councilTax": {
+    "text": "£2,526.22 Band D (2026/27) outside parished areas; parishes pay more (for example £2,548.78 in Saltburn, Marske and New Marske and £2,637.50 in Loftus)",
+    "source": "https://www.redcar-cleveland.gov.uk/ctaxcharges"
+  },
+  "postcodes": [
+    "TS6",
+    "TS10",
+    "TS11",
+    "TS12",
+    "TS13",
+    "TS14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Redcar",
+      "postcodes": "TS10",
+      "housing": "Victorian and Edwardian terraces near the seafront and centre, with inter-war and post-war estates."
+    },
+    {
+      "name": "Dormanstown",
+      "postcodes": "TS10",
+      "housing": "A planned 1920s steelworks village of cottage-style council-built homes."
+    },
+    {
+      "name": "Marske-by-the-Sea",
+      "postcodes": "TS11",
+      "housing": "Fishermen's cottages, semis and large newer estates on the coast."
+    },
+    {
+      "name": "Saltburn-by-the-Sea",
+      "postcodes": "TS12",
+      "housing": "Victorian brick terraces in the 'jewel streets' above the cliffs."
+    },
+    {
+      "name": "South Bank",
+      "postcodes": "TS6",
+      "housing": "Victorian terraces, many empty or cleared, beside the former steelworks."
+    },
+    {
+      "name": "Eston and Normanby",
+      "postcodes": "TS6",
+      "housing": "Post-war council-built estates and semis below Eston Hills."
+    },
+    {
+      "name": "Grangetown",
+      "postcodes": "TS6",
+      "housing": "Post-war estate housing near the Teesside industrial area."
+    },
+    {
+      "name": "Guisborough",
+      "postcodes": "TS14",
+      "housing": "A market town of period houses and terraces, with suburban estates."
+    },
+    {
+      "name": "Brotton and Skelton",
+      "postcodes": "TS12",
+      "housing": "Former ironstone-mining villages with terraced rows and newer estates."
+    },
+    {
+      "name": "Loftus and Carlin How",
+      "postcodes": "TS13",
+      "housing": "Terraced streets in former mining villages in East Cleveland."
+    }
+  ],
+  "housing": "Redcar and Cleveland mixes industrial Teesside, seaside towns and the villages of East Cleveland. South Bank, Grangetown, Eston and Normanby grew around the steel and chemical works, with Victorian terraces and large post-war estates, and South Bank had selective licensing until 2024. Redcar, Marske and Saltburn have Victorian seaside terraces, and East Cleveland's former ironstone-mining villages such as Brotton, Skelton, Loftus and Carlin How have terraced rows where private renting is common. Prices are among the lowest in the North East.",
+  "checkinTips": [
+    "Seafront homes in Redcar, Marske and Saltburn: photograph salt marks, rust on window fittings and damp on exposed walls.",
+    "Victorian terraces in South Bank and East Cleveland villages: record damp at the base of walls, back yards, rear lanes and any boarded neighbouring houses.",
+    "Saltburn's tall brick terraces: photograph sash windows, chimneys and gutters, and stairs in homes split into flats.",
+    "Post-war estate homes in Eston, Normanby and Grangetown: photograph gardens, fences, sheds and older boilers.",
+    "Rural cottages near Guisborough and the moors: photograph stoves, chimneys and any oil tank or LPG supply with the fuel level."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Redcar and Cleveland Borough Council's housing standards team.",
+  "nearby": [
+    "middlesbrough",
+    "north-yorkshire",
+    "stockton-on-tees"
+  ]
+}

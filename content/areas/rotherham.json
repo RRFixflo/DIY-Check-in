@@ -1,0 +1,111 @@
+{
+  "slug": "rotherham",
+  "name": "Rotherham",
+  "council": {
+    "name": "Rotherham Metropolitan Borough Council",
+    "url": "https://www.rotherham.gov.uk",
+    "privateRentingUrl": "https://www.rotherham.gov.uk/housing/selective-licensing-2026-2031"
+  },
+  "licensing": {
+    "selective": "Selective licensing in six areas designated on 14 November 2025 for the 2026 to 2031 scheme: Town Centre/Eastwood/East Dene/Clifton/Boston Castle, Masbrough/Kimberworth, Thurcroft, Dinnington, Brinsworth and Parkgate; it renews and extends the 2020–2025 scheme. The council's page lists the streets.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": "£995 per property proposed for the 2026–2031 selective licence at consultation, with discounts for landlords who earned a management rebate under the previous scheme",
+    "source": "https://publicnoticeportal.uk/notice/statutory/697b8f7e80ec873b5c9fc686",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£686 a month (ONS, August 2026), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000018/"
+  },
+  "price": {
+    "text": "£191,000 (UK HPI, July 2026, provisional), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000018/"
+  },
+  "privateRentedShare": {
+    "text": "15.0% of households rent privately (Census 2021), up from 11.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000018/"
+  },
+  "councilTax": {
+    "text": "£2,319.61 Band D (2026/27) in unparished areas, including the police (£280.04) and fire (£95.05) precepts; parish precepts average £110.47 more",
+    "source": "https://moderngov.rotherham.gov.uk/documents/s156693/Appendix 6 - Statutory Resolution of Council Tax 2026-27.pdf"
+  },
+  "postcodes": [
+    "S60",
+    "S61",
+    "S62",
+    "S63",
+    "S65",
+    "S66",
+    "S25",
+    "S26"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rotherham town centre",
+      "postcodes": "S60, S65",
+      "housing": "Flats over shops, converted buildings and newer apartments."
+    },
+    {
+      "name": "Eastwood and East Dene",
+      "postcodes": "S65",
+      "housing": "Victorian terraces with many private lets in the Eastwood licensing area, and post-war estates at East Dene."
+    },
+    {
+      "name": "Masbrough and Kimberworth",
+      "postcodes": "S61",
+      "housing": "Terraced streets and post-war estates on the west bank of the Don."
+    },
+    {
+      "name": "Clifton and Boston Castle",
+      "postcodes": "S60, S65",
+      "housing": "Victorian and Edwardian terraces and larger houses near Clifton Park."
+    },
+    {
+      "name": "Parkgate and Rawmarsh",
+      "postcodes": "S62",
+      "housing": "Terraces, post-war estates and newer homes north of the town."
+    },
+    {
+      "name": "Wath-upon-Dearne",
+      "postcodes": "S63",
+      "housing": "Former mining-town terraces, semis and newer estates."
+    },
+    {
+      "name": "Maltby",
+      "postcodes": "S66",
+      "housing": "Colliery-era terraces and post-war estates in the east."
+    },
+    {
+      "name": "Dinnington",
+      "postcodes": "S25",
+      "housing": "Former pit-village terraces and estates in the south-east."
+    },
+    {
+      "name": "Wickersley and Bramley",
+      "postcodes": "S66",
+      "housing": "Suburban semis, bungalows and detached houses."
+    },
+    {
+      "name": "Brinsworth and Treeton",
+      "postcodes": "S60",
+      "housing": "Inter-war and post-war semis and newer estates near the M1."
+    }
+  ],
+  "housing": "Rotherham grew on coal and steel, so much of its housing is Victorian terraces near the town centre and in former mining towns such as Wath, Maltby, Dinnington and Thurcroft, alongside large post-war council-built estates. Private renting is concentrated in terraced areas such as Eastwood, Masbrough and parts of the former pit villages, several of which are under selective licensing. Wickersley, Bramley and Brinsworth are more suburban, and prices are low by national standards.",
+  "checkinTips": [
+    "Homes in the selective licensing areas: note the licence number and photograph smoke and carbon monoxide alarms, which are licence conditions.",
+    "Victorian terraces in Eastwood and Masbrough: record damp at the base of walls, cellar heads, back yards and rear alleys.",
+    "Former colliery terraces in Dinnington, Maltby and Thurcroft: photograph any cracks, uneven floors, outbuildings and the state of gutters.",
+    "Post-war estate homes: photograph gardens, fences, sheds and older boilers and windows.",
+    "Flats over shops in the town centre: record the separate entrance, stairs, fire doors and where the meters are."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rotherham Council's housing standards team.",
+  "nearby": [
+    "sheffield",
+    "barnsley",
+    "doncaster",
+    "bassetlaw",
+    "north-east-derbyshire",
+    "bolsover"
+  ]
+}

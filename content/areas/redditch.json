@@ -1,0 +1,98 @@
+{
+  "slug": "redditch",
+  "name": "Redditch",
+  "council": {
+    "name": "Redditch Borough Council",
+    "url": "https://www.redditchbc.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies, with amenity standards shared with Bromsgrove.",
+    "fee": null,
+    "source": "https://www.redditchbc.gov.uk/media/yshdyxuq/redditch-bromsgrove-amenity-standards-2020.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£886 a month (ONS, October 2025), similar to a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000236/"
+  },
+  "price": {
+    "text": "£246,000 (UK HPI, September 2025, provisional), similar to a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000236/"
+  },
+  "privateRentedShare": {
+    "text": "14.4% of households rent privately (Census 2021), up from 11.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000236/"
+  },
+  "councilTax": {
+    "text": "£2,460.46 average Band D (2026/27) including county, police, fire and parish precepts (£2,633.78 in Feckenham parish); the borough council's own share is £285.94",
+    "source": "https://moderngovwebpublic.redditchbc.gov.uk/documents/s57470/RBC Council Tax Resolutions FINAL.pdf"
+  },
+  "postcodes": [
+    "B96",
+    "B97",
+    "B98"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Redditch town centre",
+      "postcodes": "B97",
+      "housing": "Victorian terraces around the old needle-making centre, flats over shops and newer apartments."
+    },
+    {
+      "name": "Headless Cross",
+      "postcodes": "B97",
+      "housing": "Victorian and Edwardian terraces and semis on the hill south of the centre."
+    },
+    {
+      "name": "Batchley",
+      "postcodes": "B97",
+      "housing": "A post-war council-built estate west of the centre."
+    },
+    {
+      "name": "Webheath",
+      "postcodes": "B97",
+      "housing": "Suburban semis and detached houses with newer estates."
+    },
+    {
+      "name": "Matchborough and Winyates",
+      "postcodes": "B98",
+      "housing": "1970s new-town estates of terraced houses and maisonettes, with garage courts and footpaths."
+    },
+    {
+      "name": "Church Hill and Woodrow",
+      "postcodes": "B98",
+      "housing": "New-town estates with terraces, maisonettes and some towers."
+    },
+    {
+      "name": "Lodge Park and Greenlands",
+      "postcodes": "B98",
+      "housing": "Post-war and new-town estate housing."
+    },
+    {
+      "name": "Crabbs Cross and Walkwood",
+      "postcodes": "B97",
+      "housing": "1970s–90s estates of houses in the south of the town."
+    },
+    {
+      "name": "Astwood Bank and Feckenham",
+      "postcodes": "B96",
+      "housing": "Villages with older cottages, semis and bungalows."
+    }
+  ],
+  "housing": "Redditch was a needle-making town before it became a new town in 1964, so it has a small core of Victorian terraces around the centre and Headless Cross and large planned estates such as Matchborough, Winyates, Church Hill and Woodrow. The new-town estates have terraced houses and maisonettes laid out around footpaths and garage courts, many built by the development corporation and later bought or let privately. Private renting is a modest share of homes, and the villages of Astwood Bank and Feckenham are mostly owner-occupied.",
+  "checkinTips": [
+    "New-town terraces and maisonettes in Matchborough, Winyates and Church Hill: photograph flat roofs, older windows, shared stairways and garage courts, and note garage keys.",
+    "Victorian terraces near the town centre and Headless Cross: record damp at the base of walls, rear yards and alleys.",
+    "Homes with underpasses and footpath frontages on the estates: note which bins, sheds and parking spaces belong to the property.",
+    "Village cottages in Astwood Bank and Feckenham: photograph stoves, chimneys and damp in older walls.",
+    "Flats over shops in the town centre: record the separate entrance, stairs, fire escape and where the meters are."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Redditch Borough Council's private sector housing team, shared with Bromsgrove.",
+  "nearby": [
+    "bromsgrove",
+    "stratford-on-avon",
+    "wychavon"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "slug": "preston",
+  "name": "Preston",
+  "council": {
+    "name": "Preston City Council",
+    "url": "https://www.preston.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing in force. A scheme for City Centre, St Matthew's and Plungington wards, with a proposed fee of £1,050 per property for up to five years, was consulted on from 27 July 2026 into early October 2026; a decision is awaited.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies. An Article 4 direction restricting new HMOs was consulted on in early 2026 and, if confirmed, would take effect in February 2027.",
+    "fee": "£1,050 per property proposed for the planned selective licence (£470 on application, £580 on grant)",
+    "source": "https://www.central.radio/news/preston-leyland-and-chorley-news/consultation-launched-on-plans-for-new-housing-licencing-scheme-in-preston/",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£790 a month (ONS, August 2026), up 5.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000123/"
+  },
+  "price": {
+    "text": "£189,000 (UK HPI, July 2026, provisional), up 7.3% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000123/"
+  },
+  "privateRentedShare": {
+    "text": "22.4% of households rent privately (Census 2021), up from 18.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000123/"
+  },
+  "councilTax": {
+    "text": "About £2,576 average Band D (2026/27) including Lancashire County Council, police, fire and parish precepts (MHCLG figures)",
+    "source": "https://housecheckup.co.uk/council-tax/preston"
+  },
+  "postcodes": [
+    "PR1",
+    "PR2",
+    "PR3",
+    "PR4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre",
+      "postcodes": "PR1",
+      "housing": "Flats over shops, converted buildings and many purpose-built student blocks near UCLan."
+    },
+    {
+      "name": "Plungington",
+      "postcodes": "PR1",
+      "housing": "Dense Victorian terraces, many let to students and shared."
+    },
+    {
+      "name": "Deepdale",
+      "postcodes": "PR1",
+      "housing": "Victorian terraced streets around the football ground."
+    },
+    {
+      "name": "Avenham and Frenchwood",
+      "postcodes": "PR1",
+      "housing": "Georgian and Victorian houses near the parks, many split into flats, and terraces."
+    },
+    {
+      "name": "St Matthew's and Ribbleton",
+      "postcodes": "PR1, PR2",
+      "housing": "Victorian terraces and post-war estates east of the centre."
+    },
+    {
+      "name": "Ashton-on-Ribble",
+      "postcodes": "PR2",
+      "housing": "Victorian and Edwardian terraces and semis, with newer homes at the riverside docks."
+    },
+    {
+      "name": "Fulwood",
+      "postcodes": "PR2",
+      "housing": "Victorian villas, inter-war and post-war semis and larger detached homes."
+    },
+    {
+      "name": "Cottam and North West Preston",
+      "postcodes": "PR4",
+      "housing": "Large new-build estates on the north-western edge."
+    },
+    {
+      "name": "Riversway and Preston Docks",
+      "postcodes": "PR2",
+      "housing": "Modern apartments and houses around the former dock basin."
+    },
+    {
+      "name": "Broughton and Goosnargh",
+      "postcodes": "PR3",
+      "housing": "Village houses, cottages and farmhouses in the rural north."
+    }
+  ],
+  "housing": "Preston's inner wards, such as Plungington, Deepdale, St Matthew's and Avenham, are dominated by Victorian terraces with a large private rented sector, many of them shared or let to students at the University of Central Lancashire. The city centre has a lot of purpose-built student housing and flats over shops. Fulwood and Ashton are more suburban, while the north-west of the city is growing fast with new-build estates at Cottam and beyond. The council is consulting on selective licensing in three inner wards.",
+  "checkinTips": [
+    "Student lets in Plungington and near UCLan: photograph each bedroom lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "Victorian terraces in Deepdale and St Matthew's: record damp at the base of walls, cellar heads, back yards and alley gates.",
+    "Georgian and Victorian houses split into flats in Avenham: note communal hallways, meter cupboards and the key count for each door.",
+    "Apartments at Preston Docks: note fob counts, parking bays and the condition of balconies.",
+    "New-build estates in north-west Preston: photograph snagging marks, sealant and the state of new turf and fences."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Preston City Council's environmental health team.",
+  "nearby": [
+    "south-ribble",
+    "fylde",
+    "wyre",
+    "ribble-valley",
+    "chorley"
+  ]
+}

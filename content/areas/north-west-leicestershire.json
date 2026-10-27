@@ -1,0 +1,105 @@
+{
+  "slug": "north-west-leicestershire",
+  "name": "North West Leicestershire",
+  "council": {
+    "name": "North West Leicestershire District Council",
+    "url": "https://www.nwleics.gov.uk",
+    "privateRentingUrl": "https://www.nwleics.gov.uk/pages/advice_for_private_landlords"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; the council's private housing team licenses HMOs under the national mandatory scheme (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://www.nwleics.gov.uk/pages/advice_for_private_landlords",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£920 a month (ONS, September 2026), up 8.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000134/"
+  },
+  "price": {
+    "text": "£282,000 (UK HPI, August 2026, provisional), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000134/"
+  },
+  "privateRentedShare": {
+    "text": "13.5% of households rent privately (Census 2021), up from 11.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000134/"
+  },
+  "councilTax": {
+    "text": "About £2,418 average Band D (2026/27) including county, police, fire and parish precepts (MHCLG figures); the county's share is £1,731.79",
+    "source": "https://housecheckup.co.uk/council-tax/north-west-leicestershire"
+  },
+  "postcodes": [
+    "LE12",
+    "LE65",
+    "LE67",
+    "DE11",
+    "DE12",
+    "DE73",
+    "DE74"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Coalville",
+      "postcodes": "LE67",
+      "housing": "Brick terraces from the mining era, post-war council estates and new-build estates on the edges."
+    },
+    {
+      "name": "Whitwick",
+      "postcodes": "LE67",
+      "housing": "A former mining village of terraces, semis and estates below Charnwood Forest."
+    },
+    {
+      "name": "Ashby-de-la-Zouch",
+      "postcodes": "LE65",
+      "housing": "A market town with Georgian and Victorian houses in the centre and large newer estates around it."
+    },
+    {
+      "name": "Ibstock",
+      "postcodes": "LE67",
+      "housing": "Terraced streets, post-war homes and new estates in a former pit village."
+    },
+    {
+      "name": "Measham",
+      "postcodes": "DE12",
+      "housing": "Terraces and newer estates in a former mining village near the A42."
+    },
+    {
+      "name": "Castle Donington",
+      "postcodes": "DE74",
+      "housing": "Period cottages in the village core and large new-build estates near the airport and logistics parks."
+    },
+    {
+      "name": "Kegworth",
+      "postcodes": "DE74",
+      "housing": "Village houses and terraces near East Midlands Airport and the M1."
+    },
+    {
+      "name": "Moira and Donisthorpe",
+      "postcodes": "DE12",
+      "housing": "Former colliery villages in the National Forest with terraces and new estates."
+    },
+    {
+      "name": "Thringstone",
+      "postcodes": "LE67",
+      "housing": "Older terraces, semis and bungalows on the edge of Coalville."
+    }
+  ],
+  "housing": "North West Leicestershire grew around coal mining, and Coalville, Whitwick, Ibstock and Measham still have rows of brick terraces alongside post-war council estates. Ashby-de-la-Zouch has Georgian and Victorian houses at its centre, and large new-build estates have been added around Ashby, Coalville and Castle Donington. Jobs at East Midlands Airport and the logistics parks bring demand for rented homes around Castle Donington and Kegworth.",
+  "checkinTips": [
+    "Mining-era terraces in Coalville, Whitwick and Ibstock: photograph damp at the base of walls, back yards and outbuildings.",
+    "New-build estates around Ashby, Coalville and Castle Donington: record snagging marks, sealant and the state of turf, fences and parking spaces.",
+    "Period houses in Ashby town centre: photograph sash windows, old doors, cellars and any chimney breasts.",
+    "Homes near East Midlands Airport and the logistics parks: note window and door seals and any trickle vents, which matter for noise.",
+    "Rural cottages in the villages: photograph stoves, oil tanks and the fuel level, and any septic tank."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to North West Leicestershire District Council's private housing team.",
+  "nearby": [
+    "charnwood",
+    "hinckley-and-bosworth",
+    "south-derbyshire",
+    "erewash",
+    "rushcliffe",
+    "north-warwickshire"
+  ]
+}

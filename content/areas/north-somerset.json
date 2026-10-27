@@ -1,0 +1,106 @@
+{
+  "slug": "north-somerset",
+  "name": "North Somerset",
+  "council": {
+    "name": "North Somerset Council",
+    "url": "https://n-somerset.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme. A scheme proposed in 2016 for Central ward and part of Hillside in Weston-super-Mare was dropped after a legal challenge by landlords.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people forming two or more households) applies.",
+    "fee": null,
+    "source": "https://landlordtoday.co.uk/breaking-news/2016/8/victory-for-landlords-as-council-scraps-proposed-licensing-scheme",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,209 a month (ONS, August 2026), up 3.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000024/"
+  },
+  "price": {
+    "text": "£314,000 (UK HPI, July 2026, provisional), up 3.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000024/"
+  },
+  "privateRentedShare": {
+    "text": "18.4% of households rent privately (Census 2021), up from 16.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000024/"
+  },
+  "councilTax": {
+    "text": "£1,955 average Band D (2026/27) for North Somerset Council's own share after an 8.99% rise; about £2,490 in total with police, fire and parish precepts (varies by parish)",
+    "source": "https://n-somerset.gov.uk/news/balanced-budget-set-millions-savings-one-year-exceptional-council-tax-rise"
+  },
+  "postcodes": [
+    "BS20",
+    "BS21",
+    "BS22",
+    "BS23",
+    "BS24",
+    "BS25",
+    "BS29",
+    "BS40",
+    "BS41",
+    "BS48",
+    "BS49"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Weston-super-Mare town centre",
+      "postcodes": "BS23",
+      "housing": "Victorian and Edwardian villas and terraces, many split into flats, close to the seafront."
+    },
+    {
+      "name": "Worle",
+      "postcodes": "BS22",
+      "housing": "Older village houses surrounded by large post-war and 1980s–90s estates."
+    },
+    {
+      "name": "Locking Castle and Haywood Village",
+      "postcodes": "BS24",
+      "housing": "Modern estates, including the new-build Haywood Village on the former Locking airfield."
+    },
+    {
+      "name": "Clevedon",
+      "postcodes": "BS21",
+      "housing": "Victorian seaside villas and terraces, with post-war and newer estates inland."
+    },
+    {
+      "name": "Portishead",
+      "postcodes": "BS20",
+      "housing": "An older town centre with large new-build estates and apartments around the marina."
+    },
+    {
+      "name": "Nailsea",
+      "postcodes": "BS48",
+      "housing": "Mostly 1960s–80s family houses and bungalows."
+    },
+    {
+      "name": "Yatton and Congresbury",
+      "postcodes": "BS49",
+      "housing": "Village houses, bungalows and newer estates."
+    },
+    {
+      "name": "Long Ashton",
+      "postcodes": "BS41",
+      "housing": "A commuter village on the edge of Bristol with period cottages and suburban homes."
+    },
+    {
+      "name": "Winscombe and Banwell",
+      "postcodes": "BS25, BS29",
+      "housing": "Stone cottages and village houses below the Mendips."
+    }
+  ],
+  "housing": "Weston-super-Mare holds much of North Somerset's private rented stock, especially in the Victorian villas and terraces near the centre and seafront, many of them converted into flats. Clevedon has similar seaside period homes, while Portishead has grown fast with new-build estates and marina apartments. Nailsea, Worle and the villages are mainly owner-occupied family homes, and large new estates continue around Weston at Locking Castle and Haywood Village.",
+  "checkinTips": [
+    "Converted flats in Weston's Victorian villas: photograph shared hallways, meter cupboards and fire doors, and note which keys open which doors.",
+    "Seafront homes in Weston and Clevedon: record salt marks and corrosion on window frames, railings and external doors.",
+    "Marina apartments in Portishead: note fob and key counts, parking bays and the condition of balconies.",
+    "New-build homes in Haywood Village and Portishead: photograph snagging marks, sealant around baths and the state of new turf and fences.",
+    "Stone cottages in the Mendip villages: photograph damp patches, chimneys, stoves and any oil tank or LPG supply."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to North Somerset Council's private housing team.",
+  "nearby": [
+    "bristol",
+    "bath",
+    "somerset"
+  ]
+}

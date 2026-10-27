@@ -1,0 +1,97 @@
+{
+  "slug": "rochford",
+  "name": "Rochford",
+  "council": {
+    "name": "Rochford District Council",
+    "url": "https://www.rochford.gov.uk",
+    "privateRentingUrl": "https://www.rochford.gov.uk/licensing-for-certain-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing: the council says it operates the national mandatory HMO licensing scheme only (five or more people from two or more households).",
+    "fee": null,
+    "source": "https://www.rochford.gov.uk/licensing-for-certain-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,302 a month (ONS, September 2026), up 5.0% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000075/"
+  },
+  "price": {
+    "text": "£405,000 (UK HPI, August 2026, provisional), roughly unchanged on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000075/"
+  },
+  "privateRentedShare": {
+    "text": "10.7% of households rent privately (Census 2021), up from 8.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000075/"
+  },
+  "councilTax": {
+    "text": "£2,358.43 average Band D (2026/27) including Essex County Council, police, fire and parish precepts; the district council's own share is £272.88",
+    "source": "https://rochford.moderngov.co.uk/documents/s4761/Appendix 6 - Council Tax Resolution.pdf"
+  },
+  "postcodes": [
+    "SS4",
+    "SS5",
+    "SS6",
+    "SS3",
+    "SS11"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rayleigh",
+      "postcodes": "SS6",
+      "housing": "Inter-war and post-war semis, bungalows and detached houses around a historic high street."
+    },
+    {
+      "name": "Rochford",
+      "postcodes": "SS4",
+      "housing": "Georgian and Victorian buildings in the old town centre, with post-war and newer estates."
+    },
+    {
+      "name": "Hockley",
+      "postcodes": "SS5",
+      "housing": "Bungalows, chalet bungalows and semis near Hockley Woods."
+    },
+    {
+      "name": "Hawkwell",
+      "postcodes": "SS5",
+      "housing": "Post-war semis and bungalows and newer estates."
+    },
+    {
+      "name": "Ashingdon",
+      "postcodes": "SS4",
+      "housing": "Bungalows and post-war houses on the edge of the countryside."
+    },
+    {
+      "name": "Great Wakering",
+      "postcodes": "SS3",
+      "housing": "Village terraces and bungalows near the Thames estuary marshes."
+    },
+    {
+      "name": "Rawreth and Hullbridge",
+      "postcodes": "SS11, SS5",
+      "housing": "Bungalows, chalets and riverside homes along the River Crouch."
+    },
+    {
+      "name": "Canewdon",
+      "postcodes": "SS4",
+      "housing": "A rural village of cottages and post-war houses."
+    }
+  ],
+  "housing": "Rochford is a commuter district between Southend and the Essex countryside, mostly owner-occupied, with one of the lowest private renting shares in Essex. Rayleigh, Hockley and Hawkwell are dominated by post-war semis, bungalows and chalet bungalows, while Rochford town has an older Georgian and Victorian centre. Large new-build estates have been added around Rayleigh and Rochford. Hullbridge and the riverside and estuary villages include bungalows and homes on low-lying land near the River Crouch and the marshes.",
+  "checkinTips": [
+    "Bungalows and chalet bungalows in Hockley, Hawkwell and Ashingdon: photograph loft rooms, dormer windows, flat-roof extensions and gardens.",
+    "Riverside homes in Hullbridge and near the Crouch: photograph any damp low on walls, air bricks and signs of past flooding.",
+    "Period buildings in Rochford's old town: record sash windows, old doors and floors, and any damp.",
+    "New-build estates around Rayleigh and Rochford: note snagging marks, sealant, parking spaces and new fences and turf.",
+    "Homes under the Southend Airport flight path: note window and door seals and any trickle vents."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rochford District Council's private sector housing team.",
+  "nearby": [
+    "southend-on-sea",
+    "castle-point",
+    "basildon",
+    "chelmsford",
+    "maldon"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "slug": "nottingham",
+  "name": "Nottingham",
+  "council": {
+    "name": "Nottingham City Council",
+    "url": "https://www.nottinghamcity.gov.uk",
+    "privateRentingUrl": "https://www.nottinghamcity.gov.uk/information-for-residents/housing/private-rented-accommodation/information-for-landlords/licensing-for-landlords/selective-licensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers most of the city (about 30,000 privately rented homes in wards including Aspley, Basford, Castle, Meadows, Radford, Sherwood and St Ann's) from 1 December 2023 to 30 November 2028; the council's postcode checker shows whether a home is inside it. It follows a first scheme that ran from 2018 to 2023.",
+    "additional": "Citywide additional HMO licensing since January 2024: HMOs of three or more unrelated people forming two or more households need a licence, as well as the larger HMOs under mandatory licensing.",
+    "fee": "£1,607 for a standard additional HMO licence (up to 9 bedrooms, from April 2026), £1,210 for landlords accredited under the Nottingham Rental Standard, paid in two parts",
+    "source": "https://www.nottinghamcity.gov.uk/additionalHMO",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,015 a month (ONS, September 2026), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000018/"
+  },
+  "price": {
+    "text": "£190,000 (UK HPI, August 2026, provisional), down 1.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000018/"
+  },
+  "privateRentedShare": {
+    "text": "28.6% of households rent privately (Census 2021), up from 23.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000018"
+  },
+  "councilTax": {
+    "text": "£2,342.08 Band D for the City Council's own share (2026/27, up 3.5%); about £2,755 in total with the police and fire precepts",
+    "source": "https://www.nottinghamcity.gov.uk/ctbands"
+  },
+  "postcodes": [
+    "NG1",
+    "NG2",
+    "NG3",
+    "NG5",
+    "NG6",
+    "NG7",
+    "NG8",
+    "NG11"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Lenton",
+      "postcodes": "NG7",
+      "housing": "Victorian terraces, most let as student HMOs, between the city and the University of Nottingham."
+    },
+    {
+      "name": "Radford",
+      "postcodes": "NG7",
+      "housing": "Terraced streets and flats, many shared and student lets, plus some estates."
+    },
+    {
+      "name": "The Arboretum and Forest Fields",
+      "postcodes": "NG7",
+      "housing": "Large Victorian houses split into flats and bedsits, and terraced streets."
+    },
+    {
+      "name": "Sherwood",
+      "postcodes": "NG5",
+      "housing": "Victorian and Edwardian terraces and semis around a busy high street."
+    },
+    {
+      "name": "City centre and Lace Market",
+      "postcodes": "NG1",
+      "housing": "Converted lace warehouses, new apartment blocks and purpose-built student housing."
+    },
+    {
+      "name": "The Meadows",
+      "postcodes": "NG2",
+      "housing": "Victorian terraces and 1970s estate housing south of the centre, near the river."
+    },
+    {
+      "name": "Sneinton",
+      "postcodes": "NG2, NG3",
+      "housing": "Victorian terraces, post-war estates and new homes near the city centre."
+    },
+    {
+      "name": "Beeston Road and Dunkirk",
+      "postcodes": "NG7",
+      "housing": "Terraces and semis near the university and QMC, many let to students."
+    },
+    {
+      "name": "Aspley and Bilborough",
+      "postcodes": "NG8",
+      "housing": "Large inter-war and post-war council-built estates."
+    },
+    {
+      "name": "Clifton",
+      "postcodes": "NG11",
+      "housing": "A large post-war council-built estate south of the Trent."
+    }
+  ],
+  "housing": "Nottingham has a large private rented sector, with more than a quarter of households renting privately in 2021. Two universities mean many student HMOs, especially in the Victorian terraces of Lenton, Radford and Dunkirk, alongside purpose-built student blocks in the city centre. The Arboretum and Forest Fields have large Victorian houses split into flats and bedsits, while the outer estates such as Aspley, Bilborough and Clifton are mostly inter-war and post-war council-built homes. Most privately rented homes in the city need a selective or HMO licence.",
+  "checkinTips": [
+    "Student HMOs in Lenton and Radford: photograph each bedroom lock, fire doors and closers, alarms and the shared kitchen and bathroom separately, and note the HMO licence number.",
+    "Selective licensing: check the property's licence and photograph smoke and carbon monoxide alarms, as these are licence conditions.",
+    "Victorian houses split into flats in the Arboretum and Forest Fields: record communal hallways, meter cupboards and the key count for each door.",
+    "Lace Market warehouse conversions and city-centre blocks: note fob counts, intercom, parking and bike stores, and any exposed brick or timber.",
+    "Terraces with small back yards: photograph damp at the base of walls, yard gates and where the bins are kept.",
+    "Inter-war homes in Aspley and Bilborough: photograph gardens, fences, sheds and older boilers."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes, or a home that should be licensed and isn't, to Nottingham City Council's private sector housing team.",
+  "nearby": [
+    "broxtowe",
+    "gedling",
+    "rushcliffe",
+    "ashfield"
+  ]
+}

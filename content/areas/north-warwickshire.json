@@ -1,0 +1,107 @@
+{
+  "slug": "north-warwickshire",
+  "name": "North Warwickshire",
+  "council": {
+    "name": "North Warwickshire Borough Council",
+    "url": "https://www.northwarks.gov.uk",
+    "privateRentingUrl": "https://www.northwarks.gov.uk/private-rented-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing for larger HMOs applies. The council consulted from 6 November to 18 December 2025 on an Article 4 direction so that small HMOs would need planning permission.",
+    "fee": null,
+    "source": "https://www.northwarks.gov.uk/news/article/164/north-warwickshire-borough-council-launches-consultation-on-new-article-4-direction-for-small-hmos",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£974 a month (ONS, June 2026), up 6.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000218/"
+  },
+  "price": {
+    "text": "£266,000 (UK HPI, May 2026, provisional), up 1.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000218/"
+  },
+  "privateRentedShare": {
+    "text": "14.9% of households rent privately (Census 2021), up from 11.3% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000218/"
+  },
+  "councilTax": {
+    "text": "About £2,532 average Band D (2026/27) including county, police and parish precepts (MHCLG figures); the borough council kept its own share unchanged at about £243",
+    "source": "https://housecheckup.co.uk/council-tax/north-warwickshire"
+  },
+  "postcodes": [
+    "B46",
+    "B76",
+    "B78",
+    "B79",
+    "CV7",
+    "CV9",
+    "CV10"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Atherstone",
+      "postcodes": "CV9",
+      "housing": "A market town of Georgian and Victorian houses along Long Street, with terraces and post-war estates behind."
+    },
+    {
+      "name": "Mancetter",
+      "postcodes": "CV9",
+      "housing": "Village houses, inter-war semis and post-war estates next to Atherstone."
+    },
+    {
+      "name": "Coleshill",
+      "postcodes": "B46",
+      "housing": "A historic market town with period buildings on the high street and surrounding estates."
+    },
+    {
+      "name": "Water Orton",
+      "postcodes": "B46",
+      "housing": "A commuter village of semis and bungalows close to Birmingham."
+    },
+    {
+      "name": "Polesworth",
+      "postcodes": "B78",
+      "housing": "A former mining village with terraces, council-built homes and newer estates."
+    },
+    {
+      "name": "Dordon",
+      "postcodes": "B78",
+      "housing": "Former colliery housing, semis and new-build estates near the M42."
+    },
+    {
+      "name": "Kingsbury",
+      "postcodes": "B78",
+      "housing": "Village houses, post-war estates and bungalows."
+    },
+    {
+      "name": "Hartshill",
+      "postcodes": "CV10",
+      "housing": "A hillside village of semis, bungalows and older cottages."
+    },
+    {
+      "name": "Arley",
+      "postcodes": "CV7",
+      "housing": "A former pit village with terraced rows and council-built homes."
+    }
+  ],
+  "housing": "North Warwickshire is a largely rural borough of market towns and former mining villages, with Atherstone, Coleshill and Polesworth the largest settlements. Much of the housing is semis, bungalows and post-war council-built estates, with brick terraces in the old colliery villages and period cottages in the countryside. Private renting is a modest share of homes, and new-build estates have grown near the M42 at Dordon and Polesworth.",
+  "checkinTips": [
+    "Former colliery terraces in Polesworth, Arley and Dordon: photograph damp at the base of walls, back yards and outbuildings.",
+    "Period houses on Atherstone's Long Street and in Coleshill: record sash windows, old doors, uneven floors and any cellar.",
+    "Rural cottages and farm lets: photograph oil tanks, septic tanks or cesspits, stoves and chimneys, and note the fuel level.",
+    "New-build estates near the M42: photograph snagging marks, sealant, and the state of turf and fences.",
+    "Bungalows let to older tenants: note grab rails, ramps and any adaptations, and their condition."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to North Warwickshire Borough Council's private sector housing team.",
+  "nearby": [
+    "nuneaton-and-bedworth",
+    "tamworth",
+    "lichfield",
+    "birmingham",
+    "solihull",
+    "coventry",
+    "hinckley-and-bosworth",
+    "north-west-leicestershire"
+  ]
+}

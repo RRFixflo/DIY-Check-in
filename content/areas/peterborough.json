@@ -1,0 +1,111 @@
+{
+  "slug": "peterborough",
+  "name": "Peterborough",
+  "council": {
+    "name": "Peterborough City Council",
+    "url": "https://www.peterborough.gov.uk",
+    "privateRentingUrl": "https://www.peterborough.gov.uk/regulatory-services/housing-standards/selective-licensing-scheme"
+  },
+  "licensing": {
+    "selective": "Selective licensing in designated streets within ten wards (Bretton, Central, East, Fletton and Stanground, Fletton and Woodston, North, Orton Waterville, Park, Paston and Walton, Stanground South), from 11 March 2024 to 10 March 2029; the council's page lists the streets.",
+    "additional": "Citywide additional HMO licensing from 26 January 2026 to 25 January 2031, covering HMOs of three or four people as well as the larger ones under mandatory licensing, plus some section 257 converted blocks of flats.",
+    "fee": "£1,100 for a five-year additional HMO licence (2026)",
+    "source": "https://www.peterborough.gov.uk/residents/housing/houses-in-multiple-occupation/additional-hmo-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,012 a month (ONS, August 2026), up 4.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000031/"
+  },
+  "price": {
+    "text": "£235,000 (UK HPI, July 2026, provisional), about the same as a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000031/"
+  },
+  "privateRentedShare": {
+    "text": "24.4% of households rent privately (Census 2021), up from 19.1% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000031/"
+  },
+  "councilTax": {
+    "text": "£1,836.72 Band D for Peterborough City Council's own share (2026/27, up 4.99%); about £2,293 in total with the police, fire and parish precepts",
+    "source": "https://www.peterborough.gov.uk/council-tax/council-tax-explained/council-tax-bands/council-tax-bands-and-rates-2026-27"
+  },
+  "postcodes": [
+    "PE1",
+    "PE2",
+    "PE3",
+    "PE4",
+    "PE6",
+    "PE7",
+    "PE8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Millfield and New England",
+      "postcodes": "PE1",
+      "housing": "Victorian and Edwardian terraces, many privately rented and shared, north of the centre."
+    },
+    {
+      "name": "Central and Park",
+      "postcodes": "PE1",
+      "housing": "Terraced streets and larger Victorian houses near the city centre, some split into flats."
+    },
+    {
+      "name": "Eastfield and Dogsthorpe",
+      "postcodes": "PE1",
+      "housing": "Terraces and post-war council-built estates."
+    },
+    {
+      "name": "Fletton and Woodston",
+      "postcodes": "PE2",
+      "housing": "Brick terraces south of the river, with riverside apartments and newer estates."
+    },
+    {
+      "name": "Bretton",
+      "postcodes": "PE3",
+      "housing": "A 1970s new-town township of estates, houses and maisonettes."
+    },
+    {
+      "name": "Orton",
+      "postcodes": "PE2",
+      "housing": "New-town townships of 1970s–80s estates around Orton Malborne, Goldhay and Waterville."
+    },
+    {
+      "name": "Werrington",
+      "postcodes": "PE4",
+      "housing": "New-town estates mixed with an older village centre."
+    },
+    {
+      "name": "Hampton",
+      "postcodes": "PE7",
+      "housing": "A large township of new-build houses and flats from the late 1990s onwards."
+    },
+    {
+      "name": "Stanground",
+      "postcodes": "PE2",
+      "housing": "Older terraces and village houses with post-war and newer estates."
+    },
+    {
+      "name": "Villages",
+      "postcodes": "PE6, PE8",
+      "housing": "Stone cottages and houses in villages such as Thorney, Eye and Wansford."
+    }
+  ],
+  "housing": "Peterborough grew rapidly as a new town from the 1970s, so much of its housing is estate homes in the townships of Bretton, Orton and Werrington, with newer building at Hampton. Older Victorian and Edwardian terraces around Millfield, New England, Central and Fletton hold much of the private rented stock, including many shared homes. About a quarter of households rent privately, and most private lets in the inner wards need a selective licence, while every HMO in the city now needs a licence.",
+  "checkinTips": [
+    "Selective and HMO licensing: check the property's licence and photograph smoke and carbon monoxide alarms, which are licence conditions.",
+    "Shared houses in Millfield and New England: photograph each bedroom lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "Victorian terraces near the centre: record damp at the base of walls, back yards and rear alleys and where the bins are kept.",
+    "New-town maisonettes and homes in Bretton and Orton: note shared stairways, garage blocks, flat roofs and older windows.",
+    "New-build homes in Hampton: photograph snagging marks, sealant, parking bays and new fences and turf.",
+    "Riverside apartments in Fletton and Woodston: note fob and key counts, intercom, parking and balconies."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Peterborough City Council's housing standards team.",
+  "nearby": [
+    "huntingdonshire",
+    "fenland",
+    "south-holland",
+    "south-kesteven",
+    "north-northamptonshire",
+    "rutland"
+  ]
+}

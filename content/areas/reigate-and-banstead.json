@@ -1,0 +1,104 @@
+{
+  "slug": "reigate-and-banstead",
+  "name": "Reigate and Banstead",
+  "council": {
+    "name": "Reigate and Banstead Borough Council",
+    "url": "https://www.reigate-banstead.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies. The council has proposed an Article 4 direction so that new small HMOs would need planning permission.",
+    "fee": null,
+    "source": "https://www.sussexexpress.co.uk/news/politics/council/reigate-banstead-borough-council-clampdown-proposed-on-new-hmos-after-400-per-cent-increase-8838654",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,636 a month (ONS, May 2026), up 2.5% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000211/"
+  },
+  "price": {
+    "text": "£496,000 (UK HPI, April 2026, provisional), up 3.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000211/"
+  },
+  "privateRentedShare": {
+    "text": "15.7% of households rent privately (Census 2021), up from 12.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000211/"
+  },
+  "councilTax": {
+    "text": "£2,555.86 Band D (2026/27) outside the parished areas, including Surrey County Council and Surrey Police; £2,613.17 in Horley and £2,590.69 in Salfords and Sidlow",
+    "source": "https://www.reigate-banstead.gov.uk/info/20137/council_tax_charges/1787/council_tax_charges_2026_-_2027"
+  },
+  "postcodes": [
+    "KT20",
+    "RH1",
+    "RH2",
+    "RH6",
+    "SM7",
+    "CR5"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Redhill",
+      "postcodes": "RH1",
+      "housing": "Victorian terraces and villas, flats over shops and new apartment blocks near the station."
+    },
+    {
+      "name": "Reigate",
+      "postcodes": "RH2",
+      "housing": "Period houses in the historic town centre and large Victorian and Edwardian houses on the hills."
+    },
+    {
+      "name": "Merstham",
+      "postcodes": "RH1",
+      "housing": "A post-war London overspill estate being regenerated, with an older village core."
+    },
+    {
+      "name": "Horley",
+      "postcodes": "RH6",
+      "housing": "Inter-war and post-war houses with large new-build neighbourhoods near Gatwick."
+    },
+    {
+      "name": "Banstead",
+      "postcodes": "SM7",
+      "housing": "Inter-war and post-war detached and semi-detached houses on the edge of the North Downs."
+    },
+    {
+      "name": "Tadworth and Walton on the Hill",
+      "postcodes": "KT20",
+      "housing": "Large detached houses and some estates near the heaths."
+    },
+    {
+      "name": "Kingswood",
+      "postcodes": "KT20",
+      "housing": "Large detached houses in private roads."
+    },
+    {
+      "name": "Earlswood and Woodhatch",
+      "postcodes": "RH1, RH2",
+      "housing": "Victorian terraces, inter-war semis and post-war estates south of Redhill."
+    },
+    {
+      "name": "Chipstead",
+      "postcodes": "CR5",
+      "housing": "Detached houses in a wooded commuter village."
+    }
+  ],
+  "housing": "Reigate and Banstead is a prosperous commuter borough, with large detached and semi-detached houses in Banstead, Kingswood, Tadworth and on Reigate's hills. Redhill has more Victorian terraces, flats over shops and new apartment blocks near the station, and the number of HMOs there has grown quickly in recent years. Merstham has a large post-war estate under regeneration, while Horley, close to Gatwick, has grown with big new-build neighbourhoods. Private renting is a modest share of homes but rents are high.",
+  "checkinTips": [
+    "Shared houses and bedsits in Redhill: photograph each bedroom lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "New apartment blocks near Redhill and Reigate stations: note fob counts, parking bays, bike stores and balconies.",
+    "New-build homes in Horley: record snagging marks, sealant, new turf and fences, and window seals that matter for aircraft noise.",
+    "Large detached houses in Banstead, Kingswood and Tadworth: photograph garden equipment, gates, driveways and any outbuildings or pools listed in the tenancy.",
+    "Post-war estate homes in Merstham: photograph communal areas, garages and older windows and boilers."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Reigate and Banstead Borough Council's environmental health team.",
+  "nearby": [
+    "epsom-and-ewell",
+    "mole-valley",
+    "tandridge",
+    "crawley",
+    "sutton",
+    "croydon"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "slug": "rochdale",
+  "name": "Rochdale",
+  "council": {
+    "name": "Rochdale Borough Council",
+    "url": "https://www.rochdale.gov.uk",
+    "privateRentingUrl": "https://www.rochdale.gov.uk/private-landlords/landlord-licensing-frequently-asked-questions"
+  },
+  "licensing": {
+    "selective": "No selective licensing in force; the council's landlord licensing page says it has not yet been introduced in the borough.",
+    "additional": "Borough-wide additional HMO licensing for HMOs of three or four people, from 28 April 2025 to 28 April 2030; HMOs of five or more need a mandatory licence.",
+    "fee": null,
+    "source": "https://publicnoticeportal.uk/notice/statutory/67eed1158c71511ccfc52e21",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£829 a month (ONS, May 2026), up 8.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/"
+  },
+  "price": {
+    "text": "£212,000 (UK HPI, April 2026, provisional), up 5.1% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/"
+  },
+  "privateRentedShare": {
+    "text": "18.3% of households rent privately (Census 2021), up from 13.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E08000005"
+  },
+  "councilTax": {
+    "text": "£2,600.83 Band D (2026/27), including the police and fire (mayoral) precepts, before the council's 2% discount on most bills",
+    "source": "https://publicnoticeportal.uk/notice/statutory/69b4363c9f407e259bc11782"
+  },
+  "postcodes": [
+    "OL10",
+    "OL11",
+    "OL12",
+    "OL15",
+    "OL16",
+    "M24"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Rochdale town centre",
+      "postcodes": "OL16",
+      "housing": "Flats over shops, converted buildings and some high-rise blocks."
+    },
+    {
+      "name": "Deeplish and Newbold",
+      "postcodes": "OL11, OL16",
+      "housing": "Dense Victorian terraced streets, many privately rented."
+    },
+    {
+      "name": "Wardleworth and Spotland",
+      "postcodes": "OL12",
+      "housing": "Victorian terraces around former mills north of the centre."
+    },
+    {
+      "name": "Kirkholt",
+      "postcodes": "OL11",
+      "housing": "A large post-war council-built estate."
+    },
+    {
+      "name": "Castleton",
+      "postcodes": "OL11",
+      "housing": "Terraces and inter-war semis near the canal and railway."
+    },
+    {
+      "name": "Heywood",
+      "postcodes": "OL10",
+      "housing": "A former mill town of terraces, post-war estates and new-build homes."
+    },
+    {
+      "name": "Middleton",
+      "postcodes": "M24",
+      "housing": "Terraces, large post-war estates such as Langley, and semis."
+    },
+    {
+      "name": "Littleborough",
+      "postcodes": "OL15",
+      "housing": "Stone terraces and cottages at the foot of the Pennines."
+    },
+    {
+      "name": "Milnrow and Newhey",
+      "postcodes": "OL16",
+      "housing": "Stone and brick terraces, semis and newer estates near the M62."
+    },
+    {
+      "name": "Norden and Bamford",
+      "postcodes": "OL11, OL12",
+      "housing": "Suburban semis and detached houses on the western edge."
+    }
+  ],
+  "housing": "Rochdale grew on cotton, and its inner areas such as Deeplish, Newbold, Wardleworth and Spotland are dominated by Victorian terraces, many of them privately rented. Large post-war estates sit at Kirkholt and Langley in Middleton, and Heywood and Middleton mix older terraces with newer homes. Towards the Pennines, Littleborough and Milnrow have stone terraces and cottages, while Norden and Bamford are more suburban. Every HMO in the borough now needs a licence.",
+  "checkinTips": [
+    "Shared houses with three or more tenants: note the HMO licence number and photograph each bedroom lock, fire doors, alarms and the shared kitchen separately.",
+    "Victorian terraces in Deeplish, Newbold and Spotland: photograph damp at the base of walls, cellar heads, back yards and alley gates.",
+    "Stone cottages in Littleborough and the Pennine villages: record damp in thick walls, stoves and chimneys and windows exposed to the weather.",
+    "Flats in town-centre blocks: note fob and key counts, lifts, bin stores and fire doors.",
+    "Post-war estate homes in Kirkholt and Langley: photograph gardens, fences, sheds and older boilers."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Rochdale Borough Council's private sector housing team.",
+  "nearby": [
+    "oldham",
+    "bury",
+    "manchester",
+    "rossendale",
+    "calderdale"
+  ]
+}

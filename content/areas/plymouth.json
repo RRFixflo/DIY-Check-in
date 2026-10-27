@@ -1,0 +1,109 @@
+{
+  "slug": "plymouth",
+  "name": "Plymouth",
+  "council": {
+    "name": "Plymouth City Council",
+    "url": "https://www.plymouth.gov.uk",
+    "privateRentingUrl": null
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme found; the council's HMO licensing policy says these powers have not been adopted in Plymouth.",
+    "additional": "No additional HMO licensing scheme found; national mandatory HMO licensing (five or more people from two or more households) applies.",
+    "fee": null,
+    "source": "https://democracy.plymouth.gov.uk/documents/s106464/1.3 - App B - Draft HMO Licensing Policy 2020.pdf",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,004 a month (ONS, August 2026), up 4.7% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000026/"
+  },
+  "price": {
+    "text": "£223,000 (UK HPI, July 2026, provisional), up 2.2% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E06000026/"
+  },
+  "privateRentedShare": {
+    "text": "22.6% of households rent privately (Census 2021), up from 20.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E06000026"
+  },
+  "councilTax": {
+    "text": "£2,441.85 Band D (2026/27), including the police (£303.20) and fire (£109.68) precepts; the city council's own share is £2,028.97",
+    "source": "https://democracy.plymouth.gov.uk/documents/s158557/Item 5. Appendix 1 - Council Tax Resolution 2026-27.pdf"
+  },
+  "postcodes": [
+    "PL1",
+    "PL2",
+    "PL3",
+    "PL4",
+    "PL5",
+    "PL6",
+    "PL7",
+    "PL9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Mutley and Greenbank",
+      "postcodes": "PL4",
+      "housing": "Victorian terraces, many let as student shared houses near the University of Plymouth."
+    },
+    {
+      "name": "Stonehouse",
+      "postcodes": "PL1",
+      "housing": "Georgian and Victorian terraces, many split into flats, and the Royal William Yard conversions."
+    },
+    {
+      "name": "Barbican and Sutton Harbour",
+      "postcodes": "PL1, PL4",
+      "housing": "Old harbourside buildings, converted warehouses and modern apartment blocks."
+    },
+    {
+      "name": "Mannamead and Peverell",
+      "postcodes": "PL3",
+      "housing": "Larger Victorian and Edwardian houses, some split into flats."
+    },
+    {
+      "name": "Stoke and Devonport",
+      "postcodes": "PL1, PL2",
+      "housing": "Victorian terraces near the dockyard and new homes from the Devonport regeneration."
+    },
+    {
+      "name": "Keyham and Ford",
+      "postcodes": "PL2",
+      "housing": "Dense terraced streets built for dockyard workers."
+    },
+    {
+      "name": "Plymstock",
+      "postcodes": "PL9",
+      "housing": "Post-war and newer suburban houses and bungalows east of the Plym."
+    },
+    {
+      "name": "Plympton",
+      "postcodes": "PL7",
+      "housing": "An old market town core surrounded by large 1960s–80s estates."
+    },
+    {
+      "name": "Derriford and Estover",
+      "postcodes": "PL6",
+      "housing": "Post-war and later estates near the hospital and business parks."
+    },
+    {
+      "name": "Sherford",
+      "postcodes": "PL9",
+      "housing": "A new town of new-build houses and flats on the city's eastern edge."
+    }
+  ],
+  "housing": "Plymouth's private rented sector is concentrated in the Victorian terraces close to the centre, especially in Mutley, Greenbank and North Hill, where many homes are let to University of Plymouth students. Stonehouse and Stoke have Georgian and Victorian terraces split into flats, and Devonport and Keyham have dockyard-era terraces, with large regeneration schemes in Devonport. The waterfront has converted warehouses and new apartment blocks, while Plymstock, Plympton and Estover are mostly post-war and later suburban estates. Many homes face exposure to wind and rain off the Sound.",
+  "checkinTips": [
+    "Student houses in Mutley and Greenbank: photograph each bedroom lock, fire doors, alarms and the shared kitchen and bathroom separately.",
+    "Exposed homes facing the Sound and on the hills: record damp and mould, salt marks on windows and rust on railings and fittings.",
+    "Flats in Stonehouse and Stoke's split Victorian houses: note communal hallways, meter cupboards, fire doors and the key count.",
+    "Waterfront apartments in the Barbican and Royal William Yard: note fob counts, parking bays, balconies and any listed-building features.",
+    "Hillside terraces: photograph steps, retaining walls, gutters and the state of rear lanes and yards.",
+    "New-build homes in Sherford: record snagging marks, sealant and new turf, fences and parking."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Plymouth City Council's private sector housing team.",
+  "nearby": [
+    "south-hams",
+    "west-devon",
+    "cornwall"
+  ]
+}

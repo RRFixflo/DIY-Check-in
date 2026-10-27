@@ -1,0 +1,82 @@
+{
+  "slug": "oadby-and-wigston",
+  "name": "Oadby and Wigston",
+  "council": {
+    "name": "Oadby and Wigston Borough Council",
+    "url": "https://www.oadby-wigston.gov.uk",
+    "privateRentingUrl": "https://www.oadby-wigston.gov.uk/pages/selective_licensing_scheme"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented houses in part of Wigston and South Wigston, a further scheme approved on 6 February 2025, running for five years from 10 November 2025; the council's page shows which streets are included.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing (five or more people from two or more households) applies. There are no Article 4 directions for HMOs in the borough.",
+    "fee": null,
+    "source": "https://www.oadby-wigston.gov.uk/pages/selective_licensing_scheme",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,026 a month (ONS, June 2026), up 4.8% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000135/"
+  },
+  "price": {
+    "text": "£263,000 (UK HPI, May 2026, provisional), roughly unchanged on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000135/"
+  },
+  "privateRentedShare": {
+    "text": "16.0% of households rent privately (Census 2021), up from 9.9% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000135/"
+  },
+  "councilTax": {
+    "text": "£2,406.85 Band D (2026/27), including the county, police and fire precepts",
+    "source": "https://moderngov.oadby-wigston.gov.uk/documents/s35906/Council Tax Setting 202627.pdf"
+  },
+  "postcodes": [
+    "LE2",
+    "LE18"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Oadby",
+      "postcodes": "LE2",
+      "housing": "Inter-war and post-war semis and detached houses, with student lets near the University of Leicester's Oadby student village."
+    },
+    {
+      "name": "Wigston",
+      "postcodes": "LE18",
+      "housing": "Older terraces near the centre, with inter-war and post-war semis and estates."
+    },
+    {
+      "name": "South Wigston",
+      "postcodes": "LE18",
+      "housing": "Victorian and Edwardian terraced streets, many privately rented, in the selective licensing area."
+    },
+    {
+      "name": "Wigston Fields",
+      "postcodes": "LE18",
+      "housing": "Inter-war and post-war semis and bungalows."
+    },
+    {
+      "name": "Wigston Magna",
+      "postcodes": "LE18",
+      "housing": "The old village centre with period cottages and newer infill."
+    },
+    {
+      "name": "Kilby Bridge and Newton Lane",
+      "postcodes": "LE18",
+      "housing": "Newer estates on the south-western edge of Wigston."
+    }
+  ],
+  "housing": "Oadby and Wigston is a small, largely suburban borough on the south-east edge of Leicester. Oadby is mostly owner-occupied semis and detached houses, with students living near the University of Leicester's halls. Wigston and especially South Wigston have older Victorian and Edwardian terraces, where most private renting is found and where the selective licensing scheme applies. Private renting grew sharply between 2011 and 2021.",
+  "checkinTips": [
+    "Terraces in South Wigston's licensing area: note the licence number and photograph smoke and carbon monoxide alarms, which are licence conditions.",
+    "Victorian terraces in Wigston and South Wigston: photograph damp at the base of walls, back yards and rear alleys.",
+    "Student lets near the Oadby student village: photograph each bedroom lock and the shared kitchen and bathroom separately.",
+    "Inter-war and post-war semis in Oadby and Wigston Fields: record garages, driveways, gardens and fences.",
+    "Bungalows let to older tenants: note grab rails, ramps and other adaptations and their condition."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Oadby and Wigston Borough Council's private sector housing team.",
+  "nearby": [
+    "leicester",
+    "blaby",
+    "harborough"
+  ]
+}

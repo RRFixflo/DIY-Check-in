@@ -1,0 +1,100 @@
+{
+  "slug": "oxford",
+  "name": "Oxford",
+  "council": {
+    "name": "Oxford City Council",
+    "url": "https://www.oxford.gov.uk",
+    "privateRentingUrl": "https://www.oxford.gov.uk/private-renting/quick-reference-guide-property-licensing"
+  },
+  "licensing": {
+    "selective": "Citywide selective licensing for privately rented homes that are not HMOs (family homes and one- or two-person lets), from 1 September 2022 to 31 August 2027.",
+    "additional": "Citywide additional HMO licensing, so every HMO in Oxford (three or more people from two or more households) needs a licence; renewed on 25 March 2026, in force from 25 June 2026 to 25 June 2031.",
+    "fee": "£480 for a five-year selective licence at the start of the scheme in 2022 (£280 for accredited landlords); HMO fees are set each year on a cost-recovery basis",
+    "source": "https://www.oxford.gov.uk/selective-licensing/designation-public-notice-selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£1,957 a month (ONS, September 2026), up 2.4% on a year earlier, the highest outside London",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000178/"
+  },
+  "price": {
+    "text": "£478,000 (UK HPI, August 2026, provisional), down 2.9% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000178/"
+  },
+  "privateRentedShare": {
+    "text": "32.2% of households rent privately (Census 2021), up from 28.2% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000178/"
+  },
+  "councilTax": {
+    "text": "£367.38 Band D for Oxford City Council's own share (2026/27, up 2.99%); about £2,678 in total with the county, police and fire precepts",
+    "source": "https://mycouncil.oxford.gov.uk/documents/g8201/Decisions Monday 23-Feb-2026 17.00 Council.pdf?T=2"
+  },
+  "postcodes": [
+    "OX1",
+    "OX2",
+    "OX3",
+    "OX4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Jericho",
+      "postcodes": "OX2",
+      "housing": "Small Victorian workers' terraces close to the city centre and canal."
+    },
+    {
+      "name": "Summertown and North Oxford",
+      "postcodes": "OX2",
+      "housing": "Large Victorian Gothic villas, many split into flats, and Edwardian houses."
+    },
+    {
+      "name": "Cowley Road and East Oxford",
+      "postcodes": "OX4",
+      "housing": "Victorian terraces, many let as student and shared houses."
+    },
+    {
+      "name": "Headington",
+      "postcodes": "OX3",
+      "housing": "Inter-war semis and Victorian terraces near the hospitals and Oxford Brookes, with many shared lets."
+    },
+    {
+      "name": "Cowley and Temple Cowley",
+      "postcodes": "OX4",
+      "housing": "Inter-war and post-war houses built for car-factory workers."
+    },
+    {
+      "name": "Blackbird Leys",
+      "postcodes": "OX4",
+      "housing": "A large 1950s–60s council-built estate with towers and houses, being regenerated."
+    },
+    {
+      "name": "Botley Road and Osney",
+      "postcodes": "OX2",
+      "housing": "Victorian terraces on Osney Island and inter-war homes along Botley Road, some prone to flooding."
+    },
+    {
+      "name": "Marston",
+      "postcodes": "OX3",
+      "housing": "Inter-war and post-war semis and a historic village core."
+    },
+    {
+      "name": "Barton and Barton Park",
+      "postcodes": "OX3",
+      "housing": "A post-war estate and a newer development of houses and flats."
+    }
+  ],
+  "housing": "Oxford has one of the highest private renting shares in England outside London, and among the highest rents. Two universities, the hospitals and research employers create strong demand for shared houses, especially in the Victorian terraces of East Oxford, Cowley Road and Headington. North Oxford's large Victorian villas are often split into flats, while Cowley, Blackbird Leys and Barton have inter-war and post-war estates. Every privately rented home in the city needs either a selective or an HMO licence.",
+  "checkinTips": [
+    "Licensing: every rented home in Oxford needs a selective or HMO licence, so note the licence number and photograph the smoke and carbon monoxide alarms.",
+    "Shared houses in East Oxford and Headington: photograph each bedroom lock, fire doors and closers, alarms and the shared kitchen and bathroom separately.",
+    "Victorian villas split into flats in North Oxford: record communal hallways, meter cupboards, bike stores and the key count for each door.",
+    "Homes near the rivers in Osney, Botley Road and Grandpont: photograph any tide marks, damp low on walls and air bricks, as these areas can flood.",
+    "Small Jericho and East Oxford terraces: record sash windows, damp in rear extensions and the state of tiny back yards and bins.",
+    "Blocks in Blackbird Leys: note fob and key counts, the lift, bin stores and any balcony."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes, or an unlicensed home, to Oxford City Council's private sector housing team.",
+  "nearby": [
+    "cherwell",
+    "south-oxfordshire",
+    "vale-of-white-horse"
+  ]
+}

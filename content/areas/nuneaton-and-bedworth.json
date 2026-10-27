@@ -1,0 +1,100 @@
+{
+  "slug": "nuneaton-and-bedworth",
+  "name": "Nuneaton and Bedworth",
+  "council": {
+    "name": "Nuneaton and Bedworth Borough Council",
+    "url": "https://www.nuneatonandbedworth.gov.uk",
+    "privateRentingUrl": "https://www.nuneatonandbedworth.gov.uk/hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing: only national mandatory HMO licensing (five or more people from two or more households sharing facilities) applies.",
+    "fee": "£841 for a mandatory HMO licence for five occupiers, rising to £923 for eleven or more, as listed on the council's site",
+    "source": "https://www.nuneatonandbedworth.gov.uk/hmo",
+    "checked": "October 2026"
+  },
+  "rent": {
+    "text": "£925 a month (ONS, August 2026), up 3.4% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000219/"
+  },
+  "price": {
+    "text": "£228,000 (UK HPI, July 2026, provisional), up 1.6% on a year earlier",
+    "source": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E07000219/"
+  },
+  "privateRentedShare": {
+    "text": "16.6% of households rent privately (Census 2021), up from 12.7% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000219/"
+  },
+  "councilTax": {
+    "text": "£2,502.16 Band D (2026/27), including the county and police precepts",
+    "source": "https://www.nuneatonandbedworth.gov.uk/council-tax/council-tax-charge"
+  },
+  "postcodes": [
+    "CV10",
+    "CV11",
+    "CV12",
+    "CV7"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Nuneaton town centre",
+      "postcodes": "CV11",
+      "housing": "Victorian terraces, flats over shops and some newer apartments."
+    },
+    {
+      "name": "Abbey and Chilvers Coton",
+      "postcodes": "CV10, CV11",
+      "housing": "Dense Victorian and Edwardian terraced streets close to the centre."
+    },
+    {
+      "name": "Attleborough",
+      "postcodes": "CV11",
+      "housing": "Terraces, inter-war semis and post-war estates."
+    },
+    {
+      "name": "Whitestone and St Nicolas Park",
+      "postcodes": "CV11",
+      "housing": "1960s–80s private estates of semis and detached houses."
+    },
+    {
+      "name": "Camp Hill",
+      "postcodes": "CV10",
+      "housing": "A post-war council-built estate being regenerated with new homes."
+    },
+    {
+      "name": "Stockingford",
+      "postcodes": "CV10",
+      "housing": "Terraced streets and post-war estates in a former mining area."
+    },
+    {
+      "name": "Bedworth",
+      "postcodes": "CV12",
+      "housing": "A former mining town of terraces and post-war estates, with newer homes on the edges."
+    },
+    {
+      "name": "Bulkington",
+      "postcodes": "CV12",
+      "housing": "A village of semis, bungalows and older cottages."
+    },
+    {
+      "name": "Keresley End and Ash Green",
+      "postcodes": "CV7",
+      "housing": "Former pit-village terraces and estates on the edge of Coventry."
+    }
+  ],
+  "housing": "Nuneaton and Bedworth grew on coal mining and textiles, so Victorian and Edwardian terraces fill the streets around both town centres, especially in Abbey and Chilvers Coton. Post-war council-built estates such as Camp Hill (now being regenerated) sit alongside large private estates from the 1960s to the 1980s at Whitestone and St Nicolas Park. Private renting grew quickly between 2011 and 2021, mostly in the older terraces, and large new-build estates are being added on the edges of Nuneaton.",
+  "checkinTips": [
+    "Victorian terraces in Abbey and Chilvers Coton: photograph damp at the base of walls, back yards, rear alleys and outhouses.",
+    "Flats over shops in Nuneaton and Bedworth town centres: record the separate entrance, stairs, meter location and fire escape.",
+    "Former mining terraces in Bedworth and Stockingford: photograph any cracks or uneven floors and the state of gutters and downpipes.",
+    "New-build estates on the edges of Nuneaton: note snagging marks, sealant, parking spaces and new fences and turf.",
+    "1960s–80s estate homes in Whitestone and St Nicolas Park: photograph older windows and doors, garages and boilers."
+  ],
+  "tenantHelp": "Tenants can report disrepair, damp or unsafe conditions in privately rented homes to Nuneaton and Bedworth Borough Council's private sector housing team.",
+  "nearby": [
+    "north-warwickshire",
+    "coventry",
+    "rugby",
+    "hinckley-and-bosworth"
+  ]
+}
