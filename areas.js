@@ -1,27 +1,33 @@
-// London borough hubs: /inventory-reports/<borough> and three pages under it (landlords, tenants, neighbourhoods),
-// built from researched facts in data/boroughs/<slug>.json (council and licensing pages, ONS rents, UK HPI prices,
+// Local hubs for England's council areas (London boroughs, metropolitan boroughs, unitaries and districts):
+// /inventory-reports/<area> and three pages under it (landlords, tenants, neighbourhoods). The list of areas is
+// data/area-list.json (ONS local authority districts: name, type, county, region, Land Registry district name,
+// centre); each area's page appears once it has researched facts in data/areas/<slug>.json (council and licensing pages, ONS rents, UK HPI prices,
 // Census 2021 renting share, council tax, postcode districts, neighbourhoods and their homes, check-in tips) and,
 // when the Land Registry answers, sales in the last 12 months by property type (fetched in the background once a
-// month, cached in REPORTS_DIR/borough-sales.json). A fact that couldn't be verified is null and simply not shown.
+// month, cached in REPORTS_DIR/area-sales.json). A fact that couldn't be verified is null and simply not shown.
 const fs = require('fs');
 const path = require('path');
 
-const DIR = path.join(__dirname, 'data', 'boroughs');
-const load = () => { const out = {}; try { fs.readdirSync(DIR).filter(f => f.endsWith('.json')).forEach(f => { try { const d = JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8')); if (d && d.slug) out[d.slug] = d; } catch (e) { console.error('boroughs: bad ' + f + ': ' + e.message); } }); } catch (e) {} return out; };
-// Land Registry district names, where they differ from the borough's name.
-const LR_NAME = { westminster: 'CITY OF WESTMINSTER', 'city-of-london': 'CITY OF LONDON' };
+const DIR = path.join(__dirname, 'data', 'areas');
+const LIST = path.join(__dirname, 'data', 'area-list.json');
+const load = () => { const out = {}; try { fs.readdirSync(DIR).filter(f => f.endsWith('.json')).forEach(f => { try { const d = JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8')); if (d && d.slug) out[d.slug] = d; } catch (e) { console.error('areas: bad ' + f + ': ' + e.message); } }); } catch (e) {} return out; };
 const PTYPE = { detached: 'Detached', 'semi-detached': 'Semi-detached', terraced: 'Terraced', 'flat-maisonette': 'Flat or maisonette', otherPropertyType: 'Other' };
 const gbp = n => '£' + Math.round(n).toLocaleString('en-GB');
 const SUBS = [['landlords', 'Landlords'], ['tenants', 'Tenants'], ['neighbourhoods', 'Neighbourhoods and postcodes']];
 
 function mount(app, { renderPage, escHtml: e, PLACES, BASE_PATH, REPORTS_DIR }){
   const D = load();
-  const byslug = {}; PLACES.forEach(p => { byslug[p.slug] = p; });
-  const list = PLACES.filter(p => p.kind === 'borough' && D[p.slug]);
-  if (!list.length) return { slugs: [], paths: [] };
+  let master = []; try { master = JSON.parse(fs.readFileSync(LIST, 'utf8')); } catch (e) {}
+  const old = {}; PLACES.forEach(p => { old[p.slug] = p; });
+  // An area that already had a page keeps its short name ("Hull", "Bath"); its official name is shown too.
+  const list = master.filter(a => D[a.slug]).map(a => Object.assign({}, a, { official: a.name, name: old[a.slug] ? old[a.slug].name : a.name, london: a.type === 'london borough' }));
+  const byslug = {}; list.forEach(a => { byslug[a.slug] = a; });
+  if (!list.length) return { slugs: [], paths: [], areas: [] };
+  const R = d => d * Math.PI / 180, dist = (a, b) => Math.hypot(R(b.lon - a.lon) * Math.cos(R((a.lat + b.lat) / 2)), R(b.lat - a.lat));
+  const nearOf = a => { const named = (D[a.slug].nearby || []).filter(s => byslug[s]); return named.length ? named : list.filter(b => b !== a && a.lat != null && b.lat != null).sort((x, y) => dist(a, x) - dist(a, y)).slice(0, 6).map(b => b.slug); };
 
   /* ------------------- sales in the last 12 months (Land Registry) ------------------- */
-  const salesFile = REPORTS_DIR ? path.join(REPORTS_DIR, 'borough-sales.json') : '';
+  const salesFile = REPORTS_DIR ? path.join(REPORTS_DIR, 'area-sales.json') : '';
   let SALES = {}; try { SALES = JSON.parse(fs.readFileSync(salesFile, 'utf8')); } catch (e) {}
   async function districtSales(name){
     const since = new Date(Date.now() - 365 * 86400000).toISOString().slice(0, 10);
@@ -47,8 +53,8 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
     for (const p of list) {
       const old = SALES[p.slug];
       if (old && Date.now() - new Date(old.at).getTime() < 30 * 86400000) continue;
-      try { SALES[p.slug] = await districtSales(LR_NAME[p.slug] || p.name.toUpperCase()); fs.writeFileSync(salesFile, JSON.stringify(SALES)); }
-      catch (err) { console.error('boroughs: sales for ' + p.name + ' failed: ' + err.message); }
+      try { SALES[p.slug] = await districtSales(p.lr || p.official.toUpperCase()); fs.writeFileSync(salesFile, JSON.stringify(SALES)); }
+      catch (err) { console.error('areas: sales for ' + p.name + ' failed: ' + err.message); }
       await new Promise(r => setTimeout(r, 4000));
     }
   }
@@ -56,6 +62,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
 
   /* ------------------------------------ pieces ------------------------------------ */
   const place = p => p.slug === 'city-of-london' ? 'the City of London' : p.name;
+  const kind = p => p.london ? 'London borough' : [p.official !== p.name ? p.official : '', p.type === 'district' ? (p.county || p.region) : p.region].filter(Boolean).join(' · ');
   const Place = p => p.name.replace(/^the /, '');
   const url = (p, sub) => BASE_PATH + '/' + p.slug + (sub ? '/' + sub : '');
   const src = (o, label) => o && o.source ? ` <a class="src" href="${e(o.source)}" rel="nofollow noopener" target="_blank">${e(label || 'Source')}</a>` : '';
@@ -63,7 +70,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
   const tile = (label, o) => o && o.text ? `<div class="af"><span class="l">${e(label)}</span>${big(o.text) ? `<b>${e(big(o.text))}</b>` : ''}<span class="t">${e(o.text)}${src(o)}</span></div>` : '';
   const facts = (p, d, s) => {
     const salesTile = s ? `<div class="af"><span class="l">Homes sold, last 12 months</span><b>${s.n.toLocaleString('en-GB')}</b><span class="t">Average price paid ${e(gbp(s.avg))} (HM Land Registry)</span></div>` : '';
-    const lic = d.licensing && (d.licensing.selective || d.licensing.additional) ? `<div class="af"><span class="l">Landlord licensing</span><b>${/borough-wide|whole borough|all wards/i.test(d.licensing.selective || '') ? 'Borough-wide' : /none|no selective|not have|doesn’t have|does not/i.test(d.licensing.selective || '') ? (d.licensing.additional && !/none|no additional/i.test(d.licensing.additional) ? 'HMOs' : 'None') : 'Some areas'}</b><span class="t"><a href="${url(p, 'landlords')}#licensing">What it means for you</a></span></div>` : '';
+    const lic = d.licensing && (d.licensing.selective || d.licensing.additional) ? `<div class="af"><span class="l">Landlord licensing</span><b>${/borough-wide|district-wide|city-wide|citywide|whole (borough|district|city|area)|all wards/i.test(d.licensing.selective || '') ? (p.london ? 'Borough-wide' : 'Whole area') : /none|no selective|not have|doesn’t have|does not/i.test(d.licensing.selective || '') ? (d.licensing.additional && !/none|no additional/i.test(d.licensing.additional) ? 'HMOs' : 'None') : 'Some areas'}</b><span class="t"><a href="${url(p, 'landlords')}#licensing">What it means for you</a></span></div>` : '';
     const tiles = [tile('Average rent', d.rent), tile('Average house price', d.price), salesTile, tile('Households renting privately', d.privateRentedShare), tile('Council tax', d.councilTax), lic].filter(Boolean);
     return tiles.length ? `<div class="area-facts">${tiles.join('')}</div>` : '';
   };
@@ -72,7 +79,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
     <p class="sub" style="font-size:13.5px">HM Land Registry Price Paid Data since ${e(new Date(s.since).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }))}, updated monthly. Look up any address in the <a href="/property-report">free property report</a>.</p></div>` : '';
   const subnav = (p, on) => `<nav class="area-nav" aria-label="${e(Place(p))}"><a${on === '' ? ' class="on"' : ''} href="${url(p)}">Overview</a>${SUBS.map(([k, l]) => `<a${on === k ? ' class="on"' : ''} href="${url(p, k)}">${e(l)}</a>`).join('')}</nav>`;
   const head = (p, kicker, h1, lead, on) => `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="${BASE_PATH}">← All areas</a>${on ? ` · <a href="${url(p)}">${e(Place(p))}</a>` : ''}</p><span class="kicker">${e(kicker)}</span><h1>${e(h1)}</h1><p>${lead}</p>${subnav(p, on)}</div></div>`;
-  const near = (p, d, sub) => { const n = (d.nearby || []).map(s => byslug[s]).filter(Boolean); return n.length ? `<section style="padding-top:0"><div class="wrap"><div class="sec-head"><span class="kicker">Nearby</span><h2>Neighbouring boroughs</h2></div><p style="text-align:center;line-height:2.2">${n.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${url(q, D[q.slug] ? sub : '')}">${e(Place(q))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p></div></section>` : ''; };
+  const near = (p, d, sub) => { const n = nearOf(p).map(s => byslug[s]).filter(Boolean); return n.length ? `<section style="padding-top:0"><div class="wrap"><div class="sec-head"><span class="kicker">Nearby</span><h2>${p.london ? 'Neighbouring boroughs' : 'Nearby areas'}</h2></div><p style="text-align:center;line-height:2.2">${n.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${url(q, sub)}">${e(Place(q))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p></div></section>` : ''; };
   const faqHtml = (title, qs) => `<section style="padding-top:0"><div class="wrap"><div class="sec-head"><span class="kicker">Questions</span><h2>${e(title)}</h2></div><div class="faq">${qs.map(([q, a]) => `<details><summary>${e(q)}</summary><p>${e(a)}</p></details>`).join('')}</div></div></section>`;
   const final = (p, text) => `<div class="final"><div class="wrap"><div class="card"><h2>Ready when you have the keys</h2><p>${e(text)}</p><a class="btn" href="/app">Start free</a></div></div></div>`;
   const tips = (p, d) => d.checkinTips && d.checkinTips.length ? `<div class="card"><h3>What to check at a ${e(Place(p))} check-in</h3><ul>${d.checkinTips.map(t => `<li>${e(t)}</li>`).join('')}</ul></div>` : '';
@@ -92,7 +99,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
       ['Can I do my own check-in inventory in ' + P + '?', 'Yes. Landlords, agents and tenants can do it on a phone: a photo checklist for every room, the date and time stamped on every photo, every item’s condition, and both sides sign. The PDF is ready the moment it’s signed.'],
       ['Will a DIY inventory stand up in a deposit dispute?', 'Deposit schemes (DPS, TDS, mydeposits) decide on the evidence, above all the condition at check-in compared with check-out. Dated photos of every room, signed by both sides, are exactly that evidence.'],
     ].filter(Boolean);
-    const body = head(p, 'London borough · ' + (d.postcodes || []).slice(0, 6).join(', '), 'Inventory and check-in reports in ' + P, e(d.housing || ''), '') + `
+    const body = head(p, kind(p) + ((d.postcodes || []).length ? ' · ' + d.postcodes.slice(0, 6).join(', ') : ''), 'Inventory and check-in reports in ' + P, e(d.housing || ''), '') + `
 <section class="tight"><div class="wrap">${facts(p, d, s)}${salesTable(p, s)}</div></section>
 <section class="tight"><div class="wrap"><div class="two">
   ${tips(p, d)}
@@ -111,7 +118,7 @@ ${d.neighbourhoods && d.neighbourhoods.length ? `<section style="padding-top:0">
 </div></div></section>
 ${faqHtml('Inventories in ' + P + ': questions', qs)}${near(p, d, '')}${final(p, 'Start your ' + P + ' inventory today, on your phone. It’s free until you download it.')}`;
     return pg(p, '', 'Inventory clerk in ' + P + '? Do your own inventory for £30', 'Inventories, check-ins and check-outs in ' + w + ', done on your phone for £30. Local rents, sold prices, landlord licensing and what to check in ' + P + ' homes.', body,
-      ld(p, '', '', qs, base => [{ '@type': 'Service', name: 'Inventory and check-in reports in ' + P, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'AdministrativeArea', name: P, containedInPlace: { '@type': 'City', name: 'London' } }, offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }]));
+      ld(p, '', '', qs, base => [{ '@type': 'Service', name: 'Inventory and check-in reports in ' + P, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'AdministrativeArea', name: p.official.replace(/^the /, ''), containedInPlace: p.london ? { '@type': 'City', name: 'London' } : { '@type': 'AdministrativeArea', name: p.county || p.region } }, offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }]));
   }
 
   /* --------------------------------- for landlords --------------------------------- */
@@ -172,7 +179,7 @@ ${faqHtml('Renting in ' + P + ': questions', qs)}${near(p, d, 'tenants')}${final
   function hoods(p){
     const d = D[p.slug], P = Place(p), n = d.neighbourhoods || [];
     const qs = [
-      (d.postcodes || []).length ? ['Which postcodes are in ' + P + '?', P + ' covers all or part of these postcode districts: ' + d.postcodes.join(', ') + '. Some districts cross into neighbouring boroughs.'] : null,
+      (d.postcodes || []).length ? ['Which postcodes are in ' + P + '?', P + ' covers all or part of these postcode districts: ' + d.postcodes.join(', ') + '. Some districts cross into neighbouring areas.'] : null,
       ['Can I get a report for one postcode?', 'Yes. The free property report shows the EPC, sold prices nearby, crime, flood risk and a rental yield calculator for any UK postcode.'],
     ].filter(Boolean);
     const body = head(p, 'Neighbourhoods', P + ': neighbourhoods, postcodes and homes', 'The areas of ' + e(place(p)) + ', their postcodes and the kind of homes you’ll find, with what to record at check-in.', 'neighbourhoods') + `
@@ -195,7 +202,7 @@ ${faqHtml(P + ' postcodes: questions', qs)}${near(p, d, 'neighbourhoods')}${fina
     app.get([url(p, 'tenants'), url(p, 'tenants') + '/'], send(() => tenants(p)));
     app.get([url(p, 'neighbourhoods'), url(p, 'neighbourhoods') + '/'], send(() => hoods(p)));
   });
-  return { slugs: list.map(p => p.slug), paths: [].concat(...list.map(p => [url(p, 'landlords'), url(p, 'tenants'), url(p, 'neighbourhoods')])), bodies: list.map(p => JSON.stringify(D[p.slug])) };
+  return { slugs: list.map(p => p.slug), areas: list, paths: [].concat(...list.map(p => [url(p), url(p, 'landlords'), url(p, 'tenants'), url(p, 'neighbourhoods')])), bodies: list.map(p => JSON.stringify(D[p.slug])) };
 }
 
 module.exports = { mount };

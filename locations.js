@@ -216,8 +216,8 @@ const nearest = (p, n) => PLACES.filter(q => q !== p && same(p, q) && (p.kind ==
 function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   const e = escHtml;
   const BASE_PATH = '/inventory-reports';
-  // London boroughs with researched local data get a full hub of their own (boroughs.js), registered first.
-  const hubs = require('./boroughs').mount(app, { renderPage, escHtml, PLACES, BASE_PATH, REPORTS_DIR });
+  // Council areas in England with researched local data get a full hub of their own (areas.js), registered first.
+  const hubs = require('./areas').mount(app, { renderPage, escHtml, PLACES, BASE_PATH, REPORTS_DIR });
   const where = p => p.kind === 'borough' ? (p.slug === 'city-of-london' ? 'the City of London' : p.name + ', London') : p.name;
 
   function page(p){
@@ -279,13 +279,15 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
       ] };
   }
 
+  const REGIONS = ['North East', 'North West', 'Yorkshire and The Humber', 'East Midlands', 'West Midlands', 'East of England', 'South East', 'South West'];
   function index(){
-    const group = (title, list) => `<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 10px">${e(title)}</h3><p style="margin:0;line-height:2.2">${list.map(p => `<a class="btn ghost sm" style="margin:0 6px 0 0" href="${BASE_PATH}/${p.slug}">${e(p.name.replace(/^the /, ''))}</a>`).join('')}</p></div>`;
+    const group = (title, list) => !list.length ? '' : `<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 10px">${e(title)}</h3><p style="margin:0;line-height:2.2">${list.map(p => `<a class="btn ghost sm" style="margin:0 6px 0 0" href="${BASE_PATH}/${p.slug}">${e(p.name.replace(/^the /, ''))}</a>`).join('')}</p></div>`;
     const by = k => PLACES.filter(k).sort((a, b) => a.name.replace(/^the /, '').localeCompare(b.name.replace(/^the /, '')));
     const body = `<div class="page-head"><div class="wrap"><span class="kicker">Worldwide</span><h1>Inventory and inspection reports, wherever you let</h1><p>DIY Inventory works anywhere in the world: do the check-in (or move-in inspection), inspections and check-out on your phone, for £30 a report. Pick your area for local information.</p></div></div>
 <section class="tight"><div class="wrap">
 ${group('London boroughs', by(p => p.kind === 'borough'))}
-${group('England', by(p => p.nation === 'england' && p.kind !== 'borough'))}
+${group('England', by(p => p.nation === 'england' && p.kind !== 'borough' && !hubs.slugs.includes(p.slug)))}
+${REGIONS.map(r => [r, hubs.areas.filter(a => !a.london && a.region === r).sort((a, b) => a.name.localeCompare(b.name))]).filter(([r, l]) => l.length).map(([r, l]) => group(r, l)).join('\n')}
 ${group('Wales', by(p => p.nation === 'wales'))}
 ${group('Scotland', by(p => p.nation === 'scotland'))}
 ${group('Northern Ireland', by(p => p.nation === 'ni'))}
@@ -306,7 +308,7 @@ ${group('South Africa', by(p => p.nation === 'za'))}
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get([BASE_PATH, BASE_PATH + '/'], send(index()));
   PLACES.filter(p => !hubs.slugs.includes(p.slug)).forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], send(page(p))));
-  return { paths: [BASE_PATH].concat(PLACES.map(p => BASE_PATH + '/' + p.slug), hubs.paths), bodies: hubs.bodies || [] };
+  return { paths: [BASE_PATH].concat(PLACES.filter(p => !hubs.slugs.includes(p.slug)).map(p => BASE_PATH + '/' + p.slug), hubs.paths), bodies: hubs.bodies || [] };
 }
 
 module.exports = { mount, PLACES };
