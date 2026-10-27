@@ -44,7 +44,7 @@ When done, reply with only: the files written, and per area any field you set to
 
 ## Search budget (important)
 You have about 150 web searches in total, so spend at most 12 per area. WebFetch and curl can't reach websites from here: work from WebSearch results. Efficient order per area:
-1. One search for the ONS "Housing prices in <area>" page: it gives both the average private rent and the average house price (and their months).
+1. One search for the ONS "Housing prices in <area>" page, using WebSearch with `allowed_domains: ["ons.gov.uk"]` and the query `Housing prices in <area name> <ONS code>` (the code, e.g. E07000223, is in content/area-list.json). It returns www.ons.gov.uk/visualisations/housingpriceslocal/<code>/ with both the average private rent and the average house price (and their months).
 2. One search for the Census 2021 private renting share ("How life has changed in <area>: Census 2021").
 3. One or two searches for council tax 2026/27 Band D.
 4. Two or three searches for licensing (selective / additional HMO) on the council's own site.
