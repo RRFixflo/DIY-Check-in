@@ -420,7 +420,7 @@ function mount(app, ctx){
   ];
   function landlordsPage(req){
     const acc = current(req);
-    const cta = acc ? `<a class="btn primary" href="/account">Go to your properties</a>` : `<a class="btn primary" href="/account/sign-up">Create a free account</a><a class="arrow" href="/account/sign-in">Sign in</a>`;
+    const cta = acc ? `<a class="btn primary" href="/account">Go to your properties</a>` : `<a class="btn primary" href="/account/sign-up">Create a free account</a><a class="arrow" href="/account/sign-in">Sign in</a><a class="arrow" href="/property-report">Free property report</a>`;
     const rows = [
       ['Gas Safety certificate', 'Every 12 months', 'The date of the last check, the engineer, and the certificate itself. Reminders before the year is up.'],
       ['Electrical safety (EICR)', 'At least every 5 years', 'The inspection date, the result, any remedial work and the report. Reminders before the next one is due.'],

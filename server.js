@@ -250,7 +250,7 @@ function renderPage(pg, req, notice){
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req), inAcc = require('./landlords').signedIn(req);   // signed-in landlords see "My dashboard"
@@ -288,13 +288,16 @@ const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, render
   track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// Free landlord property report (EPC, sold prices, crime, flood, council, checklist; leads for the owner): propreport.js.
+const reportPaths = require('./propreport').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clientIp: reports.clientIp, limiter: reports.limiter,
+  notify: reports.notifyOwner, addAdminSection: reports.addAdminSection, isOwner: reports.isOwner, PUBLIC_BASE, track: analytics.track }).paths;
 // Mid-term inspections by a contractor, for the owner: a link from /admin, photos sorted into rooms by AI, a PDF report: inspections.js.
 require('./inspections').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, notify: reports.notifyOwner, clientIp: reports.clientIp, limiter: reports.limiter,
   addAdminSection: reports.addAdminSection, PUBLIC_BASE, ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, Anthropic, DEFECTS, CLEANLINESS, extractJson,
     extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths), siteBodies: Object.values(SITE).map(pg => pg.body),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
