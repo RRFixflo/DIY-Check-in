@@ -1,0 +1,94 @@
+{
+  "slug": "new-forest",
+  "name": "New Forest",
+  "council": {
+    "name": "New Forest District Council",
+    "url": "https://www.newforest.gov.uk",
+    "privateRentingUrl": "https://www.newforest.gov.uk/article/999/Private-housing"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more unrelated people forming two or more households.",
+    "fee": "£976 for an HMO licence, paid as £317 on application and £659 before the full licence is issued",
+    "source": "https://www.newforest.gov.uk/article/999/Private-housing",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "14.3% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=793"
+  },
+  "councilTax": {
+    "text": "£2,419.76 average Band D (2026/27), including Hampshire County Council, police, fire and average parish precepts",
+    "source": "https://newforest.gov.uk/article/4193/Council-Tax-rates-set-for-2026-27"
+  },
+  "postcodes": [
+    "SO40",
+    "SO41",
+    "SO42",
+    "SO43",
+    "SO45",
+    "BH24",
+    "BH25",
+    "SP6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Lymington and Pennington",
+      "postcodes": "SO41",
+      "housing": "Georgian town houses on the High Street, Victorian cottages near the quay and post-war estates in Pennington."
+    },
+    {
+      "name": "New Milton and Barton on Sea",
+      "postcodes": "BH25",
+      "housing": "Inter-war and post-war bungalows and houses, with retirement flats near the cliff top."
+    },
+    {
+      "name": "Totton",
+      "postcodes": "SO40",
+      "housing": "Victorian terraces near the old centre and large post-war and modern estates on the edge of Southampton."
+    },
+    {
+      "name": "Hythe and Dibden",
+      "postcodes": "SO45",
+      "housing": "Older waterside cottages and post-war and 1970s estates on the Waterside."
+    },
+    {
+      "name": "Fawley and Holbury",
+      "postcodes": "SO45",
+      "housing": "Post-war estates built for refinery workers, with older village cottages."
+    },
+    {
+      "name": "Ringwood",
+      "postcodes": "BH24",
+      "housing": "A market town of Georgian and Victorian houses, with post-war and newer estates."
+    },
+    {
+      "name": "Fordingbridge",
+      "postcodes": "SP6",
+      "housing": "Brick cottages and Victorian houses by the Avon, with post-war estates."
+    },
+    {
+      "name": "Lyndhurst and Brockenhurst",
+      "postcodes": "SO43, SO42",
+      "housing": "Victorian villas, forest cottages and some flats in the national park villages."
+    }
+  ],
+  "housing": "New Forest District wraps around the New Forest National Park, with coastal towns such as Lymington and New Milton, the Waterside towns of Totton, Hythe and Fawley by Southampton Water, and the Avon valley towns of Ringwood and Fordingbridge. Most households own their homes, and about one in seven rent privately, often in Victorian cottages, post-war estate houses and flats. Homes in the national park include older forest cottages, some thatched and some off mains gas.",
+  "checkinTips": [
+    "Coastal homes in Lymington, Milford on Sea and Barton: photograph salt-pitted metal, window seals and any damp on seaward walls.",
+    "Forest cottages and thatched homes: record the thatch where visible, beams, wood burners and flues, and damp in solid walls.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes in the Avon valley near Ringwood and Fordingbridge: note any signs of past flooding on floors and lower walls.",
+    "Homes with forest grazing outside: record gates, cattle grids, fences and gardens, as ponies and cattle roam the open forest."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact New Forest District Council's Private Sector Housing Team, which can inspect homes and take enforcement action.",
+  "nearby": [
+    "test-valley",
+    "southampton",
+    "wiltshire",
+    "dorset",
+    "bournemouth"
+  ]
+}

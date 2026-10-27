@@ -1,0 +1,95 @@
+{
+  "slug": "newcastle",
+  "name": "Newcastle upon Tyne",
+  "council": {
+    "name": "Newcastle City Council",
+    "url": "https://www.newcastle.gov.uk",
+    "privateRentingUrl": "https://new.newcastle.gov.uk/property-licensing-schemes-newcastle"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in Byker Old Town and the Greater High Cross area of Benwell, under a new designation that started on 1 October 2026 and runs to September 2031.",
+    "additional": "Additional HMO licensing applies to smaller HMOs (three or more people from two or more households sharing amenities) in the areas designated by Cabinet in October 2024 for five years; larger HMOs need the national mandatory licence everywhere. Check an address on the council's licensing map.",
+    "fee": "Around £1,000 for a selective licence (2026)",
+    "source": "https://new.newcastle.gov.uk/property-licensing-schemes-newcastle/selective-licensing",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,540.66 Band D (2026/27), including the adult social care precept, Northumbria police and Tyne and Wear fire",
+    "source": "https://new.newcastle.gov.uk/council-tax/council-tax-explained/council-tax-bands"
+  },
+  "postcodes": [
+    "NE1",
+    "NE2",
+    "NE3",
+    "NE4",
+    "NE5",
+    "NE6",
+    "NE7",
+    "NE13",
+    "NE15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Quayside",
+      "postcodes": "NE1",
+      "housing": "Converted Georgian buildings, new apartment blocks on the Quayside and large purpose-built student blocks."
+    },
+    {
+      "name": "Jesmond",
+      "postcodes": "NE2",
+      "housing": "Victorian terraces and Tyneside flats, many let to students and young professionals."
+    },
+    {
+      "name": "Sandyford and Heaton",
+      "postcodes": "NE2, NE6",
+      "housing": "Streets of Tyneside flats and terraces, with a large student and young professional rental market."
+    },
+    {
+      "name": "Byker",
+      "postcodes": "NE6",
+      "housing": "The listed Byker Wall estate and older terraces in Byker Old Town, partly under selective licensing."
+    },
+    {
+      "name": "Benwell and Elswick",
+      "postcodes": "NE4",
+      "housing": "Victorian terraces and Tyneside flats in the west end, with the High Cross area under selective licensing."
+    },
+    {
+      "name": "Arthur's Hill and Fenham",
+      "postcodes": "NE4",
+      "housing": "Terraced streets and Tyneside flats near the General Hospital, many privately rented."
+    },
+    {
+      "name": "Gosforth",
+      "postcodes": "NE3",
+      "housing": "Edwardian terraces and semis and inter-war houses, mostly owner-occupied."
+    },
+    {
+      "name": "Kenton and Fawdon",
+      "postcodes": "NE3, NE5",
+      "housing": "Inter-war and post-war council-built estates of semis and terraces."
+    },
+    {
+      "name": "Walker",
+      "postcodes": "NE6",
+      "housing": "Riverside council-built estates and newer housing on regeneration sites."
+    }
+  ],
+  "housing": "Newcastle's private rented sector is concentrated in Jesmond, Sandyford, Heaton and Fenham, where Victorian terraces and the two-storey Tyneside flats are let to students of Newcastle and Northumbria universities and to young professionals. The city centre has added purpose-built student blocks and Quayside apartments, while the west end and Byker have older terraces under selective licensing. Smaller HMOs in designated areas need an additional licence.",
+  "checkinTips": [
+    "Tyneside flats in Heaton, Jesmond and Fenham: record which yard, bins and outhouse belong to the flat, and photograph the separate front door and stairs.",
+    "Student houses in Jesmond and Sandyford: photograph every bedroom lock, fire doors, smoke and heat alarms, and the shared kitchen.",
+    "Victorian terraces in Benwell, Elswick and Byker: photograph the back lane, yard gate, gutters and any damp on rear walls.",
+    "City-centre and Quayside apartments: note fob, key and post-box counts, and photograph balconies and window seals.",
+    "Licensed homes: photograph the selective or HMO licence and check it shows the right address and expiry date."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Newcastle City Council's private sector housing team, which runs the licensing schemes and can inspect homes.",
+  "nearby": [
+    "north-tyneside",
+    "gateshead",
+    "northumberland"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "slug": "mansfield",
+  "name": "Mansfield",
+  "council": {
+    "name": "Mansfield District Council",
+    "url": "https://www.mansfield.gov.uk",
+    "privateRentingUrl": "https://www.mansfield.gov.uk/licensing/selective-licensing/2"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in five designated areas, taking in parts of Central, West Bank, Wainwright, Market Warsop, Eakring, Rock Hill and Bancroft wards, from 13 September 2025 to September 2030. Check an address on the council's map.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need the national mandatory licence.",
+    "fee": "£800 for a selective licence (£500 on application and £300 on issue), with discounts for accredited landlords",
+    "source": "https://www.mansfield.gov.uk/news/article/12972/selective-licensing-in-mansfield-moves-to-next-phase",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "18.9% of households rent privately (Census 2021): 17.0% from a private landlord or letting agency and 1.9% from another private owner",
+    "source": "https://www.mansfield.gov.uk/council-councillors-democracy/key-facts-mansfield/5"
+  },
+  "councilTax": {
+    "text": "£2,596.16 Band D (2026/27), including Nottinghamshire County Council, police and fire (£2,637.04 in Warsop, with its parish charge)",
+    "source": "https://www.mansfield.gov.uk/downloads/file/7057/council-tax-charges-for-2026-27"
+  },
+  "postcodes": [
+    "NG18",
+    "NG19",
+    "NG20",
+    "NG21"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Mansfield town centre",
+      "postcodes": "NG18",
+      "housing": "Victorian terraces, flats over shops and converted buildings, partly in the selective licensing area."
+    },
+    {
+      "name": "West Bank and Bancroft",
+      "postcodes": "NG18, NG19",
+      "housing": "Streets of Victorian and Edwardian terraced houses close to the centre, many privately rented."
+    },
+    {
+      "name": "Ladybrook and Oak Tree",
+      "postcodes": "NG18",
+      "housing": "Post-war council-built estates of semi-detached and terraced houses."
+    },
+    {
+      "name": "Mansfield Woodhouse",
+      "postcodes": "NG19",
+      "housing": "An older village core of stone cottages with large inter-war and post-war estates."
+    },
+    {
+      "name": "Forest Town",
+      "postcodes": "NG19",
+      "housing": "A former colliery village of early 1900s terraces and later estates."
+    },
+    {
+      "name": "Rainworth and Clipstone",
+      "postcodes": "NG21",
+      "housing": "Former pit villages of colliery terraces and semis, with newer estates."
+    },
+    {
+      "name": "Market Warsop",
+      "postcodes": "NG20",
+      "housing": "Colliery-era terraced streets and post-war houses, with parts under selective licensing."
+    },
+    {
+      "name": "Berry Hill and Ravensdale",
+      "postcodes": "NG18",
+      "housing": "Inter-war and later semis and detached houses on the south side of town."
+    }
+  ],
+  "housing": "Mansfield is a former mining and textile town where almost one in five households rent privately. Much of the rented stock is Victorian and early 1900s terraces near the town centre and in the former colliery villages such as Forest Town and Warsop, alongside large post-war estates. Since September 2025 privately rented homes in five designated areas need a selective licence.",
+  "checkinTips": [
+    "Victorian terraces near the town centre and West Bank: photograph the back yard, outbuildings, gutters and any damp in rear kitchens.",
+    "Colliery-era terraces in Warsop, Forest Town and Clipstone: note cracks in walls and around windows and doors, and any uneven floors.",
+    "Homes in the selective licensing areas: photograph the licence and check it shows the right address and expiry date.",
+    "Older homes with solid walls: record mould or condensation in bedrooms and bathrooms, and how the extractor fans work.",
+    "Flats over shops in the town centre: record the shared entrance, fire doors and the number of keys handed over."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Mansfield District Council's private sector housing team, which runs the selective licensing scheme and can inspect homes.",
+  "nearby": [
+    "ashfield",
+    "newark-and-sherwood",
+    "bolsover",
+    "bassetlaw"
+  ]
+}

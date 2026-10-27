@@ -1,0 +1,91 @@
+{
+  "slug": "north-lincolnshire",
+  "name": "North Lincolnshire",
+  "council": {
+    "name": "North Lincolnshire Council",
+    "url": "https://www.northlincs.gov.uk",
+    "privateRentingUrl": "https://www.northlincs.gov.uk/site/documents/licensing/selective-licensing-how-to-apply/"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in parts of Scunthorpe's Crosby and Park and Town wards, designated on 3 October 2024 and running to March 2030; it went ahead after the High Court dismissed a landlords' legal challenge, with applications open from 6 October 2025 and a registration deadline of 6 January 2026.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need the national mandatory licence.",
+    "fee": "Around £955 for a five-year selective licence (council's estimate before the scheme started)",
+    "source": "https://www.northlincs.gov.uk/news/selective-licensing-scheme-to-improve-communities-ramps-up-as-deadline-for-registration-looms/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,348.46 average Band D (2026/27), including the adult social care precept, Humberside police, fire and average parish precepts",
+    "source": "https://www.northlincs.gov.uk/council-tax-benefits-and-housing/council-tax-charges"
+  },
+  "postcodes": [
+    "DN15",
+    "DN16",
+    "DN17",
+    "DN18",
+    "DN19",
+    "DN20",
+    "DN9"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Crosby",
+      "postcodes": "DN15",
+      "housing": "Streets of early 1900s terraced houses near Scunthorpe town centre, many privately rented and under selective licensing."
+    },
+    {
+      "name": "Scunthorpe town centre and Park",
+      "postcodes": "DN15, DN16",
+      "housing": "Terraces, flats over shops and older houses, partly under selective licensing."
+    },
+    {
+      "name": "Ashby and Bottesford",
+      "postcodes": "DN16, DN17",
+      "housing": "Inter-war and post-war semis, bungalows and council-built estates on Scunthorpe's south side."
+    },
+    {
+      "name": "Frodingham and Westcliff",
+      "postcodes": "DN15, DN17",
+      "housing": "Post-war estates and older terraces near the steelworks."
+    },
+    {
+      "name": "Barton-upon-Humber",
+      "postcodes": "DN18",
+      "housing": "A historic town of Georgian and Victorian houses and terraces, with newer estates near the Humber Bridge."
+    },
+    {
+      "name": "Brigg",
+      "postcodes": "DN20",
+      "housing": "A market town of Georgian and Victorian buildings, post-war houses and new-build estates."
+    },
+    {
+      "name": "Epworth and the Isle of Axholme",
+      "postcodes": "DN9",
+      "housing": "Villages of older brick cottages, bungalows and farmhouses on low-lying land."
+    },
+    {
+      "name": "Barrow and Goxhill",
+      "postcodes": "DN19",
+      "housing": "Humber bank villages of cottages, bungalows and modern family houses."
+    }
+  ],
+  "housing": "North Lincolnshire centres on the steel town of Scunthorpe, with the market towns of Brigg, Barton-upon-Humber and Epworth and many rural villages. Much of the private rented stock is early 20th-century terraces in Scunthorpe's Crosby and town centre areas, where selective licensing now applies. The Isle of Axholme and Humber bank villages are low-lying farmland with cottages and bungalows.",
+  "checkinTips": [
+    "Terraces in Crosby and Park: photograph the rear yard, alley gate, gutters and any damp on back walls and in kitchens.",
+    "Homes in the Scunthorpe licensing area: photograph the selective licence and check it shows the right address and expiry date.",
+    "Low-lying homes on the Isle of Axholme and the Humber bank: note any signs of past flooding on floors and lower walls.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes near the steelworks: record dust on window sills and frames and the condition of external paintwork at the start."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North Lincolnshire Council's private sector housing team, which runs the selective licensing scheme and can inspect homes.",
+  "nearby": [
+    "north-east-lincolnshire",
+    "west-lindsey",
+    "east-riding-of-yorkshire",
+    "hull",
+    "doncaster",
+    "bassetlaw"
+  ]
+}

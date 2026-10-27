@@ -1,0 +1,93 @@
+{
+  "slug": "mid-sussex",
+  "name": "Mid Sussex",
+  "council": {
+    "name": "Mid Sussex District Council",
+    "url": "https://www.midsussex.gov.uk",
+    "privateRentingUrl": "https://www.midsussex.gov.uk/housing-council-tax/houses-in-multiple-occupation-hmo/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households, run by the council's Housing Standards Team.",
+    "fee": null,
+    "source": "https://www.midsussex.gov.uk/housing-council-tax/houses-in-multiple-occupation-hmo/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "15.3% of households rent privately (Census 2021), up from 12.8% in 2011",
+    "source": "https://www.sussexexpress.co.uk/your-sussex/west-sussex/mid-sussex/census-2021-rise-in-private-renting-in-mid-sussex-3977277"
+  },
+  "councilTax": {
+    "text": "£2,474.26 average Band D (2026/27), including West Sussex County Council, Sussex police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/mid-sussex"
+  },
+  "postcodes": [
+    "RH15",
+    "RH16",
+    "RH17",
+    "RH19",
+    "RH10",
+    "BN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Haywards Heath",
+      "postcodes": "RH16",
+      "housing": "Victorian and Edwardian villas and terraces near the station, with large post-war and modern estates."
+    },
+    {
+      "name": "Burgess Hill",
+      "postcodes": "RH15",
+      "housing": "Victorian terraces and semis in the centre, post-war estates and large new-build neighbourhoods on the edges."
+    },
+    {
+      "name": "East Grinstead",
+      "postcodes": "RH19",
+      "housing": "Timber-framed and Tudor buildings on the High Street, with Victorian, post-war and modern houses around it."
+    },
+    {
+      "name": "Cuckfield",
+      "postcodes": "RH17",
+      "housing": "A historic village of listed cottages and Georgian houses, with some later family homes."
+    },
+    {
+      "name": "Hassocks and Keymer",
+      "postcodes": "BN6",
+      "housing": "Victorian and inter-war houses near the station at the foot of the South Downs, with newer estates."
+    },
+    {
+      "name": "Hurstpierpoint",
+      "postcodes": "BN6",
+      "housing": "Old village cottages along the High Street and later estates of family houses."
+    },
+    {
+      "name": "Lindfield",
+      "postcodes": "RH16",
+      "housing": "Timber-framed and Georgian houses around the common, with inter-war and post-war homes."
+    },
+    {
+      "name": "Copthorne and Crawley Down",
+      "postcodes": "RH10",
+      "housing": "Villages of post-war and modern detached and semi-detached houses near Gatwick."
+    }
+  ],
+  "housing": "Mid Sussex is a mostly owner-occupied commuter district on the London to Brighton railway, with the towns of Haywards Heath, Burgess Hill and East Grinstead and many villages. About one in seven households rent privately, often in Victorian and Edwardian houses near stations, flats in the town centres and new-build homes in Burgess Hill's growth areas. The villages have older timber-framed and listed cottages.",
+  "checkinTips": [
+    "Listed and timber-framed cottages in Cuckfield, Lindfield and East Grinstead: photograph beams, uneven floors, leaded or sash windows and any damp.",
+    "New-build homes in Burgess Hill and Haywards Heath: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Flats near the stations and town centres: note the communal entrance, bike and bin stores, and key and fob counts.",
+    "Homes on Weald clay: photograph cracks around doors, windows and in plaster that could come from ground movement.",
+    "Homes near Gatwick in Copthorne and Crawley Down: note window seals and any secondary glazing, and test that windows open and lock."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Mid Sussex District Council's Environmental Health Housing Standards Team, which deals with private rented housing.",
+  "nearby": [
+    "crawley",
+    "horsham",
+    "lewes",
+    "wealden",
+    "tandridge",
+    "brighton"
+  ]
+}

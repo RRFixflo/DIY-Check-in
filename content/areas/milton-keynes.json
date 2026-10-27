@@ -1,0 +1,103 @@
+{
+  "slug": "milton-keynes",
+  "name": "Milton Keynes",
+  "council": {
+    "name": "Milton Keynes City Council",
+    "url": "https://www.milton-keynes.gov.uk",
+    "privateRentingUrl": "https://www.milton-keynes.gov.uk/housing/private-sector-housing/houses-multiple-occupation-hmo"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people, not all related, sharing facilities. An Article 4 direction controls new small HMOs through planning in parts of the city.",
+    "fee": "£730 for a new or renewed HMO licence (£485 on application and £245 on approval)",
+    "source": "https://www.milton-keynes.gov.uk/housing/private-sector-housing/houses-multiple-occupation-hmo",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "About 20.9% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=789"
+  },
+  "councilTax": {
+    "text": "£2,372.21 average Band D (2026/27), including Thames Valley police, Buckinghamshire and Milton Keynes fire and average parish precepts",
+    "source": "https://www.milton-keynes.gov.uk/sites/default/files/2026-03/Your%20Guide%20to%20Council%20Tax%20in%202026.pdf"
+  },
+  "postcodes": [
+    "MK1",
+    "MK2",
+    "MK3",
+    "MK4",
+    "MK5",
+    "MK6",
+    "MK8",
+    "MK9",
+    "MK10",
+    "MK11",
+    "MK12",
+    "MK13",
+    "MK14",
+    "MK15",
+    "MK16",
+    "MK17",
+    "MK19",
+    "MK46"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Central Milton Keynes",
+      "postcodes": "MK9",
+      "housing": "Apartment blocks and new towers around the shopping centre and station, largely privately rented."
+    },
+    {
+      "name": "Bletchley",
+      "postcodes": "MK2, MK3",
+      "housing": "Victorian and inter-war terraces in the old town, with post-war estates around it."
+    },
+    {
+      "name": "Wolverton",
+      "postcodes": "MK12",
+      "housing": "Victorian railway-workers' terraces in a grid of streets, many privately rented."
+    },
+    {
+      "name": "Fishermead and Netherfield",
+      "postcodes": "MK6",
+      "housing": "1970s new-town estates of terraced houses and flats."
+    },
+    {
+      "name": "Stony Stratford",
+      "postcodes": "MK11",
+      "housing": "Georgian and older coaching-town buildings on the High Street, with later estates."
+    },
+    {
+      "name": "Broughton and Brooklands",
+      "postcodes": "MK10",
+      "housing": "Large estates of new-build houses and flats on the city's eastern flank."
+    },
+    {
+      "name": "Newport Pagnell",
+      "postcodes": "MK16",
+      "housing": "A market town of older terraces and cottages, with post-war and new estates."
+    },
+    {
+      "name": "Olney",
+      "postcodes": "MK46",
+      "housing": "Stone-built Georgian and older town houses and cottages, with newer estates."
+    }
+  ],
+  "housing": "Milton Keynes mixes the 1970s and 1980s new-town grid estates, older towns such as Bletchley, Wolverton, Stony Stratford and Newport Pagnell, and large new-build districts still being built on the edges. About one in five households rent privately, with many lets in Central Milton Keynes apartments, new-town terraces and the Victorian streets of Wolverton and Bletchley. Rural villages to the north have stone cottages and farmhouses.",
+  "checkinTips": [
+    "1970s new-town estates in Fishermead, Netherfield and Beanhill: photograph flat roofs, timber cladding, windows and any condensation or mould.",
+    "New-build homes in Broughton, Brooklands and the western expansion areas: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Central Milton Keynes apartments: note fob, key, parking and bike store counts, and photograph balconies and the intercom.",
+    "Victorian terraces in Wolverton and Bletchley: photograph the rear yard, alley access, gutters and any damp in back rooms.",
+    "Stone cottages in Olney and the northern villages: record damp patches, wood burners and flues, and any oil tank."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Milton Keynes City Council's Private Sector Housing team, which can inspect homes and take enforcement action.",
+  "nearby": [
+    "buckinghamshire",
+    "central-bedfordshire",
+    "bedford",
+    "west-northamptonshire"
+  ]
+}

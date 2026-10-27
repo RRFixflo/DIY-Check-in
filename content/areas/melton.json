@@ -1,0 +1,87 @@
+{
+  "slug": "melton",
+  "name": "Melton",
+  "council": {
+    "name": "Melton Borough Council",
+    "url": "https://www.melton.gov.uk",
+    "privateRentingUrl": "https://www.melton.gov.uk/housing/private-housing-and-housing-associations/advice-for-landlords/houses-in-multiple-occupation/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households.",
+    "fee": null,
+    "source": "https://www.melton.gov.uk/housing/private-housing-and-housing-associations/advice-for-landlords/houses-in-multiple-occupation/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,429.67 average Band D (2026/27), including Leicestershire County Council, police, fire and parish precepts",
+    "source": "https://www.melton.gov.uk/your-council/news-and-awards/news/2026/council-set-budget-2026"
+  },
+  "postcodes": [
+    "LE13",
+    "LE14",
+    "NG32",
+    "NG13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Melton Mowbray town centre",
+      "postcodes": "LE13",
+      "housing": "Georgian and Victorian buildings, with flats over shops around the market place."
+    },
+    {
+      "name": "Melton Mowbray north and Egerton",
+      "postcodes": "LE13",
+      "housing": "Victorian and Edwardian terraces and post-war council-built estates."
+    },
+    {
+      "name": "Melton Mowbray south and Sysonby",
+      "postcodes": "LE13",
+      "housing": "Inter-war and post-war semis, with newer estates on the town's edges."
+    },
+    {
+      "name": "Asfordby",
+      "postcodes": "LE14",
+      "housing": "A former mining village of terraced and semi-detached houses and newer estates."
+    },
+    {
+      "name": "Bottesford",
+      "postcodes": "NG13",
+      "housing": "A large Vale of Belvoir village of stone and brick cottages and later family houses."
+    },
+    {
+      "name": "Waltham on the Wolds",
+      "postcodes": "LE14",
+      "housing": "Ironstone and brick cottages and small modern developments."
+    },
+    {
+      "name": "Long Clawson and the Vale of Belvoir",
+      "postcodes": "LE14",
+      "housing": "Rural villages of older cottages, farmhouses and barn conversions."
+    },
+    {
+      "name": "Croxton Kerrial and Knipton",
+      "postcodes": "NG32",
+      "housing": "Estate-village cottages and farmhouses near Belvoir Castle."
+    }
+  ],
+  "housing": "Melton is a rural borough centred on the market town of Melton Mowbray, with dozens of villages across the Wolds and the Vale of Belvoir. Rented homes are mostly terraces and semis in Melton Mowbray, alongside cottages and farmhouses in the villages. Many rural homes are built of ironstone or old brick and are off mains gas.",
+  "checkinTips": [
+    "Ironstone and older brick cottages in the villages: photograph damp patches, flaking plaster and condensation in cold rooms.",
+    "Rural homes off mains gas: photograph the oil tank or LPG bottles, gauge levels and the boiler service label.",
+    "Victorian terraces in Melton Mowbray: record the rear yard, outbuildings, gutters and any damp in back kitchens.",
+    "Homes near the River Eye and River Wreake: note any signs of past flooding on floors and lower walls.",
+    "Farm and barn conversions: record septic tanks or private drainage, gates, fencing and outbuildings included in the let."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Melton Borough Council's environmental health team, which deals with private housing standards.",
+  "nearby": [
+    "charnwood",
+    "harborough",
+    "rutland",
+    "south-kesteven",
+    "rushcliffe"
+  ]
+}

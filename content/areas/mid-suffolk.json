@@ -1,0 +1,91 @@
+{
+  "slug": "mid-suffolk",
+  "name": "Mid Suffolk",
+  "council": {
+    "name": "Mid Suffolk District Council",
+    "url": "https://www.midsuffolk.gov.uk",
+    "privateRentingUrl": "https://www.midsuffolk.gov.uk/w/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households. Private housing is handled jointly with Babergh District Council.",
+    "fee": "£578.55 for an HMO licence (as listed on the council's HMO page)",
+    "source": "https://www.midsuffolk.gov.uk/w/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,216.42 Band D (2026/27) before parish precepts, including Suffolk County Council (which runs the fire service) and police",
+    "source": "https://midsuffolk.gov.uk/documents/d/mid-suffolk/msdc_band-d-by-parishes-2026_27"
+  },
+  "postcodes": [
+    "IP14",
+    "IP6",
+    "IP21",
+    "IP22",
+    "IP23",
+    "IP30",
+    "IP31"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Stowmarket",
+      "postcodes": "IP14",
+      "housing": "Victorian terraces near the centre and large post-war and new-build estates around the town."
+    },
+    {
+      "name": "Needham Market",
+      "postcodes": "IP6",
+      "housing": "A small town of timber-framed and Georgian houses on the high street, with later estates."
+    },
+    {
+      "name": "Eye",
+      "postcodes": "IP23",
+      "housing": "A historic market town of timber-framed and brick houses and small modern developments."
+    },
+    {
+      "name": "Debenham",
+      "postcodes": "IP14",
+      "housing": "A large village of medieval and Georgian houses, with post-war and newer homes."
+    },
+    {
+      "name": "Claydon and Barham",
+      "postcodes": "IP6",
+      "housing": "Villages of post-war and modern estates on the edge of Ipswich."
+    },
+    {
+      "name": "Thurston",
+      "postcodes": "IP31",
+      "housing": "A growing village with older cottages and large new estates near the railway station."
+    },
+    {
+      "name": "Elmswell and Woolpit",
+      "postcodes": "IP30",
+      "housing": "Villages of older cottages and post-war and new-build houses near the A14."
+    },
+    {
+      "name": "Botesdale, Rickinghall and Mendlesham",
+      "postcodes": "IP22, IP14",
+      "housing": "Rural villages of timber-framed and thatched cottages, farmhouses and barn conversions."
+    }
+  ],
+  "housing": "Mid Suffolk is a rural district with Stowmarket as its main town, the small towns of Needham Market and Eye, and more than a hundred villages. Most households own their homes, and private lets range from estate houses in Stowmarket to timber-framed and thatched cottages in the villages. New estates have grown along the A14 and around Stowmarket and Thurston, and many rural homes are off mains gas and drains.",
+  "checkinTips": [
+    "Timber-framed and thatched cottages: photograph beams, uneven floors, low doorways, the thatch where visible and any wood burner and flue.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes on private drainage: record the septic tank or treatment plant and when it was last emptied.",
+    "Homes on clay soils: note cracks around doors, windows and in plaster that could come from ground movement.",
+    "New-build estates in Stowmarket and Thurston: record snagging marks, sealant and any cracks so they are noted before the tenancy."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact the Babergh and Mid Suffolk private sector housing team, which can inspect homes and take action against landlords.",
+  "nearby": [
+    "babergh",
+    "ipswich",
+    "east-suffolk",
+    "west-suffolk",
+    "south-norfolk",
+    "breckland"
+  ]
+}

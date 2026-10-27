@@ -1,0 +1,87 @@
+{
+  "slug": "lincoln",
+  "name": "Lincoln",
+  "council": {
+    "name": "City of Lincoln Council",
+    "url": "https://www.lincoln.gov.uk",
+    "privateRentingUrl": "https://www.lincoln.gov.uk/houses-multiple-occupation/houses-multiple-occupation-hmos/4"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households. An Article 4 direction means new small HMOs across the city need planning permission.",
+    "fee": "£1,470 for a new HMO licence (up to five bedrooms) or £1,270 for a renewal, paid 60% on application and 40% on grant",
+    "source": "https://www.lincoln.gov.uk/houses-multiple-occupation/houses-multiple-occupation-hmos/4",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "27.2% of households rent privately (Census 2021), up from 21.0% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000138/"
+  },
+  "councilTax": {
+    "text": "£2,323.08 Band D (2026/27), including Lincolnshire County Council, police and fire",
+    "source": "https://housecheckup.co.uk/council-tax/lincoln"
+  },
+  "postcodes": [
+    "LN1",
+    "LN2",
+    "LN5",
+    "LN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Uphill (Bailgate and Cathedral Quarter)",
+      "postcodes": "LN1, LN2",
+      "housing": "Georgian and Victorian townhouses, listed buildings and flats around the cathedral and castle."
+    },
+    {
+      "name": "City centre and Brayford",
+      "postcodes": "LN1, LN5",
+      "housing": "Purpose-built student blocks and modern apartments around the waterfront, with flats over shops."
+    },
+    {
+      "name": "West End",
+      "postcodes": "LN1",
+      "housing": "Streets of Victorian terraces, many let to students and young professionals."
+    },
+    {
+      "name": "Monks Road and Abbey",
+      "postcodes": "LN2",
+      "housing": "Dense Victorian and Edwardian terraces, many privately rented and some converted to HMOs."
+    },
+    {
+      "name": "Ermine",
+      "postcodes": "LN2",
+      "housing": "Post-war council-built estates of houses and low-rise flats on the north side."
+    },
+    {
+      "name": "Boultham",
+      "postcodes": "LN5, LN6",
+      "housing": "Inter-war and post-war semis and terraces south-west of the centre."
+    },
+    {
+      "name": "Birchwood and Hartsholme",
+      "postcodes": "LN6",
+      "housing": "1970s and 1980s estates of semi-detached and terraced houses on the western edge."
+    },
+    {
+      "name": "Bracebridge",
+      "postcodes": "LN5",
+      "housing": "Victorian terraces near the High Street and later semi-detached housing to the south."
+    }
+  ],
+  "housing": "Lincoln is a compact city where more than a quarter of households rent privately, helped by the University of Lincoln and Bishop Grosseteste University. Victorian terraces in the West End, Monks Road and around the High Street make up much of the rented stock, alongside purpose-built student blocks near the Brayford and older listed homes uphill. Planning controls limit new HMOs across the city.",
+  "checkinTips": [
+    "Student lets in the West End and Monks Road terraces: photograph each bedroom door lock, fire doors, smoke alarms and shared kitchen appliances.",
+    "Period homes uphill near the cathedral: record sash windows, steep stairs, fireplaces and any cracks in old plaster.",
+    "Victorian terraces with rear yards: photograph the yard, outbuildings, gutters and any damp in back kitchens and bathrooms.",
+    "Flats near the Brayford and the River Witham: note any damp or condensation, and record fob, key and parking permit counts.",
+    "HMOs: photograph the posted licence, fire blanket and alarm panel in shared areas."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact the City of Lincoln Council's Private Housing Team, which licenses HMOs and can inspect privately rented homes.",
+  "nearby": [
+    "west-lindsey",
+    "north-kesteven"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "maidstone",
+  "name": "Maidstone",
+  "council": {
+    "name": "Maidstone Borough Council",
+    "url": "https://maidstone.gov.uk",
+    "privateRentingUrl": "https://maidstone.gov.uk/home/primary-services/housing/housing-for-business/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from more than one household sharing facilities.",
+    "fee": "£930 for an HMO licence (£895 for accredited landlords); renewal £860 (2026)",
+    "source": "https://maidstone.gov.uk/home/primary-services/housing/housing-for-business/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "17.3% of households rent privately (Census 2021), up from 14.6% in 2011",
+    "source": "https://cy.ons.gov.uk/visualisations/censusareachanges/E07000110"
+  },
+  "councilTax": {
+    "text": "£2,502.59 average Band D (2026/27), including Kent County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/maidstone"
+  },
+  "postcodes": [
+    "ME14",
+    "ME15",
+    "ME16",
+    "ME17",
+    "ME18",
+    "TN12",
+    "TN27"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Maidstone town centre",
+      "postcodes": "ME14, ME15",
+      "housing": "Flats over shops, converted office blocks and new riverside apartments."
+    },
+    {
+      "name": "Fant and Tovil",
+      "postcodes": "ME16, ME15",
+      "housing": "Victorian terraces west and south of the river, many privately rented."
+    },
+    {
+      "name": "Shepway and Park Wood",
+      "postcodes": "ME15",
+      "housing": "Large post-war council-built estates of terraced houses and flats."
+    },
+    {
+      "name": "Allington",
+      "postcodes": "ME16",
+      "housing": "Estates of semi-detached and detached houses from the 1960s onwards."
+    },
+    {
+      "name": "Bearsted",
+      "postcodes": "ME14",
+      "housing": "A village of older cottages around the green and later detached family houses."
+    },
+    {
+      "name": "Coxheath",
+      "postcodes": "ME17",
+      "housing": "A large village of post-war houses and bungalows with newer estates."
+    },
+    {
+      "name": "Marden and Staplehurst",
+      "postcodes": "TN12",
+      "housing": "Weald villages with weatherboarded cottages and new-build estates near the stations."
+    },
+    {
+      "name": "Headcorn and Harrietsham",
+      "postcodes": "TN27, ME17",
+      "housing": "Timber-framed and weatherboarded village houses, oast conversions and newer estates."
+    }
+  ],
+  "housing": "Maidstone is Kent's county town, with Victorian terraces near the centre, large post-war estates to the south-east and many new-build estates on the town's edges. About one in six households rent privately, below the national share. The rural south of the borough has Weald villages with timber-framed houses and oast conversions, many off mains gas.",
+  "checkinTips": [
+    "New-build estates on the town's edges: photograph snagging marks, sealant and any settlement cracks so they are recorded before the tenancy.",
+    "Riverside flats near the Medway: note any damp or condensation and record fob, key and parking permit counts.",
+    "Victorian terraces in Fant and Tovil: photograph sash or replacement windows, rear yards and any damp in back rooms.",
+    "Timber-framed and weatherboarded cottages in the Weald villages: record beams, uneven floors, low doorways and the state of external boards.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Maidstone Borough Council's private sector housing team, which can inspect privately rented homes.",
+  "nearby": [
+    "tonbridge-and-malling",
+    "medway",
+    "swale",
+    "ashford",
+    "tunbridge-wells"
+  ]
+}

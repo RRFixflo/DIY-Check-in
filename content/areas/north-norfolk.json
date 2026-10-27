@@ -1,0 +1,93 @@
+{
+  "slug": "north-norfolk",
+  "name": "North Norfolk",
+  "council": {
+    "name": "North Norfolk District Council",
+    "url": "https://www.north-norfolk.gov.uk",
+    "privateRentingUrl": "https://www.north-norfolk.gov.uk/tasks/housing-services/does-my-house-in-multiple-occupation-hmo-need-a-licence/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more occupiers sharing facilities.",
+    "fee": "£930 for a five-year HMO licence for up to six units, plus £30 for each extra unit",
+    "source": "https://www.north-norfolk.gov.uk/tasks/housing-services/does-my-house-in-multiple-occupation-hmo-need-a-licence/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "17.6% of households rent privately (Census 2021), up from 14.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000147"
+  },
+  "councilTax": {
+    "text": "£2,459.93 average Band D (2026/27), including Norfolk County Council (which runs the fire service), police and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-norfolk"
+  },
+  "postcodes": [
+    "NR11",
+    "NR12",
+    "NR21",
+    "NR23",
+    "NR25",
+    "NR26",
+    "NR27",
+    "NR28"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Cromer",
+      "postcodes": "NR27",
+      "housing": "Victorian seaside villas and terraces, many split into flats, with post-war estates inland."
+    },
+    {
+      "name": "Sheringham",
+      "postcodes": "NR26",
+      "housing": "Flint and brick Victorian and Edwardian houses and terraces, with bungalows on the edges."
+    },
+    {
+      "name": "North Walsham",
+      "postcodes": "NR28",
+      "housing": "A market town of older terraces and cottages, post-war estates and new-build homes."
+    },
+    {
+      "name": "Fakenham",
+      "postcodes": "NR21",
+      "housing": "A market town of Georgian and Victorian houses and large post-war and modern estates."
+    },
+    {
+      "name": "Holt",
+      "postcodes": "NR25",
+      "housing": "A Georgian town of brick and flint houses, with newer developments on the edges."
+    },
+    {
+      "name": "Wells-next-the-Sea",
+      "postcodes": "NR23",
+      "housing": "Flint cottages and quayside buildings, with a high share of second homes and holiday lets."
+    },
+    {
+      "name": "Stalham and the Broads villages",
+      "postcodes": "NR12",
+      "housing": "Older cottages, bungalows and riverside homes near the Norfolk Broads."
+    },
+    {
+      "name": "Aldborough and Erpingham",
+      "postcodes": "NR11",
+      "housing": "Rural villages of flint and brick cottages, farmhouses and barn conversions."
+    }
+  ],
+  "housing": "North Norfolk is a rural and coastal district of small market towns such as Cromer, Sheringham, North Walsham, Fakenham and Holt, and many flint villages. About one in six households rent privately, while second homes and holiday lets take up a large share of homes in coastal villages such as Wells and Blakeney. Much of the housing is older flint and brick cottages and bungalows, and many rural homes are off mains gas.",
+  "checkinTips": [
+    "Coastal homes in Cromer, Sheringham and Mundesley: photograph salt-pitted metal, window seals and any damp on seaward walls.",
+    "Flint and brick cottages: record damp patches, flaking lime mortar and condensation in cold rooms.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes on private drainage: record the septic tank or treatment plant and when it was last emptied.",
+    "Homes near the Broads and low-lying coast: note any signs of past flooding on floors and lower walls."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North Norfolk District Council's housing standards team, which inspects private rented homes and licenses HMOs.",
+  "nearby": [
+    "broadland",
+    "kings-lynn-and-west-norfolk",
+    "breckland",
+    "great-yarmouth"
+  ]
+}

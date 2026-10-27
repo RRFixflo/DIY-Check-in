@@ -1,0 +1,91 @@
+{
+  "slug": "north-hertfordshire",
+  "name": "North Hertfordshire",
+  "council": {
+    "name": "North Hertfordshire District Council",
+    "url": "https://www.north-herts.gov.uk",
+    "privateRentingUrl": "https://www.north-herts.gov.uk/landlords-and-hmo-licences"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs let to five or more unrelated tenants, whatever the number of storeys.",
+    "fee": null,
+    "source": "https://www.north-herts.gov.uk/landlords-and-hmo-licences",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,448.52 average Band D (2026/27), including Hertfordshire County Council (which runs the fire service), police and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-hertfordshire"
+  },
+  "postcodes": [
+    "SG4",
+    "SG5",
+    "SG6",
+    "SG7",
+    "SG8",
+    "SG3",
+    "SG1"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Hitchin",
+      "postcodes": "SG4, SG5",
+      "housing": "Medieval and Georgian buildings in the old town, Victorian terraces near the station and post-war estates."
+    },
+    {
+      "name": "Letchworth Garden City",
+      "postcodes": "SG6",
+      "housing": "Arts and Crafts cottages and houses of the first garden city, with post-war estates; many homes come under the Heritage Foundation's scheme of management."
+    },
+    {
+      "name": "Baldock",
+      "postcodes": "SG7",
+      "housing": "A Georgian coaching town with older terraces and large new-build estates around it."
+    },
+    {
+      "name": "Royston",
+      "postcodes": "SG8",
+      "housing": "A market town of older houses in the centre and post-war and modern estates on the chalk hills."
+    },
+    {
+      "name": "Knebworth",
+      "postcodes": "SG3",
+      "housing": "A commuter village of Edwardian and inter-war houses near the station."
+    },
+    {
+      "name": "Great Ashby",
+      "postcodes": "SG1",
+      "housing": "A 1990s and 2000s estate of family houses and flats next to Stevenage."
+    },
+    {
+      "name": "Ashwell",
+      "postcodes": "SG7",
+      "housing": "A historic village of timber-framed and thatched cottages."
+    },
+    {
+      "name": "Codicote",
+      "postcodes": "SG4",
+      "housing": "A village of older cottages and post-war and newer family houses."
+    }
+  ],
+  "housing": "North Hertfordshire is a commuter district on the lines into London and Cambridge, with the market towns of Hitchin, Baldock and Royston, the first garden city at Letchworth and many villages. Private lets include Victorian terraces and flats in Hitchin, garden-city cottages in Letchworth and new-build homes around Baldock and Great Ashby. The villages have older timber-framed and thatched cottages.",
+  "checkinTips": [
+    "Arts and Crafts cottages in Letchworth: photograph original windows, doors, roughcast render and hedges, as alterations may need Heritage Foundation consent.",
+    "Victorian terraces near Hitchin station: photograph sash or replacement windows, the rear garden and any damp in back rooms.",
+    "Timber-framed and thatched cottages in Ashwell and other villages: record beams, uneven floors, the thatch where visible and any wood burner and flue.",
+    "New-build homes around Baldock and Great Ashby: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Flats in the town centres: note the communal entrance, bin and bike stores, and key and fob counts."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North Hertfordshire District Council's environmental health team, which deals with private housing standards and HMO licensing.",
+  "nearby": [
+    "luton",
+    "central-bedfordshire",
+    "stevenage",
+    "east-hertfordshire",
+    "welwyn-hatfield",
+    "south-cambridgeshire"
+  ]
+}

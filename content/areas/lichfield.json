@@ -1,0 +1,97 @@
+{
+  "slug": "lichfield",
+  "name": "Lichfield",
+  "council": {
+    "name": "Lichfield District Council",
+    "url": "https://www.lichfielddc.gov.uk",
+    "privateRentingUrl": "https://www.lichfielddc.gov.uk/licensing-permits/house-multiple-occupancy-hmo-licence"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs let to five or more people from more than one household.",
+    "fee": "£850 for an HMO licence, plus £75 for each bedroom above five (2026)",
+    "source": "https://www.lichfielddc.gov.uk/licensing-permits/house-multiple-occupancy-hmo-licence",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": {
+    "text": "£335,962 (HM Land Registry UK HPI, March 2026), up 3.8% on a year earlier",
+    "source": "https://www.propertyinvestmentsuk.co.uk/lichfield-buy-to-let/"
+  },
+  "privateRentedShare": {
+    "text": "12.7% of households rent privately (Census 2021), up from 9.5% in 2011",
+    "source": "https://www.ons.gov.uk/visualisations/censusareachanges/E07000194/"
+  },
+  "councilTax": {
+    "text": "£2,351.90 average Band D (2026/27), including Staffordshire County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/lichfield"
+  },
+  "postcodes": [
+    "WS13",
+    "WS14",
+    "WS7",
+    "WS15",
+    "B78",
+    "DE13"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Lichfield city centre",
+      "postcodes": "WS13",
+      "housing": "Georgian and Victorian townhouses and terraces around the cathedral close and market square, with flats over shops."
+    },
+    {
+      "name": "Boley Park and Darwin Park",
+      "postcodes": "WS14",
+      "housing": "Estates of detached and semi-detached houses built from the 1970s onwards on the city's south-east side."
+    },
+    {
+      "name": "Burntwood and Chase Terrace",
+      "postcodes": "WS7",
+      "housing": "Former mining-town terraces, inter-war semis and large post-war estates."
+    },
+    {
+      "name": "Armitage with Handsacre",
+      "postcodes": "WS15",
+      "housing": "Canal-side village terraces and post-war estates of semi-detached houses."
+    },
+    {
+      "name": "Fazeley",
+      "postcodes": "B78",
+      "housing": "Victorian mill-town terraces and post-war housing next to Tamworth."
+    },
+    {
+      "name": "Shenstone",
+      "postcodes": "WS14",
+      "housing": "A commuter village of older cottages and detached and semi-detached houses."
+    },
+    {
+      "name": "Alrewas",
+      "postcodes": "DE13",
+      "housing": "Thatched and timber-framed cottages in the old village, with newer estates of family houses."
+    },
+    {
+      "name": "Whittington",
+      "postcodes": "WS14",
+      "housing": "Village cottages and detached houses, with homes near the army barracks."
+    }
+  ],
+  "housing": "Lichfield District is mostly owner-occupied, with fewer than one in seven households renting privately. Lets range from period townhouses and terraces in the cathedral city to estate houses in Burntwood and the newer developments on Lichfield's southern edge. The villages have older brick cottages and growing new-build estates, and HMOs are few.",
+  "checkinTips": [
+    "Listed and period townhouses near the cathedral: photograph sash windows, shutters, fireplaces and any cracks in plaster or cornicing.",
+    "New-build homes on the southern Lichfield estates: record snagging marks, sealant around baths and any settlement cracks so they aren't blamed on the tenant.",
+    "Older terraces in Burntwood and Chase Terrace: check rear yards, outbuildings and signs of damp in back kitchens.",
+    "Canal-side cottages in Fazeley, Alrewas and Armitage: photograph walls and floors for rising damp and note any flood-risk signs.",
+    "Flats above shops in the city centre: record the shared entrance, smoke alarms and the number of keys and fobs."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems can contact Lichfield District Council's private sector housing team, which can inspect homes and enforce standards.",
+  "nearby": [
+    "tamworth",
+    "north-warwickshire",
+    "cannock-chase",
+    "east-staffordshire",
+    "south-staffordshire",
+    "walsall",
+    "birmingham"
+  ]
+}

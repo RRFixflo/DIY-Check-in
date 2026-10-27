@@ -1,0 +1,87 @@
+{
+  "slug": "luton",
+  "name": "Luton",
+  "council": {
+    "name": "Luton Council",
+    "url": "https://www.luton.gov.uk",
+    "privateRentingUrl": "https://www.luton.gov.uk/selectivelicensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in the town centre and Park Town areas from 1 June 2026, after a legal challenge by landlords failed. Check an address on the council's map.",
+    "additional": "Additional HMO licensing covers the whole borough from 1 June 2026, for smaller HMOs of three or four people from two or more households; larger HMOs need the national mandatory licence.",
+    "fee": null,
+    "source": "https://www.luton.gov.uk/news/2026/licensing-schemes-private-rented-properties-launch",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "29.2% of households rent privately (Census 2021), up from 23.6% in 2011",
+    "source": "https://www.luton.gov.uk/Community_and_living/Lists/LutonDocuments/PDF/observatory/Housing-Census-2021-summary-report.pdf"
+  },
+  "councilTax": {
+    "text": "£2,439.93 Band D (2026/27), including Bedfordshire police and fire",
+    "source": "https://www.luton.gov.uk/sites/default/files/2026-03/council-tax-booklet.pdf"
+  },
+  "postcodes": [
+    "LU1",
+    "LU2",
+    "LU3",
+    "LU4"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre",
+      "postcodes": "LU1",
+      "housing": "Flats over shops, converted offices and new apartment blocks, inside the selective licensing area."
+    },
+    {
+      "name": "High Town",
+      "postcodes": "LU1, LU2",
+      "housing": "Victorian terraces and converted flats north of the station, many privately rented."
+    },
+    {
+      "name": "Bury Park",
+      "postcodes": "LU1, LU4",
+      "housing": "Dense Victorian and Edwardian terraces, many family homes and some HMOs."
+    },
+    {
+      "name": "Park Town",
+      "postcodes": "LU1",
+      "housing": "Victorian terraces near the university and Luton Hoo, within the selective licensing area."
+    },
+    {
+      "name": "Biscot and Dallow",
+      "postcodes": "LU1, LU4",
+      "housing": "Terraced streets of the early 1900s, with some later infill flats."
+    },
+    {
+      "name": "Stopsley",
+      "postcodes": "LU2",
+      "housing": "Inter-war and post-war semi-detached houses on the eastern side."
+    },
+    {
+      "name": "Marsh Farm and Lewsey",
+      "postcodes": "LU3, LU4",
+      "housing": "Large post-war council-built estates of terraced houses and low-rise flats."
+    },
+    {
+      "name": "Wigmore",
+      "postcodes": "LU2",
+      "housing": "Estates of 1980s and 1990s detached and semi-detached houses near the airport."
+    }
+  ],
+  "housing": "Luton is a dense town where almost three in ten households rent privately, well above the national share. Much of the rented stock is Victorian and Edwardian terraces in High Town, Bury Park and Park Town, with HMOs serving workers at the airport and students at the University of Bedfordshire. Since June 2026 smaller HMOs across the town need a licence, and other private lets in the town centre and Park Town do too.",
+  "checkinTips": [
+    "Shared houses near the university and the airport: photograph each bedroom lock, fire doors, smoke and heat alarms, and the HMO licence.",
+    "Victorian terraces in High Town and Bury Park: photograph the rear yard, gutters, and any damp or mould in back kitchens and bathrooms.",
+    "Flats over shops in the town centre: record the shared entrance, fire escape route and the number of keys and fobs.",
+    "Homes under the airport flight path: note window seals and any secondary glazing, and test that windows open and lock.",
+    "Post-war estates in Marsh Farm and Lewsey: photograph communal stairs, bin stores and any condensation in flats."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems can contact Luton Council's private sector housing team, which runs the licensing schemes and can inspect homes.",
+  "nearby": [
+    "central-bedfordshire",
+    "north-hertfordshire"
+  ]
+}

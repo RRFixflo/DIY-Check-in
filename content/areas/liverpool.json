@@ -1,0 +1,100 @@
+{
+  "slug": "liverpool",
+  "name": "Liverpool",
+  "council": {
+    "name": "Liverpool City Council",
+    "url": "https://liverpool.gov.uk",
+    "privateRentingUrl": "https://liverpool.gov.uk/business/licences-and-permits/landlord-licensing/how-we-monitor-conditions"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in 16 wards (around 80% of the city's private rented homes) from April 2022 to March 2027. The council consulted until October 2026 on a scheme to follow it, with options ranging from 26 wards to the whole city.",
+    "additional": "No additional HMO licensing scheme: larger HMOs (five or more people from two or more households) need the national mandatory licence.",
+    "fee": "Proposed fee for the next scheme £995 per property (£240 on application and £755 on grant)",
+    "source": "https://liverpoolexpress.co.uk/landlord-licensing-consultation-your-questions-answered/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,673.59 Band D (2026/27), including Merseyside police, fire and the Liverpool City Region Combined Authority",
+    "source": "https://liverpool.gov.uk/council-tax/your-guide-to-council-tax/how-we-are-funded"
+  },
+  "postcodes": [
+    "L1",
+    "L3",
+    "L4",
+    "L6",
+    "L7",
+    "L8",
+    "L13",
+    "L15",
+    "L17",
+    "L18",
+    "L19",
+    "L24",
+    "L25"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Baltic Triangle",
+      "postcodes": "L1, L3",
+      "housing": "Converted warehouses, new apartment towers and large purpose-built student blocks."
+    },
+    {
+      "name": "Georgian Quarter and Canning",
+      "postcodes": "L1, L8",
+      "housing": "Grand Georgian terraces, many split into flats, near the two cathedrals and universities."
+    },
+    {
+      "name": "Kensington and Fairfield",
+      "postcodes": "L6, L7",
+      "housing": "Dense Victorian terraces, many privately rented and some HMOs, with regeneration areas."
+    },
+    {
+      "name": "Wavertree",
+      "postcodes": "L15",
+      "housing": "Victorian and Edwardian terraces, popular with students and young professionals."
+    },
+    {
+      "name": "Smithdown and Picton",
+      "postcodes": "L7, L15",
+      "housing": "Two-up two-down terraces, many let as student houses."
+    },
+    {
+      "name": "Aigburth and Sefton Park",
+      "postcodes": "L17",
+      "housing": "Large Victorian villas converted into flats, and Edwardian terraces."
+    },
+    {
+      "name": "Anfield and Walton",
+      "postcodes": "L4",
+      "housing": "Long rows of Victorian terraces, with regeneration and refurbished homes near the football grounds."
+    },
+    {
+      "name": "Allerton and Woolton",
+      "postcodes": "L18, L25",
+      "housing": "Inter-war semis and detached houses, with older village cottages in Woolton."
+    },
+    {
+      "name": "Garston and Speke",
+      "postcodes": "L19, L24",
+      "housing": "Victorian terraces near the docks and post-war council-built estates in Speke."
+    }
+  ],
+  "housing": "Liverpool has a large private rented sector, much of it Victorian terraces in inner areas such as Kensington, Anfield, Picton and Wavertree, and Georgian houses split into flats near the universities. The city centre has added thousands of apartments and student rooms in towers and converted warehouses. Most of the city has been under selective licensing since 2022, and the council is planning a scheme to follow it from 2027.",
+  "checkinTips": [
+    "Student houses around Smithdown Road and Wavertree: photograph every bedroom lock, fire doors, smoke alarms and the shared kitchen.",
+    "Georgian flats in the Canning area: record sash windows, high ceilings for cracks and damp, and communal stair condition.",
+    "City-centre apartments: note fob, key, parking and post-box counts, and photograph balconies and the intercom.",
+    "Victorian terraces in Anfield, Walton and Kensington: photograph the back yard, alley gate, gutters and any damp on rear walls.",
+    "Licensed homes: photograph the selective or HMO licence and check its address and expiry date."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety problems can report them to Liverpool City Council's private sector housing team, which enforces licence conditions and housing standards.",
+  "nearby": [
+    "sefton",
+    "knowsley",
+    "halton",
+    "wirral"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "slug": "manchester",
+  "name": "Manchester",
+  "council": {
+    "name": "Manchester City Council",
+    "url": "https://www.manchester.gov.uk",
+    "privateRentingUrl": "https://www.manchester.gov.uk/homes-and-property/private-landlords-information/houses-in-multiple-occupation-hmo/check-if-you-need-a-licence-and-apply"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes on designated streets in parts of the city, including areas of Cheetham, Crumpsall and Moss Side added from 24 February 2025. Check an address on the council's selective licensing pages.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need the national mandatory licence, and smaller shared houses need a licence only inside a selective licensing area.",
+    "fee": null,
+    "source": "https://www.manchester.gov.uk/homes-and-property/private-landlords-information/houses-in-multiple-occupation-hmo/check-if-you-need-a-licence-and-apply",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "32% of households rent privately (Census 2021), up from 28% in 2011, overtaking social renting",
+    "source": "https://manchester.gov.uk/info/500388/census_2021/8582/census_2021_-_housing_summary"
+  },
+  "councilTax": null,
+  "postcodes": [
+    "M1",
+    "M3",
+    "M4",
+    "M8",
+    "M9",
+    "M11",
+    "M12",
+    "M13",
+    "M14",
+    "M15",
+    "M16",
+    "M19",
+    "M20",
+    "M21",
+    "M22",
+    "M23",
+    "M40"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "City centre and Ancoats",
+      "postcodes": "M1, M3, M4",
+      "housing": "Converted mills and warehouses, and new apartment towers, mostly let to young professionals."
+    },
+    {
+      "name": "Fallowfield",
+      "postcodes": "M14",
+      "housing": "Edwardian and inter-war semis and terraces, many let as student houses."
+    },
+    {
+      "name": "Rusholme and Moss Side",
+      "postcodes": "M14, M15, M16",
+      "housing": "Victorian terraces and 1970s and later housing estates near the universities, with selective licensing in parts."
+    },
+    {
+      "name": "Withington and Didsbury",
+      "postcodes": "M20",
+      "housing": "Victorian and Edwardian houses, many split into flats, and terraces popular with young professionals."
+    },
+    {
+      "name": "Chorlton",
+      "postcodes": "M21",
+      "housing": "Edwardian terraces and semis, with some flats over shops."
+    },
+    {
+      "name": "Levenshulme and Longsight",
+      "postcodes": "M19, M12, M13",
+      "housing": "Long streets of Victorian terraced houses, many privately rented."
+    },
+    {
+      "name": "Cheetham Hill and Crumpsall",
+      "postcodes": "M8",
+      "housing": "Victorian terraces and large older houses, with designated selective licensing streets."
+    },
+    {
+      "name": "Gorton and Openshaw",
+      "postcodes": "M18, M11",
+      "housing": "Terraced streets and regenerated housing in east Manchester."
+    },
+    {
+      "name": "Wythenshawe",
+      "postcodes": "M22, M23",
+      "housing": "One of the largest inter-war and post-war council-built estates, now partly owner-occupied and privately rented."
+    }
+  ],
+  "housing": "Manchester has one of the largest private rented sectors in the North, with almost a third of households renting from a private landlord. The city centre has thousands of apartments in towers and converted mills, while the south of the city has large numbers of student houses and Victorian conversions around Fallowfield, Withington and Rusholme. Inner areas such as Levenshulme, Longsight and Cheetham are lined with terraces, several of them under selective licensing.",
+  "checkinTips": [
+    "Student houses in Fallowfield and Withington: photograph every bedroom lock, fire doors, smoke and heat alarms, and the shared kitchen and bathroom.",
+    "City-centre apartments: record fob, key, post-box and parking counts, photograph balconies, and note any mould around windows.",
+    "Victorian terraces in Levenshulme, Longsight and Moss Side: photograph back yards, alley gates, gutters and any damp on rear walls.",
+    "Converted mills and warehouses in Ancoats: note exposed brickwork, large windows and their seals, and communal areas.",
+    "Homes on selective licensing streets: photograph the licence and check it shows the right address and expiry date."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Manchester City Council's private rented sector team, and can check whether their landlord has a licence on the council's website.",
+  "nearby": [
+    "salford",
+    "trafford",
+    "stockport",
+    "tameside",
+    "oldham",
+    "rochdale",
+    "bury",
+    "cheshire-east"
+  ]
+}

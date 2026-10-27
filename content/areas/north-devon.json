@@ -1,0 +1,88 @@
+{
+  "slug": "north-devon",
+  "name": "North Devon",
+  "council": {
+    "name": "North Devon Council",
+    "url": "https://www.northdevon.gov.uk",
+    "privateRentingUrl": "https://www.northdevon.gov.uk/business/licences-and-permits/houses-in-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme. The council's Housing Strategy 2025 mentions a feasibility project looking at selective licensing.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people in two or more households.",
+    "fee": null,
+    "source": "https://www.northdevon.gov.uk/business/licences-and-permits/houses-in-multiple-occupation-hmos/hmo-guidance-for-landlords",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,642.21 average Band D (2026/27), including Devon County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-devon"
+  },
+  "postcodes": [
+    "EX31",
+    "EX32",
+    "EX33",
+    "EX34",
+    "EX35",
+    "EX36",
+    "EX37"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Barnstaple",
+      "postcodes": "EX31, EX32",
+      "housing": "Victorian terraces and Georgian houses in the centre, large post-war estates and new-build developments on the edges."
+    },
+    {
+      "name": "Ilfracombe",
+      "postcodes": "EX34",
+      "housing": "Victorian guest houses and villas on steep streets, many converted into flats and HMOs."
+    },
+    {
+      "name": "Braunton",
+      "postcodes": "EX33",
+      "housing": "A large village of older cottages, bungalows and post-war houses near the coast."
+    },
+    {
+      "name": "Croyde and Woolacombe",
+      "postcodes": "EX33, EX34",
+      "housing": "Seaside villages of cottages, bungalows and holiday homes, with some flats."
+    },
+    {
+      "name": "Lynton and Lynmouth",
+      "postcodes": "EX35",
+      "housing": "Victorian stone villas and cottages on the Exmoor coast."
+    },
+    {
+      "name": "South Molton",
+      "postcodes": "EX36",
+      "housing": "A market town of Georgian and Victorian houses and post-war estates."
+    },
+    {
+      "name": "Fremington and Bickington",
+      "postcodes": "EX31",
+      "housing": "Villages of post-war and modern estates on the edge of Barnstaple."
+    },
+    {
+      "name": "Chulmleigh and the rural south",
+      "postcodes": "EX18, EX37",
+      "housing": "Cob and stone cottages, farmhouses and barn conversions in small villages."
+    }
+  ],
+  "housing": "North Devon combines the market town of Barnstaple, the Victorian resort of Ilfracombe, surf villages such as Croyde and Woolacombe and a large rural hinterland reaching into Exmoor. Rented homes include converted Victorian guest houses and HMOs in Ilfracombe, terraces and estates in Barnstaple, and rural cottages, while many coastal homes are second homes or holiday lets. The council estimates about 1,100 HMOs in the district.",
+  "checkinTips": [
+    "Coastal homes in Ilfracombe, Woolacombe and Croyde: photograph salt-pitted metal, window seals and any damp on seaward walls.",
+    "Converted guest houses and HMOs in Ilfracombe: photograph every bedroom lock, fire doors, alarms and communal stairs.",
+    "Cob and stone cottages in rural villages: record damp patches, flaking render, any wood burner and flue, and the condition of the thatch where visible.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Low-lying homes near the Taw estuary in Barnstaple and Braunton: note any signs of past flooding on floors and lower walls."
+  ],
+  "tenantHelp": "Tenants can report poor conditions in a private rented home to North Devon Council's private sector housing team through the council website.",
+  "nearby": [
+    "torridge",
+    "mid-devon",
+    "somerset"
+  ]
+}

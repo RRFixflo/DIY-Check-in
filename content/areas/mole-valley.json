@@ -1,0 +1,92 @@
+{
+  "slug": "mole-valley",
+  "name": "Mole Valley",
+  "council": {
+    "name": "Mole Valley District Council",
+    "url": "https://www.molevalley.gov.uk",
+    "privateRentingUrl": "https://www.molevalley.gov.uk/houses-in-multiple-occupation-3/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households sharing facilities. From 1 April 2027 the council is to be replaced by the new East Surrey Council.",
+    "fee": "£868.50 for an HMO licence, with £50 off for members of a recognised landlords' association",
+    "source": "https://www.molevalley.gov.uk/houses-in-multiple-occupation-3/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,519.86 average Band D (2026/27), including Surrey County Council, Surrey police and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/mole-valley"
+  },
+  "postcodes": [
+    "RH4",
+    "RH5",
+    "KT21",
+    "KT22",
+    "KT23",
+    "KT24",
+    "RH6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dorking",
+      "postcodes": "RH4",
+      "housing": "Victorian terraces and older cottages near the High Street, with inter-war and post-war estates on the hillsides."
+    },
+    {
+      "name": "Leatherhead",
+      "postcodes": "KT22",
+      "housing": "Flats over shops and new apartment blocks in the town centre, with Victorian and post-war houses around it."
+    },
+    {
+      "name": "Ashtead",
+      "postcodes": "KT21",
+      "housing": "Large inter-war and post-war detached and semi-detached houses, mostly owner-occupied."
+    },
+    {
+      "name": "Fetcham and Great Bookham",
+      "postcodes": "KT22, KT23",
+      "housing": "Suburban estates of family houses and bungalows, with older village cottages in Bookham."
+    },
+    {
+      "name": "Capel and Beare Green",
+      "postcodes": "RH5",
+      "housing": "Villages of older cottages and post-war houses south of Dorking."
+    },
+    {
+      "name": "Westcott and Brockham",
+      "postcodes": "RH4, RH3",
+      "housing": "Surrey Hills villages of Victorian and older cottages around greens."
+    },
+    {
+      "name": "Charlwood and Hookwood",
+      "postcodes": "RH6",
+      "housing": "Villages of timber-framed cottages and newer homes beside Gatwick Airport."
+    },
+    {
+      "name": "Abinger and Holmwood",
+      "postcodes": "RH5",
+      "housing": "Scattered country houses, cottages and farm buildings in the Surrey Hills."
+    }
+  ],
+  "housing": "Mole Valley is a mostly owner-occupied part of Surrey, with the towns of Dorking and Leatherhead, the suburban villages of Ashtead, Fetcham and Bookham, and rural villages in the Surrey Hills. Private lets are mainly flats in the town centres, Victorian terraces in Dorking and family houses in the suburbs. Many rural homes are older cottages, some listed and off mains gas, and Charlwood and Hookwood sit next to Gatwick.",
+  "checkinTips": [
+    "Older cottages in the Surrey Hills villages: photograph beams, uneven floors, any wood burner and flue, and damp in solid walls.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Flats in Leatherhead and Dorking town centres: note the communal entrance, fire doors, bike and bin stores, and key and fob counts.",
+    "Homes near the River Mole: record any signs of past flooding on floors and lower walls.",
+    "Homes in Charlwood and Hookwood near Gatwick: note window seals and any secondary glazing, and test that windows open and lock."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Mole Valley District Council's housing team, which deals with repairs in rented homes and HMO licensing.",
+  "nearby": [
+    "guildford",
+    "waverley",
+    "elmbridge",
+    "epsom-and-ewell",
+    "reigate-and-banstead",
+    "horsham",
+    "crawley"
+  ]
+}

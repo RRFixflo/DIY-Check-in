@@ -1,0 +1,94 @@
+{
+  "slug": "north-northamptonshire",
+  "name": "North Northamptonshire",
+  "council": {
+    "name": "North Northamptonshire Council",
+    "url": "https://www.northnorthants.gov.uk",
+    "privateRentingUrl": "https://www.northnorthants.gov.uk/licensing/housing-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed on the council's site.",
+    "additional": "No additional HMO licensing scheme is listed: HMOs with five or more occupants from more than one household need the national mandatory licence, whatever the number of floors.",
+    "fee": null,
+    "source": "https://www.northnorthants.gov.uk/licensing/housing-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,343.66 Band D (2026/27) before town and parish precepts, including Northamptonshire police and fire (about £2,424 with the average parish precept)",
+    "source": "https://www.northnorthants.gov.uk/counciltax/understanding-your-council-tax-bill"
+  },
+  "postcodes": [
+    "NN8",
+    "NN9",
+    "NN10",
+    "NN14",
+    "NN15",
+    "NN16",
+    "NN17",
+    "NN18",
+    "PE8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Kettering",
+      "postcodes": "NN15, NN16",
+      "housing": "Victorian terraces from the boot and shoe era near the centre, with post-war and large new-build estates such as Hanwood Park."
+    },
+    {
+      "name": "Corby",
+      "postcodes": "NN17, NN18",
+      "housing": "New-town estates of the 1950s to 1970s built for the steelworks, with large new-build areas such as Priors Hall."
+    },
+    {
+      "name": "Wellingborough",
+      "postcodes": "NN8",
+      "housing": "Victorian terraces near the town centre, post-war estates and new-build homes at Stanton Cross."
+    },
+    {
+      "name": "Rushden",
+      "postcodes": "NN10",
+      "housing": "Victorian and Edwardian terraces from the shoe industry and later estates."
+    },
+    {
+      "name": "Raunds and Irthlingborough",
+      "postcodes": "NN9",
+      "housing": "Small towns of stone and brick terraces, with post-war and modern estates."
+    },
+    {
+      "name": "Desborough and Rothwell",
+      "postcodes": "NN14",
+      "housing": "Ironstone and brick terraces in the old centres and new estates on the edges."
+    },
+    {
+      "name": "Oundle",
+      "postcodes": "PE8",
+      "housing": "A limestone market town of Georgian and older houses, many listed."
+    },
+    {
+      "name": "Thrapston",
+      "postcodes": "NN14",
+      "housing": "A Nene valley town of stone cottages and newer estates."
+    }
+  ],
+  "housing": "North Northamptonshire brings together Kettering, Corby, Wellingborough, Rushden and the towns and villages of the Nene valley. Private lets are often Victorian terraces built for the shoe industry in Kettering, Wellingborough and Rushden, new-town houses in Corby and new-build homes on the large urban extensions. The villages and Oundle have limestone and ironstone cottages, many listed.",
+  "checkinTips": [
+    "Victorian shoe-town terraces in Kettering, Wellingborough and Rushden: photograph the rear yard, alley access, gutters and any damp in back kitchens.",
+    "1950s to 1970s new-town houses in Corby: photograph windows, flat-roof sections, cladding and any condensation or mould.",
+    "New-build homes at Priors Hall, Hanwood Park and Stanton Cross: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Ironstone and limestone cottages in the villages and Oundle: record damp patches, flaking mortar and any wood burner and flue.",
+    "Homes near the River Nene: note any signs of past flooding on floors and lower walls."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North Northamptonshire Council's private sector housing team, which licenses HMOs and can inspect homes.",
+  "nearby": [
+    "west-northamptonshire",
+    "harborough",
+    "rutland",
+    "south-kesteven",
+    "peterborough",
+    "huntingdonshire",
+    "bedford"
+  ]
+}

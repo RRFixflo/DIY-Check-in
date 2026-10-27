@@ -1,0 +1,91 @@
+{
+  "slug": "lewes",
+  "name": "Lewes",
+  "council": {
+    "name": "Lewes District Council",
+    "url": "https://www.lewes-eastbourne.gov.uk",
+    "privateRentingUrl": "https://www.lewes-eastbourne.gov.uk/article/1249/Houses-in-multiple-occupancy"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: the council runs only the national mandatory licensing for HMOs with five or more people from two or more households, and says it could bring in additional or selective licensing in future.",
+    "fee": null,
+    "source": "https://www.lewes-eastbourne.gov.uk/article/1249/Houses-in-multiple-occupancy",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "16.9% of households rent privately (Census 2021), up from 14.5% in 2011",
+    "source": "https://www.sussexexpress.co.uk/your-sussex/east-sussex/lewes/census-2021-rise-in-private-renting-in-lewes-3977342"
+  },
+  "councilTax": {
+    "text": "£2,769.13 average Band D (2026/27), including East Sussex County Council, Sussex police, fire and average town and parish precepts",
+    "source": "https://lewes-eastbourne.gov.uk/article/1907/Where-your-Council-Tax-goes"
+  },
+  "postcodes": [
+    "BN7",
+    "BN8",
+    "BN9",
+    "BN10",
+    "BN25",
+    "BN2"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Lewes town",
+      "postcodes": "BN7",
+      "housing": "Georgian and Victorian terraces and listed timber-framed houses in the old town, with later estates on the edges."
+    },
+    {
+      "name": "Newhaven",
+      "postcodes": "BN9",
+      "housing": "Victorian terraces near the harbour, post-war council-built estates and new-build flats on former industrial land."
+    },
+    {
+      "name": "Seaford",
+      "postcodes": "BN25",
+      "housing": "Inter-war and post-war bungalows and semi-detached houses, with Victorian and modern flats near the seafront."
+    },
+    {
+      "name": "Peacehaven",
+      "postcodes": "BN10",
+      "housing": "Bungalows and chalet-style houses on the 1920s clifftop grid, with newer estates."
+    },
+    {
+      "name": "Telscombe Cliffs and East Saltdean",
+      "postcodes": "BN10, BN2",
+      "housing": "Inter-war and post-war bungalows and detached houses on the cliffs next to Brighton."
+    },
+    {
+      "name": "Ringmer",
+      "postcodes": "BN8",
+      "housing": "A large village of post-war houses and bungalows with newer estates around older cottages."
+    },
+    {
+      "name": "Newick",
+      "postcodes": "BN8",
+      "housing": "Village cottages, detached houses and small post-war estates in the Low Weald."
+    },
+    {
+      "name": "Chailey and Wivelsfield",
+      "postcodes": "BN8, RH17",
+      "housing": "Scattered rural cottages, farmhouses and small estates of detached houses."
+    }
+  ],
+  "housing": "Lewes District mixes the historic county town, the coastal towns of Newhaven, Seaford and Peacehaven, and villages in the South Downs and Low Weald. Fewer households rent privately than the national average, and many lets are period terraces in Lewes, flats in Newhaven and Seaford, and bungalows along the coast. Much of the north and centre of the district is in the South Downs National Park, where older cottages and farm buildings are common.",
+  "checkinTips": [
+    "Sash windows and old timber in the Lewes old town terraces: photograph cords, catches and any soft or rotten frames.",
+    "Coastal homes in Seaford, Newhaven and Peacehaven: photograph salt-pitted metal, window seals and any damp on seaward walls.",
+    "Chalk-built and flint cottages in the Downs villages: note damp patches, flaking lime render and condensation in cold rooms.",
+    "Flats over shops in Lewes High Street and Newhaven: record the shared entrance, fire doors and how many keys and fobs are handed over.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler or storage heaters."
+  ],
+  "tenantHelp": "Tenants with disrepair, damp or safety problems can contact the Lewes and Eastbourne Councils' private sector housing team through the council website.",
+  "nearby": [
+    "brighton",
+    "mid-sussex",
+    "wealden",
+    "eastbourne"
+  ]
+}

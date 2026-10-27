@@ -1,0 +1,91 @@
+{
+  "slug": "mid-devon",
+  "name": "Mid Devon",
+  "council": {
+    "name": "Mid Devon District Council",
+    "url": "https://www.middevon.gov.uk",
+    "privateRentingUrl": "https://www.middevon.gov.uk/residents/private-sector-housing/private-landlords/houses-in-multiple-occupation/"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households sharing amenities.",
+    "fee": "£1,083 for a new HMO licence (3 to 5 units) or £615 for a renewal (2026/27)",
+    "source": "https://www.middevon.gov.uk/residents/private-sector-housing/private-sector-housing-fees-and-charges/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,656.41 average Band D (2026/27), including Devon County Council, police, fire and average parish precepts",
+    "source": "https://www.middevon.gov.uk/residents/council-tax/council-tax-bandings-and-how-your-tax-is-spent/charges-for-202627"
+  },
+  "postcodes": [
+    "EX16",
+    "EX15",
+    "EX17",
+    "EX5",
+    "EX20",
+    "EX18"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Tiverton",
+      "postcodes": "EX16",
+      "housing": "Victorian and Georgian terraces around the old lace-mill town, with large post-war and new-build estates."
+    },
+    {
+      "name": "Cullompton",
+      "postcodes": "EX15",
+      "housing": "A market town of older terraces and cottages, with new estates near the M5."
+    },
+    {
+      "name": "Crediton",
+      "postcodes": "EX17",
+      "housing": "Georgian and Victorian houses on the long high street and post-war estates on the hillsides."
+    },
+    {
+      "name": "Willand",
+      "postcodes": "EX15",
+      "housing": "A village that has grown with estates of modern family houses."
+    },
+    {
+      "name": "Uffculme",
+      "postcodes": "EX15",
+      "housing": "Cob and stone cottages in the old village, with newer houses."
+    },
+    {
+      "name": "Bampton",
+      "postcodes": "EX16",
+      "housing": "A small Exe valley town of stone cottages and terraces."
+    },
+    {
+      "name": "Silverton and Thorverton",
+      "postcodes": "EX5",
+      "housing": "Villages of cob and thatched cottages and small modern developments."
+    },
+    {
+      "name": "Copplestone and Morchard Bishop",
+      "postcodes": "EX17",
+      "housing": "Rural villages of older cottages, farmhouses and barn conversions."
+    }
+  ],
+  "housing": "Mid Devon is a largely rural district built around the towns of Tiverton, Cullompton and Crediton, with many small villages and farms. Rented homes range from Victorian terraces and post-war houses in the towns to cob and stone cottages in the villages, and large new estates are being built near the M5. Many rural homes are off mains gas and some are listed or thatched.",
+  "checkinTips": [
+    "Cob and thatched cottages in the villages: photograph wall surfaces, damp patches, the thatch condition where visible and any wood burner and flue.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes on private water or drainage: record the septic tank or treatment plant, and any borehole or spring supply.",
+    "Riverside homes in Tiverton and along the Exe and Culm: note any signs of past flooding on floors and lower walls.",
+    "New-build homes near the M5: record snagging marks, sealant and any cracks so they are noted before the tenancy."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Mid Devon District Council's private sector housing team, which can inspect homes and take enforcement action.",
+  "nearby": [
+    "north-devon",
+    "torridge",
+    "west-devon",
+    "teignbridge",
+    "exeter",
+    "east-devon",
+    "somerset"
+  ]
+}

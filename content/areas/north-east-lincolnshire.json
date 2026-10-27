@@ -1,0 +1,93 @@
+{
+  "slug": "north-east-lincolnshire",
+  "name": "North East Lincolnshire",
+  "council": {
+    "name": "North East Lincolnshire Council",
+    "url": "https://www.nelincs.gov.uk",
+    "privateRentingUrl": "https://www.nelincs.gov.uk/call-for-landlords-to-apply-now-for-east-marsh-selective-licensing-scheme/"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in a designated part of the East Marsh in Grimsby for five years from 8 April 2026. Applications were due by 8 October 2026, with a £200 late fee after that. Check an address on the council's map.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need the national mandatory licence.",
+    "fee": "£1,000 for a selective licence (£600 on application and £400 on approval), or £725 for accredited landlords",
+    "source": "https://www.nelincs.gov.uk/landlords-have-six-months-to-apply-for-selective-licence-to-avoid-late-penalties/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "22.4% of households rent privately (Census 2021), up from 18.1% in 2011",
+    "source": "https://www.grimsbytelegraph.co.uk/news/local-news/northern-lincolnshire-people-older-more-8111332"
+  },
+  "councilTax": {
+    "text": "£2,483.85 average Band D (2026/27), including Humberside police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-east-lincolnshire"
+  },
+  "postcodes": [
+    "DN31",
+    "DN32",
+    "DN33",
+    "DN34",
+    "DN35",
+    "DN36",
+    "DN37",
+    "DN40",
+    "DN41"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "East Marsh",
+      "postcodes": "DN31, DN32",
+      "housing": "Dense streets of Victorian terraced houses near the docks, mostly privately rented and partly under selective licensing."
+    },
+    {
+      "name": "West Marsh",
+      "postcodes": "DN31",
+      "housing": "Victorian and early 1900s terraces close to the town centre and the docks."
+    },
+    {
+      "name": "Grimsby town centre",
+      "postcodes": "DN31",
+      "housing": "Flats over shops and converted Victorian buildings."
+    },
+    {
+      "name": "Cleethorpes",
+      "postcodes": "DN35",
+      "housing": "Victorian terraces and villas, many split into flats, near the seafront, with inter-war semis inland."
+    },
+    {
+      "name": "Nunsthorpe and Grange",
+      "postcodes": "DN33, DN34",
+      "housing": "Inter-war and post-war council-built estates of semis and terraces."
+    },
+    {
+      "name": "Scartho",
+      "postcodes": "DN33",
+      "housing": "Inter-war and post-war semis and bungalows, mostly owner-occupied."
+    },
+    {
+      "name": "Immingham",
+      "postcodes": "DN40",
+      "housing": "Post-war and 1960s houses built for the port and refinery workforce."
+    },
+    {
+      "name": "Waltham, Humberston and New Waltham",
+      "postcodes": "DN36, DN37",
+      "housing": "Villages of bungalows and detached and semi-detached family houses."
+    }
+  ],
+  "housing": "North East Lincolnshire covers Grimsby, Cleethorpes, Immingham and the villages around them. More than one in five households rent privately, with the largest concentration in the Victorian terraces of the East and West Marsh near Grimsby's docks, where part of the East Marsh has been under selective licensing since April 2026. Cleethorpes has many Victorian seafront houses split into flats.",
+  "checkinTips": [
+    "Victorian terraces in the East and West Marsh: photograph the back yard, alley gate, gutters and any damp on rear walls and in back kitchens.",
+    "Homes in the East Marsh licensing area: photograph the selective licence and check it shows the right address and expiry date.",
+    "Seafront flats in Cleethorpes: photograph salt-pitted metal, window seals and any damp on seaward walls, and record communal areas.",
+    "Low-lying homes near the Humber and the docks: note any signs of past flooding on floors and lower walls.",
+    "Flats over shops in Grimsby town centre: record the shared entrance, fire doors and the number of keys handed over."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North East Lincolnshire Council's private sector housing team, which runs the selective licensing scheme and can inspect homes.",
+  "nearby": [
+    "north-lincolnshire",
+    "west-lindsey",
+    "east-lindsey"
+  ]
+}

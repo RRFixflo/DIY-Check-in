@@ -1,0 +1,91 @@
+{
+  "slug": "newark-and-sherwood",
+  "name": "Newark and Sherwood",
+  "council": {
+    "name": "Newark and Sherwood District Council",
+    "url": "https://www.newark-sherwooddc.gov.uk",
+    "privateRentingUrl": "https://www.gov.uk/find-licences/house-in-multiple-occupation-licence/newark-and-sherwood"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme is listed.",
+    "additional": "No additional HMO licensing scheme is listed: HMOs with five or more people from two or more households need the national mandatory licence from the district council.",
+    "fee": null,
+    "source": "https://www.gov.uk/find-licences/house-in-multiple-occupation-licence/newark-and-sherwood",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,682.10 average Band D (2026/27), including Nottinghamshire County Council, police, fire and average parish precepts; the district's own share was frozen at £198.60",
+    "source": "https://housecheckup.co.uk/council-tax/newark-and-sherwood"
+  },
+  "postcodes": [
+    "NG24",
+    "NG22",
+    "NG21",
+    "NG23",
+    "NG25",
+    "NG14"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Newark-on-Trent",
+      "postcodes": "NG24",
+      "housing": "Georgian and Victorian houses around the market place and castle, Victorian terraces and large post-war and new estates."
+    },
+    {
+      "name": "Balderton and Fernwood",
+      "postcodes": "NG24",
+      "housing": "Post-war estates and large new-build developments on the south side of Newark."
+    },
+    {
+      "name": "Southwell",
+      "postcodes": "NG25",
+      "housing": "A minster town of Georgian houses, listed cottages and some newer homes."
+    },
+    {
+      "name": "Ollerton and Boughton",
+      "postcodes": "NG22",
+      "housing": "Former colliery villages of pit-era semis and terraces, with newer estates."
+    },
+    {
+      "name": "Edwinstowe",
+      "postcodes": "NG21",
+      "housing": "A Sherwood Forest village of older cottages, colliery-era houses and modern estates."
+    },
+    {
+      "name": "Rainworth and Blidworth",
+      "postcodes": "NG21",
+      "housing": "Former mining villages of colliery terraces, semis and post-war housing."
+    },
+    {
+      "name": "Collingham",
+      "postcodes": "NG23",
+      "housing": "A Trent valley village of older brick cottages and later family houses."
+    },
+    {
+      "name": "Lowdham and Bleasby",
+      "postcodes": "NG14",
+      "housing": "Commuter villages of cottages and detached houses near the railway line."
+    }
+  ],
+  "housing": "Newark and Sherwood stretches from the historic market town of Newark across the Trent valley to the former mining villages of Sherwood Forest. Private lets range from Victorian terraces and new-build estates in Newark to colliery-era houses in Ollerton, Rainworth and Blidworth, and cottages in villages such as Southwell and Collingham. Many Trent valley homes are low-lying and some rural properties are off mains gas.",
+  "checkinTips": [
+    "Low-lying homes near the River Trent in Newark and the Trent villages: photograph floors, lower walls and skirting for flood marks or damp.",
+    "Colliery-era houses in Ollerton, Rainworth and Blidworth: note cracks in walls and around doors and windows that may come from old mine workings.",
+    "Georgian and listed homes in Newark and Southwell: record sash windows, fireplaces, uneven floors and any damp in old walls.",
+    "New-build estates in Balderton and Fernwood: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Newark and Sherwood District Council's environmental health team, which deals with private housing standards and HMO licences.",
+  "nearby": [
+    "mansfield",
+    "bassetlaw",
+    "gedling",
+    "rushcliffe",
+    "south-kesteven",
+    "north-kesteven",
+    "west-lindsey"
+  ]
+}

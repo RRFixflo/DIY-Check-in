@@ -1,0 +1,93 @@
+{
+  "slug": "north-east-derbyshire",
+  "name": "North East Derbyshire",
+  "council": {
+    "name": "North East Derbyshire District Council",
+    "url": "https://www.ne-derbyshire.gov.uk",
+    "privateRentingUrl": "https://www.ne-derbyshire.gov.uk/housing-and-health/houses-of-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more occupiers living as two or more households.",
+    "fee": null,
+    "source": "https://www.ne-derbyshire.gov.uk/housing-and-health/houses-of-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "About 10% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=800"
+  },
+  "councilTax": {
+    "text": "£2,466.57 average Band D (2026/27), including Derbyshire County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-east-derbyshire"
+  },
+  "postcodes": [
+    "S18",
+    "S42",
+    "S45",
+    "S21",
+    "S43",
+    "S44",
+    "DE55"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Dronfield",
+      "postcodes": "S18",
+      "housing": "Stone cottages in the old town and large 1960s and 1970s estates of semis and detached houses."
+    },
+    {
+      "name": "Clay Cross",
+      "postcodes": "S45",
+      "housing": "Former mining-town terraces, post-war estates and new-build homes on old industrial land."
+    },
+    {
+      "name": "Eckington and Killamarsh",
+      "postcodes": "S21",
+      "housing": "Former colliery villages of terraces and semis, with newer estates near Sheffield."
+    },
+    {
+      "name": "Wingerworth",
+      "postcodes": "S42",
+      "housing": "A large village of post-war and modern estates south of Chesterfield."
+    },
+    {
+      "name": "North Wingfield and Grassmoor",
+      "postcodes": "S42",
+      "housing": "Colliery-era terraces and post-war council-built houses."
+    },
+    {
+      "name": "Holmewood and Pilsley",
+      "postcodes": "S42, S45",
+      "housing": "Former pit villages of terraced and semi-detached houses."
+    },
+    {
+      "name": "Ashover",
+      "postcodes": "S45",
+      "housing": "A Peak fringe village of gritstone cottages, farmhouses and larger detached houses."
+    },
+    {
+      "name": "Shirland and Stonebroom",
+      "postcodes": "DE55",
+      "housing": "Village terraces and post-war houses on the district's southern edge."
+    }
+  ],
+  "housing": "North East Derbyshire wraps around Chesterfield, from Dronfield and Eckington near Sheffield to Clay Cross and the former mining villages in the south and east. Most households own their homes and only about one in ten rent privately, mostly in colliery-era terraces and post-war houses. The west of the district rises towards the Peak District, with stone cottages and farms.",
+  "checkinTips": [
+    "Colliery-era terraces in Clay Cross, Holmewood and Eckington: note cracks in walls and around doors and windows that may come from old mine workings.",
+    "Gritstone cottages in Ashover and the western villages: photograph damp patches, condensation, wood burners and flues.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Older terraces with rear yards: record outbuildings, gutters, and any damp in back kitchens and bathrooms.",
+    "New-build homes in Clay Cross and Wingerworth: record snagging marks, sealant and any cracks so they are noted before the tenancy."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North East Derbyshire District Council's private sector housing team, which enforces housing standards in privately rented homes.",
+  "nearby": [
+    "chesterfield",
+    "bolsover",
+    "amber-valley",
+    "derbyshire-dales",
+    "sheffield"
+  ]
+}

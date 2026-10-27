@@ -1,0 +1,92 @@
+{
+  "slug": "medway",
+  "name": "Medway",
+  "council": {
+    "name": "Medway Council",
+    "url": "https://www.medway.gov.uk",
+    "privateRentingUrl": "https://www.medway.gov.uk/PropertyLicensing"
+  },
+  "licensing": {
+    "selective": "Selective licensing has been approved for privately rented homes in seven wards: Chatham Central & Brompton, Fort Pitt, Gillingham North, Gillingham South, Luton, Strood North & Frindsbury, and Watling. The council's designation notice gave a start of 27 October 2026; a later landlord update gives 4 January 2027 to 3 January 2032, so check the council's page for the date.",
+    "additional": "Additional HMO licensing has been approved for smaller HMOs (three or four people from two or more households) in six wards: Chatham Central & Brompton, Fort Pitt, Gillingham North, Gillingham South, Luton and Watling, starting on the same date. Larger HMOs need the national mandatory licence everywhere.",
+    "fee": "Proposed at £840 for a selective licence and £1,600 for an additional HMO licence, with discounts for accredited landlords (consultation, 2026)",
+    "source": "https://www.medway.gov.uk/PropertyLicensing",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "20.2% of households rent privately (Census 2021), up from 17.1% in 2011",
+    "source": "https://medway.gov.uk/info/200779/our_place_and_our_community"
+  },
+  "councilTax": {
+    "text": "£2,328.55 average Band D (2026/27), including Kent police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/medway"
+  },
+  "postcodes": [
+    "ME1",
+    "ME2",
+    "ME3",
+    "ME4",
+    "ME5",
+    "ME7",
+    "ME8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Chatham",
+      "postcodes": "ME4, ME5",
+      "housing": "Victorian terraces on the hills around the town centre, flats over shops and new riverside apartments."
+    },
+    {
+      "name": "Gillingham",
+      "postcodes": "ME7",
+      "housing": "Dense streets of Victorian and Edwardian terraces, many privately rented and some HMOs."
+    },
+    {
+      "name": "Rochester",
+      "postcodes": "ME1",
+      "housing": "Georgian and Victorian houses in the historic high street area, with later terraces and semis."
+    },
+    {
+      "name": "Strood",
+      "postcodes": "ME2",
+      "housing": "Victorian terraces near the river and post-war and new-build estates."
+    },
+    {
+      "name": "Rainham",
+      "postcodes": "ME8",
+      "housing": "Large estates of 1960s and 1970s semis and terraces, mostly owner-occupied."
+    },
+    {
+      "name": "Walderslade and Lordswood",
+      "postcodes": "ME5",
+      "housing": "Estates of 1970s and 1980s houses on the wooded hills south of Chatham."
+    },
+    {
+      "name": "Chatham Maritime and St Mary's Island",
+      "postcodes": "ME4",
+      "housing": "Modern flats and houses on the former dockyard, near the universities' Medway campus."
+    },
+    {
+      "name": "Hoo Peninsula",
+      "postcodes": "ME3",
+      "housing": "Villages of older cottages and post-war houses, with large new-build estates around Hoo St Werburgh."
+    }
+  ],
+  "housing": "Medway's five towns, Rochester, Strood, Chatham, Gillingham and Rainham, have a large stock of Victorian terraces, many of them privately rented, alongside post-war estates and new riverside apartments. About one in five households rent privately, with shared houses near the universities' Medway campus and the town centres. New licensing schemes cover the central wards of Chatham, Gillingham and Strood.",
+  "checkinTips": [
+    "Victorian terraces in Gillingham and Chatham: photograph the rear yard, gutters, and any damp or mould in back kitchens and bathrooms.",
+    "Shared houses near the Medway campus: photograph each bedroom lock, fire doors, smoke alarms and the posted licence.",
+    "Hillside homes in Chatham: record steps, retaining walls and paths, and any cracks in external walls.",
+    "Riverside and dockyard apartments: note fob, key and parking counts, and photograph balconies and window seals.",
+    "Homes in the new licensing wards: photograph the licence and check it shows the right address and expiry date."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Medway Council's private sector housing team, which runs the licensing schemes and can inspect homes.",
+  "nearby": [
+    "gravesham",
+    "tonbridge-and-malling",
+    "maidstone",
+    "swale"
+  ]
+}

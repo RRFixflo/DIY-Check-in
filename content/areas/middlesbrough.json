@@ -1,0 +1,90 @@
+{
+  "slug": "middlesbrough",
+  "name": "Middlesbrough",
+  "council": {
+    "name": "Middlesbrough Council",
+    "url": "https://www.middlesbrough.gov.uk",
+    "privateRentingUrl": "https://www.middlesbrough.gov.uk/housing/landlords/selective-landlord-licensing-scheme/"
+  },
+  "licensing": {
+    "selective": "Selective licensing covers privately rented homes in two parts of Newport ward: Newport 2 until 2 July 2028 and Newport 1 until 22 July 2029. The North Ormesby scheme ended on 13 June 2026.",
+    "additional": "No additional HMO licensing scheme: HMOs with five or more people from two or more households need the national mandatory licence. An Article 4 direction controls new small HMOs through planning in parts of the town.",
+    "fee": "£998 for a selective licence in Newport 1 (as proposed when the scheme was approved in 2024)",
+    "source": "https://www.middlesbrough.gov.uk/housing/landlords/selective-landlord-licensing-scheme/",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "21.0% of households rent privately (Census 2021), up from 16.6% in 2011",
+    "source": "https://cy.ons.gov.uk/visualisations/censusareachanges/E06000002"
+  },
+  "councilTax": {
+    "text": "£2,115.86 Band D for Middlesbrough Council's own share (2026/27), plus £332.73 for Cleveland police and the Cleveland Fire Authority precept",
+    "source": "https://moderngov.middlesbrough.gov.uk/documents/s41742/Appendix 11- Council Tax Setting.pdf"
+  },
+  "postcodes": [
+    "TS1",
+    "TS3",
+    "TS4",
+    "TS5",
+    "TS7",
+    "TS8"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Town centre and Middlehaven",
+      "postcodes": "TS1, TS2",
+      "housing": "Flats over shops, converted buildings and new apartments and townhouses on the regeneration land by the docks."
+    },
+    {
+      "name": "Newport",
+      "postcodes": "TS1",
+      "housing": "Streets of Victorian terraced houses near the centre, mostly privately rented and under selective licensing."
+    },
+    {
+      "name": "Gresham and Abingdon",
+      "postcodes": "TS1",
+      "housing": "Victorian terraces close to Teesside University, many let to students and as HMOs."
+    },
+    {
+      "name": "North Ormesby",
+      "postcodes": "TS3",
+      "housing": "Small terraced houses around the market square, with a high share of private lets."
+    },
+    {
+      "name": "Linthorpe",
+      "postcodes": "TS5",
+      "housing": "Larger Victorian and Edwardian terraces and semis, some split into flats."
+    },
+    {
+      "name": "Acklam",
+      "postcodes": "TS5",
+      "housing": "Inter-war and post-war semi-detached houses and bungalows."
+    },
+    {
+      "name": "Berwick Hills and Pallister",
+      "postcodes": "TS3",
+      "housing": "Post-war council-built estates of houses and low-rise flats."
+    },
+    {
+      "name": "Marton and Nunthorpe",
+      "postcodes": "TS7, TS8",
+      "housing": "Detached and semi-detached family houses from the 1960s onwards, mostly owner-occupied."
+    }
+  ],
+  "housing": "Middlesbrough grew fast in the Victorian era, and dense terraced streets around the town centre in Newport, Gresham, Abingdon and North Ormesby still make up much of the private rented stock. About one in five households rent privately, with student lets near Teesside University and selective licensing in parts of Newport. The south of the town, around Acklam, Marton and Nunthorpe, is mainly owner-occupied suburban housing.",
+  "checkinTips": [
+    "Victorian terraces in Newport and Gresham: photograph the back yard, alley gate, gutters and any damp on rear walls and in back kitchens.",
+    "Student houses near Teesside University: photograph each bedroom lock, fire doors, smoke alarms and the shared kitchen.",
+    "Homes in the selective licensing areas: photograph the licence and check it shows the right address and expiry date.",
+    "Older terraces with solid walls: record mould or condensation in bedrooms and bathrooms, and check extractor fans work.",
+    "Flats in the town centre and Middlehaven: note the shared entrance, intercom, fire doors and the number of keys and fobs."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Middlesbrough Council's private sector housing team, which runs the selective licensing scheme and can inspect homes.",
+  "nearby": [
+    "redcar-and-cleveland",
+    "stockton-on-tees",
+    "north-yorkshire"
+  ]
+}

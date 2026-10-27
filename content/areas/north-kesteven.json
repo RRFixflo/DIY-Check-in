@@ -1,0 +1,88 @@
+{
+  "slug": "north-kesteven",
+  "name": "North Kesteven",
+  "council": {
+    "name": "North Kesteven District Council",
+    "url": "https://www.n-kesteven.gov.uk",
+    "privateRentingUrl": "https://www.n-kesteven.gov.uk/homes-property/im-private-landlord-or-tenant-north-kesteven/houses-multiple-occupation-hmos"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people forming two or more households.",
+    "fee": null,
+    "source": "https://www.n-kesteven.gov.uk/homes-property/im-private-landlord-or-tenant-north-kesteven/houses-multiple-occupation-hmos",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,337.81 average Band D (2026/27), including Lincolnshire County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/north-kesteven"
+  },
+  "postcodes": [
+    "NG34",
+    "LN4",
+    "LN5",
+    "LN6"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Sleaford",
+      "postcodes": "NG34",
+      "housing": "Georgian and Victorian houses in the market town centre, with post-war and large new-build estates around it."
+    },
+    {
+      "name": "North Hykeham",
+      "postcodes": "LN6",
+      "housing": "Post-war and modern estates of semis and detached houses on the edge of Lincoln."
+    },
+    {
+      "name": "Waddington",
+      "postcodes": "LN5",
+      "housing": "A village of older stone cottages and estates, with service family housing near RAF Waddington."
+    },
+    {
+      "name": "Bracebridge Heath",
+      "postcodes": "LN4",
+      "housing": "Post-war and modern estates on the cliff south of Lincoln."
+    },
+    {
+      "name": "Heighington and Washingborough",
+      "postcodes": "LN4",
+      "housing": "Villages of stone cottages and later family houses east of Lincoln."
+    },
+    {
+      "name": "Ruskington",
+      "postcodes": "NG34",
+      "housing": "A large village of older brick cottages, bungalows and post-war estates."
+    },
+    {
+      "name": "Navenby and the Cliff villages",
+      "postcodes": "LN5",
+      "housing": "Limestone cottages and farmhouses along the Lincoln Cliff, with newer homes."
+    },
+    {
+      "name": "Metheringham and Billinghay",
+      "postcodes": "LN4",
+      "housing": "Fen-edge villages of brick cottages, bungalows and modern estates."
+    }
+  ],
+  "housing": "North Kesteven is a largely rural district between Lincoln and Sleaford, with suburban estates in North Hykeham and the villages south of Lincoln, and farming villages across the fens and the limestone heath. Most households own their homes, and private lets include estate houses near Lincoln, family homes near the RAF bases and cottages in the villages. Many fen and heath homes are off mains gas.",
+  "checkinTips": [
+    "Limestone cottages in the Cliff villages: photograph damp patches, flaking lime render and condensation in cold rooms.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Fen-edge homes around Billinghay and Metheringham: note cracks around doors and windows from ground movement and any signs of past flooding.",
+    "New-build estates in Sleaford and North Hykeham: record snagging marks, sealant and any cracks so they are noted before the tenancy.",
+    "Homes near RAF Waddington and RAF Cranwell: note window seals and secondary glazing, and test that windows open and lock."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact North Kesteven District Council's private sector housing team, which enforces housing standards in rented homes.",
+  "nearby": [
+    "lincoln",
+    "west-lindsey",
+    "newark-and-sherwood",
+    "south-kesteven",
+    "boston",
+    "east-lindsey"
+  ]
+}

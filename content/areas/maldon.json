@@ -1,0 +1,85 @@
+{
+  "slug": "maldon",
+  "name": "Maldon",
+  "council": {
+    "name": "Maldon District Council",
+    "url": "https://www.maldon.gov.uk",
+    "privateRentingUrl": "https://www.maldon.gov.uk/info/20075/licensing/9462/houses_in_multiple_occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs let to five or more people from more than one household who share facilities.",
+    "fee": null,
+    "source": "https://www.maldon.gov.uk/info/20075/licensing/9462/houses_in_multiple_occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": null,
+  "councilTax": {
+    "text": "£2,328.37 average Band D (2026/27), including Essex County Council, police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/maldon"
+  },
+  "postcodes": [
+    "CM9",
+    "CM0",
+    "CM3"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Maldon town",
+      "postcodes": "CM9",
+      "housing": "Georgian and Victorian houses on the High Street and the Hythe, with post-war and modern estates around them."
+    },
+    {
+      "name": "Heybridge",
+      "postcodes": "CM9",
+      "housing": "Victorian workers' terraces, post-war estates and new-build homes by the canal basin."
+    },
+    {
+      "name": "Burnham-on-Crouch",
+      "postcodes": "CM0",
+      "housing": "Weatherboarded and Georgian houses on the quay, with later estates inland."
+    },
+    {
+      "name": "Southminster",
+      "postcodes": "CM0",
+      "housing": "A Dengie village of older cottages and post-war and newer estates near the station."
+    },
+    {
+      "name": "Tollesbury",
+      "postcodes": "CM9",
+      "housing": "Weatherboarded cottages near the marshes and marina, and post-war houses."
+    },
+    {
+      "name": "Mayland and Althorne",
+      "postcodes": "CM3",
+      "housing": "Bungalows and chalet houses from the inter-war plotland era, with newer homes."
+    },
+    {
+      "name": "Danbury",
+      "postcodes": "CM3",
+      "housing": "A wooded commuter village of detached houses and older cottages near Chelmsford."
+    },
+    {
+      "name": "Tiptree (Tolleshunt area)",
+      "postcodes": "CM9",
+      "housing": "Village houses and bungalows on the district's northern edge."
+    }
+  ],
+  "housing": "Maldon is a rural and estuary district, with the historic town of Maldon and Heybridge at its centre and the Dengie peninsula to the south-east. Most homes are owner-occupied, and lets are mainly period houses in Maldon, estate houses in Heybridge and bungalows in the villages. Many coastal and marshland homes are low-lying and some rural properties are off mains gas.",
+  "checkinTips": [
+    "Low-lying homes near the Blackwater and Crouch estuaries: photograph floors, skirting and walls for damp or flood marks.",
+    "Weatherboarded cottages in Burnham, Tollesbury and Maldon: record the state of the boards, paint and window sills.",
+    "Bungalows and chalet houses in Mayland and Althorne: photograph roof spaces where reachable, gutters and any condensation.",
+    "Rural homes off mains gas: photograph the oil tank or LPG bottles, gauge levels and the boiler service label.",
+    "Older listed buildings in Maldon High Street: record beams, fireplaces, uneven floors and sash windows."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact Maldon District Council's environmental health team, which deals with private housing standards and HMO licences.",
+  "nearby": [
+    "chelmsford",
+    "braintree",
+    "colchester",
+    "rochford"
+  ]
+}

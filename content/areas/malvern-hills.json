@@ -1,0 +1,93 @@
+{
+  "slug": "malvern-hills",
+  "name": "Malvern Hills",
+  "council": {
+    "name": "Malvern Hills District Council",
+    "url": "https://www.malvernhills.gov.uk",
+    "privateRentingUrl": "https://www.malvernhills.gov.uk/housing/houses-in-multiple-occupation"
+  },
+  "licensing": {
+    "selective": "No selective licensing scheme.",
+    "additional": "No additional HMO licensing scheme: only the national mandatory licence for HMOs with five or more people from two or more households. Private housing work is shared with Wychavon District Council.",
+    "fee": null,
+    "source": "https://www.malvernhills.gov.uk/housing/houses-in-multiple-occupation",
+    "checked": "October 2026"
+  },
+  "rent": null,
+  "price": null,
+  "privateRentedShare": {
+    "text": "About 13% of households rent privately (Census 2021)",
+    "source": "https://areainsights.co.uk/?p=777"
+  },
+  "councilTax": {
+    "text": "£2,450.92 average Band D (2026/27), including Worcestershire County Council, West Mercia police, fire and average parish precepts",
+    "source": "https://housecheckup.co.uk/council-tax/malvern-hills"
+  },
+  "postcodes": [
+    "WR13",
+    "WR14",
+    "WR2",
+    "WR6",
+    "WR8",
+    "WR15"
+  ],
+  "neighbourhoods": [
+    {
+      "name": "Great Malvern",
+      "postcodes": "WR14",
+      "housing": "Large Victorian villas, many split into flats, on the slopes of the hills around the town centre."
+    },
+    {
+      "name": "Malvern Link",
+      "postcodes": "WR14",
+      "housing": "Victorian and Edwardian terraces and semis, with post-war estates and new-build homes."
+    },
+    {
+      "name": "Barnards Green and Poolbrook",
+      "postcodes": "WR14",
+      "housing": "Inter-war and post-war semi-detached houses and bungalows."
+    },
+    {
+      "name": "Malvern Wells and Colwall",
+      "postcodes": "WR14, WR13",
+      "housing": "Stone and brick Victorian houses and cottages along the hills."
+    },
+    {
+      "name": "Upton-upon-Severn",
+      "postcodes": "WR8",
+      "housing": "Georgian and timber-framed town houses by the river, with newer estates."
+    },
+    {
+      "name": "Tenbury Wells",
+      "postcodes": "WR15",
+      "housing": "A market town of timber-framed and brick houses beside the River Teme."
+    },
+    {
+      "name": "Martley and the Teme Valley",
+      "postcodes": "WR6",
+      "housing": "Scattered farmhouses, cottages and barn conversions in rural villages."
+    },
+    {
+      "name": "Powick and Callow End",
+      "postcodes": "WR2",
+      "housing": "Villages of post-war and modern estates on the edge of Worcester."
+    }
+  ],
+  "housing": "Malvern Hills is a rural district centred on the Victorian spa town of Malvern, with the small towns of Upton-upon-Severn and Tenbury Wells and many villages. Most households own their homes, and the rented stock includes Victorian villas converted into flats, terraces in Malvern Link and rural cottages. Upton and Tenbury lie beside rivers that flood, and many rural homes are off mains gas.",
+  "checkinTips": [
+    "Victorian villas converted into flats in Great Malvern: photograph communal stairs, fire doors, sash windows and any damp in basements.",
+    "Riverside homes in Upton-upon-Severn and Tenbury Wells: record floors, walls and skirting for flood marks or damp.",
+    "Stone cottages along the hills: note damp patches, condensation and the state of any wood burner and its flue.",
+    "Rural homes off mains gas: photograph the oil tank, its gauge level and the boiler service label.",
+    "Homes on steep hillside plots: photograph steps, retaining walls, paths and gutters at the start of the tenancy."
+  ],
+  "tenantHelp": "Tenants with disrepair or safety concerns can contact the private sector housing team that serves Malvern Hills and Wychavon through the council website.",
+  "nearby": [
+    "herefordshire",
+    "worcester",
+    "wychavon",
+    "wyre-forest",
+    "tewkesbury",
+    "shropshire"
+  ]
+}
