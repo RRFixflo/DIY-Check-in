@@ -568,3 +568,14 @@ a.card.fp-home-art { display: block; padding: 14px; color: inherit; text-decorat
 .brand, .top nav a.link, .top nav > .btn { white-space: nowrap; }
 .top nav { flex-wrap: nowrap; gap: 2px; }
 .top nav a.link { padding: 8px 9px; font-size: 14px; }
+
+/* London borough hubs (boroughs.js) */
+.area-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 18px; }
+.area-nav a { padding: 8px 14px; border-radius: 999px; background: var(--panel); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 14.5px; box-shadow: 0 0 0 1px var(--line); }
+.area-nav a.on { background: var(--grad); color: #fff; box-shadow: none; }
+.area-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.area-facts .af { background: var(--panel); border-radius: 18px; padding: 16px 18px; box-shadow: var(--shadow); }
+.area-facts .l { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
+.area-facts b { display: block; font: 800 30px/1.15 'Plus Jakarta Sans', Inter, sans-serif; color: var(--ink); margin: 6px 0 4px; }
+.area-facts .t { display: block; font-size: 14px; color: var(--ink-soft); }
+.area-facts .src, .prose .src { font-size: 12.5px; color: var(--ink-faint); }

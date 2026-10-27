@@ -213,9 +213,11 @@ const dist = (a, b) => { const x = R(b.lon - a.lon) * Math.cos(R((a.lat + b.lat)
 const UKN = ['england', 'wales', 'scotland', 'ni'], same = (a, b) => UKN.includes(a.nation) ? UKN.includes(b.nation) : a.nation === b.nation;
 const nearest = (p, n) => PLACES.filter(q => q !== p && same(p, q) && (p.kind === 'borough' ? true : q.kind !== 'borough' || q.slug === 'london')).map(q => [q, dist(p, q)]).sort((a, b) => a[1] - b[1]).slice(0, n).map(x => x[0]);
 
-function mount(app, { renderPage, escHtml }){
+function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   const e = escHtml;
   const BASE_PATH = '/inventory-reports';
+  // London boroughs with researched local data get a full hub of their own (boroughs.js), registered first.
+  const hubs = require('./boroughs').mount(app, { renderPage, escHtml, PLACES, BASE_PATH, REPORTS_DIR });
   const where = p => p.kind === 'borough' ? (p.slug === 'city-of-london' ? 'the City of London' : p.name + ', London') : p.name;
 
   function page(p){
@@ -303,8 +305,8 @@ ${group('South Africa', by(p => p.nation === 'za'))}
 
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get([BASE_PATH, BASE_PATH + '/'], send(index()));
-  PLACES.forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], send(page(p))));
-  return { paths: [BASE_PATH].concat(PLACES.map(p => BASE_PATH + '/' + p.slug)) };
+  PLACES.filter(p => !hubs.slugs.includes(p.slug)).forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], send(page(p))));
+  return { paths: [BASE_PATH].concat(PLACES.map(p => BASE_PATH + '/' + p.slug), hubs.paths), bodies: hubs.bodies || [] };
 }
 
 module.exports = { mount, PLACES };
