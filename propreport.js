@@ -137,7 +137,28 @@ function compliance(country, cert){
 }
 
 /* ------------------------------------------------------------------ mount */
+// After each start, one quiet check of every public source with a sample postcode, logged, so a source that
+// blocks the server (or changed its format) shows up in the logs before anyone uses the report.
+async function selfTest(){
+  const pc = 'SE1 7PB', out = [];
+  const t = async (name, fn) => { try { const v = await fn(); out.push(name + ' ' + v); } catch (e) { out.push(name + ' FAILED ' + (e && e.message)); } };
+  let g = null;
+  await t('postcodes', async () => { g = await geo(pc); return g ? 'ok' : 'empty'; });
+  await t('epc', async () => (await epcweb.search(pc)).length + ' certificates');
+  await t('police', async () => { const c = await crime(g); return c ? c.total + ' crimes' : 'empty'; });
+  await t('flood', async () => { const f = await flood(g); return f ? f.count + ' areas' : 'empty'; });
+  await t('land registry', async () => (await sales([pc])).count + ' sales');
+  // How the Land Registry answers other ways of asking, to pick one that isn't refused.
+  const q = 'SELECT ?s WHERE { ?s ?p ?o } LIMIT 1', u = BASE.lr() + '/landregistry/query';
+  const tries = [['GET', u + '?query=' + encodeURIComponent(q), { Accept: 'application/sparql-results+json' }],
+    ['GET browser', u + '?query=' + encodeURIComponent(q) + '&output=json', { Accept: 'application/sparql-results+json,application/json;q=0.9,*/*;q=0.8', 'User-Agent': 'Mozilla/5.0 (compatible; DIYInventory/1.0; +https://diyinventory.co.uk)' }],
+    ['ppd csv', BASE.lr() + '/app/ppd/ppd_data.csv?postcode=' + encodeURIComponent(pc) + '&limit=1', { Accept: 'text/csv' }]];
+  for (const [name, url, headers] of tries) { try { const r = await fetch(url, { headers, signal: AbortSignal.timeout(15000) }); out.push('lr ' + name + ' HTTP ' + r.status + (r.headers.get('server') ? ' (' + r.headers.get('server') + ')' : '')); } catch (e) { out.push('lr ' + name + ' ' + e.message); } }
+  console.log('property report sources: ' + out.join(' | '));
+}
+
 function mount(app, ctx){
+  if (!process.env.PR_SELFTEST_OFF) setTimeout(() => selfTest().catch(() => {}), 60 * 1000).unref();
   const { REPORTS_DIR, renderPage, esc, clientIp, limiter, notify, addAdminSection, isOwner, PUBLIC_BASE, track } = ctx;
   const DIR = path.join(REPORTS_DIR, 'property-reports'); fs.mkdirSync(DIR, { recursive: true });
   const LEADS = path.join(DIR, 'leads.json');
