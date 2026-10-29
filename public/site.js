@@ -1,6 +1,10 @@
 // The website's motion: the header firms up on scroll, sections glide in as they come into view, numbers
 // count up, and cards and the hero phone follow the cursor. Nothing here is needed to read the site.
 (function () {
+  // The first page of this visit and the site that sent it (this tab only, no cookie), so a booking can say where
+  // the visitor came from.
+  try { if (!sessionStorage.getItem('diy-visit')) { var r = document.referrer, ext = r && r.indexOf(location.origin) !== 0 && !/^https?:\/\/(www\.)?diyinventory\.co\.uk/.test(r);
+    sessionStorage.setItem('diy-visit', JSON.stringify({ land: location.pathname + location.search, ref: ext ? r : '', at: Date.now() })); } } catch (e) {}
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var top = document.querySelector('header.top');
   function onScroll() { if (top) top.classList.toggle('scrolled', window.scrollY > 8); }

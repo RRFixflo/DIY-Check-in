@@ -29,6 +29,38 @@ function priceOf(id){ const s = services().find(x => x.id === id); return s ? s.
 // "£70", or the lowest EICR price for 'eicr': for {{PRICE_…}} on the website's pages.
 function priceText(group){ return money(Math.min.apply(null, services().filter(s => s.group === group).map(s => s.price))); }
 
+// Certificates are London only. Inner London postcode areas are London outright; for the outer areas (and anything
+// else) postcodes.io says which region the postcode is in. If postcodes.io can't be reached, the outer London areas
+// are let through (the owner checks when confirming) and everything else is refused.
+const INNER_LONDON = ['E', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC'];
+const OUTER_LONDON = ['BR', 'CR', 'DA', 'EN', 'HA', 'IG', 'KT', 'RM', 'SM', 'TW', 'UB', 'WD'];
+const pcArea = pc => (String(pc || '').toUpperCase().match(/^([A-Z]{1,2})\d/) || [])[1] || '';
+const postcodesBase = () => (process.env.PR_POSTCODES_BASE || 'https://api.postcodes.io').replace(/\/$/, '');
+async function inLondon(pc){
+  const area = pcArea(pc);
+  if (!area) return false;
+  if (INNER_LONDON.includes(area)) return true;
+  try {
+    const r = await fetch(postcodesBase() + '/postcodes/' + encodeURIComponent(String(pc).replace(/\s+/g, '')), { signal: AbortSignal.timeout(4000) });
+    if (r.status === 404) return false;
+    if (r.ok) { const j = await r.json(); return !!(j.result && j.result.region === 'London'); }
+  } catch (e) { console.log('certificates: postcode check failed (' + e.message + '), using the area list'); }
+  return OUTER_LONDON.includes(area);
+}
+const OUTSIDE = 'Sorry, we only carry out certificates in London at the moment, and this postcode is outside London. If you think that’s wrong, call us or use the contact form.';
+
+// Where a website booking came from, from the hidden fields the form fills in (site.js keeps the first page of the
+// visit and the site that sent the visitor, for this browser tab only) and the browser it was sent from.
+function originOf(b, req, device, clip){
+  const host = u => { try { return new URL(u).host.replace(/^www\./, ''); } catch (e) { return ''; } };
+  const land = clip(b.src_land, 300), ref = clip(b.src_ref, 300);
+  let utm = '';
+  try { const q = new URL(land, 'https://x').searchParams; utm = ['utm_source', 'utm_medium', 'utm_campaign'].map(k => q.get(k)).filter(Boolean).join(' / ').slice(0, 150); } catch (e) {}
+  const o = { from: ref ? host(ref) || ref.slice(0, 100) : (land ? 'direct' : ''), referrer: ref, landing: land, before: clip(b.src_prev, 300), utm, device: device(req.headers['user-agent']) };
+  Object.keys(o).forEach(k => { if (!o[k]) delete o[k]; });
+  return o;
+}
+
 /* ------------------------------- public page ------------------------------- */
 // Postcode lookup on the booking form (only when a provider key is set: address.js). Without JavaScript the
 // form is plain inputs. Typing a full postcode (or Find address) lists every address there; picking one
@@ -90,6 +122,7 @@ const ADDRESS_UI = String.raw`<style>
 function mountPublic(app, ctx){
   DIR = ctx.REPORTS_DIR;
   const { renderPage, esc, clip, clientIp, limiter, notify, PUBLIC_BASE } = ctx;
+  const device = ctx.deviceName || (() => '');
   const bookLimit = limiter(6, 60 * 60 * 1000);
   const ic = p => `<div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${p}</svg></div>`;
   const ICON = { gas: '<path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/>', eicr: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', epc: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M9 20v-5h6v5"/>' };
@@ -103,7 +136,7 @@ function mountPublic(app, ctx){
       ['eicr', 'Electrical safety (EICR)', 'Electrical Installation Condition Report', 'From ' + money(eLow), eicrs[0].desc, eicrs.map(s => s.name.replace('Electrical safety (EICR), ', '').replace(/^./, c => c.toUpperCase()) + ': ' + money(s.price)).concat(['Required at least every 5 years for rented homes in England'])],
       ['epc', 'EPC', 'Energy Performance Certificate', money(epc.price), epc.desc, ['Assessor visit and energy rating', 'Valid for 10 years', 'Needed before you advertise to rent or sell']],
     ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price}</div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates in London, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor, anywhere in London. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
 <section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div><p style="margin:28px 0 0"><a class="arrow" href="/landlords">Keep every certificate in one place, with reminders before they expire: the free landlord dashboard</a></p></div></section>
 <section id="book" style="padding-top:8px"><div class="wrap">
   <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates.</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
@@ -130,9 +163,10 @@ function mountPublic(app, ctx){
     <label><b>Preferred dates <span>(optional)</span></b><input name="when" maxlength="120" placeholder="e.g. any weekday next week"></label>
     <label><b>Notes <span>(optional)</span></b><textarea name="notes" maxlength="1500" placeholder="Tenant’s name and phone, parking, boiler location…"></textarea></label>
     <label class="hp" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label>
+    <input type="hidden" name="src_land"><input type="hidden" name="src_ref"><input type="hidden" name="src_prev">
     <div class="cert-total" aria-live="polite"><span>Total</span><strong id="certTotal">£0</strong><small id="certVat">Choose what you need</small></div>
     <button class="btn primary">Request booking</button>
-    <p class="sub" style="margin:0">We’ll check we cover your area and confirm a date with you. Prices are per property and include the visit.</p>
+    <p class="sub" style="margin:0">We cover every London borough and the City of London. We’ll confirm a date with you. Prices are per property and include the visit.</p>
   </form>
 </div></section>
 <script>
@@ -148,29 +182,38 @@ function mountPublic(app, ctx){
   q.getAll('svc').forEach(function(v){ var c = f.querySelector('[name=svc][value="' + v.replace(/[^a-z]/g, '') + '"]'); if (c) c.checked = true; });
   ['postcode', 'address', 'beds'].forEach(function(k){ var v = q.get(k), el = f.elements[k]; if (v && el && (el.tagName === 'SELECT' || !el.value)) el.value = v.slice(0, 200); });
   f.addEventListener('change', total); total();
+  // Where this visit came from (site.js keeps the first page of the visit for this tab), sent with the booking.
+  try { var v = JSON.parse(sessionStorage.getItem('diy-visit') || '{}'); f.elements.src_land.value = v.land || ''; f.elements.src_ref.value = v.ref || ''; } catch (e) {}
+  f.elements.src_prev.value = document.referrer || '';
+  // London only: say so as soon as a postcode outside the London areas is typed (the server checks properly).
+  var LON = ${JSON.stringify(INNER_LONDON.concat(OUTER_LONDON))}, pcEl = f.elements.postcode, warn = document.createElement('p');
+  warn.className = 'notice'; warn.hidden = true; warn.textContent = 'We only cover London at the moment, and this postcode looks outside London.';
+  pcEl.closest('label').after(warn);
+  pcEl.addEventListener('input', function(){ var m = pcEl.value.toUpperCase().match(/^\\s*([A-Z]{1,2})\\d/); warn.hidden = !m || LON.indexOf(m[1]) >= 0; });
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
 </script>${lookup ? ADDRESS_UI : ''}`;
-    return renderPage({ key: 'certificates', path: '/certificates', title: 'Landlord services: Gas Safety, EICR & EPC certificates · DIY Inventory', og: 'Landlord services: Gas Safety, EICR and EPC certificates',
-      desc: 'Book a Gas Safety certificate (' + money(gas.price) + '), electrical safety EICR (from ' + money(eLow) + ') or EPC (' + money(epc.price) + ') for your rental property.', body,
-      jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: 'GB',
+    return renderPage({ key: 'certificates', path: '/certificates', title: 'Gas Safety, EICR & EPC certificates in London for landlords · DIY Inventory', og: 'Landlord services: Gas Safety, EICR and EPC certificates',
+      desc: 'London landlords: book a Gas Safety certificate (' + money(gas.price) + '), electrical safety EICR (from ' + money(eLow) + ') or EPC (' + money(epc.price) + ') for your rental property.', body,
+      jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: { '@type': 'City', name: 'London' },
         offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP' } } })) }, req, notice);
   }
 
   app.get(['/certificates', '/certificates/'], (req, res) => res.type('html').send(page(req, req.query.booked ? { ok: true, text: 'Thanks, your booking request has been sent. We’ll be in touch to confirm the date.' } : null)));
   // One booking from the website's form or a microsite (source = the microsite's domain). Returns { error, code } or { booking }.
-  function book(b, ip, req, source){
+  async function book(b, ip, req, source, origin){
     const picks = [].concat(b.svc || []).filter(x => ['gas', 'eicr', 'epc'].includes(x));
     const beds = Math.max(0, Math.min(99, parseInt(b.beds, 10) || 0));
     const m = { name: clip(b.name, 80), email: clip(b.email, 120), phone: clip(b.phone, 30), address: clip(b.address, 200), postcode: clip(b.postcode, 12).toUpperCase(), when: clip(b.when, 120), access: clip(b.access, 40), notes: String(b.notes || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 1500) };
     if (!picks.length) return { error: 'Please choose at least one certificate.' };
     if (!m.name || !m.phone || !m.address || !m.postcode) return { error: 'Please fill in your name, phone number, and the property’s address and postcode.' };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return { error: 'Please enter a valid email address.' };
+    if (!(await inLondon(m.postcode))) { console.log('certificate booking refused, outside London: ' + m.postcode + (source ? ' via ' + source : '')); return { error: OUTSIDE }; }
     if (!bookLimit(ip)) return { error: 'Too many booking requests from here. Please try again later, or use the contact form.', code: 429 };
     const list = services();
     const items = picks.map(k => k === 'eicr' ? eicrFor(list, beds) : list.find(s => s.id === k)).map(s => ({ id: s.id, name: s.name, price: s.price }));
     const sub = Math.round(items.reduce((a, i) => a + i.price, 0) * 100) / 100, vat = Math.round(sub * VAT * 100) / 100;
-    const booking = Object.assign({ id: Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), at: new Date().toISOString(), status: 'new', beds, items, subtotal: sub, vat, total: Math.round((sub + vat) * 100) / 100 }, m, source ? { source } : {});
+    const booking = Object.assign({ id: Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), at: new Date().toISOString(), status: 'new', beds, items, subtotal: sub, vat, total: Math.round((sub + vat) * 100) / 100 }, m, source ? { source } : {}, origin && Object.keys(origin).length ? { origin } : {});
     const all = readJson(bookingsFile(), []); all.push(booking); writeJson(bookingsFile(), all.slice(-1000));
     console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+') + (source ? ' via ' + source : ''));
     if (ctx.track) ctx.track(req, 'certificate_booking', booking.total, source ? 'microsite' : undefined);
@@ -178,10 +221,10 @@ function mountPublic(app, ctx){
     return { booking };
   }
 
-  app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
+  app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), async (req, res) => {
     const b = req.body || {};
     if (clip(b.website, 200)) return res.redirect(303, '/certificates?booked=1#book');   // robots
-    const r = book(b, clientIp(req), req);
+    const r = await book(b, clientIp(req), req, '', originOf(b, req, device, clip));
     if (r.error) return res.status(r.code || 400).type('html').send(page(req, { text: r.error }));
     res.redirect(303, '/certificates?booked=1#book');
   });
@@ -189,7 +232,7 @@ function mountPublic(app, ctx){
   // Bookings from the microsites (the landlord-microsites repo): each site's Cloudflare Pages Function forwards its
   // form here, server to server, with the shared key LEADS_KEY in X-Leads-Key, the site's domain and the visitor's IP
   // (for the same 6 per hour limit). Stored with the website's bookings, marked with the site it came from.
-  app.post('/api/leads', express.json({ limit: '16kb' }), (req, res) => {
+  app.post('/api/leads', express.json({ limit: '16kb' }), async (req, res) => {
     const want = String(process.env.LEADS_KEY || ''), got = String(req.get('x-leads-key') || '');
     if (want.length < 16) return res.status(503).json({ ok: false, error: 'not-configured' });
     const a = crypto.createHash('sha256').update(got).digest(), w = crypto.createHash('sha256').update(want).digest();
@@ -198,7 +241,7 @@ function mountPublic(app, ctx){
     const site = clip(b.site, 100).toLowerCase().replace(/[^a-z0-9.-]/g, '');
     if (!site) return res.status(400).json({ ok: false, error: 'Missing site.' });
     const ip = clip(b.ip, 64) || clientIp(req);
-    const r = book(b, 'lead:' + ip, req, site);
+    const r = await book(b, 'lead:' + ip, req, site, { from: site, device: clip(b.device, 60) });
     if (r.error) return res.status(r.code || 400).json({ ok: false, error: r.error });
     res.status(201).json({ ok: true, id: r.booking.id, total: r.booking.total });
   });
@@ -211,12 +254,25 @@ function mountAdmin(app, ctx){
   const { esc, requireAdmin, sameOrigin } = ctx;
   const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
   const STATUS = { new: ['New', 'wait'], confirmed: ['Confirmed', ''], done: ['Done', 'sent'], cancelled: ['Cancelled', ''] };
+  // Where the booking came from: the microsite, or for the website the site that sent the visitor, the first page
+  // of the visit, the page before the form, any campaign tags, and the device.
+  function originHTML(b){
+    const o = b.origin || (b.source ? { from: b.source } : null);
+    if (!o) return '<div class="sub">📍 Source not recorded (booked before sources were tracked)</div>';
+    const path = u => { try { const x = new URL(u, 'https://x'); return x.pathname + x.search; } catch (e) { return u; } };
+    const bits = [b.source ? 'microsite <b>' + esc(b.source) + '</b>' : o.from === 'direct' ? 'typed the address or a bookmark (no referring site)' : o.from ? 'came from <b>' + esc(o.from) + '</b>' : 'source unknown'];
+    if (o.landing) bits.push('first page ' + esc(path(o.landing)));
+    if (o.before && path(o.before) !== path(o.landing || '')) bits.push('then ' + esc(path(o.before)));
+    if (o.utm) bits.push('campaign ' + esc(o.utm));
+    if (o.device) bits.push(esc(o.device));
+    return '<div class="sub">📍 ' + bits.join(' · ') + '</div>';
+  }
   function adminHTML(){
     const list = readJson(bookingsFile(), []).slice().reverse(), open = list.filter(b => b.status === 'new').length;
     const rows = list.slice(0, 200).map(b => `<li><div style="flex:1;min-width:0"><strong>${esc(b.items.map(i => i.name).join(' + '))}</strong> <span class="pill ${(STATUS[b.status] || STATUS.new)[1]}">${(STATUS[b.status] || STATUS.new)[0]}</span>
       <div class="sub">${b.source ? '<b>via ' + esc(b.source) + '</b> · ' : ''}${esc(b.address)}, ${esc(b.postcode)} · ${b.beds === 0 ? 'studio' : b.beds + ' bed'} · <b>${money(b.total)}</b></div>
       <div class="sub">${esc(b.name)} · <a href="tel:${esc(String(b.phone).replace(/[^\d+]/g, ''))}">${esc(b.phone)}</a> · <a href="mailto:${esc(b.email)}">${esc(b.email)}</a> · access: ${esc(b.access || '—')}${b.when ? ' · wants: ' + esc(b.when) : ''} · ${esc(when(b.at))}</div>
-      ${b.notes ? `<div class="msg">${esc(b.notes)}</div>` : ''}</div>
+      ${b.notes ? `<div class="msg">${esc(b.notes)}</div>` : ''}${originHTML(b)}</div>
       <div class="actions"><form method="post" action="/admin/bookings/${esc(b.id)}"><select name="status" onchange="this.form.submit()">${Object.entries(STATUS).map(([k, [l]]) => `<option value="${k}"${k === b.status ? ' selected' : ''}>${l}</option>`).join('')}</select></form></div></li>`).join('');
     const prices = services();
     return `${open ? `<a class="news" href="#bookings" onclick="document.getElementById('bookings').open=true">📅 ${open} new certificate booking${open === 1 ? '' : 's'}</a>` : ''}<details class="codes" id="bookings"${open ? ' open' : ''}><summary>📅 Certificate bookings <span class="sub" style="display:inline">— ${list.length ? list.length + ' in total' + (open ? ', ' + open + ' new' : '') : 'none yet'}</span></summary>

@@ -281,7 +281,7 @@ app.get(['/example-report', '/example-report.pdf'], (req, res) => {
 // Location pages for search (UK cities, towns and London boroughs): locations.js.
 const locMount = require('./locations').mount(app, { renderPage, escHtml, REPORTS_DIR: reports.REPORTS_DIR }), locationPaths = locMount.paths;
 const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clip: reports.clip, clientIp: reports.clientIp,
-  limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE, track: analytics.track }).paths;
+  limiter: reports.limiter, notify: reports.notifyOwner, PUBLIC_BASE, track: analytics.track, deviceName: reports.deviceName }).paths;
 // Free landlord area: /landlords, and accounts at /account with properties, certificates, tenancy and reminders: landlords.js.
 const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
   notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE }).paths;

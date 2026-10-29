@@ -412,7 +412,7 @@ function mount(app, ctx){
 
   /* ------------------------------ /landlords ------------------------------ */
   const FAQ = [
-    ['Is it really free?', 'Yes. The property dashboard and the reminders are free, for as many properties as you have. We also arrange certificates and inventory reports, but you don’t have to use them.'],
+    ['Is it really free?', 'Yes. The property dashboard and the reminders are free, for as many properties as you have. We also arrange certificates (in London) and inventory reports, but you don’t have to use them.'],
     ['How is the EPC found?', 'When you add a property we search the government’s EPC register for its postcode and show you the certificates there. You choose the right one and we keep its rating and expiry date. The register covers England and Wales; elsewhere you can enter the EPC yourself.'],
     ['When do the reminders arrive?', 'By email 60, 30, 14 and 7 days before a Gas Safety certificate, EICR or EPC expires, and on the day. You also get a reminder 60 days before a fixed-term tenancy ends, and while a deposit still needs protecting.'],
     ['Can I keep track of rent and expenses?', 'Yes. Add the rent and we list each rent period as paid, due or late. Mark rent as received in one tap and send your tenant a receipt by email, or download it as a PDF. Add costs such as repairs and certificates with their receipts, and download a summary for each tax year (6 April to 5 April) for your Self Assessment or your accountant. It’s a record, not tax advice.'],

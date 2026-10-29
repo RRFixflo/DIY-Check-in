@@ -315,7 +315,7 @@ ${err ? `<p class="notice err" style="margin:0 0 10px">${esc(err)}</p>` : ''}
 <p style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="btn primary" href="/property-report/r/${esc(req.params.key)}.pdf">⬇ Download the PDF</a><a class="btn ghost" href="/property-report?postcode=${encodeURIComponent(l.postcode)}&address=${encodeURIComponent(l.address || '')}">Back to the report</a></p></div></div>
 <section class="tight"><div class="wrap"><div class="pr-grid"><div class="card"><h3 style="margin-top:0">Track it for free</h3><p>Add the property to a free landlord dashboard: EPC, Gas Safety and EICR reminders, rent and receipts.</p><a class="btn" href="/landlords">Free landlord dashboard</a></div>
 <div class="card"><h3 style="margin-top:0">Letting it soon?</h3><p>Do the check-in inventory yourself on your phone, with dated photos, for £30.</p><a class="btn" href="/app">Start free</a></div>
-<div class="card"><h3 style="margin-top:0">Certificates</h3><p>Book a Gas Safety certificate, EICR or EPC at a fixed price.</p><a class="btn" href="/certificates">Landlord services</a></div></div></div></section>`, { noindex: true, title: 'Your property report · DIY Inventory' }));
+<div class="card"><h3 style="margin-top:0">Certificates</h3><p>In London? Book a Gas Safety certificate, EICR or EPC at a fixed price.</p><a class="btn" href="/certificates">Landlord services</a></div></div></div></section>`, { noindex: true, title: 'Your property report · DIY Inventory' }));
   });
   async function emailReport(l){
     const key = env('RESEND_API_KEY'); if (!key) return;

@@ -143,7 +143,7 @@ ${faqHtml('Inventories in ' + P + ': questions', qs)}${near(p, d, '')}${final(p,
   ${c.privateRentingUrl ? `<p><a href="${e(c.privateRentingUrl)}" rel="nofollow noopener" target="_blank">${e(c.name || 'The council')}: private renting and licensing</a></p>` : ''}
   <h2>Safety certificates</h2>
   <ul><li><strong>Gas Safety (CP12):</strong> every 12 months, by a Gas Safe registered engineer.</li><li><strong>EICR:</strong> at least every 5 years, by a qualified electrician.</li><li><strong>EPC:</strong> rated E or above, valid for 10 years.</li><li><strong>Alarms:</strong> a smoke alarm on every storey, and a carbon monoxide alarm in rooms with a fixed combustion appliance (not gas cookers).</li></ul>
-  <p><a href="/certificates">Book a Gas Safety certificate, EICR or EPC in ${e(P)}</a> at a fixed price, and keep track of expiry dates in the <a href="/landlords">free landlord dashboard</a>.</p>
+  ${p.london ? `<p><a href="/certificates">Book a Gas Safety certificate, EICR or EPC in ${e(P)}</a> at a fixed price, and keep track of expiry dates in the <a href="/landlords">free landlord dashboard</a>.</p>` : `<p>Keep track of every certificate’s expiry date, with reminders, in the <a href="/landlords">free landlord dashboard</a>.</p>`}
   <h2>Deposits and the inventory</h2>
   <p>Protect the deposit in the DPS, TDS or mydeposits within 30 days. At the end, the scheme decides any dispute on the evidence, above all the check-in compared with the check-out, so the inventory is what protects you.</p>
   ${d.checkinTips && d.checkinTips.length ? `<h2>What to record in ${e(P)} homes</h2><ul>${d.checkinTips.map(t => `<li>${e(t)}</li>`).join('')}</ul>` : ''}
