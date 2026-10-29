@@ -3,19 +3,22 @@
 // and each photo once (cloudSync() in public/index.html). Kept in REPORTS_DIR/drafts/<key>/ (state.json,
 // photos/<id>.jpg), where key is the report's random draft key. The owner sees them on /admin under
 // "Reports in progress", and gets a phone alert when one is finished but not yet paid for.
-// Drafts not touched for 180 days are deleted; the folder is capped at DRAFTS_MAX_MB (default 2000).
+// Nothing is ever deleted automatically: only the owner's Delete on /admin removes a backup. When the volume
+// is nearly full (less than DRAFTS_RESERVE_MB free, default 300, kept for finished reports) or the backups
+// pass DRAFTS_MAX_MB (optional, 0 or unset = no cap), new backup photos are refused (507) and the owner gets
+// a phone alert; the app keeps everything on the phone and tries again later.
 const fs = require('fs');
 const path = require('path');
 
 const KEY_RE = /^[a-f0-9]{32}$/;
 const PID_RE = /^[A-Za-z0-9_-]{1,48}$/;
-const KEEP_DAYS = 180;
 
 function mount(app, ctx){
   const { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify, requireAdmin, sameOrigin, PUBLIC_URL } = ctx;
   const DIR = path.join(REPORTS_DIR, 'drafts');
   fs.mkdirSync(DIR, { recursive: true });
-  const MAX_BYTES = Math.max(100, parseInt(process.env.DRAFTS_MAX_MB, 10) || 2000) * 1024 * 1024;
+  const MAX_BYTES = (parseInt(process.env.DRAFTS_MAX_MB, 10) || 0) * 1024 * 1024;
+  const RESERVE = Math.max(50, parseInt(process.env.DRAFTS_RESERVE_MB, 10) || 300) * 1024 * 1024;
   const saveLimit = limiter(900, 60 * 60 * 1000), photoLimit = limiter(900, 60 * 60 * 1000);
   const dirOf = key => path.join(DIR, key);
   const readJson = f => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return null; } };
@@ -30,18 +33,24 @@ function mount(app, ctx){
     return keys.map(key => { const s = readJson(path.join(dirOf(key), 'state.json')); return s ? { key, s } : null; }).filter(Boolean)
       .sort((a, b) => String(b.s._savedAt).localeCompare(String(a.s._savedAt)));
   }
-  // Old drafts go after 180 days, and the oldest finished ones first if the folder is over its cap.
-  function sweep(){
-    const now = Date.now();
-    list().forEach(({ key, s }) => { if (now - new Date(s._savedAt || 0).getTime() > KEEP_DAYS * 86400000) fs.rmSync(dirOf(key), { recursive: true, force: true }); });
-    countedAt = 0;
-    if (usage() > MAX_BYTES) {
-      const old = list().reverse();
-      for (const { key, s } of old) { if (usage() <= MAX_BYTES * 0.9) break; if (s.submittedId || s.finalizedAt) { fs.rmSync(dirOf(key), { recursive: true, force: true }); countedAt = 0; } }
-    }
+  // Free space on the volume, checked at most once a minute.
+  let free = Infinity, freeAt = 0;
+  function freeSpace(){
+    if (Date.now() - freeAt > 60 * 1000) { freeAt = Date.now(); try { const f = fs.statfsSync(DIR); free = f.bavail * f.bsize; } catch (e) { free = Infinity; } }
+    return free;
   }
-  setTimeout(sweep, 60 * 1000).unref();
-  setInterval(sweep, 24 * 3600 * 1000).unref();
+  // Full: refuse new backup photos instead of deleting anything, and tell the owner (at most once a day).
+  let alertedFull = 0;
+  function full(){
+    const reason = freeSpace() < RESERVE ? 'less than ' + Math.round(RESERVE / 1048576) + ' MB free on the volume'
+      : (MAX_BYTES && usage() > MAX_BYTES) ? 'backups have reached DRAFTS_MAX_MB (' + Math.round(MAX_BYTES / 1048576) + ' MB)' : '';
+    if (reason && Date.now() - alertedFull > 24 * 3600 * 1000) {
+      alertedFull = Date.now();
+      console.warn('Online backups paused: ' + reason);
+      notify({ title: 'Storage nearly full', message: 'Online backups are paused: ' + reason + '. Nothing has been deleted. Make the Railway volume bigger.', tags: ['warning'], click: PUBLIC_URL ? PUBLIC_URL + '/admin#drafts' : '' });
+    }
+    return !!reason;
+  }
 
   // The app's state, photos replaced by ids.
   app.post('/api/drafts/:key', (req, res) => {
@@ -73,7 +82,7 @@ function mount(app, ctx){
     const key = String(req.params.key);
     if (!KEY_RE.test(key) || !fs.existsSync(dirOf(key))) return res.status(404).json({ error: 'Unknown draft.' });
     if (!photoLimit(clientIp(req))) return res.status(429).json({ error: 'Too many uploads.' });
-    if (usage() > MAX_BYTES) return res.status(507).json({ error: 'Backup storage is full.' });
+    if (full()) return res.status(507).json({ error: 'Backup storage is full.' });
     const dir = path.join(dirOf(key), 'photos');
     let count = 0; try { count = fs.readdirSync(dir).length; } catch (e) {}
     const saved = [];
@@ -115,7 +124,7 @@ function mount(app, ctx){
     }).join('');
     const waiting = all.filter(d => d.s.finalizedAt && !d.s.submittedId).length;
     return `<details class="codes" id="drafts"${waiting ? ' open' : ''}><summary>📝 Reports in progress <span class="sub" style="display:inline">— ${all.length ? all.length + ' backed up' + (waiting ? ', ' + waiting + ' finished but not paid' : '') : 'none yet'}</span></summary>
-<p class="sub">Every report is backed up here as it’s being done, with its photos, whether it’s finished or not. Unfinished backups are deleted after ${KEEP_DAYS} days.</p>
+<p class="sub">Every report is backed up here as it’s being done, with its photos, whether it’s finished or not. Nothing is deleted automatically.${(() => { const f = freeSpace(); return f === Infinity ? '' : ' Free space on the volume: ' + (f / 1073741824).toFixed(2) + ' GB' + (f < RESERVE ? ' (nearly full: new backups are paused; make the volume bigger)' : '') + '.'; })()}</p>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   }
 
