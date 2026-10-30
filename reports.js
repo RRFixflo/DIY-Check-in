@@ -257,7 +257,10 @@ function addAdminSection(fn){ adminSections.push(fn); }
 function mount(app){
   /* ---------- tenant side: send a copy of the finished report ---------- */
   // Saves one report PDF with its details. Returns [httpStatus, jsonBody].
-  function storeReport(pdf, m, source){
+  // opts.unpaid: a finished report sent before it was paid for, so the owner has it anyway. It is stored once and
+  // upgraded in place when the paid copy arrives (that upload answers 201, so the paid link is marked used then).
+  function storeReport(pdf, m, source, opts){
+    opts = opts || {};
     if (!Buffer.isBuffer(pdf) || pdf.length < 1000 || pdf.slice(0, 5).toString() !== '%PDF-') return [400, { error: 'Expected the report PDF.' }];
     const meta = {
       address: clip(m.address, 200), inspectionType: clip(m.inspectionType, 40), ref: clip(m.ref, 40),
@@ -272,11 +275,19 @@ function mount(app){
     const basis = meta.finalizedAt ? meta.ref + '|' + meta.finalizedAt : 'file|' + crypto.createHash('sha256').update(pdf).digest('hex');
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
     const existing = listReports().find(r => r.key === key);
-    if (existing) return [200, { id: existing.id, duplicate: true }];
+    if (existing) {
+      if (existing.unpaid && !opts.unpaid) {
+        existing.unpaid = false; existing.paidAt = new Date().toISOString();
+        try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.json'), JSON.stringify(existing, null, 2)); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
+        console.log('report paid for: ' + existing.id);
+        return [201, { id: existing.id }];
+      }
+      return [200, { id: existing.id, duplicate: true }];
+    }
 
     const stamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '-').slice(0, 15);
     const id = `${stamp}-${key}`;
-    const record = Object.assign({ id, key, size: pdf.length, receivedAt: new Date().toISOString() }, meta);
+    const record = Object.assign({ id, key, size: pdf.length, receivedAt: new Date().toISOString() }, meta, opts.unpaid ? { unpaid: true } : {});
     try {
       fs.writeFileSync(path.join(REPORTS_DIR, id + '.pdf'), pdf);
       fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(record, null, 2));
@@ -284,7 +295,7 @@ function mount(app){
       console.error('report save failed', err);
       return [500, { error: 'The report could not be saved.' }];
     }
-    console.log(`report stored (${source}): ${id} (${meta.ref}, ${meta.address}, ${Math.round(pdf.length / 1024)} KB)`);
+    console.log(`report stored (${source}${opts.unpaid ? ', not paid yet' : ''}): ${id} (${meta.ref}, ${meta.address}, ${Math.round(pdf.length / 1024)} KB)`);
     return [201, { id }];
   }
   function metaHeader(req){
@@ -292,10 +303,19 @@ function mount(app){
   }
 
   /* ---------- tenant side: send a copy of the finished report ---------- */
+  // The app reports a finished report it couldn't send (PDF build or upload failed), so it shows in the logs.
+  const problemAllowed = limiter(30, 60 * 60 * 1000);
+  app.post('/api/report-problem', express.text({ type: '*/*', limit: '4kb' }), (req, res) => {
+    if (!problemAllowed(clientIp(req))) return res.status(204).end();
+    let d = {}; try { d = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {}); } catch (e) {}
+    console.error('report not sent from a phone: ' + [clip(d.stage, 20), 'ref ' + clip(d.ref, 40), 'backup ' + clip(d.key, 32), clip(d.msg, 300), d.online === false ? 'offline' : '', clip(d.ua, 160)].filter(Boolean).join(' | '));
+    res.status(204).end();
+  });
   app.post('/api/reports', express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
     if (!uploadAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many reports sent from here. Try again later.' });
-    const [status, body] = storeReport(req.body, metaHeader(req), 'app');
-    res.status(status).json(body);
+    const unpaid = req.headers['x-report-unpaid'] === '1';
+    const [status, body] = storeReport(req.body, metaHeader(req), 'app', { unpaid });
+    res.status(unpaid && status === 201 ? 202 : status).json(body);
   });
 
   // A finished report is sent: the stored report is marked as sent, the owner is alerted, and it is emailed to REPORT_TO_EMAIL if set.
@@ -609,7 +629,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
@@ -618,6 +638,17 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="btn danger">Delete</button></form>
         </td>
       </tr>`).join('');
+    // Reports finished on a phone whose PDF hasn't arrived (not paid, or the upload failed): shown from their backup.
+    const have = new Set(reports.map(r => r.key));
+    const orphans = drafts.finishedOnly().filter(({ s }) => !have.has(crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12)));
+    const orphanRows = orphans.map(({ key, s }) => { const m = s.meta || {}; return `
+      <tr data-q="${esc(((m.address || '') + ' ' + (m.ref || '') + ' ' + (m.inspectorName || '') + ' ' + (m.inspectionType || '')).toLowerCase())}">
+        <td>${esc(new Date(s.finalizedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
+        <td><strong>${esc(m.address || '—')}</strong><div class="sub">${esc([m.inspectionType, m.ref, s._device].filter(Boolean).join(' · '))}</div></td>
+        <td>${esc(m.signedBy || m.inspectorName || '—')}<div class="sub"><span class="pill wait">Finished on the phone · PDF not received</span></div></td>
+        <td class="num">${(s.rooms || []).length} rooms<div class="sub">from the online backup</div></td>
+        <td class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a></td>
+      </tr>`; }).join('');
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Submitted reports</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
 <style>
@@ -667,8 +698,8 @@ ${agentsHTML(req)}
 ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
 <div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
-${reports.length ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
-<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+${reports.length || orphanRows ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
+<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
 <script>
 function copyLink(btn, url){

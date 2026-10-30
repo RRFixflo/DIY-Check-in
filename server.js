@@ -330,6 +330,8 @@ if (PAYWALL) {
       if (!freeAssess.allow(req)) return res.status(429).json({ error: 'Automatic suggestions are busy right now. Choose the condition yourself.' });
       return next();
     }
+    // A finished report that isn't paid for yet is still sent to the owner (stored as not paid; unlocks nothing).
+    if (!a.valid && req.baseUrl === '/api/reports' && req.headers['x-report-unpaid'] === '1') return next();
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Inventory.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
       if (res.statusCode !== 201) return;

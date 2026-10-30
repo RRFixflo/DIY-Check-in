@@ -170,7 +170,9 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     res.redirect(303, '/admin#drafts');
   });
 
-  return { draftsHTML };
+  // Finished on the phone but with no stored report (not paid, or the upload never arrived): listed with the reports.
+  const finishedOnly = () => list().filter(({ s }) => s.finalizedAt && !s.submittedId);
+  return { draftsHTML, finishedOnly };
 }
 
 module.exports = { mount };
