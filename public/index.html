@@ -3484,11 +3484,7 @@ function earlierItemHTML(room, item){
   const txt = ei.notApplicable ? 'Not applicable' : [ei.condition ? conditionWord(ei.condition) : 'Condition not recorded'].concat((ei.defects || []).filter(d => d !== 'None').map(d => d.toLowerCase())).concat(ei.working === 'no' ? ['not working'] : []).join(' · ');
   return `<div class="then-row"><div class="then-txt"><span class="then-k">At the ${when}</span>${escapeHtml(txt)}</div>${(ei.photos || []).slice(0, 3).map(n => `<img loading="lazy" src="${escapeHtml(e.base + n)}.jpg" onclick="openPhotoPreview('${escapeHtml(e.base + n)}.jpg')" alt="Earlier photo">`).join('')}</div>`;
 }
-// Opened from a tenant's check-in link (/?access=AGT-…&start=checkin → /app?start=checkin): the report is a
-// check-in, so the type is fixed and starting from an earlier report is left out. Remembered on this phone.
-function checkinOnly(){ try { return localStorage.getItem('diyCheckinOnly') === '1'; } catch (e) { return false; } }
 function earlierSetupHTML(){
-  if (checkinOnly()) return '';
   const ps = pendingSetup, e = ps.basedOn;
   if (e) return `<div class="earlier-on">
       <div><strong>Starting from the ${escapeHtml(earlierName(e))} of ${escapeHtml(earlierWhen(e))}</strong>${e.ref ? ' · ref ' + escapeHtml(e.ref) : ''}<br>
@@ -3975,10 +3971,10 @@ function renderSetup(){
       <div class="row2">
         <div class="field">
           <label for="typeInput">Inspection type</label>
-          ${checkinOnly() ? '<div class="input" id="typeInput" style="display:flex;align-items:center">Check-In</div>' : `<select class="select" id="typeInput" onchange="pendingSetup.inspectionType=this.value; render();">
+          <select class="select" id="typeInput" onchange="pendingSetup.inspectionType=this.value; render();">
             ${ps.inspectionType ? '' : '<option value="" selected>Choose…</option>'}
             ${(ps.basedOn ? ['Check-Out','Interim Inspection','Renewal Inspection','Check-In'] : ['Check-In','Check-Out','Interim Inspection','Renewal Inspection']).map(t => `<option value="${t}" ${ps.inspectionType===t?'selected':''}>${t}</option>`).join('')}
-          </select>`}
+          </select>
         </div>
         <div class="field">
           <label for="inspectorInput">Person carrying out the inspection</label>
@@ -4599,9 +4595,11 @@ track('app_open');
       }
     } else if (state.floorplan) fpCheck();
   }
-  // A tenant's check-in link: check-ins only on this phone from now on.
+  // Phones that opened a tenant link before could change only check-ins; the type is now theirs to choose.
+  try { localStorage.removeItem('diyCheckinOnly'); } catch (e) {}
+  // A tenant's link (/?access=AGT-…&start=checkin → /app?start=checkin) opens on a new report with Check-In
+  // chosen; whoever is doing it can change it to a check-out or an inspection.
   if (new URLSearchParams(location.search).get('start') === 'checkin') {
-    try { localStorage.setItem('diyCheckinOnly', '1'); } catch (e) {}
     // The agency's link can carry the property (&address=…): fill in the address fields (still editable).
     const linkAddr = String(new URLSearchParams(location.search).get('address') || '').replace(/\s+/g, ' ').trim().slice(0, 200);
     history.replaceState(null, '', location.pathname);
