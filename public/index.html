@@ -3592,10 +3592,24 @@ function setSendUi(phase, msg){
     : phase === 'error' ? "It hasn't sent yet. " + escapeHtml(msg || '') + ' Tap Try sending again. It will also send by itself when you have a connection.'
     : 'Your report is being sent. Please keep this page open for a moment.';
 }
+// A send cut off by the phone (Share or Download straight away puts the page in the background and iOS stops the
+// upload): tried again when the page is visible again, and every 30 seconds while the finished screen is open.
+let sendStartedAt = 0;
+function resumeSending(){
+  if (state.view !== 'done' || !state.finalizedAt || state.sentAt || document.visibilityState === 'hidden' || navigator.onLine === false) return;
+  if (!reportUnlocked()) { if (!state.unpaidId && !unpaidSending) sendUnpaidCopy(); return; }
+  const stuck = sendUi.phase === 'sending' && Date.now() - sendStartedAt > 60000;
+  if (sendUi.phase === 'sending' && !stuck) return;
+  if (stuck) { submitting = false; submitPromise = null; }
+  sendUi.phase = ''; sendToAgent();
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(resumeSending, 800); });
+window.addEventListener('pageshow', () => setTimeout(resumeSending, 800));
+setInterval(resumeSending, 30000);
 async function sendToAgent(){
   if (!reportUnlocked()) return;
   if (state.sentAt || sendUi.phase === 'sending') return;
-  setSendUi('sending');
+  setSendUi('sending'); sendStartedAt = Date.now();
   try {
     if (!(state.submittedId && state.photosUploaded)) await submitReport();
     if (!state.submittedId) throw new Error(submitUi.msg || 'The report could not be uploaded.');

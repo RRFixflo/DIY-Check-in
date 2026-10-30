@@ -13,6 +13,7 @@ const KEEP_DAYS = 180;
 
 function mount(app, ctx){
   const { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify, requireAdmin, sameOrigin, PUBLIC_URL } = ctx;
+  const { buildFromBackup } = require('./backup-pdf');
   const DIR = path.join(REPORTS_DIR, 'drafts');
   fs.mkdirSync(DIR, { recursive: true });
   const MAX_BYTES = Math.max(100, parseInt(process.env.DRAFTS_MAX_MB, 10) || 2000) * 1024 * 1024;
@@ -58,6 +59,9 @@ function mount(app, ctx){
     s._savedAt = new Date().toISOString();
     s._device = deviceName(req.headers['user-agent']);
     s._alerted = before._alerted || '';
+    s._serverReportId = before._serverReportId || '';
+    // Whether this phone has a paid link or code (the cookie travels with every backup), for a report made from it.
+    if (ctx.hasAccess) s._access = ctx.hasAccess(req) || before._access || false;
     // Finished but not paid for: tell the owner once.
     if (s.finalizedAt && !s.submittedId && !s._alerted) {
       s._alerted = s._savedAt;
@@ -169,6 +173,40 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     if (KEY_RE.test(key)) { fs.rmSync(dirOf(key), { recursive: true, force: true }); countedAt = 0; }
     res.redirect(303, '/admin#drafts');
   });
+
+  // Finished on the phone, but its PDF never reached the server (the upload was cut off, or the build failed):
+  // a few minutes on, the server makes the report from this backup, stores it like any other and sends it to
+  // the owner (ctx.fromBackup). It waits until every photo has arrived, or 30 minutes after finishing at most.
+  // A copy the phone sends later replaces it (storeReport()).
+  const WAIT_MS = 5 * 60 * 1000, GIVE_UP_MS = 30 * 60 * 1000;
+  let building = false;
+  async function rescue(){
+    if (building || !ctx.fromBackup) return;
+    building = true;
+    try {
+      for (const { key, s } of list()) {
+        if (!s.finalizedAt || s.submittedId || s._serverReportId || s._rescueFailed) continue;
+        const age = Date.now() - new Date(s.finalizedAt).getTime();
+        if (!(age > WAIT_MS) || age > 14 * 86400000) continue;
+        if (ctx.alreadyStored && ctx.alreadyStored(s)) continue;
+        const ids = []; (function walk(o){ if (Array.isArray(o)) o.forEach(walk); else if (o && typeof o === 'object') { if (o.id && PID_RE.test(String(o.id)) && 'ts' in o) ids.push(String(o.id)); Object.values(o).forEach(walk); } })([s.rooms, s.property]);
+        const missing = ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
+        if (missing && age < GIVE_UP_MS) continue;
+        try {
+          const pdf = await buildFromBackup(s, id => PID_RE.test(String(id)) ? path.join(dirOf(key), 'photos', String(id) + '.jpg') : '');
+          const id = await ctx.fromBackup(pdf, s, { missing });
+          const now = readJson(path.join(dirOf(key), 'state.json')) || s;
+          now._serverReportId = id || 'stored'; writeJson(path.join(dirOf(key), 'state.json'), now);
+          console.log('report made from its backup: ' + key + ' → ' + id + (missing ? ' (' + missing + ' photos missing)' : ''));
+        } catch (err) {
+          console.error('report from backup failed: ' + key + ': ' + err.message);
+          const now = readJson(path.join(dirOf(key), 'state.json')) || s; now._rescueFailed = new Date().toISOString(); writeJson(path.join(dirOf(key), 'state.json'), now);
+        }
+      }
+    } finally { building = false; }
+  }
+  setTimeout(() => rescue().catch(() => {}), 60 * 1000).unref();
+  setInterval(() => rescue().catch(() => {}), 2 * 60 * 1000).unref();
 
   // Finished on the phone but with no stored report (not paid, or the upload never arrived): listed with the reports.
   const finishedOnly = () => list().filter(({ s }) => s.finalizedAt && !s.submittedId);

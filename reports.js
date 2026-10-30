@@ -279,6 +279,16 @@ function mount(app){
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
     const existing = listReports().find(r => r.key === key);
     if (existing) {
+      // The server made this one from the backup; the phone's own PDF, when it does arrive, takes its place.
+      if (existing.source === 'backup' && source === 'app') {
+        try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
+        existing.size = pdf.length; existing.source = 'app'; existing.replacedBackupAt = new Date().toISOString();
+        Object.assign(existing, meta, { source: 'app' });
+        if (existing.unpaid && !opts.unpaid) { existing.unpaid = false; existing.paidAt = new Date().toISOString(); }
+        fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.json'), JSON.stringify(existing, null, 2));
+        console.log('report replaced by the phone\'s own PDF: ' + existing.id);
+        return [opts.unpaid || !existing.paidAt ? 200 : 201, { id: existing.id }];
+      }
       if (existing.unpaid && !opts.unpaid) {
         existing.unpaid = false; existing.paidAt = new Date().toISOString();
         try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.json'), JSON.stringify(existing, null, 2)); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
@@ -364,7 +374,28 @@ function mount(app){
     return r ? r.id : null;
   }
   // Online backups of reports while they're being done (drafts.js), listed on /admin.
-  const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL });
+  // A report finished on a phone whose PDF never arrived is made from its backup (drafts.js) and filed here.
+  const accessToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
+  const hasAccess = req => { const t = accessToken(req); if (!t) return false; const c = codeAccess(t); if (c) return !!c.valid; try { const p = require('./purchases').access(t); return !!(p && p.valid); } catch (e) { return false; } };
+  const backupKey = s => crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12);
+  async function fromBackup(pdf, s, info){
+    const m = s.meta || {}, pr = s.property || {};
+    let photos = 0; (s.rooms || []).forEach(r => { (r.items || []).forEach(i => { photos += (i.photos || []).length; }); photos += (r.extraPhotos || []).length; }); photos += ((pr.exterior || {}).photos || []).length;
+    const [status, body] = storeReport(pdf, Object.assign({}, m, { finalizedAt: s.finalizedAt, rooms: (s.rooms || []).length, photos, photoKey: s.photoKey || '', basedOnRef: (s.earlier && s.earlier.ref) || '',
+      fileName: [m.address, m.inspectionType, m.date, m.ref].filter(Boolean).join(' - ').replace(/[\\/:*?"<>|]/g, '-') + '.pdf' }), 'backup', { unpaid: !(s._access || reportsAccessFree()) });
+    if (status >= 400 || !body.id) throw new Error(body.error || 'store failed');
+    const r = readMeta(body.id);
+    if (r && !r.sentAt) {
+      r.sentAt = new Date().toISOString(); r.fromBackup = true; if (info && info.missing) r.backupMissingPhotos = info.missing;
+      if (NTFY_TOPIC && !r.notifiedAt) { r.notifiedAt = r.sentAt; notifyPhone(r); }
+      fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2));
+      try { const mail = await emailReport(r); if (mail.ok) { r.emailedAt = new Date().toISOString(); fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } } catch (e) {}
+    }
+    return body.id;
+  }
+  const reportsAccessFree = () => /^(off|false|0|no)$/i.test(String(process.env.DIY_PAYWALL || ''));
+  const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
+    hasAccess, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
   // Tenant sign-off links (/sign/<key>), in signoff.js.
   require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
@@ -631,7 +662,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     const rows = reports.map(r => `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
-        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
+        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
