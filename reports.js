@@ -21,6 +21,9 @@ const photoDir = id => path.join(REPORTS_DIR, id + '.photos');
 const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
 const REPORT_TO_EMAIL = (process.env.REPORT_TO_EMAIL || '').trim();
 const REPORT_FROM_EMAIL = (process.env.REPORT_FROM_EMAIL || '').trim() || 'DIY Inventory <onboarding@resend.dev>';
+// When this version of the software went live (the server starts on each deploy) and what changed, for /admin.
+const STARTED_AT = new Date();
+const DEPLOY_NOTE = String(process.env.RAILWAY_GIT_COMMIT_MESSAGE || '').split('\n')[0].trim().slice(0, 160);
 const PUBLIC_URL = (process.env.PUBLIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN : '')).replace(/\/+$/, '');
 // Phone alert when a tenant sends a report, via the free ntfy app (ntfy.sh): subscribe to NTFY_TOPIC.
 const NTFY_TOPIC = (process.env.NTFY_TOPIC || '').trim();
@@ -625,16 +628,12 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 
   app.get('/admin', requireAdmin, (req, res) => {
     const reports = listReports();
-    const fmtWhen = t => new Date(t).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
-    // The latest thing that happened to a report (received, sent, paid for, signed by the tenant).
-    const lastUpdate = r => [[r.receivedAt, 'received'], [r.sentAt, 'sent'], [r.paidAt, 'paid for'], [r.tenantSignedAt, 'signed by the tenant']]
-      .filter(([t]) => t && !isNaN(new Date(t))).sort((a, b) => String(b[0]).localeCompare(String(a[0])))[0] || null;
     const rows = reports.map(r => `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : ''].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
-        <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(u => u ? `<div class="sub">Last updated ${esc(fmtWhen(u[0]))} (${u[1]})</div>` : '')(lastUpdate(r))}</td>
+        <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
@@ -650,7 +649,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
         <td>${esc(new Date(s.finalizedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(m.address || '—')}</strong><div class="sub">${esc([m.inspectionType, m.ref, s._device].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(m.signedBy || m.inspectorName || '—')}<div class="sub"><span class="pill wait">Finished on the phone · PDF not received</span></div></td>
-        <td class="num">${(s.rooms || []).length} rooms<div class="sub">from the online backup</div>${s._savedAt ? `<div class="sub">Last updated ${esc(fmtWhen(s._savedAt))}</div>` : ''}</td>
+        <td class="num">${(s.rooms || []).length} rooms<div class="sub">from the online backup</div></td>
         <td class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a></td>
       </tr>`; }).join('');
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
@@ -690,6 +689,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 <h1>Submitted reports</h1>
 <form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
 <p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
+<p class="sub" style="margin:-10px 0 16px">🛠️ Software last updated <strong>${esc(STARTED_AT.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</strong>${DEPLOY_NOTE ? ': ' + esc(DEPLOY_NOTE) : ''}</p>
 <p style="margin:-6px 0 16px"><a class="btn primary" href="/app">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
 ${analytics.summaryHTML(esc)}
 ${certs.adminHTML()}
