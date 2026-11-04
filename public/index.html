@@ -4633,6 +4633,16 @@ track('app_open');
   try { localStorage.removeItem('diyCheckinOnly'); } catch (e) {}
   // A tenant's link (/?access=AGT-…&start=checkin → /app?start=checkin) opens on a new report with Check-In
   // chosen; whoever is doing it can change it to a check-out or an inspection.
+  // A tenant's check-out link (the agency's moving-out email): a check-out, which can start from their check-in on this phone.
+  if (new URLSearchParams(location.search).get('start') === 'checkout') {
+    const linkAddr = String(new URLSearchParams(location.search).get('address') || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+    history.replaceState(null, '', location.pathname);
+    if (state.view === 'setup') {
+      pendingSetup.inspectionType = 'Check-Out';
+      if (linkAddr && !pendingSetup.basedOn) { const la = splitAddressLine(linkAddr); if (la.postcode && POSTCODE_RE.test(la.postcode)) pendingSetup.country = 'GB'; setAddressFields(la); pendingSetup.lookup = null; pendingSetup.picked = true; pendingSetup.manualAddress = true; }
+      saveSetupDraft(); render();
+    }
+  }
   if (new URLSearchParams(location.search).get('start') === 'checkin') {
     // The agency's link can carry the property (&address=…): fill in the address fields (still editable).
     const linkAddr = String(new URLSearchParams(location.search).get('address') || '').replace(/\s+/g, ' ').trim().slice(0, 200);
