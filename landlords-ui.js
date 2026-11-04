@@ -15,13 +15,14 @@ const ICON = {
   rent: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/>',
   exp: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
   tax: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  refs: '<path d="M9 11l2 2 4-4"/><path d="M5 3h14v18l-7-4-7 4z"/>',
   set: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
 };
 const svg = (p, n = 20) => `<svg width="${n}" height="${n}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
-const NAV = [['props', 'Properties', '/account', 'home'], ['rent', 'Rent', '/account/rent', 'rent'], ['exp', 'Expenses', '/account/expenses', 'exp'], ['tax', 'Tax year', '/account/money', 'tax'], ['set', 'Settings', '/account/settings', 'set']];
+const NAV = [['props', 'Properties', '/account', 'home'], ['rent', 'Rent', '/account/rent', 'rent'], ['exp', 'Expenses', '/account/expenses', 'exp'], ['tax', 'Tax year', '/account/money', 'tax'], ['refs', 'References', '/account/references', 'refs'], ['set', 'Settings', '/account/settings', 'set']];
 function navKey(p){
   p = String(p || '');
-  return /^\/account\/rent/.test(p) ? 'rent' : /^\/account\/expenses/.test(p) ? 'exp' : /^\/account\/money/.test(p) ? 'tax' : /^\/account\/settings/.test(p) ? 'set' : 'props';
+  return /^\/account\/rent/.test(p) ? 'rent' : /^\/account\/expenses/.test(p) ? 'exp' : /^\/account\/money/.test(p) ? 'tax' : /^\/account\/settings/.test(p) ? 'set' : /^\/account\/references/.test(p) ? 'refs' : 'props';
 }
 function appChrome(html, acc, path){
   const on = navKey(path), cur = k => k === on ? ' aria-current="page" class="on"' : '';
@@ -32,6 +33,17 @@ function appChrome(html, acc, path){
 </div></header>
 <nav class="lbar" aria-label="Dashboard">${NAV.map(([k, l, h, i]) => `<a href="${h}"${cur(k)}>${svg(ICON[i])}<span>${l}</span></a>`).join('')}</nav>`;
   const footer = `<footer class="lft"><div class="wrap"><a href="/">← Back to diyinventory.co.uk</a><span><a href="/app">Do a check-in or inspection</a> · <a href="/certificates">Book a certificate</a> · <a href="/contact">Help</a> · <a href="/privacy">Privacy</a></span></div></footer>`;
+  return html.replace('<body>', '<body class="lapp">').replace(/<header class="top">[\s\S]*?<\/header>/, () => header).replace(/<footer>[\s\S]*?<\/footer>/, () => footer);
+}
+
+// Staff of an account (tenant referencing only): the same dashboard look, with just References and their own sign-out.
+function staffChrome(html, st, acc){
+  const header = `<header class="lhd"><div class="wrap lhd-in">
+  <a class="lhd-brand" href="/account/references"><img src="/icons/icon-192.png" alt="" width="30" height="30"><span><b>Tenant references</b><small>${esc(acc.name)} · DIY Inventory</small></span></a>
+  <nav class="lhd-nav" aria-label="Dashboard"><a href="/account/references" aria-current="page" class="on">References</a><a href="/team/password">Password</a></nav>
+  <div class="lhd-me"><span class="lhd-name" title="${esc(st.email)}">${esc(st.name)} (staff)</span><form method="post" action="/team/sign-out" class="inline"><button class="lhd-out">Sign out</button></form></div>
+</div></header>`;
+  const footer = `<footer class="lft"><div class="wrap"><span>Staff access for ${esc(acc.name)}</span><span><a href="/contact">Help</a> · <a href="/privacy#referencing">Privacy</a></span></div></footer>`;
   return html.replace('<body>', '<body class="lapp">').replace(/<header class="top">[\s\S]*?<\/header>/, () => header).replace(/<footer>[\s\S]*?<\/footer>/, () => footer);
 }
 
@@ -249,4 +261,4 @@ const DRAFT_UI = String.raw`<script>
 })();
 </script>`;
 
-module.exports = { appChrome, navKey, ADDR_UI, TNT_UI, TABS_UI, DT_UI, DRAFT_UI, svg, ICON };
+module.exports = { appChrome, staffChrome, navKey, ADDR_UI, TNT_UI, TABS_UI, DT_UI, DRAFT_UI, svg, ICON };

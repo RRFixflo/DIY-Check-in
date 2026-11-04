@@ -285,6 +285,9 @@ const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, ren
 // Free landlord area: /landlords, and accounts at /account with properties, certificates, tenancy and reminders: landlords.js.
 const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
   notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE }).paths;
+// Tenant referencing (£20 per tenant, paid by the landlord): /tenant-referencing, /account/references, /reference/…: referencing/.
+const referencingPaths = require('./referencing').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
+  notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE, track: analytics.track }).paths;
 // Floor plans (£9.55): /floor-plan, the drawing tool /floor-plan/create, and paying by card (SumUp or Stripe): payments.js.
 // Buying a report (£30) on our own page, /buy, with the same card checkout: purchases.js.
 const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
@@ -300,7 +303,7 @@ require('./inspections').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner:
     extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, referencingPaths, buyPaths, floorplanPaths, locationPaths, reportPaths), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
