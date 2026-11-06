@@ -1083,7 +1083,10 @@ ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports
   <div class="list">${attention.length ? attention.join('') : '<div class="none">Nothing waiting for you. ✓</div>'}</div>
   <div class="two"><div><h2 class="ph">Latest reports</h2><div class="list">${latest || '<div class="none">No reports yet.</div>'}</div></div>
   <div><h2 class="ph">Visits and sales</h2>${analytics.summaryHTML(esc)}
-  ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}</div></div>
+  ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
+  <h2 class="ph">Email</h2><div class="alerts">${RESEND_API_KEY ? `✉️ On · sending from <code>${esc(REPORT_FROM_EMAIL)}</code>${REPORT_TO_EMAIL ? ' · your copies go to <code>' + esc(REPORT_TO_EMAIL) + '</code>' : ' · <b>REPORT_TO_EMAIL isn’t set</b>, so you don’t get a copy of each report'}` : '✉️ <b>Off</b>: set RESEND_API_KEY in Railway.'}
+  ${req.query.mail ? `<p style="margin:8px 0 0;font-weight:600;color:${String(req.query.mail)[0] === '✓' ? '#15803D' : '#B42318'}">${esc(String(req.query.mail).slice(0, 300))}</p>` : ''}
+  <form method="post" action="/admin/test-email" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input name="to" type="email" required placeholder="Send a test email to…" value="${esc(REPORT_TO_EMAIL)}" style="flex:1;min-width:200px;padding:9px 14px;border:0;background:#F1F3F7;border-radius:999px;font:inherit"><button class="btn primary">Send a test email</button></form></div></div></div>
 </section>
 <section class="pane" id="p-reports">
   <div class="top"><div><h1>Reports</h1><p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first.</p></div></div>
@@ -1216,6 +1219,24 @@ h1{font-size:26px;margin:0 0 4px}.lead{color:#5B677C;margin:0 0 18px}.card{backg
     const only = req.query.downloads ? all.filter(x => /download|app_share/.test(x.what)) : all;
     res.type('html').send(shellPage('Views and downloads', `<p><a href="/admin#reports">‹ Reports</a></p><h1>Views and downloads</h1><p class="lead">${req.query.downloads ? 'Every download of a report' : 'Every view and download of every report'}, newest first (not your own). ${req.query.downloads ? '<a href="/admin/opened">Show views too</a>' : '<a href="/admin/opened?downloads=1">Downloads only</a>'}</p>
 <div class="card">${only.length ? `<table><thead><tr><th>When</th><th>Report</th><th>What and who</th><th>Device and where</th></tr></thead><tbody>${accessRows(only.slice(0, 1000), true)}</tbody></table>` : '<div class="empty">Nothing yet.</div>'}</div>`));
+  });
+  // A test email from the admin page, with Resend's own answer shown (domain not verified, wrong key…).
+  app.post('/admin/test-email', requireAdmin, express.urlencoded({ extended: false, limit: '2kb' }), async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Send it from the admin page.');
+    const to = String((req.body && req.body.to) || '').trim().toLowerCase();
+    const back = m => res.redirect(303, '/admin?mail=' + encodeURIComponent(m.slice(0, 300)) + '#overview');
+    if (!RESEND_API_KEY) return back('Email is off: RESEND_API_KEY isn’t set in Railway.');
+    if (!EMAIL_RE.test(to)) return back('Please enter a valid email address.');
+    try {
+      const r = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+        headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: REPORT_FROM_EMAIL, to: [to], subject: 'DIY Inventory: test email', text: 'This is a test email from your DIY Inventory admin page.\n\nIf you can read this, report copies, receipts and reminders will reach people too.\n\nSent from: ' + REPORT_FROM_EMAIL }) });
+      const body = await r.text().catch(() => '');
+      if (r.ok) { console.log('test email sent to ' + to); return back('✓ Sent to ' + to + ' from ' + REPORT_FROM_EMAIL + '. Check that inbox (and spam).'); }
+      let msg = body; try { msg = JSON.parse(body).message || body; } catch (e) {}
+      console.error('test email failed: HTTP ' + r.status + ' ' + msg);
+      back('✗ Resend said: ' + msg + ' (HTTP ' + r.status + ')');
+    } catch (e) { back('✗ Could not reach Resend: ' + e.message); }
   });
   app.post('/admin/reports/:id/link', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Make links from the reports page.');
