@@ -272,14 +272,24 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     res.json({ ok: true });
   });
 
+  // The owner marks a purchase as used by hand (a report that reached them without the phone's own upload).
+  app.post('/admin/purchases/:ref/used', (req, res) => {
+    const owner = ctx.isOwner || require('./reports').isOwner;
+    if (!owner(req)) return res.status(403).type('text/plain').send('Sign in on /admin first.');
+    const o = String(req.get('origin') || req.get('referer') || ''); try { if (o && new URL(o).host !== req.get('host')) return res.status(403).type('text/plain').send('Mark it from the admin page.'); } catch (e) {}
+    const r = find('ref', String(req.params.ref));
+    if (r && r.status === 'paid' && !r.usedAt) { update(r.ref, x => { x.usedAt = new Date().toISOString(); x.usedFor = x.usedFor || 'marked by hand'; }); console.log('report purchase marked used by hand: ' + r.ref); }
+    res.redirect(303, '/admin#purchases');
+  });
+
   /* ------------------------------------------------------------ /admin */
   if (ctx.addAdminSection) ctx.addAdminSection(req => {
     const all = readAll().list, paid = all.filter(r => r.status === 'paid').reverse(), pending = all.filter(r => r.status !== 'paid').length;
     const revenue = Math.round(paid.reduce((a, r) => a + (Number(r.amount) || 0), 0) * 100) / 100, unused = paid.filter(r => !r.usedAt).length, prov = payments.provider();
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
-    const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.usedAt ? '<span class="pill">Used</span>' : '<span class="pill sent">Not used yet</span>'}
+    const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.usedAt ? '<span class="pill">Used' + (r.usedFor ? ' for ' + esc(r.usedFor) : '') + ', ' + esc(when(r.usedAt)) + '</span>' : '<span class="pill sent">Not used yet</span>'}
       <div class="sub">${esc(when(r.paidAt || r.createdAt))}${r.email ? ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : ''}${r.for === 'tenant' ? ' · for a tenant' : ''} · ${r.provider === 'sumup' ? 'SumUp' : 'Stripe'}${r.providerRef ? ' · ' + esc(r.providerRef) : ''} · ref ${esc(r.ref)}${r.usedAt ? ' · used ' + esc(when(r.usedAt)) + (r.usedFor ? ' for ' + esc(r.usedFor) : '') : ''}${r.emailedAt ? ' · link emailed' : ''}</div>
-      <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit">${require('./origin').html(r.origin, esc)}</div></li>`).join('');
+      <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit">${r.usedAt ? '' : `<form method="post" action="/admin/purchases/${esc(r.ref)}/used" style="margin-top:6px" onsubmit="return confirm('Mark this purchase as used? Its link will stop working for new reports.')"><button class="btn">Mark as used</button> <span class="sub" style="display:inline">if their report arrived another way (e.g. made from the backup)</span></form>`}${require('./origin').html(r.origin, esc)}</div></li>`).join('');
     return `<details class="codes" id="purchases"><summary>💷 Report purchases <span class="sub" style="display:inline">— ${paid.length ? paid.length + ' sold, £' + revenue.toFixed(2) + ' · ' + unused + ' not used yet' : 'none sold yet'}${pending ? ' · ' + pending + ' started, not paid' : ''}</span></summary>
 <p class="sub" style="margin-top:12px">${PRICE_TEXT} each, on <a href="/buy" target="_blank" rel="noopener">/buy</a>. Card payments: ${prov ? '<b>' + (prov === 'sumup' ? 'SumUp' : 'Stripe') + '</b>' : '<b>not set up</b> (set SUMUP_API_KEY and SUMUP_MERCHANT_CODE, or STRIPE_SECRET_KEY, in Railway). Until then /buy asks people to contact you'}. Copy a link below to send it to the buyer again.</p>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;

@@ -334,8 +334,10 @@ if (PAYWALL) {
     if (!a.valid && req.baseUrl === '/api/reports' && req.headers['x-report-unpaid'] === '1') return next();
     if (!a.valid) return res.status(402).json({ error: a.reason === 'used' ? 'This access link has already been used for a report.' : 'You need a paid access link to use DIY Inventory.', buy: BUY_URL });
     if (req.baseUrl === '/api/reports') res.on('finish', () => {
-      if (res.statusCode !== 201) return;
       let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {}
+      // A purchase is spent by its report even when the phone's PDF replaces one made from the backup (200); marking is once only.
+      if (res.statusCode === 200 && purchases.isToken(token)) { purchases.markUsed(token, m.address); return; }
+      if (res.statusCode !== 201) return;
       if (reports.codeAccess(token)) { reports.useCode(token, m.address, req); return; }
       if (purchases.isToken(token)) { purchases.markUsed(token, m.address); return; }
       markLegacyUsed(token);

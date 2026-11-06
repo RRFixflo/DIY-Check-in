@@ -570,12 +570,31 @@ function mount(app){
   const accessToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
   const hasAccess = req => { if (signedIn(req)) return true; const t = accessToken(req); if (!t) return false; const c = codeAccess(t); if (c) return !!c.valid; try { const p = require('./purchases').access(t); return !!(p && p.valid); } catch (e) { return false; } };
   const backupKey = s => crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12);
+  // The full-size photos of a report made from the backup, served at /p/<photoKey>/<n> like the phone's own.
+  function attachBackupPhotos(id, key, photos, photoFile){
+    try {
+      const r = readMeta(id); if (!r) return;
+      if (KEY_RE.test(String(key || '')) && r.photoKey !== key) { r.photoKey = key; fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); keyToId.set(key, id); }
+      const dir = photoDir(id); fs.mkdirSync(dir, { recursive: true });
+      let index = {}; try { index = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')); } catch (e) {}
+      for (const ph of photos || []) { const f = photoFile(ph.id); if (f && fs.existsSync(f)) { fs.copyFileSync(f, path.join(dir, ph.n + '.jpg')); index[ph.n] = { title: clip(ph.title, 200), ts: clip(ph.ts, 40) }; } }
+      fs.writeFileSync(path.join(dir, 'index.json'), JSON.stringify(index));
+    } catch (e) { console.error('backup photos not attached: ' + e.message); }
+  }
   async function fromBackup(pdf, s, info){
     const m = s.meta || {}, pr = s.property || {};
     let photos = 0; (s.rooms || []).forEach(r => { (r.items || []).forEach(i => { photos += (i.photos || []).length; }); photos += (r.extraPhotos || []).length; }); photos += ((pr.exterior || {}).photos || []).length;
     const [status, body] = storeReport(pdf, Object.assign({}, m, { finalizedAt: s.finalizedAt, rooms: (s.rooms || []).length, photos, photoKey: s.photoKey || '', basedOnRef: (s.earlier && s.earlier.ref) || '',
-      fileName: [m.address, m.inspectionType, m.date, m.ref].filter(Boolean).join(' - ').replace(/[\\/:*?"<>|]/g, '-') + '.pdf' }), 'backup', { unpaid: !(s._access || reportsAccessFree()) });
+      fileName: [m.address, m.inspectionType, m.date, m.ref].filter(Boolean).join(' - ').replace(/[\\/:*?"<>|]/g, '-') + '.pdf' }), 'backup', { unpaid: !((info && info.paid) || s._access || reportsAccessFree()) });
     if (status >= 400 || !body.id) throw new Error(body.error || 'store failed');
+    // The link or code the phone had pays for this report: mark it used, as storing the phone's own PDF would have.
+    if (status === 201 && s._token && !reportsAccessFree()) {
+      try {
+        if (codeAccess(s._token)) useCode(s._token, m.address);
+        else if (require('./purchases').markUsed(s._token, m.address)) console.log('report purchase used (report made from the backup)');
+      } catch (e) { console.error('marking the link used failed:', e.message); }
+    }
+    if (info && info.photos) attachBackupPhotos(body.id, s.photoKey, info.photos, info.photoFile);
     const r = readMeta(body.id);
     if (r && !r.sentAt) {
       r.sentAt = new Date().toISOString(); r.fromBackup = true; if (info && info.missing) r.backupMissingPhotos = info.missing;
@@ -892,6 +911,8 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${r.tenantSignedAt && r.photoKey ? `<a class="btn" href="/sign/${r.photoKey}/signed.pdf" target="_blank" rel="noopener">Signed copy</a>` : ''}
+          ${notPaid(r) || (!r.sentAt && r.source !== 'uploaded') ? `<form method="post" action="/admin/reports/${r.id}/complete" onsubmit="return confirm('Mark this report as complete${notPaid(r) ? ' and paid' : ''}? Its online link will work and any copies are emailed.')"><button class="btn primary">Mark as complete</button></form>` : ''}
+          ${r.source === 'backup' ? `<form method="post" action="/admin/reports/${r.id}/rebuild" onsubmit="this.querySelector('button').textContent='Rebuilding…'"><button class="btn" title="Remake it with clickable full-size photos and an index of photographs">Rebuild from backup</button></form>` : ''}
           ${notPaid(r) ? '' : r.photoKey ? `<a class="btn" href="/report/${r.photoKey}" target="_blank" rel="noopener">Online</a><button class="btn" type="button" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">Copy link</button>` : `<form method="post" action="/admin/reports/${r.id}/link"><button class="btn">Make online link</button></form>`}
           <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="btn danger">Delete</button></form>
         </td>
@@ -905,7 +926,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
         <td><strong>${esc(m.address || '—')}</strong><div class="sub">${esc([m.inspectionType, m.ref, s._device].filter(Boolean).join(' · '))}</div></td>
         <td>${esc(m.signedBy || m.inspectorName || '—')}<div class="sub"><span class="pill wait">Finished on the phone · PDF not received</span></div></td>
         <td class="num">${(s.rooms || []).length} rooms<div class="sub">from the online backup</div></td>
-        <td class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a></td>
+        <td class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a><form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…'"><button class="btn primary">Make the report now</button></form></td>
       </tr>`; }).join('');
     // The page is laid out as a dashboard: a sidebar of sections, each shown on its own (#hash), with an Overview first.
     // Every block (bookings, purchases, messages…) is still made by its own module; here they're only sorted into groups.
@@ -1107,6 +1128,35 @@ async function uploadPdfs(input){
     res.status(status).json(body);
   });
 
+  // Remake a report that was made from the online backup with the current builder (clickable photos, index of photographs).
+  app.post('/admin/reports/:id/rebuild', requireAdmin, async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Rebuild from the reports page.');
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r || r.source !== 'backup') return res.status(404).type('text/plain').send('Only a report made from the backup can be rebuilt.');
+    try {
+      const b = await drafts.rebuild(id);
+      if (!b) return res.status(404).type('text/plain').send('Its backup is no longer on the server.');
+      fs.writeFileSync(path.join(REPORTS_DIR, id + '.pdf'), b.pdf);
+      const now = readMeta(id); now.size = b.pdf.length; now.rebuiltAt = new Date().toISOString(); fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(now, null, 2));
+      attachBackupPhotos(id, b.s.photoKey, b.photos, b.photoFile);
+      console.log('report rebuilt from its backup: ' + id + ' (' + b.photos.length + ' photos linked)');
+      res.redirect(303, '/admin#reports');
+    } catch (e) { console.error('rebuild failed: ' + e.message); res.status(500).type('text/plain').send('The rebuild failed: ' + e.message); }
+  });
+  // The owner marks a report as complete at any time: paid and sent, so its online link and copies work.
+  app.post('/admin/reports/:id/complete', requireAdmin, async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Mark it from the reports page.');
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).type('text/plain').send('Report not found.');
+    const now = new Date().toISOString();
+    if (r.unpaid) { r.unpaid = false; r.paidAt = now; r.completedByOwner = now; }
+    if (!r.sentAt) r.sentAt = now;
+    if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, id); }
+    fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
+    console.log('report marked complete by the owner: ' + id);
+    await deliverCopies(r, '').catch(() => {});
+    res.redirect(303, '/admin#reports');
+  });
   app.post('/admin/reports/:id/link', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Make links from the reports page.');
     const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);

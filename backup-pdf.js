@@ -4,7 +4,7 @@
 // and photos (the date and time are already burned into each photo), meters, keys, notes and the signature.
 // A4 landscape, pdf-lib, standard fonts (text is kept to characters they can show).
 const fs = require('fs');
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const { PDFDocument, StandardFonts, rgb, PDFString, PDFName } = require('pdf-lib');
 
 const W = 841.89, H = 595.28, M = 36;
 const NAVY = rgb(0.106, 0.18, 0.294), SOFT = rgb(0.35, 0.39, 0.45), LINE = rgb(0.85, 0.82, 0.76), PAPER = rgb(0.98, 0.965, 0.94);
@@ -15,7 +15,11 @@ const safe = t => String(t == null ? '' : t).replace(/[‘’]/g, "'").replace(/
 const when = t => { const d = new Date(t); return isNaN(d) ? '' : d.toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }); };
 const kindOf = t => /check-?in/i.test(t || '') ? 'Check-In' : /check-?out/i.test(t || '') ? 'Check-Out' : 'Inspection';
 
-async function buildFromBackup(s, photoFile){
+// out (optional): { base } in, e.g. 'https://diyinventory.co.uk/p/<photoKey>/'; out.photos comes back as
+// [{ n, id, title, ts }] in the order drawn, so the server can serve each at <base><n> (full size), as on the phone's PDF.
+async function buildFromBackup(s, photoFile, out){
+  out = out || {}; out.photos = [];
+  const numbers = new Map();
   const doc = await PDFDocument.create();
   const F = await doc.embedFont(StandardFonts.Helvetica), B = await doc.embedFont(StandardFonts.HelveticaBold), T = await doc.embedFont(StandardFonts.TimesRomanBold);
   const m = s.meta || {}, pr = s.property || {};
@@ -36,6 +40,27 @@ async function buildFromBackup(s, photoFile){
   };
   const text = (t, x, size, font, color, width) => { for (const l of wrap(t, font, size, width || W - 2 * M)) { if (y < M + size) newPage(); page.drawText(l, { x, y: y - size, size, font, color: color || NAVY }); y -= size + 3; } };
   const fit = (img, x, top, bw, bh) => { const r = Math.min(bw / img.width, bh / img.height), w = img.width * r, h = img.height * r; page.drawImage(img, { x: x + (bw - w) / 2, y: top - bh + (bh - h) / 2, width: w, height: h }); };
+  // Each photo is numbered once, in the order drawn, and tapping it opens it full size online.
+  const link = (x, yb, w, h, url) => {
+    const annot = doc.context.obj({ Type: 'Annot', Subtype: 'Link', Rect: [x, yb, x + w, yb + h], Border: [0, 0, 0],
+      A: { Type: 'Action', S: 'URI', URI: PDFString.of(url) } });
+    const ref = doc.context.register(annot);
+    const annots = page.node.lookup(PDFName.of('Annots'));
+    if (annots) annots.push(ref); else page.node.set(PDFName.of('Annots'), doc.context.obj([ref]));
+  };
+  const numberOf = (p, title) => {
+    const id = p && p.id; if (!id) return 0;
+    if (!numbers.has(id)) { numbers.set(id, out.photos.length + 1); out.photos.push({ n: out.photos.length + 1, id, title: safe(title).slice(0, 120), ts: p.ts || '' }); }
+    return numbers.get(id);
+  };
+  const place = async (p, title, x, top, bw, bh) => {
+    const img = await photo(p); if (!img) return false;
+    const r = Math.min(bw / img.width, bh / img.height), w = img.width * r, h = img.height * r, px = x + (bw - w) / 2, py = top - bh + (bh - h) / 2;
+    page.drawImage(img, { x: px, y: py, width: w, height: h });
+    const n = numberOf(p, title);
+    if (out.base && n) link(px, py, w, h, out.base + n);
+    return true;
+  };
   const heading = t => { if (y < M + 60) newPage(); y -= 6; page.drawText(safe(t), { x: M, y: y - 18, size: 18, font: T, color: NAVY }); y -= 26; page.drawLine({ start: { x: M, y }, end: { x: W - M, y }, thickness: 0.6, color: LINE }); y -= 10; };
 
   /* cover */
@@ -46,8 +71,7 @@ async function buildFromBackup(s, photoFile){
   y -= 8;
   [['Report type', m.inspectionType], ['Reference', m.ref], ['Carried out by', m.inspectorName], ['Signed by', m.signedBy || m.inspectorName], ['Started', when(m.createdAt || s._createdAt)], ['Finished', when(s.finalizedAt)], ['Move-in date', m.moveInDateTime ? when(m.moveInDateTime) : ''], ['Managing agent', m.managingAgent]]
     .filter(([, v]) => v).forEach(([k, v]) => { page.drawText(safe(k), { x: M, y: y - 10, size: 9, font: F, color: SOFT }); page.drawText(safe(v).slice(0, 70), { x: M + 110, y: y - 10, size: 10, font: B, color: NAVY }); y -= 17; });
-  const front = await photo(((pr.exterior || {}).photos || [])[0]);
-  if (front) fit(front, W / 2, H - M, half, H - 2 * M - 60);
+  await place(((pr.exterior || {}).photos || [])[0], 'Front of the property', W / 2, H - M, half, H - 2 * M - 60);
   y -= 10;
   text('This copy of the report was made from its online backup, because the PDF made on the phone did not arrive. It has the same details, conditions and photos; the date and time on each photo were burned in when it was taken.', M, 8.5, F, SOFT, half - 10);
 
@@ -61,9 +85,8 @@ async function buildFromBackup(s, photoFile){
       for (let k = 0; k < 2 && i + k < items.length; k++) {
         const it = items[i + k], x = M + k * (cardW + 16), top = y;
         page.drawRectangle({ x, y: top - cardH, width: cardW, height: cardH, color: rgb(1, 1, 1), borderColor: LINE, borderWidth: 0.6 });
-        const img = await photo((it.photos || [])[0]);
-        if (img) fit(img, x + 6, top - 6, phW, cardH - 12);
-        else page.drawText(it.notApplicable ? 'Not applicable' : 'No photo', { x: x + 40, y: top - cardH / 2, size: 9, font: F, color: SOFT });
+        const ok = await place((it.photos || [])[0], (r.name || 'Room') + ' - ' + (it.label || 'Item'), x + 6, top - 6, phW, cardH - 12);
+        if (!ok) page.drawText(it.notApplicable ? 'Not applicable' : 'No photo', { x: x + 40, y: top - cardH / 2, size: 9, font: F, color: SOFT });
         const tx = x + phW + 16, tw = cardW - phW - 24; let ty = top - 8;
         for (const l of wrap(it.label || 'Item', B, 10.5, tw).slice(0, 2)) { page.drawText(l, { x: tx, y: ty - 10.5, size: 10.5, font: B, color: NAVY }); ty -= 14; }
         const cond = it.notApplicable ? 'Not applicable' : CONDITION[it.condition] || 'Condition not recorded';
@@ -85,8 +108,8 @@ async function buildFromBackup(s, photoFile){
       for (let i = 0; i < rest.length; i += 4) {
         if (y - th - 14 < M + 20) newPage();
         for (let k = 0; k < 4 && i + k < rest.length; k++) {
-          const [p, label] = rest[i + k], img = await photo(p), x = M + k * (tw + 10);
-          if (img) fit(img, x, y, tw, th);
+          const [p, label] = rest[i + k], x = M + k * (tw + 10);
+          await place(p, (r.name || 'Room') + ' - ' + label, x, y, tw, th);
           page.drawText(safe(label).slice(0, 40), { x, y: y - th - 10, size: 7.5, font: F, color: SOFT });
         }
         y -= th + 20;
@@ -102,12 +125,12 @@ async function buildFromBackup(s, photoFile){
     for (const [k, v] of meters) {
       if (y < M + 130) newPage();
       text(k.charAt(0).toUpperCase() + k.slice(1) + ' meter: ' + (v.na ? 'not applicable' : [v.reading ? 'reading ' + v.reading : '', v.serial ? 'serial ' + v.serial : '', v.location].filter(Boolean).join(' · ') || 'no reading'), M, 11, B);
-      const img = await photo((v.photos || [])[0]); if (img) { fit(img, M, y - 2, 200, 110); y -= 118; }
+      if (await place((v.photos || [])[0], k.charAt(0).toUpperCase() + k.slice(1) + ' meter', M, y - 2, 200, 110)) y -= 118;
     }
     for (const kk of keys) {
       if (y < M + 130) newPage();
       text('Keys: ' + ([kk.desc, kk.action].filter(Boolean).join(' · ') || 'not described'), M, 11, B);
-      const img = await photo((kk.photos || [])[0]); if (img) { fit(img, M, y - 2, 200, 110); y -= 118; }
+      if (await place((kk.photos || [])[0], 'Keys', M, y - 2, 200, 110)) y -= 118;
     }
   }
 
@@ -118,6 +141,21 @@ async function buildFromBackup(s, photoFile){
   text('Signed by ' + (m.signedBy || m.inspectorName || '-') + (s.finalizedAt ? ' on ' + when(s.finalizedAt) : ''), M, 11, B);
   const sig = /^data:image\/(png|jpeg);base64,(.+)$/.exec(String(s.signatureDataUrl || ''));
   if (sig) { try { const img = sig[1] === 'png' ? await doc.embedPng(Buffer.from(sig[2], 'base64')) : await doc.embedJpg(Buffer.from(sig[2], 'base64')); fit(img, M, y - 6, 260, 110); y -= 120; } catch (e) {} }
+  /* index of photographs: every photo with its number, where it is, when it was taken, and a link to it full size */
+  if (out.photos.length) {
+    newPage(); heading('Index of photographs');
+    text(out.base ? 'Every photograph in this report, in order. Tap a photo anywhere in the report, or View here, to open it full size.' : 'Every photograph in this report, in order.', M, 9, F, SOFT);
+    y -= 4;
+    const cols = [M, M + 40, W - M - 230, W - M - 40];
+    for (const ph of out.photos) {
+      if (y < M + 24) { newPage(); heading('Index of photographs (continued)'); }
+      page.drawText(String(ph.n), { x: cols[0], y: y - 9, size: 8.5, font: B, color: NAVY });
+      page.drawText(safe(ph.title).slice(0, 95), { x: cols[1], y: y - 9, size: 8.5, font: F, color: NAVY });
+      if (ph.ts) page.drawText(safe(when(ph.ts)), { x: cols[2], y: y - 9, size: 8.5, font: F, color: SOFT });
+      if (out.base) { page.drawText('View', { x: cols[3], y: y - 9, size: 8.5, font: B, color: rgb(0.2, 0.35, 0.65) }); link(cols[3] - 2, y - 12, 30, 13, out.base + ph.n); }
+      y -= 13; page.drawLine({ start: { x: M, y: y + 1 }, end: { x: W - M, y: y + 1 }, thickness: 0.3, color: LINE });
+    }
+  }
   doc.setTitle(safe(kindOf(m.inspectionType) + ' - ' + (m.address || ''))); doc.setProducer('DIY Inventory');
   return Buffer.from(await doc.save());
 }

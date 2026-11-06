@@ -120,6 +120,7 @@ function mount(app, ctx){
         <div class="sub">${esc([m.inspectionType, m.inspectorName ? 'by ' + m.inspectorName : '', s._device].filter(Boolean).join(' · '))}</div>
         <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div></div>
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
+        ${s.submittedId || s._serverReportId ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;
     }).join('');
     const waiting = all.filter(d => d.s.finalizedAt && !paidS(d.s)).length;
@@ -183,6 +184,21 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   // a few minutes on, the server makes the report from this backup, stores it like any other and sends it to
   // the owner (ctx.fromBackup). It waits until every photo has arrived, or 30 minutes after finishing at most.
   // A copy the phone sends later replaces it (storeReport()).
+  // The report PDF from a backup, with every photo numbered and linked to /p/<photoKey>/<n> (full size), as on the
+  // phone's own PDF. A backup without a photo key (older phones) is given one.
+  async function buildFor(key, s){
+    if (!/^[a-f0-9]{32}$/.test(String(s.photoKey || ''))) {
+      s.photoKey = require('crypto').randomBytes(16).toString('hex');
+      const now = readJson(path.join(dirOf(key), 'state.json')) || s; now.photoKey = s.photoKey; writeJson(path.join(dirOf(key), 'state.json'), now);
+    }
+    const photoFile = id => PID_RE.test(String(id)) ? path.join(dirOf(key), 'photos', String(id) + '.jpg') : '';
+    const out = { base: (ctx.PUBLIC_URL || '') + '/p/' + s.photoKey + '/' };
+    const pdf = await buildFromBackup(s, photoFile, out);
+    return { pdf, photos: out.photos, photoFile };
+  }
+  // The backup a stored report was made from (for Rebuild on /admin).
+  const backupFor = reportId => list().find(({ s }) => s._serverReportId === reportId) || null;
+  async function rebuild(reportId){ const b = backupFor(reportId); if (!b) return null; return Object.assign({ key: b.key, s: b.s }, await buildFor(b.key, b.s)); }
   const WAIT_MS = 5 * 60 * 1000, GIVE_UP_MS = 30 * 60 * 1000;
   let building = false;
   async function rescue(){
@@ -198,8 +214,8 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
         const missing = ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
         if (missing && age < GIVE_UP_MS) continue;
         try {
-          const pdf = await buildFromBackup(s, id => PID_RE.test(String(id)) ? path.join(dirOf(key), 'photos', String(id) + '.jpg') : '');
-          const id = await ctx.fromBackup(pdf, s, { missing });
+          const { pdf, photos, photoFile } = await buildFor(key, s);
+          const id = await ctx.fromBackup(pdf, s, { missing, photos, photoFile });
           const now = readJson(path.join(dirOf(key), 'state.json')) || s;
           now._serverReportId = id || 'stored'; writeJson(path.join(dirOf(key), 'state.json'), now);
           console.log('report made from its backup: ' + key + ' → ' + id + (missing ? ' (' + missing + ' photos missing)' : ''));
@@ -213,9 +229,28 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   setTimeout(() => rescue().catch(() => {}), 60 * 1000).unref();
   setInterval(() => rescue().catch(() => {}), 2 * 60 * 1000).unref();
 
+  // The owner makes the report from a backup at any time (finished or not), stored as complete and paid.
+  async function makeNow(key){
+    const s = readJson(path.join(dirOf(key), 'state.json'));
+    if (!s) return null;
+    if (s._serverReportId && s._serverReportId !== 'stored') return s._serverReportId;
+    const s2 = Object.assign({}, s, { finalizedAt: s.finalizedAt || new Date().toISOString() });
+    const { pdf, photos, photoFile } = await buildFor(key, s2);
+    const id = await ctx.fromBackup(pdf, s2, { photos, photoFile, paid: true, byOwner: true });
+    const now = readJson(path.join(dirOf(key), 'state.json')) || s; now._serverReportId = id || 'stored'; if (s2.photoKey) now.photoKey = s2.photoKey; writeJson(path.join(dirOf(key), 'state.json'), now);
+    console.log('report made from its backup by the owner: ' + key + ' → ' + id);
+    return id;
+  }
+  if (ctx.requireAdmin) app.post('/admin/drafts/:key/make', ctx.requireAdmin, async (req, res) => {
+    if (ctx.sameOrigin && !ctx.sameOrigin(req)) return res.status(403).type('text/plain').send('Make it from the admin page.');
+    const key = String(req.params.key); if (!KEY_RE.test(key)) return res.status(404).type('text/plain').send('Unknown backup.');
+    try { const id = await makeNow(key); if (!id) return res.status(404).type('text/plain').send('Unknown backup.'); res.redirect(303, '/admin#reports'); }
+    catch (e) { console.error('make from backup failed: ' + e.message); res.status(500).type('text/plain').send('It could not be made: ' + e.message); }
+  });
+
   // Finished on the phone but with no stored report (not paid, or the upload never arrived): listed with the reports.
   const finishedOnly = () => list().filter(({ s }) => s.finalizedAt && !s.submittedId);
-  return { draftsHTML, finishedOnly };
+  return { draftsHTML, finishedOnly, rebuild, backupFor, makeNow };
 }
 
 module.exports = { mount };
