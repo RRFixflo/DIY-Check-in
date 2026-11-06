@@ -366,6 +366,8 @@ function mount(app){
   // links existed takes the key the first time its photos arrive.
   const photoUploads = limiter(600, 60 * 60 * 1000);
   const keyToId = new Map();
+  // A report sent before it was paid for (stored so the owner has it): nothing of it is served by its key until it's paid.
+  const notPaid = r => !!(r && r.unpaid && !r.paidAt);
   function findByKey(key){
     const hit = keyToId.get(key);
     if (hit && readMeta(hit)) return hit;
@@ -398,7 +400,7 @@ function mount(app){
     hasAccess, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
   // Tenant sign-off links (/sign/<key>), in signoff.js.
-  require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
+  require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
 
   // A finished report's details (rooms, items, conditions, meters, keys; photos as their numbers), so a
   // later check-out or inspection can start from it and compare. Kept beside its photos (data.json).
@@ -423,6 +425,7 @@ function mount(app){
     const key = String(req.params.key).toLowerCase();
     if (!KEY_RE.test(key)) return res.status(404).json({ error: 'That report could not be found.' });
     const id = findByKey(key);
+    if (id && notPaid(readMeta(id))) return res.status(402).json({ error: 'That report hasn’t been paid for yet, so it can’t be used to start a new one.' });
     let data = null;
     try { data = id && JSON.parse(fs.readFileSync(path.join(photoDir(id), 'data.json'), 'utf8')); } catch (e) {}
     if (!data) return res.status(404).json({ error: id ? 'That report was made before reports could be reused, so it can’t be used to start a new one.' : 'That report could not be found.' });
@@ -465,7 +468,7 @@ function mount(app){
       return { id: 'example', n, file: path.join(EXAMPLE_DIR, n + '.jpg'), info: idx[n] || {}, meta: { address: idx.address } };
     }
     const id = findByKey(key);
-    if (!id) return null;
+    if (!id || notPaid(readMeta(id))) return null;
     const file = path.join(photoDir(id), n + '.jpg');
     let info = {};
     try { info = JSON.parse(fs.readFileSync(path.join(photoDir(id), 'index.json'), 'utf8'))[n] || {}; } catch (e) {}

@@ -21,7 +21,7 @@ function mount(app, ctx){
     key = String(key || '').toLowerCase();
     if (!KEY_RE.test(key)) return null;
     const id = findByKey(key), r = id && readMeta(id);
-    if (!r) return null;
+    if (!r || (ctx.notPaid && ctx.notPaid(r))) return null;   // not paid for yet: no report, PDF or sign-off by its link
     return { key, id, r, data: readJson(path.join(photoDir(id), 'data.json')), sign: readJson(path.join(photoDir(id), 'sign.json')) };
   }
   const kindOf = t => /check-?out/i.test(t || '') ? 'Check-Out' : /inspection/i.test(t || '') ? 'Inspection' : 'Check-In';

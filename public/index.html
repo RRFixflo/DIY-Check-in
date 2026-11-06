@@ -4523,6 +4523,7 @@ function renderDone(){
       <div class="room-count-hint">Send the link to whoever will do the next report (a landlord or agent, for example). It is also on the report's contents page.</div>
     </div>` : ''}
 
+    ${reportUnlocked() ? `
     <div class="report-doc" onclick="if (event.target.tagName === 'IMG' && !event.target.classList.contains('sig-preview')) openPhotoPreview(event.target.src)">
       <h2>${escapeHtml(reportTitle(state))}</h2>
       <div class="report-meta">
@@ -4543,6 +4544,13 @@ function renderDone(){
         </div>
       `).join('')}
     </div>
+    ` : `
+    <div class="panel locked-report">
+      <div class="section-title" style="margin-top:0">🔒 What’s in your report</div>
+      <p>${escapeHtml(reportTitle(state))}: ${state.rooms.length} room${state.rooms.length === 1 ? '' : 's'}, ${totalCaptured()} photos, signed by ${escapeHtml(state.meta.signedBy || state.meta.inspectorName)}.</p>
+      <p class="room-count-hint">The full report, with every room, condition and photo, opens here once it’s paid for.</p>
+    </div>
+    `}
 
     <div class="btn-row" style="margin-top:24px; justify-content:center;">
       <button type="button" class="btn" onclick="startAgain()">Start again</button>
