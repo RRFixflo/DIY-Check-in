@@ -544,7 +544,7 @@ function mount(app){
   // Online backups of reports while they're being done (drafts.js), listed on /admin.
   // A report finished on a phone whose PDF never arrived is made from its backup (drafts.js) and filed here.
   const accessToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
-  const hasAccess = req => { const t = accessToken(req); if (!t) return false; const c = codeAccess(t); if (c) return !!c.valid; try { const p = require('./purchases').access(t); return !!(p && p.valid); } catch (e) { return false; } };
+  const hasAccess = req => { if (signedIn(req)) return true; const t = accessToken(req); if (!t) return false; const c = codeAccess(t); if (c) return !!c.valid; try { const p = require('./purchases').access(t); return !!(p && p.valid); } catch (e) { return false; } };
   const backupKey = s => crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12);
   async function fromBackup(pdf, s, info){
     const m = s.meta || {}, pr = s.property || {};
@@ -867,69 +867,165 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
         <td class="num">${(s.rooms || []).length} rooms<div class="sub">from the online backup</div></td>
         <td class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a></td>
       </tr>`; }).join('');
+    // The page is laid out as a dashboard: a sidebar of sections, each shown on its own (#hash), with an Overview first.
+    // Every block (bookings, purchases, messages…) is still made by its own module; here they're only sorted into groups.
+    const secs = [];
+    const addSec = html => {
+      if (!html) return;
+      const i = html.indexOf('<details'), banner = i > 0 ? html.slice(0, i) : '', body = i >= 0 ? html.slice(i) : html;
+      const tag = body.slice(0, body.indexOf('>') + 1), id = (/\sid="([^"]+)"/.exec(tag) || [])[1] || '';
+      const title = ((/<summary>([\s\S]*?)<\/summary>/.exec(body) || [])[1] || '');
+      secs.push({ id, banner, body: body.replace(/^<details(?![^>]*\sopen)/, '<details open'), fresh: /\sopen[\s>]/.test(tag), title });
+    };
+    const safe = f => { try { return f(); } catch (e) { console.error('admin section failed:', e.message); return ''; } };
+    addSec(safe(() => certs.adminHTML()));
+    adminSections.forEach(f => addSec(safe(() => f(req))));
+    addSec(safe(messagesHTML)); addSec(safe(() => drafts.draftsHTML())); addSec(safe(activityHTML)); addSec(safe(() => codesHTML(req))); addSec(safe(() => agentsHTML(req)));
+    const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans']], ['enquiries', 'Enquiries', '✉️', ['messages', 'bookings', 'prleads']],
+      ['work', 'In progress', '📝', ['drafts', 'inspections']], ['landlords', 'Landlords', '🏠', ['landlords']], ['access', 'Access & links', '🔑', ['agents', 'codes', 'activity']]];
+    const known = new Set(GROUPS.flatMap(g => g[3]));
+    const groups = GROUPS.map(([k, label, icon, ids]) => ({ k, label, icon, secs: ids.map(id => secs.find(x => x.id === id)).filter(Boolean) }))
+      .concat([{ k: 'more', label: 'More', icon: '⋯', secs: secs.filter(x => !known.has(x.id)) }]).filter(g => g.secs.length);
+    const groupOf = id => (groups.find(g => g.secs.some(x => x.id === id)) || {}).k || 'overview';
+    const plain = h => String(h || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const weekAgo = Date.now() - 7 * 864e5;
+    const thisWeek = reports.filter(r => Date.parse(r.receivedAt) > weekAgo).length, unpaidN = reports.filter(r => notPaid(r)).length;
+    const attention = [].concat(
+      orphans.length ? [`<a href="#reports"><div><b>${orphans.length}</b> finished on a phone, PDF not received yet</div><span>Reports</span></a>`] : [],
+      unpaidN ? [`<a href="#reports"><div><b>${unpaidN}</b> finished report${unpaidN === 1 ? '' : 's'} not paid for yet</div><span>Reports</span></a>`] : [],
+      secs.filter(x => x.fresh || x.banner).map(x => `<a href="#${esc(x.id)}"><div>${esc(plain(x.banner) || plain(x.title))}</div><span>${esc((groups.find(g => g.k === groupOf(x.id)) || {}).label || '')}</span></a>`));
+    const fmt = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+    const latest = reports.slice(0, 5).map(r => `<a href="#reports"><div><b>${esc(r.address || '—')}</b></div><span>${esc([r.inspectionType, fmt(r.receivedAt), notPaid(r) ? 'not paid yet' : ''].filter(Boolean).join(' · '))}</span></a>`).join('');
+    const NAV = [['overview', 'Overview', '◎', attention.length], ['reports', 'Reports', '📄', 0]].concat(groups.map(g => [g.k, g.label, g.icon, g.secs.filter(x => x.fresh).length]));
+    const nav = NAV.map(([k, label, icon, n]) => `<a href="#${k}" data-k="${k}"><i>${icon}</i><span>${esc(label)}</span>${k === 'reports' ? `<em class="c">${reports.length}</em>` : n ? `<em>${n}</em>` : ''}</a>`).join('');
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>Submitted reports</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
+<title>Admin · DIY Inventory</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Admin">
 <style>
-  :root { --ink:#0F172A; --soft:#475569; --line:#E4E8EF; --bg:#F4F5FB; --accent:#4F46E5; --danger:#B42318; }
-  * { box-sizing: border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  main { max-width: 1100px; margin: 0 auto; padding: 28px 16px 60px; }
-  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -.03em; font-weight: 800; } .lead { color: var(--soft); margin: 0 0 18px; }
+  :root { --ink:#13203A; --soft:#5B677C; --faint:#8A95A8; --line:#E6E9F0; --bg:#F5F6F9; --card:#fff; --navy:#1B2A4A; --accent:#1B2A4A; --camel:#C49A6C; --danger:#B42318; --good:#15803D; }
+  * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:14.5px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .shell { display:grid; grid-template-columns:240px minmax(0,1fr); min-height:100vh; } main { min-width:0; }
+  .list a > div { min-width:0; } .list a span { text-align:right; }
+  aside { background:var(--navy); color:#DCE3EF; padding:20px 14px; position:sticky; top:0; height:100vh; display:flex; flex-direction:column; gap:4px; }
+  aside .brand { display:flex; align-items:center; gap:10px; font-weight:750; color:#fff; padding:2px 10px 18px; font-size:15px; } aside .brand img { border-radius:8px; }
+  aside nav { display:flex; flex-direction:column; gap:2px; }
+  aside nav a { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; color:#C9D3E3; text-decoration:none; font-weight:600; }
+  aside nav a i { font-style:normal; width:20px; text-align:center; } aside nav a span { flex:1; }
+  aside nav a:hover { background:rgba(255,255,255,.07); color:#fff; } aside nav a.on { background:#fff; color:var(--navy); }
+  aside nav a em { font-style:normal; font-size:11.5px; font-weight:700; background:var(--camel); color:#1B2A4A; border-radius:999px; padding:1px 7px; } aside nav a em.c { background:rgba(255,255,255,.14); color:#fff; } aside nav a.on em.c { background:#EEF1F6; color:var(--navy); }
+  aside .foot { margin-top:auto; display:flex; flex-direction:column; gap:8px; padding:10px; font-size:12px; color:#9FB0C8; }
+  aside .foot .btn { text-align:center; margin:0; }
+  main { padding:28px 32px 60px; max-width:1180px; width:100%; }
+  .top { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+  h1 { font-size:26px; margin:0; letter-spacing:-.02em; font-weight:800; } .lead { color:var(--soft); margin:4px 0 0; }
+  h2.ph { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--faint); margin:26px 0 10px; }
+  .tiles { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+  .tile { background:var(--card); border-radius:16px; padding:16px 18px; box-shadow:0 1px 2px rgba(19,32,58,.05), 0 0 0 1px var(--line); text-decoration:none; color:inherit; }
+  .tile b { display:block; font-size:28px; letter-spacing:-.02em; } .tile span { color:var(--soft); font-size:13px; } .tile.warn b { color:#B45309; }
+  .list { background:var(--card); border-radius:16px; box-shadow:0 0 0 1px var(--line); overflow:hidden; }
+  .list a { display:flex; justify-content:space-between; gap:12px; padding:13px 16px; border-top:1px solid var(--line); color:var(--ink); text-decoration:none; } .list a:first-child { border-top:0; }
+  .list a:hover { background:#FAFBFD; } .list a span { color:var(--faint); font-size:13px; white-space:nowrap; } .list a b { font-weight:600; }
+  .list .none { padding:16px; color:var(--soft); }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; } .two > div { min-width:0; }
   .warn { background:#FDF3E1; color:#8A5A16; padding:12px 14px; border-radius:10px; margin-bottom:16px; font-size:14px; }
-  input[type=search] { width:100%; max-width:420px; padding:12px 16px; border:0; background:#fff; box-shadow:0 0 0 1px var(--line); border-radius:999px; font-size:15px; margin-bottom:14px; }
-  .card { background:#fff; border:0; border-radius:22px; overflow:hidden; box-shadow:0 1px 2px rgba(15,23,42,.04), 0 4px 16px rgba(15,23,42,.06); }
-  table { width:100%; border-collapse:collapse; } th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:#8A96A8; padding:12px 14px; border-bottom:1px solid var(--line); }
+  input[type=search] { width:100%; max-width:420px; padding:11px 16px; border:0; background:#fff; box-shadow:0 0 0 1px var(--line); border-radius:999px; font-size:15px; }
+  .card { background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 0 0 1px var(--line); }
+  table { width:100%; border-collapse:collapse; } th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); padding:12px 14px; border-bottom:1px solid var(--line); background:#FAFBFD; }
   td { padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top; } tr:last-child td { border-bottom:none; }
   .sub { color:var(--soft); font-size:12.5px; margin-top:2px; } .num { white-space:nowrap; }
   .actions { white-space:nowrap; } .actions form { display:inline; }
-  .btn { display:inline-block; font:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); text-decoration:none; cursor:pointer; margin:2px 4px 2px 0; }
-  .btn:hover { border-color: var(--accent); color: var(--accent); } .btn.danger { color: var(--danger); } .btn.danger:hover { border-color: var(--danger); }
-  .upload { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; } #upStatus { font-size:14px; color:var(--soft); }
-  .btn.primary { background:linear-gradient(135deg,#4F46E5,#7C3AED); border-color:var(--accent); color:#fff; padding:10px 14px; font-size:14px; } .btn.primary:hover { color:#fff; opacity:.92; }
-  .empty { padding: 40px 16px; text-align:center; color: var(--soft); }
-  .alerts { background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:14px; font-size:14px; color:var(--soft); line-height:1.6; }
+  .btn { display:inline-block; font:inherit; font-size:13px; font-weight:600; padding:7px 13px; border-radius:999px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); text-decoration:none; cursor:pointer; margin:2px 4px 2px 0; }
+  .btn:hover { border-color:var(--navy); } .btn.danger { color:var(--danger); } .btn.danger:hover { border-color:var(--danger); }
+  .btn.primary { background:var(--navy); border-color:var(--navy); color:#fff; } .btn.primary:hover { opacity:.92; }
+  aside .btn { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); color:#fff; } aside .btn.primary { background:var(--camel); border-color:var(--camel); color:#1B2A4A; }
+  .tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px; } #upStatus { font-size:14px; color:var(--soft); }
+  .empty { padding:40px 16px; text-align:center; color:var(--soft); }
+  .alerts { background:#fff; border-radius:12px; padding:12px 16px; font-size:14px; color:var(--soft); line-height:1.6; box-shadow:0 0 0 1px var(--line); }
   .alerts code { background:#F1F3F7; color:var(--ink); padding:2px 6px; border-radius:6px; font-size:13px; user-select:all; word-break:break-all; }
-  .pill { display:inline-block; margin-top:4px; font-size:11.5px; font-weight:600; padding:2px 8px; border-radius:999px; background:#F1F3F7; color:var(--soft); } .pill.sent { background:#E7F6EC; color:#15803D; }
-  .codes { background:#fff; border-radius:16px; padding:12px 16px; margin-bottom:14px; box-shadow:0 1px 2px rgba(15,23,42,.04); } .codes summary { cursor:pointer; font-weight:700; }
-  .codes .newcode { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; } .codes input { flex:1; min-width:180px; padding:10px 14px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
+  .pill { display:inline-block; margin-top:4px; font-size:11.5px; font-weight:600; padding:2px 8px; border-radius:999px; background:#F1F3F7; color:var(--soft); } .pill.sent { background:#E7F6EC; color:var(--good); } .pill.wait { background:#FEF3E2; color:#B45309; } .pill.new { background:var(--navy); color:#fff; }
+  /* sections from each module: shown as open cards with a heading */
+  .codes { background:#fff; border-radius:16px; padding:16px 18px; margin-bottom:16px; box-shadow:0 0 0 1px var(--line); }
+  .codes > summary { list-style:none; cursor:default; font-weight:750; font-size:17px; margin-bottom:8px; pointer-events:none; } .codes > summary::-webkit-details-marker { display:none; }
+  .codes > summary .sub { font-weight:500; font-size:13px; }
+  .codes .newcode { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; } .codes input:not([type=checkbox]):not([type=radio]) { flex:1; min-width:180px; padding:10px 14px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
-  .news { display:block; background:#EEF0FF; color:#3730A3; font-weight:700; text-decoration:none; padding:12px 16px; border-radius:14px; margin-bottom:12px; }
-  .pill.wait { background:#FEF3E2; color:#B45309; }
-  .news.stats { display:flex; justify-content:space-between; align-items:center; gap:10px; background:linear-gradient(135deg,#EEF0FF,#F3EEFF); } .news.stats b { font-size:17px; } .news.stats .open { white-space:nowrap; background:#4F46E5; color:#fff; padding:6px 12px; border-radius:999px; font-size:13px; }
   .codes select { padding:8px 12px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes .msg { white-space:pre-wrap; overflow-wrap:anywhere; margin-top:6px; color:var(--ink); }
-  .codes li.isnew { background:#F7F7FF; margin:0 -16px; padding:10px 16px; } .pill.new { background:#4F46E5; color:#fff; }
-  .codes code { background:#EEF0FF; color:#3730A3; padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:#4F46E5; color:#fff; }
-  @media (max-width: 720px) { thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; } }
-</style></head><body><main>
-<h1>Submitted reports</h1>
-<form method="post" action="/admin/logout" style="float:right;margin-top:4px"><button class="btn">Sign out</button></form>
-<p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first. Only people with the password can see this page.</p>
-<p class="sub" style="margin:-10px 0 16px">🛠️ Software last updated <strong>${esc(STARTED_AT.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</strong>${DEPLOY_NOTE ? ': ' + esc(DEPLOY_NOTE) : ''}</p>
-<p style="margin:-6px 0 16px"><a class="btn primary" href="/app">Open the app</a> <span class="sub" style="display:inline">You can use DIY Inventory without a paid link while signed in here.</span></p>
-${analytics.summaryHTML(esc)}
-${certs.adminHTML()}
-${adminSections.map(f => { try { return f(req); } catch (e) { console.error('admin section failed:', e.message); return ''; } }).join('')}
-${messagesHTML()}
-${drafts.draftsHTML()}
-${activityHTML()}
-${codesHTML(req)}
-${agentsHTML(req)}
-${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}
-<div class="upload"><label class="btn primary">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
+  .codes li.isnew { background:#F7F8FC; margin:0 -18px; padding:10px 18px; }
+  .codes code { background:#EEF1F6; color:var(--navy); padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:var(--navy); color:#fff; }
+  .news { display:block; background:#FFF6EA; color:#7A4B12; font-weight:650; text-decoration:none; padding:12px 16px; border-radius:12px; margin-bottom:12px; }
+  .news.stats { display:flex; justify-content:space-between; align-items:center; gap:10px; background:#fff; color:var(--ink); box-shadow:0 0 0 1px var(--line); border-radius:16px; } .news.stats b { font-size:17px; } .news.stats .open { white-space:nowrap; background:var(--navy); color:#fff; padding:6px 12px; border-radius:999px; font-size:13px; }
+  .pane > .banner .news { margin-bottom:12px; }
+  @media (max-width: 980px) { .tiles { grid-template-columns:repeat(2,minmax(0,1fr)); } .two { grid-template-columns:1fr; } }
+  @media (max-width: 760px) {
+    .shell { grid-template-columns:minmax(0,1fr); } main { padding:16px 14px 50px; } .list a { flex-wrap:wrap; } .list a span { white-space:normal; text-align:left; }
+    aside { position:sticky; top:0; z-index:5; height:auto; padding:10px 10px 8px; flex-direction:column; }
+    aside .brand { padding:2px 4px 8px; } aside .foot { display:none; }
+    aside nav { flex-direction:row; overflow-x:auto; gap:6px; scrollbar-width:none; } aside nav::-webkit-scrollbar { display:none; }
+    aside nav a { flex:0 0 auto; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.08); } aside nav a i { display:none; }
+    thead { display:none; } tr { display:block; border-bottom:1px solid var(--line); padding:8px 0; } td { display:block; border:none; padding:4px 14px; }
+    .mob-foot { display:flex !important; }
+  }
+  .mob-foot { display:none; gap:8px; flex-wrap:wrap; margin-top:28px; }
+</style></head><body><div class="shell">
+<aside><div class="brand"><img src="/icons/icon-192.png" alt="" width="28" height="28">DIY Inventory · Admin</div>
+<nav>${nav}</nav>
+<div class="foot"><a class="btn primary" href="/app">Open the app</a><a class="btn" href="/admin/analytics">Visits and sales</a><form method="post" action="/admin/logout"><button class="btn" style="width:100%">Sign out</button></form>
+<span>Updated ${esc(STARTED_AT.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}${DEPLOY_NOTE ? ': ' + esc(DEPLOY_NOTE) : ''}</span></div></aside>
+<main>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
-${reports.length || orphanRows ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">
-<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
+<section class="pane" id="p-overview">
+  <div class="top"><div><h1>Overview</h1><p class="lead">What needs you, and how things are going.</p></div></div>
+  <div class="tiles">
+    <a class="tile" href="#reports"><b>${reports.length}</b><span>reports received</span></a>
+    <a class="tile" href="#reports"><b>${thisWeek}</b><span>in the last 7 days</span></a>
+    <a class="tile${unpaidN ? ' warn' : ''}" href="#reports"><b>${unpaidN}</b><span>finished, not paid yet</span></a>
+    <a class="tile${orphans.length ? ' warn' : ''}" href="#reports"><b>${orphans.length}</b><span>PDF not received yet</span></a>
+  </div>
+  <h2 class="ph">Needs your attention</h2>
+  <div class="list">${attention.length ? attention.join('') : '<div class="none">Nothing waiting for you. ✓</div>'}</div>
+  <div class="two"><div><h2 class="ph">Latest reports</h2><div class="list">${latest || '<div class="none">No reports yet.</div>'}</div></div>
+  <div><h2 class="ph">Visits and sales</h2>${analytics.summaryHTML(esc)}
+  ${NTFY_TOPIC ? `<div class="alerts">📱 Phone alerts: in the <strong>ntfy</strong> app, subscribe to <code>${esc(NTFY_TOPIC)}</code></div>` : ''}</div></div>
+</section>
+<section class="pane" id="p-reports">
+  <div class="top"><div><h1>Reports</h1><p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first.</p></div></div>
+  <div class="tools">${reports.length || orphanRows ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('#p-reports tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">` : ''}
+  <label class="btn">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
+  ${reports.length || orphanRows ? `<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
+</section>
+${groups.map(g => `<section class="pane" id="p-${g.k}">
+  <div class="top"><div><h1>${esc(g.label)}</h1></div></div>
+  ${g.secs.map(x => (x.banner ? `<div class="banner">${x.banner}</div>` : '') + x.body).join('')}
+</section>`).join('')}
+<div class="mob-foot"><a class="btn primary" href="/app">Open the app</a><a class="btn" href="/admin/analytics">Visits and sales</a><form method="post" action="/admin/logout"><button class="btn">Sign out</button></form></div>
+</main></div>
 <script>
+// One section at a time, by the address's #: a section name (#reports, #sales…) or any block inside one (#agents, #purchases…).
+(function(){
+  const panes = [].slice.call(document.querySelectorAll('.pane')), links = [].slice.call(document.querySelectorAll('aside nav a'));
+  function show(h){
+    const id = String(h || '').replace(/^#/, '');
+    let pane = id && document.getElementById('p-' + id), target = null;
+    if (!pane && id) { target = document.getElementById(id); pane = target && target.closest('.pane'); }
+    if (!pane) pane = document.getElementById('p-overview');
+    panes.forEach(p => { p.hidden = p !== pane; });
+    links.forEach(a => a.classList.toggle('on', 'p-' + a.dataset.k === pane.id));
+    if (target) target.scrollIntoView({ block: 'start' }); else window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', () => show(location.hash));
+  show(location.hash);
+})();
+
 function copyLink(btn, url){
   const done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => btn.textContent = 'Copy link', 2000); };
   if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url)); else prompt('Copy this link:', url);
 }
 // A code just made: open the section and show it.
-(function(){ const c = new URLSearchParams(location.search).get('code'), d = document.querySelector('.codes');
-  if (location.hash === '#codes' || c) d.open = true;
-  if (c) document.querySelectorAll('.codes li').forEach(li => { if (li.querySelector('code').textContent === c) li.classList.add('new'); });
-  if (c || location.hash) history.replaceState(null, '', '/admin'); })();
+(function(){ const c = new URLSearchParams(location.search).get('code'), d = document.getElementById('codes');
+  if (d && (location.hash === '#codes' || c)) { d.open = true; if (c) location.hash = '#codes'; }
+  if (c) document.querySelectorAll('#codes li').forEach(li => { const k = li.querySelector('code'); if (k && k.textContent === c) li.classList.add('new'); });
+  if (c) history.replaceState(null, '', '/admin#codes'); })();
 // Details come from the app's file names: "Address - Type - Date - Ref.pdf"; anything else keeps its file name.
 function metaFromName(name){
   const base = name.replace(/\.pdf$/i, ''), parts = base.split(' - ');

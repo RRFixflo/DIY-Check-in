@@ -65,7 +65,7 @@ function mount(app, ctx){
     // The link or code itself (kept only here, on the server), so a report made from the backup still reaches the buyer or agent by email.
     if (ctx.accessToken) s._token = (ctx.hasAccess && ctx.hasAccess(req) && ctx.accessToken(req)) || before._token || '';
     // Finished but not paid for: tell the owner once.
-    if (s.finalizedAt && !s.submittedId && !s._alerted) {
+    if (s.finalizedAt && !s.submittedId && !s._access && !s._alerted) {
       s._alerted = s._savedAt;
       const m = s.meta || {};
       notify({ title: 'Report finished, not paid yet', message: [clip(m.address, 200) || 'No address', [m.inspectionType, m.inspectorName ? 'by ' + clip(m.inspectorName, 80) : ''].filter(Boolean).join(' ')].join('\n'), tags: ['hourglass'], click: PUBLIC_URL ? PUBLIC_URL + '/admin#drafts' : '' });
@@ -106,7 +106,10 @@ function mount(app, ctx){
     count(pr.exterior && pr.exterior.photos); (pr.keys || []).forEach(k => count(k.photos)); Object.values(pr.meters || {}).forEach(m => count(m && m.photos));
     return { photos, items, done };
   }
-  const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
+  // Paid = the phone's paid copy arrived (submittedId), or the phone had a paid link, code or agent link (or the owner was
+  // signed in) when it last backed up (_access): that's what pays, even if the phone's own upload then failed.
+  const paidS = s => !!(s.submittedId || s._access);
+  const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', s._serverReportId ? 'Finished and paid · report made from the backup' : 'Finished and paid · PDF still arriving'] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
 
   // The list on /admin.
   function draftsHTML(){
@@ -119,7 +122,7 @@ function mount(app, ctx){
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;
     }).join('');
-    const waiting = all.filter(d => d.s.finalizedAt && !d.s.submittedId).length;
+    const waiting = all.filter(d => d.s.finalizedAt && !paidS(d.s)).length;
     return `<details class="codes" id="drafts"${waiting ? ' open' : ''}><summary>📝 Reports in progress <span class="sub" style="display:inline">— ${all.length ? all.length + ' backed up' + (waiting ? ', ' + waiting + ' finished but not paid' : '') : 'none yet'}</span></summary>
 <p class="sub">Every report is backed up here as it’s being done, with its photos, whether it’s finished or not. Unfinished backups are deleted after ${KEEP_DAYS} days.</p>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
