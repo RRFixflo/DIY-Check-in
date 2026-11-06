@@ -527,6 +527,21 @@ function mount(app){
 <script>document.getElementById('share').onclick=async function(){var u=location.href;try{if(navigator.share){await navigator.share({title:document.title,url:u});return;}await navigator.clipboard.writeText(u);this.textContent='Link copied';}catch(e){}};</script>`));
   });
 
+  // One-off, for the owner: LOG_ONLINE_LINK=<ref>[,<ref>…] (a Railway variable) makes sure those paid reports have an
+  // online link and writes it to the logs at start-up. Remove the variable afterwards.
+  const wantLinks = String(process.env.LOG_ONLINE_LINK || '').split(',').map(x => x.trim()).filter(Boolean);
+  if (wantLinks.length) setTimeout(() => {
+    for (const ref of wantLinks) {
+      const found = listReports().filter(r => r.ref === ref);
+      if (!found.length) { console.log('online link for ' + ref + ': no report with that reference'); continue; }
+      for (const r of found) {
+        if (notPaid(r)) { console.log('online link for ' + ref + ': not paid for, so no link (' + r.id + ')'); continue; }
+        if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); }
+        console.log('online link for ' + ref + ' (' + (r.address || '') + '): ' + (PUBLIC_URL || '') + '/report/' + r.photoKey);
+      }
+    }
+  }, 3000).unref();
+
   /* ---------- full-size photos: the PDF shows smaller pictures that link here ---------- */
   // Uploaded after the report, a few at a time, with the report's photo key. A report sent before photo
   // links existed takes the key the first time its photos arrive.
