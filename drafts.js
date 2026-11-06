@@ -62,6 +62,8 @@ function mount(app, ctx){
     s._serverReportId = before._serverReportId || '';
     // Whether this phone has a paid link or code (the cookie travels with every backup), for a report made from it.
     if (ctx.hasAccess) s._access = ctx.hasAccess(req) || before._access || false;
+    // The link or code itself (kept only here, on the server), so a report made from the backup still reaches the buyer or agent by email.
+    if (ctx.accessToken) s._token = (ctx.hasAccess && ctx.hasAccess(req) && ctx.accessToken(req)) || before._token || '';
     // Finished but not paid for: tell the owner once.
     if (s.finalizedAt && !s.submittedId && !s._alerted) {
       s._alerted = s._savedAt;

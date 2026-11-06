@@ -147,6 +147,57 @@ function listReports(){
     .sort((a, b) => String(b.receivedAt).localeCompare(String(a.receivedAt)));
 }
 
+const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/;
+// A copy of a finished, paid report for the person who did it (the email typed on the phone, and the buyer's email
+// from /buy) and for the agent whose tenant link was used (that link's email, set on /admin). Each address gets it
+// once (r.copies), never before it's paid for, and never without Resend. Failures are logged and tried again on the next send.
+async function deliverCopies(r, token){
+  if (!RESEND_API_KEY || !r || (r.unpaid && !r.paidAt)) return;
+  const agent = agentFor(token);
+  if (agent && !r.agentId) { r.agentId = agent.id; r.agentName = agent.name; }
+  let buyer = ''; try { buyer = require('./purchases').emailFor(token); } catch (e) {}
+  const wanted = [];
+  [r.copyEmail, buyer].forEach(e => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !wanted.some(w => w.to === e)) wanted.push({ to: e, kind: 'self' }); });
+  const ae = String((agent && agent.email) || '').trim().toLowerCase();
+  if (EMAIL_RE.test(ae)) { const w = wanted.find(w => w.to === ae); if (w) w.kind = 'agent'; else wanted.push({ to: ae, kind: 'agent' }); }
+  r.copies = r.copies || {};
+  for (const w of wanted) {
+    if (r.copies[w.to]) continue;
+    const ok = await emailCopy(r, w.to, w.kind);
+    if (ok) r.copies[w.to] = new Date().toISOString();
+  }
+  try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } catch (e) {}
+}
+async function emailCopy(r, to, kind){
+  const attach = r.size <= MAX_ATTACH;
+  const type = r.inspectionType || 'Check-in', when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' }) : '';
+  const link = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/sign/' + r.photoKey + '/report.pdf' : '';
+  const sign = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/sign/' + r.photoKey : '';
+  const text = (kind === 'agent' ? [
+    'A tenant has finished a ' + type.toLowerCase() + ' report using your DIY Inventory link.', '',
+    'Property: ' + (r.address || '—'), 'Completed by: ' + (r.signedBy || r.inspectorName || '—'), when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
+    attach ? 'The report is attached as a PDF.' : 'The report is too large to attach.', link ? (attach ? 'You can also open it here: ' : 'Open it here: ') + link : '',
+    sign ? 'To have it checked and signed, send this link: ' + sign : ''
+  ] : [
+    'Here is your ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + '.', '',
+    when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
+    attach ? 'The report is attached as a PDF. Keep this email: it is your copy.' : 'The report is too large to attach.', link ? (attach ? 'You can also open it here at any time: ' : 'Open it here: ') + link : '',
+    sign ? 'To have it checked and signed by the other party (tenant or landlord), send them this link: ' + sign : '', '',
+    'DIY Inventory'
+  ]).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  try {
+    const res = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', {   // the base can point at a mock, for tests only
+      method: 'POST', signal: AbortSignal.timeout(60000),
+      headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: REPORT_FROM_EMAIL, to: [to], subject: (kind === 'agent' ? type + ' report: ' : 'Your ' + type.toLowerCase() + ' report: ') + (r.address || 'property'), text,
+        attachments: attach ? [{ filename: r.fileName || (r.id + '.pdf'), content: fs.readFileSync(path.join(REPORTS_DIR, r.id + '.pdf')).toString('base64') }] : undefined })
+    });
+    if (!res.ok) { console.error('report copy email failed (' + kind + '): HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return false; }
+    console.log('report copy emailed (' + kind + '): ' + r.id);
+    return true;
+  } catch (err) { console.error('report copy email failed (' + kind + '):', err.message); return false; }
+}
+
 async function emailReport(r){
   if (!RESEND_API_KEY || !REPORT_TO_EMAIL) return { ok: false, reason: 'not-configured' };
   const pdfPath = path.join(REPORTS_DIR, r.id + '.pdf');
@@ -164,7 +215,7 @@ async function emailReport(r){
     PUBLIC_URL ? 'All reports: ' + PUBLIC_URL + '/admin' : ''
   ].filter(l => l !== null).join('\n').trim();
   try {
-    const res = await fetch('https://api.resend.com/emails', {
+    const res = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', {
       method: 'POST', signal: AbortSignal.timeout(60000),
       headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -272,6 +323,7 @@ function mount(app){
       photos: Math.max(0, Math.min(9999, parseInt(m.photos, 10) || 0)), fileName: clip(m.fileName, 200).replace(/[\\/"]/g, '-'),
       photoKey: KEY_RE.test(String(m.photoKey || '')) ? String(m.photoKey) : '',
       basedOnRef: clip(m.basedOnRef, 40),
+      copyEmail: EMAIL_RE.test(String(m.copyEmail || '').trim()) ? clip(String(m.copyEmail).trim().toLowerCase(), 120) : '',
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -279,6 +331,7 @@ function mount(app){
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
     const existing = listReports().find(r => r.key === key);
     if (existing) {
+      if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;   // given on the phone after an earlier copy arrived
       // The server made this one from the backup; the phone's own PDF, when it does arrive, takes its place.
       if (existing.source === 'backup' && source === 'app') {
         try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
@@ -295,6 +348,7 @@ function mount(app){
         console.log('report paid for: ' + existing.id);
         return [201, { id: existing.id }];
       }
+      if (meta.copyEmail && existing.copyEmail === meta.copyEmail) { try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.json'), JSON.stringify(existing, null, 2)); } catch (e) {} }
       return [200, { id: existing.id, duplicate: true }];
     }
 
@@ -350,12 +404,16 @@ function mount(app){
         fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
         notifyPhone(r);
       }
+      let ownerFailed = false;
       if (!r.emailedAt){
         const mail = await emailReport(r);
         if (mail.ok) r.emailedAt = new Date().toISOString();
-        else if (mail.reason === 'send-failed'){ fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); return res.status(502).json({ error: "The email didn't go through." }); }
+        else if (mail.reason === 'send-failed') ownerFailed = true;
       }
       fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
+      // The person's and the agent's copies go whatever happened to the owner's email.
+      await deliverCopies(r, accessToken(req)).catch(e => console.error('report copies failed:', e.message));
+      if (ownerFailed) return res.status(502).json({ error: "The email didn't go through." });
       console.log('report sent: ' + id + (r.emailedAt ? ' (emailed to ' + REPORT_TO_EMAIL + ')' : ' (email not set up)'));
       res.json({ ok: true, sentAt: r.sentAt, emailed: !!r.emailedAt });
     } finally { sending.delete(id); }
@@ -392,12 +450,13 @@ function mount(app){
       if (NTFY_TOPIC && !r.notifiedAt) { r.notifiedAt = r.sentAt; notifyPhone(r); }
       fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2));
       try { const mail = await emailReport(r); if (mail.ok) { r.emailedAt = new Date().toISOString(); fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } } catch (e) {}
+      await deliverCopies(r, s._token || '').catch(e => console.error('report copies failed:', e.message));
     }
     return body.id;
   }
   const reportsAccessFree = () => /^(off|false|0|no)$/i.test(String(process.env.DIY_PAYWALL || ''));
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
-    hasAccess, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
+    hasAccess, accessToken, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
   // Tenant sign-off links (/sign/<key>), in signoff.js.
   require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
@@ -624,11 +683,13 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
     const list = readAgents().slice().reverse();
     const rows = list.map(a => `<li><div style="flex:1;min-width:0"><strong>${esc(a.name)}</strong>
       <div class="sub">Made ${esc(day(a.createdAt))} · ${a.uses ? 'used for ' + a.uses + ' report' + (a.uses === 1 ? '' : 's') + ', last ' + esc(day(a.lastUsedAt)) + (a.lastUsedFor ? ' (' + esc(a.lastUsedFor) + ')' : '') : 'not used yet'}</div>
-      <input readonly value="${esc(base + a.token + end)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace"></div>
+      <input readonly value="${esc(base + a.token + end)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace">
+      <form method="post" action="/admin/agents/${esc(a.id)}/email" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input name="email" type="email" maxlength="120" value="${esc(a.email || '')}" placeholder="Email finished reports to… (optional)" style="flex:1;min-width:180px"><button class="btn">Save</button></form>
+      <div class="sub">${a.email ? '📧 Each finished report from this link is emailed to ' + esc(a.email) + (RESEND_API_KEY ? '' : ' (once email is set up: RESEND_API_KEY)') : 'No email: finished reports from this link only come to you.'}</div></div>
       <div class="actions"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + a.token + end)}')">Copy link</button><form method="post" action="/admin/agents/${esc(a.id)}/delete" onsubmit="return confirm('Remove the link for ${esc(String(a.name).replace(/'/g, ''))}? It will stop working straight away.')"><button class="btn danger">Remove</button></form></div></li>`).join('');
     return `<details class="codes" id="agents"><summary>🏢 Tenant links: check-in or check-out <span class="sub" style="display:inline">— ${list.length ? list.length + ' link' + (list.length === 1 ? '' : 's') : 'none yet'}</span></summary>
 <p class="sub">A link for tenants to do their own check-in or check-out, without paying or typing a code. It opens straight on a new report with Check-In chosen, and they can change it to Check-Out (or an inspection). Make one per estate agent (or landlord) and they can send the same link to every tenant; it keeps working until you remove it, and each report made with it is counted here. The reports arrive here like any other.</p>
-<form method="post" action="/admin/agents" class="newcode"><input name="name" required maxlength="80" placeholder="Which agent or landlord is it for? e.g. Smith &amp; Co Lettings" autocomplete="off"><button class="btn primary">Make a link</button></form>
+<form method="post" action="/admin/agents" class="newcode"><input name="name" required maxlength="80" placeholder="Which agent or landlord is it for? e.g. Smith &amp; Co Lettings" autocomplete="off"><input name="email" type="email" maxlength="120" placeholder="Their email for finished reports (optional)" autocomplete="off"><button class="btn primary">Make a link</button></form>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   }
   app.post('/admin/agents', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
@@ -636,8 +697,19 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     const name = clip(req.body && req.body.name, 80);
     if (!name) return res.status(400).type('text/plain').send('Please say who the link is for.');
     const list = readAgents();
-    list.push({ id: crypto.randomBytes(6).toString('hex'), name, token: 'AGT-' + crypto.randomBytes(18).toString('base64url'), createdAt: new Date().toISOString(), uses: 0 });
+    const email = String((req.body && req.body.email) || '').trim().toLowerCase();
+    if (email && !EMAIL_RE.test(email)) return res.status(400).type('text/plain').send('Please check the email address, or leave it blank.');
+    list.push({ id: crypto.randomBytes(6).toString('hex'), name, email: clip(email, 120), token: 'AGT-' + crypto.randomBytes(18).toString('base64url'), createdAt: new Date().toISOString(), uses: 0 });
     writeAgents(list);
+    res.redirect(303, '/admin#agents');
+  });
+  app.post('/admin/agents/:id/email', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Change links from the reports page.');
+    const email = String((req.body && req.body.email) || '').trim().toLowerCase();
+    if (email && !EMAIL_RE.test(email)) return res.status(400).type('text/plain').send('Please check the email address, or leave it blank.');
+    const list = readAgents(), a = list.find(a => a.id === String(req.params.id));
+    if (!a) return res.status(404).type('text/plain').send('That link has been removed.');
+    a.email = clip(email, 120); writeAgents(list);
     res.redirect(303, '/admin#agents');
   });
   app.post('/admin/agents/:id/delete', requireAdmin, (req, res) => {
@@ -666,7 +738,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div></td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>

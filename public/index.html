@@ -2171,6 +2171,7 @@ function alertDetails(){
 
 function onDeclarationChange(checked){ state.declarationAccepted = checked; persist(); updateFinishButtonState(); }
 function onSignedByChange(value){ state.meta.signedBy = value; persist(); }
+function onCopyEmailChange(value){ state.meta.copyEmail = String(value || '').trim().slice(0, 120); persist(); }
 
 function initSignaturePad(){
   const canvas = document.getElementById('sigCanvas');
@@ -3636,7 +3637,7 @@ async function sendUnpaidCopy(){
   try {
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
-    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', basedOnRef: (state.earlier && state.earlier.ref) || '' };
+    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', basedOnRef: (state.earlier && state.earlier.ref) || '' };
     const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Unpaid': '1', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || 'HTTP ' + res.status);
@@ -3666,7 +3667,7 @@ async function submitReportOnce(){
       inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt,
       finalizedAt: state.finalizedAt, rooms: state.rooms.length,
       photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname,
-      photoKey: state.photoKey || '',
+      photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '',
       basedOnRef: (state.earlier && state.earlier.ref) || ''
     };
     const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
@@ -4454,6 +4455,12 @@ function renderReview(){
       <div class="field">
         <label for="signedByInput">Signed by</label>
         <input class="input" id="signedByInput" type="text" value="${escapeHtml(state.meta.inspectorName)}" oninput="onSignedByChange(this.value)">
+      </div>
+
+      <div class="field">
+        <label for="copyEmailInput">Email me a copy <span style="font-weight:400;color:var(--ink-faint)">(optional)</span></label>
+        <input class="input" id="copyEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="you@example.com" value="${escapeHtml(state.meta.copyEmail || '')}" oninput="onCopyEmailChange(this.value)">
+        <div class="room-count-hint">We email the PDF to this address as soon as your report is finished and paid for, so you always have a copy.</div>
       </div>
 
       <div class="field">

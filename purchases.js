@@ -42,6 +42,8 @@ function access(token){
   if (!r || r.status !== 'paid') return { valid: false, reason: 'unknown' };
   return r.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
 }
+// The buyer's email for a paid purchase token ('' if none was given), so their finished report can be emailed to them.
+function emailFor(token){ if (!isToken(token)) return ''; const r = find('token', token); return r && r.status === 'paid' ? String(r.email || '') : ''; }
 // A report has been stored with this token: it's spent (the same browser still sees and sends that report).
 function markUsed(token, address){
   if (!isToken(token)) return false;
@@ -313,4 +315,4 @@ const CSS = `.buy-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 
 .buy-receipt dt { color: var(--ink-faint); font-weight: 600; } .buy-receipt dd { margin: 0; overflow-wrap: anywhere; }
 @media (max-width: 820px) { .buy-grid, .buy-done { grid-template-columns: 1fr; } .pay-top .buy-pay { order: -1; } .buy-start { min-width: 0; width: 100%; } .buy-copy { flex-wrap: wrap; } .buy-copy .btn { flex: 1 1 100%; } }`;
 
-module.exports = { mount, access, markUsed, isToken, PRICE, PRICE_TEXT };
+module.exports = { emailFor, mount, access, markUsed, isToken, PRICE, PRICE_TEXT };
