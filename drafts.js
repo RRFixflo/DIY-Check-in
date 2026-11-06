@@ -65,6 +65,19 @@ function mount(app, ctx){
     // The link or code itself (kept only here, on the server), so a report made from the backup still reaches the buyer or agent by email.
     if (ctx.accessToken) s._token = (ctx.hasAccess && ctx.hasAccess(req) && ctx.accessToken(req)) || before._token || '';
     if (ctx.isOwnerReq) s._byOwner = ctx.isOwnerReq(req) || before._byOwner || false;
+    // Someone has started a report (the address is set and rooms are made): tell the owner once, with who let them in
+    // (a purchase, an agent's tenant link, the access code, or nothing yet) and where they are. Not the owner's own.
+    s._startAlerted = before._startAlerted || '';
+    const m0 = s.meta || {};
+    if (!s._startAlerted && m0.address && (s.rooms || []).length && !s._byOwner) {
+      s._startAlerted = s._savedAt;
+      let place = {}; try { place = require('./analytics').placeOf(req); } catch (e) {}
+      const via = ctx.accessLabel ? ctx.accessLabel(s._token, false) : '';
+      const where = [place.city, place.region, place.country].filter(Boolean).join(', ');
+      notify({ title: 'Report started: ' + clip(m0.inspectionType || 'Check-In', 30), message: [clip(m0.address, 200), [m0.inspectorName ? 'by ' + clip(m0.inspectorName, 80) : '', s._device, where].filter(Boolean).join(' · '), via ? 'Using: ' + via : 'No link or code yet (will pay at the end)'].join('\n'),
+        tags: ['pencil2'], click: PUBLIC_URL ? PUBLIC_URL + '/admin#drafts' : '' });
+      console.log('report started: ' + key + ' (' + clip(m0.address, 80) + ')');
+    }
     // Finished but not paid for: tell the owner once.
     if (s.finalizedAt && !s.submittedId && !s._access && !s._alerted) {
       s._alerted = s._savedAt;

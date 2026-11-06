@@ -505,6 +505,10 @@ function mount(app){
       const ref = String(req.headers.referer || ''); let from = ''; try { const h = new URL(ref).host.replace(/^www\./, ''); if (h && h !== String(req.headers.host || '').replace(/^www\./, '')) from = h; } catch (e) {}
       let place = {}; try { place = require('./analytics').placeOf(req); } catch (e) {}
       L.push({ at: new Date().toISOString(), what, who: who || whoOpened(req, r), device: deviceName(ua), place: Object.keys(place).length ? place : undefined, from: from || undefined });
+      // The first time anyone other than its maker opens the report from its link: tell the owner once.
+      const e = L[L.length - 1];
+      if (!/^app_/.test(what) && e.who !== 'The person who did the report' && !L.slice(0, -1).some(x => !/^app_/.test(x.what) && x.who !== 'The person who did the report'))
+        notifyOwner({ title: 'Report opened: ' + (r.address || 'a report'), message: [ACCESS_KIND[what] || what, e.who, e.device, [place.city, place.region, place.country].filter(Boolean).join(', '), e.from ? 'came from ' + e.from : ''].filter(Boolean).join(' · '), tags: ['eyes'], click: PUBLIC_URL ? PUBLIC_URL + '/admin/reports/' + id + '/opened' : '' });
       fs.writeFileSync(file, JSON.stringify(L.slice(-500)));
     } catch (e) { console.error('access log failed: ' + e.message); }
   }
