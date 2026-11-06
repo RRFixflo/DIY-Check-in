@@ -328,6 +328,7 @@ function mount(app){
       basedOnRef: clip(m.basedOnRef, 40),
       copyEmail: EMAIL_RE.test(String(m.copyEmail || '').trim()) ? clip(String(m.copyEmail).trim().toLowerCase(), 120) : '',
       origin: m.origin && typeof m.origin === 'object' && !Array.isArray(m.origin) ? m.origin : undefined,
+      tokenHash: /^[a-f0-9]{20}$/.test(String(m.tokenHash || '')) ? m.tokenHash : undefined,
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -336,7 +337,8 @@ function mount(app){
     const existing = listReports().find(r => r.key === key);
     if (existing) {
       if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;
-      if (meta.origin && !existing.origin) existing.origin = meta.origin;   // given on the phone after an earlier copy arrived
+      if (meta.origin && !existing.origin) existing.origin = meta.origin;
+      if (meta.tokenHash && !existing.tokenHash) existing.tokenHash = meta.tokenHash;   // given on the phone after an earlier copy arrived
       // The server made this one from the backup; the phone's own PDF, when it does arrive, takes its place.
       if (existing.source === 'backup' && source === 'app') {
         try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
@@ -432,6 +434,7 @@ function mount(app){
     const unpaid = req.headers['x-report-unpaid'] === '1';
     const meta = metaHeader(req);
     meta.origin = meta.visit && typeof meta.visit === 'object' ? Origin.of(req, {}, { visit: meta.visit }) : undefined;   // never trusted from the phone as is
+    meta.tokenHash = tokenHash(accessToken(req));
     delete meta.visit;
     let pdf = req.body, up = '';
     if (req.headers['x-report-upload']) {
@@ -479,6 +482,38 @@ function mount(app){
     } finally { sending.delete(id); }
   });
 
+  /* ---------- who opened each report: REPORTS_DIR/<id>.access.json (the last 500), shown on /admin ---------- */
+  const ACCESS_KIND = { page: 'Viewed it online', pdf: 'Opened the PDF', download: 'Downloaded the PDF', sign_page: 'Opened the sign-off page', sign_pdf: 'Opened the PDF from the sign-off page', signed_pdf: 'Opened the signed copy',
+    app_download: 'Downloaded it on the phone that made it', app_open: 'Opened it on the phone that made it', app_share: 'Shared or saved it from the phone that made it' };
+  const tokenHash = t => t ? crypto.createHash('sha256').update('diy-report|' + t).digest('hex').slice(0, 20) : '';
+  function whoOpened(req, r){
+    if (r.tokenHash && tokenHash(accessToken(req)) === r.tokenHash) return 'The person who did the report';
+    const a = agentFor(accessToken(req)); if (a) return 'Someone with ' + a.name + '’s tenant link';
+    if (r.tenantSignedBy && /(^|;\s*)diy_signed=/.test(req.headers.cookie || '')) return r.tenantSignedBy + ' (who signed it)';
+    return 'Someone with the link';
+  }
+  function logAccess(id, req, what, who){
+    try {
+      if (signedIn(req)) return;   // the owner's own looks aren't logged
+      const ua = String(req.headers['user-agent'] || ''); if (/bot|crawl|spider|preview|facebookexternalhit|whatsapp|slackbot|telegram|discord|curl|wget|headless/i.test(ua)) return;
+      const r = readMeta(id); if (!r) return;
+      const file = path.join(REPORTS_DIR, id + '.access.json');
+      let L = []; try { L = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) {}
+      const ref = String(req.headers.referer || ''); let from = ''; try { const h = new URL(ref).host.replace(/^www\./, ''); if (h && h !== String(req.headers.host || '').replace(/^www\./, '')) from = h; } catch (e) {}
+      let place = {}; try { place = require('./analytics').placeOf(req); } catch (e) {}
+      L.push({ at: new Date().toISOString(), what, who: who || whoOpened(req, r), device: deviceName(ua), place: Object.keys(place).length ? place : undefined, from: from || undefined });
+      fs.writeFileSync(file, JSON.stringify(L.slice(-500)));
+    } catch (e) { console.error('access log failed: ' + e.message); }
+  }
+  const readAccess = id => { try { return JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, id + '.access.json'), 'utf8')); } catch (e) { return []; } };
+  // The app says when its PDF was downloaded, opened or shared (the key proves it's that report's phone).
+  app.post('/api/reports/:id/opened', express.text({ type: '*/*', limit: '2kb' }), (req, res) => {
+    let b = {}; try { b = JSON.parse(req.body || '{}'); } catch (e) {}
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (r && r.photoKey && b.key === r.photoKey && ['download', 'open', 'share'].includes(b.kind)) logAccess(id, req, 'app_' + b.kind, 'The person who did the report');
+    res.status(204).end();
+  });
+
   /* ---------- the report online: /report/<key>, to view and download (paid reports only) ---------- */
   const onlineLink = r => r && r.photoKey ? (PUBLIC_URL || '') + '/report/' + r.photoKey : '';
   function onlineReport(key){
@@ -493,6 +528,7 @@ function mount(app){
     const o = onlineReport(req.params.key);
     res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer', 'Cache-Control': 'private, no-store' });
     if (!o) return res.status(404).type('text/plain').send('Report not found.');
+    if (!/bytes=(?!0-)/.test(String(req.headers.range || ''))) logAccess(o.id, req, req.query.download ? 'download' : 'pdf');   // not each piece a PDF viewer fetches
     const name = String(o.r.fileName || 'report.pdf').replace(/\.pdf$/i, '').replace(/["\\\r\n]/g, '') + (o.signed ? ' - signed' : '') + '.pdf';
     res.type('application/pdf').set('Content-Disposition', (req.query.download ? 'attachment' : 'inline') + '; filename="' + name + '"');
     fs.createReadStream(o.file).pipe(res);
@@ -521,6 +557,7 @@ function mount(app){
   @media(max-width:700px){.viewer{display:none}.btn{flex:1 1 100%}}
 </style></head><body><header><img src="/icons/icon-192.png" alt="" width="30" height="30">DIY Inventory</header><main>${body}</main></body></html>`;
     if (!o) return res.status(404).type('html').send(shell('Report not found', '<div class="card"><h1>Report not found</h1><p>Check the link you were sent. If it still doesn’t work, ask whoever sent it for a new one.</p></div>'));
+    logAccess(o.id, req, 'page');
     const r = o.r, pdf = '/report/' + o.key + '.pdf';
     const when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
     const type = /check-?out/i.test(r.inspectionType || '') ? 'Check-Out' : /inspection/i.test(r.inspectionType || '') ? 'Inspection' : 'Check-In';
@@ -610,7 +647,7 @@ function mount(app){
     hasAccess, accessToken, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
   // Tenant sign-off links (/sign/<key>), in signoff.js.
-  require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
+  require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, logAccess: (...a) => logAccess(...a), esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
 
   // A finished report's details (rooms, items, conditions, meters, keys; photos as their numbers), so a
   // later check-out or inspection can start from it and compare. Kept beside its photos (data.json).
@@ -906,7 +943,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
-        <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
+        <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
@@ -1051,6 +1088,7 @@ ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports
 <section class="pane" id="p-reports">
   <div class="top"><div><h1>Reports</h1><p class="lead">${reports.length} report${reports.length === 1 ? '' : 's'}, newest first.</p></div></div>
   <div class="tools">${reports.length || orphanRows ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('#p-reports tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">` : ''}
+  <a class="btn" href="/admin/opened">👁 Who viewed and downloaded</a>
   <label class="btn">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
   ${reports.length || orphanRows ? `<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
@@ -1156,6 +1194,28 @@ async function uploadPdfs(input){
     console.log('report marked complete by the owner: ' + id);
     await deliverCopies(r, '').catch(() => {});
     res.redirect(303, '/admin#reports');
+  });
+  // Who opened a report (/admin/reports/:id/opened), and every report's opens together (/admin/opened).
+  const accessRows = (list, withReport) => list.map(x => `<tr><td class="num">${esc(new Date(x.at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>${withReport ? `<td><a href="/admin/reports/${esc(x.id)}/opened">${esc(x.address || '—')}</a><div class="sub">${esc(x.ref || '')}</div></td>` : ''}<td><b>${esc(ACCESS_KIND[x.what] || x.what)}</b><div class="sub">${esc(x.who || '')}</div></td><td>${esc(x.device || '')}<div class="sub">${esc([x.place && x.place.city, x.place && x.place.region, x.place && x.place.postcode, x.place && x.place.country].filter(Boolean).join(', ') || 'Location not known')}${x.from ? ' · came from ' + esc(x.from) : ''}</div></td></tr>`).join('');
+  const shellPage = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)} · Admin</title><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<style>body{margin:0;background:#F5F6F9;color:#13203A;font:14.5px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}${SHELL_CSS}main{padding:28px 32px 60px;max-width:1180px}@media(max-width:760px){main{padding:16px 14px 50px}}
+h1{font-size:26px;margin:0 0 4px}.lead{color:#5B677C;margin:0 0 18px}.card{background:#fff;border-radius:16px;box-shadow:0 0 0 1px #E6E9F0;overflow:hidden}table{width:100%;border-collapse:collapse}th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:#8A95A8;padding:12px 14px;border-bottom:1px solid #E6E9F0;background:#FAFBFD}td{padding:12px 14px;border-bottom:1px solid #E6E9F0;vertical-align:top}.sub{color:#5B677C;font-size:12.5px;margin-top:2px}.num{white-space:nowrap}a{color:#1B2A4A}.empty{padding:30px;text-align:center;color:#5B677C}
+@media(max-width:760px){thead{display:none}tr{display:block;border-bottom:1px solid #E6E9F0;padding:8px 0}td{display:block;border:none;padding:4px 14px}}</style></head>
+<body><div class="shell">${shellAside('reports')}<main>${body}</main></div></body></html>`;
+  app.get('/admin/reports/:id/opened', requireAdmin, (req, res) => {
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).type('text/plain').send('Report not found.');
+    const L = readAccess(id).slice().reverse();
+    res.type('html').send(shellPage('Who opened it', `<p><a href="/admin#reports">‹ Reports</a></p><h1>Who opened it</h1><p class="lead">${esc(r.address || '—')} · ${esc(r.inspectionType || '')} · ${esc(r.ref || '')}. Every view and download of this report, newest first (not your own).</p>
+<div class="card">${L.length ? `<table><thead><tr><th>When</th><th>What and who</th><th>Device and where</th></tr></thead><tbody>${accessRows(L, false)}</tbody></table>` : '<div class="empty">Nobody has opened it yet.</div>'}</div>`));
+  });
+  app.get('/admin/opened', requireAdmin, (req, res) => {
+    const all = [];
+    for (const r of listReports()) for (const x of readAccess(r.id)) all.push(Object.assign({ id: r.id, address: r.address, ref: r.ref }, x));
+    all.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    const only = req.query.downloads ? all.filter(x => /download|app_share/.test(x.what)) : all;
+    res.type('html').send(shellPage('Views and downloads', `<p><a href="/admin#reports">‹ Reports</a></p><h1>Views and downloads</h1><p class="lead">${req.query.downloads ? 'Every download of a report' : 'Every view and download of every report'}, newest first (not your own). ${req.query.downloads ? '<a href="/admin/opened">Show views too</a>' : '<a href="/admin/opened?downloads=1">Downloads only</a>'}</p>
+<div class="card">${only.length ? `<table><thead><tr><th>When</th><th>Report</th><th>What and who</th><th>Device and where</th></tr></thead><tbody>${accessRows(only.slice(0, 1000), true)}</tbody></table>` : '<div class="empty">Nothing yet.</div>'}</div>`));
   });
   app.post('/admin/reports/:id/link', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Make links from the reports page.');

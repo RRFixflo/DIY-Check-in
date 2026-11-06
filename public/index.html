@@ -3584,10 +3584,14 @@ function savePdf(){
   const a = document.createElement('a');
   a.href = pdfReady.url; a.download = pdfReady.fname;
   document.body.appendChild(a); a.click(); a.remove();
-  if (reportUnlocked()) track('downloaded', 1);
+  if (reportUnlocked()) { track('downloaded', 1); reportOpened('download'); }
   setPdfUi('ready', 0, 'Saved to your Downloads · ' + formatBytes(pdfReady.blob.size) + '. On iPhone: Files app → Downloads.');
 }
-function openPdf(){ if (pdfReady && reportUnlocked()) { track('downloaded', 1); window.open(pdfReady.url, '_blank'); } }
+function openPdf(){ if (pdfReady && reportUnlocked()) { track('downloaded', 1); reportOpened('open'); window.open(pdfReady.url, '_blank'); } }
+// The report's own log of who opened it (/admin): a download, open or share on this phone.
+function reportOpened(kind){
+  try { if (!state.submittedId || !state.photoKey) return; navigator.sendBeacon('/api/reports/' + encodeURIComponent(state.submittedId) + '/opened', new Blob([JSON.stringify({ key: state.photoKey, kind })], { type: 'text/plain' })); } catch (e) {}
+}
 
 /* A copy of every finished report is saved on the server as soon as it is finished, where only the owner
    can open it (/admin), so it is never lost. Saved once per report (the server also ignores repeats) and
@@ -3769,7 +3773,7 @@ function canSharePdf(){
 async function sharePdf(){
   if (!reportUnlocked()) return;   // paid for first: the PDF is only handed over once the report is unlocked
   if (!pdfReady) return;
-  track('downloaded', 1);
+  track('downloaded', 1); reportOpened('share');
   try {
     await navigator.share({ files: [new File([pdfReady.blob], pdfReady.fname, { type: 'application/pdf' })], title: state.meta.inspectionType + ' report' });
   } catch (e) {

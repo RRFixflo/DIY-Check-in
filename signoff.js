@@ -74,6 +74,7 @@ function mount(app, ctx){
     res.set('Cache-Control', 'no-store').set('Referrer-Policy', 'same-origin');
     if (!L || !L.data) return res.status(404).type('html').send(page('Report not found', '<h1>Report not found</h1><p class="lead">Check the link you were sent. If it still doesn’t work, ask whoever sent it for a new one.</p>'));
     const { key, r, data, sign } = L;
+    if (ctx.logAccess) ctx.logAccess(L.id, req, 'sign_page');
     const kind = kindOf(data.type || r.inspectionType);
     const base = '/p/' + key + '/';
     const photos = list => (list || []).length ? `<div class="ph">${list.slice(0, 6).map(n => `<a href="${base}${n}" target="_blank" rel="noopener"><img loading="lazy" src="${base}${n}.jpg" alt=""></a>`).join('')}</div>` : '';
@@ -151,6 +152,7 @@ function mount(app, ctx){
     if (!L) return res.status(404).type('text/plain').send('Report not found.');
     const signedFile = signedPdf(L.id);
     const file = fs.existsSync(signedFile) ? signedFile : path.join(REPORTS_DIR, L.id + '.pdf');
+    if (ctx.logAccess && !/bytes=(?!0-)/.test(String(req.headers.range || ''))) ctx.logAccess(L.id, req, file === signedFile ? 'signed_pdf' : 'sign_pdf');
     if (!fs.existsSync(file)) return res.status(404).type('text/plain').send('Report not found.');
     const name = String(L.r.fileName || 'report.pdf').replace(/\.pdf$/i, '') + (file === signedFile ? ' - signed' : '') + '.pdf';
     res.set('Cache-Control', 'no-store').type('application/pdf').set('Content-Disposition', 'inline; filename="' + name.replace(/["\\]/g, '') + '"');
@@ -191,6 +193,7 @@ function mount(app, ctx){
     fs.writeFileSync(path.join(REPORTS_DIR, L.id + '.json'), JSON.stringify(meta, null, 2));
     console.log('report signed by the tenant: ' + L.id);
     notify({ title: 'Report signed by ' + name, message: [L.data.address || L.r.address, kindOf(L.data.type) + (sign.agree === 'comments' ? ' · with ' + (comments.length + (general ? 1 : 0)) + ' comment(s)' : ' · agreed')].join('\n'), tags: ['writing_hand'], click: PUBLIC_URL ? PUBLIC_URL + '/admin' : '' });
+    res.append('Set-Cookie', 'diy_signed=1; Path=/; Max-Age=31536000; SameSite=Lax; HttpOnly');   // so their later visits show as theirs
     res.json({ ok: true });
   });
 

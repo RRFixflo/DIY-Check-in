@@ -281,7 +281,7 @@ function mountAdmin(app, a){
       const prev = i ? steps[i - 1][1] : 0, pct = i && prev ? Math.round(v / prev * 100) + '%' : i ? '—' : '';
       return `<tr><td>${esc(label)}</td><td class="n">${v}</td><td class="n">${pct}</td><td class="bar"><i style="width:${s.visitors ? Math.max(v ? 1 : 0, v / s.visitors * 100) : 0}%"></i></td></tr>`;
     }).join('');
-    const others = ['downloaded', 'sign_page', 'sign_off', 'contact_message', 'certificate_booking'].map(k => `<li><span class="k">${esc(EVENT_LABEL[k])}</span><span class="v">${people(s, k)}</span></li>`).join('')
+    const others = ['downloaded', 'sign_page', 'sign_off', 'contact_message', 'certificate_booking'].map(k => `<li><span class="k">${k === 'downloaded' ? '<a href="/admin/opened?downloads=1">' + esc(EVENT_LABEL[k]) + '</a> <small>see who</small>' : esc(EVENT_LABEL[k])}</span><span class="v">${people(s, k)}</span></li>`).join('')
       + `<li><span class="k">Bought a floor plan <small>${money(Math.round(s.floorplans.value * 100) / 100)}</small></span><span class="v">${s.floorplans.n}</span></li>`;
     const pages = Object.fromEntries(Object.entries(s.paths));
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
