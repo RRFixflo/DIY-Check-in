@@ -510,7 +510,8 @@ function mount(app, ctx){
     const h = await hashPassword(pw);
     const idx = readIndex(); if (idx.byEmail[values.email]) return fail('There’s already an account with that email. Sign in, or reset the password.', 409);
     const acc = { id: rid(8), name: values.name, email: values.email, salt: h.salt, hash: h.hash, createdAt: new Date().toISOString(), sessionVer: 0,
-      settings: { reminders: true, ccEmail: '' }, properties: [], sent: {} };
+      settings: { reminders: true, ccEmail: '' }, properties: [], sent: {}, origin: require('./origin').of(req, req.body || {}) };
+    try { require('./analytics').lead(req, 'signup', acc.origin); } catch (e) {}
     writeAcc(acc); idx.byEmail[acc.email] = acc.id; writeIndex(idx);
     console.log('landlords: new account ' + acc.id);
     notify({ title: 'New landlord account', message: acc.name + ' · ' + acc.email, tags: ['house'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#landlords' : '' });
@@ -1250,7 +1251,7 @@ ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</d
     const upRows = up.slice(0, 100).map(({ a, p, k, st }) => `<li><div style="flex:1;min-width:0"><strong>${esc(SHORT[k])} · ${esc(fullAddress(p.address))}</strong> <span class="pill${st.d < 0 ? ' wait' : ''}">${st.d < 0 ? 'Expired ' + esc(fmt(st.due)) : 'Due ' + esc(fmt(st.due)) + ' · ' + esc(inDays(st.d))}</span>
       <div class="sub">${esc(p.type)} · ${esc(bedsText(p.beds))} · ${esc(a.name)} · <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></div></div></li>`).join('');
     const accRows = accs.slice(0, 300).map(a => `<li${a.createdAt > seen ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong><a href="/admin/landlords/${esc(a.id)}">${esc(a.name)}</a></strong>${a.createdAt > seen ? ' <span class="pill new">New</span>' : ''}
-      <div class="sub"><a href="mailto:${esc(a.email)}">${esc(a.email)}</a> · joined ${esc(day(a.createdAt))} · ${plural(a.properties.length, 'property').replace('propertys', 'properties')}${a.properties.length ? ': ' + esc(a.properties.slice(0, 3).map(p => streetLine(p.address) + ', ' + p.address.postcode).join('; ')) + (a.properties.length > 3 ? '…' : '') : ''} · reminders ${a.settings && a.settings.reminders === false ? 'off' : 'on'}</div></div>
+      <div class="sub"><a href="mailto:${esc(a.email)}">${esc(a.email)}</a> · joined ${esc(day(a.createdAt))} · ${plural(a.properties.length, 'property').replace('propertys', 'properties')}${a.properties.length ? ': ' + esc(a.properties.slice(0, 3).map(p => streetLine(p.address) + ', ' + p.address.postcode).join('; ')) + (a.properties.length > 3 ? '…' : '') : ''} · reminders ${a.settings && a.settings.reminders === false ? 'off' : 'on'}</div>${require('./origin').html(a.origin, esc)}</div>
       <div class="actions"><a class="btn" href="/admin/landlords/${esc(a.id)}">View all details</a><form method="post" action="/admin/landlords/${esc(a.id)}/delete" onsubmit="return confirm('Delete the account of ${esc(a.name.replace(/'/g, ''))} with all its properties and files? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#landlords" onclick="document.getElementById('landlords').open=true">🏠 ${plural(fresh, 'new landlord sign-up')} since your last visit</a>` : '';
     return banner + `<details class="codes" id="landlords"${fresh ? ' open' : ''}><summary>🏠 Landlord accounts <span class="sub" style="display:inline">— ${accs.length ? plural(accs.length, 'account') + ', ' + nProps + ' propert' + (nProps === 1 ? 'y' : 'ies') + (up.length ? ', ' + up.length + ' certificate' + (up.length === 1 ? '' : 's') + ' due within 90 days' : '') : 'none yet'}</span></summary>

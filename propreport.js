@@ -294,9 +294,11 @@ ${err ? `<p class="notice err" style="margin:0 0 10px">${esc(err)}</p>` : ''}
     const cert = d.epc && d.epc.cert;
     const lead = Object.assign({ id, token, at: new Date().toISOString(), postcode: pc, address: cert ? cert.address : picked, epc: cert ? cert.rating + (cert.expired ? ' (expired)' : ' until ' + cert.expires) : '', typical: d.sales ? d.sales.median3 : 0, council: d.geo ? d.geo.district : '' }, v);
     try { fs.writeFileSync(path.join(DIR, id + '.pdf'), await buildPdf(d, lead)); fs.writeFileSync(path.join(DIR, id + '.json'), JSON.stringify(d)); } catch (e) { console.error('property report pdf failed:', e.message); }
+    lead.origin = require('./origin').of(req, b);
     const L = readLeads(); L.list.unshift(lead); L.list = L.list.slice(0, 2000); writeLeads(L);
     notify({ title: 'New lead: property report', message: `${v.name} (${v.role}) · ${v.phone} · ${v.email}\n${lead.address || pc}${lead.epc ? ' · EPC ' + lead.epc : ''}\nWants a rent valuation.`, tags: ['house_with_garden'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#prleads' : '' });
     if (track) track(req, 'property_report_lead');
+    try { require('./analytics').lead(req, 'property_report', lead.origin); } catch (e) {}
     emailReport(lead).catch(() => {});
     res.redirect(303, '/property-report/r/' + id + '-' + token);
   });
@@ -383,7 +385,7 @@ ${err ? `<p class="notice err" style="margin:0 0 10px">${esc(err)}</p>` : ''}
     const when = s => new Date(s).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const rows = L.list.slice(0, 300).map(l => `<li${l.at > seen ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong>${esc(l.name)}</strong> <span class="pill">${esc(l.role || '')}</span>${l.at > seen ? ' <span class="pill new">New</span>' : ''}
       <div class="sub"><a href="tel:${esc(l.phone)}">${esc(l.phone)}</a> · <a href="mailto:${esc(l.email)}?subject=${encodeURIComponent('Rent valuation: ' + (l.address || l.postcode))}">${esc(l.email)}</a> · ${esc(when(l.at))}</div>
-      <div class="sub">${esc(l.address || l.postcode)}${l.epc ? ' · EPC ' + esc(l.epc) : ''}${l.typical ? ' · typical price ' + esc(gbp(l.typical)) : ''}${l.council ? ' · ' + esc(l.council) : ''}</div></div>
+      <div class="sub">${esc(l.address || l.postcode)}${l.epc ? ' · EPC ' + esc(l.epc) : ''}${l.typical ? ' · typical price ' + esc(gbp(l.typical)) : ''}${l.council ? ' · ' + esc(l.council) : ''}</div>${require('./origin').html(l.origin, esc)}</div>
       <div class="actions"><a class="btn" href="/property-report/r/${esc(l.id + '-' + l.token)}.pdf" target="_blank">PDF</a></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#prleads" onclick="document.getElementById('prleads').open=true">📊 ${fresh} new property report lead${fresh === 1 ? '' : 's'} since your last visit</a>` : '';
     return banner + `<details class="codes" id="prleads"${fresh ? ' open' : ''}><summary>📊 Property report leads <span class="sub" style="display:inline">— ${L.list.length ? L.list.length + ' lead' + (L.list.length === 1 ? '' : 's') : 'none yet'}</span></summary>

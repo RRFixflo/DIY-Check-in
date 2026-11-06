@@ -217,6 +217,7 @@ function mountPublic(app, ctx){
     const all = readJson(bookingsFile(), []); all.push(booking); writeJson(bookingsFile(), all.slice(-1000));
     console.log('certificate booking: ' + booking.id + ' ' + items.map(i => i.id).join('+') + (source ? ' via ' + source : ''));
     if (ctx.track) ctx.track(req, 'certificate_booking', booking.total, source ? 'microsite' : undefined);
+    try { require('./analytics').lead(source ? null : req, 'booking', booking.origin); } catch (e) {}
     notify({ title: 'New certificate booking: ' + items.map(i => i.id === 'gas' ? 'Gas Safety' : i.id === 'epc' ? 'EPC' : 'EICR').join(' + ') + (source ? ' (' + source + ')' : ''), message: [m.address + ', ' + m.postcode, m.name + ' · ' + m.phone, money(booking.total) + (m.when ? ' · ' + m.when : '')].join('\n'), tags: ['calendar'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#bookings' : '' });
     return { booking };
   }
@@ -224,7 +225,7 @@ function mountPublic(app, ctx){
   app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), async (req, res) => {
     const b = req.body || {};
     if (clip(b.website, 200)) return res.redirect(303, '/certificates?booked=1#book');   // robots
-    const r = await book(b, clientIp(req), req, '', originOf(b, req, device, clip));
+    const r = await book(b, clientIp(req), req, '', require('./origin').of(req, b));
     if (r.error) return res.status(r.code || 400).type('html').send(page(req, { text: r.error }));
     res.redirect(303, '/certificates?booked=1#book');
   });
@@ -241,7 +242,7 @@ function mountPublic(app, ctx){
     const site = clip(b.site, 100).toLowerCase().replace(/[^a-z0-9.-]/g, '');
     if (!site) return res.status(400).json({ ok: false, error: 'Missing site.' });
     const ip = clip(b.ip, 64) || clientIp(req);
-    const r = await book(b, 'lead:' + ip, req, site, { from: site, device: clip(b.device, 60) });
+    const r = await book(b, 'lead:' + ip, req, site, Object.assign(require('./origin').of(null, b, { microsite: site }), clip(b.device, 60) ? { device: clip(b.device, 60) } : {}));
     if (r.error) return res.status(r.code || 400).json({ ok: false, error: r.error });
     res.status(201).json({ ok: true, id: r.booking.id, total: r.booking.total });
   });
@@ -257,6 +258,7 @@ function mountAdmin(app, ctx){
   // Where the booking came from: the microsite, or for the website the site that sent the visitor, the first page
   // of the visit, the page before the form, any campaign tags, and the device.
   function originHTML(b){
+    if (b.origin && b.origin.label) return require('./origin').html(b.origin, esc);   // recorded with origin.js
     const o = b.origin || (b.source ? { from: b.source } : null);
     if (!o) return '<div class="sub">📍 Source not recorded (booked before sources were tracked)</div>';
     const path = u => { try { const x = new URL(u, 'https://x'); return x.pathname + x.search; } catch (e) { return u; } };

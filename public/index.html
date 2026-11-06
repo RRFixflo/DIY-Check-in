@@ -2171,6 +2171,16 @@ function alertDetails(){
 
 function onDeclarationChange(checked){ state.declarationAccepted = checked; persist(); updateFinishButtonState(); }
 function onSignedByChange(value){ state.meta.signedBy = value; persist(); }
+// Where this visit came from (sessionStorage, this tab only; the website's site.js starts it, or this page when someone
+// lands on the app first). Sent with the finished report so the owner sees where each report came from (origin.js).
+function visitInfo(){
+  try {
+    let v = JSON.parse(sessionStorage.getItem('diy-visit') || 'null');
+    if (!v) { const r = document.referrer, ext = r && r.indexOf(location.origin) !== 0; v = { land: location.pathname + location.search, ref: ext ? r : '', at: Date.now(), pages: 1, trail: [location.pathname] }; sessionStorage.setItem('diy-visit', JSON.stringify(v)); }
+    return Object.assign({}, v, { here: '/app' });
+  } catch (e) { return null; }
+}
+try { visitInfo(); } catch (e) {}
 async function shareOnlineLink(btn){
   const url = location.origin + '/report/' + state.photoKey;
   try {
@@ -3676,7 +3686,7 @@ async function sendUnpaidCopy(){
   try {
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
-    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', basedOnRef: (state.earlier && state.earlier.ref) || '' };
+    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', visit: visitInfo(), basedOnRef: (state.earlier && state.earlier.ref) || '' };
     const res = await postReportPdf(r.blob, { 'X-Report-Unpaid': '1', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || 'HTTP ' + res.status);
@@ -3706,7 +3716,7 @@ async function submitReportOnce(){
       inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt,
       finalizedAt: state.finalizedAt, rooms: state.rooms.length,
       photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname,
-      photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '',
+      photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', visit: visitInfo(),
       basedOnRef: (state.earlier && state.earlier.ref) || ''
     };
     const res = await postReportPdf(r.blob, { 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, pct => {

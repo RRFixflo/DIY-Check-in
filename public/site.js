@@ -1,10 +1,24 @@
 // The website's motion: the header firms up on scroll, sections glide in as they come into view, numbers
 // count up, and cards and the hero phone follow the cursor. Nothing here is needed to read the site.
 (function () {
-  // The first page of this visit and the site that sent it (this tab only, no cookie), so a booking can say where
-  // the visitor came from.
-  try { if (!sessionStorage.getItem('diy-visit')) { var r = document.referrer, ext = r && r.indexOf(location.origin) !== 0 && !/^https?:\/\/(www\.)?diyinventory\.co\.uk/.test(r);
-    sessionStorage.setItem('diy-visit', JSON.stringify({ land: location.pathname + location.search, ref: ext ? r : '', at: Date.now() })); } } catch (e) {}
+  // Where this visit came from (this tab only, sessionStorage, no cookie): the first page (with its campaign tags and
+  // ad click id), the site that sent the visitor, when they arrived, how many pages they've seen and the last few.
+  // Every form posted on the site carries it as a hidden src_visit field (origin.js on the server), so each lead says
+  // exactly where it came from.
+  try {
+    var here = location.pathname + location.search, v = JSON.parse(sessionStorage.getItem('diy-visit') || 'null');
+    if (!v) { var r = document.referrer, ext = r && r.indexOf(location.origin) !== 0 && !/^https?:\/\/(www\.)?diyinventory\.co\.uk/.test(r);
+      v = { land: here, ref: ext ? r : '', at: Date.now(), pages: 0, trail: [] }; }
+    v.pages = (v.pages || 0) + 1; v.trail = (v.trail || []).concat(here).slice(-8);
+    sessionStorage.setItem('diy-visit', JSON.stringify(v));
+    document.addEventListener('submit', function (e) {
+      var f = e.target; if (!f || String(f.getAttribute('method') || '').toLowerCase() !== 'post') return;
+      var cur = {}; try { cur = JSON.parse(sessionStorage.getItem('diy-visit') || '{}'); } catch (x) {}
+      cur.here = location.pathname + location.search;
+      var inp = f.querySelector('input[name="src_visit"]'); if (!inp) { inp = document.createElement('input'); inp.type = 'hidden'; inp.name = 'src_visit'; f.appendChild(inp); }
+      inp.value = JSON.stringify(cur);
+    }, true);
+  } catch (e) {}
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var top = document.querySelector('header.top');
   function onScroll() { if (top) top.classList.toggle('scrolled', window.scrollY > 8); }

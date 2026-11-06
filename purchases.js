@@ -108,6 +108,7 @@ function mount(app, ctx){
     if (first) {
       console.log('report: paid ' + rec.ref + ' (' + rec.provider + ')');
       if (track) track(req, 'report_purchase', PRICE);
+      try { require('./analytics').lead(req, 'purchase', rec.origin); } catch (e) {}
       if (notify) notify({ title: 'Report sold: ' + PRICE_TEXT, message: [(out.name || out.email) ? [out.name, out.email].filter(Boolean).join(' · ') : 'No name or email given', (out.for === 'tenant' ? 'Bought for a tenant' : 'Bought on /buy') + ' · paid by ' + (rec.provider === 'sumup' ? 'SumUp' : 'Stripe')].join('\n'), tags: ['moneybag'], click: PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') + '/admin#purchases' : '' });
       const link = PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') + '/?access=' + out.token : req ? linkOf(out, req) : '';
       if (out.email && link) emailBuyer(out, link).then(ok => { if (ok) update(rec.ref, r => { r.emailedAt = new Date().toISOString(); }); });
@@ -227,7 +228,7 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     if (!prov) return res.status(503).type('html').send(buyPage(req, o));
     if (!checkoutLimit(clientIp(req))) return res.status(429).type('html').send(buyPage(req, Object.assign(o, { notice: { text: 'Too many payment attempts from here. Please try again in a while.' } })));
     const rec = { ref: crypto.randomBytes(12).toString('hex'), token: 'RPT-' + crypto.randomBytes(18).toString('base64url'), provider: prov, providerId: '', providerRef: '', amount: PRICE, currency: 'GBP', status: 'pending',
-      name: o.name, email: o.email, for: o.for, from: o.from, createdAt: new Date().toISOString(), paidAt: '', usedAt: '' };
+      name: o.name, email: o.email, for: o.for, from: o.from, createdAt: new Date().toISOString(), paidAt: '', usedAt: '', origin: require('./origin').of(req, req.body || {}) };
     const base = ctx.canonicalBase(req);
     try {
       const c = await payments.createCheckout({ provider: prov, ref: rec.ref, amountPence: PENCE, name: 'DIY Inventory report', detail: 'One check-in, check-out or inspection', email: rec.email,
@@ -278,7 +279,7 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.usedAt ? '<span class="pill">Used</span>' : '<span class="pill sent">Not used yet</span>'}
       <div class="sub">${esc(when(r.paidAt || r.createdAt))}${r.email ? ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : ''}${r.for === 'tenant' ? ' · for a tenant' : ''} · ${r.provider === 'sumup' ? 'SumUp' : 'Stripe'}${r.providerRef ? ' · ' + esc(r.providerRef) : ''} · ref ${esc(r.ref)}${r.usedAt ? ' · used ' + esc(when(r.usedAt)) + (r.usedFor ? ' for ' + esc(r.usedFor) : '') : ''}${r.emailedAt ? ' · link emailed' : ''}</div>
-      <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit"></div></li>`).join('');
+      <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit">${require('./origin').html(r.origin, esc)}</div></li>`).join('');
     return `<details class="codes" id="purchases"><summary>💷 Report purchases <span class="sub" style="display:inline">— ${paid.length ? paid.length + ' sold, £' + revenue.toFixed(2) + ' · ' + unused + ' not used yet' : 'none sold yet'}${pending ? ' · ' + pending + ' started, not paid' : ''}</span></summary>
 <p class="sub" style="margin-top:12px">${PRICE_TEXT} each, on <a href="/buy" target="_blank" rel="noopener">/buy</a>. Card payments: ${prov ? '<b>' + (prov === 'sumup' ? 'SumUp' : 'Stripe') + '</b>' : '<b>not set up</b> (set SUMUP_API_KEY and SUMUP_MERCHANT_CODE, or STRIPE_SECRET_KEY, in Railway). Until then /buy asks people to contact you'}. Copy a link below to send it to the buyer again.</p>
 ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;

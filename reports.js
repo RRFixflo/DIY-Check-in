@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const Origin = require('./origin');
 const express = require('express');
 
 const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || '').trim();
@@ -266,6 +267,8 @@ function saveMessage(req, b){
   if (!messageLimit(clientIp(req))) return { ok: false, status: 429, error: 'Too many messages from here. Please try again in an hour.' };
   const d = readMessages();
   Object.assign(m, { id: Date.now().toString(36) + crypto.randomBytes(4).toString('hex'), at: new Date().toISOString(), device: deviceName(req.headers['user-agent']) });
+  m.origin = Origin.of(req, b);
+  try { require('./analytics').lead(req, 'message', m.origin); } catch (e) {}
   d.list.push(m); if (d.list.length > 500) d.list = d.list.slice(-500);
   writeMessages(d);
   console.log('message received from ' + m.email);
@@ -324,6 +327,7 @@ function mount(app){
       photoKey: KEY_RE.test(String(m.photoKey || '')) ? String(m.photoKey) : '',
       basedOnRef: clip(m.basedOnRef, 40),
       copyEmail: EMAIL_RE.test(String(m.copyEmail || '').trim()) ? clip(String(m.copyEmail).trim().toLowerCase(), 120) : '',
+      origin: m.origin && typeof m.origin === 'object' && !Array.isArray(m.origin) ? m.origin : undefined,
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -331,7 +335,8 @@ function mount(app){
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
     const existing = listReports().find(r => r.key === key);
     if (existing) {
-      if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;   // given on the phone after an earlier copy arrived
+      if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;
+      if (meta.origin && !existing.origin) existing.origin = meta.origin;   // given on the phone after an earlier copy arrived
       // The server made this one from the backup; the phone's own PDF, when it does arrive, takes its place.
       if (existing.source === 'backup' && source === 'app') {
         try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
@@ -425,13 +430,17 @@ function mount(app){
   app.post('/api/reports', express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
     if (!uploadAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many reports sent from here. Try again later.' });
     const unpaid = req.headers['x-report-unpaid'] === '1';
+    const meta = metaHeader(req);
+    meta.origin = meta.visit && typeof meta.visit === 'object' ? Origin.of(req, {}, { visit: meta.visit }) : undefined;   // never trusted from the phone as is
+    delete meta.visit;
     let pdf = req.body, up = '';
     if (req.headers['x-report-upload']) {
       const a = assembled(req);
       if (!Buffer.isBuffer(a[0])) return res.status(a[0]).json(a[1]);
       [pdf, up] = a;
     }
-    const [status, body] = storeReport(pdf, metaHeader(req), 'app', { unpaid });
+    const [status, body] = storeReport(pdf, meta, 'app', { unpaid });
+    if (status === 201 && meta.origin) { try { require('./analytics').lead(req, 'report', meta.origin); } catch (e) {} }
     if (up && status < 400) fs.rmSync(path.join(CHUNK_DIR, up), { recursive: true, force: true });
     res.status(unpaid && status === 201 ? 202 : status).json(body);
   });
@@ -776,7 +785,7 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const rows = list.slice(0, 200).map(m => `<li${isNew(m) ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong>${esc(m.name)}</strong>${isNew(m) ? ' <span class="pill new">New</span>' : ''}${m.topic ? ' <span class="pill">' + esc(m.topic) + '</span>' : ''}
       <div class="sub"><a href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: your message to DIY Inventory')}">${esc(m.email)}</a>${m.phone ? ' · <a href="tel:' + esc(m.phone.replace(/[^\d+]/g, '')) + '">' + esc(m.phone) + '</a>' : ''} · ${esc(when(m.at))}</div>
-      <div class="msg">${esc(m.message)}</div></div>
+      <div class="msg">${esc(m.message)}</div>${Origin.html(m.origin, esc)}</div>
       <div class="actions"><form method="post" action="/admin/messages/${esc(m.id)}/delete" onsubmit="return confirm('Delete this message?')"><button class="btn danger">Delete</button></form></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#messages" onclick="document.getElementById('messages').open=true">✉️ ${fresh} new message${fresh === 1 ? '' : 's'} from the website</a>` : '';
     return banner + `<details class="codes" id="messages"${fresh ? ' open' : ''}><summary>✉️ Messages <span class="sub" style="display:inline">— ${list.length ? list.length + ' from the contact form' : 'none yet'}</span></summary>
@@ -876,7 +885,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     const rows = reports.map(r => `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
-        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div></td>
+        <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
         <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div></td>
         <td class="actions">

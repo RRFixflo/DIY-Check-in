@@ -119,6 +119,15 @@ function track(req, name, value, kind){
   if (name === 'floorplan_purchase') { const f = d.floorplans || (d.floorplans = { n: 0, value: 0 }); f.n++; f.value = Math.round((f.value + (Number(value) || 0)) * 100) / 100; }
   save();
 }
+// A lead with where it came from (origin.js): counted per day by source and kind, for “Where leads come from”.
+const LEAD_KINDS = { booking: 'Certificate booking', message: 'Contact message', property_report: 'Property report', purchase: 'Report bought', signup: 'Landlord sign-up', report: 'Report finished' };
+function lead(req, kind, o){
+  if (!DIR || !LEAD_KINDS[kind]) return;
+  if (req && skip(req)) return;
+  const d = current(), L = d.leads || (d.leads = {}), lab = String((o && o.label) || 'Not recorded').slice(0, 80);
+  const row = L[lab] || (L[lab] = {}); row[kind] = (row[kind] || 0) + 1;
+  save();
+}
 const cookieToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
 
 function mount(app, c){
@@ -177,7 +186,7 @@ function mount(app, c){
 function daysBack(n){ const t = Date.parse(dayKey() + 'T12:00:00Z'), out = []; for (let i = n - 1; i >= 0; i--) out.push(new Date(t - i * 86400000).toISOString().slice(0, 10)); return out; }
 function load(n){ const t = current(); flush(); return daysBack(n).map(day => day === t.day ? t : (readJson(fileOf(day), null) || blankDay(day))); }
 function sum(days){
-  const s = blankDay(''); delete s.seen; s.pathsV = {}; s.floorplans = { n: 0, value: 0 };
+  const s = blankDay(''); delete s.seen; s.pathsV = {}; s.floorplans = { n: 0, value: 0 }; s.leads = {};
   for (const d of days) {
     s.views += d.views || 0; s.visitors += d.visitors || 0; s.revenue += d.revenue || 0;
     (d.hours || []).forEach((h, i) => s.hours[i] += h || 0);
@@ -188,6 +197,7 @@ function sum(days){
     s.certs.n += (d.certs || {}).n || 0; s.certs.value += (d.certs || {}).value || 0;
     s.floorplans.n += (d.floorplans || {}).n || 0; s.floorplans.value += (d.floorplans || {}).value || 0;
     s.purchases.n += (d.purchases || {}).n || 0; s.purchases.value += (d.purchases || {}).value || 0;
+    for (const [lab, row] of Object.entries(d.leads || {})) { const r = s.leads[lab] || (s.leads[lab] = {}); for (const [k, v] of Object.entries(row)) r[k] = (r[k] || 0) + v; }
   }
   s.revenue = Math.round(s.revenue * 100) / 100; s.certs.value = Math.round(s.certs.value * 100) / 100;
   return s;
@@ -295,6 +305,12 @@ function mountAdmin(app, a){
 <div class="card"><h2>${n === 1 ? 'New visitors by hour today' : 'Visitors per day'}</h2>${chartHTML}<p class="sub">${n === 1 ? 'UK time. ' : ''}Hover or tap a bar for its number. A visitor is counted once a day.</p></div>
 <div class="card"><h2>Sales funnel</h2><table><thead><tr><th>Step</th><th class="n">People</th><th class="n">From step before</th><th class="bar"></th></tr></thead><tbody>${funnel}</tbody></table>
 <p class="sub">People are counted once a day per step, so over several days someone who came back is counted again. “Report sold” is a report bought on /buy (counted once, when it is paid), or a report stored with an older paid link.</p></div>
+${(() => {
+  const rows = Object.entries(s.leads || {}).map(([lab, r]) => [lab, r, Object.values(r).reduce((x, y) => x + y, 0)]).sort((x, y) => y[2] - x[2]);
+  const kinds = Object.keys(LEAD_KINDS).filter(k => rows.some(([, r]) => r[k]));
+  return `<div class="card"><h2>Where leads come from</h2>${rows.length ? `<div style="overflow-x:auto"><table><thead><tr><th>Source</th>${kinds.map(k => `<th class="n">${esc(LEAD_KINDS[k])}</th>`).join('')}<th class="n">All</th></tr></thead><tbody>${rows.map(([lab, r, t]) => `<tr><td>${esc(lab)}</td>${kinds.map(k => `<td class="n">${r[k] || ''}</td>`).join('')}<td class="n"><b>${t}</b></td></tr>`).join('')}</tbody></table></div>` : '<p class="sub">No leads in this period yet. Each new booking, message, property report, purchase, sign-up and finished report is counted here by where it came from.</p>'}
+<p class="sub">Every lead’s own source (landing page, campaign, pages seen, device) is on its entry in the admin. “Direct” means no referring site was passed on: a typed address, a bookmark, or an app that hides it.</p></div>`;
+})()}
 <div class="grid2">
   <div class="card"><h2>Top pages</h2>${list(pages, s.views, k => `<a href="${esc(k)}" target="_blank" rel="noopener">${esc(k)}</a>`)}<p class="sub">Page views.</p></div>
   <div class="card"><h2>Where visitors came from</h2>${list(s.referrers, Object.values(s.referrers).reduce((a, b) => a + b, 0))}<p class="sub">Arrivals from another site; “direct” is a typed address, a bookmark or an app that doesn’t say.</p></div>
@@ -307,4 +323,4 @@ function mountAdmin(app, a){
   });
 }
 
-module.exports = { mount, mountAdmin, track, summaryHTML, CLIENT_EVENTS };
+module.exports = { mount, mountAdmin, track, lead, summaryHTML, CLIENT_EVENTS };
