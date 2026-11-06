@@ -257,18 +257,18 @@ function mountAdmin(app, a){
       + `<li><span class="k">Bought a floor plan <small>${money(Math.round(s.floorplans.value * 100) / 100)}</small></span><span class="v">${s.floorplans.n}</span></li>`;
     const pages = Object.fromEntries(Object.entries(s.paths));
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>Visits and sales</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
+<title>Visits and sales · Admin</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Reports">
 <style>
-  :root { --ink:#0F172A; --soft:#475569; --faint:#8A96A8; --line:#E4E8EF; --bg:#F4F5FB; --card:#fff; --chip:#F1F3F7; --accent:#4F46E5; --accent-soft:#EEF0FF; --accent-ink:#3730A3; --bar:#4F46E5; --bar-hover:#3730A3; --good:#15803D; }
-  @media (prefers-color-scheme: dark) { :root { --ink:#E7E9F3; --soft:#A3ABC2; --faint:#7C859E; --line:#2A2F45; --bg:#0D1020; --card:#161A2E; --chip:#20253D; --accent:#8B8CF8; --accent-soft:#25285A; --accent-ink:#C7C8FF; --bar:#8B8CF8; --bar-hover:#B4B5FF; --good:#4ADE80; } }
+  :root { --ink:#13203A; --soft:#5B677C; --faint:#8A95A8; --line:#E6E9F0; --bg:#F5F6F9; --card:#fff; --chip:#F1F3F7; --accent:#1B2A4A; --accent-soft:#EEF1F6; --accent-ink:#1B2A4A; --bar:#1B2A4A; --bar-hover:#C49A6C; --good:#15803D; }
   * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  main { max-width:1100px; margin:0 auto; padding:24px 16px 60px; }
+  main { max-width:1180px; padding:28px 32px 60px; } @media (max-width:760px){ main { padding:16px 14px 50px; } }
+  ${a.shell ? a.shell.css : ''}
   a { color:var(--accent); } .back { display:inline-block; font-size:14px; font-weight:600; text-decoration:none; margin-bottom:10px; }
   h1 { font-size:28px; margin:0 0 4px; letter-spacing:-.03em; font-weight:800; } h2 { font-size:16px; margin:0 0 10px; letter-spacing:-.01em; }
   .lead, .sub { color:var(--soft); } .lead { margin:0 0 16px; } .sub { font-size:12.5px; margin:4px 0 0; }
   .periods { display:inline-flex; background:var(--card); border-radius:999px; padding:4px; box-shadow:0 0 0 1px var(--line); margin-bottom:18px; max-width:100%; overflow-x:auto; }
   .periods a { padding:7px 14px; border-radius:999px; text-decoration:none; color:var(--soft); font-weight:600; font-size:14px; white-space:nowrap; }
-  .periods a.on { background:linear-gradient(135deg,#4F46E5,#7C3AED); color:#fff; }
+  .periods a.on { background:var(--accent); color:#fff; }
   .tiles { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; margin-bottom:14px; }
   .tile, .card { background:var(--card); border-radius:18px; padding:14px 16px; box-shadow:0 1px 2px rgba(15,23,42,.04), 0 4px 16px rgba(15,23,42,.06); min-width:0; }
   .tile .l { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); font-weight:700; } .tile .v { font-size:30px; font-weight:800; letter-spacing:-.03em; margin-top:2px; } .tile .sub { margin:0; }
@@ -282,8 +282,7 @@ function mountAdmin(app, a){
   .top li i { position:absolute; left:0; top:0; bottom:0; background:var(--accent-soft); z-index:0; border-radius:8px; } .top .k, .top .v { position:relative; z-index:1; } .top .k { overflow-wrap:anywhere; min-width:0; } .top .v { font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; } .top small { color:var(--soft); font-weight:500; }
   .plain li i { display:none; }
   @media (max-width:760px) { .tiles { grid-template-columns:repeat(2, minmax(0, 1fr)); } .grid2 { grid-template-columns:1fr; } .tile .v { font-size:25px; } th.bar, td.bar { display:none; } h1 { font-size:24px; } svg.wide { display:none; } svg.narrow { display:block; } }
-</style></head><body><main>
-<a class="back" href="/admin">‹ Reports</a>
+</style></head><body><div class="shell">${a.shell ? a.shell.aside('analytics') : ''}<main>
 <h1>Visits and sales</h1>
 <p class="lead">Counted on this server, without cookies and without keeping IP addresses. Robots and your own visits while signed in here aren’t counted.</p>
 <nav class="periods" aria-label="Period">${Object.entries(PERIODS).map(([k, l]) => `<a href="/admin/analytics?days=${k}"${Number(k) === n ? ' class="on" aria-current="page"' : ''}>${l}</a>`).join('')}</nav>
@@ -304,7 +303,7 @@ function mountAdmin(app, a){
   <div class="card"><h2>Countries (a guess)</h2>${list(s.countries, s.visitors, k => esc(k === '?' ? 'Not known' : regionName(k)))}<p class="sub">From the browser’s language setting (e.g. English, UK), not from location.</p></div>
   <div class="card"><h2>Other actions</h2><ul class="top plain">${others}</ul></div>
 </div>
-</main></body></html>`);
+</main></div></body></html>`);
   });
 }
 

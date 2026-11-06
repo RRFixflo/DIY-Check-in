@@ -750,7 +750,23 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   // Certificate bookings (Gas Safety, EICR, EPC) and their prices: certs.js.
   const certs = require('./certs').mountAdmin(app, { REPORTS_DIR, esc, requireAdmin, sameOrigin });
   // Visits and sales funnel: /admin/analytics (analytics.js).
-  const analytics = require('./analytics'); analytics.mountAdmin(app, { esc, requireAdmin });
+  // The admin sidebar, shared by /admin and the pages beside it (Visits and sales), so they look like one place.
+  const ADMIN_SECTIONS = [['overview', 'Overview', '◎'], ['reports', 'Reports', '📄'], ['sales', 'Sales', '💷'], ['enquiries', 'Enquiries', '✉️'], ['work', 'In progress', '📝'], ['landlords', 'Landlords', '🏠'], ['access', 'Access & links', '🔑']];
+  const SHELL_CSS = `.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.shell>main{min-width:0}
+  .shell aside{background:#1B2A4A;color:#DCE3EF;padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px;font:14.5px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  .shell aside .brand{display:flex;align-items:center;gap:10px;font-weight:750;color:#fff;padding:2px 10px 18px;font-size:15px}.shell aside .brand img{border-radius:8px}
+  .shell aside nav{display:flex;flex-direction:column;gap:2px}
+  .shell aside nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;color:#C9D3E3;text-decoration:none;font-weight:600}
+  .shell aside nav a i{font-style:normal;width:20px;text-align:center}.shell aside nav a:hover{background:rgba(255,255,255,.07);color:#fff}.shell aside nav a.on{background:#fff;color:#1B2A4A}
+  .shell aside .foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding:10px;font-size:12px;color:#9FB0C8}
+  .shell aside .foot a,.shell aside .foot button{display:block;text-align:center;font:inherit;font-size:13px;font-weight:600;padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;text-decoration:none;cursor:pointer;width:100%}
+  .shell aside .foot a.primary{background:#C49A6C;border-color:#C49A6C;color:#1B2A4A}
+  @media(max-width:760px){.shell{grid-template-columns:minmax(0,1fr)}.shell aside{position:sticky;top:0;z-index:5;height:auto;padding:10px 10px 8px}.shell aside .brand{padding:2px 4px 8px}.shell aside .foot{display:none}
+  .shell aside nav{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}.shell aside nav::-webkit-scrollbar{display:none}.shell aside nav a{flex:0 0 auto;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.08)}.shell aside nav a i{display:none}}`;
+  const shellAside = active => `<aside><div class="brand"><img src="/icons/icon-192.png" alt="" width="28" height="28">DIY Inventory · Admin</div>
+<nav>${ADMIN_SECTIONS.map(([k, l, i]) => `<a href="/admin#${k}"${active === k ? ' class="on"' : ''}><i>${i}</i><span>${esc(l)}</span></a>`).join('')}<a href="/admin/analytics"${active === 'analytics' ? ' class="on"' : ''}><i>📈</i><span>Visits and sales</span></a></nav>
+<div class="foot"><a class="primary" href="/app">Open the app</a><form method="post" action="/admin/logout"><button>Sign out</button></form></div></aside>`;
+  const analytics = require('./analytics'); analytics.mountAdmin(app, { esc, requireAdmin, shell: { css: SHELL_CSS, aside: shellAside } });
 
   // Contact form messages for the admin page; opening the page marks them as seen.
   function messagesHTML(){
@@ -912,7 +928,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     const fmt = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const latest = reports.slice(0, 5).map(r => `<a href="#reports"><div><b>${esc(r.address || '—')}</b></div><span>${esc([r.inspectionType, fmt(r.receivedAt), notPaid(r) ? 'not paid yet' : ''].filter(Boolean).join(' · '))}</span></a>`).join('');
     const NAV = [['overview', 'Overview', '◎', attention.length], ['reports', 'Reports', '📄', 0]].concat(groups.map(g => [g.k, g.label, g.icon, g.secs.filter(x => x.fresh).length]));
-    const nav = NAV.map(([k, label, icon, n]) => `<a href="#${k}" data-k="${k}"><i>${icon}</i><span>${esc(label)}</span>${k === 'reports' ? `<em class="c">${reports.length}</em>` : n ? `<em>${n}</em>` : ''}</a>`).join('');
+    const nav = NAV.map(([k, label, icon, n]) => `<a href="#${k}" data-k="${k}"><i>${icon}</i><span>${esc(label)}</span>${k === 'reports' ? `<em class="c">${reports.length}</em>` : n ? `<em>${n}</em>` : ''}</a>`).join('') + '<a href="/admin/analytics"><i>📈</i><span>Visits and sales</span></a>';
     res.type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Admin · DIY Inventory</title><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-title" content="Admin">
 <style>
@@ -984,7 +1000,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 </style></head><body><div class="shell">
 <aside><div class="brand"><img src="/icons/icon-192.png" alt="" width="28" height="28">DIY Inventory · Admin</div>
 <nav>${nav}</nav>
-<div class="foot"><a class="btn primary" href="/app">Open the app</a><a class="btn" href="/admin/analytics">Visits and sales</a><form method="post" action="/admin/logout"><button class="btn" style="width:100%">Sign out</button></form>
+<div class="foot"><a class="btn primary" href="/app">Open the app</a><form method="post" action="/admin/logout"><button class="btn" style="width:100%">Sign out</button></form>
 <span>Updated ${esc(STARTED_AT.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}${DEPLOY_NOTE ? ': ' + esc(DEPLOY_NOTE) : ''}</span></div></aside>
 <main>
 ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports stored here are lost the next time the app is deployed. Attach a volume to this service in Railway.</div>'}
