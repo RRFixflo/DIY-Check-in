@@ -64,6 +64,7 @@ function mount(app, ctx){
     if (ctx.hasAccess) s._access = ctx.hasAccess(req) || before._access || false;
     // The link or code itself (kept only here, on the server), so a report made from the backup still reaches the buyer or agent by email.
     if (ctx.accessToken) s._token = (ctx.hasAccess && ctx.hasAccess(req) && ctx.accessToken(req)) || before._token || '';
+    if (ctx.isOwnerReq) s._byOwner = ctx.isOwnerReq(req) || before._byOwner || false;
     // Finished but not paid for: tell the owner once.
     if (s.finalizedAt && !s.submittedId && !s._access && !s._alerted) {
       s._alerted = s._savedAt;
@@ -109,7 +110,9 @@ function mount(app, ctx){
   // Paid = the phone's paid copy arrived (submittedId), or the phone had a paid link, code or agent link (or the owner was
   // signed in) when it last backed up (_access): that's what pays, even if the phone's own upload then failed.
   const paidS = s => !!(s.submittedId || s._access);
-  const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', s._serverReportId ? 'Finished and paid · report made from the backup' : 'Finished and paid · PDF still arriving'] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
+  // What unlocked it, in words (a £30 purchase and who, an agent's tenant link, the access code, the owner).
+  const via = s => ctx.accessLabel ? ctx.accessLabel(s._token, s._byOwner) : '';
+  const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
 
   // The list on /admin.
   function draftsHTML(){
@@ -118,7 +121,7 @@ function mount(app, ctx){
       const m = s.meta || {}, st = stats(s), [cls, label] = status(s);
       return `<li><div style="flex:1;min-width:0"><strong>${esc(m.address || 'No address yet')}</strong> <span class="pill ${cls}">${label}</span>
         <div class="sub">${esc([m.inspectionType, m.inspectorName ? 'by ' + m.inspectorName : '', s._device].filter(Boolean).join(' · '))}</div>
-        <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div></div>
+        <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div>${s._access ? `<div class="sub">💳 ${esc(via(s) || 'Access allowed, but how isn’t recorded (backed up before this was tracked)')}</div>` : ''}</div>
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
         ${s.submittedId || s._serverReportId ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;

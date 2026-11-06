@@ -329,6 +329,7 @@ function mount(app){
       copyEmail: EMAIL_RE.test(String(m.copyEmail || '').trim()) ? clip(String(m.copyEmail).trim().toLowerCase(), 120) : '',
       origin: m.origin && typeof m.origin === 'object' && !Array.isArray(m.origin) ? m.origin : undefined,
       tokenHash: /^[a-f0-9]{20}$/.test(String(m.tokenHash || '')) ? m.tokenHash : undefined,
+      paidWith: clip(m.paidWith, 200) || undefined,
       source
     };
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
@@ -338,7 +339,8 @@ function mount(app){
     if (existing) {
       if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;
       if (meta.origin && !existing.origin) existing.origin = meta.origin;
-      if (meta.tokenHash && !existing.tokenHash) existing.tokenHash = meta.tokenHash;   // given on the phone after an earlier copy arrived
+      if (meta.tokenHash && !existing.tokenHash) existing.tokenHash = meta.tokenHash;
+      if (meta.paidWith && !existing.paidWith) existing.paidWith = meta.paidWith;   // given on the phone after an earlier copy arrived
       // The server made this one from the backup; the phone's own PDF, when it does arrive, takes its place.
       if (existing.source === 'backup' && source === 'app') {
         try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
@@ -435,6 +437,7 @@ function mount(app){
     const meta = metaHeader(req);
     meta.origin = meta.visit && typeof meta.visit === 'object' ? Origin.of(req, {}, { visit: meta.visit }) : undefined;   // never trusted from the phone as is
     meta.tokenHash = tokenHash(accessToken(req));
+    meta.paidWith = req.headers['x-report-unpaid'] === '1' ? '' : accessLabel(accessToken(req), signedIn(req));
     delete meta.visit;
     let pdf = req.body, up = '';
     if (req.headers['x-report-upload']) {
@@ -618,6 +621,18 @@ function mount(app){
       fs.writeFileSync(path.join(dir, 'index.json'), JSON.stringify(index));
     } catch (e) { console.error('backup photos not attached: ' + e.message); }
   }
+  // How a report was paid for or unlocked, in words for /admin.
+  function accessLabel(token, byOwner){
+    if (byOwner) return 'You (signed in to admin) · no charge';
+    if (!token) return '';
+    try { const d = require('./purchases').describe(token); if (d) return d; } catch (e) {}
+    const a = agentFor(token); if (a) return 'Tenant link of ' + a.name + ' · no charge to the tenant';
+    if (/^AGT-/.test(token)) return 'A tenant link that has since been removed';
+    if (/^SHARED-/.test(token)) return 'Your access code (' + readShared().code + ') · no charge';
+    if (/^(DIY|FREE)-/.test(token)) return 'One-off access code ' + token + ' · no charge';
+    if (/^RPT-/.test(token)) return 'A /buy link that isn’t recorded as paid';
+    return 'A paid link from the older system';
+  }
   async function fromBackup(pdf, s, info){
     const m = s.meta || {}, pr = s.property || {};
     let photos = 0; (s.rooms || []).forEach(r => { (r.items || []).forEach(i => { photos += (i.photos || []).length; }); photos += (r.extraPhotos || []).length; }); photos += ((pr.exterior || {}).photos || []).length;
@@ -632,6 +647,7 @@ function mount(app){
       } catch (e) { console.error('marking the link used failed:', e.message); }
     }
     if (info && info.photos) attachBackupPhotos(body.id, s.photoKey, info.photos, info.photoFile);
+    { const rr = readMeta(body.id); const lab = info && info.byOwner ? 'You (marked complete in admin)' : accessLabel(s._token, s._byOwner); if (rr && lab && !rr.paidWith) { rr.paidWith = lab; fs.writeFileSync(path.join(REPORTS_DIR, rr.id + '.json'), JSON.stringify(rr, null, 2)); } }
     const r = readMeta(body.id);
     if (r && !r.sentAt) {
       r.sentAt = new Date().toISOString(); r.fromBackup = true; if (info && info.missing) r.backupMissingPhotos = info.missing;
@@ -644,7 +660,7 @@ function mount(app){
   }
   const reportsAccessFree = () => /^(off|false|0|no)$/i.test(String(process.env.DIY_PAYWALL || ''));
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
-    hasAccess, accessToken, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
+    hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
   // Tenant sign-off links (/sign/<key>), in signoff.js.
   require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, logAccess: (...a) => logAccess(...a), esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
@@ -942,7 +958,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
@@ -1190,7 +1206,7 @@ async function uploadPdfs(input){
     const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
     if (!r) return res.status(404).type('text/plain').send('Report not found.');
     const now = new Date().toISOString();
-    if (r.unpaid) { r.unpaid = false; r.paidAt = now; r.completedByOwner = now; }
+    if (r.unpaid) { r.unpaid = false; r.paidAt = now; r.completedByOwner = now; r.paidWith = r.paidWith || 'You (marked complete in admin)'; }
     if (!r.sentAt) r.sentAt = now;
     if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, id); }
     fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2));
