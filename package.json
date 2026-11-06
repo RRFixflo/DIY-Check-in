@@ -14,6 +14,8 @@
     "@anthropic-ai/sdk": "^0.128.0",
     "compression": "^1.8.2",
     "express": "^5.2.1",
+    "jsdom": "^25.0.1",
+    "jspdf": "^2.5.1",
     "pdf-lib": "^1.17.1"
   }
 }

@@ -192,9 +192,16 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
       const now = readJson(path.join(dirOf(key), 'state.json')) || s; now.photoKey = s.photoKey; writeJson(path.join(dirOf(key), 'state.json'), now);
     }
     const photoFile = id => PID_RE.test(String(id)) ? path.join(dirOf(key), 'photos', String(id) + '.jpg') : '';
+    // The app's own report builder, run on the server (render-backup.js), so it looks exactly like the phone's; the
+    // simpler builder (backup-pdf.js) only if that fails.
+    try {
+      const r = await require('./render-backup').renderInChild(s, path.join(dirOf(key), 'photos'), ctx.PUBLIC_URL || 'http://localhost', path.join(ctx.REPORTS_DIR, 'render-tmp'));
+      console.log('report built from its backup with the app’s own design: ' + key + ' (' + r.photos.length + ' photos)');
+      return { pdf: r.pdf, photos: r.photos.filter(p => p.id), photoFile, design: 'app' };
+    } catch (e) { console.error('the app’s design could not be used for backup ' + key + ', using the simple one: ' + e.message); }
     const out = { base: (ctx.PUBLIC_URL || '') + '/p/' + s.photoKey + '/' };
     const pdf = await buildFromBackup(s, photoFile, out);
-    return { pdf, photos: out.photos, photoFile };
+    return { pdf, photos: out.photos, photoFile, design: 'simple' };
   }
   // The backup a stored report was made from (for Rebuild on /admin).
   const backupFor = reportId => list().find(({ s }) => s._serverReportId === reportId) || null;
