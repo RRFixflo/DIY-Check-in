@@ -2171,6 +2171,13 @@ function alertDetails(){
 
 function onDeclarationChange(checked){ state.declarationAccepted = checked; persist(); updateFinishButtonState(); }
 function onSignedByChange(value){ state.meta.signedBy = value; persist(); }
+async function shareOnlineLink(btn){
+  const url = location.origin + '/report/' + state.photoKey;
+  try {
+    if (navigator.share) { await navigator.share({ title: reportTitle(state), text: 'The ' + String(state.meta.inspectionType || 'inventory').toLowerCase() + ' report for ' + state.meta.address, url }); return; }
+    await navigator.clipboard.writeText(url); btn.textContent = 'Link copied';
+  } catch (e) { if (e && e.name === 'AbortError') return; prompt('Copy this link:', url); }
+}
 function onCopyEmailChange(value){ state.meta.copyEmail = String(value || '').trim().slice(0, 120); persist(); }
 
 function initSignaturePad(){
@@ -3629,6 +3636,38 @@ async function sendToAgent(){
 function reportProblem(stage, err){
   try { navigator.sendBeacon('/api/report-problem', JSON.stringify({ key: state.draftKey || '', ref: (state.meta && state.meta.ref) || '', stage, msg: String((err && err.message) || err || '').slice(0, 300), online: navigator.onLine, ua: navigator.userAgent.slice(0, 160) })); } catch (e) {}
 }
+// The report PDF goes up in 2 MB pieces (a big report in one request failed on phones with a weak signal: iPhone
+// gives up, and the proxy cuts uploads that take over ~100 s). Each piece is retried; after a break the pieces the
+// server already has are skipped. Small PDFs go in one request as before. The final POST /api/reports names the
+// upload instead of carrying the file, so payment and storing work exactly as before.
+const PDF_CHUNK = 2 * 1024 * 1024;
+const pdfUploadIds = new WeakMap();
+const waitMs = ms => new Promise(r => setTimeout(r, ms));
+async function postReportPdf(blob, headers, onProgress){
+  if (blob.size <= PDF_CHUNK) return fetch('/api/reports', { method: 'POST', headers: Object.assign({ 'Content-Type': 'application/pdf' }, headers), body: blob });
+  let up = pdfUploadIds.get(blob);
+  if (!up) { const b = new Uint8Array(16); crypto.getRandomValues(b); up = Array.from(b, x => x.toString(16).padStart(2, '0')).join(''); pdfUploadIds.set(blob, up); }
+  const count = Math.ceil(blob.size / PDF_CHUNK);
+  let have = [];
+  try { const r = await fetch('/api/report-chunks/' + up); if (r.ok) have = (await r.json()).have || []; } catch (e) {}
+  let done = have.length;
+  for (let n = 0; n < count; n++){
+    if (have.includes(n)) continue;
+    const part = blob.slice(n * PDF_CHUNK, Math.min(blob.size, (n + 1) * PDF_CHUNK));
+    let ok = false, lastErr = null;
+    for (let t = 0; t < 6 && !ok; t++){
+      if (t) await waitMs(Math.min(15000, 1500 * t * t));
+      try {
+        const r = await fetch('/api/report-chunks/' + up + '/' + n, { method: 'PUT', headers: { 'Content-Type': 'application/octet-stream' }, body: part });
+        if (r.ok) ok = true;
+        else { const d = await r.json().catch(() => ({})); lastErr = new Error(d.error || 'HTTP ' + r.status); if (r.status === 400 || r.status === 413) break; }
+      } catch (e) { lastErr = e; }
+    }
+    if (!ok) throw lastErr || new Error('The report could not be uploaded.');
+    done++; if (onProgress) onProgress(Math.round(done / count * 100));
+  }
+  return fetch('/api/reports', { method: 'POST', headers: Object.assign({ 'X-Report-Upload': up, 'X-Report-Chunks': String(count), 'X-Report-Size': String(blob.size) }, headers) });
+}
 // Not paid for yet: the owner still gets the finished report (stored as not paid; it unlocks nothing here).
 let unpaidSending = false;
 async function sendUnpaidCopy(){
@@ -3638,7 +3677,7 @@ async function sendUnpaidCopy(){
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
     const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', basedOnRef: (state.earlier && state.earlier.ref) || '' };
-    const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Unpaid': '1', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
+    const res = await postReportPdf(r.blob, { 'X-Report-Unpaid': '1', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || 'HTTP ' + res.status);
     state.unpaidId = data.id; persist();
@@ -3670,7 +3709,10 @@ async function submitReportOnce(){
       photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '',
       basedOnRef: (state.earlier && state.earlier.ref) || ''
     };
-    const res = await fetch('/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/pdf', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, body: r.blob });
+    const res = await postReportPdf(r.blob, { 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, pct => {
+      sendStartedAt = Date.now();   // still moving: not stuck
+      const btn = document.getElementById('sendBtn'); if (btn && sendUi.phase === 'sending') btn.innerHTML = 'Sending your report… ' + pct + '%';
+    });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || '');
     state.submittedId = data.id;
@@ -3689,12 +3731,22 @@ async function submitReportOnce(){
 // The full-size photos the PDF links to, a few at a time; the server keeps any it already has.
 async function uploadPhotos(id, photos){
   if (state.photosUploaded || !state.photoKey || !photos.length) { state.photosUploaded = true; return; }
-  for (let i = 0; i < photos.length; i += 6){
-    const res = await fetch('/api/reports/' + encodeURIComponent(id) + '/photos', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key: state.photoKey, photos: photos.slice(i, i + 6) })
-    });
-    if (!res.ok){ const d = await res.json().catch(() => ({})); throw new Error(d.error || 'The photos could not be uploaded.'); }
+  // Two at a time (each request stays small on a weak signal), each batch retried a few times.
+  for (let i = 0; i < photos.length; i += 2){
+    let ok = false, lastErr = null;
+    for (let t = 0; t < 4 && !ok; t++){
+      if (t) await waitMs(1500 * t * t);
+      try {
+        const res = await fetch('/api/reports/' + encodeURIComponent(id) + '/photos', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: state.photoKey, photos: photos.slice(i, i + 2) })
+        });
+        if (res.ok) ok = true;
+        else { const d = await res.json().catch(() => ({})); lastErr = new Error(d.error || 'The photos could not be uploaded.'); if (res.status === 403 || res.status === 404) break; }
+      } catch (e) { lastErr = e; }
+    }
+    if (!ok) throw lastErr || new Error('The photos could not be uploaded.');
+    sendStartedAt = Date.now();
   }
   state.photosUploaded = true;
   persist();
@@ -4510,6 +4562,16 @@ function renderDone(){
       </div>
     </div>
 
+
+    ${reportUnlocked() && state.photoKey ? `<div class="panel next-card">
+      <div class="section-title" style="margin-top:0">View it online</div>
+      <p>A link to your report: anyone you send it to can view it and download the PDF, on a phone or a computer.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="shareOnlineLink(this)">${navigator.share ? 'Share the link' : 'Copy the link'}</button>
+        <a class="btn" href="/report/${escapeHtml(state.photoKey)}" target="_blank" rel="noopener">Open</a>
+      </div>
+      <div class="room-count-hint" id="onlineHint">${state.submittedId ? '' : 'The link works as soon as your report has finished sending.'}</div>
+    </div>` : ''}
 
     ${reportUnlocked() ? `<div class="panel next-card">
       <div class="section-title" style="margin-top:0">Get it signed by the tenant</div>

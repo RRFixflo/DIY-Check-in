@@ -346,7 +346,7 @@ if (PAYWALL) {
   // asked for when the report is finished: /api/access). A paid link (/?access=TOKEN) or code sets the
   // cookie and goes on to /app.
   app.use(async (req, res, next) => {
-    if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
+    if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign|report)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
     const isRoot = req.path === '/';
     if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
     // A tenant's check-in link goes straight to a check-in; an agency can add the property (&address=…) to fill it in.

@@ -171,17 +171,17 @@ async function deliverCopies(r, token){
 async function emailCopy(r, to, kind){
   const attach = r.size <= MAX_ATTACH;
   const type = r.inspectionType || 'Check-in', when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' }) : '';
-  const link = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/sign/' + r.photoKey + '/report.pdf' : '';
+  const link = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/report/' + r.photoKey : '';   // view and download online
   const sign = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/sign/' + r.photoKey : '';
   const text = (kind === 'agent' ? [
     'A tenant has finished a ' + type.toLowerCase() + ' report using your DIY Inventory link.', '',
     'Property: ' + (r.address || '—'), 'Completed by: ' + (r.signedBy || r.inspectorName || '—'), when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
-    attach ? 'The report is attached as a PDF.' : 'The report is too large to attach.', link ? (attach ? 'You can also open it here: ' : 'Open it here: ') + link : '',
+    attach ? 'The report is attached as a PDF.' : 'The report is too large to attach.', link ? 'View and download it online: ' + link : '',
     sign ? 'To have it checked and signed, send this link: ' + sign : ''
   ] : [
     'Here is your ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + '.', '',
     when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
-    attach ? 'The report is attached as a PDF. Keep this email: it is your copy.' : 'The report is too large to attach.', link ? (attach ? 'You can also open it here at any time: ' : 'Open it here: ') + link : '',
+    attach ? 'The report is attached as a PDF. Keep this email: it is your copy.' : 'The report is too large to attach.', link ? 'View and download it online at any time: ' + link : '',
     sign ? 'To have it checked and signed by the other party (tenant or landlord), send them this link: ' + sign : '', '',
     'DIY Inventory'
   ]).join('\n').replace(/\n{3,}/g, '\n\n').trim();
@@ -378,10 +378,61 @@ function mount(app){
     console.error('report not sent from a phone: ' + [clip(d.stage, 20), 'ref ' + clip(d.ref, 40), 'backup ' + clip(d.key, 32), clip(d.msg, 300), d.online === false ? 'offline' : '', clip(d.ua, 160)].filter(Boolean).join(' | '));
     res.status(204).end();
   });
+  // A big PDF arrives in pieces first (PUT /api/report-chunks/<upload>/<n>, 2 MB each from the app; GET lists the
+  // pieces already here, so a broken upload carries on), then POST /api/reports names the upload (X-Report-Upload,
+  // -Chunks, -Size) instead of carrying the file. Pieces are kept in REPORTS_DIR/chunks/<upload>/ and removed once
+  // the report is stored, or after a day.
+  const CHUNK_DIR = path.join(REPORTS_DIR, 'chunks'), UP_RE = /^[a-f0-9]{32}$/, CHUNK_MAX = 4 * 1024 * 1024, CHUNKS_MAX_BYTES = 1536 * 1024 * 1024;
+  const chunkAllowed = limiter(3000, 60 * 60 * 1000);
+  const chunkFiles = up => { try { return fs.readdirSync(path.join(CHUNK_DIR, up)).filter(f => /^\d+$/.test(f)).map(Number); } catch (e) { return []; } };
+  function chunksSize(){
+    let t = 0;
+    try { for (const d of fs.readdirSync(CHUNK_DIR)) for (const f of fs.readdirSync(path.join(CHUNK_DIR, d))) t += fs.statSync(path.join(CHUNK_DIR, d, f)).size; } catch (e) {}
+    return t;
+  }
+  function sweepChunks(){
+    try { for (const d of fs.readdirSync(CHUNK_DIR)) { const p = path.join(CHUNK_DIR, d); if (Date.now() - fs.statSync(p).mtimeMs > 24 * 3600 * 1000) fs.rmSync(p, { recursive: true, force: true }); } } catch (e) {}
+  }
+  sweepChunks(); setInterval(sweepChunks, 60 * 60 * 1000).unref();
+  app.get('/api/report-chunks/:up', (req, res) => {
+    const up = String(req.params.up);
+    if (!UP_RE.test(up)) return res.status(404).json({ error: 'Unknown upload.' });
+    res.set('Cache-Control', 'no-store').json({ have: chunkFiles(up) });
+  });
+  app.put('/api/report-chunks/:up/:n', express.raw({ type: '*/*', limit: CHUNK_MAX }), (req, res) => {
+    if (!chunkAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many uploads from here. Try again later.' });
+    const up = String(req.params.up), n = parseInt(req.params.n, 10);
+    if (!UP_RE.test(up) || !(n >= 0 && n < Math.ceil(MAX_PDF / (1024 * 1024))) || String(n) !== req.params.n) return res.status(400).json({ error: 'Bad upload.' });
+    if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ error: 'Empty upload.' });
+    if (chunksSize() > CHUNKS_MAX_BYTES) { console.error('report chunks folder full'); return res.status(503).json({ error: 'Busy right now. Try again later.' }); }
+    try {
+      const dir = path.join(CHUNK_DIR, up); fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, n + '.tmp'), req.body); fs.renameSync(path.join(dir, n + '.tmp'), path.join(dir, String(n)));
+    } catch (e) { console.error('report chunk save failed', e.message); return res.status(500).json({ error: 'Could not save that part.' }); }
+    res.json({ ok: true });
+  });
+  // The pieces put back together: [buffer] or [status, body] when something is missing.
+  function assembled(req){
+    const up = String(req.headers['x-report-upload'] || ''), count = parseInt(req.headers['x-report-chunks'], 10), size = parseInt(req.headers['x-report-size'], 10);
+    if (!UP_RE.test(up) || !(count > 0 && count <= 200) || !(size > 0 && size <= MAX_PDF)) return [400, { error: 'Bad upload.' }];
+    const have = new Set(chunkFiles(up)), missing = [];
+    for (let i = 0; i < count; i++) if (!have.has(i)) missing.push(i);
+    if (missing.length) return [409, { error: 'Part of the report hasn’t arrived yet. It will be sent again.', missing }];
+    const buf = Buffer.concat(Array.from({ length: count }, (_, i) => fs.readFileSync(path.join(CHUNK_DIR, up, String(i)))));
+    if (buf.length !== size) { fs.rmSync(path.join(CHUNK_DIR, up), { recursive: true, force: true }); return [409, { error: 'The report arrived incomplete. It will be sent again.' }]; }
+    return [buf, up];
+  }
   app.post('/api/reports', express.raw({ type: 'application/pdf', limit: MAX_PDF }), (req, res) => {
     if (!uploadAllowed(clientIp(req))) return res.status(429).json({ error: 'Too many reports sent from here. Try again later.' });
     const unpaid = req.headers['x-report-unpaid'] === '1';
-    const [status, body] = storeReport(req.body, metaHeader(req), 'app', { unpaid });
+    let pdf = req.body, up = '';
+    if (req.headers['x-report-upload']) {
+      const a = assembled(req);
+      if (!Buffer.isBuffer(a[0])) return res.status(a[0]).json(a[1]);
+      [pdf, up] = a;
+    }
+    const [status, body] = storeReport(pdf, metaHeader(req), 'app', { unpaid });
+    if (up && status < 400) fs.rmSync(path.join(CHUNK_DIR, up), { recursive: true, force: true });
     res.status(unpaid && status === 201 ? 202 : status).json(body);
   });
 
@@ -417,6 +468,63 @@ function mount(app){
       console.log('report sent: ' + id + (r.emailedAt ? ' (emailed to ' + REPORT_TO_EMAIL + ')' : ' (email not set up)'));
       res.json({ ok: true, sentAt: r.sentAt, emailed: !!r.emailedAt });
     } finally { sending.delete(id); }
+  });
+
+  /* ---------- the report online: /report/<key>, to view and download (paid reports only) ---------- */
+  const onlineLink = r => r && r.photoKey ? (PUBLIC_URL || '') + '/report/' + r.photoKey : '';
+  function onlineReport(key){
+    key = String(key || '').toLowerCase();
+    if (!KEY_RE.test(key)) return null;
+    const id = findByKey(key), r = id && readMeta(id);
+    if (!r || notPaid(r) || !fs.existsSync(path.join(REPORTS_DIR, id + '.pdf'))) return null;
+    const signed = path.join(REPORTS_DIR, id + '.signed.pdf');
+    return { key, id, r, file: fs.existsSync(signed) ? signed : path.join(REPORTS_DIR, id + '.pdf'), signed: fs.existsSync(signed), canSign: fs.existsSync(path.join(photoDir(id), 'data.json')) };
+  }
+  app.get('/report/:key.pdf', (req, res) => {
+    const o = onlineReport(req.params.key);
+    res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer', 'Cache-Control': 'private, no-store' });
+    if (!o) return res.status(404).type('text/plain').send('Report not found.');
+    const name = String(o.r.fileName || 'report.pdf').replace(/\.pdf$/i, '').replace(/["\\\r\n]/g, '') + (o.signed ? ' - signed' : '') + '.pdf';
+    res.type('application/pdf').set('Content-Disposition', (req.query.download ? 'attachment' : 'inline') + '; filename="' + name + '"');
+    fs.createReadStream(o.file).pipe(res);
+  });
+  app.get('/report/:key', (req, res) => {
+    const o = onlineReport(req.params.key);
+    res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer', 'Cache-Control': 'private, no-store' });
+    const shell = (title, body) => `<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>${esc(title)}</title><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<style>
+  :root{--bg:#F6F1EA;--card:#fff;--ink:#1B2A4A;--muted:#5E6B80;--line:#E6DED2;--accent:#1B2A4A;--good:#1F7A4D}
+  @media(prefers-color-scheme:dark){:root{--bg:#0F1A2E;--card:#16233D;--ink:#EEF2F8;--muted:#A9B4C6;--line:#25365A;--accent:#C49A6C;--good:#5FC28E}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  header{padding:14px 18px;display:flex;align-items:center;gap:10px;font-weight:700}header img{border-radius:8px}
+  main{max-width:980px;margin:0 auto;padding:0 16px 40px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+  h1{font:600 clamp(24px,4vw,34px)/1.15 Georgia,'Times New Roman',serif;margin:2px 0 6px}
+  .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .facts{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:14px;margin:8px 0 16px}
+  .btns{display:flex;flex-wrap:wrap;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:999px;font-weight:650;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--card);cursor:pointer;font-size:15px}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .ok{color:var(--good);font-weight:600;font-size:14px;margin-top:12px}
+  .viewer{margin-top:16px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#525659;height:80vh}
+  .viewer iframe{width:100%;height:100%;border:0;display:block}
+  .note{font-size:13px;color:var(--muted);margin-top:14px}
+  @media(max-width:700px){.viewer{display:none}.btn{flex:1 1 100%}}
+</style></head><body><header><img src="/icons/icon-192.png" alt="" width="30" height="30">DIY Inventory</header><main>${body}</main></body></html>`;
+    if (!o) return res.status(404).type('html').send(shell('Report not found', '<div class="card"><h1>Report not found</h1><p>Check the link you were sent. If it still doesn’t work, ask whoever sent it for a new one.</p></div>'));
+    const r = o.r, pdf = '/report/' + o.key + '.pdf';
+    const when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    const type = /check-?out/i.test(r.inspectionType || '') ? 'Check-Out' : /inspection/i.test(r.inspectionType || '') ? 'Inspection' : 'Check-In';
+    res.type('html').send(shell(type + ' – ' + (r.address || 'report'), `<div class="card">
+  <div class="k">${esc(type)} report</div>
+  <h1>${esc(r.address || 'Property report')}</h1>
+  <div class="facts">${when ? `<span>Finished ${esc(when)}</span>` : ''}${r.signedBy || r.inspectorName ? `<span>By ${esc(r.signedBy || r.inspectorName)}</span>` : ''}${r.rooms ? `<span>${r.rooms} rooms · ${r.photos} photos</span>` : ''}${r.ref ? `<span>Ref ${esc(r.ref)}</span>` : ''}</div>
+  <div class="btns"><a class="btn primary" href="${pdf}?download=1">Download PDF</a><a class="btn" href="${pdf}" target="_blank" rel="noopener">Open full screen</a>${o.canSign && !r.tenantSignedAt ? `<a class="btn" href="/sign/${o.key}">Check and sign it</a>` : ''}<button class="btn" type="button" id="share">Share this link</button></div>
+  ${r.tenantSignedAt ? `<div class="ok">✓ Signed by ${esc(r.tenantSignedBy || 'the tenant')}${r.tenantAgree === 'comments' ? ', with comments' : ''}: this is the signed copy.</div>` : ''}
+  <div class="viewer"><iframe src="${pdf}#view=FitH" title="The report"></iframe></div>
+  <p class="note">Anyone with this link can view and download the report. Photos in the PDF open full size when tapped.</p>
+</div>
+<script>document.getElementById('share').onclick=async function(){var u=location.href;try{if(navigator.share){await navigator.share({title:document.title,url:u});return;}await navigator.clipboard.writeText(u);this.textContent='Link copied';}catch(e){}};</script>`));
   });
 
   /* ---------- full-size photos: the PDF shows smaller pictures that link here ---------- */
@@ -744,6 +852,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${r.tenantSignedAt && r.photoKey ? `<a class="btn" href="/sign/${r.photoKey}/signed.pdf" target="_blank" rel="noopener">Signed copy</a>` : ''}
+          ${notPaid(r) ? '' : r.photoKey ? `<a class="btn" href="/report/${r.photoKey}" target="_blank" rel="noopener">Online</a><button class="btn" type="button" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">Copy link</button>` : `<form method="post" action="/admin/reports/${r.id}/link"><button class="btn">Make online link</button></form>`}
           <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="btn danger">Delete</button></form>
         </td>
       </tr>`).join('');
@@ -862,6 +971,13 @@ async function uploadPdfs(input){
     res.status(status).json(body);
   });
 
+  app.post('/admin/reports/:id/link', requireAdmin, (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Make links from the reports page.');
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).type('text/plain').send('Report not found.');
+    if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); keyToId.set(r.photoKey, id); }
+    res.redirect(303, '/admin#reports');
+  });
   app.post('/admin/reports/:id/delete', requireAdmin, (req, res) => {
     const id = String(req.params.id);
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete from the reports page.');
