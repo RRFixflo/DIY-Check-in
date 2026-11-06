@@ -69,6 +69,7 @@ function of(req, body, extra){
   const at = Number(v.at) || 0, secs = at && at < Date.now() ? Math.round((Date.now() - at) / 1000) : 0;
   const o = { referrer: ref, landing: land, here, trail, pages: Math.max(0, Math.min(9999, parseInt(v.pages, 10) || trail.length || 0)), secs: secs < 30 * 86400 ? secs : 0,
     utm: Object.keys(u).length ? u : undefined, click, microsite: clip(extra.microsite, 120), device: DEVICE(req && req.headers && req.headers['user-agent']) };
+  if (req && req.headers) { try { const pl = require('./analytics').placeOf(req); if (Object.keys(pl).length) o.place = pl; } catch (e) {} }
   const c = classify(o);
   Object.assign(o, { channel: c.channel, source: c.source, label: c.label, at: new Date().toISOString() });
   Object.keys(o).forEach(k => { if (o[k] === '' || o[k] === 0 || o[k] === undefined || (Array.isArray(o[k]) && !o[k].length)) delete o[k]; });
@@ -90,6 +91,7 @@ function html(o, esc){
   if (o.pages) bits.push(o.pages + ' page' + (o.pages === 1 ? '' : 's'));
   if (o.secs) bits.push(dur(o.secs) + ' after arriving');
   if (o.device) bits.push(esc(o.device));
+  if (o.place) bits.push(esc([o.place.city, o.place.region, o.place.postcode, o.place.country].filter(Boolean).join(', ')));
   const trail = (o.trail || []).length > 1 ? ' title="Pages: ' + esc(o.trail.map(path).join(' → ')) + '"' : '';
   return '<div class="sub origin"' + trail + '>📍 ' + bits.join(' · ') + '</div>';
 }

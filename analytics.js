@@ -31,7 +31,7 @@ const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8'))
 const writeJson = (f, d) => { fs.writeFileSync(f + '.tmp', JSON.stringify(d)); fs.renameSync(f + '.tmp', f); };
 
 function blankDay(day){
-  return { day, views: 0, visitors: 0, hours: new Array(24).fill(0), paths: {}, referrers: {}, utm: {}, devices: {}, countries: {}, events: {},
+  return { day, views: 0, visitors: 0, hours: new Array(24).fill(0), paths: {}, referrers: {}, utm: {}, devices: {}, countries: {}, cities: {}, events: {},
     sales: { link: 0, code: 0, open: 0, bought: 0 }, revenue: 0, purchases: { n: 0, value: 0 }, certs: { n: 0, value: 0 }, seen: {} };
 }
 // Today's counts in memory; `seen` holds today's visitor hashes: seen['*'] everyone, seen['p:/path'], seen['e:name'].
@@ -76,7 +76,23 @@ const skip = req => isBot(req) || (ctx.isOwner && ctx.isOwner(req));
 function visitorOf(req){ current(); return crypto.createHash('sha256').update(salt + '|' + ipOf(req) + '|' + uaOf(req)).digest('base64url').slice(0, 16); }
 function deviceOf(ua){ return /iPad|Tablet|PlayBook|Silk|Kindle/i.test(ua) || (/Android/i.test(ua) && !/Mobi/i.test(ua)) ? 'tablet' : /Mobi|iPhone|iPod|Android|Windows Phone/i.test(ua) ? 'phone' : 'desktop'; }
 // A guess from the browser's language setting (en-GB → GB), not a location.
-function countryOf(req){ const m = /^[a-z]{2,3}(?:-[A-Za-z]{4})?-([A-Za-z]{2})\b/.exec(String(req.headers['accept-language'] || '').trim()); return m ? m[1].toUpperCase() : '?'; }
+// Where the visitor is, from Cloudflare (which sits in front of the site and looks up each visitor's IP address):
+// CF-IPCountry always; town, region and postcode district too once “Add visitor location headers” is switched on in
+// Cloudflare (Rules → Transform Rules → Managed Transforms). Only when Cloudflare isn't in the way (the bare Railway
+// address) is the country guessed from the browser's language, marked with '~'.
+const hdr = (req, k) => { const v = req.headers[k]; try { return decodeURIComponent(String(v || '')).trim(); } catch (e) { return String(v || '').trim(); } };
+function placeOf(req){
+  const c = hdr(req, 'cf-ipcountry').toUpperCase();
+  const p = { country: /^[A-Z]{2}$/.test(c) && c !== 'XX' ? c : c === 'T1' ? 'Tor' : '', city: hdr(req, 'cf-ipcity').slice(0, 60), region: hdr(req, 'cf-region').slice(0, 60), postcode: hdr(req, 'cf-postal-code').slice(0, 12) };
+  Object.keys(p).forEach(k => { if (!p[k]) delete p[k]; });
+  return p;
+}
+function countryOf(req){
+  const p = placeOf(req); if (p.country) return p.country;
+  if (req.headers['cf-ray']) return '?';
+  const m = /^[a-z]{2,3}(?:-[A-Za-z]{4})?-([A-Za-z]{2})\b/.exec(String(req.headers['accept-language'] || '').trim()); return m ? '~' + m[1].toUpperCase() : '?';
+}
+function cityOf(req){ const p = placeOf(req); return p.city ? p.city + (p.region && p.region !== p.city ? ', ' + p.region : '') + (p.country && p.country !== 'GB' ? ' (' + p.country + ')' : '') : ''; }
 const bump = (o, k, n = 1) => { o[k] = (o[k] || 0) + n; };
 const cap = (o, k, max) => (k in o || Object.keys(o).length < max) ? k : '(other)';
 // Adds v to today's set `key`; true the first time today.
@@ -96,7 +112,7 @@ function pageView(req, pathName){
   const d = current(), v = visitorOf(req), ua = uaOf(req);
   d.views++;
   const first = firstToday(d, '*', v);
-  if (first) { d.visitors++; d.hours[hourOf()]++; bump(d.devices, deviceOf(ua)); bump(d.countries, cap(d.countries, countryOf(req), 120)); }
+  if (first) { d.visitors++; d.hours[hourOf()]++; bump(d.devices, deviceOf(ua)); bump(d.countries, cap(d.countries, countryOf(req), 120)); if (req.headers['cf-ipcountry']) d.cf = true; const town = cityOf(req); if (town) { d.cities = d.cities || {}; bump(d.cities, cap(d.cities, town, 400)); } }
   const p = cap(d.paths, pathName, 300), pc = d.paths[p] || (d.paths[p] = { views: 0, visitors: 0 });
   pc.views++; if (firstToday(d, 'p:' + p, v)) pc.visitors++;
   const ref = referrerOf(req); if (ref && (ref !== 'direct' || first)) bump(d.referrers, cap(d.referrers, ref, 200));
@@ -191,7 +207,9 @@ function sum(days){
     s.views += d.views || 0; s.visitors += d.visitors || 0; s.revenue += d.revenue || 0;
     (d.hours || []).forEach((h, i) => s.hours[i] += h || 0);
     for (const [k, v] of Object.entries(d.paths || {})) { bump(s.paths, k, v.views); bump(s.pathsV, k, v.visitors); }
-    for (const f of ['referrers', 'utm', 'devices', 'countries']) for (const [k, v] of Object.entries(d[f] || {})) bump(s[f], k, v);
+    for (const f of ['referrers', 'utm', 'devices', 'cities']) for (const [k, v] of Object.entries(d[f] || {})) bump(s[f], k, v);
+    // Days counted before Cloudflare's location was used only have the browser-language guess: shown as guessed.
+    for (const [k, v] of Object.entries(d.countries || {})) bump(s.countries, d.cf || k === '?' || k[0] === '~' ? k : '~' + k, v);
     for (const [k, v] of Object.entries(d.events || {})) { const e = s.events[k] || (s.events[k] = { n: 0, visitors: 0 }); e.n += v.n || 0; e.visitors += v.visitors || 0; }
     for (const k of Object.keys(s.sales)) s.sales[k] += (d.sales || {})[k] || 0;
     s.certs.n += (d.certs || {}).n || 0; s.certs.value += (d.certs || {}).value || 0;
@@ -316,11 +334,12 @@ ${(() => {
   <div class="card"><h2>Where visitors came from</h2>${list(s.referrers, Object.values(s.referrers).reduce((a, b) => a + b, 0))}<p class="sub">Arrivals from another site; “direct” is a typed address, a bookmark or an app that doesn’t say.</p></div>
   <div class="card"><h2>Campaigns (UTM)</h2>${list(s.utm, 0)}<p class="sub">Source / medium / campaign, from links tagged with utm_… .</p></div>
   <div class="card"><h2>Devices</h2>${list(s.devices, s.visitors, k => ({ phone: '📱 Phone', tablet: '📲 Tablet', desktop: '🖥️ Computer' }[k] || esc(k)))}</div>
-  <div class="card"><h2>Countries (a guess)</h2>${list(s.countries, s.visitors, k => esc(k === '?' ? 'Not known' : regionName(k)))}<p class="sub">From the browser’s language setting (e.g. English, UK), not from location.</p></div>
+  <div class="card"><h2>Countries</h2>${list(s.countries, s.visitors, k => esc(k === '?' ? 'Not known' : k === 'Tor' ? 'Tor network (hidden)' : k[0] === '~' ? regionName(k.slice(1)) + ' (guessed)' : regionName(k)))}<p class="sub">From each visitor’s internet address, looked up by Cloudflare. “(guessed)”: an older day, or a visit that didn’t come through Cloudflare, counted from the browser’s language.</p></div>
+  <div class="card"><h2>Towns and cities</h2>${Object.keys(s.cities || {}).length ? list(s.cities, s.visitors, k => esc(k)) : '<p class="sub">Not switched on yet. In Cloudflare, open diyinventory.co.uk → Rules → Transform Rules → Managed Transforms, and turn on <b>Add visitor location headers</b>. Towns appear here from then on.</p>'}<p class="sub">Where the visitor’s internet connection is, so about right for home broadband and less exact on mobile data.</p></div>
   <div class="card"><h2>Other actions</h2><ul class="top plain">${others}</ul></div>
 </div>
 </main></div></body></html>`);
   });
 }
 
-module.exports = { mount, mountAdmin, track, lead, summaryHTML, CLIENT_EVENTS };
+module.exports = { mount, mountAdmin, track, lead, placeOf, summaryHTML, CLIENT_EVENTS };
