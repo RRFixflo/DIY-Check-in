@@ -381,7 +381,7 @@ if (PAYWALL) {
 // unlocking it with the report link from /buy (or its token, or an access code) pasted in the app.
 app.get('/api/access', async (req, res) => {
   res.set('Cache-Control', 'no-store');
-  if (!PAYWALL || reports.isOwner(req)) return res.json({ access: true, buy: BUY_URL });
+  if (!PAYWALL || reports.isOwner(req)) return res.json({ access: true, buy: BUY_URL, owner: reports.isOwner(req) });
   const a = await checkAccess(cookieToken(req));
   res.json({ access: !!a.valid, reason: a.valid ? '' : a.reason, buy: BUY_URL });
 });

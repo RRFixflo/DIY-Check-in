@@ -34,6 +34,7 @@ const MAX_ATTACH = 28 * 1024 * 1024; // Resend allows 40 MB per email after base
 fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const COPY_TYPES = ['Check-In', 'Check-Out', 'Interim Inspection', 'Renewal Inspection'];
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
 
@@ -988,13 +989,14 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${r.copiedFrom ? ' <div class="sub">📄 Copy of the ' + esc(r.copiedFromType || 'report') + ' ' + esc(r.copiedFromRef || '') + '</div>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${r.tenantSignedAt && r.photoKey ? `<a class="btn" href="/sign/${r.photoKey}/signed.pdf" target="_blank" rel="noopener">Signed copy</a>` : ''}
           ${notPaid(r) || (!r.sentAt && r.source !== 'uploaded') ? `<form method="post" action="/admin/reports/${r.id}/complete" onsubmit="return confirm('Mark this report as complete${notPaid(r) ? ' and paid' : ''}? Its online link will work and any copies are emailed.')"><button class="btn primary">Mark as complete</button></form>` : ''}
+          <form method="post" action="/admin/reports/${r.id}/copy" class="copyas" onsubmit="if(!this.type.value){alert('Choose the type for the copy.');return false}this.querySelector('button').textContent='Copying…'"><select name="type" aria-label="Type for the copy" style="font:inherit;font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #cfd3de;max-width:160px"><option value="">Copy as…</option>${COPY_TYPES.filter(t => t !== r.inspectionType).map(t => `<option>${t}</option>`).join('')}</select><button class="btn" title="Make a separate copy of this report as another type: same rooms, conditions and photos, new reference. The original stays as it is.">Make a copy</button></form>
           ${r.source === 'backup' ? `<form method="post" action="/admin/reports/${r.id}/rebuild" onsubmit="this.querySelector('button').textContent='Rebuilding…'"><button class="btn" title="Remake it with clickable full-size photos and an index of photographs">Rebuild from backup</button></form>` : ''}
           ${notPaid(r) ? '' : r.photoKey ? `<a class="btn" href="/report/${r.photoKey}" target="_blank" rel="noopener">Online</a><button class="btn" type="button" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">Copy link</button>` : `<form method="post" action="/admin/reports/${r.id}/link"><button class="btn">Make online link</button></form>`}
           <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="btn danger">Delete</button></form>
@@ -1076,7 +1078,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   table { width:100%; border-collapse:collapse; } th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); padding:12px 14px; border-bottom:1px solid var(--line); background:#FAFBFD; }
   td { padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top; } tr:last-child td { border-bottom:none; }
   .sub { color:var(--soft); font-size:12.5px; margin-top:2px; } .num { white-space:nowrap; }
-  .actions { white-space:nowrap; } .actions form { display:inline; }
+  .actions { white-space:nowrap; } .actions form { display:inline; } @media (max-width:760px) { .actions { white-space:normal; } } .actions form.copyas { display:inline-flex; gap:6px; flex-wrap:wrap; white-space:normal; max-width:100%; vertical-align:middle; }
   .btn { display:inline-block; font:inherit; font-size:13px; font-weight:600; padding:7px 13px; border-radius:999px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); text-decoration:none; cursor:pointer; margin:2px 4px 2px 0; }
   .btn:hover { border-color:var(--navy); } .btn.danger { color:var(--danger); } .btn.danger:hover { border-color:var(--danger); }
   .btn.primary { background:var(--navy); border-color:var(--navy); color:#fff; } .btn.primary:hover { opacity:.92; }
@@ -1229,6 +1231,45 @@ async function uploadPdfs(input){
       console.log('report rebuilt from its backup: ' + id + ' (' + b.photos.length + ' photos linked)');
       res.redirect(303, '/admin#reports');
     } catch (e) { console.error('rebuild failed: ' + e.message); res.status(500).type('text/plain').send('The rebuild failed: ' + e.message); }
+  });
+  // The owner (only) makes a copy of a report as another type, e.g. a check-out copied as a check-in: the same rooms,
+  // items, conditions and photos from its online backup, a new reference and photo key, built with the app's own
+  // design and stored as a separate, paid report. The original is left exactly as it is; nothing is emailed to anyone.
+  async function copyAs(id, type){
+    const r = ID_RE.test(id) && readMeta(id);
+    if (!r) return { error: 'Report not found.', status: 404 };
+    if (!COPY_TYPES.includes(type)) return { error: 'Choose the type for the copy.', status: 400 };
+    const b = drafts.findBackup(({ s }) => s._serverReportId === id || (s.finalizedAt && backupKey(s) === r.key));
+    if (!b) return { error: 'This report’s online backup is no longer on the server, so it can’t be copied.', status: 404 };
+    const s = JSON.parse(JSON.stringify(b.s));
+    ['_serverReportId', '_rescueFailed', '_token', '_access', '_startAlerted', 'submittedId', 'unpaidId', 'sentAt', 'editOf', 'editedAt', 'pendingReplace', 'photosUploaded', 'dataUploaded', 'cloudSent'].forEach(k => delete s[k]);
+    s.meta = Object.assign({}, s.meta, { inspectionType: type, ref: 'SC-' + crypto.randomBytes(5).toString('hex').slice(0, 7).toUpperCase(), copyEmail: '' });
+    if (type === 'Check-In') s.earlier = null;   // a check-in isn't compared with an earlier report
+    s.photoKey = crypto.randomBytes(16).toString('hex');
+    s.finalizedAt = s.finalizedAt || new Date().toISOString();
+    const built = await drafts.buildFor(b.key, s);
+    const pr = s.property || {}; let photos = ((pr.exterior || {}).photos || []).length;
+    (s.rooms || []).forEach(x => { (x.items || []).forEach(i => { photos += (i.photos || []).length; }); photos += (x.extraPhotos || []).length; });
+    const m = s.meta;
+    const [status, body] = storeReport(built.pdf, Object.assign({}, m, { finalizedAt: s.finalizedAt, rooms: (s.rooms || []).length, photos, photoKey: s.photoKey,
+      basedOnRef: (s.earlier && s.earlier.ref) || '', fileName: [m.address, type, m.date, m.ref].filter(Boolean).join(' - ').replace(/[\\/:*?"<>|]/g, '-') + '.pdf' }), 'copy', {});
+    if (status >= 400 || !body.id) return { error: body.error || 'It could not be saved.', status: 500 };
+    attachBackupPhotos(body.id, s.photoKey, built.photos, built.photoFile);
+    const c = readMeta(body.id);
+    Object.assign(c, { sentAt: new Date().toISOString(), paidWith: 'You (copied from ' + (r.inspectionType || 'report') + ' ' + (r.ref || r.id) + ')', copiedFrom: r.id, copiedFromRef: r.ref || '', copiedFromType: r.inspectionType || '' });
+    fs.writeFileSync(path.join(REPORTS_DIR, c.id + '.json'), JSON.stringify(c, null, 2));
+    console.log('report copied by the owner: ' + r.id + ' (' + r.inspectionType + ') → ' + c.id + ' (' + type + ', ' + built.design + ' design)');
+    return { id: c.id, key: c.photoKey, ref: c.ref, type };
+  }
+  app.post('/admin/reports/:id/copy', requireAdmin, express.urlencoded({ extended: false }), async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Copy it from the reports page.');
+    const wantsJson = /json/.test(String(req.headers.accept || ''));
+    try {
+      const out = await copyAs(String(req.params.id), String((req.body || {}).type || ''));
+      if (out.error) return wantsJson ? res.status(out.status).json({ error: out.error }) : res.status(out.status).type('text/plain').send(out.error);
+      if (wantsJson) return res.json(Object.assign({ ok: true, url: '/report/' + out.key }, out));
+      res.redirect(303, '/admin#reports');
+    } catch (e) { console.error('report copy failed: ' + e.message); return wantsJson ? res.status(500).json({ error: 'The copy failed: ' + e.message }) : res.status(500).type('text/plain').send('The copy failed: ' + e.message); }
   });
   // The owner marks a report as complete at any time: paid and sent, so its online link and copies work.
   app.post('/admin/reports/:id/complete', requireAdmin, async (req, res) => {

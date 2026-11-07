@@ -2266,6 +2266,7 @@ function updateFinishButtonState(){
 const REPORT_TYPES = ['Check-In', 'Check-Out', 'Interim Inspection', 'Renewal Inspection'];
 let typePick = '';
 function typeChipHTML(){
+  if (!accessUi.owner) return escapeHtml(state.meta.inspectionType);   // only the owner (signed in to /admin) changes or copies the type
   return `<button type="button" class="type-chip" onclick="openTypeChange()" title="Change the report type" aria-label="Report type: ${escapeHtml(state.meta.inspectionType)}. Tap to change it.">${escapeHtml(state.meta.inspectionType)} ✎</button>`;
 }
 function openTypeChange(){ typePick = REPORT_TYPES.includes(state.meta.inspectionType) ? state.meta.inspectionType : 'Check-In'; drawTypeChange(''); document.getElementById('typeBox').classList.remove('hidden'); }
@@ -2275,17 +2276,17 @@ function drawTypeChange(err){
   const mv = (document.getElementById('typeMoveIn') || {}).value || state.meta.moveInDateTime || '';
   document.getElementById('typeBody').innerHTML = `
     <div class="type-opts">${REPORT_TYPES.map(t => `<label class="type-opt${typePick === t ? ' on' : ''}"><input type="radio" name="typePick" value="${t}" ${typePick === t ? 'checked' : ''} onchange="typePick=this.value; drawTypeChange('')">${t}</label>`).join('')}</div>
-    ${needMoveIn ? `<label for="typeMoveIn" style="display:block;font-size:14px;font-weight:600;margin-bottom:6px">Tenancy move-in date &amp; time</label>
+    ${needMoveIn && !state.finalizedAt ? `<label for="typeMoveIn" style="display:block;font-size:14px;font-weight:600;margin-bottom:6px">Tenancy move-in date &amp; time</label>
       <input class="input" id="typeMoveIn" type="datetime-local" value="${escapeHtml(mv)}" style="margin-bottom:12px">` : ''}
-    <p class="type-note">The title, cover, wording and file name change to match${state.finalizedAt ? '. The finished report is made again and replaces the copy already sent, under the same link' : ''}. Rooms, photos and conditions stay as they are.</p>
+    <p class="type-note">${state.finalizedAt ? 'A separate copy of this report is made as the type you choose: the same rooms, conditions and photos, with a new reference and its own link. This report stays exactly as it is.' : 'The title, cover, wording and file name change to match. Rooms, photos and conditions stay as they are.'}</p>
     ${err ? `<p class="type-err">${escapeHtml(err)}</p>` : ''}
-    <div class="btn-row"><button type="button" class="btn btn-primary" onclick="applyTypeChange()">Change to ${escapeHtml(typePick)}</button><button type="button" class="btn" onclick="closeTypeChange()">Cancel</button></div>`;
+    <div class="btn-row"><button type="button" class="btn btn-primary" id="typeGo" onclick="applyTypeChange()">${state.finalizedAt ? 'Make a copy as ' : 'Change to '}${escapeHtml(typePick)}</button><button type="button" class="btn" onclick="closeTypeChange()">Cancel</button></div>`;
 }
 function applyTypeChange(){
   const t = typePick;
   if (!REPORT_TYPES.includes(t)) return;
   if (t === state.meta.inspectionType) { closeTypeChange(); return; }
-  if (t === 'Check-In') {   // the same rule as starting a check-in: within 7 days of the move-in (counted from when this report was started)
+  if (t === 'Check-In' && !state.finalizedAt) {   // the same rule as starting a check-in: within 7 days of the move-in (counted from when this report was started)
     const v = (document.getElementById('typeMoveIn') || {}).value || '';
     const moveIn = new Date(v), started = new Date(state.meta.createdAt || Date.now());
     if (!v || isNaN(moveIn.getTime())) { drawTypeChange('Enter the tenancy move-in date and time. A check-in must be done within 7 days of move-in.'); return; }
@@ -2294,13 +2295,26 @@ function applyTypeChange(){
     if (diff > 7 * 86400000) { drawTypeChange('This report was started more than 7 days after that move-in date, so it can’t be a check-in.'); return; }
     state.meta.moveInDateTime = v;
   }
+  if (state.finalizedAt) { copyFinishedAs(t); return; }   // a finished report is never changed: a separate copy is made
   const was = state.meta.inspectionType;
   state.meta.inspectionType = t;
-  if (state.finalizedAt) markEdited();
   persist();
   closeTypeChange();
   render();
   notice('Changed from ' + was + ' to ' + t + '.' + (state.finalizedAt ? ' The report is being made again and will replace the one already sent.' : ''));
+}
+// The owner copies a finished report as another type (POST /admin/reports/:id/copy, from its online backup).
+async function copyFinishedAs(t){
+  const go = document.getElementById('typeGo');
+  if (!state.submittedId) { drawTypeChange('This report hasn’t finished sending yet. Try again once it says Report sent.'); return; }
+  if (go) { go.disabled = true; go.textContent = 'Making the copy…'; }
+  try {
+    const res = await fetch('/admin/reports/' + encodeURIComponent(state.submittedId) + '/copy', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ type: t }) });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok || !d.ok) throw new Error(d.error || 'The copy could not be made.');
+    document.getElementById('typeBody').innerHTML = `<p style="margin:6px 0 12px"><strong>✓ ${escapeHtml(t)} copy made</strong> (ref ${escapeHtml(d.ref)}). It’s on your admin page under Reports, with its own link.</p>
+      <div class="btn-row"><a class="btn btn-primary" href="${escapeHtml(d.url)}" target="_blank" rel="noopener">Open the copy</a><a class="btn" href="/admin#reports" target="_blank" rel="noopener">Admin</a><button type="button" class="btn" onclick="closeTypeChange()">Close</button></div>`;
+  } catch (e) { drawTypeChange((e && e.message) || 'The copy could not be made.'); }
 }
 // A finished report has changed: build it again and replace the stored copy (same link, nothing to pay again).
 function markEdited(){
@@ -3877,7 +3891,7 @@ async function checkAccessStatus(){
   try {
     const r = await fetch('/api/access', { cache: 'no-store' });
     const d = await r.json();
-    accessUi = { checked: true, access: !!d.access, reason: d.reason || '', buy: d.buy || accessUi.buy };
+    accessUi = { checked: true, access: !!d.access, reason: d.reason || '', buy: d.buy || accessUi.buy, owner: !!d.owner };
   } catch (e) { accessUi = Object.assign({}, accessUi, { checked: true, offline: true }); }
   return accessUi;
 }
@@ -4667,7 +4681,7 @@ function renderDone(){
         ` : (accessUi.checked ? payCardHTML() : '<div class="pay-msg">Checking…</div>')}
         <button type="button" class="btn btn-block" style="margin-top:12px" onclick="editReport()">✏️ Edit the report: add or remove photos</button>
         <div class="restart-row"><button type="button" class="btn" onclick="startAgain()">Start again</button></div>
-        <div class="room-count-hint">To change it to a ${inspectionKind(state.meta.inspectionType) === 'Check-Out' ? 'check-in or an inspection' : inspectionKind(state.meta.inspectionType) === 'Check-In' ? 'check-out or an inspection' : 'check-in or check-out'}, tap “${escapeHtml(state.meta.inspectionType)} ✎” at the top.</div>
+        ${accessUi.owner ? `<div class="room-count-hint">To make a copy of it as a ${inspectionKind(state.meta.inspectionType) === 'Check-Out' ? 'check-in or an inspection' : inspectionKind(state.meta.inspectionType) === 'Check-In' ? 'check-out or an inspection' : 'check-in or check-out'}, tap “${escapeHtml(state.meta.inspectionType)} ✎” at the top.</div>` : ''}
       </div>
     </div>
 
@@ -4842,7 +4856,7 @@ track('app_open');
   // Back from paying on /buy (/app?paid=1): the cookie is set, so check access again and unlock the finished report.
   const backFromPaying = new URLSearchParams(location.search).get('paid');
   if (backFromPaying) history.replaceState(null, '', location.pathname);
-  checkAccessStatus().then(() => { if (state.view === 'setup' || (backFromPaying && state.view === 'done')) render(); });
+  checkAccessStatus().then(() => { if (state.view === 'setup' || (backFromPaying && state.view === 'done') || accessUi.owner) render(); });
   // Opened from an earlier report's link (/?from=<key>): start a new report from it, if nothing else is open.
   const fromKey = keyFromInput(new URLSearchParams(location.search).get('from'));
   if (fromKey){ history.replaceState(null, '', location.pathname); if (state.view === 'setup') startFromEarlier(fromKey); }
