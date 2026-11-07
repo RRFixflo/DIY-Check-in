@@ -615,6 +615,9 @@
   .earlier-on strong { color: var(--ink); }
   .earlier-on .btn-ghost { flex: none; }
   .then-row { display: flex; align-items: center; gap: 8px; margin: 8px 0 4px; padding: 8px 10px; border-radius: 12px; background: var(--surface-2); }
+  .ai-cmp { margin-top: 8px; padding: 8px 10px; border-radius: 10px; font-size: 13px; line-height: 1.4; background: var(--surface-2); border-left: 4px solid var(--line-strong); }
+  .ai-cmp.worse { border-left-color: #C0472B; background: rgba(192,71,43,.10); } .ai-cmp.wear { border-left-color: #C49A6C; background: rgba(196,154,108,.14); }
+  .ai-cmp.same, .ai-cmp.better { border-left-color: #3E8E57; background: rgba(62,142,87,.10); } .ai-cmp.checking { opacity: .75; }
   .then-txt { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); }
   .then-k { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
   .then-row img { width: 44px; height: 44px; object-fit: cover; border-radius: 9px; cursor: zoom-in; background: var(--line); }
@@ -1423,13 +1426,18 @@ async function assessItemPhoto(roomId, itemId, photoId){
   const item = room.items.find(i => i.id === itemId); if (!item) return;
   const photo = item.photos.find(p => p.id === photoId); if (!photo) return;
   if (aiEnabled === false) return;
+  // A check-out started from the check-in: the first photo of an item goes with the check-in's photo of it,
+  // and the AI says what changed (item.aiChange).
+  const ei = earlierItem(state, room, item), ek = earlierFor(state) && earlierFor(state).key;
+  const cmp = ek && ei && !ei.notApplicable && (ei.photos || []).length && item.photos[0] && item.photos[0].id === photo.id ? { key: ek, n: ei.photos[0], condition: ei.condition || '' } : null;
+  if (cmp) item.aiChange = { status: 'checking', photoId: photo.id };
   photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'checking' });
   render();
   try{
     const res = await fetch('/api/assess', {
       method:'POST',
       headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ label: item.label, room: room.name, image: photo.dataUrl })
+      body: JSON.stringify(Object.assign({ label: item.label, room: room.name, image: photo.dataUrl }, cmp ? { earlier: cmp } : {}))
     });
     const data = await res.json();
     if (res.status === 402){
@@ -1452,9 +1460,12 @@ async function assessItemPhoto(roomId, itemId, photoId){
         if (ok.length) item.defects = ok.includes('None') && ok.length > 1 ? ok.filter(d => d !== 'None') : ok;
       }
       if (['clean','needs','dirty'].includes(data.cleanliness) && !item.clean) item.clean = data.cleanliness;
+      if (cmp) item.aiChange = data.change ? Object.assign({ photoId: photo.id, at: Date.now() }, data.change) : null;
     }
+    if (cmp && item.aiChange && item.aiChange.status === 'checking' && (res.status === 402 || !res.ok || data.error)) item.aiChange = null;
   }catch(err){
     photo.aiCheck = Object.assign({}, photo.aiCheck, { status:'error', note:'could not reach the server' });
+    if (cmp) item.aiChange = null;
   }
   persist(); render();
 }
@@ -1879,7 +1890,7 @@ function normalizeItem(i){
   if (i && i.condition === undefined) i.condition = '';
   if (i && i.conditionNote === undefined) i.conditionNote = '';
   if (i && i.aiObservation === undefined) i.aiObservation = '';
-  return { id: i.id || ('it' + Math.random().toString(36).slice(2,8)), label: i.label || 'Item', notApplicable: !!i.notApplicable, naReason: i.naReason || '', photos: Array.isArray(i.photos) ? i.photos : [], custom: !!i.custom, mandatory: !!i.mandatory, condition: i.condition || '', conditionNote: i.conditionNote || '', aiObservation: i.aiObservation || '', desc: i.desc || '', defects: Array.isArray(i.defects) ? i.defects : [], clean: i.clean || '', working: i.working || '', qty: i.qty || '' };
+  return { id: i.id || ('it' + Math.random().toString(36).slice(2,8)), label: i.label || 'Item', notApplicable: !!i.notApplicable, naReason: i.naReason || '', photos: Array.isArray(i.photos) ? i.photos : [], custom: !!i.custom, mandatory: !!i.mandatory, condition: i.condition || '', conditionNote: i.conditionNote || '', aiObservation: i.aiObservation || '', desc: i.desc || '', defects: Array.isArray(i.defects) ? i.defects : [], clean: i.clean || '', working: i.working || '', qty: i.qty || '', aiChange: i.aiChange && i.aiChange.status !== 'checking' ? i.aiChange : null };
 }
 function normalizeRoom(r){
   const hasItems = Array.isArray(r.items) && r.items.length;
@@ -3162,8 +3173,26 @@ async function buildPdfBlob(s, onProgress, out){
     newSection('Changes since the ' + eName);
     const changes = [];
     s.rooms.forEach(room => room.items.forEach(item => { const c = itemChange(s, room, item); if (c) changes.push({ room, item, c }); }));
-    changes.sort((a, b) => (b.c.worse ? 1 : 0) - (a.c.worse ? 1 : 0));
+    const SEV = { major: 3, moderate: 2, minor: 1 };
+    changes.sort((a, b) => ((b.c.worse ? 10 : 0) + (SEV[(b.c.ai || {}).severity] || 0)) - ((a.c.worse ? 10 : 0) + (SEV[(a.c.ai || {}).severity] || 0)));
     const worseN = changes.filter(x => x.c.worse).length;
+    // The AI's photo-by-photo comparison, summed up in a box at the top.
+    const compared = []; s.rooms.forEach(room => room.items.forEach(item => { const a = aiChangeOf(item); if (a) compared.push(a); }));
+    if (compared.length){
+      const n = k => compared.filter(a => a.status === 'worse' && a.kind === k).length;
+      const found = [['damage', 'possible damage'], ['wear', 'wear and tear'], ['cleaning', 'needs cleaning'], ['missing', 'missing']].map(([k, w]) => [n(k), w]).filter(x => x[0]);
+      const same = compared.filter(a => a.status === 'same').length, unclear = compared.filter(a => a.status === 'unclear').length;
+      const txt = 'Compared automatically. Our AI put the photo of each item from the ' + eName + ' beside its photo in this report and looked for differences: ' + compared.length + ' item' + (compared.length === 1 ? '' : 's') + ' compared' +
+        (found.length ? '; found ' + found.map(([c, w]) => c + ' ' + w).join(', ') : '; no damage found') + (same ? '; ' + same + ' unchanged' : '') + (unclear ? '; ' + unclear + ' could not be compared (different angle or light)' : '') +
+        '. These are what the photos show, not a decision on who is responsible: check each one against the photographs.';
+      const bl = lines(txt, CW - 12);
+      const bh = bl.length * 4.4 + 9;
+      doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(M, y, CW, bh, 'F');
+      doc.setFillColor(C.accent[0], C.accent[1], C.accent[2]); doc.rect(M, y, 1.4, bh, 'F');
+      set('bold', 7, C.accent); doc.text('CHECKED BY AI', M + 6, y + 5);
+      set('normal', 9, C.ink); doc.text(bl, M + 6, y + 10);
+      y += bh + 6;
+    }
     set('normal', 9.4, C.ink);
     const il = lines('This report is compared with the ' + eName + ' of ' + eWhen + (E.ref ? ' (ref ' + E.ref + ')' : '') + '. ' +
       (changes.length ? worseN + ' item' + (worseN === 1 ? '' : 's') + ' changed for the worse (a lower condition, new marks or damage, not working, or less clean)' + (changes.length > worseN ? ', and ' + (changes.length - worseN) + ' other change' + (changes.length - worseN === 1 ? '' : 's') : '') + '. Each item in the room pages shows both reports.' : 'No changes were recorded between the two reports.'), CW * 0.75);
@@ -3172,7 +3201,7 @@ async function buildPdfBlob(s, onProgress, out){
       const brief = it => !it ? '—' : it.notApplicable ? 'Not applicable' : [it.condition ? conditionWord(it.condition) : 'Not recorded'].concat((it.defects || []).filter(d => d !== 'None').map(d => d.toLowerCase())).join(', ');
       table([['Room', 44], ['Item', 52], [eStage + ' · ' + eWhen.toUpperCase(), 55], ['Now', 55], ['Change', CW - 206]],
         changes.map(({ room, item, c }) => [room.name, item.label, brief(c.ei), brief(item), c.text]),
-        { style: (i, row, ri) => i === 4 && changes[ri].c.worse ? ['bold', COND.poor[0]] : i < 2 ? ['bold', C.ink] : null });
+        { style: (i, row, ri) => i === 4 && changes[ri].c.worse ? ['bold', (changes[ri].c.ai && changes[ri].c.ai.kind === 'wear' && /^AI/.test(changes[ri].c.text) ? COND.fair : COND.poor)[0]] : i < 2 ? ['bold', C.ink] : null });
     }
     // Meter readings then and now.
     const mRows = Object.keys(METER_LABELS).map(k => { const a = (E.meters || {})[k] || {}, b = ((s.property || {}).meters || {})[k] || {}; return (a.reading || b.reading) ? [METER_LABELS[k], (a.na ? 'N/A' : (a.reading || '—') + (a.reading ? ' ' + METER_UNITS[k] : '')), (b.na ? 'N/A' : (b.reading || '—') + (b.reading ? ' ' + METER_UNITS[k] : ''))] : null; }).filter(Boolean);
@@ -3188,10 +3217,12 @@ async function buildPdfBlob(s, onProgress, out){
       const origin = (location && /^https?:/.test(location.origin || '')) ? location.origin : '';
       for (let i = 0; i < pairs.length; i++){
         const { room, item, c } = pairs[i];
-        if (y + bh + 18 > BOTTOM){ newPage(); banner('Changes since the ' + eName + ' – photographs'); }
+        const ccol = c.ai && c.ai.kind === 'wear' && !/^(Worse|New|Now)/.test(c.text) ? COND.fair[0] : COND.poor[0];
+        set('bold', 8, ccol); const ctl = lines(c.text, CW).slice(0, 3);
+        if (y + bh + 18 + ctl.length * 3.8 > BOTTOM){ newPage(); banner('Changes since the ' + eName + ' – photographs'); }
         set('bold', 9, C.ink); doc.text(room.name + '  ·  ' + item.label, M, y + 3);
-        set('bold', 8, COND.poor[0]); doc.text(c.text, PW - M, y + 3, { align: 'right' });
-        const top = y + 6;
+        set('bold', 8, ccol); doc.text(ctl, M, y + 7.4);
+        const top = y + 6 + ctl.length * 3.8 + 1;
         const n = c.ei.photos[0];
         const thenImg = await (async () => { try { const r = await fetch(E.base + n + '.jpg'); if (!r.ok) return null; const b = await r.blob(); const du = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }); return await shrinkPhoto(du, 700); } catch (e) { return null; } })();
         if (!(thenImg && drawFitted(thenImg, 'cmp-then-' + i, M, top, bw, bh))){
@@ -3695,8 +3726,25 @@ function earlierName(e){ const k = inspectionKind(e && e.type); return k === 'In
 function conditionWord(v){ return conditionLabel(v).replace(/ condition$/, ''); }
 const CLEAN_RANK = { clean:0, needs:1, dirty:2 };
 // What changed for an item since the earlier report, or null. worse: anything that counts against it.
+// The AI's comparison of this item's first photo with the earlier report's photo, if it is still that photo.
+function aiChangeOf(item){
+  const a = item && item.aiChange;
+  if (!a || a.status === 'checking' || !(item.photos || []).length || item.photos[0].id !== a.photoId) return null;
+  return a;
+}
+const AI_KIND_WORD = { damage: 'Possible damage', wear: 'Wear and tear', cleaning: 'Needs cleaning', missing: 'Missing', better: 'Better', unclear: 'Could not compare', none: 'No change' };
 function itemChange(s, room, item){
   if (!earlierFor(s)) return null;
+  const r = itemChangeRules(s, room, item), a = aiChangeOf(item);
+  if (!a || item.notApplicable) return r;
+  if (a.status === 'worse'){
+    const t = 'AI · ' + (AI_KIND_WORD[a.kind] || 'Worse') + (a.severity && a.severity !== 'none' ? ' (' + a.severity + ')' : '') + (a.summary ? ': ' + a.summary : '');
+    return { worse: true, text: r && r.text && r.worse ? r.text + '; ' + t : t, ei: (r && r.ei) || earlierItem(s, room, item), ai: a };
+  }
+  if (r) return Object.assign({}, r, { ai: a });
+  return a.status === 'better' ? { worse: false, text: 'AI: ' + (a.summary || 'Better'), ei: earlierItem(s, room, item), ai: a } : null;
+}
+function itemChangeRules(s, room, item){
   const ei = earlierItem(s, room, item);
   if (!ei) return item.notApplicable ? null : { worse: false, text: 'Not in the earlier report', ei: null };
   if (!ei.notApplicable && item.notApplicable) return { worse: true, text: 'Now marked not applicable', ei };
@@ -3824,7 +3872,15 @@ function earlierItemHTML(room, item){
   const when = escapeHtml(earlierName(e) + ', ' + earlierWhen(e));
   if (!ei) return `<div class="then-row"><div class="then-txt"><span class="then-k">At the ${when}</span>Not in the earlier report</div></div>`;
   const txt = ei.notApplicable ? 'Not applicable' : [ei.condition ? conditionWord(ei.condition) : 'Condition not recorded'].concat((ei.defects || []).filter(d => d !== 'None').map(d => d.toLowerCase())).concat(ei.working === 'no' ? ['not working'] : []).join(' · ');
-  return `<div class="then-row"><div class="then-txt"><span class="then-k">At the ${when}</span>${escapeHtml(txt)}</div>${(ei.photos || []).slice(0, 3).map(n => `<img loading="lazy" src="${escapeHtml(e.base + n)}.jpg" onclick="openPhotoPreview('${escapeHtml(e.base + n)}.jpg')" alt="Earlier photo">`).join('')}</div>`;
+  return `<div class="then-row"><div class="then-txt"><span class="then-k">At the ${when}</span>${escapeHtml(txt)}</div>${(ei.photos || []).slice(0, 3).map(n => `<img loading="lazy" src="${escapeHtml(e.base + n)}.jpg" onclick="openPhotoPreview('${escapeHtml(e.base + n)}.jpg')" alt="Earlier photo">`).join('')}</div>${aiChangeHTML(item, e)}`;
+}
+function aiChangeHTML(item, e){
+  const raw = item.aiChange;
+  if (raw && raw.status === 'checking') return `<div class="ai-cmp checking">🤖 Comparing with the ${escapeHtml(earlierName(e))} photo…</div>`;
+  const a = aiChangeOf(item); if (!a) return '';
+  const cls = a.status === 'worse' ? (a.kind === 'wear' ? 'wear' : 'worse') : a.status === 'better' ? 'better' : a.status === 'same' ? 'same' : 'unclear';
+  const head = a.status === 'same' ? 'No change since the ' + earlierName(e) : a.status === 'unclear' ? "Couldn't compare (different angle or light)" : (AI_KIND_WORD[a.kind] || (a.status === 'better' ? 'Better' : 'Changed')) + (a.severity && a.severity !== 'none' ? ' · ' + a.severity : '');
+  return `<div class="ai-cmp ${cls}"><b>🤖 ${escapeHtml(head)}</b>${a.summary && a.status !== 'same' ? '<br>' + escapeHtml(a.summary) : ''}</div>`;
 }
 function earlierSetupHTML(){
   const ps = pendingSetup, e = ps.basedOn;

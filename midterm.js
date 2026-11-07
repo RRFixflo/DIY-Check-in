@@ -55,7 +55,7 @@ function mount(app, ctx){
 <section style="padding-top:0"><div class="wrap"><div class="card">
   <h2 style="margin-top:0">Never forget the next one</h2>
   <p>When you finish a check-in or an inspection, ask for a reminder every 3 or 6 months. The email has a ready link that starts the next inspection from the last report: open it yourself, or forward it to your tenant. One click stops the reminders.</p>
-  <p style="margin:0">What to look for: <a href="/guides/mid-tenancy-inspection-checklist">mid-tenancy inspection checklist</a> · Prefer paper? <a href="/inspection-report-template">free inspection report template</a></p>
+  <p style="margin:0">What to look for: <a href="/guides/mid-tenancy-inspection-checklist">mid-tenancy inspection checklist</a> · Prefer paper? <a href="/inspection-report-template">free inspection report template</a> <!--AI-->· At the end of the tenancy: <a href="/check-out-comparison">check-out compared with the check-in by AI</a><!--/AI--></p>
 </div></div></section>
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">Questions</span><h2>Mid-term inspections: questions and answers</h2></div>

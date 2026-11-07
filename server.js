@@ -87,6 +87,21 @@ const ASSESS_SYSTEM = [
   'Describe only what is visible. Ignore the date and time stamp burned into the corner of the photo.'
 ].join('\n');
 
+// A check-out (or inspection) started from an earlier report: the earlier photo of the same item is sent too, and
+// the AI says what changed. Signs, not proof: the report says so, and the people involved decide.
+const CHANGE_KINDS = ['none', 'damage', 'wear', 'cleaning', 'missing', 'better', 'unclear'];
+const SEVERITY = ['none', 'minor', 'moderate', 'major'];
+const COMPARE_SYSTEM = ASSESS_SYSTEM + '\n' + [
+  'You are ALSO given an earlier photograph of the same item, from the earlier report (usually the check-in). The FIRST image is the earlier photo, the SECOND image is the new photo. Assess condition, description, defects and cleanliness from the NEW (second) photo only.',
+  'Then compare the two photos and add one more key, "change", an object with exactly these keys:',
+  '  "status": "same" (no visible difference), "worse", "better", or "unclear" (different angle, lighting or framing makes a fair comparison impossible),',
+  '  "kind": the main kind of change, one of "none", "damage" (new marks, chips, cracks, holes, stains, breakage), "wear" (gradual wear from normal use: light scuffs, fading, worn carpet in walkways), "cleaning" (dirtier than before), "missing" (the item or part of it is no longer there), "better", "unclear",',
+  '  "severity": "none", "minor", "moderate" or "major",',
+  '  "summary": one factual sentence for the report saying exactly what is different and where (e.g. "New 3 cm chip on the worktop edge to the left of the sink; not visible at the check-in"), or "No visible change" ,',
+  '  "new_defects": an array of the defects visible now that were NOT visible before, using only the defect words listed above; [] if none.',
+  'Be careful and fair: only report a difference you can actually see in both photos. Differences in light, angle, zoom or photo quality are not changes. Do not judge who is responsible or what anything costs.'
+].join('\n');
+
 function parseDataUrl(dataUrl){
   const m = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl || '');
   return m ? { mediaType: m[1], data: m[2] } : null;
@@ -102,9 +117,15 @@ function extractJson(text){
 app.post('/api/assess', async (req, res) => {
   if (!anthropic) return res.status(503).json({ error: 'Condition assessment is not configured on this server.' });
 
-  const { label, room, image } = req.body || {};
+  const { label, room, image, earlier } = req.body || {};
   const img = parseDataUrl(image);
   if (!img) return res.status(400).json({ error: 'Expected an image data URL.' });
+  // The earlier photo of the same item (check-out vs check-in), read from the earlier report's own files.
+  let then = null;
+  if (earlier && /^[a-f0-9]{32}$/i.test(String(earlier.key || '')) && /^\d{1,4}$/.test(String(earlier.n || ''))) {
+    const f = reports.photoFile(String(earlier.key).toLowerCase(), String(earlier.n));
+    if (f) try { const b = fs.readFileSync(f); if (b.length < 4.5 * 1024 * 1024) then = b.toString('base64'); } catch (e) {}
+  }
 
   try {
     const response = await anthropic.beta.messages.create({
@@ -112,10 +133,11 @@ app.post('/api/assess', async (req, res) => {
       max_tokens: 16000,
       ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}),
       ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}),
-      system: ASSESS_SYSTEM,
+      system: then ? COMPARE_SYSTEM : ASSESS_SYSTEM,
       messages: [{
         role: 'user',
         content: [
+          ...(then ? [{ type: 'text', text: 'Earlier photo (from the earlier report' + (earlier.condition ? ', recorded then as ' + String(earlier.condition).slice(0, 10) : '') + '):' }, { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: then } }, { type: 'text', text: 'New photo:' }] : []),
           { type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.data } },
           { type: 'text', text: `Room: ${String(room || 'Unknown').slice(0, 80)}\nChecklist item: ${String(label || 'Unknown').slice(0, 120)}` }
         ]
@@ -135,7 +157,14 @@ app.post('/api/assess', async (req, res) => {
       observation: typeof out.observation === 'string' ? out.observation.slice(0, 500) : '',
       description: typeof out.description === 'string' ? out.description.slice(0, 200) : '',
       defects: Array.isArray(out.defects) ? out.defects.filter(d => d === 'None' || DEFECTS.includes(d)) : [],
-      cleanliness: CLEANLINESS.includes(out.cleanliness) ? out.cleanliness : ''
+      cleanliness: CLEANLINESS.includes(out.cleanliness) ? out.cleanliness : '',
+      ...(then ? { change: (c => ({
+        status: ['same', 'worse', 'better', 'unclear'].includes(c.status) ? c.status : 'unclear',
+        kind: CHANGE_KINDS.includes(c.kind) ? c.kind : 'unclear',
+        severity: SEVERITY.includes(c.severity) ? c.severity : 'none',
+        summary: typeof c.summary === 'string' ? c.summary.slice(0, 300) : '',
+        newDefects: Array.isArray(c.new_defects) ? c.new_defects.filter(d => DEFECTS.includes(d)) : []
+      }))(out.change && typeof out.change === 'object' ? out.change : {}) } : {})
     });
   } catch (err) {
     if (err instanceof Anthropic.RateLimitError) return res.status(429).json({ error: 'Too many photos at once. Try again in a moment.' });
@@ -310,9 +339,11 @@ require('./inspections').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner:
 // Mid-term (routine) inspections: /mid-term-inspection, /us/routine-inspection, and reminders every 3 or 6 months: midterm.js.
 const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clientIp: reports.clientIp, limiter: reports.limiter,
   notify: reports.notifyOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// Check-in vs check-out compared by AI (campaign pages /check-out-comparison, /us/move-out-comparison): compare.js.
+const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {

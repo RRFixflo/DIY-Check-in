@@ -17,6 +17,7 @@ const KEY_RE = /^[a-f0-9]{32}$/;
 // The example report shown on the website (public/example/, made by the PDF test harness).
 const EXAMPLE_KEY = 'e8a1c0d2b4f6e8a1c0d2b4f6e8a1c0d2', EXAMPLE_DIR = path.join(__dirname, 'public', 'example', 'photos');       // a report's private photo key (random, made on the tenant's phone)
 const photoDir = id => path.join(REPORTS_DIR, id + '.photos');
+const shared = {};   // filled in by mount()
 // Email to the owner (REPORT_TO_EMAIL) when a report is sent (via Resend, resend.com). Without
 // RESEND_API_KEY and REPORT_TO_EMAIL the report is still marked as sent and waits on /admin (with the ntfy alert).
 const RESEND_API_KEY = (process.env.RESEND_API_KEY || '').trim();
@@ -818,6 +819,8 @@ function mount(app){
     keyToId.set(key, id);
     res.json({ ok: true, saved });
   });
+  // The full-size file of photo n of a report (by its key), for the AI comparison of a check-out with its check-in.
+  shared.photoFile = (key, n) => { const f = photoFor({ params: { key: String(key || ''), n: String(n || '') } }); return f && f.file && fs.existsSync(f.file) ? f.file : null; };
   function photoFor(req){
     const key = String(req.params.key), n = parseInt(req.params.n, 10);
     if (!KEY_RE.test(key) || !(n >= 1 && n <= 5000)) return null;
@@ -1476,4 +1479,4 @@ function editAllowed(m){
   return !!(r && r.photoKey === m.photoKey && !(r.unpaid && !r.paidAt));
 }
 
-module.exports = { mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+module.exports = { photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
