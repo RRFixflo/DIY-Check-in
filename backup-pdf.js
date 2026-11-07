@@ -79,7 +79,9 @@ async function buildFromBackup(s, photoFile, out){
   const cardW = (W - 2 * M - 16) / 2, cardH = 150, phW = 150;
   for (const r of s.rooms || []) {
     newPage(); heading(r.name || 'Room');
-    const items = (r.items || []);
+    const er = ((s.earlier && s.earlier.rooms) || []).find(x => String(x.name || '').trim().toLowerCase() === String(r.name || '').trim().toLowerCase());
+    const wasThere = it => !!(er && (er.items || []).some(e => !e.notApplicable && String(e.label || '').trim().toLowerCase() === String(it.label || '').trim().toLowerCase()));
+    const items = (r.items || []).filter(it => !it.notApplicable || wasThere(it));   // not at the property: left out (unless gone since the earlier report)
     for (let i = 0; i < items.length; i += 2) {
       if (y - cardH < M + 20) { newPage(); heading((r.name || 'Room') + ' (continued)'); }
       for (let k = 0; k < 2 && i + k < items.length; k++) {
@@ -119,7 +121,7 @@ async function buildFromBackup(s, photoFile, out){
   }
 
   /* meters and keys */
-  const meters = Object.entries(pr.meters || {}).filter(([, v]) => v), keys = pr.keys || [];
+  const meters = Object.entries(pr.meters || {}).filter(([, v]) => v && !v.na), keys = pr.keys || [];
   if (meters.length || keys.length) {
     newPage(); heading('Meters and keys');
     for (const [k, v] of meters) {

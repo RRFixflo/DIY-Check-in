@@ -2581,7 +2581,19 @@ function itemBlockHTML(item){
   }
   return `<div class="report-item"><div class="il">${escapeHtml(item.label)}</div><div class="report-photo-grid">${item.photos.map(p => `<img src="${p.dataUrl}" alt="${escapeHtml(item.label)}">`).join('')}</div></div>`;
 }
+// Something that isn't at the property (stairs in a flat, a dishwasher that was never there) is left out of
+// the report altogether: no card, no "not applicable" line, no meter box. The one exception is an item the
+// earlier report recorded, now marked not applicable: that is a change (gone since the check-in), so it stays.
+function reportView(s){
+  if (!s || !Array.isArray(s.rooms)) return s;
+  const keep = (room, i) => !i.notApplicable || (() => { const ei = earlierItem(s, room, i); return !!(ei && !ei.notApplicable); })();
+  const rooms = s.rooms.map(r => Object.assign({}, r, { items: (r.items || []).filter(i => keep(r, i)) }));
+  const pr = s.property || {};
+  const meters = {}; Object.keys(pr.meters || {}).forEach(k => { if (pr.meters[k] && !pr.meters[k].na) meters[k] = pr.meters[k]; });
+  return Object.assign({}, s, { rooms, property: Object.assign({}, pr, { meters }) });
+}
 function buildReportHTML(s){
+  s = reportView(s);
   const roomsHtml = s.rooms.map(r => `
     <section class="report-room">
       <h3>${escapeHtml(r.name)} <span style="font-weight:400;font-size:12.5px;color:#8B9299;">(${roomTotalPhotos(r)} photos)</span></h3>
@@ -2831,6 +2843,7 @@ function shrinkPhoto(dataUrl, maxPx){
   });
 }
 async function buildPdfBlob(s, onProgress, out){
+  s = reportView(s);
   const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
   if (!JsPDF) throw new Error('pdf_library_unavailable');
   const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'landscape', compress:true });
@@ -3297,9 +3310,9 @@ async function buildPdfBlob(s, onProgress, out){
   await photoGrid(keyShots, 4);
 
   /* ------------------------------------------------------- utility meters */
-  newSection('Utility meters – ' + stage.toLowerCase());
   const meterKeys = Object.keys((s.property && s.property.meters) || {}).filter(k => METER_LABELS[k]);
-  {
+  if (meterKeys.length) newSection('Utility meters – ' + stage.toLowerCase());
+  if (meterKeys.length) {
     const gap = 10, mw = (CW - gap * (meterKeys.length - 1)) / Math.max(1, meterKeys.length);
     const mTop = y; let maxH = 0;
     meterKeys.forEach((key, i) => {
@@ -3709,7 +3722,7 @@ function reportData(s, photos){
     inspectorName: m.inspectorName, signedBy: m.signedBy, bedrooms: m.bedrooms, bathrooms: m.bathrooms, furnishing: m.furnishing, managingAgent: m.managingAgent,
     exterior: ns(pr.exterior && pr.exterior.photos),
     rooms: s.rooms.map(r => ({ name: r.name, type: r.type, notes: r.notes || '', condition: r.condition || {}, extra: ns(r.extraPhotos),
-      items: r.items.map(i => ({ label: i.label, custom: !!i.custom, mandatory: !!i.mandatory, notApplicable: !!i.notApplicable, naReason: i.naReason || '', condition: i.condition || '', conditionNote: i.conditionNote || '', desc: i.desc || '', defects: i.defects || [], clean: i.clean || '', working: i.working || '', qty: i.qty || '', photos: ns(i.photos) })) })),
+      items: r.items.map(i => ({ label: i.label, custom: !!i.custom, mandatory: !!i.mandatory, notApplicable: !!i.notApplicable, gone: !!(i.notApplicable && (() => { const ei = earlierItem(s, r, i); return ei && !ei.notApplicable; })()), naReason: i.naReason || '', condition: i.condition || '', conditionNote: i.conditionNote || '', desc: i.desc || '', defects: i.defects || [], clean: i.clean || '', working: i.working || '', qty: i.qty || '', photos: ns(i.photos) })) })),
     keys: (pr.keys || []).map(k => ({ desc: k.desc || '', action: k.action || '', photos: ns(k.photos) })),
     meters: Object.fromEntries(Object.entries(pr.meters || {}).map(([k, v]) => [k, { na: !!v.na, reading: v.reading || '', serial: v.serial || '', location: v.location || '', photos: ns(v.photos) }])),
     basedOn: s.earlier ? { id: s.earlier.id, ref: s.earlier.ref || '', type: s.earlier.type || '' } : null
@@ -4955,7 +4968,7 @@ function renderDone(){
           <h3>${escapeHtml(r.name)} <span style="font-weight:400; color:var(--ink-faint); font-size:13px;">(${roomTotalPhotos(r)} photos)</span></h3>
           ${conditionBlockHTML(r, false)}
           <p class="notes">${r.notes ? escapeHtml(r.notes) : 'No additional notes recorded.'}</p>
-          ${r.items.map(itemBlockHTML).join('')}
+          ${r.items.filter(i => !i.notApplicable).map(itemBlockHTML).join('')}
           ${r.extraPhotos.length ? `<div class="report-item"><div class="il">Additional photos</div><div class="report-photo-grid">${r.extraPhotos.map(p => `<img src="${p.dataUrl}" alt="Additional photo">`).join('')}</div></div>` : ''}
         </div>
       `).join('')}

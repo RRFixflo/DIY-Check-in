@@ -26,7 +26,7 @@ function mount(app, ctx){
   }
   const kindOf = t => /check-?out/i.test(t || '') ? 'Check-Out' : /inspection/i.test(t || '') ? 'Inspection' : 'Check-In';
   function itemText(i){
-    if (i.notApplicable) return 'Not applicable' + (i.naReason ? ': ' + i.naReason : '');
+    if (i.notApplicable) return 'No longer at the property (it was in the earlier report)' + (i.naReason ? ': ' + i.naReason : '');
     const marks = (i.defects || []).filter(d => d !== 'None');
     return [CONDITION[i.condition] ? CONDITION[i.condition] + ' condition' : 'Condition not recorded',
       marks.length ? 'marks: ' + marks.join(', ').toLowerCase() : (i.defects || []).includes('None') ? 'no marks' : '',
@@ -83,10 +83,10 @@ function mount(app, ctx){
       <div><dt>Reference</dt><dd>${esc(data.ref || r.ref || '—')}</dd></div></dl>
       <p style="margin:14px 0 0"><a class="btn ghost sm" href="/sign/${key}/report.pdf" target="_blank" rel="noopener">Open the full PDF report</a></p>`;
     const rooms = (data.rooms || []).map((room, ri) => `<div class="card room"><h2>${esc(room.name)}</h2>
-      ${(room.items || []).map((it, ii) => `<div class="it"><b>${esc(it.label)}</b><div class="t">${esc(itemText(it))}</div>${photos(it.photos)}
+      ${(room.items || []).filter(it => !it.notApplicable || it.gone).map((it, ii) => `<div class="it"><b>${esc(it.label)}</b><div class="t">${esc(itemText(it))}</div>${photos(it.photos)}
         ${sign ? '' : `<details><summary>+ Comment on this</summary><textarea data-room="${esc(room.name)}" data-item="${esc(it.label)}" maxlength="600" placeholder="What doesn’t match? e.g. the stain on the carpet was already there"></textarea></details>`}</div>`).join('')}
       ${(room.extra || []).length ? `<div class="it"><b>General views</b>${photos(room.extra)}</div>` : ''}</div>`).join('');
-    const meters = Object.entries(data.meters || {}).filter(([, m]) => m && (m.reading || m.na)).map(([k, m]) => `<div class="it"><b>${esc(k[0].toUpperCase() + k.slice(1))} meter</b><div class="t">${m.na ? 'Not applicable' : esc(m.reading)}</div>${photos(m.photos)}</div>`).join('');
+    const meters = Object.entries(data.meters || {}).filter(([, m]) => m && !m.na && m.reading).map(([k, m]) => `<div class="it"><b>${esc(k[0].toUpperCase() + k.slice(1))} meter</b><div class="t">${m.na ? 'Not applicable' : esc(m.reading)}</div>${photos(m.photos)}</div>`).join('');
     const keys = (data.keys || []).filter(k => k.desc).map(k => `<div class="it"><b>Keys</b><div class="t">${esc(k.desc)}${k.action ? ' · ' + esc(k.action) : ''}</div>${photos(k.photos)}</div>`).join('');
     const extras = meters || keys ? `<div class="card room"><h2>Meters and keys</h2>${meters}${keys}</div>` : '';
     if (sign){
