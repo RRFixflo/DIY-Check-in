@@ -250,14 +250,18 @@ function faqLd(body){
 function renderPage(pg, req, notice){
   const key = pg.key;
   const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report');
+  // Visitors in the US (Cloudflare's country header) are pointed to the US pages, on every page that isn't already one.
+  const usVisitor = !notice && pg.lang !== 'en-US' && String(req.headers['cf-ipcountry'] || '').toUpperCase() === 'US' && !/^\/(account|buy|app)/.test(pg.path || '');
   let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
-    .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>' : '')
+    .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
+      : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
   for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req), inAcc = require('./landlords').signedIn(req);   // signed-in landlords see "My dashboard"
   // Functions as replacements, so a "$" in a title (e.g. a landlord's own address) is taken literally. pg.head: a page's own <head> extras.
+  if (pg.lang) html = html.replace('<html lang="en-GB">', '<html lang="' + pg.lang + '">');
   return fill(html).replace('{{TITLE}}', () => escHtml(pg.title)).replace('{{OG_TITLE}}', () => escHtml(pg.og || pg.title))
     .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base) + (pg.head ? '\n' + pg.head : ''))
     .split('{{ACCOUNT_LINK_TEXT}}').join(inAcc ? 'My dashboard' : 'Sign in').split('{{ACCOUNT_MENU_TEXT}}').join(inAcc ? 'My landlord dashboard' : 'Sign in (landlords)')

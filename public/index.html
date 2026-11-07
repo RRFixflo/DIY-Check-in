@@ -836,7 +836,7 @@ function defaultState(){
 }
 function defaultPendingSetup(){
   return {
-    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '', country: '',
+    address: '', postcode: '', unit: '', flat: '', houseNo: '', building: '', road: '', town: '', country: '', usState: '',
     lookup: null, manualAddress: false, picked: false,
     inspectionType: 'Check-In', inspectorName: '', moveInDateTime: '',
     managingAgent: '', furnishing: 'Furnished',
@@ -1028,22 +1028,111 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 function escapeHtml(str){
   return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function todayDisplay(){ return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }); }
-function formatTimestamp(date){ return date.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+function todayDisplay(){ return new Date().toLocaleDateString(dLoc(), { day:'2-digit', month:'short', year:'numeric' }); }
+function formatTimestamp(date){ return date.toLocaleString(dLoc(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
 function stampDateTime(date){
   const p = n => String(n).padStart(2, '0');
+  if (usMode()) { const h = date.getHours(); return p(date.getMonth() + 1) + '/' + p(date.getDate()) + '/' + date.getFullYear() + ' ' + ((h % 12) || 12) + ':' + p(date.getMinutes()) + (h < 12 ? ' AM' : ' PM'); }
   return p(date.getDate()) + '/' + p(date.getMonth() + 1) + '/' + date.getFullYear() + ' ' + p(date.getHours()) + ':' + p(date.getMinutes());
 }
 function ordinalDate(d){
+  if (usMode()) return d.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
   const day = d.getDate();
   const suffix = (day % 10 === 1 && day !== 11) ? 'st' : (day % 10 === 2 && day !== 12) ? 'nd' : (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
-  return day + suffix + ' ' + d.toLocaleDateString('en-GB', { month:'long' }) + ' ' + d.getFullYear();
+  return day + suffix + ' ' + d.toLocaleDateString(dLoc(), { month:'long' }) + ' ' + d.getFullYear();
 }
 function formatDateTimeLocal(val){
   if (!val) return '';
   const d = new Date(val);
   if (isNaN(d.getTime())) return val;
-  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  return d.toLocaleString(dLoc(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+/* ============================= United States =============================
+   The same app in American English when the property is in the US (state.meta.country / the setup
+   form's country = 'US'): words on screen and in the PDF are translated as they are shown (usText(),
+   a MutationObserver on the page, jsPDF's text functions wrapped in buildPdfBlob), dates are written
+   month first, and the address is US-shaped (street, apt, city, state, ZIP). What is stored never
+   changes (item labels, inspectionType 'Check-In'…), so comparisons, the server copy and the admin work as before. */
+const US_STATES = [['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming'],['PR','Puerto Rico']];
+let usPdf = null;   // set while a PDF is being built, so dates follow that report
+function usFor(s){ return !!(s && s.meta && s.meta.country === 'US'); }
+function usMode(){
+  if (usPdf !== null) return usPdf;
+  try { return (state && state.rooms && state.rooms.length) ? usFor(state) : (pendingSetup && pendingSetup.country) === 'US'; } catch (e) { return false; }
+}
+function dLoc(){ return usMode() ? 'en-US' : 'en-GB'; }
+function usCheck(m, c, io, s, insp, tail){
+  let w = (io.toLowerCase() === 'in' ? 'move-in' : 'move-out') + ' inspection' + (s ? 's' : '') + (tail ? ' report' : '');
+  if (m === m.toUpperCase()) return w.toUpperCase();
+  if (/^[A-Z]/.test(io)) return w.replace(/(^|[\s-])([a-z])/g, (x, a, b) => a + b.toUpperCase());
+  if (/^C/.test(c)) return w.charAt(0).toUpperCase() + w.slice(1);
+  return w;
+}
+const US_WORDS = [
+  [/\b(check)-(in|out)(s)?\b( inspection)?( report)?/gi, usCheck],
+  [/\bCHECK (IN|OUT)\b/g, 'MOVE-$1 INSPECTION'],   [/([–-] )check (in|out)\b/g, (m, d, io) => d + 'move-' + io], [/([–-] )Check (in|out)\b/g, (m, d, io) => d + 'Move-' + io], [/\btaps\b/g, 'faucets'],
+  [/\bINTERIM INSPECTION\b/g, 'PERIODIC INSPECTION'], [/\bInterim Inspection\b/g, 'Periodic Inspection'], [/\binterim inspection\b/g, 'periodic inspection'],
+  [/(LEASE )?\bRENEWAL INSPECTION\b/g, (m, l) => l ? m : 'LEASE RENEWAL INSPECTION'], [/(Lease )?\bRenewal Inspection\b/g, (m, l) => l ? m : 'Lease Renewal Inspection'],
+  [/\bTENANCY\b/g, 'LEASE'], [/\btenancies\b/g, 'leases'], [/\bTenancies\b/g, 'Leases'], [/\btenancy\b/g, 'lease'], [/\bTenancy\b/g, 'Lease'],
+  [/([Ss]ecurity |SECURITY )?\b(deposits?|Deposits?|DEPOSITS?)\b/g, (m, sec, d) => sec ? m : d === d.toUpperCase() ? 'SECURITY ' + d : d[0] === 'D' ? 'Security d' + d.slice(1) : 'security ' + d],
+  [/\bPostcode or ZIP\b/g, 'ZIP code'], [/\bpostcodes\b/g, 'ZIP codes'], [/\bpostcode\b/g, 'ZIP code'], [/\bPostcode\b/g, 'ZIP code'], [/\bPOSTCODE\b/g, 'ZIP CODE'],
+  [/\bTown or city\b/g, 'City'], [/\btown or city\b/g, 'city'],
+  [/\bFlat, unit or house number\b/g, 'Street number'], [/\bFlat or house number\b/g, 'Street number'],
+  [/\b(a|the|your|this|each|their|my) flat\b/g, '$1 apartment'], [/\bflats\b/g, 'apartments'], [/\bFlat (?=\d)/g, 'Apt '],
+  [/\bLiving \/ Reception Room\b/g, 'Living Room'], [/\bUtility Room\b/g, 'Laundry Room'], [/\bUtility room\b/g, 'Laundry room'], [/\bSeparate WC\b/g, 'Half Bath'], [/\bWC\b/g, 'Half bath'],
+  [/\bGarden \/ Outdoor Space\b/g, 'Yard / Outdoor Space'], [/\bgardens?\b/g, m => m.replace('garden', 'yard')], [/\bGardens?\b/g, m => m.replace('Garden', 'Yard')],
+  [/\bCooker \/ hob\b/g, 'Stove / cooktop'], [/\bhobs?\b/g, m => m.replace('hob', 'cooktop')], [/\bHob\b/g, 'Cooktop'], [/\bcookers?\b/g, m => m.replace('cooker', 'stove')], [/\bCooker\b/g, 'Stove'],
+  [/\bExtractor \/ ventilation\b/g, 'Range hood / ventilation'], [/\bExtractor fan\b/g, 'Exhaust fan'], [/\bextractor fan\b/g, 'exhaust fan'], [/\bExtractor\b/g, 'Exhaust fan'], [/\bextractor\b/g, 'exhaust fan'],
+  [/\bCupboards & units\b/g, 'Cabinets'], [/\bcupboards?\b/g, m => m.replace('cupboard', 'cabinet')], [/\bCupboards?\b/g, m => m.replace('Cupboard', 'Cabinet')],
+  [/\bworktops?\b/g, m => m.replace('worktop', 'countertop')], [/\bWorktops?\b/g, m => m.replace('Worktop', 'Countertop')],
+  [/\b([Ss]ink) & taps\b/g, '$1 & faucets'], [/\bTaps\b/g, 'Faucets'],
+  [/\bwardrobes?\b/g, m => m.replace('wardrobe', 'closet')], [/\bWardrobes?\b/g, m => m.replace('Wardrobe', 'Closet')],
+  [/\bWashing machine\b/g, 'Washer'], [/\bwashing machine\b/g, 'washer'], [/\bTumble dryer\b/g, 'Dryer'], [/\btumble dryer\b/g, 'dryer'],
+  [/\bFridge\b/g, 'Refrigerator'], [/\bfridge\b/g, 'refrigerator'],
+  [/\b([Ss]moke|[Hh]eat|[Cc]arbon monoxide|CO) alarms?\b/g, m => m.replace(/alarm/, 'detector')],
+  [/\bBoiler( \(if present\))?/g, 'Water heater / furnace$1'], [/\bboiler\b/g, 'water heater'],
+  [/\bBin storage area\b/g, 'Trash area'], [/\bbins\b/g, 'trash cans'],
+  [/\bLight fittings & sockets\b/g, 'Light fixtures & outlets'], [/\b(light )?fittings\b/g, (m, l) => (l || '') + 'fixtures'], [/\bLight fitting\b/g, 'Light fixture'], [/\bsockets\b/g, 'outlets'], [/\bplug sockets?\b/g, 'outlets'],
+  [/\bElectricity meter\b/g, 'Electric meter'], [/\belectricity meter\b/g, 'electric meter'],
+  [/\b([Ll])etterbox\b/g, (m, l) => (l === 'L' ? 'M' : 'm') + 'ail slot'],
+  [/\b[Mm]anaging agent\b/g, m => m[0] === 'M' ? 'Property manager' : 'property manager'], [/\b(letting|estate) agents?\b/g, 'property manager'],
+  [/\binventory clerks?\b/g, 'inspector'],
+  [/\bcolour/g, 'color'], [/\bColour/g, 'Color'], [/\bmould/g, 'mold'], [/\bMould/g, 'Mold'], [/\bgrey\b/g, 'gray'], [/\bGrey\b/g, 'Gray'], [/\bcentre\b/g, 'center'], [/\bmetres\b/g, 'meters'],
+  [/£30(?! \()/g, '£30 (about $40)'],
+];
+function usText(t){
+  if (typeof t !== 'string' || !t) return t;
+  for (const [re, to] of US_WORDS) { re.lastIndex = 0; if (re.test(t)) { re.lastIndex = 0; t = t.replace(re, to); } }
+  return t;
+}
+function usAny(t){ return Array.isArray(t) ? t.map(usText) : usText(t); }
+function usNode(n){ const p = n.parentNode; if (!p || /^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName) || (p.closest && p.closest('[data-raw]'))) return; const v = usText(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
+function usWalk(root){
+  if (!root) return;
+  if (root.nodeType === 3) return usNode(root);
+  if (root.nodeType !== 1) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+  while ((n = w.nextNode())) usNode(n);
+  (root.matches && root.matches('[placeholder]') ? [root] : []).concat(Array.from(root.querySelectorAll ? root.querySelectorAll('[placeholder]') : []))
+    .forEach(el => { const v = usText(el.getAttribute('placeholder')); if (v !== el.getAttribute('placeholder')) el.setAttribute('placeholder', v); });
+}
+let usWasOn = false;
+function usPage(){
+  const on = usMode();
+  if (on) { usWalk(document.body); document.title = usText(document.title); }
+  if (on !== usWasOn) { usWasOn = on; document.documentElement.lang = on ? 'en-US' : 'en-GB'; }
+}
+try {
+  new MutationObserver(ms => { if (!usMode()) return; ms.forEach(m => { if (m.type === 'characterData') usNode(m.target); else m.addedNodes.forEach(usWalk); }); })
+    .observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+} catch (e) {}
+/* US address: "123 Main St, Apt 4, Austin, TX 78701" (houseNo = street number, road = street, building = apt/suite/unit). */
+function usAddressLine(ps){
+  const t = k => (ps[k] || '').trim();
+  const street = [t('houseNo'), t('road')].filter(Boolean).join(' ');
+  const apt = t('building') && /^\d/.test(t('building')) ? 'Apt ' + t('building') : t('building');
+  const stzip = [t('usState'), t('postcode')].filter(Boolean).join(' ');
+  return [street, apt, t('town'), stzip].filter(Boolean).join(', ');
 }
 function sanitizeFilename(str){ return (str || 'Property').trim().replace(/[^a-z0-9\-]+/gi, '-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,80) || 'Property'; }
 function getActiveRoom(){ return state.rooms.find(r => r.id === state.activeRoomId) || state.rooms[0] || null; }
@@ -1916,7 +2005,8 @@ const UK_LIKE = ['GB', 'JE', 'GG', 'IM'];   // UK-format postcodes
 function countryName(code){ try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch (e) { return code; } }
 const TZ_COUNTRY = { 'Europe/London': 'GB', 'Europe/Dublin': 'IE', 'Europe/Jersey': 'JE', 'Europe/Guernsey': 'GG', 'Europe/Isle_of_Man': 'IM' };
 function defaultCountry(){
-  try { const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; if (TZ_COUNTRY[tz]) return TZ_COUNTRY[tz]; } catch (e) {}
+  try { const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; if (TZ_COUNTRY[tz]) return TZ_COUNTRY[tz];
+    if (/^America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Detroit|Boise|Juneau|Sitka|Nome|Adak|Menominee|Metlakatla|Yakutat|Indiana\/|Kentucky\/|North_Dakota\/)|^Pacific\/Honolulu$/.test(tz)) return 'US'; } catch (e) {}
   const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
   for (const l of langs) { const m = /[-_]([A-Z]{2})\b/i.exec(l || ''); if (m && COUNTRY_CODES.includes(m[1].toUpperCase())) return m[1].toUpperCase(); }
   return 'GB';
@@ -1950,8 +2040,15 @@ function streetLineFrom(f){
 }
 function composeAddress(){
   const ps = pendingSetup;
-  ps.unit = streetLineFrom(ps);
   if (!ps.country) ps.country = defaultCountry();
+  if (ps.country === 'US') {
+    ps.address = usAddressLine(ps);
+    ps.unit = ps.address.split(', ').slice(0, ps.building ? 2 : 1).join(', ');
+    const el = document.getElementById('addressPreview');
+    if (el) el.textContent = ps.address || 'Fill in the fields above';
+    return;
+  }
+  ps.unit = streetLineFrom(ps);
   const pc = isUkAddress(ps) ? normalisePostcode(ps.postcode) : (ps.postcode || '').trim();
   const tail = isUkAddress(ps) && POSTCODE_RE.test(pc) ? pc : (ps.postcode || '').trim();
   ps.address = ps.unit && tail ? ps.unit + ' ' + tail : (ps.unit || tail);
@@ -1998,6 +2095,13 @@ function splitAddressLine(line){
 }
 function missingAddressParts(){
   const ps = pendingSetup, t = k => (ps[k] || '').trim(), out = [];
+  if (ps.country === 'US') {
+    if (!t('road')) out.push('the street');
+    if (!t('town')) out.push('the city');
+    if (!t('usState')) out.push('the state');
+    if (!/^\d{5}(-\d{4})?$/.test(t('postcode'))) out.push('the 5-digit ZIP code');
+    return out;
+  }
   if (!isUkAddress(ps)) { if (!t('road') && !t('building')) out.push('the street or building name'); return out; }
   if (!POSTCODE_RE.test(normalisePostcode(ps.postcode))) out.push('the full postcode');
   if (!t('flat') && !t('houseNo') && !(ps.picked && t('building'))) out.push('the flat or house number');
@@ -2095,6 +2199,25 @@ function addrLookupHTML(ps){
 function addrFieldsHTML(ps){
   const uk = isUkAddress(ps), lookup = lookupMode(ps);
   if (lookup && !(ps.manualAddress || hasAddrContent(ps))) return '';
+  if (ps.country === 'US') return `
+        <div class="field-row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="field" style="flex:0 1 120px"><label for="houseNoInput">Street number</label>
+            <input class="input" id="houseNoInput" type="text" inputmode="numeric" placeholder="e.g. 123" value="${escapeHtml(ps.houseNo || ps.flat)}" oninput="pendingSetup.flat = ''; setAddrField('houseNo', this.value)"></div>
+          <div class="field" style="flex:1 1 200px"><label for="roadInput">Street</label>
+            <input class="input" id="roadInput" type="text" autocomplete="address-line1" placeholder="e.g. Main Street" value="${escapeHtml(ps.road)}" oninput="setAddrField('road', this.value)"></div>
+        </div>
+        <div class="field"><label for="buildingInput">Apt, suite or unit <span class="opt">if any</span></label>
+          <input class="input" id="buildingInput" type="text" autocomplete="address-line2" placeholder="e.g. Apt 4B" value="${escapeHtml(ps.building)}" oninput="setAddrField('building', this.value)"></div>
+        <div class="field"><label for="townInput">City</label>
+          <input class="input" id="townInput" type="text" autocomplete="address-level2" placeholder="e.g. Austin" value="${escapeHtml(ps.town)}" oninput="setAddrField('town', this.value)"></div>
+        <div class="field-row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="field" style="flex:1 1 180px"><label for="usStateInput">State</label>
+            <select class="select" id="usStateInput" autocomplete="address-level1" onchange="setAddrField('usState', this.value)"><option value="">Choose…</option>${US_STATES.map(([c, n]) => `<option value="${c}" ${ps.usState === c ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+          <div class="field" style="flex:0 1 140px"><label for="postcodeInput">ZIP code</label>
+            <input class="input" id="postcodeInput" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="e.g. 78701" value="${escapeHtml(ps.postcode)}" oninput="setAddrField('postcode', this.value)"></div>
+        </div>
+        <div class="addr-preview"><span>On the report</span><strong id="addressPreview">${escapeHtml(ps.address || 'Fill in the fields above')}</strong></div>
+        <div class="room-count-hint">Check it reads exactly as it does on the lease. It goes on the signed report.</div>`;
   return `
         <div class="field">
           <label for="houseNoInput">${uk ? 'Flat or house number' + (ps.picked && !(ps.houseNo || ps.flat) && ps.building ? ' <span class="opt">if any</span>' : '') : 'Flat, unit or house number <span class="opt">if any</span>'}</label>
@@ -2183,7 +2306,7 @@ function submitSetup(){
   if (!rooms.length) { showSetupError('Add at least one room before starting.'); return; }
 
   state.meta = {
-    address, country: pendingSetup.country || defaultCountry(), inspectionType: pendingSetup.inspectionType, inspectorName, signedBy: '',
+    address, country: pendingSetup.country || defaultCountry(), usState: pendingSetup.country === 'US' ? (pendingSetup.usState || '') : '', inspectionType: pendingSetup.inspectionType, inspectorName, signedBy: '',
     moveInDateTime: pendingSetup.moveInDateTime || '', date: todayDisplay(), createdAt: new Date().toISOString(),
     bedrooms, bathrooms,
     furnishing: pendingSetup.furnishing || '',
@@ -2465,7 +2588,7 @@ function buildReportHTML(s){
       ${r.extraPhotos.length ? `<div class="report-item"><div class="il">Additional photos</div><div class="report-photo-grid">${r.extraPhotos.map(p => `<img src="${p.dataUrl}" alt="Additional photo">`).join('')}</div></div>` : ''}
     </section>
   `).join('');
-  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString(dLoc(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><title>${escapeHtml(reportTitle(s))}</title>
 <style>
@@ -2708,6 +2831,8 @@ async function buildPdfBlob(s, onProgress, out){
   const JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
   if (!JsPDF) throw new Error('pdf_library_unavailable');
   const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'landscape', compress:true });
+  usPdf = usFor(s);   // dates and words follow this report's country (United States: American English)
+  if (usPdf) ['text', 'textWithLink', 'splitTextToSize', 'getTextWidth', 'getStringUnitWidth'].forEach(fn => { const o = doc[fn]; if (typeof o === 'function') doc[fn] = function(t, ...a){ return o.call(this, usAny(t), ...a); }; });
 
   const PW = 297, PH = 210, M = 16, CW = PW - M * 2;
   const TOP = 28, BOTTOM = PH - 17;
@@ -3387,7 +3512,7 @@ async function buildPdfBlob(s, onProgress, out){
 
   /* ---------------------------------------------------------- declaration */
   newSection('Declaration form');
-  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+  const signedDate = s.finalizedAt ? new Date(s.finalizedAt).toLocaleString(dLoc(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
   const detTested = (pr.detectors || []).every(d => d.tested === 'Yes') ? 'Yes' : 'See the detector page';
   const keysReleased = keys.some(k => /released to tenant/i.test(k.action || '')) ? 'Yes' : 'No';
   table([[stage + ' information', CW * 0.4], ['Recorded', CW * 0.22], ['Additional comments', CW * 0.38]], [
@@ -3506,7 +3631,7 @@ async function buildPdfBlob(s, onProgress, out){
   for (let p = 1; p <= total; p++) pageChrome(p, total);
 
   if (onProgress) onProgress(100);
-  return doc.output('blob');
+  { const blob = doc.output('blob'); usPdf = null; return blob; }
 
   /* ------------------------------------------------------------- helpers */
   async function photoGrid(shots, cols, onEach){
@@ -3549,7 +3674,7 @@ const normLabel = t => String(t || '').trim().toLowerCase();
 function earlierFor(s){ return s && s.earlier && Array.isArray(s.earlier.rooms) ? s.earlier : null; }
 function earlierRoom(s, room){ const e = earlierFor(s); return e ? (e.rooms.find(r => normLabel(r.name) === normLabel(room.name)) || null) : null; }
 function earlierItem(s, room, item){ const r = earlierRoom(s, room); return r ? (r.items.find(i => normLabel(i.label) === normLabel(item.label)) || null) : null; }
-function earlierWhen(e){ return e && e.createdAt ? new Date(e.createdAt).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : ((e && e.date) || ''); }
+function earlierWhen(e){ return e && e.createdAt ? new Date(e.createdAt).toLocaleDateString(dLoc(), { day:'numeric', month:'short', year:'numeric' }) : ((e && e.date) || ''); }
 function earlierName(e){ const k = inspectionKind(e && e.type); return k === 'Inspection' ? 'inspection' : k.toLowerCase(); }
 function conditionWord(v){ return conditionLabel(v).replace(/ condition$/, ''); }
 const CLEAN_RANK = { clean:0, needs:1, dirty:2 };
@@ -4102,7 +4227,7 @@ function paintSign(){
   if (!el) return;
   if (!state.dataUploaded) { el.innerHTML = '<span class="muted-line">The link works once the report has been sent.</span>'; return; }
   el.innerHTML = signUi.signed
-    ? `<div class="signed-ok">✓ Signed by ${escapeHtml(signUi.name)} on ${escapeHtml(new Date(signUi.at).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }))}${signUi.agree === 'comments' ? ', with ' + signUi.comments + ' comment' + (signUi.comments === 1 ? '' : 's') : ''}</div><a class="btn btn-sm" href="${escapeHtml(signUi.pdf)}" target="_blank" rel="noopener">Open the signed report</a>`
+    ? `<div class="signed-ok">✓ Signed by ${escapeHtml(signUi.name)} on ${escapeHtml(new Date(signUi.at).toLocaleString(dLoc(), { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }))}${signUi.agree === 'comments' ? ', with ' + signUi.comments + ' comment' + (signUi.comments === 1 ? '' : 's') : ''}</div><a class="btn btn-sm" href="${escapeHtml(signUi.pdf)}" target="_blank" rel="noopener">Open the signed report</a>`
     : `<span class="muted-line">${signUi.checked ? 'Not signed yet.' : ''}</span> <button type="button" class="btn-ghost" onclick="checkSign()">Check again</button>`;
 }
 async function shareSignLink(btn){
@@ -4811,7 +4936,9 @@ function renderDone(){
 /* ============================= render dispatcher ============================= */
 function render(){
   const app = document.getElementById('app');
-  renderStepper();
+  try { renderStepper(); renderInner(app); } finally { usPage(); }
+}
+function renderInner(app){
   try {
     if (state.view === 'resume') { app.innerHTML = renderResume(); return; }
     if (state.view === 'setup') { app.innerHTML = renderSetup(); updateRoomCountHint(); updateMoveInHint(); }
@@ -4851,6 +4978,7 @@ addEventListener('pagehide', saveSetupDraft);
 
 /* ============================= boot ============================= */
 if (state.view === 'setup') restoreSetupDraft();
+if (!pendingSetup.country) pendingSetup.country = defaultCountry();
 render(); // paint instantly with no dependency on storage or network
 track('app_open');
 (async () => {

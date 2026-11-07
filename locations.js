@@ -218,6 +218,9 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   const BASE_PATH = '/inventory-reports';
   // Council areas in England with researched local data get a full hub of their own (areas.js), registered first.
   const hubs = require('./areas').mount(app, { renderPage, escHtml, PLACES, BASE_PATH, REPORTS_DIR });
+  // The United States: /us, a page for every state with its security deposit law, and a move-in checklist: usa.js.
+  const us = require('./usa').mount(app, { renderPage, escHtml, PLACES });
+  const usState = p => p.nation === 'us' ? us.states.find(q => q.name === p.region) : null;
   const where = p => p.kind === 'borough' ? (p.slug === 'city-of-london' ? 'the City of London' : p.name + ', London') : p.name;
 
   function page(p){
@@ -246,7 +249,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
     </ul></div>
     <div class="card"><h3>Renting in ${e(N.label)}: the basics</h3><ul>
       ${basics.map(b => '<li>' + e(b) + '</li>').join('\n      ')}
-    </ul><p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Check the current rules for ${e(p.state ? p.region : N.label)}.</p></div>
+    </ul>${usState(p) ? `<p style="margin:10px 0 0"><a href="/us/${usState(p).slug}">${e(p.region)} security deposit law and move-in checklist →</a></p>` : ''}<p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Check the current rules for ${e(p.state ? p.region : N.label)}.</p></div>
   </div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
@@ -268,7 +271,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   <p style="text-align:center;line-height:2.2">${near.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}/${q.slug}">${e(q.name.replace(/^the /, ''))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p>
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Ready when you have the keys</h2><p>Start your ${e(place)} ${e(N.thing)} today, on your phone. It’s free until you download it.</p><a class="btn" href="/app">Start free</a></div></div></div>`;
-    return { key: 'locations', path: BASE_PATH + '/' + p.slug, title: seoTitle + ' · DIY Inventory', og: N.uk ? seoTitle : title,
+    return { key: 'locations', lang: p.nation === 'us' ? 'en-US' : undefined, path: BASE_PATH + '/' + p.slug, title: seoTitle + ' · DIY Inventory', og: N.uk ? seoTitle : title,
       desc: 'Do your own ' + N.thing + ' and ' + N.checkout + ' report in ' + w + ' on your phone: dated photos, every item’s condition, signed by both sides, ready instantly. £30 per report, free to start.', body,
       jsonld: base => [
         { '@type': 'Service', name: cap(N.report) + ' in ' + place, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' },
@@ -292,7 +295,8 @@ ${group('Wales', by(p => p.nation === 'wales'))}
 ${group('Scotland', by(p => p.nation === 'scotland'))}
 ${group('Northern Ireland', by(p => p.nation === 'ni'))}
 ${group('Ireland', by(p => p.nation === 'ie'))}
-${group('United States', by(p => p.nation === 'us'))}
+<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 6px">United States</h3><p style="margin:0 0 10px"><a href="/us">Move-in and move-out inspections in all 50 states</a>, with each state’s security deposit law.</p><p style="margin:0;line-height:2.2">${us.states.map(q => `<a class="btn ghost sm" style="margin:0 6px 0 0" href="/us/${q.slug}">${e(q.name)}</a>`).join('')}</p></div>
+${group('United States: cities', by(p => p.nation === 'us'))}
 ${group('Canada', by(p => p.nation === 'ca'))}
 ${group('Australia', by(p => p.nation === 'au'))}
 ${group('New Zealand', by(p => p.nation === 'nz'))}
@@ -308,7 +312,7 @@ ${group('South Africa', by(p => p.nation === 'za'))}
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get([BASE_PATH, BASE_PATH + '/'], send(index()));
   PLACES.filter(p => !hubs.slugs.includes(p.slug)).forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], send(page(p))));
-  return { paths: [BASE_PATH].concat(PLACES.filter(p => !hubs.slugs.includes(p.slug)).map(p => BASE_PATH + '/' + p.slug), hubs.paths), bodies: hubs.bodies || [] };
+  return { paths: [BASE_PATH].concat(PLACES.filter(p => !hubs.slugs.includes(p.slug)).map(p => BASE_PATH + '/' + p.slug), hubs.paths, us.paths), bodies: (hubs.bodies || []).concat(us.bodies) };
 }
 
 module.exports = { mount, PLACES };
