@@ -1,0 +1,64 @@
+{
+ "name": "Saint Paul",
+ "neighborhoods": [
+  {
+   "name": "Highland Park",
+   "homes": "single-family homes and apartment buildings"
+  },
+  {
+   "name": "Macalester-Groveland",
+   "homes": "duplexes and older houses near the colleges"
+  },
+  {
+   "name": "Summit Hill",
+   "homes": "historic houses and older brick apartment buildings"
+  },
+  {
+   "name": "Como",
+   "homes": "single-family homes and duplexes"
+  },
+  {
+   "name": "Frogtown",
+   "homes": "older frame houses and duplexes"
+  },
+  {
+   "name": "West Seventh",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Payne-Phalen",
+   "homes": "single-family homes and duplexes"
+  },
+  {
+   "name": "Midway",
+   "homes": "apartments and newer mixed-use buildings"
+  }
+ ],
+ "housing": "Saint Paul renters live in duplexes, fourplexes and older brick walk-up apartment buildings, alongside single-family homes and newer apartments along the Green Line.",
+ "localRules": [
+  {
+   "text": "Saint Paul's Tenant Protections Ordinance, in effect from May 14, 2026, caps security deposits at one month's rent, with a possible extra month in limited cases.",
+   "source": "https://www.stpaul.gov/tenant-protections"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "HOME Line",
+   "url": "https://homelinemn.org/",
+   "what": "free statewide tenant hotline"
+  },
+  {
+   "name": "City of Saint Paul Tenant Protections",
+   "url": "https://www.stpaul.gov/tenant-protections",
+   "what": "city information on renter rules"
+  }
+ ],
+ "climate": "Test the furnace, check windows and doors for drafts and frost, and look for ice dam or water stains on ceilings; winters are long and very cold.",
+ "universities": [
+  "University of St. Thomas",
+  "Macalester College",
+  "Hamline University"
+ ],
+ "fact": "Saint Paul is one of the few US cities with a voter-approved rent stabilization law.",
+ "checked": "November 2026"
+}

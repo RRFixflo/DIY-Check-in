@@ -1,0 +1,49 @@
+{
+ "name": "Anaheim",
+ "neighborhoods": [
+  {
+   "name": "Anaheim Hills",
+   "homes": "suburban houses, townhomes and apartments"
+  },
+  {
+   "name": "Downtown Anaheim",
+   "homes": "apartments and older houses"
+  },
+  {
+   "name": "Platinum Triangle",
+   "homes": "new mid-rise apartment buildings"
+  },
+  {
+   "name": "West Anaheim",
+   "homes": "ranch houses and apartment complexes"
+  },
+  {
+   "name": "Colony Historic District",
+   "homes": "older bungalows and houses"
+  },
+  {
+   "name": "Resort District area",
+   "homes": "apartment complexes"
+  }
+ ],
+ "housing": "Anaheim renters mostly live in apartment complexes and single-family houses, with new apartment buildings in the Platinum Triangle.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Fair Housing Council of Orange County (via City of Anaheim)",
+   "url": "https://www.anaheim.net/856/Fair-Housing",
+   "what": "fair housing help and tenant education"
+  },
+  {
+   "name": "Community Legal Aid SoCal",
+   "url": "https://www.tenantstogether.org/resources/community-legal-aid-socal",
+   "what": "free legal help with evictions and repairs"
+  }
+ ],
+ "climate": "Test the air conditioning for hot inland summers and check smoke detectors and window seals, as wildfire smoke can drift in during fire season.",
+ "universities": [
+  "California State University, Fullerton (nearby)"
+ ],
+ "fact": "The City of Anaheim works with the Fair Housing Council of Orange County to provide fair housing education and legal services.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,48 @@
+{
+ "name": "Knoxville",
+ "neighborhoods": [
+  {
+   "name": "Fort Sanders",
+   "homes": "Victorian houses split into student apartments"
+  },
+  {
+   "name": "Old North Knoxville",
+   "homes": "historic Victorian houses and duplexes"
+  },
+  {
+   "name": "Fourth and Gill",
+   "homes": "historic houses, some divided into apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts and apartments in older buildings"
+  },
+  {
+   "name": "Sequoyah Hills",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Bearden",
+   "homes": "apartment complexes and single-family houses"
+  },
+  {
+   "name": "West Knoxville",
+   "homes": "large apartment complexes and suburban houses"
+  }
+ ],
+ "housing": "Knoxville's rentals range from old houses split into student apartments near the University of Tennessee to large apartment complexes and suburban houses in West Knoxville.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of East Tennessee",
+   "url": "https://laet.org/",
+   "what": "free legal help for low-income renters, including evictions"
+  }
+ ],
+ "climate": "Test the air conditioning or heat pump in both modes and check crawl spaces and basements for moisture; summers are humid and the area gets heavy rain.",
+ "universities": [
+  "University of Tennessee"
+ ],
+ "fact": "Fort Sanders, next to the University of Tennessee campus, is full of Victorian houses converted into student apartments.",
+ "checked": "November 2026"
+}

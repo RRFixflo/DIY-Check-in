@@ -1,0 +1,46 @@
+{
+ "name": "Wichita",
+ "neighborhoods": [
+  {
+   "name": "College Hill",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "Riverside",
+   "homes": "historic houses and duplexes"
+  },
+  {
+   "name": "Delano",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "Old Town",
+   "homes": "lofts in converted warehouses"
+  },
+  {
+   "name": "Wichita State area",
+   "homes": "student apartments and shared houses"
+  },
+  {
+   "name": "East Wichita",
+   "homes": "suburban houses and apartment complexes"
+  }
+ ],
+ "housing": "Wichita renters mostly live in single-family houses and apartment complexes, with older homes and duplexes near the center and lofts in Old Town.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Kansas Legal Services, Wichita office",
+   "url": "https://www.kansaslegalservices.org/node/1878/wichita-office-kansas-legal-services",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Ask where to shelter in a tornado, test the heating and cooling, and photograph the roof and windows for hail damage.",
+ "universities": [
+  "Wichita State University",
+  "Newman University",
+  "Friends University"
+ ],
+ "fact": "A Kansas Legal Services attorney says landlords not making repairs is the most common problem tenants bring to the office.",
+ "checked": "November 2026"
+}

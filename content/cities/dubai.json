@@ -1,0 +1,59 @@
+{
+ "name": "Dubai",
+ "neighborhoods": [
+  {
+   "name": "Dubai Marina",
+   "homes": "high-rise apartments"
+  },
+  {
+   "name": "Jumeirah Lake Towers",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Downtown Dubai",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Al Barsha",
+   "homes": "apartments and villas"
+  },
+  {
+   "name": "Jumeirah Village Circle",
+   "homes": "apartments and townhouses"
+  },
+  {
+   "name": "Deira",
+   "homes": "older apartment buildings"
+  },
+  {
+   "name": "Mirdif",
+   "homes": "villas"
+  },
+  {
+   "name": "Arabian Ranches",
+   "homes": "villas"
+  }
+ ],
+ "housing": "Most Dubai residents rent, mainly apartments in high-rise towers, with villas and townhouses in gated communities.",
+ "localRules": [
+  {
+   "text": "Every tenancy contract in Dubai must be registered with Ejari, and the Ejari number is needed to connect DEWA utilities.",
+   "source": "https://www.dubizzle.com/blog/property/ejari-dubai"
+  },
+  {
+   "text": "Many Dubai communities require a move-in permit from the building or community management before moving furniture in.",
+   "source": "https://www.dubizzle.com/blog/property/documents-renting-property-dubai/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Rental Disputes Center (RDC)",
+   "url": "https://rdc.gov.ae/en/about-rdc/about-rental-disputes-center/",
+   "what": "Dubai's court for rental disputes, including deposits"
+  }
+ ],
+ "climate": "Test every air conditioning unit and photograph them; summer heat makes a broken AC an urgent repair.",
+ "universities": [],
+ "fact": "Rents in Dubai are often paid by several post-dated cheques for the year.",
+ "checked": "November 2026"
+}

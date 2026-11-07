@@ -1,0 +1,59 @@
+{
+ "name": "Rochester",
+ "neighborhoods": [
+  {
+   "name": "Park Avenue",
+   "homes": "older houses split into apartments"
+  },
+  {
+   "name": "South Wedge",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Corn Hill",
+   "homes": "historic houses and townhomes"
+  },
+  {
+   "name": "Neighborhood of the Arts",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Swillburg",
+   "homes": "small single-family homes"
+  },
+  {
+   "name": "19th Ward",
+   "homes": "older single-family and two-family houses"
+  },
+  {
+   "name": "Charlotte",
+   "homes": "older houses near Lake Ontario"
+  }
+ ],
+ "housing": "Rochester's rentals are mostly older single-family and two-family houses, many built before 1950, and apartments in converted houses.",
+ "localRules": [
+  {
+   "text": "Rochester requires most rental properties to have a city certificate of occupancy, which also serves as the lead safety certificate for older homes.",
+   "source": "https://cityofrochester.gov/faqs/certificate-occupancy-faq"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenant Defense Project",
+   "url": "https://www.lawhelpny.org/organization/tenant-defense-project",
+   "what": "free legal advice and representation for tenants facing eviction"
+  },
+  {
+   "name": "Legal Assistance of Western New York",
+   "url": "https://lawny.org/node/50/rochester-location",
+   "what": "free civil legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the heat, check windows for drafts and peeling paint, and ask who clears snow; lake-effect snow makes winters long.",
+ "universities": [
+  "University of Rochester",
+  "Rochester Institute of Technology"
+ ],
+ "fact": "Because most Rochester homes are old, the city checks rentals for lead hazards, so ask to see the certificate of occupancy.",
+ "checked": "November 2026"
+}

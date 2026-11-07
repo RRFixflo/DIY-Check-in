@@ -1,0 +1,54 @@
+{
+ "name": "Honolulu",
+ "neighborhoods": [
+  {
+   "name": "Waikiki",
+   "homes": "high-rise condos and apartments"
+  },
+  {
+   "name": "Kaimuki",
+   "homes": "older houses, ohana units and small apartments"
+  },
+  {
+   "name": "Manoa",
+   "homes": "houses, ohana units and student rentals near UH"
+  },
+  {
+   "name": "Makiki",
+   "homes": "walk-up and high-rise apartments"
+  },
+  {
+   "name": "Kakaako",
+   "homes": "new high-rise condos"
+  },
+  {
+   "name": "Moiliili",
+   "homes": "small apartment buildings near UH"
+  },
+  {
+   "name": "Kalihi",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Hawaii Kai",
+   "homes": "townhomes and houses"
+  }
+ ],
+ "housing": "Honolulu renters mostly live in high-rise and walk-up condos and apartments, with many ohana units and rooms in houses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Hawaii",
+   "url": "https://www.legalaidhawaii.org/get-legal-assistance.html",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Humidity and salt air cause mold and rust, so check bathrooms, window frames and appliances; look for termite damage and ask whether the unit has air conditioning.",
+ "universities": [
+  "University of Hawaii at Manoa",
+  "Chaminade University",
+  "Hawaii Pacific University"
+ ],
+ "fact": "Many Honolulu rentals are condos, so the building's house rules on pets, parking and moving times also apply to tenants.",
+ "checked": "November 2026"
+}

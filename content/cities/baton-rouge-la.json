@@ -1,0 +1,49 @@
+{
+ "name": "Baton Rouge",
+ "neighborhoods": [
+  {
+   "name": "Garden District",
+   "homes": "historic houses and duplexes"
+  },
+  {
+   "name": "Spanish Town",
+   "homes": "old cottages and small houses near the Capitol"
+  },
+  {
+   "name": "Mid City",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Southdowns",
+   "homes": "mid-century houses"
+  },
+  {
+   "name": "Tigerland",
+   "homes": "apartment complexes rented by LSU students"
+  },
+  {
+   "name": "Shenandoah",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Highland Road area",
+   "homes": "houses and apartments near LSU"
+  }
+ ],
+ "housing": "Baton Rouge renters live in single-family homes, duplexes and apartment complexes, with many student apartments near LSU.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Southeast Louisiana Legal Services",
+   "url": "https://slls.org",
+   "what": "free legal help and an eviction help desk at Baton Rouge City Court"
+  }
+ ],
+ "climate": "Look for flood lines, water stains and mold, and test the AC; Baton Rouge is hot and humid and many areas flooded in 2016.",
+ "universities": [
+  "Louisiana State University",
+  "Southern University"
+ ],
+ "fact": "Tigerland, next to LSU, is a cluster of student apartment complexes where many leases turn over each August.",
+ "checked": "November 2026"
+}

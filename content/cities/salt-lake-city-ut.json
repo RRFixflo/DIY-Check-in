@@ -1,0 +1,63 @@
+{
+ "name": "Salt Lake City",
+ "neighborhoods": [
+  {
+   "name": "Sugar House",
+   "homes": "older houses and new apartment buildings"
+  },
+  {
+   "name": "The Avenues",
+   "homes": "historic houses and small apartment buildings"
+  },
+  {
+   "name": "9th and 9th",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Liberty Wells",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and condos"
+  },
+  {
+   "name": "Central City",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Rose Park",
+   "homes": "small mid-century houses"
+  },
+  {
+   "name": "Marmalade",
+   "homes": "historic houses and new townhomes"
+  }
+ ],
+ "housing": "Salt Lake City renters live in older bungalows and houses split into units, small apartment buildings, and many new downtown apartment buildings.",
+ "localRules": [
+  {
+   "text": "Every rental property in Salt Lake City must have a city business license, with lower fees for landlords in the Landlord/Tenant (Good Landlord) program.",
+   "source": "https://www.slc.gov/Finance/landlord-tenant/frequently-asked-questions/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Utah Legal Services",
+   "url": "https://utahdhhs.211utah.org/provider/utah-legal-services",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "Salt Lake City Housing Stability",
+   "url": "https://www.slc.gov/housingstability/?p=2123",
+   "what": "city list of rental help and eviction prevention"
+  }
+ ],
+ "climate": "Test the furnace and the cooling, which is often a swamp cooler, and check windows; winters are snowy and summers hot and dry.",
+ "universities": [
+  "University of Utah",
+  "Westminster University"
+ ],
+ "fact": "Many older Salt Lake City homes are cooled by evaporative swamp coolers rather than central AC.",
+ "checked": "November 2026"
+}

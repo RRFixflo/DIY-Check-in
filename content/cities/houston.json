@@ -1,0 +1,59 @@
+{
+ "name": "Houston",
+ "neighborhoods": [
+  {
+   "name": "Montrose",
+   "homes": "older apartments, duplexes and garage apartments"
+  },
+  {
+   "name": "The Heights",
+   "homes": "bungalows, townhouses and newer apartment buildings"
+  },
+  {
+   "name": "Midtown",
+   "homes": "mid-rise apartment complexes"
+  },
+  {
+   "name": "Gulfton",
+   "homes": "large older apartment complexes"
+  },
+  {
+   "name": "Westchase",
+   "homes": "garden apartment complexes"
+  },
+  {
+   "name": "Third Ward",
+   "homes": "older houses and apartments near the universities"
+  },
+  {
+   "name": "East End",
+   "homes": "single-family houses and newer townhouses"
+  },
+  {
+   "name": "Alief",
+   "homes": "apartment complexes and single-family homes"
+  }
+ ],
+ "housing": "Houston renters mostly live in large garden apartment complexes and rented single-family homes and townhouses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Lone Star Legal Aid",
+   "url": "https://www.lonestarlegal.org",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "Harris County Eviction Defense Program",
+   "url": "https://hcd.harriscountytx.gov/residents/legal-services/eviction-defense-program",
+   "what": "county help for renters at risk of eviction"
+  }
+ ],
+ "climate": "Test the air conditioning and look for water stains, mold and flood damage; heat, humidity and heavy storms are common.",
+ "universities": [
+  "University of Houston",
+  "Rice University",
+  "Texas Southern University"
+ ],
+ "fact": "Houston has no zoning, so apartment complexes, houses and businesses often sit side by side in the same neighborhood.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,49 @@
+{
+ "name": "Corpus Christi",
+ "neighborhoods": [
+  {
+   "name": "Southside",
+   "homes": "apartment complexes and newer single-family homes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and converted older buildings"
+  },
+  {
+   "name": "Flour Bluff",
+   "homes": "single-family homes and duplexes"
+  },
+  {
+   "name": "North Padre Island",
+   "homes": "condos, townhomes and beach houses"
+  },
+  {
+   "name": "Calallen",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Ocean Drive",
+   "homes": "condos and older homes along the bay"
+  }
+ ],
+ "housing": "Corpus Christi's rentals are mostly single-family homes and apartment complexes, with condos and townhomes on Padre Island and along the bayfront.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Texas RioGrande Legal Aid",
+   "url": "https://trla.org/news-releases/stop-tx-eviction-launches-to-keep-renters-housed?format=amp",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "Texas Tenant Advisor",
+   "url": "https://www.texastenant.org/resources-1/direct-services",
+   "what": "list of tenant legal services in Texas"
+  }
+ ],
+ "climate": "Test the air conditioning, photograph windows, doors and ceilings for water stains, and look for mold; the coast is humid and exposed to hurricanes.",
+ "universities": [
+  "Texas A&M University–Corpus Christi"
+ ],
+ "fact": "Corpus Christi has no local tenant ordinances, so the Texas Property Code sets the rules for deposits and repairs.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,58 @@
+{
+ "name": "Lincoln",
+ "neighborhoods": [
+  {
+   "name": "Near South",
+   "homes": "older houses split into apartments"
+  },
+  {
+   "name": "Downtown and Haymarket",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Clinton",
+   "homes": "older single-family homes and duplexes"
+  },
+  {
+   "name": "Havelock",
+   "homes": "small single-family homes"
+  },
+  {
+   "name": "Witherbee",
+   "homes": "older homes and small apartment buildings"
+  },
+  {
+   "name": "Country Club",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "University Place",
+   "homes": "older houses and apartments"
+  }
+ ],
+ "housing": "Lincoln's rentals are a mix of apartment complexes, older houses converted to apartments near downtown and the university, and single-family homes.",
+ "localRules": [
+  {
+   "text": "Buildings with three or more rental units in Lincoln must be licensed under the city's Apartment Licensing Ordinance.",
+   "source": "https://www.lincoln.ne.gov/City/Departments/Building-Safety/Residential-Rental-and-Property-Maintenance"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenant Assistance Project",
+   "url": "https://www.lincoln.ne.gov/City/Departments/City-Attorneys-Office/LCHR/Tenant-Assistance-Project",
+   "what": "free help for tenants facing eviction"
+  },
+  {
+   "name": "UNL Tenant Assistance Project",
+   "url": "https://law.unl.edu/tenant-assistance-project/",
+   "what": "law clinic representing tenants in eviction cases"
+  }
+ ],
+ "climate": "Test both the furnace and the air conditioning, and check windows and the roof for storm damage; Lincoln has cold winters, hot summers and hail.",
+ "universities": [
+  "University of Nebraska–Lincoln"
+ ],
+ "fact": "Lincoln's city inspections of rentals are mostly complaint-driven rather than routine.",
+ "checked": "November 2026"
+}

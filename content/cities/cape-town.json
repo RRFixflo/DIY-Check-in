@@ -1,0 +1,54 @@
+{
+ "name": "Cape Town",
+ "neighborhoods": [
+  {
+   "name": "Sea Point",
+   "homes": "apartment blocks"
+  },
+  {
+   "name": "Observatory",
+   "homes": "Victorian cottages, many student lets"
+  },
+  {
+   "name": "Gardens",
+   "homes": "flats and houses"
+  },
+  {
+   "name": "Woodstock",
+   "homes": "semi-detached cottages and new apartments"
+  },
+  {
+   "name": "Rondebosch",
+   "homes": "houses and student flats"
+  },
+  {
+   "name": "Claremont",
+   "homes": "apartments and houses"
+  },
+  {
+   "name": "Green Point",
+   "homes": "apartments"
+  },
+  {
+   "name": "Bellville",
+   "homes": "houses and flats"
+  }
+ ],
+ "housing": "Cape Town renters live in apartments along the Atlantic seaboard and City Bowl, older cottages, and houses in the southern and northern suburbs.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Western Cape Rental Housing Tribunal",
+   "url": "https://westerncape.gov.za/infrastructure/service/rht",
+   "what": "free dispute service for tenants and landlords"
+  }
+ ],
+ "climate": "Winters are wet and windy, so check for damp, leaks and mould; in summer the south-easter wind tests windows and doors.",
+ "universities": [
+  "University of Cape Town",
+  "Stellenbosch University",
+  "University of the Western Cape"
+ ],
+ "fact": "Under the Rental Housing Act, landlord and tenant should inspect the home together before move-in and again at the end.",
+ "checked": "November 2026"
+}

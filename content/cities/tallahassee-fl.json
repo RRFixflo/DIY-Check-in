@@ -1,0 +1,50 @@
+{
+ "name": "Tallahassee",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Frenchtown",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "All Saints",
+   "homes": "older houses and student apartments"
+  },
+  {
+   "name": "College Town",
+   "homes": "student apartments near FSU"
+  },
+  {
+   "name": "Killearn",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Southwood",
+   "homes": "newer single-family homes and townhomes"
+  },
+  {
+   "name": "Myers Park",
+   "homes": "older single-family homes"
+  }
+ ],
+ "housing": "Tallahassee has many student apartment complexes and houses rented by the room, plus single-family homes in suburbs.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Services of North Florida",
+   "url": "https://rightservicefl.org/node/21453",
+   "what": "free legal help for low-income renters in Leon County"
+  }
+ ],
+ "climate": "Test the AC and check for mold and leaks; summers are hot and humid and hurricanes can reach the city.",
+ "universities": [
+  "Florida State University",
+  "Florida A&M University",
+  "Tallahassee Community College"
+ ],
+ "fact": "With two large universities, many Tallahassee leases start in August, which is the busiest move-in month.",
+ "checked": "November 2026"
+}

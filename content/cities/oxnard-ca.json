@@ -1,0 +1,47 @@
+{
+ "name": "Oxnard",
+ "neighborhoods": [
+  {
+   "name": "Downtown Oxnard",
+   "homes": "older apartments and small houses"
+  },
+  {
+   "name": "La Colonia",
+   "homes": "older single-family houses, often shared by more than one household"
+  },
+  {
+   "name": "RiverPark",
+   "homes": "newer apartments and townhomes"
+  },
+  {
+   "name": "Channel Islands Harbor",
+   "homes": "condos and townhomes near the water"
+  },
+  {
+   "name": "Oxnard Shores",
+   "homes": "beach houses and duplexes"
+  },
+  {
+   "name": "Mandalay Bay",
+   "homes": "waterfront houses and condos"
+  }
+ ],
+ "housing": "Oxnard's rentals are mostly older single-family houses, apartment complexes and condos. Many farmworker families share homes, so crowded housing is common.",
+ "localRules": [
+  {
+   "text": "Oxnard's Rent Stabilization and Just Cause Tenant Protection ordinances limit rent increases on covered units to once a year and limit the reasons a landlord can evict.",
+   "source": "https://www.oxnard.org/city-department/housing/rso/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "City of Oxnard Housing Department",
+   "url": "https://www.oxnard.gov/housing/affordable-housing/rent-stabilization",
+   "what": "rent stabilization questions and overcharge complaints"
+  }
+ ],
+ "climate": "Look for mold and damp near windows and in bathrooms, since the coastal fog keeps homes humid, and check for salt rust on railings and appliances near the beach.",
+ "universities": [],
+ "fact": "Oxnard publishes its tenant protection notices in Spanish and Mixteco as well as English.",
+ "checked": "November 2026"
+}

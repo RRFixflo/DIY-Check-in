@@ -1,0 +1,54 @@
+{
+ "name": "Little Rock",
+ "neighborhoods": [
+  {
+   "name": "Hillcrest",
+   "homes": "early 1900s bungalows and small apartment buildings"
+  },
+  {
+   "name": "The Heights",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Quapaw Quarter",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "SoMa",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "River Market / Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "West Little Rock",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Midtown",
+   "homes": "older houses and apartments"
+  }
+ ],
+ "housing": "Little Rock's rentals are single-family homes and apartment complexes, with older houses and duplexes near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of Arkansas",
+   "url": "https://arlegalaid.org",
+   "what": "free legal help for renters"
+  },
+  {
+   "name": "City of Little Rock Tenant Rights",
+   "url": "https://littlerock.gov/government/city-departments/housing-and-neighborhood/tenant-rights/",
+   "what": "city information for renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check for mold and storm damage; summers are hot and humid and spring brings tornadoes.",
+ "universities": [
+  "University of Arkansas at Little Rock",
+  "University of Arkansas for Medical Sciences"
+ ],
+ "fact": "Arkansas only added basic habitability standards for rentals in 2021, so document the condition of everything at move-in.",
+ "checked": "November 2026"
+}

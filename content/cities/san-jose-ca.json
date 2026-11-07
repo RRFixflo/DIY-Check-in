@@ -1,0 +1,49 @@
+{
+ "name": "San Jose",
+ "neighborhoods": [
+  {
+   "name": "Willow Glen",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Downtown San Jose",
+   "homes": "high-rise and mid-rise apartments"
+  },
+  {
+   "name": "Japantown",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Rose Garden",
+   "homes": "houses and small apartment buildings"
+  },
+  {
+   "name": "North San Jose",
+   "homes": "large newer apartment complexes"
+  },
+  {
+   "name": "East San Jose",
+   "homes": "single-family homes and older apartments"
+  }
+ ],
+ "housing": "San Jose renters live in apartment complexes and rented single-family homes; apartments in buildings of three or more units built before September 7, 1979 are covered by the city's Apartment Rent Ordinance.",
+ "localRules": [
+  {
+   "text": "San Jose apartments covered by the Apartment Rent Ordinance must be registered with the city's rent registry every year, and the landlord cannot raise rent until they are registered.",
+   "source": "https://sanjoseca.gov/your-government/departments-offices/housing/housing-rental-rights"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "City of San José Resources for Tenants",
+   "url": "https://sanjoseca.gov/your-government/departments-offices/housing/tenants",
+   "what": "city rent stabilization program and tenant help"
+  }
+ ],
+ "climate": "Test the air conditioning and check for cracks in walls; summers are warm and the area is prone to earthquakes.",
+ "universities": [
+  "San José State University"
+ ],
+ "fact": "San Jose's rent registry records security deposits for covered apartments, along with rent increases.",
+ "checked": "November 2026"
+}

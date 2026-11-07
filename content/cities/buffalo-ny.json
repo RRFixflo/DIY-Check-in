@@ -1,0 +1,67 @@
+{
+ "name": "Buffalo",
+ "neighborhoods": [
+  {
+   "name": "Elmwood Village",
+   "homes": "upper and lower flats in older doubles"
+  },
+  {
+   "name": "Allentown",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "North Buffalo",
+   "homes": "two-family doubles and single-family homes"
+  },
+  {
+   "name": "Parkside",
+   "homes": "large older houses and doubles"
+  },
+  {
+   "name": "West Side",
+   "homes": "older doubles and frame houses"
+  },
+  {
+   "name": "South Buffalo",
+   "homes": "single-family homes and doubles"
+  },
+  {
+   "name": "University Heights",
+   "homes": "student rentals in older houses"
+  },
+  {
+   "name": "Black Rock",
+   "homes": "small older houses and doubles"
+  }
+ ],
+ "housing": "Buffalo's typical rental is a flat in a two-family 'Buffalo double', with one apartment upstairs and one downstairs.",
+ "localRules": [
+  {
+   "text": "Owners of non-owner-occupied one- and two-family rentals in Buffalo must register them every year.",
+   "source": "https://www.buffalony.gov/709/Rental-Registration"
+  },
+  {
+   "text": "These rentals are inspected every three years, including for lead hazards, and a passing unit gets a Certificate of Rental Compliance.",
+   "source": "https://www.buffalony.gov/1372/Proactive-Rental-Inspections"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Western New York Law Center",
+   "url": "https://www.wnylc.com/eviction-prevention",
+   "what": "free legal help for tenants facing eviction"
+  },
+  {
+   "name": "Buffalo City Court Housing Court",
+   "url": "https://www.nycourts.gov/courts/8th-judicial-district/buffalo-city-court/housing-landlord-tenant-court",
+   "what": "court information and on-site legal help"
+  }
+ ],
+ "climate": "Test the furnace, check windows for drafts and look in the basement for water; Buffalo winters bring heavy lake-effect snow.",
+ "universities": [
+  "University at Buffalo",
+  "Buffalo State University"
+ ],
+ "fact": "You can ask whether a Buffalo double has a current Certificate of Rental Compliance; the city publishes this in its open data.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,48 @@
+{
+ "name": "Charleston",
+ "neighborhoods": [
+  {
+   "name": "Downtown peninsula",
+   "homes": "historic single houses split into apartments"
+  },
+  {
+   "name": "Cannonborough-Elliotborough",
+   "homes": "older houses, many rented to students"
+  },
+  {
+   "name": "Wagener Terrace",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "Hampton Park Terrace",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "West Ashley",
+   "homes": "apartment complexes and single-family houses"
+  },
+  {
+   "name": "James Island",
+   "homes": "single-family houses and apartments"
+  },
+  {
+   "name": "Daniel Island",
+   "homes": "newer townhomes, condos and apartments"
+  },
+  {
+   "name": "Johns Island",
+   "homes": "newer single-family houses and apartments"
+  }
+ ],
+ "housing": "Charleston's rentals range from historic single houses on the peninsula, many split into apartments, to apartment complexes and newer houses in West Ashley and on the islands.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Look for water stains, damp and mold, and test the air conditioning; heavy rain, tidal flooding and hurricanes are common.",
+ "universities": [
+  "College of Charleston",
+  "The Citadel",
+  "Medical University of South Carolina"
+ ],
+ "fact": "Parts of the peninsula flood during heavy rain and king tides, so ask whether a unit or its parking has flooded before.",
+ "checked": "November 2026"
+}

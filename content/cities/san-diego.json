@@ -1,0 +1,59 @@
+{
+ "name": "San Diego",
+ "neighborhoods": [
+  {
+   "name": "North Park",
+   "homes": "Craftsman bungalows, duplexes and small apartment buildings"
+  },
+  {
+   "name": "Pacific Beach",
+   "homes": "beach apartments and shared houses"
+  },
+  {
+   "name": "Hillcrest",
+   "homes": "older apartment buildings and condos"
+  },
+  {
+   "name": "Mission Valley",
+   "homes": "large apartment complexes"
+  },
+  {
+   "name": "Clairemont",
+   "homes": "single-family houses and apartment complexes"
+  },
+  {
+   "name": "La Jolla",
+   "homes": "condos, apartments and houses near UC San Diego"
+  },
+  {
+   "name": "City Heights",
+   "homes": "older apartment buildings and small houses"
+  },
+  {
+   "name": "Ocean Beach",
+   "homes": "cottages and small apartment buildings"
+  }
+ ],
+ "housing": "San Diego renters mostly live in apartment complexes, small multi-unit buildings and rented houses, with many beach-area and student rentals.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "San Diego Housing Commission",
+   "url": "https://www.sdhc.org/housing-opportunities/tenant-protections/",
+   "what": "city tenant protections information"
+  },
+  {
+   "name": "Legal Aid Society of San Diego",
+   "url": "https://www.lassd.org/resource/city-of-san-diego-tenant-protection-ordinance/",
+   "what": "free legal help and tenant ordinance FAQ"
+  }
+ ],
+ "climate": "Near the coast, look for salt corrosion on fixtures and mold in bathrooms; inland, test the air conditioning before summer.",
+ "universities": [
+  "UC San Diego",
+  "San Diego State University",
+  "University of San Diego"
+ ],
+ "fact": "San Diego's tenant protection ordinance covers only the City of San Diego, not other cities in the county.",
+ "checked": "November 2026"
+}

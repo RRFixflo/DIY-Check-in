@@ -1,0 +1,48 @@
+{
+ "name": "Madison",
+ "neighborhoods": [
+  {
+   "name": "Downtown / Isthmus",
+   "homes": "apartment buildings and older houses split into units"
+  },
+  {
+   "name": "Langdon",
+   "homes": "student apartments in older houses"
+  },
+  {
+   "name": "Williamson-Marquette",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Tenney-Lapham",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Vilas",
+   "homes": "older single-family homes and duplexes"
+  },
+  {
+   "name": "Regent",
+   "homes": "older houses and apartments near campus"
+  },
+  {
+   "name": "Atwood",
+   "homes": "small houses and duplexes"
+  }
+ ],
+ "housing": "Madison's rentals are concentrated on the Isthmus, with many older houses split into apartments and newer apartment towers near the UW–Madison campus.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Tenant Resource Center",
+   "url": "https://www.madisonpubliclibrary.org/resources/eresources/tenant-resource-center",
+   "what": "free tenant advice and mediation in Dane County"
+  }
+ ],
+ "climate": "Test the heat, check windows and doors for drafts and look for ice or water stains; Madison winters are long and very cold.",
+ "universities": [
+  "University of Wisconsin–Madison"
+ ],
+ "fact": "Wisconsin law requires landlords to give new tenants a check-in sheet, which the tenant has seven days to fill in and return.",
+ "checked": "November 2026"
+}

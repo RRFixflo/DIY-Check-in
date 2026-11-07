@@ -1,0 +1,54 @@
+{
+ "name": "Tacoma",
+ "neighborhoods": [
+  {
+   "name": "Stadium District",
+   "homes": "older apartment buildings and condos"
+  },
+  {
+   "name": "North End / Proctor",
+   "homes": "early 1900s houses and small apartment buildings"
+  },
+  {
+   "name": "Hilltop",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "Sixth Avenue",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "South Tacoma",
+   "homes": "small single-family homes"
+  },
+  {
+   "name": "Lincoln District",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Old Town",
+   "homes": "houses and condos near the waterfront"
+  }
+ ],
+ "housing": "Tacoma's rentals are a mix of early 1900s houses, older walk-up apartment buildings and newer apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Tacoma Landlord-Tenant Program",
+   "url": "https://cityoftacoma.org/government/city_departments/equity_and_human_rights/landlord-tenant_program/additional_resources",
+   "what": "city information and referrals on local renter rules"
+  },
+  {
+   "name": "Tacomaprobono Housing Justice Project",
+   "url": "https://tacomaprobono.org",
+   "what": "free legal help for Pierce County renters facing eviction"
+  }
+ ],
+ "climate": "Check for mold, damp walls and window condensation, and test the heat; Tacoma's long wet season makes moisture the main problem.",
+ "universities": [
+  "University of Puget Sound",
+  "University of Washington Tacoma"
+ ],
+ "fact": "Tacoma sits next to Joint Base Lewis-McChord, so many renters are military families.",
+ "checked": "November 2026"
+}

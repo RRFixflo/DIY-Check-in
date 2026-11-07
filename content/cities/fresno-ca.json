@@ -1,0 +1,53 @@
+{
+ "name": "Fresno",
+ "neighborhoods": [
+  {
+   "name": "Tower District",
+   "homes": "1920s–30s bungalows, duplexes and small apartment buildings"
+  },
+  {
+   "name": "Fig Garden",
+   "homes": "older ranch houses on larger lots"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Woodward Park",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "Sunnyside",
+   "homes": "ranch houses"
+  },
+  {
+   "name": "Bullard",
+   "homes": "post-war houses and apartment complexes"
+  },
+  {
+   "name": "Fresno State area",
+   "homes": "student apartments and shared houses"
+  }
+ ],
+ "housing": "Fresno renters mostly live in single-family ranch houses and two-story apartment complexes, with older bungalows in the Tower District.",
+ "localRules": [
+  {
+   "text": "Fresno's Rental Housing Improvement Program requires every residential rental property to be registered with the city, and properties get a baseline inspection followed by routine inspections.",
+   "source": "https://www.fresno.gov/wp-content/uploads/2025/01/RHIA-Regulations-Effective-3_1_2025361573.2-10w380.pdf"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Central California Legal Services",
+   "url": "https://presentationbuilder.internationaltrucks.com/central-california-legal-services-fresno-office",
+   "what": "free civil legal help for low-income renters"
+  }
+ ],
+ "climate": "Summer highs often pass 100°F, so test the air conditioning, check window screens, and note any dust or smoke getting in through gaps.",
+ "universities": [
+  "California State University, Fresno"
+ ],
+ "fact": "Anyone can look up whether a Fresno rental is on the city's registry by its street address.",
+ "checked": "November 2026"
+}

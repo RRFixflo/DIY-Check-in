@@ -1,0 +1,43 @@
+{
+ "name": "Fontana",
+ "neighborhoods": [
+  {
+   "name": "Sierra Lakes",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "Southridge",
+   "homes": "1980s and 1990s single-family homes"
+  },
+  {
+   "name": "Downtown Fontana",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "North Fontana",
+   "homes": "newer single-family homes and apartment complexes"
+  },
+  {
+   "name": "Hunter's Ridge",
+   "homes": "single-family homes in the foothills"
+  }
+ ],
+ "housing": "Fontana's rentals are mostly single-family homes, with newer tracts in the north and older houses and apartments in the south.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Inland Counties Legal Services (Tenant/Landlord Assistance Project)",
+   "url": "https://sanbernardino.courts.ca.gov/system/files/tenantlandlordassistanceprogram.pdf",
+   "what": "free help with eviction cases at the Fontana courthouse"
+  },
+  {
+   "name": "City of Fontana Fair Housing",
+   "url": "https://arts.fontanaca.gov/615/Fair-Housing",
+   "what": "fair housing information and landlord-tenant mediation referrals"
+  }
+ ],
+ "climate": "Test the air conditioning and check window seals for dust; summers are hot and Santa Ana winds blow strongly through the area.",
+ "universities": [],
+ "fact": null,
+ "checked": "November 2026"
+}

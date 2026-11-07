@@ -1,0 +1,54 @@
+{
+ "name": "Norfolk",
+ "neighborhoods": [
+  {
+   "name": "Ghent",
+   "homes": "brick row houses and older buildings split into apartments"
+  },
+  {
+   "name": "Larchmont",
+   "homes": "older single-family homes near Old Dominion University"
+  },
+  {
+   "name": "Colonial Place",
+   "homes": "early 1900s houses and duplexes"
+  },
+  {
+   "name": "Ocean View",
+   "homes": "beach cottages, duplexes and apartments on the bay"
+  },
+  {
+   "name": "Park Place",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and condos in high-rises and converted buildings"
+  },
+  {
+   "name": "Wards Corner",
+   "homes": "mid-century houses and apartment complexes"
+  }
+ ],
+ "housing": "Norfolk's rentals include older row houses and converted apartments in Ghent, single-family homes and duplexes, and many apartment complexes serving military families.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Eastern Virginia",
+   "url": "https://www.laseva.org",
+   "what": "free legal help for low-income renters, including eviction defense"
+  },
+  {
+   "name": "City of Norfolk helpful resources",
+   "url": "https://www.norfolk.gov/DocumentCenter/View/91604/Helpful-Resources",
+   "what": "city list of housing help"
+  }
+ ],
+ "climate": "Look for water stains, flood lines and mold, and test the AC; Norfolk has humid summers, hurricanes and frequent tidal flooding.",
+ "universities": [
+  "Old Dominion University",
+  "Norfolk State University"
+ ],
+ "fact": "Norfolk is home to Naval Station Norfolk, so many leases follow military moves and include military clauses.",
+ "checked": "November 2026"
+}

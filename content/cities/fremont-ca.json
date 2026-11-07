@@ -1,0 +1,65 @@
+{
+ "name": "Fremont",
+ "neighborhoods": [
+  {
+   "name": "Mission San Jose",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Niles",
+   "homes": "historic cottages and small houses"
+  },
+  {
+   "name": "Centerville",
+   "homes": "older houses and apartment complexes"
+  },
+  {
+   "name": "Irvington",
+   "homes": "single-family homes and apartments"
+  },
+  {
+   "name": "Warm Springs",
+   "homes": "new townhomes and apartments near BART"
+  },
+  {
+   "name": "Ardenwood",
+   "homes": "single-family homes and townhomes"
+  },
+  {
+   "name": "Central Fremont",
+   "homes": "apartment complexes and condos near downtown and BART"
+  }
+ ],
+ "housing": "Fremont's rentals are single-family homes, townhomes and large apartment complexes, many near the BART stations.",
+ "localRules": [
+  {
+   "text": "Under Fremont's Rent Review Ordinance, landlords must tell tenants in writing about the city's rent review program with any rent increase, and increases over 5 percent can go to the Rent Review Board.",
+   "source": "https://www.codepublishing.com/CA/Fremont/html/Fremont09/Fremont0960.html"
+  },
+  {
+   "text": "Fremont bars landlords from refusing tenants because of their source of income.",
+   "source": "https://fremontcityofca.prod.govaccess.org/government/departments/housing/rent-review-program/source-of-income-discrimination"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Fremont Rent Review Program",
+   "url": "https://fremontcityofca.prod.govaccess.org/government/departments/housing/rent-review-program/rent-review-process",
+   "what": "city mediation and review of rent increases"
+  },
+  {
+   "name": "Keep Fremont Housed",
+   "url": "https://www.fremont.gov/government/departments/human-services/human-services-in-the-community/keep-fremont-housed",
+   "what": "city help for renters at risk of losing housing"
+  },
+  {
+   "name": "Centro Legal de la Raza",
+   "url": "https://www.centrolegal.org",
+   "what": "free legal help for tenants"
+  }
+ ],
+ "climate": "Check the heater and, since many homes have no central AC, ask how the home stays cool; also confirm the water heater is strapped for earthquakes.",
+ "universities": [],
+ "fact": "The Warm Springs BART station opened in 2017, and many new apartments and townhomes have been built around it.",
+ "checked": "November 2026"
+}

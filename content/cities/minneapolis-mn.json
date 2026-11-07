@@ -1,0 +1,62 @@
+{
+ "name": "Minneapolis",
+ "neighborhoods": [
+  {
+   "name": "Uptown",
+   "homes": "older apartment buildings and new mid-rises"
+  },
+  {
+   "name": "Northeast",
+   "homes": "duplexes and older houses"
+  },
+  {
+   "name": "Dinkytown",
+   "homes": "student apartments near the University of Minnesota"
+  },
+  {
+   "name": "Whittier",
+   "homes": "brick walk-up apartment buildings"
+  },
+  {
+   "name": "Longfellow",
+   "homes": "bungalows and duplexes"
+  },
+  {
+   "name": "North Loop",
+   "homes": "warehouse lofts and new apartment buildings"
+  },
+  {
+   "name": "Powderhorn",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Loring Park",
+   "homes": "older apartment buildings"
+  }
+ ],
+ "housing": "Minneapolis rentals include brick walk-up apartment buildings, duplexes, older wood-frame houses and new apartment buildings downtown and in Uptown.",
+ "localRules": [
+  {
+   "text": "Most Minneapolis rentals need a city rental license, and owners must give tenants a copy of the license certificate.",
+   "source": "https://www.minneapolismn.gov/resident-services/property-housing/housing/renting/renters/rights/"
+  },
+  {
+   "text": "Minneapolis limits security deposits to no more than one month's rent.",
+   "source": "https://www2.minneapolismn.gov/business-services/licenses-permits-inspections/rental-licenses/renter-protections/security-deposits"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "City of Minneapolis renter rights",
+   "url": "https://www.minneapolismn.gov/resident-services/property-housing/housing/renting/renters/rights/",
+   "what": "city information and protections for renters"
+  }
+ ],
+ "climate": "Long, cold winters mean you should test the heat, check windows and doors for drafts, and photograph ice dams, frost damage or water stains on ceilings.",
+ "universities": [
+  "University of Minnesota",
+  "Augsburg University"
+ ],
+ "fact": "If a Minneapolis rental license is revoked and tenants have to move out, the owner must pay relocation assistance.",
+ "checked": "November 2026"
+}

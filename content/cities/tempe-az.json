@@ -1,0 +1,43 @@
+{
+ "name": "Tempe",
+ "neighborhoods": [
+  {
+   "name": "Mill Avenue District",
+   "homes": "high-rise and student apartments"
+  },
+  {
+   "name": "Maple-Ash",
+   "homes": "older houses and small apartment buildings near ASU"
+  },
+  {
+   "name": "Broadmor",
+   "homes": "mid-century ranch houses"
+  },
+  {
+   "name": "Daley Park",
+   "homes": "older houses, many rented to students"
+  },
+  {
+   "name": "The Lakes",
+   "homes": "houses and condos around man-made lakes"
+  },
+  {
+   "name": "Warner Ranch",
+   "homes": "single-family houses in south Tempe"
+  }
+ ],
+ "housing": "Tempe has a large stock of student apartments near Arizona State University, including buildings leased by the bed, plus ranch houses and condos in the rest of the city.",
+ "localRules": [
+  {
+   "text": "Every rental home in Maricopa County must be registered with the County Assessor, and the city where it sits enforces this.",
+   "source": "https://www.mcassessor.maricopa.gov/faq/rental_registration/"
+  }
+ ],
+ "tenantHelp": [],
+ "climate": "Run the air conditioning and photograph the outdoor unit; summer heat makes a broken AC an urgent repair, and monsoon storms can damage roofs and screens.",
+ "universities": [
+  "Arizona State University"
+ ],
+ "fact": "Leases near ASU often follow the school year, so many Tempe renters move in late July and August.",
+ "checked": "November 2026"
+}

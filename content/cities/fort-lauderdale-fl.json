@@ -1,0 +1,55 @@
+{
+ "name": "Fort Lauderdale",
+ "neighborhoods": [
+  {
+   "name": "Victoria Park",
+   "homes": "small apartment buildings, duplexes and houses"
+  },
+  {
+   "name": "Las Olas / Downtown",
+   "homes": "high-rise apartments and condos"
+  },
+  {
+   "name": "Flagler Village",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Coral Ridge",
+   "homes": "single-family houses and condos"
+  },
+  {
+   "name": "Rio Vista",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Central Beach",
+   "homes": "condos and small apartment buildings"
+  },
+  {
+   "name": "Sailboat Bend",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Tarpon River",
+   "homes": "older duplexes and small houses"
+  }
+ ],
+ "housing": "Fort Lauderdale's rentals are mostly condos and high-rise apartments, plus older concrete-block houses and duplexes in the neighborhoods.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Service of Broward County",
+   "url": "https://www.floridalawhelp.org/legal-aid-service-broward-county",
+   "what": "free civil legal help for low-income renters"
+  },
+  {
+   "name": "City of Fort Lauderdale housing resources",
+   "url": "https://www.fortlauderdale.gov/government/departments-a-h/community-services/housing-community-development-and-homelessness/additional-resources",
+   "what": "list of local housing help"
+  }
+ ],
+ "climate": "Test the air conditioning, check for mold and water stains, and photograph hurricane shutters or impact windows; storms and humidity are the main risks.",
+ "universities": [],
+ "fact": "Many Fort Lauderdale condo buildings require the association to approve a tenant before move-in.",
+ "checked": "November 2026"
+}

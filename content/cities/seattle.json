@@ -1,0 +1,49 @@
+{
+ "name": "Seattle",
+ "neighborhoods": [
+  {
+   "name": "Capitol Hill",
+   "homes": "older brick apartment buildings and new mid-rises"
+  },
+  {
+   "name": "Ballard",
+   "homes": "new apartment buildings and older houses"
+  },
+  {
+   "name": "Fremont",
+   "homes": "small apartment buildings and houses"
+  },
+  {
+   "name": "University District",
+   "homes": "student apartments and shared houses"
+  },
+  {
+   "name": "Queen Anne",
+   "homes": "apartment buildings and older houses"
+  },
+  {
+   "name": "Beacon Hill",
+   "homes": "single-family houses and apartments"
+  },
+  {
+   "name": "West Seattle",
+   "homes": "houses, townhouses and apartments"
+  }
+ ],
+ "housing": "Seattle renters live mostly in apartment buildings, from older brick walk-ups to new mid-rises, plus rented houses and townhouses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Renting in Seattle",
+   "url": "https://seattle.gov/rentinginseattle/renters/moving-in/move-in-costs",
+   "what": "city renter information and help line"
+  }
+ ],
+ "climate": "Look for mold, condensation and leaks around windows and in bathrooms; the long rainy season makes damp a common problem.",
+ "universities": [
+  "University of Washington",
+  "Seattle University"
+ ],
+ "fact": "In Seattle a landlord cannot charge more than one month's rent in deposit and move-in fees combined.",
+ "checked": "November 2026"
+}

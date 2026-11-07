@@ -1,0 +1,53 @@
+{
+ "name": "Boise",
+ "neighborhoods": [
+  {
+   "name": "North End",
+   "homes": "early 1900s bungalows and houses split into apartments"
+  },
+  {
+   "name": "East End",
+   "homes": "older single-family homes near the foothills"
+  },
+  {
+   "name": "Boise Bench",
+   "homes": "1950s and 1960s ranch houses and duplexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and condos"
+  },
+  {
+   "name": "West Boise",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Harris Ranch",
+   "homes": "newer single-family homes and townhomes"
+  },
+  {
+   "name": "Southeast Boise",
+   "homes": "single-family homes and apartments near the river"
+  }
+ ],
+ "housing": "Boise renters live in single-family homes, duplexes and a growing number of new apartment complexes, with older bungalows close to downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Idaho Legal Aid Services",
+   "url": "https://www.idaholegalaid.org/topics/housing/rental-housing",
+   "what": "free legal advice on evictions, repairs and deposits"
+  },
+  {
+   "name": "City of Boise Renter Protections",
+   "url": "https://www.cityofboise.org/departments/planning-and-development-services/code-compliance/renter-protections/",
+   "what": "city rules and complaints about violations"
+  }
+ ],
+ "climate": "Test both the furnace and the air conditioning, and check windows and exposed pipes; Boise has cold winters and hot, dry summers.",
+ "universities": [
+  "Boise State University"
+ ],
+ "fact": "Boise requires landlords to hand new tenants a city notice of their rights and responsibilities.",
+ "checked": "November 2026"
+}

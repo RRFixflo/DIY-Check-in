@@ -1,0 +1,49 @@
+{
+ "name": "Oklahoma City",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "apartments in converted older buildings and new mid-rise complexes"
+  },
+  {
+   "name": "Plaza District",
+   "homes": "older bungalows, duplexes and small apartment buildings"
+  },
+  {
+   "name": "Paseo",
+   "homes": "1920s cottages and small Spanish-style apartment buildings"
+  },
+  {
+   "name": "Bricktown",
+   "homes": "lofts in converted warehouses and new apartment buildings"
+  },
+  {
+   "name": "Mesta Park",
+   "homes": "large historic houses, some split into apartments, and garage apartments"
+  },
+  {
+   "name": "Uptown 23rd",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Deep Deuce",
+   "homes": "newer apartment buildings near downtown"
+  }
+ ],
+ "housing": "Most Oklahoma City renters live in single-family houses or garden-style apartment complexes spread across a very large city area. Older core neighborhoods add bungalows, duplexes and garage apartments.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Services of Oklahoma",
+   "url": "https://www.legalaidok.org/legal-aid-news/",
+   "what": "free legal help for renters facing eviction"
+  }
+ ],
+ "climate": "Ask where to shelter in a tornado, test the heating and air conditioning, and photograph the roof, windows and siding for hail damage, which is common in spring storms.",
+ "universities": [
+  "Oklahoma City University",
+  "University of Oklahoma Health Sciences Center"
+ ],
+ "fact": "Oklahoma City covers more than 600 square miles, so most rentals are houses and apartment complexes rather than downtown flats.",
+ "checked": "November 2026"
+}

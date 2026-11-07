@@ -1,0 +1,42 @@
+{
+ "name": "North Las Vegas",
+ "neighborhoods": [
+  {
+   "name": "Aliante",
+   "homes": "newer single-family homes and apartments"
+  },
+  {
+   "name": "Eldorado",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Craig Ranch",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Valley Vista",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "Tule Springs",
+   "homes": "new single-family homes"
+  },
+  {
+   "name": "Downtown North Las Vegas",
+   "homes": "older homes and apartments"
+  }
+ ],
+ "housing": "North Las Vegas rentals are mostly stucco single-family homes in newer subdivisions, plus apartment complexes and older homes near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Center of Southern Nevada",
+   "url": "https://lacsn.org/who-we-are/legal-aid-in-the-news",
+   "what": "free landlord-tenant advice in Clark County"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; desert summers are extreme, so a broken AC is an urgent repair.",
+ "universities": [],
+ "fact": "Nevada Legal Services has helped tenants fill out court papers at the North Las Vegas Justice Court.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,38 @@
+{
+ "name": "Charlotte",
+ "neighborhoods": [
+  {
+   "name": "South End",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Plaza Midwood",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "NoDa",
+   "homes": "mill houses and new apartments"
+  },
+  {
+   "name": "Dilworth",
+   "homes": "historic houses and small apartment buildings"
+  },
+  {
+   "name": "Uptown",
+   "homes": "high-rise apartments"
+  },
+  {
+   "name": "University City",
+   "homes": "apartment complexes near UNC Charlotte"
+  }
+ ],
+ "housing": "Charlotte renters mostly live in apartment complexes, many built recently, and rented single-family homes.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the air conditioning and look for mold and water damage; summers are hot and humid.",
+ "universities": [
+  "UNC Charlotte"
+ ],
+ "fact": "Many new apartment buildings in Charlotte sit along the light rail line through South End and NoDa.",
+ "checked": "November 2026"
+}

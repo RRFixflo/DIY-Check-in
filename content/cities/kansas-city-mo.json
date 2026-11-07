@@ -1,0 +1,63 @@
+{
+ "name": "Kansas City",
+ "neighborhoods": [
+  {
+   "name": "Westport",
+   "homes": "older apartment buildings and houses"
+  },
+  {
+   "name": "Midtown",
+   "homes": "brick apartment buildings and older houses"
+  },
+  {
+   "name": "Brookside",
+   "homes": "1920s–30s houses and small apartments"
+  },
+  {
+   "name": "Crossroads",
+   "homes": "lofts in converted warehouses"
+  },
+  {
+   "name": "River Market",
+   "homes": "lofts and new apartment buildings"
+  },
+  {
+   "name": "Waldo",
+   "homes": "bungalows and duplexes"
+  },
+  {
+   "name": "Hyde Park",
+   "homes": "large historic houses, some split into apartments"
+  },
+  {
+   "name": "Northland",
+   "homes": "suburban houses and apartment complexes"
+  }
+ ],
+ "housing": "Kansas City renters live in brick apartment buildings and older houses in the city core, warehouse lofts downtown, and houses and complexes in the Northland.",
+ "localRules": [
+  {
+   "text": "Kansas City's Healthy Homes Rental Inspection Program requires owners to get a yearly rental permit for each unit, and tenants can ask for an inspection at no cost.",
+   "source": "https://kcmo.gov/city-hall/departments/health/environmental-health-services/landlord-information-healthy-homes-rental-inspection-program"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of Western Missouri",
+   "url": "https://lsmo.org/node/808/tenant-legal-help-clinic-kc-mo",
+   "what": "free tenant legal clinic and eviction defense"
+  },
+  {
+   "name": "Kansas City Public Library legal resources",
+   "url": "https://www.kclibrary.org/legal",
+   "what": "list of landlord-tenant help"
+  }
+ ],
+ "climate": "Test both the furnace and the air conditioning, look for basement water after storms, and photograph windows and siding for hail damage.",
+ "universities": [
+  "University of Missouri–Kansas City",
+  "Rockhurst University"
+ ],
+ "fact": "Kansas City gives tenants facing eviction the right to a city-funded lawyer.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,44 @@
+{
+ "name": "Atlanta",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "high-rise and mid-rise apartments"
+  },
+  {
+   "name": "Old Fourth Ward",
+   "homes": "newer apartment buildings and older houses"
+  },
+  {
+   "name": "Inman Park",
+   "homes": "Victorian houses and small apartment buildings"
+  },
+  {
+   "name": "Virginia-Highland",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "West End",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "East Atlanta",
+   "homes": "bungalows and duplexes"
+  },
+  {
+   "name": "Buckhead",
+   "homes": "apartment complexes and condo towers"
+  }
+ ],
+ "housing": "Atlanta renters live in apartment complexes and mid-rises in the core and in rented bungalows and houses in older neighborhoods.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the air conditioning and look for mold, pests and leaks; summers are hot and humid with heavy rain.",
+ "universities": [
+  "Georgia Tech",
+  "Georgia State University",
+  "Emory University"
+ ],
+ "fact": "The Atlanta Volunteer Lawyers Foundation runs a walk-in Housing Court Assistance Center for tenants facing court.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,39 @@
+{
+ "name": "Richmond",
+ "neighborhoods": [
+  {
+   "name": "The Fan",
+   "homes": "row houses split into apartments"
+  },
+  {
+   "name": "Museum District",
+   "homes": "row houses and small apartment buildings"
+  },
+  {
+   "name": "Church Hill",
+   "homes": "historic row houses"
+  },
+  {
+   "name": "Scott's Addition",
+   "homes": "new apartments in converted warehouses"
+  },
+  {
+   "name": "Carytown",
+   "homes": "row house apartments and small buildings"
+  },
+  {
+   "name": "Northside",
+   "homes": "older houses and duplexes"
+  }
+ ],
+ "housing": "Richmond renters often live in old row houses split into apartments, especially near VCU, plus rented houses and new apartment buildings.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the air conditioning and look for damp and leaks in old row houses; summers are hot and humid.",
+ "universities": [
+  "Virginia Commonwealth University",
+  "University of Richmond"
+ ],
+ "fact": "Many Fan District row houses near VCU are split into student apartments.",
+ "checked": "November 2026"
+}

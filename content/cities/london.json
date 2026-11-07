@@ -1,0 +1,55 @@
+{
+ "name": "London",
+ "neighborhoods": [
+  {
+   "name": "Hackney",
+   "homes": "Victorian terraces split into flats and council-built blocks"
+  },
+  {
+   "name": "Brixton",
+   "homes": "converted Victorian houses and purpose-built flats"
+  },
+  {
+   "name": "Clapham",
+   "homes": "Victorian terraces and mansion blocks, many flat shares"
+  },
+  {
+   "name": "Camden",
+   "homes": "period conversions and council estates"
+  },
+  {
+   "name": "Stratford",
+   "homes": "new-build flats around the Olympic Park"
+  },
+  {
+   "name": "Walthamstow",
+   "homes": "Edwardian terraced houses and conversions"
+  },
+  {
+   "name": "Islington",
+   "homes": "Georgian and Victorian terraces split into flats"
+  },
+  {
+   "name": "Canary Wharf",
+   "homes": "high-rise new-build flats"
+  }
+ ],
+ "housing": "Most London renters live in flats: Victorian and Edwardian houses converted into flats, purpose-built blocks and council-built estates, with a growing number of new-build towers. Shared houses (HMOs) are common.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Shelter",
+   "url": "https://england.shelter.org.uk/professional_resources/legal/costs_of_renting/tenancy_deposits/tenancy_deposit_protection_prescribed_information",
+   "what": "housing charity with free advice for renters in England"
+  }
+ ],
+ "climate": "Photograph walls and window frames for damp and mould, especially in bathrooms and ground-floor or basement flats, and run the heating and hot water at move-in.",
+ "universities": [
+  "UCL",
+  "King's College London",
+  "Imperial College London",
+  "LSE"
+ ],
+ "fact": "Many London boroughs require a licence for most private rented homes, so a tenant can check the council's public register before moving in.",
+ "checked": "November 2026"
+}

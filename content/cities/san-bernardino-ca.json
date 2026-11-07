@@ -1,0 +1,49 @@
+{
+ "name": "San Bernardino",
+ "neighborhoods": [
+  {
+   "name": "Verdemont",
+   "homes": "newer single-family homes in the north"
+  },
+  {
+   "name": "Del Rosa",
+   "homes": "single-family homes near the foothills"
+  },
+  {
+   "name": "Shandin Hills",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "University District",
+   "homes": "houses and apartments near Cal State San Bernardino"
+  },
+  {
+   "name": "Downtown",
+   "homes": "older houses and apartment buildings"
+  },
+  {
+   "name": "Arrowhead Springs area",
+   "homes": "single-family homes on the north side"
+  }
+ ],
+ "housing": "San Bernardino renters mostly live in older single-family homes, duplexes and apartment complexes, with newer houses on the north side.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Inland Fair Housing and Mediation Board",
+   "url": "https://tenantstogether.org/resources/inland-fair-housing-and-mediation-board",
+   "what": "landlord-tenant mediation and fair housing help"
+  },
+  {
+   "name": "City of San Bernardino Fair Housing",
+   "url": "https://ci.san-bernardino.ca.us/city_hall/community_economic_development/housing/fair_housing",
+   "what": "city fair housing information and referrals"
+  }
+ ],
+ "climate": "Test the air conditioning and check window screens and seals; summers are very hot and Santa Ana winds bring dust and fire risk.",
+ "universities": [
+  "California State University, San Bernardino"
+ ],
+ "fact": "San Bernardino inspects rented single-family homes under a city program adopted in 2008.",
+ "checked": "November 2026"
+}

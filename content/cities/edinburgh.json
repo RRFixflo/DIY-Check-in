@@ -1,0 +1,68 @@
+{
+ "name": "Edinburgh",
+ "neighborhoods": [
+  {
+   "name": "Marchmont",
+   "homes": "Victorian tenement flats, many let to students"
+  },
+  {
+   "name": "Leith",
+   "homes": "tenement flats and new-build blocks"
+  },
+  {
+   "name": "Bruntsfield",
+   "homes": "Victorian tenement flats"
+  },
+  {
+   "name": "Stockbridge",
+   "homes": "Georgian and Victorian flats"
+  },
+  {
+   "name": "Gorgie",
+   "homes": "tenement flats"
+  },
+  {
+   "name": "Portobello",
+   "homes": "tenements and houses by the sea"
+  },
+  {
+   "name": "Newington",
+   "homes": "tenement flats near the university"
+  },
+  {
+   "name": "New Town",
+   "homes": "Georgian flats"
+  }
+ ],
+ "housing": "Edinburgh renters mostly live in flats, especially Victorian sandstone tenements and Georgian flats in the New Town, with shared student flats around the university.",
+ "localRules": [
+  {
+   "text": "All private landlords in Scotland must register with the council for the area where they rent out a home.",
+   "source": "https://mygov.scot/tenancy-deposits-tenants"
+  },
+  {
+   "text": "In Scotland the landlord must lodge the deposit with an approved scheme (SafeDeposits Scotland, Letting Protection Service Scotland or MyDeposits Scotland) within 30 working days of the tenancy starting.",
+   "source": "https://mygov.scot/tenancy-deposits-landlords"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "mygov.scot",
+   "url": "https://mygov.scot/tenancy-deposits-tenants",
+   "what": "Scottish Government guidance on renting and deposits"
+  },
+  {
+   "name": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+   "url": "https://housingandpropertychamber.scot",
+   "what": "decides private renting disputes, including unprotected deposits"
+  }
+ ],
+ "climate": "Test the heating and check windows for draughts and condensation; tenement flats can be cold and damp in winter.",
+ "universities": [
+  "University of Edinburgh",
+  "Heriot-Watt University",
+  "Edinburgh Napier University"
+ ],
+ "fact": "Many Edinburgh flats are in tenements with a shared stair, so note the condition of the common close and the door entry system at move-in.",
+ "checked": "November 2026"
+}

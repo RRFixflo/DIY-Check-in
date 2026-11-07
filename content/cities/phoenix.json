@@ -1,0 +1,48 @@
+{
+ "name": "Phoenix",
+ "neighborhoods": [
+  {
+   "name": "Arcadia",
+   "homes": "ranch houses and guest houses"
+  },
+  {
+   "name": "Downtown Phoenix",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Midtown",
+   "homes": "apartment complexes and condos"
+  },
+  {
+   "name": "Maryvale",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Ahwatukee",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "North Phoenix",
+   "homes": "garden apartment complexes and houses"
+  },
+  {
+   "name": "Roosevelt Row",
+   "homes": "historic bungalows and new apartments"
+  }
+ ],
+ "housing": "Phoenix renters mostly live in garden apartment complexes and rented single-family homes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Phoenix Landlord and Tenant Program",
+   "url": "https://www.phoenix.gov/administration/departments/humanservices/programs-services/tenant-landlord-rights.html",
+   "what": "free one-on-one counseling on tenant rights"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the unit outside; summer heat makes a broken AC an urgent repair.",
+ "universities": [
+  "Arizona State University"
+ ],
+ "fact": "The City of Phoenix offers free counseling to both tenants and landlords on the Arizona Residential Landlord and Tenant Act.",
+ "checked": "November 2026"
+}

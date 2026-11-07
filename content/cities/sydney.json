@@ -1,0 +1,64 @@
+{
+ "name": "Sydney",
+ "neighborhoods": [
+  {
+   "name": "Newtown",
+   "homes": "terrace houses and flats"
+  },
+  {
+   "name": "Surry Hills",
+   "homes": "terrace houses and apartments"
+  },
+  {
+   "name": "Bondi",
+   "homes": "apartment blocks"
+  },
+  {
+   "name": "Parramatta",
+   "homes": "high-rise apartments"
+  },
+  {
+   "name": "Glebe",
+   "homes": "terraces and flats"
+  },
+  {
+   "name": "Marrickville",
+   "homes": "houses and older flats"
+  },
+  {
+   "name": "Chatswood",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Randwick",
+   "homes": "flats near the university"
+  }
+ ],
+ "housing": "Sydney renters mostly live in units in walk-up blocks and apartment towers, plus older terrace houses in the inner city.",
+ "localRules": [
+  {
+   "text": "In NSW the bond must be lodged with NSW Fair Trading, and landlords must offer tenants the Rental Bonds Online service.",
+   "source": "https://www.service.nsw.gov.au/referral/lodge-a-residential-rental-bond-tenants"
+  },
+  {
+   "text": "The NSW condition report, signed at move-in, is the key evidence when the bond is claimed at the end of the tenancy.",
+   "source": "https://www.tenants.org.au/factsheet-bond"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenants' Union of NSW",
+   "url": "https://www.tenants.org.au/tu/about-us",
+   "what": "free tenancy advice and information in NSW"
+  }
+ ],
+ "climate": "Test the air conditioning or fans and check for mould in bathrooms; Sydney summers are hot and humid.",
+ "universities": [
+  "University of Sydney",
+  "UNSW Sydney",
+  "University of Technology Sydney",
+  "Macquarie University"
+ ],
+ "fact": "Most Sydney renters live in units rather than houses.",
+ "checked": "November 2026"
+}

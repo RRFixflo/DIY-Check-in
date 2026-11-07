@@ -1,0 +1,51 @@
+{
+ "name": "Chula Vista",
+ "neighborhoods": [
+  {
+   "name": "Eastlake",
+   "homes": "single-family homes and townhomes"
+  },
+  {
+   "name": "Otay Ranch",
+   "homes": "newer apartments, townhomes and single-family homes"
+  },
+  {
+   "name": "Rolling Hills Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Castle Park",
+   "homes": "older single-family homes and apartments"
+  },
+  {
+   "name": "Third Avenue",
+   "homes": "older apartments and small houses"
+  },
+  {
+   "name": "Northwest Chula Vista",
+   "homes": "older homes and apartment buildings"
+  },
+  {
+   "name": "Terra Nova",
+   "homes": "single-family homes and condos"
+  }
+ ],
+ "housing": "Western Chula Vista has older houses and small apartment buildings, while the east has newer master-planned communities of townhomes, condos and single-family homes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of San Diego",
+   "url": "https://www.lassd.org/?p=2337",
+   "what": "free legal help and guidance on the city ordinance"
+  },
+  {
+   "name": "City of Chula Vista Landlord-Tenant",
+   "url": "https://www.chulavistaca.gov/departments/housing-and-homeless-services/rental-housing/landlord-tenant",
+   "what": "city information on renter protections"
+  }
+ ],
+ "climate": "Check windows and bathrooms for mold and test any air conditioning; near the coast it is mild and damp, inland neighborhoods get hotter.",
+ "universities": [],
+ "fact": "Under California law, security deposits are generally capped at one month's rent for leases signed since July 1, 2024.",
+ "checked": "November 2026"
+}

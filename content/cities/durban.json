@@ -1,0 +1,54 @@
+{
+ "name": "Durban",
+ "neighborhoods": [
+  {
+   "name": "Morningside",
+   "homes": "apartments and houses"
+  },
+  {
+   "name": "Berea",
+   "homes": "older apartment blocks"
+  },
+  {
+   "name": "Glenwood",
+   "homes": "houses and student flats"
+  },
+  {
+   "name": "Umhlanga",
+   "homes": "apartments and townhouses"
+  },
+  {
+   "name": "Westville",
+   "homes": "houses and townhouses"
+  },
+  {
+   "name": "Musgrave",
+   "homes": "apartments"
+  },
+  {
+   "name": "Ballito",
+   "homes": "coastal apartments"
+  }
+ ],
+ "housing": "Durban renters live in apartment blocks on the Berea and the coast, and in houses and townhouses in the suburbs.",
+ "localRules": [
+  {
+   "text": "South African landlords must keep the deposit in an interest-bearing account and refund it with interest, less any agreed costs.",
+   "source": "https://businesstech.co.za/news/property/448034/know-your-rights-when-renting-in-south-africa-including-deposits-and-breaking-a-lease/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "KwaZulu-Natal Rental Housing Tribunal",
+   "url": "https://newcastle.gov.za/?p=10043",
+   "what": "free provincial tribunal for rental disputes"
+  }
+ ],
+ "climate": "Durban is hot and humid, so check for mould and test the air conditioning or fans.",
+ "universities": [
+  "University of KwaZulu-Natal",
+  "Durban University of Technology"
+ ],
+ "fact": "Durban's humid subtropical climate makes mould a common move-out issue.",
+ "checked": "November 2026"
+}

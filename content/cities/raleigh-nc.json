@@ -1,0 +1,55 @@
+{
+ "name": "Raleigh",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments and new mid-rise buildings"
+  },
+  {
+   "name": "Five Points",
+   "homes": "1920s–40s bungalows and cottages"
+  },
+  {
+   "name": "Oakwood",
+   "homes": "historic Victorian houses"
+  },
+  {
+   "name": "Glenwood South",
+   "homes": "apartment buildings"
+  },
+  {
+   "name": "Hillsborough Street",
+   "homes": "student apartments and older houses near NC State"
+  },
+  {
+   "name": "North Hills",
+   "homes": "apartment complexes and mid-century houses"
+  },
+  {
+   "name": "Brier Creek",
+   "homes": "newer apartment complexes and townhomes"
+  }
+ ],
+ "housing": "Raleigh's rentals are mostly garden-style apartment complexes, townhomes and single-family houses, with many new apartment buildings downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Raleigh renter resources",
+   "url": "https://raleighnc.gov/housing/renters-report-issue-and-additional-resources",
+   "what": "report problems and find renter help"
+  },
+  {
+   "name": "Legal Aid of North Carolina",
+   "url": "https://legalaidnc.org/what-we-do/housing",
+   "what": "free legal help with evictions and repairs"
+  }
+ ],
+ "climate": "Humid summers mean you should test the air conditioning and look for mold or damp in crawl spaces; photograph trees near the house, since hurricane remnants can bring down limbs.",
+ "universities": [
+  "North Carolina State University",
+  "Meredith College",
+  "Shaw University"
+ ],
+ "fact": "Many Raleigh leases near NC State start in August to match the academic year.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,58 @@
+{
+ "name": "Jersey City",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "brownstones and high-rise apartment towers"
+  },
+  {
+   "name": "Hamilton Park",
+   "homes": "brick row houses and brownstones"
+  },
+  {
+   "name": "Journal Square",
+   "homes": "apartment buildings and new towers"
+  },
+  {
+   "name": "The Heights",
+   "homes": "two- and three-family houses"
+  },
+  {
+   "name": "Bergen-Lafayette",
+   "homes": "row houses and multi-family homes"
+  },
+  {
+   "name": "Greenville",
+   "homes": "two-family homes and apartments"
+  },
+  {
+   "name": "West Side",
+   "homes": "multi-family houses and apartment buildings"
+  },
+  {
+   "name": "Newport",
+   "homes": "waterfront apartment towers"
+  }
+ ],
+ "housing": "Jersey City rentals range from brownstones and two- and three-family houses to large waterfront and Journal Square apartment towers.",
+ "localRules": [
+  {
+   "text": "Jersey City's Rent Control Ordinance (Chapter 260) is administered by the Office of Landlord/Tenant Relations, which requires annual landlord registration statements.",
+   "source": "https://www.jerseycitynj.gov/landlordtenant"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Office of Landlord/Tenant Relations",
+   "url": "https://www.jerseycitynj.gov/landlordtenant",
+   "what": "rent control questions and tenant complaints"
+  }
+ ],
+ "climate": "Test the heat and radiators, and in low-lying areas check basements and ground floors for past flooding.",
+ "universities": [
+  "Saint Peter's University",
+  "New Jersey City University"
+ ],
+ "fact": "Many Jersey City renters choose homes near PATH stations for the short trip into Manhattan.",
+ "checked": "November 2026"
+}

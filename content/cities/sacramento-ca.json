@@ -1,0 +1,63 @@
+{
+ "name": "Sacramento",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "Victorian houses split into apartments and small apartment buildings"
+  },
+  {
+   "name": "East Sacramento",
+   "homes": "1920s–40s houses and duplexes"
+  },
+  {
+   "name": "Land Park",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "Curtis Park",
+   "homes": "bungalows and older houses"
+  },
+  {
+   "name": "Natomas",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "Oak Park",
+   "homes": "older bungalows and small apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and new mid-rise buildings"
+  }
+ ],
+ "housing": "Sacramento's central grid has Victorians and bungalows split into apartments; Natomas and the suburbs add apartment complexes and newer houses.",
+ "localRules": [
+  {
+   "text": "Sacramento's Tenant Protection Program limits rent increases and evictions for most multifamily rentals, and landlords must register those units with the city each year.",
+   "source": "https://www.cityofsacramento.gov/community-development/code-compliance/rental-info-hub/tenant-protection-program"
+  },
+  {
+   "text": "The City of Sacramento's Rental Housing Inspection Program charges a per-unit fee and inspects rentals to address substandard conditions.",
+   "source": "https://www.cityofsacramento.gov/community-development/code-compliance/rental-info-hub/rental-housing"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Services of Northern California",
+   "url": "https://lsnc.net/what-we-do",
+   "what": "free legal help with deposits, repairs and evictions"
+  },
+  {
+   "name": "City of Sacramento Rental Info Hub",
+   "url": "https://www.cityofsacramento.gov/community-development/code-compliance/rental-info-hub",
+   "what": "city information for renters and landlords"
+  }
+ ],
+ "climate": "Hot, dry summers make air conditioning important; test it, check window seals, and photograph yards and gutters, since winter storms can bring heavy rain.",
+ "universities": [
+  "California State University, Sacramento",
+  "UC Davis (nearby)"
+ ],
+ "fact": "Sacramento has both a city and a county rental inspection program, so check which one applies to your address.",
+ "checked": "November 2026"
+}

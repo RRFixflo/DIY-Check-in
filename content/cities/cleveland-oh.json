@@ -1,0 +1,58 @@
+{
+ "name": "Cleveland",
+ "neighborhoods": [
+  {
+   "name": "Ohio City",
+   "homes": "historic houses and doubles"
+  },
+  {
+   "name": "Tremont",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "Detroit-Shoreway",
+   "homes": "doubles and older houses"
+  },
+  {
+   "name": "University Circle",
+   "homes": "apartments near the universities and hospitals"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments in converted office buildings"
+  },
+  {
+   "name": "Slavic Village",
+   "homes": "older wood-frame houses"
+  },
+  {
+   "name": "Collinwood",
+   "homes": "older houses and doubles"
+  }
+ ],
+ "housing": "Cleveland's rental stock is mostly older wood-frame houses and up-and-down doubles, many built before 1978, plus apartments downtown.",
+ "localRules": [
+  {
+   "text": "Cleveland rentals built before 1978 need a Lead Safe Certificate, renewed every two years, as part of rental registration.",
+   "source": "https://www.clevelandohio.gov/city-hall/departments/public-health/programs-services/lead-safe/landlords-owners"
+  },
+  {
+   "text": "Every Cleveland rental unit must be registered with the city, with a yearly fee per unit.",
+   "source": "https://www.clevelandohio.gov/city-hall/departments/building-housing/divisions/records-administration/rental-registration"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Cleveland",
+   "url": "https://www.ohiolegalhelp.org/resource/right-counsel-cleveland-free-eviction-help-tenants",
+   "what": "free eviction help through Right to Counsel and a tenant information line"
+  }
+ ],
+ "climate": "Lake-effect snow and freezing winters mean testing the furnace, checking basements for water, and photographing peeling paint, which can be lead-based in older houses.",
+ "universities": [
+  "Case Western Reserve University",
+  "Cleveland State University"
+ ],
+ "fact": "Most Cleveland rentals are pre-1978 homes, so landlords must hold a Lead Safe Certificate before renting.",
+ "checked": "November 2026"
+}

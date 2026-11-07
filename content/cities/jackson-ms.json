@@ -1,0 +1,47 @@
+{
+ "name": "Jackson",
+ "neighborhoods": [
+  {
+   "name": "Fondren",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Belhaven",
+   "homes": "historic houses and small apartment buildings"
+  },
+  {
+   "name": "Eastover",
+   "homes": "large single-family houses"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments in older buildings"
+  },
+  {
+   "name": "North Jackson",
+   "homes": "apartment complexes and houses"
+  },
+  {
+   "name": "Woodland Hills",
+   "homes": "older single-family houses"
+  }
+ ],
+ "housing": "Jackson's rentals are mostly older single-family houses and apartment complexes, with many complexes in north Jackson.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Mississippi Center for Justice",
+   "url": "https://mscenterforjustice.org/work/eviction-prevention",
+   "what": "help for tenants facing eviction"
+  }
+ ],
+ "climate": "Run the taps to check water pressure and hot water, test the air conditioning and look for mold; summers are hot and humid.",
+ "universities": [
+  "Jackson State University",
+  "Millsaps College",
+  "Belhaven University",
+  "University of Mississippi Medical Center"
+ ],
+ "fact": "Jackson has had repeated boil-water notices since its 2022 water crisis, so renters should check water pressure and ask about recent notices.",
+ "checked": "November 2026"
+}

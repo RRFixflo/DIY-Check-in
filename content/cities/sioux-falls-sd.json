@@ -1,0 +1,41 @@
+{
+ "name": "Sioux Falls",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Cathedral District",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "Pettigrew Heights",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "McKennan Park",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "All Saints",
+   "homes": "older houses and small apartment buildings"
+  }
+ ],
+ "housing": "Sioux Falls renters live mostly in apartment complexes and single-family homes, with older houses near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "East River Legal Services",
+   "url": "https://erlservices.org",
+   "what": "free legal help and an eviction prevention hotline"
+  }
+ ],
+ "climate": "Test the furnace, check windows and doors for drafts and ask who clears snow; winters are long and very cold.",
+ "universities": [
+  "Augustana University",
+  "University of Sioux Falls"
+ ],
+ "fact": "The Big Sioux River runs through the city, so ask about flooding if the home is near it.",
+ "checked": "November 2026"
+}

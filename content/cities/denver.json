@@ -1,0 +1,54 @@
+{
+ "name": "Denver",
+ "neighborhoods": [
+  {
+   "name": "Capitol Hill",
+   "homes": "older brick apartment buildings and converted mansions"
+  },
+  {
+   "name": "Highland",
+   "homes": "bungalows and new townhouses"
+  },
+  {
+   "name": "Baker",
+   "homes": "Victorian houses and small apartment buildings"
+  },
+  {
+   "name": "Five Points",
+   "homes": "new apartments and older houses"
+  },
+  {
+   "name": "Washington Park",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Cheesman Park",
+   "homes": "older apartment buildings and condos"
+  },
+  {
+   "name": "RiNo",
+   "homes": "new apartment buildings"
+  }
+ ],
+ "housing": "Denver renters live in older brick apartment buildings, rented bungalows and townhouses, and many new apartment complexes.",
+ "localRules": [
+  {
+   "text": "Denver requires residential rental properties to hold a city rental license, which needs an inspection, and landlords must give tenants the city's tenant rights notice.",
+   "source": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/Denver-City-Council/Council-Members-Websites-Info/Stacie-Gilmore-Council-District-11/Healthy-Residential-Rentals-for-All"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Denver Business Licensing: residential rental licenses",
+   "url": "https://denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/Business-Licensing/News/EXL/Denver-crosses-20000-licenses-issued-milestone-for-landlords",
+   "what": "check a rental's license and report unlicensed rentals"
+  }
+ ],
+ "climate": "Test the heat and check windows and the roof for hail damage; winters bring snow and summer storms bring hail.",
+ "universities": [
+  "University of Denver",
+  "Metropolitan State University of Denver"
+ ],
+ "fact": "Renters in Denver can look up online whether their building has the required city rental license.",
+ "checked": "November 2026"
+}

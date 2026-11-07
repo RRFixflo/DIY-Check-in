@@ -1,0 +1,48 @@
+{
+ "name": "Birmingham",
+ "neighborhoods": [
+  {
+   "name": "Southside / Five Points South",
+   "homes": "apartments, many near UAB"
+  },
+  {
+   "name": "Highland Park",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Avondale",
+   "homes": "older bungalows and duplexes"
+  },
+  {
+   "name": "Crestwood",
+   "homes": "mid-century houses and bungalows"
+  },
+  {
+   "name": "Forest Park",
+   "homes": "older houses, some split into apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts in converted older buildings"
+  },
+  {
+   "name": "Glen Iris",
+   "homes": "older houses and apartments"
+  }
+ ],
+ "housing": "Birmingham's rentals are mostly older single-family houses and bungalows, apartments near UAB on the Southside, and lofts in converted downtown buildings.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Services Alabama",
+   "url": "https://legalservicesalabama.org/",
+   "what": "free civil legal help for low-income renters, including evictions and repairs"
+  }
+ ],
+ "climate": "Test the air conditioning and look for leaks, damp and mold; summers are hot and humid and spring storms are frequent.",
+ "universities": [
+  "University of Alabama at Birmingham"
+ ],
+ "fact": "UAB is the largest employer in Alabama, and many Southside renters work or study there.",
+ "checked": "November 2026"
+}

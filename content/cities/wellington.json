@@ -1,0 +1,53 @@
+{
+ "name": "Wellington",
+ "neighborhoods": [
+  {
+   "name": "Te Aro",
+   "homes": "apartments and old houses"
+  },
+  {
+   "name": "Mount Victoria",
+   "homes": "wooden villas and flats"
+  },
+  {
+   "name": "Kelburn",
+   "homes": "houses near the university"
+  },
+  {
+   "name": "Newtown",
+   "homes": "villas and flats"
+  },
+  {
+   "name": "Brooklyn",
+   "homes": "hillside houses"
+  },
+  {
+   "name": "Island Bay",
+   "homes": "houses"
+  },
+  {
+   "name": "Karori",
+   "homes": "family houses"
+  }
+ ],
+ "housing": "Wellington renters live in older wooden houses on steep hills, flats and inner-city apartments.",
+ "localRules": [
+  {
+   "text": "Landlords in New Zealand must give a receipt for the bond and lodge it with Tenancy Services within 23 working days of receiving it.",
+   "source": "https://www.tenancy.govt.nz/rent-bond-and-bills/bond/preventing-problems-with-bonds/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenancy Services",
+   "url": "https://tenancy.govt.nz/about-tenancy-services/contact-us",
+   "what": "government tenancy service: bonds, rights and the Tenancy Tribunal"
+  }
+ ],
+ "climate": "Wellington is windy and wet, so check for draughts, leaks and mould and test the heating.",
+ "universities": [
+  "Victoria University of Wellington"
+ ],
+ "fact": "Many Wellington homes are on steep hillsides reached by steps or a cable car, so check access at move-in.",
+ "checked": "November 2026"
+}

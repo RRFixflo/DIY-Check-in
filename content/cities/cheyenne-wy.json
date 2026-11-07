@@ -1,0 +1,36 @@
+{
+ "name": "Cheyenne",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments in older buildings"
+  },
+  {
+   "name": "The Avenues",
+   "homes": "older houses near downtown"
+  },
+  {
+   "name": "Rainsford Historic District",
+   "homes": "historic houses"
+  },
+  {
+   "name": "South Cheyenne",
+   "homes": "small houses and apartments"
+  },
+  {
+   "name": "East Cheyenne",
+   "homes": "single-family houses and apartment complexes"
+  },
+  {
+   "name": "North Cheyenne",
+   "homes": "single-family houses"
+  }
+ ],
+ "housing": "Cheyenne's rentals are mostly single-family houses and apartment complexes, with many military families renting near F.E. Warren Air Force Base.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace, check windows and doors for drafts and photograph the roof and siding for hail and wind damage; winters are cold and very windy.",
+ "universities": [],
+ "fact": "F.E. Warren Air Force Base is in Cheyenne, so many renters are military families.",
+ "checked": "November 2026"
+}

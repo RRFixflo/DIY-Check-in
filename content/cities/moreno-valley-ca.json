@@ -1,0 +1,34 @@
+{
+ "name": "Moreno Valley",
+ "neighborhoods": [
+  {
+   "name": "Sunnymead",
+   "homes": "older single-family homes and apartments"
+  },
+  {
+   "name": "Sunnymead Ranch",
+   "homes": "single-family homes in a planned community"
+  },
+  {
+   "name": "Moreno Valley Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Edgemont",
+   "homes": "older houses near the west side"
+  }
+ ],
+ "housing": "Moreno Valley's rentals are mostly single-family homes in 1980s and newer tracts, plus apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Fair Housing Council of Riverside County",
+   "url": "https://www.tenantstogether.org/resources/fair-housing-council-riverside-county-inc",
+   "what": "landlord-tenant counseling and mediation"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; summer heat makes a broken AC an urgent repair.",
+ "universities": [],
+ "fact": "Moreno Valley borders March Air Reserve Base, so some renters are military or base workers.",
+ "checked": "November 2026"
+}

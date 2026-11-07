@@ -1,0 +1,45 @@
+{
+ "name": "Augusta",
+ "neighborhoods": [
+  {
+   "name": "Summerville (The Hill)",
+   "homes": "older houses, some split into apartments"
+  },
+  {
+   "name": "Olde Town",
+   "homes": "historic Victorian houses and duplexes"
+  },
+  {
+   "name": "Downtown (Broad Street)",
+   "homes": "lofts and apartments above storefronts"
+  },
+  {
+   "name": "Harrisburg",
+   "homes": "small older mill-era houses"
+  },
+  {
+   "name": "National Hills",
+   "homes": "mid-century single-family houses"
+  },
+  {
+   "name": "Forest Hills",
+   "homes": "single-family houses and small apartment buildings"
+  }
+ ],
+ "housing": "Augusta's rentals are mostly single-family houses and garden-style apartment complexes. Military families from Fort Eisenhower and medical staff and students at Augusta University are a large share of renters.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Georgia Department of Law, Consumer Protection Division",
+   "url": "https://consumered.georgia.gov/node/1336",
+   "what": "state guide to tenant rights in Georgia"
+  }
+ ],
+ "climate": "Test the air conditioning and look for damp or mold in bathrooms and closets; long, humid summers make both common problems.",
+ "universities": [
+  "Augusta University",
+  "Paine College"
+ ],
+ "fact": "During Masters week each April, some Augusta homeowners rent out their whole house to golf visitors.",
+ "checked": "November 2026"
+}

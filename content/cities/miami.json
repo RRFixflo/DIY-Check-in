@@ -1,0 +1,49 @@
+{
+ "name": "Miami",
+ "neighborhoods": [
+  {
+   "name": "Brickell",
+   "homes": "high-rise condo and apartment towers"
+  },
+  {
+   "name": "Little Havana",
+   "homes": "older low-rise apartment buildings"
+  },
+  {
+   "name": "Wynwood",
+   "homes": "newer mid-rise apartments"
+  },
+  {
+   "name": "Edgewater",
+   "homes": "condo towers along the bay"
+  },
+  {
+   "name": "Coconut Grove",
+   "homes": "houses, townhouses and small apartment buildings"
+  },
+  {
+   "name": "Little Haiti",
+   "homes": "small houses and low-rise apartments"
+  },
+  {
+   "name": "Allapattah",
+   "homes": "older apartment buildings and houses"
+  }
+ ],
+ "housing": "Most Miami residents rent, many in condo towers rented out by owners and in older low-rise apartment buildings.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Miami-Dade County Office of Housing Advocacy",
+   "url": "https://www.miamidade.gov/housingadvocacy",
+   "what": "county tenant hotline and information"
+  }
+ ],
+ "climate": "Test the air conditioning, look for mold and water stains, and photograph hurricane shutters or impact windows.",
+ "universities": [
+  "University of Miami",
+  "Florida International University"
+ ],
+ "fact": "In Miami many rentals are condos owned by individuals, so the building's condo association may have its own move-in rules and fees.",
+ "checked": "November 2026"
+}

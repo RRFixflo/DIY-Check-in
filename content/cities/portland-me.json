@@ -1,0 +1,63 @@
+{
+ "name": "Portland",
+ "neighborhoods": [
+  {
+   "name": "Munjoy Hill",
+   "homes": "older multi-family houses and condos"
+  },
+  {
+   "name": "West End",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "East End",
+   "homes": "older multi-family houses"
+  },
+  {
+   "name": "Parkside",
+   "homes": "older apartment buildings and multi-family houses"
+  },
+  {
+   "name": "Bayside",
+   "homes": "apartment buildings"
+  },
+  {
+   "name": "Back Cove",
+   "homes": "single-family and two-family houses"
+  },
+  {
+   "name": "Deering",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Old Port",
+   "homes": "apartments above shops"
+  }
+ ],
+ "housing": "Portland's rentals are mostly older wood-frame multi-family houses and triple-deckers, many split into apartments, plus condos.",
+ "localRules": [
+  {
+   "text": "Landlords must register their rental units with the City of Portland.",
+   "source": "https://wgme.com/news/local/portland-cracking-down-on-landlords-who-wont-register-property"
+  },
+  {
+   "text": "Portland has a voter-approved rent control ordinance that limits yearly rent increases on covered units.",
+   "source": "https://spectrumlocalnews.com/me/maine/housing/2026/09/10/portland-to-work-on-enforcing-rent-control"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Pine Tree Legal Assistance",
+   "url": "https://www.ptla.org/node/811",
+   "what": "free legal help for low-income tenants in Maine"
+  }
+ ],
+ "climate": "Test the heating, ask how it is fueled and look for drafts and ice-dam stains; winters are cold and snowy.",
+ "universities": [
+  "University of Southern Maine",
+  "Maine College of Art & Design",
+  "University of New England"
+ ],
+ "fact": "Portland declares winter parking bans during snowstorms, so renters without off-street parking must move their cars.",
+ "checked": "November 2026"
+}

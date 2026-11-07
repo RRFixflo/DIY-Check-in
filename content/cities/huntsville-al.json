@@ -1,0 +1,49 @@
+{
+ "name": "Huntsville",
+ "neighborhoods": [
+  {
+   "name": "Five Points",
+   "homes": "older bungalows and small houses"
+  },
+  {
+   "name": "Blossomwood",
+   "homes": "mid-century single-family houses"
+  },
+  {
+   "name": "Downtown / Medical District",
+   "homes": "apartments and older houses"
+  },
+  {
+   "name": "MidCity",
+   "homes": "newer apartment buildings"
+  },
+  {
+   "name": "Jones Valley",
+   "homes": "single-family houses and apartment complexes"
+  },
+  {
+   "name": "Hampton Cove",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Village of Providence",
+   "homes": "townhomes and apartments"
+  }
+ ],
+ "housing": "Huntsville's rentals are mostly newer apartment complexes and single-family houses, many rented by engineers and defense workers who move to the city for jobs.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Services Alabama",
+   "url": "https://legalservicesalabama.org/",
+   "what": "free civil legal help for low-income renters, including evictions and repairs"
+  }
+ ],
+ "climate": "Test the air conditioning or heat pump and check windows and roofs for storm damage; the area has humid summers and frequent spring tornado warnings.",
+ "universities": [
+  "University of Alabama in Huntsville",
+  "Alabama A&M University"
+ ],
+ "fact": "Redstone Arsenal and the aerospace companies around it bring a steady stream of renters who move to Huntsville for work.",
+ "checked": "November 2026"
+}

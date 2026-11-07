@@ -1,0 +1,59 @@
+{
+ "name": "Vancouver",
+ "neighborhoods": [
+  {
+   "name": "Kitsilano",
+   "homes": "older walk-up apartments and house suites"
+  },
+  {
+   "name": "West End",
+   "homes": "rental apartment towers"
+  },
+  {
+   "name": "Mount Pleasant",
+   "homes": "houses with suites and low-rise apartments"
+  },
+  {
+   "name": "Commercial Drive",
+   "homes": "character houses split into suites"
+  },
+  {
+   "name": "Yaletown",
+   "homes": "condo towers"
+  },
+  {
+   "name": "Kerrisdale",
+   "homes": "low-rise apartments"
+  },
+  {
+   "name": "Marpole",
+   "homes": "walk-up apartments"
+  }
+ ],
+ "housing": "Vancouver renters live in older purpose-built apartment buildings, condo units rented from owners, and secondary suites in houses.",
+ "localRules": [
+  {
+   "text": "In British Columbia the landlord and tenant must do a condition inspection at move-in and at move-out, using form RTB-27 or one with the same terms.",
+   "source": "https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/starting-a-tenancy/move-in-condition-inspection/complete-condition-inspection-report"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenant Resource & Advisory Centre (TRAC)",
+   "url": "https://tenants.bc.ca/?p=4294",
+   "what": "free tenant information line and guides for BC"
+  },
+  {
+   "name": "Vancouver Tenants Union",
+   "url": "https://vancouvertenantsunion.ca",
+   "what": "tenant organizing and support in Vancouver"
+  }
+ ],
+ "climate": "Vancouver is very rainy, so check for leaks, mould and condensation around windows and in basement suites.",
+ "universities": [
+  "University of British Columbia",
+  "Simon Fraser University"
+ ],
+ "fact": "Many Vancouver rentals are basement or laneway suites in houses.",
+ "checked": "November 2026"
+}

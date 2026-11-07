@@ -1,0 +1,53 @@
+{
+ "name": "Detroit",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older apartment buildings and new complexes"
+  },
+  {
+   "name": "Corktown",
+   "homes": "row houses and small apartment buildings"
+  },
+  {
+   "name": "Lafayette Park",
+   "homes": "mid-century townhouses and towers"
+  },
+  {
+   "name": "Indian Village",
+   "homes": "large historic houses and flats"
+  },
+  {
+   "name": "Southwest Detroit",
+   "homes": "single-family houses and flats"
+  },
+  {
+   "name": "Bagley",
+   "homes": "brick single-family houses"
+  },
+  {
+   "name": "East English Village",
+   "homes": "brick single-family houses"
+  }
+ ],
+ "housing": "Most Detroit renters live in rented single-family houses and two-family flats, with apartment buildings mainly in Midtown and Downtown.",
+ "localRules": [
+  {
+   "text": "Detroit rental properties must be registered and pass an inspection for a Certificate of Compliance; where there is no certificate, tenants can pay rent into the city's Rental Escrow Program.",
+   "source": "https://detroitmi.gov/escrow"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Detroit Rental Escrow Program",
+   "url": "https://detroitmi.gov/escrow",
+   "what": "city program to hold rent while repairs are made"
+  }
+ ],
+ "climate": "Test the furnace and look for leaks, damp basements and drafty windows; winters are cold and many houses are old.",
+ "universities": [
+  "Wayne State University"
+ ],
+ "fact": "In Detroit you can ask the landlord to show the rental's Certificate of Compliance, which must be posted at the property.",
+ "checked": "November 2026"
+}

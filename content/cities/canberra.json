@@ -1,0 +1,54 @@
+{
+ "name": "Canberra",
+ "neighborhoods": [
+  {
+   "name": "Braddon",
+   "homes": "apartments"
+  },
+  {
+   "name": "Belconnen",
+   "homes": "units and houses"
+  },
+  {
+   "name": "Gungahlin",
+   "homes": "newer apartments and townhouses"
+  },
+  {
+   "name": "Kingston",
+   "homes": "apartments"
+  },
+  {
+   "name": "Turner",
+   "homes": "units near the university"
+  },
+  {
+   "name": "Woden",
+   "homes": "apartments and houses"
+  },
+  {
+   "name": "Tuggeranong",
+   "homes": "houses"
+  }
+ ],
+ "housing": "Canberra renters live in apartments in the town centres and along light rail, and in houses and townhouses in the suburbs.",
+ "localRules": [
+  {
+   "text": "In the ACT the bond must be lodged with the ACT Revenue Office.",
+   "source": "https://www.act.gov.au/housing-planning-and-property/renting/starting-a-tenancy"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenancy Advice Service (Legal Aid ACT)",
+   "url": "https://legalaidact.org.au/tasact",
+   "what": "free tenancy advice line in the ACT"
+  }
+ ],
+ "climate": "Test the heating and check for draughts; Canberra winters are cold with frosty mornings.",
+ "universities": [
+  "Australian National University",
+  "University of Canberra"
+ ],
+ "fact": "Canberra has some of the coldest winters of any Australian capital.",
+ "checked": "November 2026"
+}

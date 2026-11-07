@@ -1,0 +1,62 @@
+{
+ "name": "Newport",
+ "neighborhoods": [
+  {
+   "name": "Maindee",
+   "homes": "Victorian terraced houses"
+  },
+  {
+   "name": "Stow Hill",
+   "homes": "period houses and flats"
+  },
+  {
+   "name": "Caerleon",
+   "homes": "houses and student lets"
+  },
+  {
+   "name": "Malpas",
+   "homes": "semi-detached houses"
+  },
+  {
+   "name": "Pill",
+   "homes": "terraced houses"
+  },
+  {
+   "name": "Rogerstone",
+   "homes": "newer family houses"
+  },
+  {
+   "name": "Bettws",
+   "homes": "former council houses"
+  }
+ ],
+ "housing": "Newport's rentals are mainly terraced and semi-detached houses, with flats in the city centre.",
+ "localRules": [
+  {
+   "text": "Every private landlord letting a home in Wales must register with Rent Smart Wales, and a landlord who manages the home themselves (or their agent) also needs a licence.",
+   "source": "https://rentsmart.gov.wales/Uploads/Downloads/00/00/02/03/DownloadFileEN_FILE/ENG-Registration-and-Licensing-leaflet-Digital.pdf"
+  },
+  {
+   "text": "Deposits in Wales must be put in a government-backed tenancy deposit scheme within 30 days of the landlord receiving them.",
+   "source": "https://www.flintshire.gov.uk/en/Resident/Housing/Landlords/Related-Pages/Landlord-Responsibilities.aspx"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Shelter Cymru",
+   "url": "https://sheltercymru.org.uk/housing-advice-parent/",
+   "what": "free housing advice charity in Wales"
+  },
+  {
+   "name": "Newport City Council",
+   "url": "https://www.newport.gov.uk/housing/renting-and-home-ownership/information-tenants",
+   "what": "council information for private tenants"
+  }
+ ],
+ "climate": "Photograph any damp or mould and test the heating; older terraced houses in the wet South Wales climate are prone to condensation.",
+ "universities": [
+  "University of South Wales"
+ ],
+ "fact": "Under the Renting Homes (Wales) Act 2016, tenants in Newport and the rest of Wales are called contract-holders and have occupation contracts, not tenancies.",
+ "checked": "November 2026"
+}

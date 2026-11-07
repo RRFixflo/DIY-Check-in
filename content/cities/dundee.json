@@ -1,0 +1,59 @@
+{
+ "name": "Dundee",
+ "neighborhoods": [
+  {
+   "name": "West End",
+   "homes": "Victorian tenements and student flats"
+  },
+  {
+   "name": "Broughty Ferry",
+   "homes": "houses and flats by the Tay"
+  },
+  {
+   "name": "Stobswell",
+   "homes": "tenement flats"
+  },
+  {
+   "name": "Hilltown",
+   "homes": "tenements and former council blocks"
+  },
+  {
+   "name": "City Centre",
+   "homes": "flats including converted mills"
+  },
+  {
+   "name": "Lochee",
+   "homes": "tenements and terraced houses"
+  }
+ ],
+ "housing": "Dundee renters mainly live in tenement flats, many shared by students in the West End, plus converted mill buildings and family houses in Broughty Ferry.",
+ "localRules": [
+  {
+   "text": "All private landlords in Scotland must register with the council for the area where they rent out a home.",
+   "source": "https://mygov.scot/tenancy-deposits-tenants"
+  },
+  {
+   "text": "In Scotland the landlord must lodge the deposit with an approved scheme (SafeDeposits Scotland, Letting Protection Service Scotland or MyDeposits Scotland) within 30 working days of the tenancy starting.",
+   "source": "https://mygov.scot/tenancy-deposits-landlords"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "mygov.scot",
+   "url": "https://mygov.scot/tenancy-deposits-tenants",
+   "what": "Scottish Government guidance on renting and deposits"
+  },
+  {
+   "name": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+   "url": "https://housingandpropertychamber.scot",
+   "what": "decides private renting disputes, including unprotected deposits"
+  }
+ ],
+ "climate": "Check heating and windows for draughts and condensation; tenement flats near the Tay can be cold and damp in winter.",
+ "universities": [
+  "University of Dundee",
+  "Abertay University"
+ ],
+ "fact": "Dundee's West End around the universities has many shared student flats, so lets often start in late summer.",
+ "checked": "November 2026"
+}

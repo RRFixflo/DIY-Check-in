@@ -1,0 +1,51 @@
+{
+ "name": "San Antonio",
+ "neighborhoods": [
+  {
+   "name": "Alamo Heights",
+   "homes": "older single-family homes and small apartment buildings"
+  },
+  {
+   "name": "Southtown",
+   "homes": "historic houses and new apartments"
+  },
+  {
+   "name": "Monte Vista",
+   "homes": "historic houses and older apartments"
+  },
+  {
+   "name": "Tobin Hill",
+   "homes": "bungalows and apartment buildings"
+  },
+  {
+   "name": "Medical Center",
+   "homes": "apartment complexes"
+  },
+  {
+   "name": "Stone Oak",
+   "homes": "apartment complexes and single-family homes"
+  }
+ ],
+ "housing": "San Antonio renters mostly live in garden apartment complexes and rented single-family homes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of San Antonio Neighborhood and Housing Services: legal assistance",
+   "url": "https://www.sa.gov/Directory/Departments/NHSD/Housing-Support/Counseling-Mediation/Legal-Assistance",
+   "what": "tenant-landlord mediation and legal aid referral"
+  },
+  {
+   "name": "Texas RioGrande Legal Aid",
+   "url": "https://www.trla.org",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; summer highs make a broken AC an urgent repair.",
+ "universities": [
+  "UTSA",
+  "Trinity University",
+  "St. Mary's University"
+ ],
+ "fact": "The City of San Antonio offers tenant-landlord mediation through housing counselors.",
+ "checked": "November 2026"
+}

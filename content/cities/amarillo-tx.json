@@ -1,0 +1,38 @@
+{
+ "name": "Amarillo",
+ "neighborhoods": [
+  {
+   "name": "Wolflin",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "San Jacinto",
+   "homes": "small older houses along historic Route 66"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Puckett",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Sleepy Hollow",
+   "homes": "single-family homes"
+  }
+ ],
+ "housing": "Amarillo's rentals are mostly single-family brick homes, duplexes and apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free legal help for low-income renters, with an Amarillo office"
+  }
+ ],
+ "climate": "Photograph the roof, windows and siding for hail damage and test both the heat and AC; the Panhandle has strong wind, hail and cold winters.",
+ "universities": [],
+ "fact": "Historic Route 66 runs through Amarillo's San Jacinto neighborhood along Sixth Avenue.",
+ "checked": "November 2026"
+}

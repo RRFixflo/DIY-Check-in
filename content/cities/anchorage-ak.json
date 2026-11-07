@@ -1,0 +1,57 @@
+{
+ "name": "Anchorage",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "apartment buildings and fourplexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and older houses"
+  },
+  {
+   "name": "Spenard",
+   "homes": "older houses, duplexes and fourplexes"
+  },
+  {
+   "name": "South Addition",
+   "homes": "older single-family homes and small apartments"
+  },
+  {
+   "name": "Mountain View",
+   "homes": "fourplexes and apartment buildings"
+  },
+  {
+   "name": "Muldoon",
+   "homes": "fourplexes and single-family homes"
+  },
+  {
+   "name": "Eagle River",
+   "homes": "single-family homes and duplexes"
+  },
+  {
+   "name": "Turnagain",
+   "homes": "single-family homes"
+  }
+ ],
+ "housing": "Anchorage's rentals include many fourplexes and duplexes, apartment buildings in Midtown and Mountain View, and single-family homes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Alaska Department of Law: Landlord and Tenant Information",
+   "url": "https://www.law.alaska.gov/consumer/landlord-tenant.html",
+   "what": "state guide to renter rights"
+  },
+  {
+   "name": "Alaska Court System Housing Resources",
+   "url": "https://courts.alaska.gov/shc/housing/resources.htm",
+   "what": "self-help and the free landlord-tenant helpline"
+  }
+ ],
+ "climate": "Test every heater and check windows and doors for drafts and frost; winters are long and cold, and a heating failure can freeze pipes quickly.",
+ "universities": [
+  "University of Alaska Anchorage"
+ ],
+ "fact": "Alaska Legal Services runs a free landlord-tenant legal helpline staffed by volunteer attorneys.",
+ "checked": "November 2026"
+}

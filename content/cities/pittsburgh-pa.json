@@ -1,0 +1,59 @@
+{
+ "name": "Pittsburgh",
+ "neighborhoods": [
+  {
+   "name": "Shadyside",
+   "homes": "older houses split into apartments and brick apartment buildings"
+  },
+  {
+   "name": "Squirrel Hill",
+   "homes": "single-family homes, duplexes and apartments"
+  },
+  {
+   "name": "Oakland",
+   "homes": "student apartments in older row houses"
+  },
+  {
+   "name": "Lawrenceville",
+   "homes": "brick row houses"
+  },
+  {
+   "name": "Bloomfield",
+   "homes": "row houses and small apartments"
+  },
+  {
+   "name": "South Side",
+   "homes": "brick row houses on the flats and slopes"
+  },
+  {
+   "name": "Mount Washington",
+   "homes": "older houses and apartments on the hillside"
+  },
+  {
+   "name": "Highland Park",
+   "homes": "large older houses and apartments"
+  }
+ ],
+ "housing": "Pittsburgh's rentals are mostly older brick row houses and wood-frame houses split into apartments, many on steep hills, plus student housing around Oakland.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Neighborhood Legal Services",
+   "url": "https://nlsa.us/wp-content/uploads/2023/04/NLSbrochureGuideToHelp0626.pdf",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "URA Legal Assistance Program",
+   "url": "https://ura.org/pages/housing-legal-assistance",
+   "what": "mediation and legal help for eligible city tenants"
+  }
+ ],
+ "climate": "Test the furnace and look for water in the basement and around old windows; winters are cold and wet, and many homes are over 100 years old.",
+ "universities": [
+  "University of Pittsburgh",
+  "Carnegie Mellon University",
+  "Duquesne University"
+ ],
+ "fact": "Pittsburgh's rental registry was fought in court for years before the current permit program started in December 2024.",
+ "checked": "November 2026"
+}

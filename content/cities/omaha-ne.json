@@ -1,0 +1,50 @@
+{
+ "name": "Omaha",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older apartment buildings and houses"
+  },
+  {
+   "name": "Dundee",
+   "homes": "1910s–20s houses and small apartment buildings"
+  },
+  {
+   "name": "Benson",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Old Market",
+   "homes": "lofts in converted warehouses"
+  },
+  {
+   "name": "Blackstone",
+   "homes": "historic apartment buildings"
+  },
+  {
+   "name": "Aksarben Village",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "West Omaha",
+   "homes": "suburban houses and apartment complexes"
+  }
+ ],
+ "housing": "Omaha's rentals range from brick walk-up apartments and older houses in Midtown to apartment complexes and houses in West Omaha.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Tenant Assistance Project, Legal Aid of Nebraska",
+   "url": "https://search.ne211.org/search/6a04fb6b-a4fa-50bd-b2f8-89f85f3e5767",
+   "what": "free lawyers for tenants at eviction hearings"
+  }
+ ],
+ "climate": "Test the furnace and air conditioning, check basements for water, and photograph the roof and windows for hail damage after spring storms.",
+ "universities": [
+  "University of Nebraska Omaha",
+  "Creighton University",
+  "University of Nebraska Medical Center"
+ ],
+ "fact": "Tenants who show up to an eviction hearing in Douglas County can get a volunteer lawyer through the Tenant Assistance Project.",
+ "checked": "November 2026"
+}

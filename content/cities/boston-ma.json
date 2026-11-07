@@ -1,0 +1,56 @@
+{
+ "name": "Boston",
+ "neighborhoods": [
+  {
+   "name": "Allston",
+   "homes": "triple-deckers and older apartment buildings"
+  },
+  {
+   "name": "Brighton",
+   "homes": "apartment buildings and triple-deckers"
+  },
+  {
+   "name": "Jamaica Plain",
+   "homes": "triple-deckers and Victorian houses"
+  },
+  {
+   "name": "Dorchester",
+   "homes": "triple-deckers"
+  },
+  {
+   "name": "South End",
+   "homes": "brick and brownstone row houses"
+  },
+  {
+   "name": "Mission Hill",
+   "homes": "triple-deckers and student apartments"
+  },
+  {
+   "name": "East Boston",
+   "homes": "triple-deckers and new apartment buildings"
+  }
+ ],
+ "housing": "Boston's rentals are largely triple-deckers and brick row houses, with many student apartments in Allston, Brighton and Mission Hill.",
+ "localRules": [
+  {
+   "text": "Boston requires all private rental units to be registered with the city every year by July 1 and to be inspected under its rental registration and inspection program.",
+   "source": "https://content.boston.gov/sites/default/files/file/2024/07/4205_Rental%20Registration%20Trifold%2011X8.5%20%282%29.pdf"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Boston Inspectional Services: rental inspections",
+   "url": "https://boston.gov/node/2381",
+   "what": "request a rental unit inspection"
+  }
+ ],
+ "climate": "Test the heat and photograph windows and radiators; winters are cold and snowy, and old buildings can be drafty.",
+ "universities": [
+  "Boston University",
+  "Northeastern University",
+  "Boston College",
+  "Harvard University"
+ ],
+ "fact": "Most Boston leases start on September 1, so move-in day is the busiest of the year.",
+ "checked": "November 2026"
+}

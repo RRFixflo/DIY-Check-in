@@ -1,0 +1,53 @@
+{
+ "name": "Vancouver",
+ "neighborhoods": [
+  {
+   "name": "Esther Short / Downtown",
+   "homes": "newer apartment buildings"
+  },
+  {
+   "name": "Uptown Village",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Hough",
+   "homes": "older bungalows"
+  },
+  {
+   "name": "Arnada",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Fruit Valley",
+   "homes": "small houses and apartments"
+  },
+  {
+   "name": "Cascade Park",
+   "homes": "apartment complexes and single-family houses"
+  },
+  {
+   "name": "Fisher's Landing",
+   "homes": "apartment complexes and newer houses"
+  }
+ ],
+ "housing": "Vancouver's rentals are mostly apartment complexes and single-family houses, with new apartment buildings downtown and along the waterfront.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Clark County Volunteer Lawyers Program",
+   "url": "https://gethelp.211info.org/agency/2566/1979",
+   "what": "free tenant advice, mediation and eviction defense"
+  },
+  {
+   "name": "City of Vancouver tenant information",
+   "url": "https://www.cityofvancouver.us/wp-content/uploads/2025/11/Vancouver-Tenant-one-page-info.pdf",
+   "what": "city sheet listing tenant rights and help"
+  }
+ ],
+ "climate": "Look for mold, damp and leaks, and check that bathroom fans work; the long rainy season keeps homes wet.",
+ "universities": [
+  "Washington State University Vancouver"
+ ],
+ "fact": "Many Vancouver residents work in Portland, Oregon, but Washington's landlord-tenant law, not Oregon's, applies to Vancouver rentals.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,44 @@
+{
+ "name": "Bakersfield",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "Westchester",
+   "homes": "1930s–50s houses"
+  },
+  {
+   "name": "Southwest Bakersfield",
+   "homes": "suburban houses and apartment complexes"
+  },
+  {
+   "name": "Northwest Bakersfield",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "Seven Oaks",
+   "homes": "larger newer houses"
+  },
+  {
+   "name": "East Bakersfield",
+   "homes": "older houses and duplexes"
+  }
+ ],
+ "housing": "Bakersfield renters mostly live in single-family houses and apartment complexes, with older homes and duplexes near downtown and east Bakersfield.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Greater Bakersfield Legal Assistance",
+   "url": "https://www.turnto23.com/news/in-your-neighborhood/bakersfield/city-council-approves-contract-with-gbla-for-eviction-prevention-program",
+   "what": "free legal help and the city's eviction prevention program"
+  }
+ ],
+ "climate": "Summer highs often top 100°F, so test the air conditioning, check window screens and seals, and note any dust getting in.",
+ "universities": [
+  "California State University, Bakersfield"
+ ],
+ "fact": "The City of Bakersfield funds an eviction prevention program run by Greater Bakersfield Legal Assistance.",
+ "checked": "November 2026"
+}

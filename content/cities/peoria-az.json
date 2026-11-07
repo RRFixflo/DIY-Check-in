@@ -1,0 +1,41 @@
+{
+ "name": "Peoria",
+ "neighborhoods": [
+  {
+   "name": "Old Town Peoria",
+   "homes": "older small houses and apartment complexes"
+  },
+  {
+   "name": "Fletcher Heights",
+   "homes": "single-family houses in a planned community"
+  },
+  {
+   "name": "Vistancia",
+   "homes": "newer houses in a master-planned community"
+  },
+  {
+   "name": "Westwing Mountain",
+   "homes": "single-family houses with HOA rules"
+  },
+  {
+   "name": "Terramar",
+   "homes": "single-family houses in a planned community"
+  },
+  {
+   "name": "Ventana Lakes",
+   "homes": "houses in an age-restricted community"
+  }
+ ],
+ "housing": "Peoria's rentals are mostly single-family houses in planned communities with homeowners associations, plus newer apartment complexes along the main roads.",
+ "localRules": [
+  {
+   "text": "Every rental home in Maricopa County must be registered with the County Assessor, and the city where it sits enforces this.",
+   "source": "https://www.mcassessor.maricopa.gov/faq/rental_registration/"
+  }
+ ],
+ "tenantHelp": [],
+ "climate": "Run the air conditioning during the inspection and photograph the outdoor unit and roof; summer heat makes a broken AC an urgent repair, and monsoon dust storms can damage screens and pools.",
+ "universities": [],
+ "fact": "Many Peoria rentals are in HOA communities, so tenants usually have to follow the association's rules on parking, trash cans and yards.",
+ "checked": "November 2026"
+}

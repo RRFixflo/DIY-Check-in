@@ -1,0 +1,39 @@
+{
+ "name": "Indianapolis",
+ "neighborhoods": [
+  {
+   "name": "Broad Ripple",
+   "homes": "apartments and small houses"
+  },
+  {
+   "name": "Fountain Square",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "Mass Ave",
+   "homes": "new mid-rise apartments"
+  },
+  {
+   "name": "Irvington",
+   "homes": "historic houses and doubles"
+  },
+  {
+   "name": "Meridian-Kessler",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Near Eastside",
+   "homes": "single-family houses and doubles"
+  }
+ ],
+ "housing": "Indianapolis renters mostly live in rented single-family homes, doubles and apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace and look for drafts and damp basements; winters are cold.",
+ "universities": [
+  "IUPUI (Indiana University Indianapolis)",
+  "Butler University"
+ ],
+ "fact": "Indianapolis tenants who report code problems are protected against retaliation under the city's tenant rights ordinance.",
+ "checked": "November 2026"
+}

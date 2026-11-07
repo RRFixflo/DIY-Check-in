@@ -1,0 +1,59 @@
+{
+ "name": "Los Angeles",
+ "neighborhoods": [
+  {
+   "name": "Koreatown",
+   "homes": "dense older apartment buildings"
+  },
+  {
+   "name": "Silver Lake",
+   "homes": "small apartment buildings, duplexes and hillside houses"
+  },
+  {
+   "name": "Echo Park",
+   "homes": "bungalows, courtyard buildings and small apartment buildings"
+  },
+  {
+   "name": "Hollywood",
+   "homes": "older apartment buildings and newer complexes"
+  },
+  {
+   "name": "Westwood",
+   "homes": "apartment buildings popular with students"
+  },
+  {
+   "name": "Mid-City",
+   "homes": "duplexes, fourplexes and older apartment buildings"
+  },
+  {
+   "name": "North Hollywood",
+   "homes": "garden apartment complexes and small houses"
+  },
+  {
+   "name": "Highland Park",
+   "homes": "Craftsman houses, bungalows and small apartment buildings"
+  }
+ ],
+ "housing": "Most Angelenos rent, many in older apartment buildings, courtyard bungalows and duplexes; buildings built on or before October 1, 1978 are often covered by the city's Rent Stabilization Ordinance.",
+ "localRules": [
+  {
+   "text": "Owners of units covered by the Rent Stabilization Ordinance (generally built on or before October 1, 1978) must register them with the Los Angeles Housing Department every year and report the rent each tenant pays.",
+   "source": "https://housing.lacity.gov/tenant-rent-registry"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Los Angeles Housing Department (LAHD)",
+   "url": "https://housing.lacity.gov/tenant-rent-registry",
+   "what": "city housing department; rent stabilization and tenant rights"
+  }
+ ],
+ "climate": "Test the air conditioning or fans and check windows and screens; also photograph any cracks in walls, since the city sits in an earthquake zone.",
+ "universities": [
+  "UCLA",
+  "University of Southern California",
+  "Cal State LA"
+ ],
+ "fact": "Whether your Los Angeles apartment is under rent stabilization mostly depends on when the building was built, so check its status with LAHD.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,64 @@
+{
+ "name": "San Francisco",
+ "neighborhoods": [
+  {
+   "name": "Mission District",
+   "homes": "Victorian flats and small apartment buildings"
+  },
+  {
+   "name": "Richmond District",
+   "homes": "flats in two- and three-unit buildings and older apartments"
+  },
+  {
+   "name": "Sunset District",
+   "homes": "single-family homes and in-law units"
+  },
+  {
+   "name": "Nob Hill",
+   "homes": "older apartment buildings, many studios"
+  },
+  {
+   "name": "Haight-Ashbury",
+   "homes": "Victorian flats and shared houses"
+  },
+  {
+   "name": "Noe Valley",
+   "homes": "Victorian and Edwardian flats and houses"
+  },
+  {
+   "name": "Tenderloin",
+   "homes": "older apartment buildings and residential hotels"
+  },
+  {
+   "name": "SoMa",
+   "homes": "newer apartment towers and converted lofts"
+  }
+ ],
+ "housing": "Most San Franciscans rent, often in Victorian and Edwardian flats, small apartment buildings and in-law units; many older units are covered by the city's Rent Ordinance.",
+ "localRules": [
+  {
+   "text": "San Francisco landlords must pay tenants interest on security deposits each year at a rate set by the Rent Board (4.2% from March 1, 2026).",
+   "source": "https://www.sf.gov/reports--security-deposits"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "San Francisco Tenants Union",
+   "url": "https://sftu.org",
+   "what": "tenant counseling and information"
+  },
+  {
+   "name": "San Francisco Rent Board",
+   "url": "https://www.sf.gov/reports--security-deposits",
+   "what": "city rent board; rules on deposits and rent"
+  }
+ ],
+ "climate": "Check for damp, mold and condensation around windows and in closets, and test the heater; the city is cool and foggy for much of the year.",
+ "universities": [
+  "University of San Francisco",
+  "San Francisco State University",
+  "UCSF"
+ ],
+ "fact": "In San Francisco a security deposit earns interest that the landlord must pay each year, either directly or as a credit against rent.",
+ "checked": "November 2026"
+}

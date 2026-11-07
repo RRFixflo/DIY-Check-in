@@ -1,0 +1,62 @@
+{
+ "name": "Oakland",
+ "neighborhoods": [
+  {
+   "name": "Rockridge",
+   "homes": "Craftsman houses and small apartment buildings"
+  },
+  {
+   "name": "Temescal",
+   "homes": "older houses, duplexes and new apartment buildings"
+  },
+  {
+   "name": "Grand Lake",
+   "homes": "1920s apartment buildings"
+  },
+  {
+   "name": "Adams Point",
+   "homes": "older apartment buildings near Lake Merritt"
+  },
+  {
+   "name": "Fruitvale",
+   "homes": "older houses, duplexes and small apartments"
+  },
+  {
+   "name": "Uptown",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Jack London Square",
+   "homes": "lofts and new apartments"
+  },
+  {
+   "name": "Dimond District",
+   "homes": "bungalows and small apartment buildings"
+  }
+ ],
+ "housing": "Oakland renters mostly live in pre-1983 apartment buildings, duplexes and Victorian or Craftsman houses, many of them covered by the city's rent rules.",
+ "localRules": [
+  {
+   "text": "Oakland landlords must give new tenants the city's Notice to Tenants of the Rent Adjustment Program in English, Spanish and Chinese at move-in.",
+   "source": "https://www.oaklandca.gov/Community/Housing-Programs-Support/Rent-Adjustment-Program-RAP/For-Property-Owners/Notice-to-Tenants-of-the-Rent-Adjustment-Program"
+  },
+  {
+   "text": "In Oakland, no rent increase can take effect until at least six months after the tenant first received the Rent Adjustment Program notice.",
+   "source": "https://www.oaklandca.gov/Community/Housing-Programs-Support/Rent-Adjustment-Program-RAP/For-Property-Owners/Notice-to-Tenants-of-the-Rent-Adjustment-Program"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Oakland Rent Adjustment Program",
+   "url": "https://www.oaklandca.gov/Community/Housing-Programs-Support/Oakland-Rental-Housing-Laws",
+   "what": "city office for rent and eviction rules"
+  }
+ ],
+ "climate": "Most older Oakland buildings have no air conditioning; check heaters, look for damp and mold in bathrooms, and ask about earthquake retrofits in soft-story buildings.",
+ "universities": [
+  "Mills College at Northeastern University",
+  "UC Berkeley (nearby)"
+ ],
+ "fact": "Keep the Rent Adjustment Program notice your landlord gives you at move-in: without it, you get more time to file a petition about a rent increase.",
+ "checked": "November 2026"
+}

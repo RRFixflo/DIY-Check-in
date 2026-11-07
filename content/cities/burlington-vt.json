@@ -1,0 +1,45 @@
+{
+ "name": "Burlington",
+ "neighborhoods": [
+  {
+   "name": "Old North End",
+   "homes": "older multi-family houses"
+  },
+  {
+   "name": "Hill Section",
+   "homes": "large old houses split into apartments"
+  },
+  {
+   "name": "South End",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "New North End",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments above shops"
+  },
+  {
+   "name": "Five Sisters",
+   "homes": "single-family houses"
+  }
+ ],
+ "housing": "Burlington's rentals are mostly older wood houses split into apartments, with many students from UVM and Champlain College in the Hill Section and Old North End.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Burlington tenant rights page",
+   "url": "https://burlingtonvt.gov/node/8007",
+   "what": "tenant rights and the CVOEO Vermont Tenants hotline"
+  }
+ ],
+ "climate": "Test the heating, check windows for drafts and look for signs of frozen pipes; winters are long and very cold.",
+ "universities": [
+  "University of Vermont",
+  "Champlain College"
+ ],
+ "fact": "Students from UVM and Champlain College make up a large share of Burlington's renters.",
+ "checked": "November 2026"
+}

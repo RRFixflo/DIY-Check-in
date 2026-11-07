@@ -1,0 +1,42 @@
+{
+ "name": "Port St. Lucie",
+ "neighborhoods": [
+  {
+   "name": "Tradition",
+   "homes": "newer single-family homes and townhomes in a master-planned community"
+  },
+  {
+   "name": "St. Lucie West",
+   "homes": "single-family homes, villas and apartment complexes"
+  },
+  {
+   "name": "Torino",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "Sandpiper Bay",
+   "homes": "older single-family homes near the river"
+  },
+  {
+   "name": "Southern Grove",
+   "homes": "new apartment complexes and houses"
+  },
+  {
+   "name": "Floresta",
+   "homes": "1970s and 1980s concrete block houses"
+  }
+ ],
+ "housing": "Port St. Lucie's rentals are mostly single-family concrete block homes on the city's original grid of lots, plus newer master-planned communities and apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "St. Lucie County Human Services resources (lists Florida Rural Legal Services)",
+   "url": "https://www.stlucieco.gov/departments-and-services/community-services/human-services/additional-resources",
+   "what": "county list of help, including free legal services for low-income residents"
+  }
+ ],
+ "climate": "Photograph hurricane shutters or impact windows, the roof and the AC unit, and look for water stains; hurricane season and humidity make storm damage and mold common.",
+ "universities": [],
+ "fact": "Much of Port St. Lucie was laid out in the 1960s as a grid of lots for single-family homes, so most rentals are houses rather than apartments.",
+ "checked": "November 2026"
+}

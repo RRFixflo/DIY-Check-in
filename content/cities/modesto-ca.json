@@ -1,0 +1,38 @@
+{
+ "name": "Modesto",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "College Area",
+   "homes": "older houses and apartments near Modesto Junior College"
+  },
+  {
+   "name": "La Loma",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Village One",
+   "homes": "newer single-family homes in north Modesto"
+  },
+  {
+   "name": "Airport District",
+   "homes": "small older houses"
+  }
+ ],
+ "housing": "Modesto's rentals are mostly single-family homes and apartment complexes, with older houses near downtown and newer tracts to the north.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Project Sentinel (Modesto office)",
+   "url": "https://www.tenantstogether.org/city/modesto",
+   "what": "free landlord-tenant counseling and mediation for Stanislaus County"
+  }
+ ],
+ "climate": "Test the air conditioning and check windows and screens; Modesto summers are very hot and air quality can be poor.",
+ "universities": [],
+ "fact": "Most of Modesto gets its electricity from the Modesto Irrigation District rather than PG&E, so set up power with MID when you move in.",
+ "checked": "November 2026"
+}

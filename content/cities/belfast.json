@@ -1,0 +1,67 @@
+{
+ "name": "Belfast",
+ "neighborhoods": [
+  {
+   "name": "Queen's Quarter",
+   "homes": "Victorian terraces and shared student houses"
+  },
+  {
+   "name": "Holylands",
+   "homes": "terraced houses let to students"
+  },
+  {
+   "name": "Stranmillis",
+   "homes": "terraced houses and flats"
+  },
+  {
+   "name": "Ormeau Road",
+   "homes": "terraced houses and flats"
+  },
+  {
+   "name": "Lisburn Road",
+   "homes": "terraces and apartments"
+  },
+  {
+   "name": "East Belfast",
+   "homes": "terraced houses"
+  },
+  {
+   "name": "Titanic Quarter",
+   "homes": "modern apartments"
+  },
+  {
+   "name": "Cathedral Quarter",
+   "homes": "city-centre flats"
+  }
+ ],
+ "housing": "Belfast's rentals are largely red-brick terraced houses, many shared by students near Queen's, plus modern apartments in the city centre and Titanic Quarter.",
+ "localRules": [
+  {
+   "text": "In Northern Ireland the landlord must protect the deposit in an approved scheme within 28 days and give the tenant the scheme information within 35 days.",
+   "source": "https://www.communities-ni.gov.uk/node/364052"
+  },
+  {
+   "text": "Private landlords in Northern Ireland must join the Landlord Registration Scheme, and tenants can check a landlord on nidirect.",
+   "source": "https://www.communities-ni.gov.uk/node/30278"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Housing Rights",
+   "url": "https://www.housingrights.org.uk/professionals/advice-and-information/renting-privately",
+   "what": "free housing advice in Northern Ireland, including deposit disputes"
+  },
+  {
+   "name": "nidirect",
+   "url": "https://nidirect.gov.uk/articles/tenancy-deposit-scheme-information-tenants",
+   "what": "government guidance on deposits for tenants"
+  }
+ ],
+ "climate": "Belfast is mild and wet, so photograph any damp or mould and test the heating and hot water.",
+ "universities": [
+  "Queen's University Belfast",
+  "Ulster University"
+ ],
+ "fact": "The Holylands near Queen's University is one of the densest student renting areas in the UK.",
+ "checked": "November 2026"
+}

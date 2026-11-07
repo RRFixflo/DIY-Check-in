@@ -1,0 +1,38 @@
+{
+ "name": "Fargo",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Roosevelt",
+   "homes": "older houses near NDSU, many rented to students"
+  },
+  {
+   "name": "Horace Mann",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "Hawthorne",
+   "homes": "older houses"
+  },
+  {
+   "name": "South Fargo",
+   "homes": "apartment complexes"
+  },
+  {
+   "name": "Osgood",
+   "homes": "newer houses and apartment complexes"
+  }
+ ],
+ "housing": "Fargo's rentals are mostly apartment complexes, many in south Fargo, plus older houses near downtown and NDSU.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace, check windows and doors for drafts, and ask about plug-ins for engine block heaters and the sump pump; winters are extremely cold.",
+ "universities": [
+  "North Dakota State University"
+ ],
+ "fact": "Fargo sits on the Red River, which floods in spring, so ask whether the building has flooded before.",
+ "checked": "November 2026"
+}

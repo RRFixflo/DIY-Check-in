@@ -1,0 +1,54 @@
+{
+ "name": "Memphis",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older houses, duplexes and small apartment buildings"
+  },
+  {
+   "name": "Cooper-Young",
+   "homes": "bungalows and older cottages"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts and apartments in converted buildings"
+  },
+  {
+   "name": "East Memphis",
+   "homes": "post-war houses and apartment complexes"
+  },
+  {
+   "name": "Harbor Town",
+   "homes": "newer townhouses and apartments on Mud Island"
+  },
+  {
+   "name": "Overton Square",
+   "homes": "older apartments and houses"
+  },
+  {
+   "name": "Cordova",
+   "homes": "suburban houses and apartment complexes"
+  }
+ ],
+ "housing": "Many Memphis rentals are single-family houses, a large share owned by investors, along with garden-style apartment complexes in the east and older duplexes in Midtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Memphis Area Legal Services",
+   "url": "https://www.901legalconnect.org/housing",
+   "what": "free legal help for low-income renters in Shelby County"
+  },
+  {
+   "name": "Memphis Tenants Union",
+   "url": "https://secure.everyaction.com/MmJaxKPpkECc2zN1Bb2vhw2",
+   "what": "tenant organizing in apartment buildings"
+  }
+ ],
+ "climate": "Hot, humid summers make working air conditioning essential; check for mold, water stains and signs of pests such as termites and roaches, and photograph them at move-in.",
+ "universities": [
+  "University of Memphis",
+  "Rhodes College"
+ ],
+ "fact": "Memphis has many investor-owned single-family rentals, so your landlord may be a company based in another state, which makes a dated move-in record especially useful.",
+ "checked": "November 2026"
+}

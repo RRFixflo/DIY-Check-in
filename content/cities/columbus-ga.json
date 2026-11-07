@@ -1,0 +1,48 @@
+{
+ "name": "Columbus",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Historic District",
+   "homes": "historic houses and townhomes"
+  },
+  {
+   "name": "Uptown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Wynnton",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Green Island Hills",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "North Columbus",
+   "homes": "newer single-family homes and apartment complexes"
+  },
+  {
+   "name": "Bibb City",
+   "homes": "former mill houses and lofts"
+  }
+ ],
+ "housing": "Columbus renters live mostly in single-family homes and apartment complexes, many rented by military families from Fort Benning.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Georgia Legal Services Program",
+   "url": "https://www.glsp.org",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check for mold and pests; summers are hot and humid.",
+ "universities": [
+  "Columbus State University"
+ ],
+ "fact": "Columbus is next to Fort Benning, so many leases follow military moves and include military clauses.",
+ "checked": "November 2026"
+}

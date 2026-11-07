@@ -1,0 +1,58 @@
+{
+ "name": "Lexington",
+ "neighborhoods": [
+  {
+   "name": "Chevy Chase",
+   "homes": "older single-family homes and small apartment buildings"
+  },
+  {
+   "name": "Ashland Park",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "Kenwick",
+   "homes": "1920s–1940s cottages and duplexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and converted older buildings"
+  },
+  {
+   "name": "Hamburg",
+   "homes": "newer apartment complexes and townhomes"
+  },
+  {
+   "name": "Beaumont",
+   "homes": "apartment complexes and newer single-family homes"
+  },
+  {
+   "name": "Masterson Station",
+   "homes": "single-family homes and townhomes"
+  },
+  {
+   "name": "Southland",
+   "homes": "mid-century ranch houses and duplexes"
+  }
+ ],
+ "housing": "Lexington renters live in apartment complexes on the edges of town, older houses split into apartments near the University of Kentucky, and single-family homes.",
+ "localRules": [
+  {
+   "text": "Lexington-Fayette has adopted Kentucky's Uniform Residential Landlord and Tenant Act, so a landlord must give a written list of existing damage before taking a security deposit, and the tenant can check it before moving in.",
+   "source": "https://www.kyjustice.org/topics/evictions/security-deposits-only-places-passed-urlta-uniform-residential-landlord-tenant-act"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Kentucky Justice Online",
+   "url": "https://www.kyjustice.org/topics/evictions/security-deposits-only-places-passed-urlta-uniform-residential-landlord-tenant-act",
+   "what": "free legal information on deposits and evictions"
+  }
+ ],
+ "climate": "Test both heating and air conditioning, and check basements and crawl spaces for damp; Lexington has hot, humid summers and cold winters.",
+ "universities": [
+  "University of Kentucky",
+  "Transylvania University"
+ ],
+ "fact": "Because Lexington adopted the state's landlord-tenant act, the move-in damage list is the main proof of condition if part of a deposit is withheld.",
+ "checked": "November 2026"
+}

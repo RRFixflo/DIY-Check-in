@@ -1,0 +1,60 @@
+{
+ "name": "Philadelphia",
+ "neighborhoods": [
+  {
+   "name": "Fishtown",
+   "homes": "row houses and new apartment buildings"
+  },
+  {
+   "name": "University City",
+   "homes": "Victorian twins and student apartments"
+  },
+  {
+   "name": "South Philadelphia",
+   "homes": "brick row houses"
+  },
+  {
+   "name": "Fairmount",
+   "homes": "row houses and small apartment buildings"
+  },
+  {
+   "name": "Northern Liberties",
+   "homes": "new apartments and converted lofts"
+  },
+  {
+   "name": "Germantown",
+   "homes": "older twins, row houses and apartment buildings"
+  },
+  {
+   "name": "Center City",
+   "homes": "high-rises and row house apartments"
+  }
+ ],
+ "housing": "Philadelphia's rentals are mostly brick row houses, either whole or split into apartments, plus older twins and apartment buildings.",
+ "localRules": [
+  {
+   "text": "Philadelphia landlords who need a rental license must give each tenant a signed Certificate of Rental Suitability and the city's Partners for Good Housing handbook at the start of the tenancy.",
+   "source": "https://www.phila.gov/departments/fair-housing-commission/tenant-protections/rental-suitability/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Philly Tenant Hotline (TURN and Community Legal Services)",
+   "url": "https://clsphila.org/rtc",
+   "what": "free legal information and referral for renters"
+  },
+  {
+   "name": "City of Philadelphia: free legal help to avoid eviction",
+   "url": "https://phila.gov/services/property-lots-housing/get-free-legal-help-to-avoid-eviction/",
+   "what": "city right-to-counsel and eviction help"
+  }
+ ],
+ "climate": "Test the heat and look for leaks and damp in basements and around old windows; winters are cold and row houses are often old.",
+ "universities": [
+  "University of Pennsylvania",
+  "Temple University",
+  "Drexel University"
+ ],
+ "fact": "A Philadelphia landlord can only issue a Certificate of Rental Suitability with an active rental license and no open code violations.",
+ "checked": "November 2026"
+}

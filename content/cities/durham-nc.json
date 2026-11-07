@@ -1,0 +1,54 @@
+{
+ "name": "Durham",
+ "neighborhoods": [
+  {
+   "name": "Trinity Park",
+   "homes": "older houses and duplexes near Duke"
+  },
+  {
+   "name": "Walltown",
+   "homes": "small older houses"
+  },
+  {
+   "name": "Old West Durham",
+   "homes": "mill houses and bungalows"
+  },
+  {
+   "name": "Duke Park",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Old North Durham",
+   "homes": "historic houses, some split into units"
+  },
+  {
+   "name": "Northgate Park",
+   "homes": "small single-family homes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "new apartments and converted tobacco warehouses"
+  }
+ ],
+ "housing": "Durham's rentals range from mill houses and bungalows near downtown and Duke to new apartment buildings and large suburban complexes toward the south.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Durham Eviction Diversion Program",
+   "url": "https://www.durhamnc.gov/4611/Eviction-Diversion",
+   "what": "free legal help for tenants facing eviction"
+  },
+  {
+   "name": "Legal Aid of North Carolina",
+   "url": "https://legalaidnc.org/wp-content/uploads/2024/05/EDP-English-language-flier.docx.pdf",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and look for mold in bathrooms and crawl spaces; summers are hot and humid.",
+ "universities": [
+  "Duke University",
+  "North Carolina Central University"
+ ],
+ "fact": "Several of Durham's apartment buildings are converted tobacco warehouses from the city's industrial past.",
+ "checked": "November 2026"
+}

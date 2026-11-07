@@ -1,0 +1,59 @@
+{
+ "name": "Brisbane",
+ "neighborhoods": [
+  {
+   "name": "New Farm",
+   "homes": "apartments and Queenslanders"
+  },
+  {
+   "name": "West End",
+   "homes": "apartments and older houses"
+  },
+  {
+   "name": "Paddington",
+   "homes": "Queenslander houses"
+  },
+  {
+   "name": "Fortitude Valley",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "St Lucia",
+   "homes": "units near the university"
+  },
+  {
+   "name": "Woolloongabba",
+   "homes": "new apartments"
+  },
+  {
+   "name": "Toowong",
+   "homes": "units and houses"
+  }
+ ],
+ "housing": "Brisbane renters live in apartments and units, and in timber 'Queenslander' houses raised on stumps.",
+ "localRules": [
+  {
+   "text": "In Queensland the bond must be lodged with the Residential Tenancies Authority within 10 days of being received.",
+   "source": "https://rta.qld.gov.au/news/2024/09/30/gold-coast-property-owner-fined-for-failing-to-lodge-bond"
+  },
+  {
+   "text": "Queensland tenancies start with the RTA's entry condition report (Form 1a), which the tenant checks, signs and returns within 7 days.",
+   "source": "https://www.rta.qld.gov.au/Forms-and-publications/Forms/Forms-for-general-tenancies/Entry-condition-report-Form-1a"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenants Queensland",
+   "url": "https://tenantsqld.org.au/rental-bonds/",
+   "what": "free tenancy advice in Queensland"
+  }
+ ],
+ "climate": "Test the air conditioning and fans and check for mould; Brisbane summers are hot, humid and stormy.",
+ "universities": [
+  "University of Queensland",
+  "Queensland University of Technology",
+  "Griffith University"
+ ],
+ "fact": "Many older Brisbane homes are timber Queenslanders raised on stumps.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,53 @@
+{
+ "name": "Long Beach",
+ "neighborhoods": [
+  {
+   "name": "Belmont Shore",
+   "homes": "small apartment buildings, duplexes and beach cottages"
+  },
+  {
+   "name": "Bixby Knolls",
+   "homes": "1920s–50s houses"
+  },
+  {
+   "name": "Alamitos Beach",
+   "homes": "older apartment buildings near the ocean"
+  },
+  {
+   "name": "Downtown",
+   "homes": "high-rise and mid-rise apartments"
+  },
+  {
+   "name": "Bluff Heights",
+   "homes": "Craftsman bungalows and small apartment buildings"
+  },
+  {
+   "name": "Los Altos",
+   "homes": "post-war ranch houses"
+  },
+  {
+   "name": "Naples",
+   "homes": "canal-side houses and apartments"
+  }
+ ],
+ "housing": "Long Beach renters mostly live in small and mid-size apartment buildings, many built before 1980, along with duplexes and bungalows.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Foundation of Los Angeles, Long Beach office",
+   "url": "https://locator.lacounty.gov/lac/Location/3173607/legal-aid-foundation-of-los-angeles---long-beach-office",
+   "what": "free legal help for renters"
+  },
+  {
+   "name": "Fair Housing Foundation",
+   "url": "https://fhfca.org/resources",
+   "what": "landlord-tenant counseling and mediation"
+  }
+ ],
+ "climate": "Salt air near the coast causes rust and mold, so check window frames, railings and bathrooms; many older buildings have no air conditioning, so ask before you sign.",
+ "universities": [
+  "California State University, Long Beach"
+ ],
+ "fact": "Long Beach adopted its rental inspection program in 2015, and renters can ask a landlord whether the building is in good standing with it.",
+ "checked": "November 2026"
+}

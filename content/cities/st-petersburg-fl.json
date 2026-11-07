@@ -1,0 +1,54 @@
+{
+ "name": "St. Petersburg",
+ "neighborhoods": [
+  {
+   "name": "Old Northeast",
+   "homes": "historic bungalows and garage apartments"
+  },
+  {
+   "name": "Kenwood",
+   "homes": "1920s bungalows"
+  },
+  {
+   "name": "Crescent Lake",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartment and condo towers"
+  },
+  {
+   "name": "Old Southeast",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "Shore Acres",
+   "homes": "low-lying single-family homes"
+  },
+  {
+   "name": "Grand Central",
+   "homes": "older houses and small apartment buildings"
+  }
+ ],
+ "housing": "St. Petersburg renters live in older bungalows and garage apartments, downtown condo and apartment towers, and large apartment complexes further north.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Gulfcoast Legal Services",
+   "url": "https://www.floridalawhelp.org/gulfcoast-legal-services",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "Pinellas County Help with Housing",
+   "url": "https://rent.pinellas.gov/?p=3303",
+   "what": "county renter resources"
+  }
+ ],
+ "climate": "Test the air conditioning, look for mold and water stains, and ask about past flooding and hurricane shutters; the city is humid, low-lying and in hurricane country.",
+ "universities": [
+  "USF St. Petersburg",
+  "Eckerd College"
+ ],
+ "fact": "St. Petersburg repealed its Tenant Bill of Rights in 2023 after Florida took all landlord-tenant rules back to the state.",
+ "checked": "November 2026"
+}

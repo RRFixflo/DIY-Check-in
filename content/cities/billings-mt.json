@@ -1,0 +1,39 @@
+{
+ "name": "Billings",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Billings Heights",
+   "homes": "single-family houses and apartment complexes"
+  },
+  {
+   "name": "West End",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "South Side",
+   "homes": "older small houses"
+  },
+  {
+   "name": "North Elevation",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Central-Terry",
+   "homes": "older single-family houses"
+  }
+ ],
+ "housing": "Billings' rentals are mostly single-family houses and apartment complexes, with older homes near downtown and newer ones on the West End and in the Heights.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace, check windows for drafts and photograph the roof and siding for hail damage; winters are cold and windy.",
+ "universities": [
+  "Montana State University Billings",
+  "Rocky Mountain College"
+ ],
+ "fact": "Billings is the largest city in Montana.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,58 @@
+{
+ "name": "Tampa",
+ "neighborhoods": [
+  {
+   "name": "Hyde Park",
+   "homes": "historic bungalows and apartments"
+  },
+  {
+   "name": "Seminole Heights",
+   "homes": "1920s bungalows and duplexes"
+  },
+  {
+   "name": "Ybor City",
+   "homes": "lofts and apartments in historic buildings"
+  },
+  {
+   "name": "South Tampa",
+   "homes": "single-family houses and condos"
+  },
+  {
+   "name": "Channelside",
+   "homes": "high-rise condos and apartments"
+  },
+  {
+   "name": "Westchase",
+   "homes": "townhomes and suburban houses"
+  },
+  {
+   "name": "New Tampa",
+   "homes": "apartment complexes and newer houses"
+  },
+  {
+   "name": "University area",
+   "homes": "student apartments near USF"
+  }
+ ],
+ "housing": "Tampa renters live in apartment complexes, condos, townhomes and single-family houses, with historic bungalows in Seminole Heights and Hyde Park.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Bay Area Legal Services",
+   "url": "https://bals.org/help/landlord-tenant-eviction",
+   "what": "free legal help with landlord disputes and evictions"
+  },
+  {
+   "name": "Hillsborough County Housing Stability Program",
+   "url": "https://www.hillsboroughcounty.org/en/residents/social-services/affordable-housing/housing-stability-program",
+   "what": "county-funded legal information for renters"
+  }
+ ],
+ "climate": "Test the air conditioning, check for mold and water stains, ask about the flood zone and hurricane shutters, and photograph windows and roof before storm season.",
+ "universities": [
+  "University of South Florida",
+  "University of Tampa"
+ ],
+ "fact": "Much of Tampa is in hurricane flood zones, so ask your landlord about storm shutters and whether the home has flooded before.",
+ "checked": "November 2026"
+}

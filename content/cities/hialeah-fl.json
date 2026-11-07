@@ -1,0 +1,34 @@
+{
+ "name": "Hialeah",
+ "neighborhoods": [
+  {
+   "name": "East Hialeah",
+   "homes": "older concrete block houses and apartment buildings"
+  },
+  {
+   "name": "West Hialeah",
+   "homes": "single-family homes and newer apartments"
+  },
+  {
+   "name": "Hialeah Park area",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Seminola",
+   "homes": "older single-family homes"
+  }
+ ],
+ "housing": "Hialeah's rentals are mostly concrete block houses and low-rise apartment buildings, and many homes have extra rooms or units added on.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Services of Greater Miami",
+   "url": "https://www.floridalawhelp.org/legal-services-greater-miami",
+   "what": "free legal help for low-income renters in Miami-Dade"
+  }
+ ],
+ "climate": "Photograph the AC, windows and shutters, and look for mold and water stains; heat, humidity and hurricanes are year-round concerns.",
+ "universities": [],
+ "fact": "Many Hialeah homes have add-on units known locally as efficiencies, and some were built without permits, so check the unit is legal before renting it.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,60 @@
+{
+ "name": "Melbourne",
+ "neighborhoods": [
+  {
+   "name": "Fitzroy",
+   "homes": "terrace houses and apartments"
+  },
+  {
+   "name": "Brunswick",
+   "homes": "houses and new apartment blocks"
+  },
+  {
+   "name": "St Kilda",
+   "homes": "older flats and apartments"
+  },
+  {
+   "name": "Richmond",
+   "homes": "workers' cottages and apartments"
+  },
+  {
+   "name": "Carlton",
+   "homes": "terraces and student apartments"
+  },
+  {
+   "name": "Footscray",
+   "homes": "houses and new apartments"
+  },
+  {
+   "name": "Southbank",
+   "homes": "apartment towers"
+  }
+ ],
+ "housing": "Melbourne renters live in inner-city apartments, older brick flats and Victorian terrace houses and cottages, with houses in the outer suburbs.",
+ "localRules": [
+  {
+   "text": "In Victoria the bond must be lodged with the Residential Tenancies Bond Authority (RTBA), which sends the renter a receipt.",
+   "source": "https://www.consumer.vic.gov.au/housing/renting/rent-bond-bills-and-condition-reports/bond/lodging-the-bond-with-the-rtba"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenants Victoria",
+   "url": "https://tenantsvic.org.au/contact-us/",
+   "what": "free advice for renters in Victoria"
+  },
+  {
+   "name": "Victorian Government renting help",
+   "url": "https://www.vic.gov.au/getting-help-with-renting-problems",
+   "what": "where to get help with renting problems"
+  }
+ ],
+ "climate": "Melbourne weather changes fast, so test both heating and cooling and check for draughts and mould.",
+ "universities": [
+  "University of Melbourne",
+  "Monash University",
+  "RMIT University"
+ ],
+ "fact": "Melbourne's weather is known for having four seasons in one day.",
+ "checked": "November 2026"
+}

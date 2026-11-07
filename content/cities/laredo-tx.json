@@ -1,0 +1,44 @@
+{
+ "name": "Laredo",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "The Heights",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Del Mar",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "North Laredo",
+   "homes": "newer single-family homes and apartments"
+  },
+  {
+   "name": "San Isidro",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "El Azteca",
+   "homes": "historic small houses near the river"
+  }
+ ],
+ "housing": "Laredo's rentals are mostly single-family homes and apartment complexes, with newer subdivisions in the north and older houses near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Texas RioGrande Legal Aid",
+   "url": "https://trla.org/news-releases/stop-tx-eviction-launches-to-keep-renters-housed?format=amp",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; Laredo is one of the hottest cities in Texas.",
+ "universities": [
+  "Texas A&M International University"
+ ],
+ "fact": "Texas RioGrande Legal Aid has an office in Laredo for low-income renters.",
+ "checked": "November 2026"
+}

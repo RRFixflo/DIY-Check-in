@@ -1,0 +1,49 @@
+{
+ "name": "Virginia Beach",
+ "neighborhoods": [
+  {
+   "name": "Oceanfront",
+   "homes": "condos, cottages and apartments near the beach"
+  },
+  {
+   "name": "Hilltop",
+   "homes": "apartment complexes and houses"
+  },
+  {
+   "name": "Town Center",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Kempsville",
+   "homes": "ranch houses and townhomes"
+  },
+  {
+   "name": "Great Neck",
+   "homes": "larger single-family houses"
+  },
+  {
+   "name": "Chic's Beach",
+   "homes": "beach cottages and condos"
+  },
+  {
+   "name": "Princess Anne",
+   "homes": "newer houses and townhomes"
+  }
+ ],
+ "housing": "Virginia Beach rentals are mostly single-family houses, townhomes and apartment complexes, with condos and cottages near the oceanfront.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Eastern Virginia",
+   "url": "https://www.wtkr.com/news/free-legal-aid-helps-tenants-navigate-living-conditions",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Humidity and coastal storms mean you should check for mold, water stains and window leaks, test the air conditioning, and ask about flood risk and hurricane shutters.",
+ "universities": [
+  "Regent University",
+  "Virginia Wesleyan University"
+ ],
+ "fact": "Naval Air Station Oceana and other Hampton Roads bases bring frequent military moves, so many leases include a military clause.",
+ "checked": "November 2026"
+}

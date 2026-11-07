@@ -1,0 +1,45 @@
+{
+ "name": "Montgomery",
+ "neighborhoods": [
+  {
+   "name": "Old Cloverdale",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Cloverdale-Idlewild",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "Garden District",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "Capitol Heights",
+   "homes": "older bungalows"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts in converted buildings"
+  },
+  {
+   "name": "East Montgomery",
+   "homes": "apartment complexes and newer houses"
+  }
+ ],
+ "housing": "Montgomery's rentals are mostly single-family houses and apartment complexes, with older homes in Cloverdale and the Garden District and newer complexes in East Montgomery.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Services Alabama",
+   "url": "https://legalservicesalabama.org/",
+   "what": "free civil legal help for low-income renters, including evictions and repairs"
+  }
+ ],
+ "climate": "Test the air conditioning and check for damp, mold and pests; summers are long, hot and humid.",
+ "universities": [
+  "Alabama State University",
+  "Auburn University at Montgomery"
+ ],
+ "fact": "Maxwell Air Force Base is home to Air University, so many officers rent in Montgomery for a single school year.",
+ "checked": "November 2026"
+}

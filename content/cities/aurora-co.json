@@ -1,0 +1,41 @@
+{
+ "name": "Aurora",
+ "neighborhoods": [
+  {
+   "name": "Original Aurora",
+   "homes": "older houses and small apartment buildings along Colfax"
+  },
+  {
+   "name": "Southlands",
+   "homes": "suburban houses and apartment complexes"
+  },
+  {
+   "name": "Saddle Rock",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Hoffman Heights",
+   "homes": "post-war ranch houses"
+  },
+  {
+   "name": "Fitzsimons",
+   "homes": "new apartment buildings near the Anschutz Medical Campus"
+  }
+ ],
+ "housing": "Aurora renters live mostly in apartment complexes and single-family houses, with older buildings along Colfax and new apartments near the medical campus.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Colorado Legal Services",
+   "url": "https://www.coloradolegalservices.org/event/renters-rights-101-workshop-virtual-and-in-person/",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Hail is common, so photograph the roof, windows and siding; test the furnace and air conditioning, as winters are cold and summers hot.",
+ "universities": [
+  "University of Colorado Anschutz Medical Campus",
+  "Community College of Aurora"
+ ],
+ "fact": "Aurora was developing a rental registration and licensing program in 2026, tentatively to start in January 2027.",
+ "checked": "November 2026"
+}

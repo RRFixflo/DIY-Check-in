@@ -1,0 +1,44 @@
+{
+ "name": "Fort Wayne",
+ "neighborhoods": [
+  {
+   "name": "West Central",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "new apartments and lofts"
+  },
+  {
+   "name": "Southwood Park",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "North Anthony",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "Aboite",
+   "homes": "suburban single-family homes and apartment complexes"
+  },
+  {
+   "name": "Waynedale",
+   "homes": "small single-family homes"
+  }
+ ],
+ "housing": "Fort Wayne renters mostly live in single-family homes and duplexes, apartment complexes on the edges of the city, and newer downtown apartments.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Allen County Legal Service Providers",
+   "url": "https://www.allencounty.in.gov/1083/Legal-Service-Providers",
+   "what": "list of free and low-cost legal help, including Indiana Legal Services"
+  }
+ ],
+ "climate": "Test the furnace and check the basement and sump pump for water; Fort Wayne has cold winters and wet springs.",
+ "universities": [
+  "Purdue University Fort Wayne"
+ ],
+ "fact": "Indiana Legal Services has a Fort Wayne office that helps low-income tenants with evictions and repair problems.",
+ "checked": "November 2026"
+}

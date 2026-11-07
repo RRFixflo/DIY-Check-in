@@ -1,0 +1,52 @@
+{
+ "name": "Yonkers",
+ "neighborhoods": [
+  {
+   "name": "Getty Square / Downtown",
+   "homes": "prewar apartment buildings and new waterfront towers"
+  },
+  {
+   "name": "Ludlow",
+   "homes": "two-family homes and apartment buildings"
+  },
+  {
+   "name": "Park Hill",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Crestwood",
+   "homes": "single-family homes and co-ops"
+  },
+  {
+   "name": "Lincoln Park",
+   "homes": "two-family homes and apartment buildings"
+  },
+  {
+   "name": "Nodine Hill",
+   "homes": "older multi-family houses"
+  }
+ ],
+ "housing": "Yonkers renters live mostly in prewar and mid-century apartment buildings and two- and three-family houses, with new towers on the waterfront.",
+ "localRules": [
+  {
+   "text": "Many older Yonkers apartment buildings are rent-stabilized under the Emergency Tenant Protection Act, with rent increases set by the Westchester County Rent Guidelines Board.",
+   "source": "https://homes.westchestercountyny.gov/tenants/rent-control"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Services of the Hudson Valley",
+   "url": "https://www.lshv.org",
+   "what": "free legal help for low-income tenants, with a Yonkers office"
+  },
+  {
+   "name": "Westchester County rent control information",
+   "url": "https://homes.westchestercountyny.gov/tenants/rent-control",
+   "what": "rules and help for rent-stabilized tenants"
+  }
+ ],
+ "climate": "Test the heat and hot water and check radiators and windows; winters are cold.",
+ "universities": [],
+ "fact": "Yonkers has thousands of rent-stabilized apartments, so check whether your unit is one before signing.",
+ "checked": "November 2026"
+}

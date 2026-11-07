@@ -1,0 +1,54 @@
+{
+ "name": "New York",
+ "neighborhoods": [
+  {
+   "name": "Astoria",
+   "homes": "walk-up apartments in two-family houses and prewar buildings"
+  },
+  {
+   "name": "Bushwick",
+   "homes": "railroad apartments in walk-ups and converted lofts"
+  },
+  {
+   "name": "Washington Heights",
+   "homes": "large prewar elevator buildings"
+  },
+  {
+   "name": "Park Slope",
+   "homes": "floors of brownstones and small walk-up buildings"
+  },
+  {
+   "name": "Upper West Side",
+   "homes": "prewar co-op and rental buildings and brownstone units"
+  },
+  {
+   "name": "Harlem",
+   "homes": "brownstone apartments and older walk-up and elevator buildings"
+  },
+  {
+   "name": "Jackson Heights",
+   "homes": "prewar garden apartment buildings"
+  },
+  {
+   "name": "Bay Ridge",
+   "homes": "apartments in row houses and prewar buildings"
+  }
+ ],
+ "housing": "Most New Yorkers rent, mostly in prewar walk-ups, elevator buildings and floors of row houses; a large share of apartments are rent stabilized.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "NYC Mayor's Office to Protect Tenants",
+   "url": "https://www.nyc.gov/tenantprotection",
+   "what": "city office with tenant rights information and help"
+  }
+ ],
+ "climate": "Turn on the heat and hot water and photograph radiators and window seals; winters are cold and landlords must provide heat during the heat season.",
+ "universities": [
+  "Columbia University",
+  "New York University",
+  "City University of New York"
+ ],
+ "fact": "Many New York apartments are rent stabilized, so it is worth asking the landlord or checking with the state whether yours is covered before you sign.",
+ "checked": "November 2026"
+}

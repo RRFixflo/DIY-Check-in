@@ -1,0 +1,54 @@
+{
+ "name": "Newark",
+ "neighborhoods": [
+  {
+   "name": "Ironbound",
+   "homes": "two- and three-family frame houses"
+  },
+  {
+   "name": "Forest Hill",
+   "homes": "large older houses and apartment buildings"
+  },
+  {
+   "name": "North Ward",
+   "homes": "multi-family houses and brick apartment buildings"
+  },
+  {
+   "name": "Vailsburg",
+   "homes": "two-family homes and apartments"
+  },
+  {
+   "name": "Weequahic",
+   "homes": "older single and multi-family homes"
+  },
+  {
+   "name": "University Heights",
+   "homes": "student apartments and newer buildings"
+  },
+  {
+   "name": "Downtown",
+   "homes": "new apartment towers and converted buildings"
+  }
+ ],
+ "housing": "Newark's rentals are mostly two- and three-family houses and brick apartment buildings, with new apartment towers near downtown and Newark Penn Station.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Newark Office of Rent Control",
+   "url": "https://newarknj.gov/departments/rentcontrol",
+   "what": "rent control and registration questions"
+  },
+  {
+   "name": "Essex-Newark Legal Services",
+   "url": "https://lsnj.org/ENLS/community.html",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the heat and every radiator, and check windows for drafts; New Jersey winters are cold and many buildings are old.",
+ "universities": [
+  "Rutgers University–Newark",
+  "New Jersey Institute of Technology"
+ ],
+ "fact": "Newark also runs an Office of Tenant Legal Services that gives free legal help to low-income tenants facing eviction.",
+ "checked": "November 2026"
+}

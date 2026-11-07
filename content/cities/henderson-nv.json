@@ -1,0 +1,49 @@
+{
+ "name": "Henderson",
+ "neighborhoods": [
+  {
+   "name": "Green Valley",
+   "homes": "suburban houses, townhomes and apartment complexes"
+  },
+  {
+   "name": "Anthem",
+   "homes": "newer houses in a master-planned community"
+  },
+  {
+   "name": "Inspirada",
+   "homes": "new houses and townhomes"
+  },
+  {
+   "name": "Water Street District",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "Seven Hills",
+   "homes": "larger houses and apartment complexes"
+  },
+  {
+   "name": "MacDonald Ranch",
+   "homes": "single-family houses"
+  }
+ ],
+ "housing": "Henderson renters mostly live in houses, townhomes and apartment complexes in master-planned communities, many with homeowners' association rules.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Center of Southern Nevada",
+   "url": "https://lacsn.org/who-we-are/legal-aid-in-the-news",
+   "what": "free legal help and eviction advice"
+  },
+  {
+   "name": "City of Henderson resources for residents",
+   "url": "https://cityofhenderson.com/government/departments/community-development-and-services/housing/resources-for-residents",
+   "what": "city list of housing and legal help"
+  }
+ ],
+ "climate": "Summer highs above 110°F make working air conditioning essential; test it, check window coverings and seals, and photograph yard and pool equipment.",
+ "universities": [
+  "Nevada State University"
+ ],
+ "fact": "Henderson has no rental rules beyond Nevada state law, so the lease and a dated move-in record carry extra weight.",
+ "checked": "November 2026"
+}

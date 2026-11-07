@@ -1,0 +1,58 @@
+{
+ "name": "Swansea",
+ "neighborhoods": [
+  {
+   "name": "Uplands",
+   "homes": "Victorian terraced houses and student shared houses"
+  },
+  {
+   "name": "Brynmill",
+   "homes": "terraced houses let to students"
+  },
+  {
+   "name": "Sketty",
+   "homes": "semi-detached houses and flats"
+  },
+  {
+   "name": "Mumbles",
+   "homes": "houses and seafront flats"
+  },
+  {
+   "name": "St Thomas",
+   "homes": "terraced houses"
+  },
+  {
+   "name": "Swansea Marina",
+   "homes": "modern apartment blocks"
+  },
+  {
+   "name": "Mount Pleasant",
+   "homes": "hillside terraced houses"
+  }
+ ],
+ "housing": "Swansea's rentals are mostly terraced houses, many shared by students in Uplands and Brynmill, with flats in the city centre and Marina.",
+ "localRules": [
+  {
+   "text": "Every private landlord letting a home in Wales must register with Rent Smart Wales, and a landlord who manages the home themselves (or their agent) also needs a licence.",
+   "source": "https://rentsmart.gov.wales/Uploads/Downloads/00/00/02/03/DownloadFileEN_FILE/ENG-Registration-and-Licensing-leaflet-Digital.pdf"
+  },
+  {
+   "text": "Deposits in Wales must be put in a government-backed tenancy deposit scheme within 30 days of the landlord receiving them.",
+   "source": "https://www.flintshire.gov.uk/en/Resident/Housing/Landlords/Related-Pages/Landlord-Responsibilities.aspx"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Shelter Cymru",
+   "url": "https://sheltercymru.org.uk/housing-advice-parent/",
+   "what": "free housing advice charity in Wales"
+  }
+ ],
+ "climate": "Check for damp and mould, and photograph gutters and window seals; Swansea is one of the wetter UK cities.",
+ "universities": [
+  "Swansea University",
+  "University of Wales Trinity Saint David"
+ ],
+ "fact": "Uplands and Brynmill are Swansea's main student areas, so many shared-house lets run from summer to summer.",
+ "checked": "November 2026"
+}

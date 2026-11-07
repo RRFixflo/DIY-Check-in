@@ -1,0 +1,58 @@
+{
+ "name": "Auckland",
+ "neighborhoods": [
+  {
+   "name": "Ponsonby",
+   "homes": "villas and apartments"
+  },
+  {
+   "name": "Grey Lynn",
+   "homes": "villas and bungalows"
+  },
+  {
+   "name": "Mount Eden",
+   "homes": "villas and flats"
+  },
+  {
+   "name": "Kingsland",
+   "homes": "villas and apartments"
+  },
+  {
+   "name": "Parnell",
+   "homes": "villas and apartments"
+  },
+  {
+   "name": "Onehunga",
+   "homes": "houses and townhouses"
+  },
+  {
+   "name": "Takapuna",
+   "homes": "apartments and houses"
+  },
+  {
+   "name": "CBD",
+   "homes": "apartment towers"
+  }
+ ],
+ "housing": "Auckland renters live in wooden villas and bungalows, townhouses and city apartments.",
+ "localRules": [
+  {
+   "text": "Landlords in New Zealand must give a receipt for the bond and lodge it with Tenancy Services within 23 working days of receiving it.",
+   "source": "https://www.tenancy.govt.nz/rent-bond-and-bills/bond/preventing-problems-with-bonds/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenancy Services",
+   "url": "https://tenancy.govt.nz/about-tenancy-services/contact-us",
+   "what": "government tenancy service: bonds, rights and the Tenancy Tribunal"
+  }
+ ],
+ "climate": "Check for damp and mould and test the heating and extractor fans; Auckland is mild but humid.",
+ "universities": [
+  "University of Auckland",
+  "Auckland University of Technology"
+ ],
+ "fact": "Many older Auckland rentals are wooden villas, which can be cold and damp in winter.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,58 @@
+{
+ "name": "Cardiff",
+ "neighborhoods": [
+  {
+   "name": "Cathays",
+   "homes": "Victorian terraced houses let as student shared houses"
+  },
+  {
+   "name": "Roath",
+   "homes": "Victorian terraces and converted flats"
+  },
+  {
+   "name": "Canton",
+   "homes": "terraced houses and flats"
+  },
+  {
+   "name": "Pontcanna",
+   "homes": "Victorian houses split into flats"
+  },
+  {
+   "name": "Cardiff Bay",
+   "homes": "modern apartment blocks"
+  },
+  {
+   "name": "Splott",
+   "homes": "small terraced houses"
+  },
+  {
+   "name": "Grangetown",
+   "homes": "terraced houses and new-build flats"
+  }
+ ],
+ "housing": "Cardiff's rentals are largely Victorian terraced houses, many let as shared student houses, plus modern flats in the city centre and Cardiff Bay.",
+ "localRules": [
+  {
+   "text": "Every private landlord letting a home in Wales must register with Rent Smart Wales, and a landlord who manages the home themselves (or their agent) also needs a licence.",
+   "source": "https://rentsmart.gov.wales/Uploads/Downloads/00/00/02/03/DownloadFileEN_FILE/ENG-Registration-and-Licensing-leaflet-Digital.pdf"
+  },
+  {
+   "text": "Deposits in Wales must be put in a government-backed tenancy deposit scheme within 30 days of the landlord receiving them.",
+   "source": "https://www.flintshire.gov.uk/en/Resident/Housing/Landlords/Related-Pages/Landlord-Responsibilities.aspx"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Shelter Cymru",
+   "url": "https://sheltercymru.org.uk/housing-advice-parent/",
+   "what": "free housing advice charity in Wales"
+  }
+ ],
+ "climate": "Photograph any damp, mould and condensation on walls and window frames; Cardiff's mild, wet climate makes these the most common disputes.",
+ "universities": [
+  "Cardiff University",
+  "Cardiff Metropolitan University"
+ ],
+ "fact": "Cathays is one of the UK's densest student areas, so many Cardiff tenancies start in summer for the academic year.",
+ "checked": "November 2026"
+}

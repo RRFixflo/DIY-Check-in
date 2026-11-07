@@ -1,0 +1,38 @@
+{
+ "name": "Orlando",
+ "neighborhoods": [
+  {
+   "name": "Thornton Park",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "College Park",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Mills 50",
+   "homes": "small apartment buildings and houses"
+  },
+  {
+   "name": "Baldwin Park",
+   "homes": "newer apartments and townhouses"
+  },
+  {
+   "name": "Lake Nona",
+   "homes": "newer apartment complexes and houses"
+  },
+  {
+   "name": "Downtown Orlando",
+   "homes": "mid-rise and high-rise apartments"
+  }
+ ],
+ "housing": "Orlando renters mostly live in garden apartment complexes and rented single-family homes, with many newer complexes in the suburbs.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the air conditioning, check for mold and leaks, and note hurricane shutters; summers are hot, humid and stormy.",
+ "universities": [
+  "University of Central Florida"
+ ],
+ "fact": "Orange County's Tenant Bill of Rights covers only unincorporated areas, so it does not apply inside Orlando city limits.",
+ "checked": "November 2026"
+}

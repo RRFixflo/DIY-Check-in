@@ -1,0 +1,59 @@
+{
+ "name": "Toronto",
+ "neighborhoods": [
+  {
+   "name": "The Annex",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "Liberty Village",
+   "homes": "condo towers"
+  },
+  {
+   "name": "Leslieville",
+   "homes": "semi-detached houses and basement apartments"
+  },
+  {
+   "name": "High Park",
+   "homes": "houses and older apartment buildings"
+  },
+  {
+   "name": "St. James Town",
+   "homes": "high-rise rental towers"
+  },
+  {
+   "name": "Yonge and Eglinton",
+   "homes": "condo and rental towers"
+  },
+  {
+   "name": "The Danforth",
+   "homes": "houses with upper and basement units"
+  },
+  {
+   "name": "North York",
+   "homes": "condo towers and townhouses"
+  }
+ ],
+ "housing": "Toronto renters live mainly in condo units rented from individual owners, older purpose-built rental towers, and rooms or basement apartments in houses.",
+ "localRules": [
+  {
+   "text": "Most residential tenancies in Ontario signed on or after April 30, 2018 must use the province's standard lease; a landlord may take a rent deposit but not a damage deposit.",
+   "source": "https://www.ontario.ca/page/guide-ontarios-standard-lease"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Advocacy Centre for Tenants Ontario (ACTO)",
+   "url": "https://tdc.acto.ca",
+   "what": "free duty counsel for low-income tenants at the Landlord and Tenant Board"
+  }
+ ],
+ "climate": "Test the heating before winter and photograph windows and balcony doors; also check whether the unit has air conditioning, as Toronto summers are humid.",
+ "universities": [
+  "University of Toronto",
+  "Toronto Metropolitan University",
+  "York University"
+ ],
+ "fact": "Many Toronto rentals are condo units owned by individual investors, so the landlord is often not the building's manager.",
+ "checked": "November 2026"
+}

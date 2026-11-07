@@ -1,0 +1,49 @@
+{
+ "name": "Lubbock",
+ "neighborhoods": [
+  {
+   "name": "Tech Terrace",
+   "homes": "older houses rented to students"
+  },
+  {
+   "name": "Overton",
+   "homes": "student apartments near Texas Tech"
+  },
+  {
+   "name": "Heart of Lubbock",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "South Lubbock",
+   "homes": "newer single-family homes and apartment complexes"
+  },
+  {
+   "name": "Bayless-Atkins",
+   "homes": "older houses and duplexes"
+  }
+ ],
+ "housing": "Lubbock's rentals are shaped by Texas Tech: student apartment complexes and houses near campus, plus single-family homes and duplexes across the city.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "Lubbock Eviction Legal Clinic",
+   "url": "https://texaslawhelp.org/event/home-preservation-project-lubbock-eviction-legal-clinic",
+   "what": "free walk-in landlord-tenant clinic"
+  }
+ ],
+ "climate": "Test the air conditioning and heating, and check windows, screens and the roof for hail and dust damage; West Texas has hot summers, hail and dust storms.",
+ "universities": [
+  "Texas Tech University"
+ ],
+ "fact": "Many leases near Texas Tech follow the school year.",
+ "checked": "November 2026"
+}

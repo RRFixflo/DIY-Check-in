@@ -1,0 +1,49 @@
+{
+ "name": "Tulsa",
+ "neighborhoods": [
+  {
+   "name": "Brookside",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Cherry Street",
+   "homes": "1920s–30s houses and duplexes"
+  },
+  {
+   "name": "Maple Ridge",
+   "homes": "large historic houses"
+  },
+  {
+   "name": "Brady Arts District",
+   "homes": "lofts and new apartments downtown"
+  },
+  {
+   "name": "Kendall-Whittier",
+   "homes": "older houses near the University of Tulsa"
+  },
+  {
+   "name": "Midtown",
+   "homes": "houses and apartment complexes"
+  },
+  {
+   "name": "South Tulsa",
+   "homes": "apartment complexes and suburban houses"
+  }
+ ],
+ "housing": "Tulsa renters mostly live in single-family houses and apartment complexes, with older bungalows and duplexes in Midtown and lofts downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Services of Oklahoma (Tulsa Right to Counsel)",
+   "url": "https://legalaidok.org/tulsa-rtc-program",
+   "what": "free eviction help for tenants in certain Tulsa ZIP codes"
+  }
+ ],
+ "climate": "Ask where to shelter in a tornado, test heating and cooling, and photograph the roof and windows for hail damage.",
+ "universities": [
+  "University of Tulsa",
+  "Oklahoma State University–Tulsa"
+ ],
+ "fact": "Legal Aid Services of Oklahoma offers free eviction help to tenants in several south Tulsa ZIP codes through its Right to Counsel program.",
+ "checked": "November 2026"
+}

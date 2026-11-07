@@ -1,0 +1,69 @@
+{
+ "name": "Grand Rapids",
+ "neighborhoods": [
+  {
+   "name": "Heritage Hill",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "Eastown",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "East Hills",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Midtown",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Creston",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Garfield Park",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "West Side",
+   "homes": "older houses, many rented to students"
+  }
+ ],
+ "housing": "Grand Rapids' rentals are mostly older wood-frame houses and duplexes, many built before 1978, plus newer downtown apartments.",
+ "localRules": [
+  {
+   "text": "Grand Rapids requires a Certificate of Compliance for every rental unit not lived in by its owner, and no one can move in until it is issued.",
+   "source": "https://www.grandrapidsmi.gov/departments/code-compliance/rental-properties/rental-certification-program/"
+  },
+  {
+   "text": "As part of rental certification, the city screens rentals built before 1978 for lead hazards.",
+   "source": "https://www.grandrapidsmi.gov/departments/code-compliance/lead-based-paint/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Fair Housing Center of West Michigan",
+   "url": "https://michiganlegalhelp.org/node/1325",
+   "what": "help with housing discrimination"
+  },
+  {
+   "name": "City of Grand Rapids Rental Certification Program",
+   "url": "https://www.grandrapidsmi.gov/departments/code-compliance/rental-properties/rental-certification-program/",
+   "what": "city code inspections of rental homes"
+  }
+ ],
+ "climate": "Test the furnace, check windows for drafts and ask who clears snow; winters are long and snowy.",
+ "universities": [
+  "Grand Valley State University",
+  "Calvin University",
+  "Aquinas College",
+  "Kendall College of Art and Design"
+ ],
+ "fact": "Heritage Hill is one of the largest urban historic districts in the country, and many of its big old houses are now apartments.",
+ "checked": "November 2026"
+}

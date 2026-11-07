@@ -1,0 +1,44 @@
+{
+ "name": "Mesa",
+ "neighborhoods": [
+  {
+   "name": "Downtown Mesa",
+   "homes": "older houses, small apartments and new mid-rise buildings near light rail"
+  },
+  {
+   "name": "Dobson Ranch",
+   "homes": "1970s–80s houses and townhomes"
+  },
+  {
+   "name": "Red Mountain",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Eastmark",
+   "homes": "new houses in a master-planned community"
+  },
+  {
+   "name": "Las Sendas",
+   "homes": "larger houses near the mountains"
+  },
+  {
+   "name": "West Mesa",
+   "homes": "ranch houses and apartment complexes"
+  }
+ ],
+ "housing": "Mesa's rentals are mostly single-family houses, townhomes and apartment complexes, many inside homeowners' associations, plus park models and mobile homes in the east.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Community Legal Services",
+   "url": "https://www.maricopa.gov/legalhelp",
+   "what": "free legal help for Maricopa County renters facing eviction"
+  }
+ ],
+ "climate": "Summer highs above 110°F make a working air conditioner essential; test it, check the thermostat, and photograph the roof and pool equipment if there is one.",
+ "universities": [
+  "Arizona State University (Polytechnic campus)"
+ ],
+ "fact": "Many Mesa homes and park models are rented to winter visitors from about October to April.",
+ "checked": "November 2026"
+}

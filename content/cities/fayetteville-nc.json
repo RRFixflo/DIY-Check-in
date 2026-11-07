@@ -1,0 +1,46 @@
+{
+ "name": "Fayetteville",
+ "neighborhoods": [
+  {
+   "name": "Haymount",
+   "homes": "historic houses and small apartment buildings"
+  },
+  {
+   "name": "Downtown",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Lake Rim",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Arran Lakes",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Gates Four",
+   "homes": "single-family homes in a golf community"
+  }
+ ],
+ "housing": "Fayetteville's rentals are mostly single-family homes and apartment complexes, many rented by military families.",
+ "localRules": [
+  {
+   "text": "Fayetteville's Rental Action Management Program requires owners of rentals with repeated code violations to register them with the city.",
+   "source": "https://cityrulelookup.com/blog/rental-property-rules-in-fayetteville-nc"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of North Carolina",
+   "url": "https://legalaidnc.org/what-we-do/housing",
+   "what": "free legal help with evictions, repairs and housing problems"
+  }
+ ],
+ "climate": "Test the air conditioning and check for mold and pests; summers are hot and humid.",
+ "universities": [
+  "Fayetteville State University",
+  "Methodist University"
+ ],
+ "fact": "Fayetteville is next to Fort Bragg, so many leases follow military moves and include military clauses.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,39 @@
+{
+ "name": "Columbus",
+ "neighborhoods": [
+  {
+   "name": "Short North",
+   "homes": "apartments above shops and new mid-rises"
+  },
+  {
+   "name": "German Village",
+   "homes": "brick cottages and row houses"
+  },
+  {
+   "name": "Clintonville",
+   "homes": "houses and doubles"
+  },
+  {
+   "name": "University District",
+   "homes": "student houses and apartments"
+  },
+  {
+   "name": "Victorian Village",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "Olde Towne East",
+   "homes": "historic houses and apartments"
+  }
+ ],
+ "housing": "Columbus renters live in apartment complexes, half-doubles (two-family houses) and many student rentals near Ohio State.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace and look for drafts and damp basements; winters are cold and snowy.",
+ "universities": [
+  "Ohio State University",
+  "Columbus State Community College"
+ ],
+ "fact": null,
+ "checked": "November 2026"
+}

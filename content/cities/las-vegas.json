@@ -1,0 +1,44 @@
+{
+ "name": "Las Vegas",
+ "neighborhoods": [
+  {
+   "name": "Summerlin",
+   "homes": "apartment complexes and single-family homes"
+  },
+  {
+   "name": "Henderson",
+   "homes": "apartment complexes and houses"
+  },
+  {
+   "name": "Spring Valley",
+   "homes": "apartment complexes and condos"
+  },
+  {
+   "name": "Downtown Las Vegas",
+   "homes": "older apartments and new mid-rises"
+  },
+  {
+   "name": "Southwest Las Vegas",
+   "homes": "newer apartment complexes and houses"
+  },
+  {
+   "name": "North Las Vegas",
+   "homes": "single-family homes and apartments"
+  }
+ ],
+ "housing": "Las Vegas renters mostly live in garden apartment complexes, condos and rented single-family homes in master-planned areas.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Civil Law Self-Help Center",
+   "url": "https://www.civillawselfhelpcenter.org",
+   "what": "free forms and information, mostly on evictions"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; summer heat makes a broken AC an urgent repair.",
+ "universities": [
+  "UNLV"
+ ],
+ "fact": "The Civil Law Self-Help Center at the Regional Justice Center sees mostly eviction cases.",
+ "checked": "November 2026"
+}

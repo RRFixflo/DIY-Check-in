@@ -1,0 +1,69 @@
+{
+ "name": "Glasgow",
+ "neighborhoods": [
+  {
+   "name": "West End",
+   "homes": "red and blond sandstone tenement flats"
+  },
+  {
+   "name": "Partick",
+   "homes": "tenement flats"
+  },
+  {
+   "name": "Finnieston",
+   "homes": "tenements and new-build flats"
+  },
+  {
+   "name": "Dennistoun",
+   "homes": "tenement flats"
+  },
+  {
+   "name": "Shawlands",
+   "homes": "tenement flats"
+  },
+  {
+   "name": "Merchant City",
+   "homes": "converted warehouses and modern flats"
+  },
+  {
+   "name": "Hyndland",
+   "homes": "large tenement flats"
+  }
+ ],
+ "housing": "Glasgow's rentals are dominated by sandstone tenement flats, with modern apartment blocks in the city centre and by the Clyde.",
+ "localRules": [
+  {
+   "text": "All private landlords in Scotland must register with the council for the area where they rent out a home.",
+   "source": "https://mygov.scot/tenancy-deposits-tenants"
+  },
+  {
+   "text": "In Scotland the landlord must lodge the deposit with an approved scheme (SafeDeposits Scotland, Letting Protection Service Scotland or MyDeposits Scotland) within 30 working days of the tenancy starting.",
+   "source": "https://mygov.scot/tenancy-deposits-landlords"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "mygov.scot",
+   "url": "https://mygov.scot/tenancy-deposits-tenants",
+   "what": "Scottish Government guidance on renting and deposits"
+  },
+  {
+   "name": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+   "url": "https://housingandpropertychamber.scot",
+   "what": "decides private renting disputes, including unprotected deposits"
+  },
+  {
+   "name": "Glasgow City Council",
+   "url": "https://www.glasgow.gov.uk/article/3682/Advice-and-Support-for-Tenants",
+   "what": "council advice and support for tenants"
+  }
+ ],
+ "climate": "Glasgow is mild and very wet, so photograph any damp, mould or condensation and check window seals and the heating.",
+ "universities": [
+  "University of Glasgow",
+  "University of Strathclyde",
+  "Glasgow Caledonian University"
+ ],
+ "fact": "Most Glasgow renters live in tenement flats with a shared close, so note the stair, back court and door entry system at move-in.",
+ "checked": "November 2026"
+}

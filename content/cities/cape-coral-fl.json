@@ -1,0 +1,36 @@
+{
+ "name": "Cape Coral",
+ "neighborhoods": [
+  {
+   "name": "Southeast Cape",
+   "homes": "older canal-front houses and duplexes"
+  },
+  {
+   "name": "Southwest Cape",
+   "homes": "canal-front single-family houses"
+  },
+  {
+   "name": "Northwest Cape",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Northeast Cape",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Cape Harbour",
+   "homes": "condos and townhomes near the marina"
+  },
+  {
+   "name": "Downtown (South Cape)",
+   "homes": "apartments and condos"
+  }
+ ],
+ "housing": "Cape Coral's rentals are mostly single-family houses, many on canals with pools, lanais and boat docks, plus duplexes and some condos.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Photograph the roof, lanai screens, pool equipment and any storm repairs, and test the air conditioning; hurricanes and humidity are the main risks.",
+ "universities": [],
+ "fact": "Cape Coral has more than 400 miles of canals, so many rental houses come with a dock and waterfront.",
+ "checked": "November 2026"
+}

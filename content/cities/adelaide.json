@@ -1,0 +1,55 @@
+{
+ "name": "Adelaide",
+ "neighborhoods": [
+  {
+   "name": "Norwood",
+   "homes": "villas and units"
+  },
+  {
+   "name": "North Adelaide",
+   "homes": "stone cottages and apartments"
+  },
+  {
+   "name": "Glenelg",
+   "homes": "beachside units"
+  },
+  {
+   "name": "Prospect",
+   "homes": "houses and units"
+  },
+  {
+   "name": "Unley",
+   "homes": "villas and cottages"
+  },
+  {
+   "name": "Mawson Lakes",
+   "homes": "newer houses near the university"
+  }
+ ],
+ "housing": "Adelaide renters mainly live in houses, villas and units, many built of stone or brick.",
+ "localRules": [
+  {
+   "text": "In South Australia the bond is lodged with Consumer and Business Services.",
+   "source": "https://cbs.sa.gov.au/documents/tenancy/fact-sheets/Renting-in-SA-know-your-rights_easy-read.pdf"
+  },
+  {
+   "text": "South Australia uses a standard Inspection Sheet, completed and signed at the start and end of the tenancy.",
+   "source": "https://rentbetter.com.au/article/a-guide-to-condition-reports-in-sa"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "RentRightSA (Tenant Advice and Advocacy Service)",
+   "url": "https://www.cbs.sa.gov.au/sections/renting/renting/tenant-advice-and-advocacy-service",
+   "what": "free tenancy advice and advocacy in SA"
+  }
+ ],
+ "climate": "Test the air conditioning and check for cracks in walls; Adelaide summers are very hot and the clay soil moves.",
+ "universities": [
+  "University of Adelaide",
+  "Flinders University",
+  "University of South Australia"
+ ],
+ "fact": "In South Australia the condition report is called an Inspection Sheet.",
+ "checked": "November 2026"
+}

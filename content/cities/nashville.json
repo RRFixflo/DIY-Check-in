@@ -1,0 +1,50 @@
+{
+ "name": "Nashville",
+ "neighborhoods": [
+  {
+   "name": "East Nashville",
+   "homes": "bungalows, duplexes and new townhouses"
+  },
+  {
+   "name": "The Gulch",
+   "homes": "high-rise apartments"
+  },
+  {
+   "name": "Germantown",
+   "homes": "row houses and new apartments"
+  },
+  {
+   "name": "12 South",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Midtown",
+   "homes": "apartment buildings near Vanderbilt"
+  },
+  {
+   "name": "Sylvan Park",
+   "homes": "bungalows and new townhouses"
+  },
+  {
+   "name": "Antioch",
+   "homes": "apartment complexes and single-family homes"
+  }
+ ],
+ "housing": "Nashville renters live in apartment complexes, new mid- and high-rises in the core, and rented bungalows and townhouses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Middle Tennessee and the Cumberlands",
+   "url": "https://las.org",
+   "what": "free legal help for low-income renters, including eviction"
+  }
+ ],
+ "climate": "Test the air conditioning and look for water damage; summers are hot and humid and storms can flood low areas.",
+ "universities": [
+  "Vanderbilt University",
+  "Belmont University",
+  "Tennessee State University"
+ ],
+ "fact": "Tennessee's landlord-tenant law does not give renters a right to air conditioning, so check it works before you sign.",
+ "checked": "November 2026"
+}

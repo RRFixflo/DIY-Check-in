@@ -1,0 +1,47 @@
+{
+ "name": "Winston-Salem",
+ "neighborhoods": [
+  {
+   "name": "Ardmore",
+   "homes": "1920s and 1930s bungalows and small apartment buildings"
+  },
+  {
+   "name": "West End",
+   "homes": "historic houses, many split into apartments"
+  },
+  {
+   "name": "Buena Vista",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Washington Park",
+   "homes": "historic houses and duplexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts and apartments in converted industrial buildings"
+  },
+  {
+   "name": "Sherwood Forest",
+   "homes": "1960s ranch houses"
+  }
+ ],
+ "housing": "Winston-Salem renters live mostly in single-family homes and suburban apartment complexes, with lofts downtown in former tobacco and textile buildings.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of North Carolina",
+   "url": "https://legalaidnc.org/what-we-do/housing",
+   "what": "free legal help with evictions, repairs and housing problems"
+  }
+ ],
+ "climate": "Test the air conditioning and check crawl spaces and bathrooms for damp; humid summers bring mold and mildew.",
+ "universities": [
+  "Wake Forest University",
+  "Winston-Salem State University",
+  "UNC School of the Arts",
+  "Salem College"
+ ],
+ "fact": "Many downtown Winston-Salem apartments are in converted tobacco-era warehouses and factories.",
+ "checked": "November 2026"
+}

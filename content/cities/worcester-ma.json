@@ -1,0 +1,51 @@
+{
+ "name": "Worcester",
+ "neighborhoods": [
+  {
+   "name": "Main South",
+   "homes": "triple-deckers near Clark University"
+  },
+  {
+   "name": "Elm Park / West Side",
+   "homes": "older single-family homes and triple-deckers"
+  },
+  {
+   "name": "Tatnuck",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Shrewsbury Street",
+   "homes": "triple-deckers and apartments"
+  },
+  {
+   "name": "Grafton Hill",
+   "homes": "triple-deckers and two-family houses"
+  },
+  {
+   "name": "Greendale",
+   "homes": "single-family homes and two-family houses"
+  },
+  {
+   "name": "Burncoat",
+   "homes": "single-family homes and multi-family houses"
+  }
+ ],
+ "housing": "Worcester's rentals are largely triple-deckers and other wood-frame multi-family houses, plus apartment buildings near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Community Legal Aid",
+   "url": "https://communitylegal.org",
+   "what": "free legal help for low-income tenants in central Massachusetts"
+  }
+ ],
+ "climate": "Test the heat, check for ice dam stains on ceilings and ask who clears snow from porches and stairs; winters are cold and snowy.",
+ "universities": [
+  "Worcester Polytechnic Institute",
+  "Clark University",
+  "College of the Holy Cross",
+  "Worcester State University"
+ ],
+ "fact": "Triple-deckers, with one apartment on each floor, are Worcester's most common rental building.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,54 @@
+{
+ "name": "Spokane",
+ "neighborhoods": [
+  {
+   "name": "South Hill",
+   "homes": "older single-family homes and small apartment buildings"
+  },
+  {
+   "name": "Browne's Addition",
+   "homes": "Victorian houses converted into apartments"
+  },
+  {
+   "name": "Logan",
+   "homes": "older houses rented to students near Gonzaga"
+  },
+  {
+   "name": "West Central",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Hillyard",
+   "homes": "small older houses"
+  },
+  {
+   "name": "Kendall Yards",
+   "homes": "new apartments and townhomes"
+  },
+  {
+   "name": "Perry District",
+   "homes": "older houses and duplexes"
+  }
+ ],
+ "housing": "Spokane renters mostly live in older single-family homes, houses converted into apartments, and apartment complexes, with new buildings near downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Spokane eviction prevention provider directory",
+   "url": "https://my.spokanecity.org/housing/eviction-prevention/provider-directory/",
+   "what": "list of local renter help, including legal aid"
+  },
+  {
+   "name": "Northwest Justice Project",
+   "url": "https://nwjustice.org",
+   "what": "free legal help for low-income renters through the CLEAR line"
+  }
+ ],
+ "climate": "Test the furnace, check windows and exposed pipes, and ask who clears snow; Spokane winters are cold and snowy.",
+ "universities": [
+  "Gonzaga University",
+  "Whitworth University"
+ ],
+ "fact": "Spokane requires every long-term rental to be on the city's rental registry.",
+ "checked": "November 2026"
+}

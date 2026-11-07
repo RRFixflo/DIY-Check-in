@@ -1,0 +1,52 @@
+{
+ "name": "Irvine",
+ "neighborhoods": [
+  {
+   "name": "Woodbridge",
+   "homes": "townhomes, condos and large apartment villages around lakes"
+  },
+  {
+   "name": "University Park",
+   "homes": "older townhomes and single-family homes"
+  },
+  {
+   "name": "Northwood",
+   "homes": "single-family homes and apartment villages"
+  },
+  {
+   "name": "Turtle Rock",
+   "homes": "single-family homes near UC Irvine"
+  },
+  {
+   "name": "Westpark",
+   "homes": "townhomes, condos and apartments"
+  },
+  {
+   "name": "Irvine Spectrum",
+   "homes": "large newer apartment communities"
+  },
+  {
+   "name": "Great Park",
+   "homes": "new single-family homes and townhomes"
+  },
+  {
+   "name": "Portola Springs",
+   "homes": "newer townhomes and condos"
+  }
+ ],
+ "housing": "Irvine is a master-planned city of villages; renters mostly live in large managed apartment communities, condos and townhomes in HOA developments.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Community Legal Aid SoCal",
+   "url": "https://tenantstogether.org/resources/community-legal-aid-socal",
+   "what": "free legal help for low-income Orange County renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check windows and patio doors; the climate is mild, but inland summer heat and Santa Ana winds can be hard on seals and screens.",
+ "universities": [
+  "UC Irvine"
+ ],
+ "fact": "Much of Irvine's apartment stock belongs to a few large landlords, so many renters sign standard company leases with set move-in and move-out procedures.",
+ "checked": "November 2026"
+}

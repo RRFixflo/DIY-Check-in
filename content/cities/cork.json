@@ -1,0 +1,59 @@
+{
+ "name": "Cork",
+ "neighborhoods": [
+  {
+   "name": "Ballintemple",
+   "homes": "period houses and flats"
+  },
+  {
+   "name": "Douglas",
+   "homes": "family houses and apartments"
+  },
+  {
+   "name": "Blackrock",
+   "homes": "houses and apartments"
+  },
+  {
+   "name": "Sunday's Well",
+   "homes": "terraced houses on the hill"
+  },
+  {
+   "name": "Bishopstown",
+   "homes": "houses let to students"
+  },
+  {
+   "name": "Wilton",
+   "homes": "houses and student lets"
+  },
+  {
+   "name": "City Centre",
+   "homes": "flats above shops and apartments"
+  }
+ ],
+ "housing": "Cork's rentals are a mix of terraced and semi-detached houses, many shared by students near UCC and MTU, and city-centre apartments.",
+ "localRules": [
+  {
+   "text": "Landlords in Ireland must register each tenancy with the Residential Tenancies Board within one month of it starting, and every year after.",
+   "source": "https://www.rtb.ie/register-a-tenancy/why-register"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Residential Tenancies Board (RTB)",
+   "url": "https://rtb.ie/renting/beginning-a-tenancy/tenant-checklist/",
+   "what": "state body for tenancy registration and deposit disputes"
+  },
+  {
+   "name": "Threshold",
+   "url": "https://www.threshold.ie/get-help",
+   "what": "free advice charity for renters"
+  }
+ ],
+ "climate": "Cork is wet, so check walls and windows for damp and mould and test the heating.",
+ "universities": [
+  "University College Cork",
+  "Munster Technological University"
+ ],
+ "fact": "Bishopstown and Wilton near the universities have many shared student houses.",
+ "checked": "November 2026"
+}

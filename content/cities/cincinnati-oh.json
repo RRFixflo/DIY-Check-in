@@ -1,0 +1,58 @@
+{
+ "name": "Cincinnati",
+ "neighborhoods": [
+  {
+   "name": "Clifton",
+   "homes": "older houses split into apartments near UC"
+  },
+  {
+   "name": "Over-the-Rhine",
+   "homes": "renovated 19th-century brick row buildings"
+  },
+  {
+   "name": "Hyde Park",
+   "homes": "single-family homes and small apartment buildings"
+  },
+  {
+   "name": "Oakley",
+   "homes": "two-family homes and newer apartments"
+  },
+  {
+   "name": "Northside",
+   "homes": "older frame houses and duplexes"
+  },
+  {
+   "name": "Walnut Hills",
+   "homes": "older apartment buildings and houses"
+  },
+  {
+   "name": "Mount Adams",
+   "homes": "hillside townhouses and small apartments"
+  },
+  {
+   "name": "Westwood",
+   "homes": "single-family homes and apartment buildings"
+  }
+ ],
+ "housing": "Cincinnati has a lot of older brick housing: two- and three-family homes, Italianate row buildings in Over-the-Rhine, and older houses split into apartments near the University of Cincinnati.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Southwest Ohio",
+   "url": "https://lascinti.org/category/housing/",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "City of Cincinnati Housing Resources",
+   "url": "https://cincinnati-oh.gov/buildings/property-maintenance-code-enforcement/housing-resources",
+   "what": "code enforcement and renter resources"
+  }
+ ],
+ "climate": "Test the furnace, check older windows for drafts and look for water in the basement; winters are cold and many buildings are old.",
+ "universities": [
+  "University of Cincinnati",
+  "Xavier University"
+ ],
+ "fact": "Cincinnati also caps residential late fees at $50 or 5% of monthly rent, whichever is greater.",
+ "checked": "November 2026"
+}

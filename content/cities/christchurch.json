@@ -1,0 +1,54 @@
+{
+ "name": "Christchurch",
+ "neighborhoods": [
+  {
+   "name": "Riccarton",
+   "homes": "houses and student flats"
+  },
+  {
+   "name": "Ilam",
+   "homes": "houses near the university"
+  },
+  {
+   "name": "Merivale",
+   "homes": "houses and townhouses"
+  },
+  {
+   "name": "Sydenham",
+   "homes": "townhouses"
+  },
+  {
+   "name": "Addington",
+   "homes": "new townhouses"
+  },
+  {
+   "name": "Sumner",
+   "homes": "seaside houses"
+  },
+  {
+   "name": "Central City",
+   "homes": "new apartments and townhouses"
+  }
+ ],
+ "housing": "Christchurch renters live mostly in houses and new townhouses, many built since the 2010–2011 earthquakes.",
+ "localRules": [
+  {
+   "text": "Landlords in New Zealand must give a receipt for the bond and lodge it with Tenancy Services within 23 working days of receiving it.",
+   "source": "https://www.tenancy.govt.nz/rent-bond-and-bills/bond/preventing-problems-with-bonds/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tenancy Services",
+   "url": "https://tenancy.govt.nz/about-tenancy-services/contact-us",
+   "what": "government tenancy service: bonds, rights and the Tenancy Tribunal"
+  }
+ ],
+ "climate": "Test the heating and check for damp; Christchurch winters are cold and frosty.",
+ "universities": [
+  "University of Canterbury",
+  "Lincoln University"
+ ],
+ "fact": "Much of Christchurch was rebuilt after the 2010–2011 earthquakes, so many rentals are new townhouses.",
+ "checked": "November 2026"
+}

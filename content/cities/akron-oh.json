@@ -1,0 +1,57 @@
+{
+ "name": "Akron",
+ "neighborhoods": [
+  {
+   "name": "Highland Square",
+   "homes": "older houses split into apartments"
+  },
+  {
+   "name": "Firestone Park",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Goodyear Heights",
+   "homes": "older single-family houses"
+  },
+  {
+   "name": "Ellet",
+   "homes": "single-family houses and duplexes"
+  },
+  {
+   "name": "North Hill",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Merriman Valley",
+   "homes": "apartment complexes and condos"
+  },
+  {
+   "name": "University Park",
+   "homes": "student apartments and older houses"
+  }
+ ],
+ "housing": "Akron's rentals are mostly older single-family houses and duplexes, many built for rubber-factory workers, plus apartments near the University of Akron.",
+ "localRules": [
+  {
+   "text": "Landlords must register each rental unit with the City of Akron's Housing Code Enforcement.",
+   "source": "https://signalakron.org/wp-content/uploads/2025/01/Akron-City-Council-Ward-8-meeting-01_15_2025.pdf"
+  },
+  {
+   "text": "Summit County also requires a one-time registration of residential rentals with the Fiscal Office.",
+   "source": "https://fiscaloffice.summitoh.net/residential-rental-registry"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Community Legal Aid (Right to Counsel Akron)",
+   "url": "https://www.communitylegalaid.org/rtc",
+   "what": "free lawyers for eligible Akron tenants facing eviction"
+  }
+ ],
+ "climate": "Test the furnace and check the basement for water; winters are cold and snowy and spring thaw brings damp.",
+ "universities": [
+  "University of Akron"
+ ],
+ "fact": "Akron Municipal Court requires landlords to show the property is on the county rental registry before they can file an eviction.",
+ "checked": "November 2026"
+}

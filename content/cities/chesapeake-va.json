@@ -1,0 +1,46 @@
+{
+ "name": "Chesapeake",
+ "neighborhoods": [
+  {
+   "name": "Great Bridge",
+   "homes": "single-family homes and townhomes"
+  },
+  {
+   "name": "Greenbrier",
+   "homes": "apartment complexes and townhomes"
+  },
+  {
+   "name": "Western Branch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Deep Creek",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Hickory",
+   "homes": "newer single-family homes on larger lots"
+  },
+  {
+   "name": "South Norfolk",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Indian River",
+   "homes": "single-family homes and apartments"
+  }
+ ],
+ "housing": "Chesapeake renters mostly live in single-family homes and townhomes, with apartment complexes around Greenbrier and older houses in South Norfolk.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid Society of Eastern Virginia",
+   "url": "https://probono.net/oppsguide/organization.65733-Legal_Aid_Society_of_Eastern_Virginia_Norfolk_Office",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and look for mold, water stains and signs of past flooding; the area is humid, low-lying and exposed to hurricanes.",
+ "universities": [],
+ "fact": "Chesapeake is home to many military families who work at bases across Hampton Roads.",
+ "checked": "November 2026"
+}

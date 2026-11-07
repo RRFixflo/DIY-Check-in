@@ -1,0 +1,45 @@
+{
+ "name": "Fort Worth",
+ "neighborhoods": [
+  {
+   "name": "Near Southside",
+   "homes": "older houses and new apartments"
+  },
+  {
+   "name": "TCU area",
+   "homes": "student houses and apartments"
+  },
+  {
+   "name": "Fairmount",
+   "homes": "historic bungalows and duplexes"
+  },
+  {
+   "name": "Arlington Heights",
+   "homes": "older houses and small apartments"
+  },
+  {
+   "name": "West 7th",
+   "homes": "new mid-rise apartments"
+  },
+  {
+   "name": "Alliance",
+   "homes": "newer apartment complexes and houses"
+  }
+ ],
+ "housing": "Fort Worth renters mostly live in apartment complexes and rented single-family homes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://www.legalaidtx.org",
+   "what": "free civil legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check the roof and windows for hail damage; summers are hot and spring storms bring hail.",
+ "universities": [
+  "Texas Christian University",
+  "UNT Health Science Center"
+ ],
+ "fact": "Many rentals near TCU are houses shared by students.",
+ "checked": "November 2026"
+}

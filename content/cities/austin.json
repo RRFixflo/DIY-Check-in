@@ -1,0 +1,54 @@
+{
+ "name": "Austin",
+ "neighborhoods": [
+  {
+   "name": "Hyde Park",
+   "homes": "older bungalows and small apartment buildings"
+  },
+  {
+   "name": "West Campus",
+   "homes": "student apartment towers and shared houses"
+  },
+  {
+   "name": "East Austin",
+   "homes": "bungalows, new townhouses and apartments"
+  },
+  {
+   "name": "South Congress",
+   "homes": "small apartment buildings and houses"
+  },
+  {
+   "name": "Riverside",
+   "homes": "large older apartment complexes"
+  },
+  {
+   "name": "North Loop",
+   "homes": "duplexes and older houses"
+  },
+  {
+   "name": "Mueller",
+   "homes": "newer apartments, row houses and houses"
+  }
+ ],
+ "housing": "Austin renters mostly live in apartment complexes, with many student apartments near UT and rented duplexes and houses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Austin Tenants' Council",
+   "url": "https://texaslawhelp.org/directory/austin-tenants-council",
+   "what": "free tenant counseling on repairs and rights"
+  },
+  {
+   "name": "City of Austin Renter Resources",
+   "url": "https://www.austintexas.gov/department/renter-resources",
+   "what": "city list of renter help, including legal services"
+  }
+ ],
+ "climate": "Test the air conditioning and check for pests and water damage; summers are long and very hot.",
+ "universities": [
+  "University of Texas at Austin",
+  "St. Edward's University"
+ ],
+ "fact": "Many leases near the University of Texas start in August, so student areas see a rush of move-ins at once.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,50 @@
+{
+ "name": "Santa Clarita",
+ "neighborhoods": [
+  {
+   "name": "Valencia",
+   "homes": "master-planned single-family homes, townhomes and apartments"
+  },
+  {
+   "name": "Saugus",
+   "homes": "single-family homes and condos"
+  },
+  {
+   "name": "Newhall",
+   "homes": "older houses and apartments near Old Town Newhall"
+  },
+  {
+   "name": "Canyon Country",
+   "homes": "single-family homes, condos and apartment complexes"
+  },
+  {
+   "name": "Stevenson Ranch",
+   "homes": "single-family homes and townhomes (unincorporated)"
+  },
+  {
+   "name": "Castaic",
+   "homes": "single-family homes (unincorporated)"
+  }
+ ],
+ "housing": "Santa Clarita's rentals are mostly single-family homes, townhomes and condos in planned communities, plus apartment complexes in Valencia and Canyon Country.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Neighborhood Legal Services of Los Angeles County",
+   "url": "https://nlsla.org/?p=5911",
+   "what": "free legal help for low-income renters"
+  },
+  {
+   "name": "LA County Rent Stabilization Program",
+   "url": "https://dcba.lacounty.gov/?p=31305",
+   "what": "rules and help for renters in unincorporated areas"
+  }
+ ],
+ "climate": "Test the air conditioning and smoke alarms and note any brush near the home; summers are hot and the valley has a high wildfire risk.",
+ "universities": [
+  "California Institute of the Arts",
+  "The Master's University"
+ ],
+ "fact": "Valencia was built as a master-planned community with paseo walking trails linking its neighborhoods.",
+ "checked": "November 2026"
+}

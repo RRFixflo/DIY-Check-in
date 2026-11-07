@@ -1,0 +1,58 @@
+{
+ "name": "Johannesburg",
+ "neighborhoods": [
+  {
+   "name": "Melville",
+   "homes": "houses and garden cottages"
+  },
+  {
+   "name": "Braamfontein",
+   "homes": "student apartments"
+  },
+  {
+   "name": "Sandton",
+   "homes": "apartments and townhouses"
+  },
+  {
+   "name": "Rosebank",
+   "homes": "apartments"
+  },
+  {
+   "name": "Parkhurst",
+   "homes": "houses and cottages"
+  },
+  {
+   "name": "Fourways",
+   "homes": "townhouses in complexes"
+  },
+  {
+   "name": "Maboneng",
+   "homes": "converted warehouse apartments"
+  },
+  {
+   "name": "Randburg",
+   "homes": "townhouses and flats"
+  }
+ ],
+ "housing": "Johannesburg renters live in townhouses in security complexes, apartments, and garden cottages behind houses.",
+ "localRules": [
+  {
+   "text": "South African landlords must keep the deposit in an interest-bearing account and refund it with interest, less any agreed costs.",
+   "source": "https://businesstech.co.za/news/property/448034/know-your-rights-when-renting-in-south-africa-including-deposits-and-breaking-a-lease/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Gauteng Rental Housing Tribunal",
+   "url": "https://www.gov.za/documents/notices/rental-housing-act-gauteng-rental-housing-tribunal-panel-adjudicators-and-members",
+   "what": "free provincial tribunal for rental disputes"
+  }
+ ],
+ "climate": "Photograph the roof and ceilings for leaks and test the geyser; Johannesburg summers bring heavy afternoon thunderstorms.",
+ "universities": [
+  "University of the Witwatersrand",
+  "University of Johannesburg"
+ ],
+ "fact": "Many Johannesburg rentals are townhouses in gated complexes with their own body corporate rules.",
+ "checked": "November 2026"
+}

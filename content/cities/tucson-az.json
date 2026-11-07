@@ -1,0 +1,53 @@
+{
+ "name": "Tucson",
+ "neighborhoods": [
+  {
+   "name": "Sam Hughes",
+   "homes": "older brick houses and guest houses near the university"
+  },
+  {
+   "name": "West University",
+   "homes": "historic houses, duplexes and student apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and new mid-rise buildings"
+  },
+  {
+   "name": "Armory Park",
+   "homes": "historic adobe and brick houses"
+  },
+  {
+   "name": "Barrio Viejo",
+   "homes": "historic adobe row houses"
+  },
+  {
+   "name": "Catalina Foothills",
+   "homes": "larger houses and apartment complexes"
+  },
+  {
+   "name": "Midtown",
+   "homes": "ranch houses and apartment complexes"
+  }
+ ],
+ "housing": "Tucson's rentals are mostly single-story houses and low-rise apartment complexes, with many casitas and guest houses near the university.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Tucson Landlord Tenant Resources",
+   "url": "https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Housing-Assistance/Landlord-Tenant-Resources",
+   "what": "city list of renter help and fair housing contacts"
+  },
+  {
+   "name": "Pima County Emergency Eviction Legal Services",
+   "url": "https://search.211arizona.org/search/67ea5b85-f77f-52e9-b6b5-f0462f540807",
+   "what": "free legal help for renters facing eviction"
+  }
+ ],
+ "climate": "Test the air conditioning or evaporative cooler, check that windows seal, and photograph the roof and ceilings, since the July to September monsoon brings heavy downpours.",
+ "universities": [
+  "University of Arizona"
+ ],
+ "fact": "Many Tucson leases near the University of Arizona run from August, so homes near campus turn over all at once.",
+ "checked": "November 2026"
+}

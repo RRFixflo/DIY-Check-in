@@ -1,0 +1,50 @@
+{
+ "name": "Colorado Springs",
+ "neighborhoods": [
+  {
+   "name": "Old Colorado City",
+   "homes": "historic houses and small apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Old North End",
+   "homes": "large historic houses, some split into apartments"
+  },
+  {
+   "name": "Briargate",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "Broadmoor",
+   "homes": "larger houses and some apartments"
+  },
+  {
+   "name": "Powers corridor",
+   "homes": "apartment complexes and newer houses"
+  },
+  {
+   "name": "Security-Widefield",
+   "homes": "ranch houses near Fort Carson"
+  }
+ ],
+ "housing": "Colorado Springs rentals are mostly single-family houses and apartment complexes, with many leases tied to the city's military bases.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Colorado Legal Services",
+   "url": "https://www.coloradolegalservices.org/event/renters-rights-101-workshop-virtual-and-in-person/",
+   "what": "free legal help and renters' rights workshops"
+  }
+ ],
+ "climate": "Hailstorms are common, so photograph the roof, windows and siding; test the furnace, and check for drafts since the city sits above 6,000 feet with cold winters.",
+ "universities": [
+  "University of Colorado Colorado Springs",
+  "Colorado College",
+  "US Air Force Academy"
+ ],
+ "fact": "Fort Carson, the Air Force Academy and the Space Force bases bring frequent military moves, so many leases include a military clause.",
+ "checked": "November 2026"
+}

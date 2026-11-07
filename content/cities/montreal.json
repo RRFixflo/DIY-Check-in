@@ -1,0 +1,65 @@
+{
+ "name": "Montreal",
+ "neighborhoods": [
+  {
+   "name": "Plateau-Mont-Royal",
+   "homes": "duplexes and triplexes with outdoor stairs"
+  },
+  {
+   "name": "Mile End",
+   "homes": "plexes and walk-up apartments"
+  },
+  {
+   "name": "Rosemont",
+   "homes": "plexes"
+  },
+  {
+   "name": "Verdun",
+   "homes": "plexes and new condos"
+  },
+  {
+   "name": "Villeray",
+   "homes": "plexes"
+  },
+  {
+   "name": "Côte-des-Neiges",
+   "homes": "apartment buildings near the universities"
+  },
+  {
+   "name": "Hochelaga-Maisonneuve",
+   "homes": "older plexes"
+  },
+  {
+   "name": "NDG",
+   "homes": "plexes and apartment buildings"
+  }
+ ],
+ "housing": "Montreal is a city of renters, and many live in duplexes and triplexes (plexes) with outdoor staircases, as well as apartment buildings.",
+ "localRules": [
+  {
+   "text": "In Quebec a landlord cannot require a security or damage deposit; only the first month's rent can be asked in advance.",
+   "source": "https://educaloi.qc.ca/en/legal-news/rental-security-deposits-a-common-yet-illegal-practice/"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Tribunal administratif du logement (TAL)",
+   "url": "https://educaloi.qc.ca/en/capsules/what-does-the-tribunal-administratif-du-logement-do/",
+   "what": "Quebec's rental tribunal (guide from Éducaloi)"
+  },
+  {
+   "name": "Juridiqc",
+   "url": "https://juridiqc.gouv.qc.ca/en/being-a-tenant/tools-and-measures-in-the-event-of-a-conflict/tribunal-administratif-du-logement/steps-to-obtain-a-decision-from-the-tribunal-administratif-du-logement",
+   "what": "Quebec government legal information for tenants"
+  }
+ ],
+ "climate": "Test the heating and check windows for drafts; also photograph outdoor stairs and balconies, which take a beating from winter ice.",
+ "universities": [
+  "McGill University",
+  "Concordia University",
+  "Université de Montréal",
+  "UQAM"
+ ],
+ "fact": "Many Montreal leases end on June 30, so July 1 is the city's main moving day.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,48 @@
+{
+ "name": "Bridgeport",
+ "neighborhoods": [
+  {
+   "name": "Black Rock",
+   "homes": "single-family and two-family houses"
+  },
+  {
+   "name": "North End",
+   "homes": "single-family and two-family houses"
+  },
+  {
+   "name": "East Side",
+   "homes": "multi-family houses"
+  },
+  {
+   "name": "West End",
+   "homes": "multi-family houses"
+  },
+  {
+   "name": "South End",
+   "homes": "older houses and apartments near the University of Bridgeport"
+  },
+  {
+   "name": "Brooklawn",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments in older buildings"
+  }
+ ],
+ "housing": "Bridgeport's rentals are mostly two- and three-family wood houses and older apartment buildings.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Bridgeport Fair Rent Commission",
+   "url": "https://bridgeportct.gov/government/departments/health-social-services/fair-rent-commission/fair-rent-program",
+   "what": "complaints about rent increases and conditions"
+  }
+ ],
+ "climate": "Test the heating and check windows for drafts; homes near the shore can flood in coastal storms.",
+ "universities": [
+  "University of Bridgeport"
+ ],
+ "fact": "Connecticut landlords must pay interest on security deposits at a rate the state sets each year.",
+ "checked": "November 2026"
+}

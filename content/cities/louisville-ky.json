@@ -1,0 +1,58 @@
+{
+ "name": "Louisville",
+ "neighborhoods": [
+  {
+   "name": "Highlands",
+   "homes": "older houses, duplexes and small apartment buildings"
+  },
+  {
+   "name": "Germantown",
+   "homes": "shotgun houses and camelback cottages"
+  },
+  {
+   "name": "Old Louisville",
+   "homes": "Victorian mansions divided into apartments"
+  },
+  {
+   "name": "Crescent Hill",
+   "homes": "older single-family homes and small apartment buildings"
+  },
+  {
+   "name": "Clifton",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "St. Matthews",
+   "homes": "post-war houses and apartment complexes"
+  },
+  {
+   "name": "NuLu",
+   "homes": "lofts and new apartment buildings near downtown"
+  },
+  {
+   "name": "Schnitzelburg",
+   "homes": "shotgun houses"
+  }
+ ],
+ "housing": "Louisville's older rentals are shotgun houses, camelbacks and Victorian homes split into apartments; the suburbs add apartment complexes and single-family houses.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Kentucky Equal Justice Center",
+   "url": "https://www.kyequaljustice.org/housing-justice",
+   "what": "housing advocacy and links to eviction help"
+  },
+  {
+   "name": "Legal Aid Society (Louisville)",
+   "url": "https://www.kyequaljustice.org/post/eviction-links",
+   "what": "free legal advice and court representation for renters"
+  }
+ ],
+ "climate": "Humid summers and cold snaps mean you should test both heating and air conditioning, check basements for damp, and photograph any water stains near the Ohio River flood plain.",
+ "universities": [
+  "University of Louisville",
+  "Bellarmine University"
+ ],
+ "fact": "Louisville Metro passed a right-to-counsel ordinance in 2021 to give low-income renters free lawyers in eviction cases.",
+ "checked": "November 2026"
+}

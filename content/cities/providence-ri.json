@@ -1,0 +1,60 @@
+{
+ "name": "Providence",
+ "neighborhoods": [
+  {
+   "name": "Fox Point",
+   "homes": "older houses split into apartments"
+  },
+  {
+   "name": "College Hill",
+   "homes": "historic houses and student apartments"
+  },
+  {
+   "name": "Federal Hill",
+   "homes": "triple-deckers and multi-family houses"
+  },
+  {
+   "name": "Elmhurst",
+   "homes": "single-family and two-family houses"
+  },
+  {
+   "name": "Mount Pleasant",
+   "homes": "multi-family houses, many rented to students"
+  },
+  {
+   "name": "West End",
+   "homes": "triple-deckers and Victorian houses"
+  },
+  {
+   "name": "Olneyville",
+   "homes": "mill buildings converted to apartments and multi-family houses"
+  },
+  {
+   "name": "Downtown",
+   "homes": "lofts and apartments in older buildings"
+  }
+ ],
+ "housing": "Providence's rentals are largely triple-deckers and two-family wood houses, many built before 1978, plus student apartments near the colleges and lofts in old mills.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Rhode Island Center for Justice",
+   "url": "https://www.rihousing.com/government-assistance-providers/",
+   "what": "legal help for tenants facing eviction or bad conditions (listed by RIHousing)"
+  },
+  {
+   "name": "City of Providence eviction defense program",
+   "url": "https://www.providenceri.gov/city-of-providence-launches-eviction-defense-program-in-partnership-with-rhode-island-legal-services/",
+   "what": "free eviction defense for low-income tenants with Rhode Island Legal Services"
+  }
+ ],
+ "climate": "Test the heating and look at windows and ceilings for drafts, leaks and ice-dam stains; winters are cold and snowy.",
+ "universities": [
+  "Brown University",
+  "Rhode Island School of Design",
+  "Providence College",
+  "Johnson & Wales University"
+ ],
+ "fact": "Rhode Island landlords must list their rentals in a public statewide registry with a lead certificate, so Providence renters can look up their building.",
+ "checked": "November 2026"
+}

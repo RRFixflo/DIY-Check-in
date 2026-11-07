@@ -1,0 +1,54 @@
+{
+ "name": "Ottawa",
+ "neighborhoods": [
+  {
+   "name": "Centretown",
+   "homes": "older apartment buildings and houses split into units"
+  },
+  {
+   "name": "The Glebe",
+   "homes": "houses and duplexes"
+  },
+  {
+   "name": "Sandy Hill",
+   "homes": "houses let to students"
+  },
+  {
+   "name": "Westboro",
+   "homes": "houses and new condos"
+  },
+  {
+   "name": "Hintonburg",
+   "homes": "houses and low-rise apartments"
+  },
+  {
+   "name": "Vanier",
+   "homes": "low-rise apartments"
+  },
+  {
+   "name": "Kanata",
+   "homes": "townhouses and family houses"
+  }
+ ],
+ "housing": "Ottawa renters live in low-rise and high-rise apartment buildings, houses split into units, and suburban townhouses.",
+ "localRules": [
+  {
+   "text": "Most residential tenancies in Ontario signed on or after April 30, 2018 must use the province's standard lease; a landlord may take a rent deposit but not a damage deposit.",
+   "source": "https://www.ontario.ca/page/guide-ontarios-standard-lease"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Advocacy Centre for Tenants Ontario (ACTO)",
+   "url": "https://tdc.acto.ca",
+   "what": "free duty counsel for low-income tenants at the Landlord and Tenant Board"
+  }
+ ],
+ "climate": "Test the heating and check windows for drafts; Ottawa winters are very cold and snowy.",
+ "universities": [
+  "University of Ottawa",
+  "Carleton University"
+ ],
+ "fact": "Sandy Hill near the University of Ottawa has many student rentals in older houses.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,58 @@
+{
+ "name": "St. Louis",
+ "neighborhoods": [
+  {
+   "name": "Central West End",
+   "homes": "older apartment buildings and condos"
+  },
+  {
+   "name": "Soulard",
+   "homes": "brick row houses"
+  },
+  {
+   "name": "Tower Grove South",
+   "homes": "brick two-family flats and four-family buildings"
+  },
+  {
+   "name": "Shaw",
+   "homes": "brick houses and multi-family flats"
+  },
+  {
+   "name": "Lafayette Square",
+   "homes": "Victorian row houses"
+  },
+  {
+   "name": "Dogtown",
+   "homes": "small brick houses"
+  },
+  {
+   "name": "The Hill",
+   "homes": "small brick single-family homes"
+  },
+  {
+   "name": "Benton Park",
+   "homes": "brick row houses and flats"
+  }
+ ],
+ "housing": "St. Louis is a city of brick: renters often live in two-family flats, four-family buildings and row houses built before World War II.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Housing Eviction Law Program (HELP-STL)",
+   "url": "https://www.stlouis-mo.gov/government/departments/human-services/help-stl/index.cfm",
+   "what": "free legal help for city tenants facing eviction"
+  },
+  {
+   "name": "Legal Services of Eastern Missouri",
+   "url": "https://lsem.org/housing-law/",
+   "what": "free housing legal help"
+  }
+ ],
+ "climate": "Test both the furnace and the air conditioning and check basements for water; summers are hot and humid and winters cold.",
+ "universities": [
+  "Washington University in St. Louis",
+  "Saint Louis University"
+ ],
+ "fact": "Ask to see the unit's occupancy inspection certificate before moving in, since the city requires one at each change of occupant.",
+ "checked": "November 2026"
+}

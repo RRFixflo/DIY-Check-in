@@ -1,0 +1,51 @@
+{
+ "name": "Santa Ana",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments and older buildings"
+  },
+  {
+   "name": "Floral Park",
+   "homes": "1920s–1930s single-family homes"
+  },
+  {
+   "name": "French Park",
+   "homes": "Victorian houses, some split into units"
+  },
+  {
+   "name": "Washington Square",
+   "homes": "older bungalows and small apartment buildings"
+  },
+  {
+   "name": "Delhi",
+   "homes": "single-family homes and small multi-family buildings"
+  },
+  {
+   "name": "Willard",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "South Coast Metro",
+   "homes": "newer apartment complexes"
+  }
+ ],
+ "housing": "Santa Ana's rentals are older single-family homes, small multi-unit buildings and garden apartment complexes, many built before 1995.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Santa Ana Rent Stabilization Program",
+   "url": "https://santa-ana.org/renterprotections?tid=vi",
+   "what": "city office for rent stabilization questions"
+  },
+  {
+   "name": "Community Legal Aid SoCal",
+   "url": "https://howtojustice.org/directory/community-legal-aid-socal/",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Check whether the unit has air conditioning and test it, and look at window screens and seals; summers are warm and many older homes have no central AC.",
+ "universities": [],
+ "fact": "Santa Ana is one of the few Orange County cities with its own rent stabilization law.",
+ "checked": "November 2026"
+}

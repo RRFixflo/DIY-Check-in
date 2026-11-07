@@ -1,0 +1,60 @@
+{
+ "name": "Perth",
+ "neighborhoods": [
+  {
+   "name": "Subiaco",
+   "homes": "character houses and apartments"
+  },
+  {
+   "name": "Leederville",
+   "homes": "houses and apartments"
+  },
+  {
+   "name": "Fremantle",
+   "homes": "cottages and apartments"
+  },
+  {
+   "name": "Mount Lawley",
+   "homes": "character houses and flats"
+  },
+  {
+   "name": "Scarborough",
+   "homes": "beachside apartments"
+  },
+  {
+   "name": "Victoria Park",
+   "homes": "houses and units"
+  },
+  {
+   "name": "Joondalup",
+   "homes": "newer houses"
+  }
+ ],
+ "housing": "Perth renters mostly live in houses and villas (units in small groups), with apartments in the inner city.",
+ "localRules": [
+  {
+   "text": "In Western Australia the bond must be lodged with the Bond Administrator at Consumer Protection within 14 days of receipt.",
+   "source": "https://consumerprotection.wa.gov.au/announcements/late-lodgement-of-tenancy-bonds-results-fine-property-agency-tiapan-pty-ltd-lj-hooker-city-residential"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Circle Green Community Legal",
+   "url": "https://communitylegalwa.org.au/faqs/circle-green-community-legal",
+   "what": "state-wide tenancy advice in WA"
+  },
+  {
+   "name": "Tenancy Advice and Education Service",
+   "url": "https://consumerprotection.wa.gov.au/tenancy-advice-and-education-service",
+   "what": "government-funded help for tenants"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph reticulation (garden sprinklers) and gardens; Perth summers are long, hot and dry.",
+ "universities": [
+  "University of Western Australia",
+  "Curtin University",
+  "Murdoch University"
+ ],
+ "fact": "Many Perth rentals come with gardens and reticulation that the tenant is expected to keep up.",
+ "checked": "November 2026"
+}

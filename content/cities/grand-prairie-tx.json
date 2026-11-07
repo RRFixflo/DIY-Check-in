@@ -1,0 +1,38 @@
+{
+ "name": "Grand Prairie",
+ "neighborhoods": [
+  {
+   "name": "Mira Lagos",
+   "homes": "newer single-family homes near Joe Pool Lake"
+  },
+  {
+   "name": "Lakeridge",
+   "homes": "single-family homes near Joe Pool Lake"
+  },
+  {
+   "name": "Grand Peninsula",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "Westchester",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Downtown Grand Prairie",
+   "homes": "older houses and apartments"
+  }
+ ],
+ "housing": "Grand Prairie's rentals are mostly single-family homes and apartment complexes, with newer houses in the south near Joe Pool Lake.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and look for foundation cracks and hail damage; North Texas heat, clay soils and spring storms cause all three.",
+ "universities": [],
+ "fact": "Grand Prairie spans parts of Dallas, Tarrant and Ellis counties, so which county court handles a dispute depends on the address.",
+ "checked": "November 2026"
+}

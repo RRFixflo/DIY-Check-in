@@ -1,0 +1,51 @@
+{
+ "name": "Washington, D.C.",
+ "neighborhoods": [
+  {
+   "name": "Columbia Heights",
+   "homes": "row house apartments and mid-rise buildings"
+  },
+  {
+   "name": "Capitol Hill",
+   "homes": "row houses and basement apartments"
+  },
+  {
+   "name": "Adams Morgan",
+   "homes": "older apartment buildings and row house units"
+  },
+  {
+   "name": "Petworth",
+   "homes": "row houses and basement units"
+  },
+  {
+   "name": "Navy Yard",
+   "homes": "new high-rise apartments"
+  },
+  {
+   "name": "Dupont Circle",
+   "homes": "row house flats and older apartment buildings"
+  },
+  {
+   "name": "Shaw",
+   "homes": "row houses and new apartment buildings"
+  }
+ ],
+ "housing": "D.C. renters live in row house flats and English basements, older apartment buildings and new high-rises; many older buildings are rent controlled.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Office of the Tenant Advocate",
+   "url": "https://ota.dc.gov",
+   "what": "D.C. government tenant advice and help with deposits"
+  }
+ ],
+ "climate": "Test both heat and air conditioning, and check basement units for damp and leaks after rain.",
+ "universities": [
+  "Georgetown University",
+  "George Washington University",
+  "Howard University",
+  "American University"
+ ],
+ "fact": "Many D.C. rentals are English basements: apartments on the lower level of a row house.",
+ "checked": "November 2026"
+}

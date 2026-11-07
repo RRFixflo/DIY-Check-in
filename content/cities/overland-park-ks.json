@@ -1,0 +1,36 @@
+{
+ "name": "Overland Park",
+ "neighborhoods": [
+  {
+   "name": "Downtown Overland Park",
+   "homes": "older small houses and newer apartment buildings"
+  },
+  {
+   "name": "Corporate Woods",
+   "homes": "apartment complexes near offices"
+  },
+  {
+   "name": "Nall Hills",
+   "homes": "mid-century houses and apartments"
+  },
+  {
+   "name": "Oak Park",
+   "homes": "apartment complexes and townhomes"
+  },
+  {
+   "name": "Blue Valley (south Overland Park)",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Stanley",
+   "homes": "single-family houses and townhomes"
+  }
+ ],
+ "housing": "Overland Park's rentals are mostly suburban single-family houses, townhomes and large apartment complexes, with newer homes in the south of the city.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace and air conditioning, and photograph the roof and siding for hail damage; storms are common and winters are cold.",
+ "universities": [],
+ "fact": "Overland Park's rental inspections look only at the outside of the building, so a tenant's own move-in record is the main proof of the inside.",
+ "checked": "November 2026"
+}

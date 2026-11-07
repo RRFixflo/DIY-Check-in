@@ -1,0 +1,44 @@
+{
+ "name": "Stockton",
+ "neighborhoods": [
+  {
+   "name": "Miracle Mile",
+   "homes": "1920s–40s houses and small apartments"
+  },
+  {
+   "name": "Lincoln Village",
+   "homes": "post-war houses and apartment complexes"
+  },
+  {
+   "name": "Brookside",
+   "homes": "newer houses near the Delta"
+  },
+  {
+   "name": "Spanos Park",
+   "homes": "newer houses and apartment complexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "older apartments and lofts"
+  },
+  {
+   "name": "University Park",
+   "homes": "older houses near University of the Pacific"
+  }
+ ],
+ "housing": "Stockton renters mostly live in single-family houses and apartment complexes, with older homes and small apartments near the Miracle Mile and downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "California Rural Legal Assistance",
+   "url": "https://tenantstogether.org/resources/california-rural-legal-assistance-inc",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Hot summers make air conditioning important; test it, check window seals, and ask about flood risk in areas near the Delta waterways.",
+ "universities": [
+  "University of the Pacific"
+ ],
+ "fact": "Stockton sits on the San Joaquin Delta, so some neighborhoods are near levees and flood zones.",
+ "checked": "November 2026"
+}

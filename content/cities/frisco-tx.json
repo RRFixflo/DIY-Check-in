@@ -1,0 +1,42 @@
+{
+ "name": "Frisco",
+ "neighborhoods": [
+  {
+   "name": "Frisco Square",
+   "homes": "apartments and townhomes"
+  },
+  {
+   "name": "Starwood",
+   "homes": "large single-family houses"
+  },
+  {
+   "name": "Stonebriar",
+   "homes": "apartment complexes and houses"
+  },
+  {
+   "name": "Richwoods",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Newman Village",
+   "homes": "newer single-family houses"
+  },
+  {
+   "name": "Phillips Creek Ranch",
+   "homes": "newer single-family houses"
+  }
+ ],
+ "housing": "Frisco's rentals are mostly newer single-family houses in HOA communities and large new apartment complexes.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free civil legal help for low-income renters in Collin County"
+  }
+ ],
+ "climate": "Test the air conditioning, photograph the roof for hail damage and look for foundation cracks; summers are hot and spring hail is common.",
+ "universities": [],
+ "fact": "Frisco is one of the fastest-growing cities in the country, so many rentals are recently built.",
+ "checked": "November 2026"
+}

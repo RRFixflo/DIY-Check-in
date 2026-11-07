@@ -1,0 +1,53 @@
+{
+ "name": "Albuquerque",
+ "neighborhoods": [
+  {
+   "name": "Nob Hill",
+   "homes": "1930s–50s houses, casitas and small apartment buildings"
+  },
+  {
+   "name": "University Heights",
+   "homes": "small houses, duplexes and apartments near UNM"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Northeast Heights",
+   "homes": "ranch houses and apartment complexes"
+  },
+  {
+   "name": "North Valley",
+   "homes": "adobe-style houses and casitas on larger lots"
+  },
+  {
+   "name": "Westside",
+   "homes": "newer single-family houses and apartment complexes"
+  },
+  {
+   "name": "Old Town",
+   "homes": "older adobe homes and small apartments"
+  }
+ ],
+ "housing": "Albuquerque renters mostly live in single-family houses, stucco apartment complexes and small casitas, many cooled by evaporative 'swamp' coolers.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "City of Albuquerque Office of Consumer Protection",
+   "url": "https://www.cabq.gov/office-of-consumer-protection/renters-rights",
+   "what": "renters' rights information and referrals"
+  },
+  {
+   "name": "New Mexico Legal Aid",
+   "url": "https://newmexicolegalaid.org/tag/housing/",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the swamp cooler or air conditioning before summer, check the roof and windows for gaps that let in dust, and note the heater works for cold desert nights.",
+ "universities": [
+  "University of New Mexico"
+ ],
+ "fact": "Many Albuquerque rentals use evaporative 'swamp' coolers rather than central air, so check who is responsible for servicing them.",
+ "checked": "November 2026"
+}

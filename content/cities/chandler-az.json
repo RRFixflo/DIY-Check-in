@@ -1,0 +1,42 @@
+{
+ "name": "Chandler",
+ "neighborhoods": [
+  {
+   "name": "Downtown Chandler",
+   "homes": "apartments and older homes"
+  },
+  {
+   "name": "Ocotillo",
+   "homes": "single-family homes and apartments near lakes"
+  },
+  {
+   "name": "Fulton Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Clemente Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Warner Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "West Chandler",
+   "homes": "apartment complexes and single-family homes"
+  }
+ ],
+ "housing": "Chandler renters mostly live in stucco single-family homes in HOA communities and in large apartment complexes, many near tech employers.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Maricopa County Legal Assistance for Renters",
+   "url": "https://maricopa.gov/5763/Legal-Assistance-for-Renters",
+   "what": "free legal help for renters facing eviction"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; summer highs often pass 110°F, so a broken AC is an urgent repair.",
+ "universities": [],
+ "fact": "Arizona law sets the rules for Chandler rentals, and many homes are also governed by HOA rules that tenants must follow.",
+ "checked": "November 2026"
+}

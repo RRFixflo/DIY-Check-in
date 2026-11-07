@@ -371,14 +371,15 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
     const seoTitle = N.uk ? 'Inventory clerk in ' + place + '? Do your own inventory for £30' : st ? place + ', ' + st.code.toUpperCase() + ' Move-In & Move-Out Inspection App' : title + ' · £30';
     const low = t => t.charAt(0).toLowerCase() + t.slice(1), nd = t => String(t).replace(/\.$/, '');
     const usRule = st && st.returnDays ? 'In ' + st.name + ', the security deposit must be returned within ' + low(nd(st.returnDays).replace(/^within /i, '')) + (st.cap ? (/^No statewide/i.test(st.cap) ? ', and there is no statewide limit on its amount.' : ', and it can’t be more than ' + low(nd(st.cap)) + '.') : '.') : '';
-    const basics = N.basics.concat(p.state && STATES[p.state] ? [STATES[p.state]] : usRule ? [usRule] : []);
+    const stateRule = p.state && STATES[p.state] ? STATES[p.state] : usRule;
+    // With local research, the national basics give way to the one rule for this state or nation (the rest is on /us/<state> or the guides).
+    const basics = LOCAL[p.slug] && stateRule ? [stateRule] : N.basics.concat(stateRule ? [stateRule] : []);
     const faqs = [
       ['How much does ' + (N.uk ? 'an inventory report' : 'a ' + N.thing + ' report') + ' cost in ' + w + '?', 'With DIY Inventory it’s ' + N.price + ', whatever the size of the property: a ' + N.checkin + ', a ' + N.checkout + ' or an inspection during the tenancy. It’s free to start, and you pay when the finished report is downloaded.'],
       ...(N.uk ? [['How much does an inventory clerk cost in ' + w + '?', 'Inventory clerks in ' + w + ' usually charge for each visit, more for bigger or furnished homes, so a check-in and a check-out together can cost a few hundred pounds. With DIY Inventory each report is £30, whatever the size, and you can do it as soon as you have the keys.']] : []),
       ['Do I need ' + N.clerk + ' in ' + w + '?', 'No. You can do the ' + N.thing + ' yourself on your phone, or send your ' + N.who + ' a link to do it. The app gives every room a photo checklist, stamps the date and time on every photo, and both sides sign the report.'],
       ['Will the report help with a ' + N.money + ' dispute in ' + N.label + '?', N.disputes + ' Your report gives you that evidence: dated photos of every room, the condition of every item, meter readings and keys, signed by both sides.'],
-    ].concat(N.uk ? [['Can I book a Gas Safety certificate, EICR or EPC in ' + w + '?', 'You can request one on our landlord services page at a fixed price. We’ll check we cover the area and confirm a date with you.']]
-      : [['Does it work outside the UK?', 'Yes. DIY Inventory runs in any phone’s web browser, anywhere in the world. Choose your country when you set up the property; addresses and dates follow your country’s format, and there’s nothing to install.']]);
+    ].filter((f, i) => !LOCAL[p.slug] || (N.uk && i === 1));   // pages with local research keep only their own questions (UK: and what a clerk costs there)
     // ---- what makes this city's page its own
     const L = LOCAL[p.slug] || {}, C = p.nation === 'us' ? census.get(p.slug) : null, us_ = p.nation === 'us';
     const hood = us_ ? 'neighborhood' : 'neighbourhood';
@@ -428,32 +429,20 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
 </div></section>` : '';
     const sameRegion = us_ ? PLACES.filter(q => q !== p && q.nation === 'us' && q.region === p.region && !near.includes(q)).slice(0, 12) : [];
     faqs.push(...extraFaqs);
-    const body = `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="${BASE_PATH}">← All areas</a></p><span class="kicker">${e(p.region)} · ${e(N.label.replace(/^the /, ''))}</span><h1>${e(title)}</h1><p>${e(cap(N.checkin))} and ${e(N.checkout)} reports and inspections during the tenancy, for landlords, property managers and ${e(N.who)}s in ${e(w)}, done on your phone. Dated photos, every item’s condition, signed by both sides, and the PDF ready the moment it’s signed. ${e(N.price)}.</p></div></div>
+    const body = `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="${BASE_PATH}">← All areas</a></p><span class="kicker">${e(p.region)} · ${e(N.label.replace(/^the /, ''))}</span><h1>${e(title)}</h1><p>${LOCAL[p.slug] ? e(cap(N.checkin) + ' and ' + N.checkout + ' reports for ' + N.who + 's and landlords in ' + w + ', on your phone: dated photos, signed by both sides. ' + N.price + '.') : e(cap(N.checkin) + ' and ' + N.checkout + ' reports and inspections during the tenancy, for landlords, property managers and ' + N.who + 's in ' + w + ', done on your phone. Dated photos, every item’s condition, signed by both sides, and the PDF ready the moment it’s signed. ' + N.price + '.')}</p></div></div>
 <section class="tight"><div class="wrap">
   <div class="two">
-    <div class="card"><h3>Why do it yourself in ${e(place)}?</h3><ul>
-      <li>No appointment to wait for: do it whenever you have the keys, before the ${e(N.who)} moves in or with them there.</li>
-      <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every check-in, inspection and check-out.' : 'A fixed ' + (p.nation === 'us' ? '{{USD}}' : '£30') + ' a report instead of paying ' + N.clerk + ' for every visit.')}</li>
-      <li>The report is ready instantly, so it can be sent and signed on move-in day.</li>
-      ${N.uk ? '<li>Prefer paper? Use our <a href="/inventory-template">free inventory template</a> (PDF and Word).</li>' : ''}
-      <li>The ${e(N.checkout)} starts from the ${e(N.checkin)} and shows what has changed, with photos side by side.</li>
-    </ul></div>
-    <div class="card"><h3>Renting in ${e(N.label)}: the basics</h3><ul>
+    ${LOCAL[p.slug] ? '' : `<div class="card"><h3>Why do it yourself in ${e(place)}?</h3><ul>
+      <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every visit, ready the moment it’s signed.' : 'A fixed ' + (p.nation === 'us' ? '{{USD}}' : '£30') + ' a report instead of paying ' + N.clerk + ' for every visit, ready the moment it’s signed.')}</li>
+      <li>The ${e(N.checkout)} starts from the ${e(N.checkin)} and shows what changed, photos side by side.${N.uk ? ' Prefer paper? Use our <a href="/inventory-template">free inventory template</a>.' : ''}</li>
+    </ul></div>`}
+    ${LOCAL[p.slug] && st ? `<div class="card" style="grid-column:1/-1;text-align:center"><a href="/us/${st.slug}">${e(p.region)} security deposit law: the limit, and how fast it must be returned →</a></div>` : `<div class="card"><h3>Renting in ${e(N.label)}: the basics</h3><ul>
       ${basics.map(b => '<li>' + e(b) + '</li>').join('\n      ')}
-    </ul>${usState(p) ? `<p style="margin:10px 0 0"><a href="/us/${usState(p).slug}">${e(p.region)} security deposit law and move-in checklist →</a></p>` : ''}<p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Check the current rules for ${e(p.state ? p.region : N.label)}.</p></div>
+    </ul>${usState(p) ? `<p style="margin:10px 0 0"><a href="/us/${usState(p).slug}">${e(p.region)} security deposit law and move-in checklist →</a></p>` : ''}<p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Check the current rules for ${e(p.state ? p.region : N.label)}.</p></div>`}
   </div>
 </div></section>
 ${localHtml}${numbersHtml}${tipsHtml}${rulesHtml}
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><span class="kicker">How it works</span><h2>Your ${e(place)} ${e(N.thing)} in four steps</h2><p>Everything happens in your phone’s browser, in any country. Nothing to install.</p></div>
-  <div class="steps four">
-    <div class="card step"><div class="n">1</div><h3>Set up the property</h3><p>Choose the country, enter the address, and pick the rooms. Each room gets its own photo checklist.</p></div>
-    <div class="card step"><div class="n">2</div><h3>Photograph every room</h3><p>The camera steps through each item and stamps the date and time on every photo. Meters and keys too.</p></div>
-    <div class="card step"><div class="n">3</div><h3>Sign, and it’s ready</h3><p>Sign on the screen and the PDF report is made straight away. Send the ${e(N.who)} a link to check and sign it.</p></div>
-    <div class="card step"><div class="n">4</div><h3>Compare at ${e(N.checkout)}</h3><p>Start the ${e(N.checkout)} from the ${e(N.checkin)} and see exactly what has changed, with photos side by side.</p></div>
-  </div>
-  <p style="text-align:center;margin:26px 0 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn primary" href="/app">Start free</a><a class="btn ghost" href="/example-report">See an example report</a></p>
-</div></section>
+<section style="padding-top:0"><div class="wrap"><div class="card" style="text-align:center"><p style="margin:0 0 12px">Add the property, photograph each room as the app walks you through it, sign, and the PDF report is ready. <a href="/how-it-works">How it works</a></p><p style="margin:0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn primary" href="/app">Start free</a><a class="btn ghost" href="/example-report">See an example report</a></p></div></div></section>
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">Questions</span><h2>${e(cap(N.thing))}s in ${e(place)}: questions and answers</h2></div>
   <div class="faq">${faqs.map(([q, a]) => `<details><summary>${e(q)}</summary><p>${e(a)}</p></details>`).join('')}</div>

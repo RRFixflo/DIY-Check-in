@@ -1,0 +1,59 @@
+{
+ "name": "Galway",
+ "neighborhoods": [
+  {
+   "name": "Salthill",
+   "homes": "houses and seafront apartments"
+  },
+  {
+   "name": "Newcastle",
+   "homes": "houses near the university"
+  },
+  {
+   "name": "Westside",
+   "homes": "houses and former council homes"
+  },
+  {
+   "name": "Knocknacarra",
+   "homes": "newer family houses"
+  },
+  {
+   "name": "Renmore",
+   "homes": "family houses"
+  },
+  {
+   "name": "Woodquay",
+   "homes": "city-centre flats"
+  },
+  {
+   "name": "Claddagh",
+   "homes": "small houses and apartments"
+  }
+ ],
+ "housing": "Galway's rentals are mostly houses and apartments, with high student demand near the University of Galway.",
+ "localRules": [
+  {
+   "text": "Landlords in Ireland must register each tenancy with the Residential Tenancies Board within one month of it starting, and every year after.",
+   "source": "https://www.rtb.ie/register-a-tenancy/why-register"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Residential Tenancies Board (RTB)",
+   "url": "https://rtb.ie/renting/beginning-a-tenancy/tenant-checklist/",
+   "what": "state body for tenancy registration and deposit disputes"
+  },
+  {
+   "name": "Threshold",
+   "url": "https://www.threshold.ie/get-help",
+   "what": "free advice charity for renters"
+  }
+ ],
+ "climate": "Galway is one of Ireland's wettest cities, so photograph any damp or mould and check window seals and the heating.",
+ "universities": [
+  "University of Galway",
+  "Atlantic Technological University"
+ ],
+ "fact": "Student demand around the University of Galway makes late summer the busiest time to find a home.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,42 @@
+{
+ "name": "Plano",
+ "neighborhoods": [
+  {
+   "name": "Legacy West",
+   "homes": "new apartment buildings"
+  },
+  {
+   "name": "Downtown Plano",
+   "homes": "apartments and older homes"
+  },
+  {
+   "name": "Willow Bend",
+   "homes": "single-family homes and apartments"
+  },
+  {
+   "name": "Shadow Ridge",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Los Rios",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Deerfield",
+   "homes": "single-family homes"
+  }
+ ],
+ "housing": "Plano renters live in large apartment complexes, many near office campuses and the Dallas North Tollway, and in single-family homes in planned subdivisions.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check the roof, windows and gutters for hail damage; summers are hot and North Texas storms bring hail.",
+ "universities": [],
+ "fact": "Many of Plano's newer apartments sit near large corporate headquarters in the Legacy area.",
+ "checked": "November 2026"
+}

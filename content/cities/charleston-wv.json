@@ -1,0 +1,43 @@
+{
+ "name": "Charleston",
+ "neighborhoods": [
+  {
+   "name": "East End",
+   "homes": "older houses and small apartment buildings near the Capitol"
+  },
+  {
+   "name": "South Hills",
+   "homes": "single-family houses on hillsides"
+  },
+  {
+   "name": "Kanawha City",
+   "homes": "single-family houses and apartments"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments in older buildings"
+  },
+  {
+   "name": "West Side",
+   "homes": "older houses"
+  },
+  {
+   "name": "Edgewood",
+   "homes": "older single-family houses"
+  }
+ ],
+ "housing": "Charleston's rentals are mostly older houses and small apartment buildings, many on hillsides or along the rivers.",
+ "localRules": [
+  {
+   "text": "Owners must register every residential rental unit in the City of Charleston and get a rental license.",
+   "source": "https://www.charlestonwv.gov/sites/default/files/documents/ResRentalFAQ.pdf"
+  }
+ ],
+ "tenantHelp": [],
+ "climate": "Check the basement and yard drainage for water and test the heating; the Kanawha and Elk rivers flood and winters are cold.",
+ "universities": [
+  "University of Charleston"
+ ],
+ "fact": "Many East End rentals are in older houses within walking distance of the West Virginia State Capitol.",
+ "checked": "November 2026"
+}

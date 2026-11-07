@@ -1,0 +1,48 @@
+{
+ "name": "Des Moines",
+ "neighborhoods": [
+  {
+   "name": "Sherman Hill",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "Drake",
+   "homes": "older houses rented to students"
+  },
+  {
+   "name": "Beaverdale",
+   "homes": "brick single-family homes"
+  },
+  {
+   "name": "East Village",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments in new and converted buildings"
+  },
+  {
+   "name": "Highland Park",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Waterbury",
+   "homes": "older single-family homes"
+  }
+ ],
+ "housing": "Des Moines renters live in older single-family homes, houses split into apartments, and a growing number of downtown apartments.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Iowa Legal Aid",
+   "url": "https://www.iowalegalaid.org",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the furnace and AC, and check basements for water and windows for drafts; Iowa has cold winters and hot, humid summers.",
+ "universities": [
+  "Drake University"
+ ],
+ "fact": "A Des Moines rental needs a city rental certificate, so you can ask the landlord to show it.",
+ "checked": "November 2026"
+}

@@ -1,0 +1,60 @@
+{
+ "name": "Dublin",
+ "neighborhoods": [
+  {
+   "name": "Rathmines",
+   "homes": "period houses split into flats and bedsits"
+  },
+  {
+   "name": "Ranelagh",
+   "homes": "Victorian houses and flats"
+  },
+  {
+   "name": "Phibsborough",
+   "homes": "terraced houses and flats"
+  },
+  {
+   "name": "Stoneybatter",
+   "homes": "small terraced cottages"
+  },
+  {
+   "name": "Drumcondra",
+   "homes": "red-brick terraces"
+  },
+  {
+   "name": "Smithfield",
+   "homes": "modern apartments"
+  },
+  {
+   "name": "Docklands",
+   "homes": "modern apartment blocks"
+  },
+  {
+   "name": "Clontarf",
+   "homes": "family houses and flats"
+  }
+ ],
+ "housing": "Dublin renters live mostly in apartments and in red-brick Victorian and Georgian houses divided into flats, with family houses in the suburbs.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Residential Tenancies Board (RTB)",
+   "url": "https://rtb.ie/renting/beginning-a-tenancy/tenant-checklist/",
+   "what": "state body for tenancy registration and deposit disputes"
+  },
+  {
+   "name": "Threshold",
+   "url": "https://www.threshold.ie/get-help",
+   "what": "free advice charity for renters"
+  }
+ ],
+ "climate": "Dublin is mild and damp, so check for mould and condensation and test the heating and immersion water heater.",
+ "universities": [
+  "Trinity College Dublin",
+  "University College Dublin",
+  "Dublin City University",
+  "TU Dublin"
+ ],
+ "fact": "Dublin is a Rent Pressure Zone, which limits how much rents can rise.",
+ "checked": "November 2026"
+}

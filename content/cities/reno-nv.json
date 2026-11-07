@@ -1,0 +1,46 @@
+{
+ "name": "Reno",
+ "neighborhoods": [
+  {
+   "name": "Midtown",
+   "homes": "older houses, small apartments and newer buildings"
+  },
+  {
+   "name": "Old Southwest",
+   "homes": "older single-family homes and duplexes"
+  },
+  {
+   "name": "Wells Avenue",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "University area",
+   "homes": "student apartments and shared houses"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and converted buildings"
+  },
+  {
+   "name": "South Meadows",
+   "homes": "newer apartment complexes"
+  },
+  {
+   "name": "Northwest Reno",
+   "homes": "single-family homes and apartments"
+  },
+  {
+   "name": "Somersett",
+   "homes": "newer single-family homes"
+  }
+ ],
+ "housing": "Reno renters live in apartment complexes, older houses and small multi-unit buildings near Midtown and the university, and single-family homes in newer suburbs.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the furnace and any evaporative cooler or AC, and check that outside pipes are protected; Reno is dry, with freezing winter nights and hot summers.",
+ "universities": [
+  "University of Nevada, Reno"
+ ],
+ "fact": "Washoe Legal Services, now listed as Northern Nevada Legal Aid, gives free help to low-income Reno tenants facing eviction.",
+ "checked": "November 2026"
+}

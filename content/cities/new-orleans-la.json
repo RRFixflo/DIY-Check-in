@@ -1,0 +1,60 @@
+{
+ "name": "New Orleans",
+ "neighborhoods": [
+  {
+   "name": "Uptown",
+   "homes": "shotgun doubles and raised cottages"
+  },
+  {
+   "name": "Mid-City",
+   "homes": "shotgun houses and doubles"
+  },
+  {
+   "name": "Bywater",
+   "homes": "creole cottages and shotgun houses"
+  },
+  {
+   "name": "Marigny",
+   "homes": "creole cottages and doubles"
+  },
+  {
+   "name": "Irish Channel",
+   "homes": "shotgun doubles"
+  },
+  {
+   "name": "Garden District",
+   "homes": "large historic houses, some split into apartments"
+  },
+  {
+   "name": "Lower Garden District",
+   "homes": "historic houses split into apartments"
+  },
+  {
+   "name": "Gentilly",
+   "homes": "post-war ranch houses and raised houses"
+  }
+ ],
+ "housing": "New Orleans rentals are largely shotgun doubles, creole cottages and older houses split into apartments, many over a century old.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Southeast Louisiana Legal Services",
+   "url": "https://slls.org/en/?p=14063",
+   "what": "free legal help and eviction defense"
+  },
+  {
+   "name": "Jane Place Neighborhood Sustainability Initiative",
+   "url": "https://www.idealist.org/en/nonprofit/a90651a1aea945758c11ba3ff2a86a10-jane-place-neighborhood-sustainability-initiative-new-orleans",
+   "what": "tenant organizing and outreach"
+  }
+ ],
+ "climate": "Heat and humidity cause mold and termites, so check walls, floors and window frames; test the air conditioning and ask about flooding and hurricane preparation.",
+ "universities": [
+  "Tulane University",
+  "Loyola University New Orleans",
+  "University of New Orleans",
+  "Xavier University of Louisiana"
+ ],
+ "fact": "Many New Orleans renters live in one side of a shotgun double, a long narrow house with rooms in a row.",
+ "checked": "November 2026"
+}

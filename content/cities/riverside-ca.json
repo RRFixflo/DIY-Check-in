@@ -1,0 +1,53 @@
+{
+ "name": "Riverside",
+ "neighborhoods": [
+  {
+   "name": "Downtown",
+   "homes": "apartments, lofts and older bungalows"
+  },
+  {
+   "name": "Wood Streets",
+   "homes": "historic 1910s–1930s single-family homes"
+  },
+  {
+   "name": "Magnolia Center",
+   "homes": "garden apartments and mid-century houses"
+  },
+  {
+   "name": "Canyon Crest",
+   "homes": "apartment complexes and townhomes near UCR"
+  },
+  {
+   "name": "University",
+   "homes": "student apartments and shared houses"
+  },
+  {
+   "name": "Arlington",
+   "homes": "older single-family homes and small apartment buildings"
+  },
+  {
+   "name": "La Sierra",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Orangecrest",
+   "homes": "newer single-family homes in planned tracts"
+  }
+ ],
+ "housing": "Riverside's rentals are mostly single-family homes and stucco garden apartment complexes, with older bungalows near downtown and student housing around UC Riverside.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Fair Housing Council of Riverside County",
+   "url": "https://www.tenantstogether.org/resources/fair-housing-council-riverside-county-inc",
+   "what": "free landlord-tenant mediation and fair housing complaints"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit; Riverside summers are very hot, so a broken AC is an urgent repair.",
+ "universities": [
+  "UC Riverside",
+  "California Baptist University"
+ ],
+ "fact": "Under California law, landlords must photograph a unit at move-in and move-out for tenancies that began on or after July 1, 2025, so dated photos matter in Riverside deposit disputes.",
+ "checked": "November 2026"
+}

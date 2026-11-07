@@ -1,0 +1,55 @@
+{
+ "name": "Portland",
+ "neighborhoods": [
+  {
+   "name": "Alberta Arts District",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Hawthorne",
+   "homes": "older houses and small apartment buildings"
+  },
+  {
+   "name": "Pearl District",
+   "homes": "loft and mid-rise apartments"
+  },
+  {
+   "name": "Nob Hill",
+   "homes": "older apartment buildings and Victorian houses"
+  },
+  {
+   "name": "Sellwood",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "St. Johns",
+   "homes": "single-family houses and apartments"
+  },
+  {
+   "name": "Buckman",
+   "homes": "older houses and apartment buildings"
+  }
+ ],
+ "housing": "Portland renters live in older houses and small apartment buildings on the east side and in mid-rises in the Pearl District and downtown.",
+ "localRules": [
+  {
+   "text": "Portland's security deposit ordinance requires landlords to give tenants a condition report to complete at the start of the tenancy, and it limits deposits for renters who moved in on or after March 1, 2020.",
+   "source": "https://consumerlaw.osbar.org/?p=3703"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Oregon Law Help",
+   "url": "https://oregonlawhelp.org",
+   "what": "free legal information for Oregon renters"
+  }
+ ],
+ "climate": "Look for mold, condensation and leaks around windows; long rainy winters make damp a common issue.",
+ "universities": [
+  "Portland State University",
+  "University of Portland",
+  "Reed College"
+ ],
+ "fact": "In Portland the move-in condition report is part of the city's deposit rules, so filling it in carefully protects your deposit.",
+ "checked": "November 2026"
+}

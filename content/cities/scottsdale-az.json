@@ -1,0 +1,42 @@
+{
+ "name": "Scottsdale",
+ "neighborhoods": [
+  {
+   "name": "Old Town",
+   "homes": "condos and apartments near restaurants and nightlife"
+  },
+  {
+   "name": "South Scottsdale",
+   "homes": "1950s and 1960s ranch houses and small apartment buildings"
+  },
+  {
+   "name": "McCormick Ranch",
+   "homes": "single-family homes and condos around lakes"
+  },
+  {
+   "name": "Gainey Ranch",
+   "homes": "gated townhomes and single-family homes"
+  },
+  {
+   "name": "North Scottsdale",
+   "homes": "newer single-family homes and luxury apartments"
+  },
+  {
+   "name": "Grayhawk",
+   "homes": "master-planned single-family homes"
+  }
+ ],
+ "housing": "Scottsdale rentals range from condos and apartments near Old Town to single-family homes in planned communities, and many homes are in HOAs with their own rules.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Maricopa County Legal Assistance for Renters (Community Legal Services)",
+   "url": "https://maricopa.gov/5763/Legal-Assistance-for-Renters",
+   "what": "free legal help for county tenants facing eviction for unpaid rent"
+  }
+ ],
+ "climate": "Test the air conditioning and pool equipment if there is one, and photograph the outdoor AC unit; summer heat makes a broken AC an urgent repair.",
+ "universities": [],
+ "fact": "Scottsdale requires a city license for short-term rentals, so check whether a home was used as a vacation rental before you lease it.",
+ "checked": "November 2026"
+}

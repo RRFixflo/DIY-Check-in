@@ -1,0 +1,49 @@
+{
+ "name": "Toledo",
+ "neighborhoods": [
+  {
+   "name": "Old West End",
+   "homes": "large Victorian houses, many split into apartments"
+  },
+  {
+   "name": "Point Place",
+   "homes": "small single-family homes near the water"
+  },
+  {
+   "name": "Old Orchard",
+   "homes": "older homes near the University of Toledo"
+  },
+  {
+   "name": "West Toledo",
+   "homes": "single-family homes and duplexes"
+  },
+  {
+   "name": "East Toledo",
+   "homes": "older frame houses"
+  },
+  {
+   "name": "Downtown / Warehouse District",
+   "homes": "lofts and apartments"
+  }
+ ],
+ "housing": "Toledo's rentals are largely older single-family and two-family houses, many built before 1978, plus apartment complexes in the suburbs.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Right to Counsel Toledo (Legal Aid of Western Ohio)",
+   "url": "https://www.ohiolegalhelp.org/resource/right-counsel-toledo-free-eviction-help",
+   "what": "free eviction defense for eligible Toledo tenants"
+  },
+  {
+   "name": "City of Toledo Renter Resources",
+   "url": "https://toledo.oh.gov/residents/renters",
+   "what": "city renter information and Tenant Tuesday clinics"
+  }
+ ],
+ "climate": "Test the furnace, check windows for drafts and look in the basement for water; winters are cold off Lake Erie.",
+ "universities": [
+  "University of Toledo"
+ ],
+ "fact": "In an older Toledo rental, ask to see the lead-safe certificate before you move in.",
+ "checked": "November 2026"
+}

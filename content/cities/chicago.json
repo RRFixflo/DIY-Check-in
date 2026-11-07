@@ -1,0 +1,60 @@
+{
+ "name": "Chicago",
+ "neighborhoods": [
+  {
+   "name": "Lincoln Park",
+   "homes": "greystone flats and courtyard apartment buildings"
+  },
+  {
+   "name": "Logan Square",
+   "homes": "two-flats and three-flats"
+  },
+  {
+   "name": "Lakeview",
+   "homes": "vintage courtyard buildings and high-rises"
+  },
+  {
+   "name": "Uptown",
+   "homes": "vintage apartment buildings and high-rises"
+  },
+  {
+   "name": "Pilsen",
+   "homes": "older two-flats and brick walk-ups"
+  },
+  {
+   "name": "Hyde Park",
+   "homes": "courtyard buildings near the University of Chicago"
+  },
+  {
+   "name": "Rogers Park",
+   "homes": "courtyard apartment buildings near the lake"
+  },
+  {
+   "name": "Wicker Park",
+   "homes": "two-flats, three-flats and newer condos"
+  }
+ ],
+ "housing": "Chicago's rentals are largely two-flats, three-flats and vintage courtyard buildings, plus high-rises along the lake.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Metropolitan Tenants Organization",
+   "url": "https://www.tenants-rights.org",
+   "what": "tenant rights hotline and organizing"
+  },
+  {
+   "name": "Lawyers' Committee for Better Housing",
+   "url": "https://lcbh.org",
+   "what": "free legal help for renters"
+  }
+ ],
+ "climate": "Test the heat and photograph windows, radiators and any drafts; winters are long and very cold.",
+ "universities": [
+  "University of Chicago",
+  "Loyola University Chicago",
+  "DePaul University",
+  "University of Illinois Chicago"
+ ],
+ "fact": "Chicago's ordinance can make a landlord who mishandles a deposit pay up to twice the deposit, so the receipt and move-in record matter.",
+ "checked": "November 2026"
+}

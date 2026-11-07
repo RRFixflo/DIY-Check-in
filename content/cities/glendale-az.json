@@ -1,0 +1,45 @@
+{
+ "name": "Glendale",
+ "neighborhoods": [
+  {
+   "name": "Arrowhead Ranch",
+   "homes": "single-family homes, some in gated subdivisions"
+  },
+  {
+   "name": "Catlin Court",
+   "homes": "historic bungalows near downtown"
+  },
+  {
+   "name": "Westgate",
+   "homes": "newer apartment complexes near the stadium district"
+  },
+  {
+   "name": "Bellair",
+   "homes": "1970s and 1980s single-family homes"
+  },
+  {
+   "name": "Glen Lakes",
+   "homes": "older single-family homes around a golf course"
+  },
+  {
+   "name": "Downtown Glendale",
+   "homes": "small apartment buildings and older houses"
+  }
+ ],
+ "housing": "Glendale's rentals are mostly single-family homes in suburban subdivisions and garden-style apartment complexes, with newer complexes near Westgate.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Maricopa County Legal Assistance for Renters (Community Legal Services)",
+   "url": "https://maricopa.gov/5763/Legal-Assistance-for-Renters",
+   "what": "free legal help for county tenants facing eviction for unpaid rent"
+  }
+ ],
+ "climate": "Test the air conditioning and photograph the outdoor unit and thermostat; summer heat makes a broken AC an urgent repair, and monsoon storms can leave dust and roof damage worth recording.",
+ "universities": [
+  "Arizona State University West Valley",
+  "Midwestern University"
+ ],
+ "fact": "Arizona law requires landlords to register residential rentals with the county assessor, so Glendale rentals should appear in the Maricopa County Assessor's records.",
+ "checked": "November 2026"
+}

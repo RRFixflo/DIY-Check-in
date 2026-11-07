@@ -1,0 +1,49 @@
+{
+ "name": "Manchester",
+ "neighborhoods": [
+  {
+   "name": "North End",
+   "homes": "single-family houses and older apartments"
+  },
+  {
+   "name": "West Side",
+   "homes": "older multi-family houses"
+  },
+  {
+   "name": "Millyard",
+   "homes": "mill buildings converted to apartments"
+  },
+  {
+   "name": "Downtown (Elm Street)",
+   "homes": "apartments above shops"
+  },
+  {
+   "name": "East Side",
+   "homes": "older multi-family houses"
+  },
+  {
+   "name": "Rimmon Heights",
+   "homes": "multi-family houses"
+  },
+  {
+   "name": "South Manchester",
+   "homes": "apartment complexes and houses"
+  }
+ ],
+ "housing": "Manchester's rentals are mostly older multi-family wood houses and triple-deckers, plus apartments in converted mill buildings.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "603 Legal Aid",
+   "url": "https://nhfv.org/resources/603-legal-aid-formerly-legal-advice-referral-center-and-the-nh-bar-assns-pro-bono-program/",
+   "what": "free civil legal help for low-income people in New Hampshire"
+  }
+ ],
+ "climate": "Test the heating, ask how it is fueled, and find out who clears snow; winters are long and cold.",
+ "universities": [
+  "Southern New Hampshire University",
+  "University of New Hampshire at Manchester"
+ ],
+ "fact": "The brick mills of the Amoskeag Millyard along the Merrimack River now hold offices and apartments.",
+ "checked": "November 2026"
+}

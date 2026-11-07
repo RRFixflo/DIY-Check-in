@@ -1,0 +1,44 @@
+{
+ "name": "El Paso",
+ "neighborhoods": [
+  {
+   "name": "Kern Place",
+   "homes": "older houses and apartments near UTEP"
+  },
+  {
+   "name": "Sunset Heights",
+   "homes": "historic houses and small apartment buildings"
+  },
+  {
+   "name": "West Side",
+   "homes": "apartment complexes and houses"
+  },
+  {
+   "name": "East Side",
+   "homes": "newer single-family homes and apartments"
+  },
+  {
+   "name": "Northeast El Paso",
+   "homes": "houses and apartments near Fort Bliss"
+  },
+  {
+   "name": "Central El Paso",
+   "homes": "older houses and apartments"
+  }
+ ],
+ "housing": "El Paso renters mostly live in rented single-family homes and apartment complexes, with many military households near Fort Bliss.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Texas RioGrande Legal Aid",
+   "url": "https://www.trla.org",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning or evaporative cooler and check window seals for dust; summers are hot and dry.",
+ "universities": [
+  "University of Texas at El Paso"
+ ],
+ "fact": "Many El Paso homes are cooled by evaporative (swamp) coolers rather than central air, so check which one the rental has.",
+ "checked": "November 2026"
+}

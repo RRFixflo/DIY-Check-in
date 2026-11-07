@@ -1,0 +1,59 @@
+{
+ "name": "Edmonton",
+ "neighborhoods": [
+  {
+   "name": "Oliver",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Garneau",
+   "homes": "houses and apartments near the university"
+  },
+  {
+   "name": "Strathcona",
+   "homes": "older houses and walk-ups"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Westmount",
+   "homes": "houses and apartments"
+  },
+  {
+   "name": "Windermere",
+   "homes": "newer suburban houses"
+  },
+  {
+   "name": "Mill Woods",
+   "homes": "townhouses and houses"
+  }
+ ],
+ "housing": "Edmonton renters live in apartment towers around downtown and Oliver, walk-ups near the university, and houses and basement suites in the suburbs.",
+ "localRules": [
+  {
+   "text": "In Alberta the landlord must do a move-in inspection report with the tenant; without one the landlord cannot keep any of the security deposit for damage.",
+   "source": "https://Alberta.ca/system/files/custom_downloaded_images/sa-inspection-reports.pdf"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Residential Tenancy Dispute Resolution Service (RTDRS)",
+   "url": "https://www.alberta.ca/rtdrs-legal-resources",
+   "what": "Alberta's tribunal for landlord and tenant disputes, including deposits"
+  },
+  {
+   "name": "Alberta residential tenancies legal resources",
+   "url": "https://www.alberta.ca/residential-tenancies-resources",
+   "what": "list of free legal help for renters in Alberta"
+  }
+ ],
+ "climate": "Test the furnace and check windows and doors for drafts; Edmonton winters are long and very cold.",
+ "universities": [
+  "University of Alberta",
+  "MacEwan University"
+ ],
+ "fact": "Garneau next to the University of Alberta has many student rentals.",
+ "checked": "November 2026"
+}

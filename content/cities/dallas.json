@@ -1,0 +1,54 @@
+{
+ "name": "Dallas",
+ "neighborhoods": [
+  {
+   "name": "Uptown",
+   "homes": "mid-rise and high-rise apartment complexes"
+  },
+  {
+   "name": "Oak Lawn",
+   "homes": "older apartments and newer complexes"
+  },
+  {
+   "name": "Lower Greenville",
+   "homes": "duplexes, fourplexes and small apartment buildings"
+  },
+  {
+   "name": "Deep Ellum",
+   "homes": "loft apartments and new complexes"
+  },
+  {
+   "name": "Bishop Arts",
+   "homes": "bungalows and small apartment buildings"
+  },
+  {
+   "name": "Lake Highlands",
+   "homes": "apartment complexes and single-family homes"
+  },
+  {
+   "name": "Oak Cliff",
+   "homes": "older houses and duplexes"
+  }
+ ],
+ "housing": "Dallas renters mostly live in garden and mid-rise apartment complexes, with many rented single-family homes and duplexes.",
+ "localRules": [
+  {
+   "text": "Dallas requires owners of single-family rental homes, duplexes and condo units to register them with Code Compliance every year, and multi-tenant properties are registered and inspected separately.",
+   "source": "https://dallas.gov/departments/codecompliance/Pages/single-family-program.aspx"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "City of Dallas Eviction Assistance Initiative (with Legal Aid of NorthWest Texas)",
+   "url": "https://dallascityhall.com/eai",
+   "what": "legal advice and representation for renters facing eviction"
+  }
+ ],
+ "climate": "Test the air conditioning and check the roof and windows for hail damage; summers are hot and spring storms bring hail.",
+ "universities": [
+  "Southern Methodist University",
+  "University of Texas at Dallas"
+ ],
+ "fact": "In Dallas you can report a rental home that needs repairs to Code Compliance, which registers and inspects rental properties.",
+ "checked": "November 2026"
+}

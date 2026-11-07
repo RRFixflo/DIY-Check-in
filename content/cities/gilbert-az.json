@@ -1,0 +1,42 @@
+{
+ "name": "Gilbert",
+ "neighborhoods": [
+  {
+   "name": "Heritage District",
+   "homes": "apartments and older homes downtown"
+  },
+  {
+   "name": "Agritopia",
+   "homes": "single-family homes and townhomes"
+  },
+  {
+   "name": "Val Vista Lakes",
+   "homes": "single-family homes around lakes"
+  },
+  {
+   "name": "Power Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Morrison Ranch",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Seville",
+   "homes": "single-family homes"
+  }
+ ],
+ "housing": "Gilbert's rentals are mostly single-family stucco homes in HOA communities, with apartment complexes along the main roads and near the Heritage District.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Maricopa County Legal Assistance for Renters",
+   "url": "https://maricopa.gov/5763/Legal-Assistance-for-Renters",
+   "what": "free legal help for renters facing eviction"
+  }
+ ],
+ "climate": "Test the air conditioning, photograph the outdoor unit and check the pool equipment if there is one; summer highs often pass 110°F.",
+ "universities": [],
+ "fact": "Most Gilbert rental homes are in HOA communities, so tenants usually have to follow the HOA's rules on yards, parking and trash.",
+ "checked": "November 2026"
+}

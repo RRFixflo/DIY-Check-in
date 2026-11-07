@@ -1,0 +1,54 @@
+{
+ "name": "Milwaukee",
+ "neighborhoods": [
+  {
+   "name": "Bay View",
+   "homes": "upper and lower duplexes and small houses"
+  },
+  {
+   "name": "Riverwest",
+   "homes": "duplexes and older wood-frame houses"
+  },
+  {
+   "name": "East Side",
+   "homes": "duplexes and older apartment buildings near UWM"
+  },
+  {
+   "name": "Third Ward",
+   "homes": "lofts in converted warehouses"
+  },
+  {
+   "name": "Walker's Point",
+   "homes": "lofts and older houses"
+  },
+  {
+   "name": "Washington Heights",
+   "homes": "bungalows and duplexes"
+  },
+  {
+   "name": "Brewers Hill",
+   "homes": "historic houses and condos"
+  }
+ ],
+ "housing": "Milwaukee is known for its upper-and-lower duplexes and 'Polish flats', alongside bungalows and warehouse lofts downtown.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Milwaukee Rental Housing Resource Center",
+   "url": "https://milwaukeenns.org/2023/12/20/milwaukee-rental-housing-resource-center-still-serving-residents-in-need/",
+   "what": "help for renters and landlords, including mediation and legal aid referrals"
+  },
+  {
+   "name": "Legal Aid Society of Milwaukee",
+   "url": "https://milwaukeenns.org/2025/02/25/evictions-are-still-high-in-milwaukee-heres-what-you-need-to-know/",
+   "what": "free eviction defense at the courthouse"
+  }
+ ],
+ "climate": "Cold winters mean you should test the furnace, check windows and doors for drafts, and photograph any ice damage, damp basements or frozen-pipe stains.",
+ "universities": [
+  "University of Wisconsin–Milwaukee",
+  "Marquette University"
+ ],
+ "fact": "Many Milwaukee renters live in one half of a duplex, often with the landlord or another household in the other unit.",
+ "checked": "November 2026"
+}

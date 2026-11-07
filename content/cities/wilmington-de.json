@@ -1,0 +1,46 @@
+{
+ "name": "Wilmington",
+ "neighborhoods": [
+  {
+   "name": "Trolley Square",
+   "homes": "row houses and apartments"
+  },
+  {
+   "name": "Little Italy",
+   "homes": "brick row houses"
+  },
+  {
+   "name": "Wawaset Park",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "Highlands",
+   "homes": "older houses and row houses"
+  },
+  {
+   "name": "Riverfront",
+   "homes": "newer apartment buildings"
+  },
+  {
+   "name": "Downtown (Market Street)",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Union Park Gardens",
+   "homes": "row houses"
+  }
+ ],
+ "housing": "Wilmington's rentals are largely brick row houses and older apartment buildings, plus newer apartments on the Riverfront.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Community Legal Aid Society (CLASI)",
+   "url": "https://declasi.org/",
+   "what": "free legal help for tenants, including subsidized housing and evictions"
+  }
+ ],
+ "climate": "Test both the heating and the air conditioning; winters are cold and summers are humid.",
+ "universities": [],
+ "fact": "Wilmington requires rental owners who live outside New Castle County to hire a local property manager.",
+ "checked": "November 2026"
+}

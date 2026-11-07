@@ -1,0 +1,47 @@
+{
+ "name": "Garland",
+ "neighborhoods": [
+  {
+   "name": "Firewheel",
+   "homes": "newer single-family homes"
+  },
+  {
+   "name": "Downtown Garland",
+   "homes": "older houses and new apartments near the DART station"
+  },
+  {
+   "name": "Club Hill",
+   "homes": "1960s and 1970s brick ranch houses"
+  },
+  {
+   "name": "Eastern Hills",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "Spring Park",
+   "homes": "single-family homes"
+  },
+  {
+   "name": "Lake Ray Hubbard area",
+   "homes": "single-family homes near the lake"
+  }
+ ],
+ "housing": "Garland's rentals are mostly brick single-family homes from the 1960s to 1980s and garden-style apartment complexes.",
+ "localRules": [
+  {
+   "text": "Owners of single-family homes and duplexes rented out in Garland must register them and hold a permit from Code Compliance under Chapter 32 of the city code.",
+   "source": "https://cityrulelookup.com/rental-inspections/inspection-programs/garland-tx"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of NorthWest Texas",
+   "url": "https://texaslawhelp.org/directory/lanwt",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and look for foundation cracks, sticking doors and hail damage; North Texas heat, clay soils and spring storms cause all three.",
+ "universities": [],
+ "fact": "Garland requires a city permit for single-family rental homes, so a landlord should be able to show one.",
+ "checked": "November 2026"
+}

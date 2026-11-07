@@ -1,0 +1,49 @@
+{
+ "name": "Arlington",
+ "neighborhoods": [
+  {
+   "name": "Downtown Arlington",
+   "homes": "apartments and student housing near UTA"
+  },
+  {
+   "name": "Entertainment District",
+   "homes": "new apartment buildings near the stadiums"
+  },
+  {
+   "name": "Viridian",
+   "homes": "newer houses and townhomes"
+  },
+  {
+   "name": "Dalworthington Gardens area",
+   "homes": "single-family houses"
+  },
+  {
+   "name": "South Arlington",
+   "homes": "suburban houses and apartment complexes"
+  },
+  {
+   "name": "East Arlington",
+   "homes": "older houses and apartment complexes"
+  }
+ ],
+ "housing": "Arlington's rentals are mostly garden-style apartment complexes and single-family houses, with student housing around UT Arlington.",
+ "localRules": [
+  {
+   "text": "Arlington's Code Compliance department inspects apartment complexes every year and publishes their inspection scores.",
+   "source": "https://www.arlingtontx.gov/City-Services/Code-Compliance/Code-Compliance-Directory/Multi-Family-Rapid-Reference-Guide/Multi-Family-Property-Inspection-Program"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "City of Arlington tenant rights page",
+   "url": "https://arlingtontx.gov/city_hall/departments/code_compliance/multi_family_residential/rapid_reference_guide/tenant_rights/",
+   "what": "city information and how to report code problems"
+  }
+ ],
+ "climate": "Test the air conditioning before summer heat, check that pipes are insulated for winter freezes, and photograph the roof and windows for hail damage.",
+ "universities": [
+  "University of Texas at Arlington"
+ ],
+ "fact": "You can check an Arlington apartment complex's latest city inspection score before signing a lease.",
+ "checked": "November 2026"
+}

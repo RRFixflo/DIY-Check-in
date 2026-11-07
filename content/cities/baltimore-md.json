@@ -1,0 +1,69 @@
+{
+ "name": "Baltimore",
+ "neighborhoods": [
+  {
+   "name": "Canton",
+   "homes": "brick rowhouses"
+  },
+  {
+   "name": "Federal Hill",
+   "homes": "rowhouses and apartments"
+  },
+  {
+   "name": "Fells Point",
+   "homes": "historic rowhouses and apartments in converted buildings"
+  },
+  {
+   "name": "Hampden",
+   "homes": "small stone and brick rowhouses"
+  },
+  {
+   "name": "Charles Village",
+   "homes": "large rowhouses split into apartments"
+  },
+  {
+   "name": "Mount Vernon",
+   "homes": "apartments in historic townhouses and mid-rise buildings"
+  },
+  {
+   "name": "Remington",
+   "homes": "rowhouses"
+  },
+  {
+   "name": "Roland Park",
+   "homes": "larger single-family houses and some apartments"
+  }
+ ],
+ "housing": "Baltimore's rentals are mostly brick rowhouses, rented whole or split into apartments, plus apartments in converted mills, warehouses and older mid-rises.",
+ "localRules": [
+  {
+   "text": "Baltimore City requires every non-owner-occupied rental, including single-family houses, to be registered and licensed, with a passing inspection by a state-licensed home inspector.",
+   "source": "https://dhcd.baltimorecity.gov/pi/alarmproperty-registration"
+  },
+  {
+   "text": "Landlords without a Baltimore rental license can lose the right to collect rent and must give their license number when filing a failure-to-pay-rent case.",
+   "source": "https://peoples-law.org/node/49110"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "Public Justice Center",
+   "url": "https://www.publicjustice.org/en/tag/tenant",
+   "what": "free legal help for Baltimore City renters"
+  },
+  {
+   "name": "Baltimore Renters United",
+   "url": "https://jufj.org/bru-rtc/",
+   "what": "tenant coalition behind the city's right to counsel"
+  }
+ ],
+ "climate": "Rowhouses often have older radiators and window units, so test the heat and cooling, check basements for water after rain, and photograph any lead paint chips or peeling paint on older trim.",
+ "universities": [
+  "Johns Hopkins University",
+  "University of Maryland, Baltimore",
+  "Loyola University Maryland",
+  "Towson University"
+ ],
+ "fact": "Baltimore was the seventh US city to give tenants a right to a lawyer in eviction cases.",
+ "checked": "November 2026"
+}

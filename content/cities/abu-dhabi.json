@@ -1,0 +1,52 @@
+{
+ "name": "Abu Dhabi",
+ "neighborhoods": [
+  {
+   "name": "Al Reem Island",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Al Raha Beach",
+   "homes": "apartments and townhouses"
+  },
+  {
+   "name": "Khalifa City",
+   "homes": "villas"
+  },
+  {
+   "name": "Al Reef",
+   "homes": "villas and townhouses"
+  },
+  {
+   "name": "Saadiyat Island",
+   "homes": "apartments and villas"
+  },
+  {
+   "name": "Corniche",
+   "homes": "apartment towers"
+  },
+  {
+   "name": "Al Khalidiyah",
+   "homes": "apartment buildings"
+  },
+  {
+   "name": "Mohammed Bin Zayed City",
+   "homes": "villas and apartments"
+  }
+ ],
+ "housing": "Abu Dhabi renters live in apartment towers on the main island and Al Reem, and in villas and townhouses in the suburbs.",
+ "localRules": [
+  {
+   "text": "Tenancy contracts in Abu Dhabi must be registered on Tawtheeq, and a rental dispute cannot be filed without it.",
+   "source": "https://www.tamimi.com/law-update/june-5/articles/new-registration-requirements-for-tenancy-contracts-in-abu-dhabi/"
+  }
+ ],
+ "tenantHelp": [],
+ "climate": "Test every air conditioning unit; summer heat makes a broken AC an urgent repair.",
+ "universities": [
+  "New York University Abu Dhabi",
+  "Khalifa University"
+ ],
+ "fact": "Abu Dhabi's tenancy registration system is called Tawtheeq.",
+ "checked": "November 2026"
+}

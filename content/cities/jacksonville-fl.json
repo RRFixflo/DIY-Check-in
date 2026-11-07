@@ -1,0 +1,39 @@
+{
+ "name": "Jacksonville",
+ "neighborhoods": [
+  {
+   "name": "Riverside",
+   "homes": "historic houses, duplexes and small apartment buildings"
+  },
+  {
+   "name": "San Marco",
+   "homes": "older houses and apartments"
+  },
+  {
+   "name": "Southside",
+   "homes": "large apartment complexes"
+  },
+  {
+   "name": "Springfield",
+   "homes": "Victorian houses split into apartments"
+  },
+  {
+   "name": "Arlington",
+   "homes": "single-family homes and apartment complexes"
+  },
+  {
+   "name": "Jacksonville Beach",
+   "homes": "beach apartments and condos"
+  }
+ ],
+ "housing": "Jacksonville renters mostly live in apartment complexes and rented single-family homes spread across a large city.",
+ "localRules": [],
+ "tenantHelp": [],
+ "climate": "Test the air conditioning, look for mold and leaks, and note any storm shutters; summers are hot and hurricanes are possible.",
+ "universities": [
+  "University of North Florida",
+  "Jacksonville University"
+ ],
+ "fact": "Jacksonville is one of the largest US cities by land area, so rentals range from beach condos to suburban houses.",
+ "checked": "November 2026"
+}

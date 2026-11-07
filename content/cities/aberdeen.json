@@ -1,0 +1,63 @@
+{
+ "name": "Aberdeen",
+ "neighborhoods": [
+  {
+   "name": "Old Aberdeen",
+   "homes": "granite houses and student flats"
+  },
+  {
+   "name": "Rosemount",
+   "homes": "granite tenement flats"
+  },
+  {
+   "name": "West End",
+   "homes": "large granite houses split into flats"
+  },
+  {
+   "name": "Ferryhill",
+   "homes": "granite terraces and flats"
+  },
+  {
+   "name": "Torry",
+   "homes": "tenement flats and former council homes"
+  },
+  {
+   "name": "Bridge of Don",
+   "homes": "newer houses and flats"
+  },
+  {
+   "name": "Cults",
+   "homes": "detached family houses"
+  }
+ ],
+ "housing": "Aberdeen's rentals are mostly granite tenement flats and terraces, with newer estates on the edge of the city.",
+ "localRules": [
+  {
+   "text": "All private landlords in Scotland must register with the council for the area where they rent out a home.",
+   "source": "https://mygov.scot/tenancy-deposits-tenants"
+  },
+  {
+   "text": "In Scotland the landlord must lodge the deposit with an approved scheme (SafeDeposits Scotland, Letting Protection Service Scotland or MyDeposits Scotland) within 30 working days of the tenancy starting.",
+   "source": "https://mygov.scot/tenancy-deposits-landlords"
+  }
+ ],
+ "tenantHelp": [
+  {
+   "name": "mygov.scot",
+   "url": "https://mygov.scot/tenancy-deposits-tenants",
+   "what": "Scottish Government guidance on renting and deposits"
+  },
+  {
+   "name": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+   "url": "https://housingandpropertychamber.scot",
+   "what": "decides private renting disputes, including unprotected deposits"
+  }
+ ],
+ "climate": "Test the heating and check windows for draughts; Aberdeen winters are cold and long.",
+ "universities": [
+  "University of Aberdeen",
+  "Robert Gordon University"
+ ],
+ "fact": "Much of central Aberdeen is built from grey granite, which earned it the name the Granite City.",
+ "checked": "November 2026"
+}

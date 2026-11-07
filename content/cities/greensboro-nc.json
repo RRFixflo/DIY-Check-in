@@ -1,0 +1,50 @@
+{
+ "name": "Greensboro",
+ "neighborhoods": [
+  {
+   "name": "Fisher Park",
+   "homes": "historic houses, some split into apartments"
+  },
+  {
+   "name": "Lindley Park",
+   "homes": "older single-family homes"
+  },
+  {
+   "name": "College Hill",
+   "homes": "older houses rented to students near UNCG"
+  },
+  {
+   "name": "Westerwood",
+   "homes": "bungalows and small houses"
+  },
+  {
+   "name": "Glenwood",
+   "homes": "older houses and duplexes"
+  },
+  {
+   "name": "Downtown",
+   "homes": "apartments and lofts"
+  },
+  {
+   "name": "Sedgefield",
+   "homes": "single-family homes and apartment complexes"
+  }
+ ],
+ "housing": "Greensboro renters live mostly in garden apartment complexes and single-family homes, with older houses near the universities rented to students.",
+ "localRules": [],
+ "tenantHelp": [
+  {
+   "name": "Legal Aid of North Carolina",
+   "url": "https://legalaidnc.org/?p=242",
+   "what": "free legal help for low-income renters"
+  }
+ ],
+ "climate": "Test the air conditioning and check crawl spaces and bathrooms for moisture and mold; summers are hot and humid.",
+ "universities": [
+  "UNC Greensboro",
+  "North Carolina A&T State University",
+  "Guilford College"
+ ],
+ "fact": "Greensboro once required every rental to pass inspection before it was let, but that program ended after a 2011 state law limited routine rental inspections.",
+ "checked": "November 2026"
+}
