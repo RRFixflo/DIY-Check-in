@@ -4,6 +4,8 @@
 // deadlines, tenancy wording, safety checks differ between England, Wales, Scotland and Northern Ireland), the
 // nearest other areas, local questions and answers, and structured data (Service with areaServed, FAQPage,
 // BreadcrumbList). The app works the same everywhere; nothing here claims a local office.
+const fs = require('fs');
+const path = require('path');
 const PLACES = [
   // [slug, name, region, nation, lat, lon, kind]
   ['london', 'London', 'Greater London', 'england', 51.507, -0.128, 'city'],
@@ -349,6 +351,16 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   const us = require('./usa').mount(app, { renderPage, escHtml, PLACES });
   const usState = p => p.nation === 'us' ? us.states.find(q => q.name === p.region) : null;
   const where = p => p.kind === 'borough' ? (p.slug === 'city-of-london' ? 'the City of London' : p.name + ', London') : p.name;
+  // Local research for each city (content/cities/<slug>.json: neighbourhoods and their homes, the rental housing,
+  // local rules with sources, where renters get help, what the climate means for an inspection, universities, a
+  // local fact) and, for US cities, official figures from the Census Bureau fetched by the live server (uscensus.js).
+  const LOCAL = {};
+  try { fs.readdirSync(path.join(__dirname, 'content', 'cities')).filter(f => f.endsWith('.json')).forEach(f => { try { LOCAL[f.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(__dirname, 'content', 'cities', f), 'utf8')); } catch (err) { console.error('cities: ' + f + ': ' + err.message); } }); } catch (err) {}
+  const census = require('./uscensus');
+  census.start(REPORTS_DIR, PLACES.filter(p => p.nation === 'us' && usState(p)).map(p => ({ slug: p.slug, name: p.name, code: usState(p).code })));
+  const okUrl = u => /^https?:\/\/[^\s"<>]+$/.test(String(u || ''));
+  const usd = n => '$' + Number(n).toLocaleString('en-US');
+  const pct = n => n + '%';
 
   function page(p){
     const N = NATION[p.nation], near = nearest(p, 6), w = where(p), place = p.name.replace(/^the /, '');
@@ -367,6 +379,55 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
       ['Will the report help with a ' + N.money + ' dispute in ' + N.label + '?', N.disputes + ' Your report gives you that evidence: dated photos of every room, the condition of every item, meter readings and keys, signed by both sides.'],
     ].concat(N.uk ? [['Can I book a Gas Safety certificate, EICR or EPC in ' + w + '?', 'You can request one on our landlord services page at a fixed price. We’ll check we cover the area and confirm a date with you.']]
       : [['Does it work outside the UK?', 'Yes. DIY Inventory runs in any phone’s web browser, anywhere in the world. Choose your country when you set up the property; addresses and dates follow your country’s format, and there’s nothing to install.']]);
+    // ---- what makes this city's page its own
+    const L = LOCAL[p.slug] || {}, C = p.nation === 'us' ? census.get(p.slug) : null, us_ = p.nation === 'us';
+    const hood = us_ ? 'neighborhood' : 'neighbourhood';
+    const hoods = (L.neighborhoods || []).filter(h => h && h.name).slice(0, 8);
+    const rules = (L.localRules || []).filter(r => r && r.text);
+    const help = (L.tenantHelp || []).filter(h => h && h.name && okUrl(h.url)).slice(0, 3);
+    const tips = [];
+    if (L.climate) tips.push(L.climate);
+    if (C && C.built && C.built < 1978) tips.push('The typical home in ' + place + ' was built in ' + C.built + '. For homes built before 1978, federal law requires the landlord to disclose any known lead-based paint, so photograph peeling or chipped paint close up.');
+    else if (C && C.built && C.built >= 1995) tips.push('Housing here is newer than in most US cities (the typical home was built in ' + C.built + '), so many items will be new or good at move-in: record that, so any damage later is easy to show.');
+    if (C && C.homes && C.homes.houses >= 50) tips.push('More than half of renters here (' + C.homes.houses + '%) rent a house, so include the yard, fences, garage, gutters and the outside walls, not just the rooms.');
+    else if (C && C.homes && C.homes.large >= 40) tips.push(C.homes.large + '% of renters here live in buildings of 20 or more apartments: photograph the mailbox and its key, parking or garage fobs, and any storage unit that comes with the apartment.');
+    else if (C && C.homes && C.homes.small >= 40) tips.push(C.homes.small + '% of renters here live in duplexes and small apartment buildings: check shared entrances, stairs and laundry, and note which parts are yours to look after.');
+    if (C && C.homes && C.homes.mobile >= 5) tips.push(C.homes.mobile + '% of renters here live in a mobile home: photograph the skirting, steps and underside as well as the inside.');
+    if (C && C.burden >= 30) tips.push('Renters here typically spend ' + C.burden + '% of their income on rent, so the security deposit is a lot of money to lose: a dated record from move-in day is how you get it back.');
+    const yr = C && C.year ? (C.year - 4) + '–' + C.year : '';
+    const tiles = !C ? [] : [
+      C.medRent && ['Median rent', usd(C.medRent) + ' a month'], C.r1 && ['1 bedroom', usd(C.r1)], C.r2 && ['2 bedrooms', usd(C.r2)], C.r3 && ['3 bedrooms', usd(C.r3)],
+      C.rentedPct != null && ['Homes that are rented', pct(C.rentedPct)], C.burden && ['Rent as a share of income', pct(C.burden)], C.built && ['Typical home built', String(C.built)], C.pop && ['Population', C.pop.toLocaleString('en-US')],
+    ].filter(Boolean);
+    const extraFaqs = [];
+    if (C && C.medRent) extraFaqs.push(['How much is rent in ' + place + '?', 'The median gross rent (rent plus any utilities the renter pays) in ' + place + ' is ' + usd(C.medRent) + ' a month' + (C.r1 && C.r2 && C.r3 ? ': ' + usd(C.r1) + ' for one bedroom, ' + usd(C.r2) + ' for two and ' + usd(C.r3) + ' for three' : '') + ', according to the U.S. Census Bureau’s American Community Survey (' + yr + ').' + (C.rentedPct != null ? ' About ' + C.rentedPct + '% of homes in ' + place + ' are rented.' : '')]);
+    if (hoods.length >= 3) extraFaqs.push(['Which ' + place + ' ' + hood + 's do renters live in?', 'Popular areas include ' + hoods.slice(0, -1).map(h => h.name).join(', ') + ' and ' + hoods[hoods.length - 1].name + '. ' + (L.housing || '')]);
+    if (help.length) extraFaqs.push([(us_ ? 'Where can renters in ' : 'Where can tenants in ') + place + ' get help?', help.map(h => h.name + (h.what ? ' (' + h.what + ')' : '')).join('; ') + '. If a deposit is disputed, your dated report is the evidence they will ask for.']);
+    if (L.fact) extraFaqs.push(['What’s different about renting in ' + place + '?', L.fact]);
+    const localHtml = (hoods.length || L.housing || L.fact) ? `<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><span class="kicker">Local</span><h2>Renting in ${e(place)}</h2>${L.housing ? `<p>${e(L.housing)}</p>` : ''}</div>
+  ${hoods.length ? `<div class="two">${hoods.map(h => `<div class="card" style="padding:14px 16px"><strong style="display:block">${e(h.name)}</strong>${h.homes ? `<span style="color:var(--ink-soft);font-size:14.5px">${e(h.homes.charAt(0).toUpperCase() + h.homes.slice(1))}</span>` : ''}</div>`).join('')}</div>` : ''}
+  ${L.fact || (L.universities || []).length ? `<p style="margin:16px 0 0;text-align:center">${e(L.fact || '')}${(L.universities || []).length ? ' ' + e('Students rent near ' + L.universities.slice(0, 3).join(', ') + ', where leases often follow the academic year.') : ''}</p>` : ''}
+</div></section>` : '';
+    const numbersHtml = tiles.length ? `<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><span class="kicker">In numbers</span><h2>${e(place)} rentals in numbers</h2><p>Official figures from the U.S. Census Bureau.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">${tiles.map(([k, v]) => `<div class="card" style="padding:14px 16px;text-align:center"><span style="display:block;font-size:13.5px;color:var(--ink-soft)">${e(k)}</span><strong style="display:block;font-size:1.35rem;margin-top:4px">${e(v)}</strong></div>`).join('')}</div>
+  ${C.homes ? `<p style="margin:14px 0 0;text-align:center">Where renters live: ${e(C.homes.houses + '% in houses, ' + C.homes.small + '% in buildings of 2 to 19 apartments, ' + C.homes.large + '% in buildings of 20 or more' + (C.homes.mobile ? ', ' + C.homes.mobile + '% in mobile homes' : '') + '.')}</p>` : ''}
+  <p class="sub" style="margin:10px 0 0;font-size:13.5px;text-align:center">Source: <a href="https://data.census.gov/" rel="noopener">U.S. Census Bureau, American Community Survey ${e(yr)} 5-year estimates</a>${C.place ? ' (' + e(C.place) + ')' : ''}. Rents are median gross rent, including utilities paid by the renter.</p>
+</div></section>` : '';
+    const tipsHtml = tips.length ? `<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><span class="kicker">Checklist</span><h2>What to check at ${e(us_ ? 'move-in' : N.checkin)} in ${e(place)}</h2><p>On top of the room-by-room checklist the app walks you through.</p></div>
+  <div class="card"><ul>${tips.map(t => '<li>' + e(t) + '</li>').join('')}</ul></div>
+</div></section>` : '';
+    const rulesHtml = rules.length || help.length ? `<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><span class="kicker">Rules and help</span><h2>Local rules and help in ${e(place)}</h2></div>
+  <div class="two">
+    ${rules.length ? `<div class="card"><h3>Local rules</h3><ul>${rules.map(r => '<li>' + e(r.text) + (okUrl(r.source) ? ` <a href="${e(r.source)}" rel="noopener nofollow">Source</a>` : '') + '</li>').join('')}</ul><p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Rules change, so check with the ${us_ ? 'city' : 'council or authority'}.</p></div>` : ''}
+    ${help.length ? `<div class="card"><h3>${us_ ? 'Help for renters' : 'Help for tenants'}</h3><ul>${help.map(h => `<li><a href="${e(h.url)}" rel="noopener nofollow">${e(h.name)}</a>${h.what ? ': ' + e(h.what) : ''}</li>`).join('')}</ul></div>` : ''}
+  </div>
+</div></section>` : '';
+    const sameRegion = us_ ? PLACES.filter(q => q !== p && q.nation === 'us' && q.region === p.region && !near.includes(q)).slice(0, 12) : [];
+    faqs.push(...extraFaqs);
     const body = `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="${BASE_PATH}">← All areas</a></p><span class="kicker">${e(p.region)} · ${e(N.label.replace(/^the /, ''))}</span><h1>${e(title)}</h1><p>${e(cap(N.checkin))} and ${e(N.checkout)} reports and inspections during the tenancy, for landlords, property managers and ${e(N.who)}s in ${e(w)}, done on your phone. Dated photos, every item’s condition, signed by both sides, and the PDF ready the moment it’s signed. ${e(N.price)}.</p></div></div>
 <section class="tight"><div class="wrap">
   <div class="two">
@@ -382,6 +443,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
     </ul>${usState(p) ? `<p style="margin:10px 0 0"><a href="/us/${usState(p).slug}">${e(p.region)} security deposit law and move-in checklist →</a></p>` : ''}<p class="sub" style="margin:10px 0 0;font-size:13.5px">General information, not legal advice. Check the current rules for ${e(p.state ? p.region : N.label)}.</p></div>
   </div>
 </div></section>
+${localHtml}${numbersHtml}${tipsHtml}${rulesHtml}
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">How it works</span><h2>Your ${e(place)} ${e(N.thing)} in four steps</h2><p>Everything happens in your phone’s browser, in any country. Nothing to install.</p></div>
   <div class="steps four">
@@ -399,6 +461,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">Nearby</span><h2>Also covering</h2></div>
   <p style="text-align:center;line-height:2.2">${near.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}/${q.slug}">${e(q.name.replace(/^the /, ''))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p>
+  ${sameRegion.length ? `<p style="text-align:center;line-height:2.2;margin-top:6px"><span class="sub">More in ${e(p.region)}:</span> ${sameRegion.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}/${q.slug}">${e(q.name)}</a>`).join('')}</p>` : ''}
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Ready when you have the keys</h2><p>Start your ${e(place)} ${e(N.thing)} today, on your phone. It’s free until you download it.</p><a class="btn" href="/app">Start free</a></div></div></div>`;
     return { key: 'locations', lang: p.nation === 'us' ? 'en-US' : undefined, path: BASE_PATH + '/' + p.slug, title: st ? seoTitle : seoTitle + ' · DIY Inventory', og: N.uk ? seoTitle : title,
@@ -441,7 +504,7 @@ ${group('South Africa', by(p => p.nation === 'za'))}
 
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get([BASE_PATH, BASE_PATH + '/'], send(index()));
-  PLACES.filter(p => !hubs.slugs.includes(p.slug)).forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], send(page(p))));
+  PLACES.filter(p => !hubs.slugs.includes(p.slug)).forEach(p => app.get([BASE_PATH + '/' + p.slug, BASE_PATH + '/' + p.slug + '/'], (req, res) => res.type('html').send(renderPage(page(p), req))));
   return { paths: [BASE_PATH].concat(PLACES.filter(p => !hubs.slugs.includes(p.slug)).map(p => BASE_PATH + '/' + p.slug), hubs.paths, us.paths), bodies: (hubs.bodies || []).concat(us.bodies) };
 }
 
