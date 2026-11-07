@@ -13,7 +13,7 @@ const VARS = { pop: 'B01003_001E', occ: 'B25003_001E', rented: 'B25003_003E', me
   burden: 'B25071_001E', built: 'B25035_001E', value: 'B25077_001E',
   rt: 'B25032_013E', rDet: 'B25032_014E', rAtt: 'B25032_015E', r2u: 'B25032_016E', r34: 'B25032_017E', r59: 'B25032_018E', r1019: 'B25032_019E', r2049: 'B25032_020E', r50: 'B25032_021E', rMob: 'B25032_022E', rBoat: 'B25032_023E' };
 
-let file = '', data = { year: 0, at: '', cities: {} };
+let file = '', data = { year: 0, at: '', cities: {} }, lastFail = 0;
 const norm = s => String(s || '').toLowerCase().replace(/\./g, '').replace(/\bsaint\b/g, 'st').replace(/\s+/g, ' ').trim();
 // "Nashville-Davidson metropolitan government (balance), Tennessee" → "nashville-davidson"
 function placeName(full){
@@ -41,9 +41,10 @@ function shape(row){
 }
 
 async function getJson(url){
-  const r = await fetch(url, { signal: AbortSignal.timeout(20000) });
-  if (!r.ok) { const e = new Error('HTTP ' + r.status); e.status = r.status; throw e; }
-  return r.json();
+  const r = await fetch(url, { signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'DIYInventory/1.0 (+https://diyinventory.co.uk)', Accept: 'application/json' } });
+  const t = await r.text();
+  if (!r.ok) { const e = new Error('HTTP ' + r.status + ': ' + t.replace(/\s+/g, ' ').slice(0, 160)); e.status = r.status; throw e; }
+  try { return JSON.parse(t); } catch (err) { throw new Error('not JSON (HTTP ' + r.status + '): ' + t.replace(/\s+/g, ' ').slice(0, 160)); }
 }
 async function refresh(places){
   const base = (process.env.CENSUS_API_BASE || 'https://api.census.gov/data').replace(/\/+$/, ''), key = process.env.CENSUS_API_KEY ? '&key=' + encodeURIComponent(process.env.CENSUS_API_KEY) : '';
@@ -53,9 +54,9 @@ async function refresh(places){
   // The newest year the API has (a 5-year release comes out each December).
   let year = 0;
   for (let y = new Date().getFullYear() - 1; y >= new Date().getFullYear() - 5 && !year; y--) {
-    try { await getJson(`${base}/${y}/acs/acs5?get=NAME,B01003_001E&for=state:11${key}`); year = y; } catch (e) { if (e.status && e.status !== 404 && e.status !== 400) { console.error('us census: ' + y + ': ' + e.message); } }
+    try { await getJson(`${base}/${y}/acs/acs5?get=NAME,B01003_001E&for=state:11${key}`); year = y; } catch (e) { console.error('us census: ACS ' + y + ' not available: ' + e.message); }
   }
-  if (!year) { console.error('us census: no ACS 5-year data found'); return; }
+  if (!year) { console.error('us census: no ACS 5-year data found (tries again in an hour)'); lastFail = Date.now(); return; }
   const cities = {}; let found = 0, missing = [];
   for (const [fips, list] of Object.entries(byState)) {
     try {
@@ -80,10 +81,10 @@ function start(dir, places){
   file = path.join(dir, 'us-census.json');
   try { const d = JSON.parse(fs.readFileSync(file, 'utf8')); if (d && d.cities) data = d; } catch (e) {}
   if (/^(1|on|true)$/i.test(process.env.US_CENSUS_OFF || '')) return;
-  const due = () => !data.at || Date.now() - Date.parse(data.at) > 30 * 86400000 || places.some(p => !data.cities[p.slug]) && Date.now() - Date.parse(data.at) > 86400000;
-  const run = () => { if (due()) refresh(places).catch(e => console.error('us census:', e.message)); };
+  const due = () => Date.now() - lastFail > 3600 * 1000 && (!data.at || Date.now() - Date.parse(data.at) > 30 * 86400000 || places.some(p => !data.cities[p.slug]) && Date.now() - Date.parse(data.at) > 86400000);
+  const run = () => { if (due()) refresh(places).catch(e => { lastFail = Date.now(); console.error('us census:', e.message); }); };
   setTimeout(run, Number(process.env.US_CENSUS_DELAY_MS) || 60 * 1000).unref();
-  setInterval(run, 24 * 3600 * 1000).unref();
+  setInterval(run, 3600 * 1000).unref();   // hourly check; it only fetches when due
 }
 const get = slug => data.cities[slug] ? Object.assign({ year: data.year }, data.cities[slug]) : null;
 
