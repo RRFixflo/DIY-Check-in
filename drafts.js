@@ -109,6 +109,27 @@ function mount(app, ctx){
     res.json({ ok: true, saved });
   });
 
+  // The phone that made a report gets it back from here when its own copy is gone (storage cleared, the phone
+  // tidied it away): the state without the server's own notes, then each photo. The random draft key is the access.
+  const restoreLimit = limiter(2000, 60 * 60 * 1000);
+  app.get('/api/drafts/:key', (req, res) => {
+    const key = String(req.params.key);
+    if (!restoreLimit(clientIp(req))) return res.status(429).json({ error: 'Too many requests.' });
+    const s = KEY_RE.test(key) && readJson(path.join(dirOf(key), 'state.json'));
+    if (!s) return res.status(404).json({ error: 'No backup.' });
+    const out = {}; Object.keys(s).forEach(k => { if (k[0] !== '_') out[k] = s[k]; });
+    let have = []; try { have = fs.readdirSync(path.join(dirOf(key), 'photos')).filter(f => /\.jpg$/.test(f)).map(f => f.slice(0, -4)); } catch (e) {}
+    res.set('Cache-Control', 'no-store').json({ state: out, photos: have, serverReport: !!s._serverReportId });
+  });
+  app.get('/api/drafts/:key/photo/:id', (req, res) => {
+    const key = String(req.params.key), id = String(req.params.id);
+    if (!restoreLimit(clientIp(req))) return res.status(429).end();
+    if (!KEY_RE.test(key) || !PID_RE.test(id)) return res.status(404).end();
+    const file = path.join(dirOf(key), 'photos', id + '.jpg');
+    if (!fs.existsSync(file)) return res.status(404).end();
+    res.set('Cache-Control', 'private, no-store').type('jpeg').sendFile(file);
+  });
+
   /* ------------------------------ owner's view ------------------------------ */
   const CONDITION = { new: 'New', good: 'Good', fair: 'Fair', poor: 'Poor' };
   const when = t => t ? new Date(t).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }) : '—';

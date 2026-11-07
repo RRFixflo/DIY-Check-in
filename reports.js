@@ -153,6 +153,7 @@ const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/;
 // A copy of a finished, paid report for the person who did it (the email typed on the phone, and the buyer's email
 // from /buy) and for the agent whose tenant link was used (that link's email, set on /admin). Each address gets it
 // once (r.copies), never before it's paid for, and never without Resend. Failures are logged and tried again on the next send.
+let knownTargets = () => [];
 async function deliverCopies(r, token){
   if (!RESEND_API_KEY || !r || (r.unpaid && !r.paidAt)) return;
   const agent = agentFor(token);
@@ -162,6 +163,8 @@ async function deliverCopies(r, token){
   [r.copyEmail, buyer].forEach(e => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !wanted.some(w => w.to === e)) wanted.push({ to: e, kind: 'self' }); });
   const ae = String((agent && agent.email) || '').trim().toLowerCase();
   if (EMAIL_RE.test(ae)) { const w = wanted.find(w => w.to === ae); if (w) w.kind = 'agent'; else wanted.push({ to: ae, kind: 'agent' }); }
+  // Also whoever did it or paid for it when the report wasn't linked to them (made from the backup, a code, …).
+  try { knownTargets(r).forEach(k => { if (/did the report|paid for it/.test(k.who) && !wanted.some(w => w.to === k.e)) wanted.push({ to: k.e, kind: 'self' }); }); } catch (e) {}
   r.copies = r.copies || {};
   for (const w of wanted) {
     if (r.copies[w.to]) continue;
@@ -683,6 +686,67 @@ function mount(app){
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
     hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
+  // Every email we hold for a report (the person who did it first): the admin Email form and the automatic copies.
+  // Every email sent about a report, newest first, with when: the copies after payment, links sent from here, and the owner's own copy.
+  const whenTxt = t => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+  function sentLog(r){
+    const L = [];
+    Object.entries(r.copies || {}).forEach(([to, at]) => L.push({ to, at, what: 'copy after payment' }));
+    (r.linkEmails || []).forEach(x => L.push({ to: x.to, at: x.at, what: 'link sent from admin' }));
+    if (r.emailedAt) L.push({ to: REPORT_TO_EMAIL || 'you', at: r.emailedAt, what: 'your copy' });
+    if (!L.length) return '';
+    L.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    const line = x => '<li><b>' + esc(whenTxt(x.at)) + '</b> ' + esc(x.to) + ' <span class="what">' + esc(x.what) + '</span></li>';
+    return ` <details class="sub sentlog"><summary>✉ Emailed ${L.length === 1 ? 'once' : L.length + ' times'} · last ${esc(whenTxt(L[0].at))}</summary><ul>${L.map(line).join('')}</ul></details>`;
+  }
+  let efCache = null;
+  function emailsForReport(r){
+      if (!efCache || Date.now() - efCache.at > 30000) {
+        const m = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) m.set('id:' + s._serverReportId, s); if (s.finalizedAt) m.set('k:' + backupKey(s), s); }); } catch (e) {}
+        let b = []; try { b = require('./purchases').paidWithEmail(); } catch (e) {}
+        efCache = { at: Date.now(), bk: m, agents: readAgents(), buys: b };
+      }
+      const bk = efCache.bk, agentsAll = efCache.agents, buys = efCache.buys;
+      const norm = t => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+      const emailsFor = r => {
+        const out = [], add = (e, who, name) => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !out.some(x => x.e === e)) out.push({ e, who, name: name || '' }); };
+        const s = bk.get('id:' + r.id) || bk.get('k:' + r.key) || null, doer = r.signedBy || r.inspectorName || '';
+        add(r.copyEmail, 'did the report', doer); if (s) add((s.meta || {}).copyEmail, 'did the report', doer);
+        let buyer = ''; try { buyer = s && s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
+        add(buyer, 'paid for it');
+        // A purchase that names this report's person, or was used for this address, even if the report was never linked to it.
+        const dn = norm(doer), ad = norm(r.address);
+        const sameName = (a, b) => { if (!a || !b) return false; if (a === b) return true; const A = a.split(' '), B = b.split(' '), [x, y] = A.length <= B.length ? [A, B] : [B, A]; return x.length >= 2 && x.every(w => y.includes(w)); };
+        buys.forEach(b => { const bn = norm(b.name), bu = norm(b.usedFor); if (sameName(bn, dn) || (bu && ad && (bu === ad || bu.includes(ad) || ad.includes(bu))) || (s && s._token && s._token === b.token)) add(b.email, 'paid for it', b.name); });
+        { const pw = String(r.paidWith || ''), m = / by ([^,()]+?),\s*([^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,})/i.exec(pw); if (m) add(m[2], 'paid for it', m[1].trim()); (pw.match(/[^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,}/gi) || []).forEach(e => add(e, 'paid for it')); }
+        const ag = r.agentId && agentsAll.find(a => a.id === r.agentId); if (ag) add(ag.email, 'agent link: ' + ag.name, ag.name);
+        Object.keys(r.copies || {}).forEach(e => add(e, 'sent a copy'));
+        (r.linkEmails || []).forEach(x => add(x.to, 'emailed before', x.name));
+        return out;
+      };
+    return emailsFor(r);
+  }
+  knownTargets = r => emailsForReport(r);
+  // Once a report is paid for, the link goes to the person who did it and whoever paid, by itself: checked every
+  // 30 minutes for paid reports of the last 30 days, so one that couldn't be sent before (e.g. while the email domain
+  // wasn't verified) still goes. Each address once (r.copies, with the time).
+  let copySweeping = false;
+  async function copySweep(){
+    if (copySweeping || !RESEND_API_KEY) return; copySweeping = true;
+    try {
+      for (const r of listReports()) {
+        if (r.unpaid && !r.paidAt) continue;
+        if (r.source === 'uploaded' || r.source === 'copy') continue;
+        if (Date.now() - new Date(r.paidAt || r.receivedAt || 0).getTime() > 30 * 86400000) continue;
+        const want = emailsForReport(r).filter(k => /did the report|paid for it/.test(k.who) && !(r.copies || {})[k.e]);
+        if (!want.length) continue;
+        if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, r.id); }
+        await deliverCopies(r, '').catch(e => console.error('automatic copy failed:', e.message));
+      }
+    } finally { copySweeping = false; }
+  }
+  setTimeout(() => copySweep().catch(() => {}), 90 * 1000).unref();
+  setInterval(() => copySweep().catch(() => {}), 30 * 60 * 1000).unref();
   // Tenant sign-off links (/sign/<key>), in signoff.js.
   require('./signoff').mount(app, { REPORTS_DIR, photoDir, findByKey, readMeta, notPaid, logAccess: (...a) => logAccess(...a), esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, PUBLIC_URL });
 
@@ -985,32 +1049,11 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 
   app.get('/admin', requireAdmin, (req, res) => {
     const reports = listReports();
-    // Every email we hold for each report (the person who did it first), to fill in the Email form.
-    const bk = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) bk.set('id:' + s._serverReportId, s); if (s.finalizedAt) bk.set('k:' + backupKey(s), s); }); } catch (e) {}
-    const agentsAll = readAgents();
-    let buys = []; try { buys = require('./purchases').paidWithEmail(); } catch (e) {}
-    const norm = t => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-    const emailsFor = r => {
-      const out = [], add = (e, who, name) => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !out.some(x => x.e === e)) out.push({ e, who, name: name || '' }); };
-      const s = bk.get('id:' + r.id) || bk.get('k:' + r.key) || null, doer = r.signedBy || r.inspectorName || '';
-      add(r.copyEmail, 'did the report', doer); if (s) add((s.meta || {}).copyEmail, 'did the report', doer);
-      let buyer = ''; try { buyer = s && s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
-      add(buyer, 'paid for it');
-      // A purchase that names this report's person, or was used for this address, even if the report was never linked to it.
-      const dn = norm(doer), ad = norm(r.address);
-      const sameName = (a, b) => { if (!a || !b) return false; if (a === b) return true; const A = a.split(' '), B = b.split(' '), [x, y] = A.length <= B.length ? [A, B] : [B, A]; return x.length >= 2 && x.every(w => y.includes(w)); };
-      buys.forEach(b => { const bn = norm(b.name), bu = norm(b.usedFor); if (sameName(bn, dn) || (bu && ad && (bu === ad || bu.includes(ad) || ad.includes(bu))) || (s && s._token && s._token === b.token)) add(b.email, 'paid for it', b.name); });
-      { const pw = String(r.paidWith || ''), m = / by ([^,()]+?),\s*([^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,})/i.exec(pw); if (m) add(m[2], 'paid for it', m[1].trim()); (pw.match(/[^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,}/gi) || []).forEach(e => add(e, 'paid for it')); }
-      const ag = r.agentId && agentsAll.find(a => a.id === r.agentId); if (ag) add(ag.email, 'agent link: ' + ag.name, ag.name);
-      Object.keys(r.copies || {}).forEach(e => add(e, 'sent a copy'));
-      (r.linkEmails || []).forEach(x => add(x.to, 'emailed before', x.name));
-      return out;
-    };
-    const rows = reports.map(r => { const known = emailsFor(r); return `
+    const rows = reports.map(r => { const known = emailsForReport(r); return `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${(r.linkEmails || []).length ? (() => { const u = [...new Set(r.linkEmails.map(e => e.to).reverse())]; return ' <div class="sub">✉ Link emailed to ' + esc(u.slice(0, 2).join(', ')) + (u.length > 2 ? ' +' + (u.length - 2) : '') + '</div>'; })() : ''}${r.copiedFrom ? ' <div class="sub">📄 Copy of the ' + esc(r.copiedFromType || 'report') + ' ' + esc(r.copiedFromRef || '') + '</div>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${sentLog(r)}${r.copiedFrom ? ' <div class="sub">📄 Copy of the ' + esc(r.copiedFromType || 'report') + ' ' + esc(r.copiedFromRef || '') + '</div>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions"><div class="act">
           ${notPaid(r) || (!r.sentAt && r.source !== 'uploaded') ? `<form method="post" action="/admin/reports/${r.id}/complete" onsubmit="return confirm('Mark this report as complete${notPaid(r) ? ' and paid' : ''}? Its online link will work and any copies are emailed.')"><button class="btn primary">Mark as complete</button></form>` : ''}
@@ -1115,6 +1158,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   details.more { flex-basis:auto; } details.more[open] { flex-basis:100%; }
   .menu { margin-top:8px; background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:6px; display:grid; gap:2px; white-space:normal; text-align:left; }
   .actions form.mailf { display:grid; gap:2px; }
+  .sentlog { margin-top:4px; } .sentlog summary { cursor:pointer; color:var(--soft); } .sentlog ul { margin:4px 0 0; padding-left:16px; } .sentlog li { margin:2px 0; overflow-wrap:anywhere; } .sentlog .what { display:block; color:var(--faint); font-size:11px; }
   .known { display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:4px 6px 6px; } .known > span { font-size:12.5px; font-weight:600; color:var(--soft); width:100%; }
   .kchip { font:inherit; font-size:12.5px; text-align:left; background:#fff; border:1px solid #CDD4DF; border-radius:10px; padding:6px 10px; cursor:pointer; color:var(--ink); max-width:100%; } .kchip b { font-weight:600; } .kchip i { display:block; font-style:normal; color:var(--soft); font-size:12px; overflow-wrap:anywhere; } .kchip.on { border-color:var(--navy); box-shadow:0 0 0 1px var(--navy); }
   .mailf label { display:block; font-size:12.5px; font-weight:600; color:var(--soft); padding:4px 6px; } .mailf label span { font-weight:400; } .mailf input, .mailf textarea { display:block; width:100%; margin-top:4px; font:inherit; font-size:14px; font-weight:400; color:var(--ink); padding:8px 10px; border:1px solid #CDD4DF; border-radius:8px; background:#fff; } .mailf textarea { resize:vertical; }

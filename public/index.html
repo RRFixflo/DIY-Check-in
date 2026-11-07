@@ -921,7 +921,67 @@ function ensureDraftKey(s){
     const b = new Uint8Array(16); (window.crypto || window.msCrypto).getRandomValues(b);
     s.draftKey = Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
   }
+  if (s === state) rememberDraftKey(s.draftKey);
   return s.draftKey;
+}
+// The report's backup key is also kept outside IndexedDB (localStorage and a cookie), so if the phone loses the report
+// itself (storage cleared, iPhone tidying space) it can be fetched back from the online backup: nothing to start again.
+const DRAFT_KEY_LS = 'diyDraftKey';
+function rememberDraftKey(k){
+  if (!/^[a-f0-9]{32}$/.test(k || '')) return;
+  try { if (localStorage.getItem(DRAFT_KEY_LS) !== k) localStorage.setItem(DRAFT_KEY_LS, k); } catch (e) {}
+  try { if (!document.cookie.includes('diy_draft=' + k)) document.cookie = 'diy_draft=' + k + '; Max-Age=15552000; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); } catch (e) {}
+}
+function forgetDraftKey(){
+  try { localStorage.removeItem(DRAFT_KEY_LS); } catch (e) {}
+  try { document.cookie = 'diy_draft=; Max-Age=0; Path=/; SameSite=Lax'; } catch (e) {}
+}
+function rememberedDraftKey(){
+  let k = ''; try { k = localStorage.getItem(DRAFT_KEY_LS) || ''; } catch (e) {}
+  if (!/^[a-f0-9]{32}$/.test(k)) { const m = /(?:^|;\s*)diy_draft=([a-f0-9]{32})/.exec(document.cookie || ''); k = m ? m[1] : ''; }
+  return k;
+}
+// Saved at once when they leave the screen (switch app, lock the phone, close the tab), not a moment later.
+function saveNow(){ clearTimeout(saveTimer); if (state && state.rooms && state.rooms.length) { idbSet('current', state); if (state.draftKey) rememberDraftKey(state.draftKey); } saveScroll(); }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveNow(); });
+addEventListener('pagehide', saveNow);
+// Where they were on the page, so coming back lands on the same spot.
+function saveScroll(){ try { if (state && ['capture','details','review'].includes(state.view)) localStorage.setItem('diyScroll', JSON.stringify({ view: state.view, room: state.activeRoomId, y: Math.round(window.scrollY), at: Date.now() })); } catch (e) {} }
+function restoreScroll(){
+  try { const p = JSON.parse(localStorage.getItem('diyScroll') || 'null'); if (!p || p.view !== state.view || Date.now() - p.at > 30 * 86400000) return;
+    requestAnimationFrame(() => setTimeout(() => window.scrollTo({ top: p.y, behavior: 'instant' }), 60)); } catch (e) {}
+}
+// The phone's copy is gone but its backup key is known: fetch the report back (state, then each photo).
+async function restoreFromBackup(key){
+  const r = await fetch('/api/drafts/' + key, { cache: 'no-store' });
+  if (!r.ok) return null;
+  const d = await r.json().catch(() => null);
+  if (!d || !d.state || !Array.isArray(d.state.rooms) || !d.state.rooms.length) return null;
+  const s = d.state, have = new Set(d.photos || []);
+  const app = document.getElementById('app');
+  const lists = []; const pr = s.property || {};
+  lists.push(pr.exterior && pr.exterior.photos); (s.rooms || []).forEach(rm => { (rm.items || []).forEach(i => lists.push(i.photos)); lists.push(rm.extraPhotos); });
+  (pr.keys || []).forEach(k => lists.push(k.photos)); Object.values(pr.meters || {}).forEach(m => lists.push(m && m.photos));
+  const photos = []; lists.forEach(l => (l || []).forEach(p => { if (p && p.id && have.has(String(p.id))) photos.push(p); }));
+  let done = 0;
+  const show = () => { if (app) app.innerHTML = '<div class="panel" style="text-align:center"><h1 style="font-size:20px">Getting your report back…</h1><p class="room-count-hint">' + escapeHtml((s.meta && s.meta.address) || '') + '<br>Photos ' + done + ' of ' + photos.length + '. Please keep this page open.</p></div>'; };
+  show();
+  const toData = blob => new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => res(''); fr.readAsDataURL(blob); });
+  for (let i = 0; i < photos.length; i += 4) {
+    await Promise.all(photos.slice(i, i + 4).map(async p => {
+      try { const pr2 = await fetch('/api/drafts/' + key + '/photo/' + encodeURIComponent(p.id)); if (pr2.ok) p.dataUrl = await toData(await pr2.blob()); } catch (e) {}
+      done++;
+    }));
+    show();
+  }
+  // Photos that didn't come back are left out rather than shown broken.
+  const keep = p => p && typeof p.dataUrl === 'string' && p.dataUrl.startsWith('data:image');
+  if (pr.exterior) pr.exterior.photos = (pr.exterior.photos || []).filter(keep);
+  (s.rooms || []).forEach(rm => { (rm.items || []).forEach(i => { i.photos = (i.photos || []).filter(keep); }); rm.extraPhotos = (rm.extraPhotos || []).filter(keep); });
+  (pr.keys || []).forEach(k => { k.photos = (k.photos || []).filter(keep); }); Object.values(pr.meters || {}).forEach(m => { if (m) m.photos = (m.photos || []).filter(keep); });
+  s.draftKey = key; s.cloudSent = photos.filter(keep).map(p => p.id);
+  await idbSet('current', s);
+  return s;
 }
 function allPhotos(s){
   const out = [], add = l => (l || []).forEach(p => { if (p && p.id && p.dataUrl) out.push(p); });
@@ -1791,7 +1851,7 @@ function normalizeState(saved){
 
 /* ============================= resume screen ============================= */
 function resumeDraft(){ state = savedDraft; savedDraft = null; render(); window.scrollTo({top:0, behavior:'instant'}); }
-async function discardDraft(){ await idbClear('current'); clearSetupDraft(); savedDraft = null; state = defaultState(); pendingSetup = defaultPendingSetup(); render(); }
+async function discardDraft(){ await idbClear('current'); clearSetupDraft(); forgetDraftKey(); savedDraft = null; state = defaultState(); pendingSetup = defaultPendingSetup(); render(); }
 
 /* ============================= setup view logic ============================= */
 function computeMoveInStatus(){
@@ -4070,7 +4130,7 @@ async function startNextFromThis(){
   startFromEarlier(key);
 }
 async function confirmReset(){
-  await idbClear('current'); clearSetupDraft(); state = defaultState(); pendingSetup = defaultPendingSetup();
+  await idbClear('current'); clearSetupDraft(); forgetDraftKey(); try { localStorage.removeItem('diyScroll'); } catch (e) {} state = defaultState(); pendingSetup = defaultPendingSetup();
   sendUi = { phase: 'idle', msg: '' }; submitUi = { phase: 'idle', msg: '' };
   render(); window.scrollTo({top:0, behavior:'instant'});
 }
@@ -4796,18 +4856,23 @@ track('app_open');
 (async () => {
   try {
     try { addressBook = (await idbGet('addressBook')) || []; reportHistory = (await idbGet('history')) || []; if ((addressBook.length || reportHistory.length) && state.view === 'setup') render(); } catch(e){}
-    const saved = await idbGet('current');
+    let saved = await idbGet('current');
+    if (!(saved && Array.isArray(saved.rooms) && saved.rooms.length) && state.view === 'setup') {
+      const k = rememberedDraftKey();
+      if (k) { try { saved = await restoreFromBackup(k); } catch (e) { saved = null; } if (!saved) render(); }
+    }
+    if (saved && saved.draftKey) rememberDraftKey(saved.draftKey);
     if (saved && Array.isArray(saved.rooms) && saved.rooms.length && saved.finalizedAt && state.view === 'setup') {
       // A finished report stays on this device, ready to download again, until a new inspection is started.
       state = normalizeState(saved);
       state.view = 'done';
       render();
     } else if (saved && Array.isArray(saved.rooms) && saved.rooms.length && !saved.finalizedAt) {
-      savedDraft = normalizeState(saved);
-      if (!savedDraft.earlier) savedDraft.rooms = walkOrder(savedDraft.rooms);
-      state = defaultState();
-      state.view = 'resume';
+      // Straight back where they left off: the same screen, room and place on the page (no "start again?" question).
+      state = normalizeState(saved);
+      if (!state.earlier) state.rooms = walkOrder(state.rooms);
       render();
+      restoreScroll();
     }
   } catch (err) {
     console.error('Inventory app failed to check for a saved draft:', err);
