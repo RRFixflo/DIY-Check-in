@@ -2791,8 +2791,7 @@ async function buildPdfBlob(s, onProgress, out){
     doc.setPage(pageIndex);
     if (pageIndex === 1) return; // the cover carries its own title
     brandMark(M, 9.6, 5);
-    set('bold', 8, C.ink); doc.text('DIY Inventory', M + 7, 13.3);
-    set('normal', 8, C.faint); doc.text(kind + ' report', M + 7 + doc.getTextWidth('DIY Inventory') + 9, 13.3);
+    set('bold', 8, C.ink); doc.text(kind + ' report', M + 7, 13.3);   // just the kind of report, never "DIY …" (the owner asked)
     set('normal', 7.6, C.inkSoft);
     doc.text(lines(s.meta.address || '', 150)[0], PW - M, 13.3, { align:'right' });
     hr(17.5);
@@ -2830,7 +2829,6 @@ async function buildPdfBlob(s, onProgress, out){
   // Brand, report type and the address as the title, on the left.
   const LW = px - M - 12;
   brandMark(M, 15, 7.5);
-  set('bold', 10.5, C.ink); doc.text('DIY Inventory', M + 10.5, 20.4);
   y = 50;
   set('bold', 8, C.accent); doc.text(kind.toUpperCase() + ' REPORT', M, y);
   serif('normal', 30, C.ink);

@@ -208,7 +208,7 @@ function mount(app, ctx){
       pg = doc.addPage([W, H]); y = H - M;
       pg.drawRectangle({ x: M, y: y - 26, width: 4, height: 22, color: accent });
       pg.drawText('Tenant acknowledgement', { x: M + 14, y: y - 20, size: 18, font: bold, color: ink });
-      pg.drawText(safe('DIY Inventory  ·  ' + (L.data.address || L.r.address), font), { x: M, y: 20, size: 8, font, color: soft });
+      pg.drawText(safe(kindOf((L.data && L.data.type) || L.r.inspectionType) + ' report  ·  ' + (L.data.address || L.r.address), font), { x: M, y: 20, size: 8, font, color: soft });
       y -= 50;
     };
     const wrap = (t, f, size, width) => {
