@@ -1101,7 +1101,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     adminSections.forEach(f => addSec(safe(() => f(req))));
     addSec(safe(messagesHTML)); addSec(safe(() => drafts.draftsHTML())); addSec(safe(activityHTML)); addSec(safe(() => codesHTML(req))); addSec(safe(() => agentsHTML(req)));
     const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans']], ['enquiries', 'Enquiries', '✉️', ['messages', 'bookings', 'prleads']],
-      ['work', 'In progress', '📝', ['drafts', 'inspections']], ['landlords', 'Landlords', '🏠', ['landlords']], ['access', 'Access & links', '🔑', ['agents', 'codes', 'activity']]];
+      ['work', 'In progress', '📝', ['drafts', 'inspections', 'midterm']], ['landlords', 'Landlords', '🏠', ['landlords']], ['access', 'Access & links', '🔑', ['agents', 'codes', 'activity']]];
     const known = new Set(GROUPS.flatMap(g => g[3]));
     const groups = GROUPS.map(([k, label, icon, ids]) => ({ k, label, icon, secs: ids.map(id => secs.find(x => x.id === id)).filter(Boolean) }))
       .concat([{ k: 'more', label: 'More', icon: '⋯', secs: secs.filter(x => !known.has(x.id)) }]).filter(g => g.secs.length);

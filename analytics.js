@@ -14,7 +14,7 @@ const express = require('express');
 const KEEP_DAYS = 400;
 const REPORT_PRICE = 30;   // £, per paid report
 // Funnel steps the app may send to POST /api/event (anything else is ignored).
-const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded'];
+const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded', 'midterm_link', 'midterm_reminder'];
 // Recorded by the server itself.
 const SERVER_EVENTS = ['report_submitted', 'certificate_booking', 'contact_message', 'sign_off', 'sign_page', 'floorplan_purchase', 'report_purchase', 'property_report_view', 'property_report_lead'];
 const BOT = /bot\b|bot\/|crawl|spider|slurp|preview|monitor|curl|wget|python|headless|facebookexternalhit|facebookcatalog|WhatsApp|Twitterbot|Slackbot|TelegramBot|LinkedInBot|Discordbot|Applebot|Pinterest|redditbot|Embedly|SkypeUriPreview|Googlebot|bingbot|vkShare|Iframely|lighthouse|pingdom|uptime|axios|node-fetch|undici|go-http|okhttp|java\/|libwww|httpclient|scrapy|semrush|ahrefs|mj12|dotbot|petalbot|yandex|baidu|duckduck|GPTBot|ClaudeBot|PerplexityBot|OAI-SearchBot|bytespider|CCBot/i;

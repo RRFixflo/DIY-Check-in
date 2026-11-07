@@ -307,9 +307,12 @@ const reportPaths = require('./propreport').mount(app, { REPORTS_DIR: reports.RE
 require('./inspections').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, notify: reports.notifyOwner, clientIp: reports.clientIp, limiter: reports.limiter,
   addAdminSection: reports.addAdminSection, PUBLIC_BASE, ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, Anthropic, DEFECTS, CLEANLINESS, extractJson,
     extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
+// Mid-term (routine) inspections: /mid-term-inspection, /us/routine-inspection, and reminders every 3 or 6 months: midterm.js.
+const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, esc: escHtml, clientIp: reports.clientIp, limiter: reports.limiter,
+  notify: reports.notifyOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
@@ -361,12 +364,13 @@ if (PAYWALL) {
   app.use(async (req, res, next) => {
     if (req.method !== 'GET' || /^\/(api|admin|p|icons|img|sign|report)(\/|$)/.test(req.path) || /\.(png|svg|ico|webmanifest|js|css|json|jpg|webp|pdf)$/i.test(req.path)) return next();
     const isRoot = req.path === '/';
-    if (isRoot && req.query.from) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)));   // "start from this report" links
+    if (isRoot && req.query.from && !req.query.access) return res.redirect(302, '/app?from=' + encodeURIComponent(String(req.query.from).slice(0, 64)) + (req.query.start === 'inspection' ? '&start=inspection' : ''));   // "start from this report" links (and mid-term inspection links)
     // A tenant's check-in link goes straight to a check-in; an agency can add the property (&address=…) to fill it in.
     // A tenant's check-out link (&start=checkout, from the agency's moving-out email) opens a check-out the same way.
-    const startK = req.query.start === 'checkin' || req.query.start === 'checkout' ? req.query.start : '';
+    const startK = ['checkin', 'checkout', 'inspection'].includes(req.query.start) ? req.query.start : '';
     const addrQ = startK && typeof req.query.address === 'string' && req.query.address.trim() ? '&address=' + encodeURIComponent(req.query.address.replace(/\s+/g, ' ').trim().slice(0, 200)) : '';
-    const startQ = startK ? '?start=' + startK + addrQ : '';
+    const fromQ = startK && /^[a-f0-9]{32}$/i.test(String(req.query.from || '')) ? '&from=' + String(req.query.from).toLowerCase() : '';   // a mid-term link based on an earlier report
+    const startQ = startK ? '?start=' + startK + addrQ + fromQ : '';
     if (reports.isOwner(req)) return isRoot ? (req.query.access ? res.redirect(302, '/app' + startQ) : res.type('html').send(sitePage('home', req))) : next(); // the owner (signed in to /admin) needs no paid link
     const isApp = /^\/app\/?$/.test(req.path);
     if (isApp && !req.query.access) return next();

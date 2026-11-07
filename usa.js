@@ -151,7 +151,7 @@ ${cs.length ? `<section style="padding-top:0"><div class="wrap"><div class="sec-
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">${rows}</div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><span class="kicker">Free checklist</span><h2>Not sure what to photograph?</h2><p>Our <a href="${BASE}/move-in-checklist">move-in inspection checklist</a> lists every room and item, the same list the app walks you through.</p></div>
+  <div class="sec-head"><span class="kicker">Free checklist</span><h2>Not sure what to photograph?</h2><p>Our <a href="${BASE}/move-in-checklist">move-in inspection checklist</a> lists every room and item, the same list the app walks you through. During the lease, <a href="${BASE}/routine-inspection">routine inspections</a> work the same way: your tenant does them from a link.</p></div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">Questions</span><h2>Move-in inspections: questions and answers</h2></div>
