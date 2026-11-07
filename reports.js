@@ -989,15 +989,19 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${r.copiedFrom ? ' <div class="sub">📄 Copy of the ' + esc(r.copiedFromType || 'report') + ' ' + esc(r.copiedFromRef || '') + '</div>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${(r.linkEmails || []).length ? (() => { const u = [...new Set(r.linkEmails.map(e => e.to).reverse())]; return ' <div class="sub">✉ Link emailed to ' + esc(u.slice(0, 2).join(', ')) + (u.length > 2 ? ' +' + (u.length - 2) : '') + '</div>'; })() : ''}${r.copiedFrom ? ' <div class="sub">📄 Copy of the ' + esc(r.copiedFromType || 'report') + ' ' + esc(r.copiedFromRef || '') + '</div>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions"><div class="act">
           ${notPaid(r) || (!r.sentAt && r.source !== 'uploaded') ? `<form method="post" action="/admin/reports/${r.id}/complete" onsubmit="return confirm('Mark this report as complete${notPaid(r) ? ' and paid' : ''}? Its online link will work and any copies are emailed.')"><button class="btn primary">Mark as complete</button></form>` : ''}
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
-          ${!notPaid(r) && r.photoKey ? `<button class="btn" type="button" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">Copy link</button>` : ''}
+          ${!notPaid(r) ? `<details class="more mail"><summary class="btn">✉ Email</summary><form class="menu mailf" onsubmit="return sendLink(this, '${r.id}')">
+            <label>Owner’s email<input type="email" name="to" required placeholder="name@example.com"></label>
+            <label>Their name <span>(optional)</span><input name="name" placeholder="e.g. Mr Smith"></label>
+            <label>Message<textarea name="note" rows="4">Please find the ${esc((r.inspectionType || 'inventory').toLowerCase())} report for ${esc(r.address || 'your property')} below. You can view it online and download the PDF.</textarea></label>
+            <div class="mrow"><button class="btn primary">Send the link</button><span class="mres"></span></div></form></details>` : ''}
           <details class="more"><summary class="btn">More ▾</summary><div class="menu">
-            ${!notPaid(r) && r.photoKey ? `<a class="mi" href="/report/${r.photoKey}" target="_blank" rel="noopener">🌐 Open the online page</a>` : ''}
+            ${!notPaid(r) && r.photoKey ? `<button class="mi" type="button" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">🔗 Copy link</button><a class="mi" href="/report/${r.photoKey}" target="_blank" rel="noopener">🌐 Open the online page</a>` : ''}
             ${!notPaid(r) && !r.photoKey ? `<form method="post" action="/admin/reports/${r.id}/link"><button class="mi">🌐 Make an online link</button></form>` : ''}
             ${r.tenantSignedAt && r.photoKey ? `<a class="mi" href="/sign/${r.photoKey}/signed.pdf" target="_blank" rel="noopener">✍️ Signed copy</a>` : ''}
             <form method="post" action="/admin/reports/${r.id}/copy" class="copyas" onsubmit="if(!this.type.value){alert('Choose the type for the copy.');return false}this.querySelector('button').textContent='Copying…'"><span class="ml">📄 Make a copy as another type</span><span class="mr"><select name="type" aria-label="Type for the copy"><option value="">Choose…</option>${COPY_TYPES.filter(t => t !== r.inspectionType).map(t => `<option>${t}</option>`).join('')}</select><button class="btn" title="A separate copy: same rooms, conditions and photos, new reference. The original stays as it is.">Make copy</button></span></form>
@@ -1083,11 +1087,14 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   td { padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top; } tr:last-child td { border-bottom:none; }
   .sub { color:var(--soft); font-size:12.5px; margin-top:2px; } .num { white-space:nowrap; }
   .actions { white-space:nowrap; } .actions form { display:inline; }
-  td.actions { width:350px; min-width:350px; } .act { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; align-items:flex-start; } .act .btn { margin:0; white-space:nowrap; padding:6px 11px; }
+  td.actions { width:330px; min-width:330px; } .act { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; align-items:flex-start; } .act .btn { margin:0; white-space:nowrap; padding:6px 11px; }
   details.more > summary { list-style:none; } details.more > summary::-webkit-details-marker { display:none; } details.more[open] > summary { background:#F1F3F7; }
   @media (max-width:760px) { .act { justify-content:flex-start; max-width:none; margin-left:0; } td.actions { width:auto; min-width:0; } }
   details.more { flex-basis:auto; } details.more[open] { flex-basis:100%; }
   .menu { margin-top:8px; background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:6px; display:grid; gap:2px; white-space:normal; text-align:left; }
+  .actions form.mailf { display:grid; gap:2px; }
+  .mailf label { display:block; font-size:12.5px; font-weight:600; color:var(--soft); padding:4px 6px; } .mailf label span { font-weight:400; } .mailf input, .mailf textarea { display:block; width:100%; margin-top:4px; font:inherit; font-size:14px; font-weight:400; color:var(--ink); padding:8px 10px; border:1px solid #CDD4DF; border-radius:8px; background:#fff; } .mailf textarea { resize:vertical; }
+  .mailf .mrow { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:6px; } .mres { font-size:13px; } .mres.ok { color:var(--good); } .mres.bad { color:var(--danger); }
   .menu form { display:block; } .menu .mi { display:block; width:100%; text-align:left; font:inherit; font-size:14px; color:var(--ink); background:none; border:0; border-radius:8px; padding:9px 10px; cursor:pointer; text-decoration:none; } .menu .mi:hover { background:#EEF1F6; } .menu .mi.danger { color:var(--danger); }
   .menu .copyas { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:8px 10px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:2px 0; } .menu .ml { font-size:14px; } .menu .mr { display:flex; gap:6px; } .menu select { font:inherit; font-size:13px; padding:6px 8px; border-radius:8px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); }
   .btn { display:inline-block; font:inherit; font-size:13px; font-weight:600; padding:7px 13px; border-radius:999px; border:1px solid #CDD4DF; background:#fff; color:var(--ink); text-decoration:none; cursor:pointer; margin:2px 4px 2px 0; }
@@ -1178,8 +1185,15 @@ ${groups.map(g => `<section class="pane" id="p-${g.k}">
   show(location.hash);
 })();
 
+function sendLink(f, id){
+  const out = f.querySelector('.mres'), btn = f.querySelector('button'); btn.disabled = true; out.className = 'mres'; out.textContent = 'Sending…';
+  fetch('/admin/reports/' + id + '/email', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' }, body: new URLSearchParams(new FormData(f)) })
+    .then(r => r.json().catch(() => ({})).then(d => { btn.disabled = false; if (d.ok) { out.className = 'mres ok'; out.textContent = '✓ Sent to ' + d.to; f.to.value = ''; f.name.value = ''; } else { out.className = 'mres bad'; out.textContent = d.error || 'It didn’t send.'; } }))
+    .catch(() => { btn.disabled = false; out.className = 'mres bad'; out.textContent = 'No connection. Try again.'; });
+  return false;
+}
 function copyLink(btn, url){
-  const done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => btn.textContent = 'Copy link', 2000); };
+  const was = btn.textContent, done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => btn.textContent = was, 2000); };
   if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url)); else prompt('Copy this link:', url);
 }
 // A code just made: open the section and show it.
@@ -1242,6 +1256,33 @@ async function uploadPdfs(input){
       console.log('report rebuilt from its backup: ' + id + ' (' + b.photos.length + ' photos linked)');
       res.redirect(303, '/admin#reports');
     } catch (e) { console.error('rebuild failed: ' + e.message); res.status(500).type('text/plain').send('The rebuild failed: ' + e.message); }
+  });
+  // The owner emails a report's online link (view and download) to the property owner, or anyone, from /admin.
+  // Each email is kept on the report (r.linkEmails) and shown on the row. Never for a report not paid for yet.
+  app.post('/admin/reports/:id/email', requireAdmin, express.urlencoded({ extended: false }), async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).json({ error: 'Send it from the reports page.' });
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    if (notPaid(r)) return res.status(409).json({ error: 'This report isn’t paid for yet, so its link doesn’t open. Mark it as complete first.' });
+    const b = req.body || {}, to = String(b.to || '').trim().toLowerCase(), name = clip(b.name, 80), note = String(b.note || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 2000);
+    if (!EMAIL_RE.test(to)) return res.status(400).json({ error: 'Enter a valid email address.' });
+    if (!RESEND_API_KEY) return res.status(503).json({ error: 'Email isn’t switched on (RESEND_API_KEY isn’t set).' });
+    if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, id); fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(r, null, 2)); }
+    const link = (PUBLIC_URL || (req.protocol + '://' + req.get('host'))) + '/report/' + r.photoKey;
+    const type = r.inspectionType || 'Inventory';
+    const text = [name ? 'Dear ' + name + ',' : 'Hello,', '', note || ('Please find the ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + ' below.'), '',
+      'View and download the report: ' + link, '', 'Property: ' + (r.address || '—'), r.ref ? 'Reference: ' + r.ref : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
+      'Every photograph in the report is date and time stamped; tap one to see it full size.'].filter(l => l !== null).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    try {
+      const resp = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+        headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.assign({ from: REPORT_FROM_EMAIL, to: [to], subject: type + ' report: ' + (r.address || 'your property'), text }, REPORT_TO_EMAIL ? { reply_to: REPORT_TO_EMAIL } : {})) });
+      if (!resp.ok) { const t = (await resp.text().catch(() => '')).slice(0, 300); console.error('report link email failed: HTTP ' + resp.status, t); let m = ''; try { m = JSON.parse(t).message; } catch (e) {} return res.status(502).json({ error: 'The email didn’t go: ' + (m || 'HTTP ' + resp.status) }); }
+    } catch (e) { return res.status(502).json({ error: 'The email didn’t go: ' + e.message }); }
+    const now = readMeta(id) || r; now.linkEmails = (now.linkEmails || []).concat([{ to, name, at: new Date().toISOString() }]).slice(-50);
+    fs.writeFileSync(path.join(REPORTS_DIR, id + '.json'), JSON.stringify(now, null, 2));
+    console.log('report link emailed by the owner: ' + id + ' → ' + to);
+    res.json({ ok: true, to });
   });
   // The owner (only) makes a copy of a report as another type, e.g. a check-out copied as a check-in: the same rooms,
   // items, conditions and photos from its online backup, a new reference and photo key, built with the app's own
