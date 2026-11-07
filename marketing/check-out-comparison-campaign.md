@@ -8,6 +8,26 @@ Why it wins:
 - **It's fair to both sides.** Wear and tear is shown as wear and tear, not damage. Tenants trust it, and landlords only raise what will stand up.
 - **It makes the check-in worth doing with us.** The comparison only works when the check-in was done in DIY Inventory, so every check-in is a future check-out.
 
+## The headline message: evidence for deposit disputes
+Deposit schemes (TDS, DPS, mydeposits) and US small claims courts decide on evidence. They mostly compare the property at check-in with the property at check-out. That comparison is exactly what this report sets out:
+- every change listed, most serious first, with dated check-in and check-out photos side by side;
+- damage kept apart from fair wear and tear, which can't be deducted for;
+- the items that **didn't** change, counted as well.
+
+Lead every ad, post and email with this. Suggested lines:
+- **Landlords:** "Every deduction backed by a before-and-after photo."
+- **Tenants:** "Show what was already there. Wear and tear is not damage."
+- **Agents:** "Settle the deposit with the changes page, before it becomes a dispute."
+
+What we may **not** say: that the report wins disputes, is "accepted"/"approved" by any scheme or court, or decides what's deducted. Use "made to be used as evidence" and "the adjudicator decides".
+
+**Where it already shows:**
+- the campaign page (a "Built for the deposit conversation" section, plus FAQs);
+- the deposit guides: how to dispute deductions, what can be deducted, fair wear and tear, check-out guide;
+- the home page FAQ and llms.txt (for AI assistants);
+- inside the report's AI box;
+- in the app: a "Using this for the deposit" card on a finished check-out.
+
 ## 1. What's live
 | Piece | Where |
 |---|---|
@@ -39,9 +59,11 @@ Why it wins:
 > *Don't want these emails? Reply "stop".*
 
 ## 4. Google Ads (UK)
-**Keywords:** "check out inventory" · "check in check out comparison" · "end of tenancy inspection" · "inventory check out report" · "deposit dispute evidence" · "check out report landlord"
+**Keywords:** "deposit dispute evidence" · "tenancy deposit dispute" · "deposit deductions photos" · "fair wear and tear deposit" · "check out inventory" · "check in check out comparison" · "end of tenancy inspection" · "inventory check out report" · "deposit dispute evidence" · "check out report landlord"
 
 **Headlines** (30 characters max):
+- Deposit Dispute Evidence
+- Before-and-After for Deposits
 - Check-Out Compared by AI
 - Every Change Found for You
 - Damage vs Wear and Tear

@@ -3184,7 +3184,7 @@ async function buildPdfBlob(s, onProgress, out){
       const same = compared.filter(a => a.status === 'same').length, unclear = compared.filter(a => a.status === 'unclear').length;
       const txt = 'Compared automatically. Our AI put the photo of each item from the ' + eName + ' beside its photo in this report and looked for differences: ' + compared.length + ' item' + (compared.length === 1 ? '' : 's') + ' compared' +
         (found.length ? '; found ' + found.map(([c, w]) => c + ' ' + w).join(', ') : '; no damage found') + (same ? '; ' + same + ' unchanged' : '') + (unclear ? '; ' + unclear + ' could not be compared (different angle or light)' : '') +
-        '. These are what the photos show, not a decision on who is responsible: check each one against the photographs.';
+        '. These are what the photos show, not a decision on who is responsible: check each one against the photographs. For the deposit: each change below names its room and item, with both reports’ dated photos, so a deduction, or an objection to one, can point straight to its evidence.';
       const bl = lines(txt, CW - 12);
       const bh = bl.length * 4.4 + 9;
       doc.setFillColor(C.paper[0], C.paper[1], C.paper[2]); doc.rect(M, y, CW, bh, 'F');
@@ -5008,6 +5008,10 @@ function renderDone(){
       <div class="room-count-hint" id="midStatus">Each email has a link that starts the next inspection from the latest report. One click stops them.</div>
     </div>` : ''}
 
+    ${reportUnlocked() && earlierFor(state) && inspectionKind(state.meta.inspectionType) === 'Check-Out' ? `<div class="card" style="margin-top:14px">
+      <strong>Using this for the deposit</strong>
+      <p style="margin:6px 0 0;font-size:14px;line-height:1.45">The report’s “Changes since the ${escapeHtml(earlierName(earlierFor(state)))}” page lists every change${aiEnabled ? ', compared photo by photo by our AI,' : ''} with the dated photos from both reports side by side. Send it to the other side first and agree the changes: most disagreements end there. If it goes to ${usFor(state) ? 'small claims court, bring this PDF' : 'the deposit scheme (TDS, DPS or mydeposits), upload this PDF'} as your evidence, with any invoices or quotes for the work.</p>
+    </div>` : ''}
     ${reportUnlocked() ? `
     <div class="report-doc" onclick="if (event.target.tagName === 'IMG' && !event.target.classList.contains('sig-preview')) openPhotoPreview(event.target.src)">
       <h2>${escapeHtml(reportTitle(state))}</h2>

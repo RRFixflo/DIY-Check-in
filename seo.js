@@ -124,6 +124,7 @@ function mount(app, ctx){
       '## What it does',
       '- A photo checklist for every room; at least 8 photos per room, with the date and time burned into every photo.',
       ctx.aiOn() ? '- AI suggests each item’s condition, a short description, marks or damage and cleanliness from its photo; the person can change anything.' : '',
+      ctx.aiOn() ? '- Check-out compared with the check-in by AI (' + base + '/check-out-comparison): each check-out photo is compared with the check-in photo of the same item, and every change is listed (possible damage, wear and tear, needs cleaning, missing; how serious; where), with both dated photos side by side. Made to be used as evidence in deposit disputes; the AI says what the photos show, the people involved (or the deposit scheme) decide.' : '',
       '- The report is a professional PDF, ready instantly when signed: cover, room-by-room condition, meters, keys, signature and declaration, with every photo linked at full size.',
       '- Do it yourself as a landlord or agent, or send the tenant a link to do it. Either side can send the other a link to check, comment and sign.',
       '- Check-outs and mid-tenancy inspections start from the earlier report and compare the two: what changed, meter readings then and now, photos side by side.',
