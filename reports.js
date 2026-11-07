@@ -985,7 +985,22 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 
   app.get('/admin', requireAdmin, (req, res) => {
     const reports = listReports();
-    const rows = reports.map(r => `
+    // Every email we hold for each report (the person who did it first), to fill in the Email form.
+    const bk = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) bk.set('id:' + s._serverReportId, s); if (s.finalizedAt) bk.set('k:' + backupKey(s), s); }); } catch (e) {}
+    const agentsAll = readAgents();
+    const emailsFor = r => {
+      const out = [], add = (e, who, name) => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !out.some(x => x.e === e)) out.push({ e, who, name: name || '' }); };
+      const s = bk.get('id:' + r.id) || bk.get('k:' + r.key) || null, doer = r.signedBy || r.inspectorName || '';
+      add(r.copyEmail, 'did the report', doer); if (s) add((s.meta || {}).copyEmail, 'did the report', doer);
+      let buyer = ''; try { buyer = s && s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
+      add(buyer, 'paid for it');
+      { const pw = String(r.paidWith || ''), m = / by ([^,()]+?),\s*([^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,})/i.exec(pw); if (m) add(m[2], 'paid for it', m[1].trim()); (pw.match(/[^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,}/gi) || []).forEach(e => add(e, 'paid for it')); }
+      const ag = r.agentId && agentsAll.find(a => a.id === r.agentId); if (ag) add(ag.email, 'agent link: ' + ag.name, ag.name);
+      Object.keys(r.copies || {}).forEach(e => add(e, 'sent a copy'));
+      (r.linkEmails || []).forEach(x => add(x.to, 'emailed before', x.name));
+      return out;
+    };
+    const rows = reports.map(r => { const known = emailsFor(r); return `
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
@@ -996,8 +1011,9 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${!notPaid(r) ? `<details class="more mail"><summary class="btn">✉ Email</summary><form class="menu mailf" onsubmit="return sendLink(this, '${r.id}')">
-            <label>Owner’s email<input type="email" name="to" required placeholder="name@example.com"></label>
-            <label>Their name <span>(optional)</span><input name="name" placeholder="e.g. Mr Smith"></label>
+            ${known.length ? `<div class="known"><span>Send to:</span>${known.map((k, i) => `<button type="button" class="kchip${i ? '' : ' on'}" data-e="${esc(k.e)}" data-n="${esc(k.name)}" onclick="pickTo(this)"><b>${esc(k.name || k.e)}</b> · ${esc(k.who)}<i>${esc(k.e)}</i></button>`).join('')}</div>` : ''}
+            <label>Email address<input type="email" name="to" required placeholder="name@example.com" value="${esc(known[0] ? known[0].e : '')}"></label>
+            <label>Their name <span>(optional)</span><input name="name" placeholder="e.g. Mr Smith" value="${esc(known[0] ? known[0].name : '')}"></label>
             <label>Message<textarea name="note" rows="4">Please find the ${esc((r.inspectionType || 'inventory').toLowerCase())} report for ${esc(r.address || 'your property')} below. You can view it online and download the PDF.</textarea></label>
             <div class="mrow"><button class="btn primary">Send the link</button><span class="mres"></span></div></form></details>` : ''}
           <details class="more"><summary class="btn">More ▾</summary><div class="menu">
@@ -1009,7 +1025,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
             <form method="post" action="/admin/reports/${r.id}/delete" onsubmit="return confirm('Delete the report for ${esc(String(r.address).replace(/'/g, ''))}? This cannot be undone.')"><button class="mi danger">🗑 Delete</button></form>
           </div></details>
         </div></td>
-      </tr>`).join('');
+      </tr>`; }).join('');
     // Reports finished on a phone whose PDF hasn't arrived (not paid, or the upload failed): shown from their backup.
     const have = new Set(reports.map(r => r.key));
     const orphans = drafts.finishedOnly().filter(({ s }) => !have.has(crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12)));
@@ -1093,6 +1109,8 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   details.more { flex-basis:auto; } details.more[open] { flex-basis:100%; }
   .menu { margin-top:8px; background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:6px; display:grid; gap:2px; white-space:normal; text-align:left; }
   .actions form.mailf { display:grid; gap:2px; }
+  .known { display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:4px 6px 6px; } .known > span { font-size:12.5px; font-weight:600; color:var(--soft); width:100%; }
+  .kchip { font:inherit; font-size:12.5px; text-align:left; background:#fff; border:1px solid #CDD4DF; border-radius:10px; padding:6px 10px; cursor:pointer; color:var(--ink); max-width:100%; } .kchip b { font-weight:600; } .kchip i { display:block; font-style:normal; color:var(--soft); font-size:12px; overflow-wrap:anywhere; } .kchip.on { border-color:var(--navy); box-shadow:0 0 0 1px var(--navy); }
   .mailf label { display:block; font-size:12.5px; font-weight:600; color:var(--soft); padding:4px 6px; } .mailf label span { font-weight:400; } .mailf input, .mailf textarea { display:block; width:100%; margin-top:4px; font:inherit; font-size:14px; font-weight:400; color:var(--ink); padding:8px 10px; border:1px solid #CDD4DF; border-radius:8px; background:#fff; } .mailf textarea { resize:vertical; }
   .mailf .mrow { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:6px; } .mres { font-size:13px; } .mres.ok { color:var(--good); } .mres.bad { color:var(--danger); }
   .menu form { display:block; } .menu .mi { display:block; width:100%; text-align:left; font:inherit; font-size:14px; color:var(--ink); background:none; border:0; border-radius:8px; padding:9px 10px; cursor:pointer; text-decoration:none; } .menu .mi:hover { background:#EEF1F6; } .menu .mi.danger { color:var(--danger); }
@@ -1185,6 +1203,7 @@ ${groups.map(g => `<section class="pane" id="p-${g.k}">
   show(location.hash);
 })();
 
+function pickTo(b){ const f = b.closest('form'); f.to.value = b.dataset.e; f.name.value = b.dataset.n || ''; f.querySelectorAll('.kchip').forEach(x => x.classList.toggle('on', x === b)); }
 function sendLink(f, id){
   const out = f.querySelector('.mres'), btn = f.querySelector('button'); btn.disabled = true; out.className = 'mres'; out.textContent = 'Sending…';
   fetch('/admin/reports/' + id + '/email', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' }, body: new URLSearchParams(new FormData(f)) })

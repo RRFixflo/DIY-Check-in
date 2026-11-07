@@ -274,7 +274,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   // Finished on the phone but with no stored report (not paid, or the upload never arrived): listed with the reports.
   const finishedOnly = () => list().filter(({ s }) => s.finalizedAt && !s.submittedId);
   const findBackup = fn => list().find(fn) || null;
-  return { draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup };
+  return { draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list };
 }
 
 module.exports = { mount };
