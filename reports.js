@@ -988,12 +988,18 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     // Every email we hold for each report (the person who did it first), to fill in the Email form.
     const bk = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) bk.set('id:' + s._serverReportId, s); if (s.finalizedAt) bk.set('k:' + backupKey(s), s); }); } catch (e) {}
     const agentsAll = readAgents();
+    let buys = []; try { buys = require('./purchases').paidWithEmail(); } catch (e) {}
+    const norm = t => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     const emailsFor = r => {
       const out = [], add = (e, who, name) => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !out.some(x => x.e === e)) out.push({ e, who, name: name || '' }); };
       const s = bk.get('id:' + r.id) || bk.get('k:' + r.key) || null, doer = r.signedBy || r.inspectorName || '';
       add(r.copyEmail, 'did the report', doer); if (s) add((s.meta || {}).copyEmail, 'did the report', doer);
       let buyer = ''; try { buyer = s && s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
       add(buyer, 'paid for it');
+      // A purchase that names this report's person, or was used for this address, even if the report was never linked to it.
+      const dn = norm(doer), ad = norm(r.address);
+      const sameName = (a, b) => { if (!a || !b) return false; if (a === b) return true; const A = a.split(' '), B = b.split(' '), [x, y] = A.length <= B.length ? [A, B] : [B, A]; return x.length >= 2 && x.every(w => y.includes(w)); };
+      buys.forEach(b => { const bn = norm(b.name), bu = norm(b.usedFor); if (sameName(bn, dn) || (bu && ad && (bu === ad || bu.includes(ad) || ad.includes(bu))) || (s && s._token && s._token === b.token)) add(b.email, 'paid for it', b.name); });
       { const pw = String(r.paidWith || ''), m = / by ([^,()]+?),\s*([^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,})/i.exec(pw); if (m) add(m[2], 'paid for it', m[1].trim()); (pw.match(/[^\s,()<>]+@[^\s,()<>]+\.[a-z]{2,}/gi) || []).forEach(e => add(e, 'paid for it')); }
       const ag = r.agentId && agentsAll.find(a => a.id === r.agentId); if (ag) add(ag.email, 'agent link: ' + ag.name, ag.name);
       Object.keys(r.copies || {}).forEach(e => add(e, 'sent a copy'));

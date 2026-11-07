@@ -333,4 +333,6 @@ const CSS = `.buy-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 
 .buy-receipt dt { color: var(--ink-faint); font-weight: 600; } .buy-receipt dd { margin: 0; overflow-wrap: anywhere; }
 @media (max-width: 820px) { .buy-grid, .buy-done { grid-template-columns: 1fr; } .pay-top .buy-pay { order: -1; } .buy-start { min-width: 0; width: 100%; } .buy-copy { flex-wrap: wrap; } .buy-copy .btn { flex: 1 1 100%; } }`;
 
-module.exports = { describe, emailFor, mount, access, markUsed, isToken, PRICE, PRICE_TEXT };
+// Every paid purchase with an email (for /admin's Email form: matched to a report by its buyer's name or the address it was used for).
+function paidWithEmail(){ return readAll().list.filter(r => r.status === 'paid' && r.email).map(r => ({ name: r.name || '', email: r.email, usedFor: r.usedFor || '', token: r.token })); }
+module.exports = { describe, emailFor, paidWithEmail, mount, access, markUsed, isToken, PRICE, PRICE_TEXT };
