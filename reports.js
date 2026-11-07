@@ -336,6 +336,22 @@ function mount(app){
     const basis = meta.finalizedAt ? meta.ref + '|' + meta.finalizedAt : 'file|' + crypto.createHash('sha256').update(pdf).digest('hex');
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
     const existing = listReports().find(r => r.key === key);
+    // An edited copy of a finished report (photos added or removed, or its type changed on the phone): it replaces the
+    // stored one in place, so its id, link, payment and copies stay the same. Only from the phone that made it (its photo key).
+    if (existing && m.editedAt && meta.photoKey && existing.photoKey === meta.photoKey && clip(m.editedAt, 40) !== String(existing.editedAt || '')) {
+      try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
+      const was = existing.inspectionType;
+      ['address', 'inspectionType', 'inspectorName', 'signedBy', 'rooms', 'photos', 'fileName', 'basedOnRef'].forEach(k => { if (meta[k] !== '' && meta[k] !== undefined) existing[k] = meta[k]; });
+      if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;
+      Object.assign(existing, { size: pdf.length, source: 'app', editedAt: clip(m.editedAt, 40), edits: (existing.edits || 0) + 1 });
+      if (existing.tenantSignedAt) existing.editedAfterSigning = true;   // the signed copy stays as the version they signed
+      let status = 200;
+      if (existing.unpaid && !opts.unpaid) { existing.unpaid = false; existing.paidAt = new Date().toISOString(); status = 201; }
+      fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.json'), JSON.stringify(existing, null, 2));
+      console.log('report edited on the phone: ' + existing.id + (was !== existing.inspectionType ? ' (' + was + ' → ' + existing.inspectionType + ')' : ''));
+      notifyOwner({ title: 'Report edited: ' + (existing.address || 'a report'), message: [existing.inspectionType + (was !== existing.inspectionType ? ' (was ' + was + ')' : ''), existing.rooms + ' rooms, ' + existing.photos + ' photos', existing.ref ? 'Ref ' + existing.ref : ''].filter(Boolean).join(' · '), tags: ['pencil2'], click: PUBLIC_URL ? PUBLIC_URL + '/admin#reports' : '' });
+      return [status, { id: existing.id, replaced: true }];
+    }
     if (existing) {
       if (meta.copyEmail && !existing.copyEmail) existing.copyEmail = meta.copyEmail;
       if (meta.origin && !existing.origin) existing.origin = meta.origin;
@@ -708,6 +724,16 @@ function mount(app){
     const list = Array.isArray(b.photos) ? b.photos.slice(0, 12) : [];
     const dir = photoDir(id);
     fs.mkdirSync(dir, { recursive: true });
+    // The first photo of an edited version: the earlier version's photos (numbered differently) are cleared first.
+    const edit = /^[\w:.\-]{10,40}$/.test(String(b.edit || '')) ? String(b.edit) : '';
+    if (edit) {
+      let was = ''; try { was = fs.readFileSync(path.join(dir, 'edit.txt'), 'utf8'); } catch (e) {}
+      if (was !== edit) {
+        try { for (const f of fs.readdirSync(dir)) if (/^\d+\.jpg$/.test(f)) fs.unlinkSync(path.join(dir, f)); } catch (e) {}
+        try { fs.unlinkSync(path.join(dir, 'index.json')); } catch (e) {}
+        fs.writeFileSync(path.join(dir, 'edit.txt'), edit);
+      }
+    }
     let index = {};
     try { index = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')); } catch (e) {}
     let saved = 0;
@@ -962,7 +988,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
       <tr data-q="${esc((r.address + ' ' + r.ref + ' ' + r.inspectorName + ' ' + r.inspectionType).toLowerCase())}">
         <td>${esc(new Date(r.receivedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }))}</td>
         <td><strong>${esc(r.address || '—')}</strong><div class="sub">${esc([r.inspectionType, r.ref, r.basedOnRef ? 'compared with ' + r.basedOnRef : '', r.source === 'uploaded' ? 'added from a PDF' : '', r.source === 'backup' ? 'made from the online backup (the phone’s PDF didn’t arrive)' + (r.backupMissingPhotos ? ', ' + r.backupMissingPhotos + ' photos missing' : '') : ''].filter(Boolean).join(' · '))}</div>${r.origin ? Origin.html(r.origin, esc) : ''}</td>
-        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}</div></td>
+        <td>${esc(r.signedBy || r.inspectorName || '—')}<div class="sub">${r.source === 'uploaded' ? '' : r.sentAt ? '<span class="pill sent">Sent ' + esc(new Date(r.sentAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.emailedAt ? ' · emailed' : '') + '</span>' : '<span class="pill">Not sent by tenant yet</span>'}${r.unpaid ? ' <span class="pill wait">Not paid yet</span>' : ''}${r.paidWith ? ' <div class="sub">💳 ' + esc(r.paidWith) + '</div>' : ''}${r.copies && Object.keys(r.copies).length ? ' <span class="pill sent">📧 Copy to ' + esc(Object.keys(r.copies).join(', ')) + '</span>' : ''}${r.agentName ? ' <span class="pill">via ' + esc(r.agentName) + '</span>' : ''}${r.tenantSignedAt ? ' <span class="pill sent">✍️ Signed by ' + esc(r.tenantSignedBy) + (r.tenantAgree === 'comments' ? ', with comments' : '') + '</span>' : ''}${r.editedAt ? ' <div class="sub">✏️ Edited on the phone ' + esc(new Date(r.editedAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })) + (r.edits > 1 ? ' (' + r.edits + ' times)' : '') + (r.editedAfterSigning ? ' · after the tenant signed: their signed copy is the earlier version' : '') + '</div>' : ''}</div></td>
         <td class="num">${r.rooms ? r.rooms + ' rooms · ' + r.photos + ' photos' : '—'}<div class="sub">${(r.size / 1048576).toFixed(1)} MB</div>${(() => { const L = readAccess(r.id); if (!L.length) return ''; const dl = L.filter(x => /download|app_share/.test(x.what)).length; return `<div class="sub"><a href="/admin/reports/${r.id}/opened">👁 ${L.length - dl} view${L.length - dl === 1 ? '' : 's'} · ⬇ ${dl} download${dl === 1 ? '' : 's'}</a></div>`; })()}</td>
         <td class="actions">
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
@@ -1278,4 +1304,14 @@ h1{font-size:26px;margin:0 0 4px}.lead{color:#5B677C;margin:0 0 18px}.card{backg
   console.log(`reports: stored in ${REPORTS_DIR}${PERSISTENT ? '' : ' (NOT persistent: no volume attached)'}, admin ${ADMIN_PASSWORD ? 'enabled' : 'locked (ADMIN_PASSWORD not set)'}`);
 }
 
-module.exports = { mount, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+// May this upload replace a stored report with an edited copy, without paying again? Only the phone that made it
+// (same reference, finish time and private photo key), only for a report already paid for.
+function editAllowed(m){
+  m = m || {};
+  if (!m.editedAt || !/^[a-f0-9]{32}$/.test(String(m.photoKey || '')) || !m.finalizedAt) return false;
+  const key = crypto.createHash('sha256').update(clip(m.ref, 40) + '|' + clip(m.finalizedAt, 40)).digest('hex').slice(0, 12);
+  const r = listReports().find(x => x.key === key);
+  return !!(r && r.photoKey === m.photoKey && !(r.unpaid && !r.paidAt));
+}
+
+module.exports = { mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

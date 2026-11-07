@@ -325,6 +325,8 @@ if (PAYWALL) {
   app.use(['/api/assess', '/api/reports'], async (req, res, next) => {
     if (req.method !== 'POST' || (req.path !== '/' && req.baseUrl === '/api/reports')) return next();
     if (reports.isOwner(req)) return next(); // the owner (signed in to /admin) needs no paid link
+    // An edited copy of a report already paid for replaces it in place: no new payment, nothing marked used.
+    if (req.baseUrl === '/api/reports') { let m = {}; try { m = JSON.parse(decodeURIComponent(String(req.headers['x-report-meta'] || ''))); } catch (e) {} if (reports.editAllowed(m)) return next(); }
     const token = cookieToken(req), a = await checkAccess(token);
     if (!a.valid && req.baseUrl === '/api/assess') {
       if (!freeAssess.allow(req)) return res.status(429).json({ error: 'Automatic suggestions are busy right now. Choose the condition yourself.' });

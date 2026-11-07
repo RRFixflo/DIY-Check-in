@@ -649,6 +649,15 @@
   .pay-first { margin: -6px 0 16px; padding: 12px 16px; border-radius: 16px; background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); font-size: 14.5px; color: var(--ink-soft); display: flex; gap: 10px 14px; align-items: center; flex-wrap: wrap; }
   .pay-first strong { color: var(--ink); }
   .pay-first a { margin-left: auto; white-space: nowrap; text-decoration: none; }
+  .type-chip { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
+  .type-opts { display: grid; gap: 8px; margin: 10px 0 12px; }
+  .type-opt { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1.5px solid var(--line, #e3e5ec); border-radius: 12px; cursor: pointer; font-weight: 600; background: var(--panel); color: var(--ink); }
+  .type-opt input { width: 18px; height: 18px; margin: 0; flex: none; }
+  .type-opt.on { border-color: var(--accent); background: var(--accent-soft); }
+  .type-note { font-size: 13px; color: var(--ink-soft); margin: 0 0 12px; }
+  .type-err { color: #b42318; font-size: 13px; font-weight: 600; margin: 0 0 10px; }
+  .edit-banner { background: var(--accent-soft); border: 1.5px solid var(--accent); border-radius: 14px; padding: 12px 14px; margin: 0 0 14px; font-size: 14px; color: var(--ink); }
+  .edit-banner .btn { margin-top: 8px; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -692,6 +701,12 @@
     <div class="example-head"><strong id="exampleTitle"></strong><button type="button" class="btn-ghost" onclick="closeExample(event)" aria-label="Close">✕</button></div>
     <div id="exampleArt"></div>
     <p id="exampleTip"></p>
+  </div>
+</div>
+<div id="typeBox" class="example-box hidden" onclick="if (event.target === this) closeTypeChange()" role="dialog" aria-modal="true" aria-labelledby="typeTitle">
+  <div class="example-card">
+    <div class="example-head"><strong id="typeTitle">Change the report type</strong><button type="button" class="btn-ghost" onclick="closeTypeChange()" aria-label="Close">✕</button></div>
+    <div id="typeBody"></div>
   </div>
 </div>
 <div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
@@ -1767,7 +1782,10 @@ function normalizeState(saved){
     earlier: saved.earlier && Array.isArray(saved.earlier.rooms) ? saved.earlier : null,
     submittedAt: saved.submittedAt || null,
     tracked: saved.tracked && typeof saved.tracked === 'object' ? saved.tracked : {},
-    floorplan: saved.floorplan && typeof saved.floorplan === 'object' && saved.floorplan.plan ? saved.floorplan : null
+    floorplan: saved.floorplan && typeof saved.floorplan === 'object' && saved.floorplan.plan ? saved.floorplan : null,
+    editOf: saved.editOf || null,             // being edited after it was finished: its first finish time
+    editedAt: saved.editedAt || null,         // last time an edited version was finished
+    pendingReplace: !!saved.pendingReplace    // the edited version still has to replace the stored copy
   };
 }
 
@@ -2239,6 +2257,74 @@ function updateFinishButtonState(){
   if (help) help.textContent = missing.length ? 'Before finishing: ' + missing.join(', ') + '.' : 'Everything is complete — ready to finish.';
 }
 
+
+/* ============================= changing a report after it was started or finished ============================= */
+// The type (check-in, check-out, inspection) can be changed at any time: everything that depends on it (the title,
+// cover, wording, file name) follows, because it is all worked out from state.meta.inspectionType. A finished report
+// can be opened again to add or remove photos; finishing it again replaces the stored copy in place (same link,
+// same payment, the photos re-uploaded with their new numbers).
+const REPORT_TYPES = ['Check-In', 'Check-Out', 'Interim Inspection', 'Renewal Inspection'];
+let typePick = '';
+function typeChipHTML(){
+  return `<button type="button" class="type-chip" onclick="openTypeChange()" title="Change the report type" aria-label="Report type: ${escapeHtml(state.meta.inspectionType)}. Tap to change it.">${escapeHtml(state.meta.inspectionType)} ✎</button>`;
+}
+function openTypeChange(){ typePick = REPORT_TYPES.includes(state.meta.inspectionType) ? state.meta.inspectionType : 'Check-In'; drawTypeChange(''); document.getElementById('typeBox').classList.remove('hidden'); }
+function closeTypeChange(){ document.getElementById('typeBox').classList.add('hidden'); }
+function drawTypeChange(err){
+  const needMoveIn = typePick === 'Check-In';
+  const mv = (document.getElementById('typeMoveIn') || {}).value || state.meta.moveInDateTime || '';
+  document.getElementById('typeBody').innerHTML = `
+    <div class="type-opts">${REPORT_TYPES.map(t => `<label class="type-opt${typePick === t ? ' on' : ''}"><input type="radio" name="typePick" value="${t}" ${typePick === t ? 'checked' : ''} onchange="typePick=this.value; drawTypeChange('')">${t}</label>`).join('')}</div>
+    ${needMoveIn ? `<label for="typeMoveIn" style="display:block;font-size:14px;font-weight:600;margin-bottom:6px">Tenancy move-in date &amp; time</label>
+      <input class="input" id="typeMoveIn" type="datetime-local" value="${escapeHtml(mv)}" style="margin-bottom:12px">` : ''}
+    <p class="type-note">The title, cover, wording and file name change to match${state.finalizedAt ? '. The finished report is made again and replaces the copy already sent, under the same link' : ''}. Rooms, photos and conditions stay as they are.</p>
+    ${err ? `<p class="type-err">${escapeHtml(err)}</p>` : ''}
+    <div class="btn-row"><button type="button" class="btn btn-primary" onclick="applyTypeChange()">Change to ${escapeHtml(typePick)}</button><button type="button" class="btn" onclick="closeTypeChange()">Cancel</button></div>`;
+}
+function applyTypeChange(){
+  const t = typePick;
+  if (!REPORT_TYPES.includes(t)) return;
+  if (t === state.meta.inspectionType) { closeTypeChange(); return; }
+  if (t === 'Check-In') {   // the same rule as starting a check-in: within 7 days of the move-in (counted from when this report was started)
+    const v = (document.getElementById('typeMoveIn') || {}).value || '';
+    const moveIn = new Date(v), started = new Date(state.meta.createdAt || Date.now());
+    if (!v || isNaN(moveIn.getTime())) { drawTypeChange('Enter the tenancy move-in date and time. A check-in must be done within 7 days of move-in.'); return; }
+    const diff = started - moveIn;
+    if (diff < 0) { drawTypeChange('The move-in date is after this report was started. A check-in is done on or after the move-in date.'); return; }
+    if (diff > 7 * 86400000) { drawTypeChange('This report was started more than 7 days after that move-in date, so it can’t be a check-in.'); return; }
+    state.meta.moveInDateTime = v;
+  }
+  const was = state.meta.inspectionType;
+  state.meta.inspectionType = t;
+  if (state.finalizedAt) markEdited();
+  persist();
+  closeTypeChange();
+  render();
+  notice('Changed from ' + was + ' to ' + t + '.' + (state.finalizedAt ? ' The report is being made again and will replace the one already sent.' : ''));
+}
+// A finished report has changed: build it again and replace the stored copy (same link, nothing to pay again).
+function markEdited(){
+  state.editedAt = new Date().toISOString();
+  state.pendingReplace = true;
+  state.sentAt = null; state.photosUploaded = false; state.dataUploaded = false;
+  setSubmitUi('idle'); sendUi = { phase: 'idle', msg: '' };
+}
+// Open a finished report again to add or remove photos (or change anything else); finishing again saves the changes.
+function editReport(){
+  if (!state.finalizedAt) return;
+  state.editOf = state.finalizedAt;
+  state.finalizedAt = null;
+  state.declarationAccepted = false;   // confirmed again for the changed report; the signature is kept
+  state.view = 'capture';
+  persist(); render();
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+function editBannerHTML(){
+  if (!state.editOf) return '';
+  return `<div class="edit-banner"><strong>Editing your finished report.</strong> Add or remove any photos, change details, then go to Review and finish again. It replaces the report already sent, under the same link, at no extra cost.
+    ${state.view === 'review' ? '' : '<br><button type="button" class="btn btn-sm btn-primary" onclick="goToReview()">Done editing: review and finish</button>'}</div>`;
+}
+
 /* ============================= finishing & export ============================= */
 async function completeReport(){
   updateFinishButtonState();
@@ -2246,7 +2332,10 @@ async function completeReport(){
   if (btn.disabled) return;
   const signedByInput = document.getElementById('signedByInput');
   state.meta.signedBy = (signedByInput && signedByInput.value.trim()) || state.meta.inspectorName;
-  state.finalizedAt = new Date().toISOString();
+  if (state.editOf) {   // an edited finished report: same report (same finish time and link), replaced in place
+    state.finalizedAt = state.editOf; state.editOf = null;
+    markEdited();
+  } else state.finalizedAt = new Date().toISOString();
   track('report_finished', 1);
   persist();
   state.view = 'done';
@@ -3619,7 +3708,7 @@ function setSendUi(phase, msg){
 let sendStartedAt = 0;
 function resumeSending(){
   if (state.view !== 'done' || !state.finalizedAt || state.sentAt || document.visibilityState === 'hidden' || navigator.onLine === false) return;
-  if (!reportUnlocked()) { if (!state.unpaidId && !unpaidSending) sendUnpaidCopy(); return; }
+  if (!reportUnlocked()) { if ((!state.unpaidId || state.pendingReplace) && !unpaidSending) sendUnpaidCopy(); return; }
   const stuck = sendUi.phase === 'sending' && Date.now() - sendStartedAt > 60000;
   if (sendUi.phase === 'sending' && !stuck) return;
   if (stuck) { submitting = false; submitPromise = null; }
@@ -3685,16 +3774,16 @@ async function postReportPdf(blob, headers, onProgress){
 // Not paid for yet: the owner still gets the finished report (stored as not paid; it unlocks nothing here).
 let unpaidSending = false;
 async function sendUnpaidCopy(){
-  if (unpaidSending || !state.finalizedAt || state.unpaidId || state.submittedId || reportUnlocked()) return;
+  if (unpaidSending || !state.finalizedAt || (state.unpaidId && !state.pendingReplace) || state.submittedId || reportUnlocked()) return;
   unpaidSending = true;
   try {
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
-    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', visit: visitInfo(), basedOnRef: (state.earlier && state.earlier.ref) || '' };
+    const meta = { address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref, inspectorName: state.meta.inspectorName, signedBy: state.meta.signedBy, createdAt: state.meta.createdAt, finalizedAt: state.finalizedAt, rooms: state.rooms.length, photos: totalCaptured(), fileName: r.fname, photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', visit: visitInfo(), basedOnRef: (state.earlier && state.earlier.ref) || '', editedAt: state.editedAt || '' };
     const res = await postReportPdf(r.blob, { 'X-Report-Unpaid': '1', 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || 'HTTP ' + res.status);
-    state.unpaidId = data.id; persist();
+    state.unpaidId = data.id; state.pendingReplace = false; persist();
   } catch (err) { console.error('unpaid copy failed', err); reportProblem('unpaid-upload', err); }
   finally { unpaidSending = false; }
 }
@@ -3713,7 +3802,7 @@ async function submitReportOnce(){
   try {
     const r = await preparePdf();
     if (!r) throw new Error('The PDF could not be built.');
-    if (!state.submittedId){
+    if (!state.submittedId || state.pendingReplace){
     const pr = state.property || {};
     const meta = {
       address: state.meta.address, inspectionType: state.meta.inspectionType, ref: state.meta.ref,
@@ -3721,7 +3810,7 @@ async function submitReportOnce(){
       finalizedAt: state.finalizedAt, rooms: state.rooms.length,
       photos: totalCaptured() + ((pr.exterior && pr.exterior.photos.length) || 0), fileName: r.fname,
       photoKey: state.photoKey || '', copyEmail: state.meta.copyEmail || '', visit: visitInfo(),
-      basedOnRef: (state.earlier && state.earlier.ref) || ''
+      basedOnRef: (state.earlier && state.earlier.ref) || '', editedAt: state.editedAt || ''
     };
     const res = await postReportPdf(r.blob, { 'X-Report-Meta': encodeURIComponent(JSON.stringify(meta)) }, pct => {
       sendStartedAt = Date.now();   // still moving: not stuck
@@ -3730,7 +3819,8 @@ async function submitReportOnce(){
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.id) throw new Error(data.error || '');
     state.submittedId = data.id;
-    state.submittedAt = new Date().toISOString();
+    state.submittedAt = state.submittedAt || new Date().toISOString();
+    state.pendingReplace = false;
     persist();
     }
     await uploadPhotos(state.submittedId, r.photos || []);
@@ -3753,7 +3843,7 @@ async function uploadPhotos(id, photos){
       try {
         const res = await fetch('/api/reports/' + encodeURIComponent(id) + '/photos', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: state.photoKey, photos: photos.slice(i, i + 2) })
+          body: JSON.stringify({ key: state.photoKey, photos: photos.slice(i, i + 2), edit: state.editedAt || '' })
         });
         if (res.ok) ok = true;
         else { const d = await res.json().catch(() => ({})); lastErr = new Error(d.error || 'The photos could not be uploaded.'); if (res.status === 403 || res.status === 404) break; }
@@ -3842,7 +3932,7 @@ function fpPlan(s){ return s && s.floorplan && s.floorplan.plan; }
 function fpHas(s){ return !!(window.FloorPlan && fpPlan(s) && FloorPlan.hasPlan(fpPlan(s))); }
 function fpUnlocked(s){ return !!(s && s.floorplan && (s.floorplan.token || s.floorplan.free)); }
 function fpIncluded(s){ return fpHas(s) && fpUnlocked(s); }
-function pdfKey(){ return state.finalizedAt + '|' + (fpIncluded(state) ? 'fp' + (fpPlan(state).updatedAt || '') : ''); }
+function pdfKey(){ return state.finalizedAt + '|' + (state.editedAt || '') + '|' + (fpIncluded(state) ? 'fp' + (fpPlan(state).updatedAt || '') : ''); }
 function fpAccessFor(){ return { checking: !fpAccessUi.checked && !fpUnlocked(state), unlocked: fpUnlocked(state), configured: fpAccessUi.configured }; }
 // The report's rooms, named the way a floor plan names them; outside spaces are left out.
 function fpRoomNames(){
@@ -4260,8 +4350,9 @@ function renderCapture(){
     : '';
   return `
     ${aiBanner}
+    ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
       <h1>${escapeHtml(state.meta.address)}</h1>
       <div class="sub">${roomsComplete()} of ${state.rooms.length} rooms complete · ${totalCaptured()} of ${totalRequired()} photos captured</div>
       <div class="progress-bar-shell"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
@@ -4353,8 +4444,9 @@ function renderDetails(){
   const pr = state.property;
   const d = pr.declaration;
   return `
+    ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
       <h1>Keys, meters &amp; sign-off</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
@@ -4488,8 +4580,9 @@ function renderReview(){
   const allOk = state.rooms.every(roomIsComplete);
   const aiWarnings = countAiWarnings();
   return `
+    ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
       <h1>Review &amp; sign</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
@@ -4552,7 +4645,7 @@ function renderReview(){
 function renderDone(){
   return `
     <div class="masthead">
-      <div class="kicker">${escapeHtml(state.meta.inspectionType)} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
       <h1>Report complete</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
@@ -4572,7 +4665,9 @@ function renderDone(){
           ${canSharePdf() ? '<button type="button" class="btn btn-sm pdf-secondary" onclick="sharePdf()" disabled>Share or save to Files</button>' : ''}
         </div>
         ` : (accessUi.checked ? payCardHTML() : '<div class="pay-msg">Checking…</div>')}
+        <button type="button" class="btn btn-block" style="margin-top:12px" onclick="editReport()">✏️ Edit the report: add or remove photos</button>
         <div class="restart-row"><button type="button" class="btn" onclick="startAgain()">Start again</button></div>
+        <div class="room-count-hint">To change it to a ${inspectionKind(state.meta.inspectionType) === 'Check-Out' ? 'check-in or an inspection' : inspectionKind(state.meta.inspectionType) === 'Check-In' ? 'check-out or an inspection' : 'check-in or check-out'}, tap “${escapeHtml(state.meta.inspectionType)} ✎” at the top.</div>
       </div>
     </div>
 
