@@ -11,7 +11,7 @@ const path = require('path');
 const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, 'content', 'us-states.json'), 'utf8'));
 const STATES = DATA.states;
 const CHECKED = 'November 2026';
-const PRICE = '£30 per report (about $40; your card converts it)';
+const PRICE = '{{USD}} per report (charged as £30 by card; your bank converts it)';   // {{USD}}: today's rate, filled in by renderPage()
 const BASE = '/us';
 
 const R = d => d * Math.PI / 180;
@@ -36,7 +36,7 @@ function mount(app, { renderPage, escHtml, PLACES }){
   const crumbs = (base, list) => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, u], i) => ({ '@type': 'ListItem', position: i + 1, name, item: base + u })) });
   const faqLd = faqs => ({ '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
   const faqHtml = faqs => `<div class="faq">${faqs.map(([q, a]) => `<details><summary>${e(q)}</summary><p>${e(a)}</p></details>`).join('')}</div>`;
-  const offer = { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP', description: 'One report, paid when the finished report is downloaded. Free to start. Charged in pounds; about $40.' };
+  const offer = { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP', description: 'One report, paid when the finished report is downloaded. Free to start. Charged in pounds (£30); your bank converts it to dollars.' };
 
   const twoSides = where => `<div class="two">
     <div class="card"><h3>Renters: peace of mind, and your deposit back</h3><ul>

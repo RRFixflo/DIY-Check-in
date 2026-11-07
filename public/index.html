@@ -1054,7 +1054,8 @@ function formatDateTimeLocal(val){
    month first, and the address is US-shaped (street, apt, city, state, ZIP). What is stored never
    changes (item labels, inspectionType 'Check-In'…), so comparisons, the server copy and the admin work as before. */
 const US_STATES = [['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming'],['PR','Puerto Rico']];
-let usPdf = null;   // set while a PDF is being built, so dates follow that report
+let usPdf = null;
+let usdPrice = '$39';   // £30 in dollars at today's rate, from /api/status (usd)   // set while a PDF is being built, so dates follow that report
 function usFor(s){ return !!(s && s.meta && s.meta.country === 'US'); }
 function usMode(){
   if (usPdf !== null) return usPdf;
@@ -1098,7 +1099,7 @@ const US_WORDS = [
   [/\b[Mm]anaging agent\b/g, m => m[0] === 'M' ? 'Property manager' : 'property manager'], [/\b(letting|estate) agents?\b/g, 'property manager'],
   [/\binventory clerks?\b/g, 'inspector'],
   [/\bcolour/g, 'color'], [/\bColour/g, 'Color'], [/\bmould/g, 'mold'], [/\bMould/g, 'Mold'], [/\bgrey\b/g, 'gray'], [/\bGrey\b/g, 'Gray'], [/\bcentre\b/g, 'center'], [/\bmetres\b/g, 'meters'],
-  [/£30(?! \()/g, '£30 (about $40)'],
+  [/(\()?£30(?![\d.,])( \()?/g, (m, open, after) => open || after ? m : usdPrice + ' (£30)'],   // the card is still charged £30, in pounds
 ];
 function usText(t){
   if (typeof t !== 'string' || !t) return t;
@@ -1399,6 +1400,7 @@ async function initAI(){
     aiEnabled = !!data.ai;
     aiStatusNote = data.ai ? '' : (data.reason || 'no API key configured on the server');
     addressLookup = !!data.address;
+    if (/^\$\d+$/.test(data.usd || '')) usdPrice = data.usd;
   }catch(e){ aiEnabled = false; aiStatusNote = 'server unreachable'; addressLookup = false; }
   render();
 }
@@ -4106,7 +4108,7 @@ function payCardHTML(){
   return `<div class="pay-card">
       <div class="pay-title">Your report is ready</div>
       <p>Pay <strong>£30</strong> to download your PDF report, send it, and get it signed by the tenant. Your report stays saved on this phone in the meantime.</p>
-      <a class="btn btn-primary btn-block" href="${escapeHtml(buy + (buy.indexOf('?') < 0 ? '?' : '&') + 'from=app')}" onclick="track('pay_click', 1)">Pay £30</a>
+      <a class="btn btn-primary btn-block" href="${escapeHtml(buy + (buy.indexOf('?') < 0 ? '?' : '&') + 'from=app' + (usMode() ? '&cur=usd' : ''))}" onclick="track('pay_click', 1)">Pay £30</a>
       <div class="pay-paid">
         <label for="payInput"><strong>Paid, or have an access code?</strong> Paste your report link, or type your code.</label>
         <div class="custom-room-add">
@@ -4322,7 +4324,7 @@ function renderSetup(){
       <div class="sub">Set up the property once, and each room gets its own photo checklist.</div>
     </div>
     ${accessUi.checked && !accessUi.access ? `<div class="price-note"><strong>Free to start.</strong> You only pay £30 when your report is finished, to download it and send it.</div>` : ''}
-    ${accessUi.checked && !accessUi.access ? `<div class="pay-first"><span><strong>Landlord or agent?</strong> Pay now and send your tenant the link: they do the report and never see a price.</span><a class="btn btn-primary btn-sm" href="${escapeHtml((accessUi.buy || '/buy') + ((accessUi.buy || '/buy').indexOf('?') < 0 ? '?' : '&') + 'for=tenant')}" onclick="track('pay_click', 1)">Pay now · £30</a></div>` : ''}
+    ${accessUi.checked && !accessUi.access ? `<div class="pay-first"><span><strong>Landlord or agent?</strong> Pay now and send your tenant the link: they do the report and never see a price.</span><a class="btn btn-primary btn-sm" href="${escapeHtml((accessUi.buy || '/buy') + ((accessUi.buy || '/buy').indexOf('?') < 0 ? '?' : '&') + 'for=tenant' + (usMode() ? '&cur=usd' : ''))}" onclick="track('pay_click', 1)">Pay now · £30</a></div>` : ''}
     <div class="intro-card">
       <h2>Before you start</h2>
       <ul class="intro-list">

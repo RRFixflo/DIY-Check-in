@@ -128,10 +128,13 @@ function mount(app, ctx){
   const head = '<style>' + CSS + '</style>';
   function buyPage(req, o){
     const forTenant = o.for === 'tenant', fromApp = o.from === 'app', on = !!payments.provider();
+    // People in the US see dollars (today's rate); the card is still charged £30 by SumUp or Stripe, in pounds.
+    const fx = require('./fx'), us = fx.usVisitor(req), usd = fx.usd(PRICE);
+    const amt = us ? usd : PRICE_TEXT;
     const lead = fromApp ? 'Pay once to download your finished report, send it, and get it signed. Your report is saved on your phone and waiting for you.'
       : forTenant ? 'Pay now and send your tenant the link. They do the whole report on their phone and never see a price.'
       : 'One check-in, check-out or inspection, done on your phone, with a professional PDF report.';
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Buy a report</span><h1>${forTenant ? 'Buy a report for your tenant' : 'Buy a report'} · ${PRICE_TEXT}</h1><p>${lead}</p></div></div>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Buy a report</span><h1>${forTenant ? 'Buy a report for your tenant' : 'Buy a report'} · ${amt}</h1><p>${lead}</p></div></div>
 <section class="tight"><div class="wrap buy-grid${fromApp ? " pay-top" : ""}">
   <div class="card buy-what">
     <h2>What you get</h2>
@@ -143,24 +146,24 @@ function mount(app, ctx){
       <li>${tick}<span>Tenant sign-off on their phone, added to the report as a signed page</span></li>
       <li>${tick}<span>${forTenant ? 'Your tenant opens the link and does the report: they never see a price' : 'Use it yourself, or send the link to your tenant: they never see a price'}</span></li>
     </ul>
-    <p class="buy-small">No subscription and no monthly fee. Prices are in pounds sterling (GBP); if your card is in another currency, your bank converts it.</p>
+    <p class="buy-small">${us ? `No subscription and no monthly fee. The price is £30.00 in British pounds, about ${usd} today. Your card is charged £30.00 and your bank converts it to dollars; some US cards add a small foreign transaction fee.` : 'No subscription and no monthly fee. Prices are in pounds sterling (GBP); if your card is in another currency, your bank converts it.'}</p>
   </div>
   <div class="card buy-pay">
-    <div class="buy-amt">${PRICE_TEXT}</div>
-    <div class="buy-amt-sub">One report · paid once</div>
+    <div class="buy-amt">${amt}</div>
+    <div class="buy-amt-sub">${us ? 'One report · paid once · charged as £30.00' : 'One report · paid once'}</div>
     ${on ? `<form class="form" method="post" action="/buy">
       <input type="hidden" name="for" value="${forTenant ? 'tenant' : ''}"><input type="hidden" name="from" value="${fromApp ? 'app' : ''}">
       <label><b>Your name <span>optional</span></b><input name="name" autocomplete="name" maxlength="80" value="${esc(o.name || '')}"></label>
       <label><b>Your email <span>optional, for your receipt and your link</span></b><input name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" value="${esc(o.email || '')}"></label>
-      <button class="btn primary buy-btn" type="submit">Pay ${PRICE_TEXT}</button>
-      <p class="buy-small">You pay by card on our payment provider’s secure page${payments.provider() === 'sumup' ? ' (SumUp)' : ' (Stripe)'}, then come straight back here for your link.</p>
+      <button class="btn primary buy-btn" type="submit">Pay ${us ? usd + ' (£30)' : PRICE_TEXT}</button>
+      <p class="buy-small">You pay by card on our payment provider’s secure page${payments.provider() === 'sumup' ? ' (SumUp)' : ' (Stripe)'}, then come straight back here for your link.${us ? ' That page shows the price in pounds, £30.00: it’s the same ' + usd + '.' : ''}</p>
     </form>` : `<div class="buy-off"><b>Card payments are being switched on.</b><p>You can’t pay online just yet. <a href="/contact">Contact us</a> and we’ll set you up with a report straight away. Been given an access code? Enter it below.</p><a class="btn primary buy-btn" href="/contact">Contact us</a></div>`}
     <details class="buy-code"${on ? '' : ' open'}><summary>Have a link or an access code?</summary>
       <form method="get" action="/"><input name="access" placeholder="Link or access code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code" required><button class="btn ghost">Go</button></form>
     </details>
   </div>
 </div></section>`;
-    return renderPage({ key: 'buy', path: '/buy', title: 'Buy a report · ' + PRICE_TEXT + ' · DIY Inventory', og: 'Buy a DIY Inventory report · ' + PRICE_TEXT,
+    return renderPage({ key: 'buy', noUsd: true, path: '/buy', title: 'Buy a report · ' + PRICE_TEXT + ' · DIY Inventory', og: 'Buy a DIY Inventory report · ' + PRICE_TEXT,
       desc: 'Buy one DIY Inventory report for ' + PRICE_TEXT + ': a check-in, check-out or inspection done on your phone. Use it yourself or send the link to your tenant.',
       body, head: head + (forTenant || fromApp || o.notice ? '<meta name="robots" content="noindex, follow">' : ''),
       jsonld: base => [{ '@type': 'Product', name: 'DIY Inventory report', description: 'One property inventory report: a check-in, check-out or inspection, done on your phone, with a PDF report.', brand: { '@id': base + '/#org' },

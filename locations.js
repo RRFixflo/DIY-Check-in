@@ -291,7 +291,7 @@ Object.assign(NATION, {
   ie: Object.assign({}, ABROAD, { label: 'Ireland', country: 'Ireland', report: 'inventory and check-in reports', thing: 'inventory', checkin: 'check-in', checkout: 'check-out', clerk: 'an inventory clerk', money: 'deposit', who: 'tenant',
     disputes: 'Deposit disputes go to the Residential Tenancies Board (RTB), which decides on the evidence, so a dated record of the condition at the start of the tenancy matters.',
     basics: ['Most tenancies must be registered with the Residential Tenancies Board (RTB).', 'Landlords hold the deposit and must return it promptly at the end, less any justified deductions for damage beyond normal wear and tear or rent owed.', 'An inventory with dated photos, signed by both sides, is the best evidence if there is a dispute.'] }),
-  us: Object.assign({}, ABROAD, { label: 'the United States', country: 'United States', report: 'move-in and move-out inspection reports', thing: 'move-in inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
+  us: Object.assign({}, ABROAD, { price: '{{USD}} per report (charged as £30 by card; your bank converts it)', label: 'the United States', country: 'United States', report: 'move-in and move-out inspection reports', thing: 'move-in inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
     disputes: 'If you disagree about deductions from the security deposit, small claims courts look at the evidence: a move-in checklist with dated photos, signed by both sides, is what settles it.',
     basics: ['Security deposit rules are set by each state: how much can be taken, where it is held, and how many days the landlord has to return it with an itemized list of deductions.', 'Normal wear and tear can’t be deducted; damage beyond it can, so a record of the condition at move-in is essential.'] }),
   ca: Object.assign({}, ABROAD, { label: 'Canada', country: 'Canada', report: 'move-in and move-out condition inspection reports', thing: 'condition inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
@@ -372,7 +372,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
   <div class="two">
     <div class="card"><h3>Why do it yourself in ${e(place)}?</h3><ul>
       <li>No appointment to wait for: do it whenever you have the keys, before the ${e(N.who)} moves in or with them there.</li>
-      <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every check-in, inspection and check-out.' : 'A fixed £30 a report instead of paying ' + N.clerk + ' for every visit.')}</li>
+      <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every check-in, inspection and check-out.' : 'A fixed ' + (p.nation === 'us' ? '{{USD}}' : '£30') + ' a report instead of paying ' + N.clerk + ' for every visit.')}</li>
       <li>The report is ready instantly, so it can be sent and signed on move-in day.</li>
       ${N.uk ? '<li>Prefer paper? Use our <a href="/inventory-template">free inventory template</a> (PDF and Word).</li>' : ''}
       <li>The ${e(N.checkout)} starts from the ${e(N.checkin)} and shows what has changed, with photos side by side.</li>

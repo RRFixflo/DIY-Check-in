@@ -12,6 +12,8 @@ const express = require('express');
 const compression = require('compression');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
+// Dollar prices for US customers (cards are still charged £30 in pounds): fx.js.
+const fx = require('./fx'); fx.start(reports.REPORTS_DIR);
 const certs = require('./certs');
 const address = require('./address');
 const analytics = require('./analytics');
@@ -54,7 +56,8 @@ app.get('/api/status', (req, res) => {
     ai: !!anthropic,
     model: anthropic ? ANTHROPIC_MODEL : '',
     reason: anthropic ? '' : 'ANTHROPIC_API_KEY is not set on the server',
-    address: address.configured()
+    address: address.configured(),
+    usd: fx.usd(30)   // what £30 is in dollars today, shown to US customers (the card is charged in pounds)
   });
 });
 
@@ -249,10 +252,12 @@ function faqLd(body){
 }
 function renderPage(pg, req, notice){
   const key = pg.key;
-  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report');
+  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report').split('{{USD}}').join(fx.usd(30));
   // Visitors in the US (Cloudflare's country header) are pointed to the US pages, on every page that isn't already one.
   const usVisitor = !notice && pg.lang !== 'en-US' && String(req.headers['cf-ipcountry'] || '').toUpperCase() === 'US' && !/^\/(account|buy|app)/.test(pg.path || '');
-  let html = LAYOUT.replace('{{CONTENT}}', () => pg.body)
+  // People in the US see the price in dollars too (“$39 (£30)”); the card is still charged £30. Not robots, so pages are indexed in pounds.
+  const body = !pg.noUsd && pg.lang !== 'en-US' && fx.usVisitor(req) ? pg.body.replace(/£30(?![\d.,])/g, fx.usd(30) + ' (£30)') : pg.body;
+  let html = LAYOUT.replace('{{CONTENT}}', () => body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
       : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
@@ -265,7 +270,7 @@ function renderPage(pg, req, notice){
   return fill(html).replace('{{TITLE}}', () => escHtml(pg.title)).replace('{{OG_TITLE}}', () => escHtml(pg.og || pg.title))
     .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base) + (pg.head ? '\n' + pg.head : ''))
     .split('{{ACCOUNT_LINK_TEXT}}').join(inAcc ? 'My dashboard' : 'Sign in').split('{{ACCOUNT_MENU_TEXT}}').join(inAcc ? 'My landlord dashboard' : 'Sign in (landlords)')
-    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).split('{{CSS_V}}').join(CSS_V);
+    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).split('{{CSS_V}}').join(CSS_V).split('{{USD}}').join(fx.usd(30));
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
