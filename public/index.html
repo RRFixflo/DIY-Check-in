@@ -2436,6 +2436,8 @@ function submitSetup(){
   const missingAddr = missingAddressParts();
   if (missingAddr.length) { showSetupError('Enter ' + missingAddr.join(', ') + ' before starting.'); return; }
   if (!inspectorName) { showSetupError('Enter the name of the person carrying out the inspection.'); return; }
+  const email = String(pendingSetup.email || '').trim().toLowerCase();
+  if (!validEmail(email)) { showSetupError('Enter your email address, so we can send you the link to your report.'); return; }
   if (!pendingSetup.inspectionType) { showSetupError('Choose the inspection type: check-out, or an inspection during the tenancy.'); return; }
 
   if (pendingSetup.inspectionType === 'Check-In') {
@@ -2471,6 +2473,7 @@ function submitSetup(){
     bedrooms, bathrooms,
     furnishing: pendingSetup.furnishing || '',
     managingAgent: (pendingSetup.managingAgent || '').trim(),
+    copyEmail: email,
     ref: 'SC-' + Math.random().toString(36).slice(2,9).toUpperCase()
   };
   setupError = '';
@@ -2581,7 +2584,8 @@ async function shareOnlineLink(btn){
     await navigator.clipboard.writeText(url); btn.textContent = 'Link copied';
   } catch (e) { if (e && e.name === 'AbortError') return; prompt('Copy this link:', url); }
 }
-function onCopyEmailChange(value){ state.meta.copyEmail = String(value || '').trim().slice(0, 120); persist(); }
+function onCopyEmailChange(value){ state.meta.copyEmail = String(value || '').trim().slice(0, 120); persist(); updateFinishButtonState(); }
+const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || '').trim());
 
 function initSignaturePad(){
   const canvas = document.getElementById('sigCanvas');
@@ -2628,6 +2632,7 @@ function updateFinishButtonState(){
   if (!hasExteriorPhoto()) missing.push('a photo of the front of the property is needed');
   if (!state.declarationAccepted) missing.push('the declaration needs to be confirmed');
   if (!state.signatureDataUrl) missing.push('a signature is needed');
+  if (!state.ownerEdit && !validEmail(state.meta.copyEmail)) missing.push('your email is needed, so we can send you the report link');
   btn.disabled = missing.length > 0;
   if (help) help.textContent = missing.length ? 'Before finishing: ' + missing.join(', ') + '.' : 'Everything is complete — ready to finish.';
 }
@@ -4665,6 +4670,11 @@ function renderSetup(){
           <label for="inspectorInput">Person carrying out the inspection</label>
           <input class="input" id="inspectorInput" type="text" value="${escapeHtml(ps.inspectorName)}" oninput="pendingSetup.inspectorName=this.value">
         </div>
+        <div class="field">
+          <label for="setupEmailInput">Your email</label>
+          <input class="input" id="setupEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="you@example.com" value="${escapeHtml(ps.email || '')}" oninput="pendingSetup.email=this.value.trim(); saveSetupDraft()">
+          <div class="room-count-hint">We email you the link to your report, so you always have it.</div>
+        </div>
       </div>
       <div class="field">
         <label for="moveInInput">Tenancy move-in date &amp; time${ps.inspectionType==='Check-In' ? ' (required)' : ' (if known)'}</label>
@@ -5113,7 +5123,7 @@ function renderReview(){
       </div>
 
       <div class="field">
-        <label for="copyEmailInput">Email me a copy <span style="font-weight:400;color:var(--ink-faint)">(optional)</span></label>
+        <label for="copyEmailInput">Your email <span style="font-weight:400;color:var(--ink-faint)">(we send you the link to your report)</span></label>
         <input class="input" id="copyEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="you@example.com" value="${escapeHtml(state.meta.copyEmail || '')}" oninput="onCopyEmailChange(this.value)">
         <div class="room-count-hint">We email the PDF to this address as soon as your report is finished and paid for, so you always have a copy.</div>
       </div>
