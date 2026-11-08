@@ -680,6 +680,9 @@
 .room-remove:hover { background: #FBEDEA; }
 .room-add-btn .rn-name { color: var(--accent, #1B2E4B); font-weight: 600; }
 .room-add-btn { border-style: dashed !important; }
+.room-head-acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.room-photo-btn { display: inline-flex; align-items: center; gap: 8px; }
+.room-photo-btn svg { width: 18px; height: 18px; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -1619,6 +1622,16 @@ function triggerItemFileInput(roomId, itemId){
   const targets = roomTargets(room);
   const i = targets.findIndex(t => t.itemId === itemId);
   openPhotoTargets(i >= 0 ? targets : [{ roomId, itemId }], Math.max(0, i));
+}
+// One big button per room (the owner: “I should be able to easily add a picture”): opens the camera at the first item
+// still without a photo, else at the room's general views; the camera can also pick from the gallery.
+function addRoomPhotos(roomId){
+  if (!exteriorFirst()) return;
+  const room = state.rooms.find(r => r.id === roomId); if (!room) return;
+  const targets = roomTargets(room);
+  let i = targets.findIndex(t => { const r = resolveTarget(t); return r && !r.arr.length; });
+  if (i < 0) i = targets.length - 1;
+  openPhotoTargets(targets, i);
 }
 function triggerExtraFileInput(roomId){
   if (!exteriorFirst()) return;
@@ -4833,7 +4846,7 @@ function renderCapture(){
         <button type="button" class="room-nav-item room-add-btn" onclick="addRoomNow()"><span class="rn-name">+ Add a room</span></button>
       </nav>
       <div class="room-panel">
-        <div class="room-head"><h2>${escapeHtml(room.name)}</h2>${state.rooms.length > 1 ? `<button type="button" class="room-remove" onclick="removeRoom('${room.id}')">Not at this property? Remove room</button>` : ''}</div>
+        <div class="room-head"><h2>${escapeHtml(room.name)}</h2><div class="room-head-acts"><button type="button" class="btn btn-primary room-photo-btn" onclick="addRoomPhotos('${room.id}')">${ICONS.camera}<span>Add photos</span></button>${state.rooms.length > 1 ? `<button type="button" class="room-remove" onclick="removeRoom('${room.id}')">Not at this property? Remove room</button>` : ''}</div></div>
         <div class="req-line ${complete ? 'ok' : 'warn'}">${reqMsg}</div>
 
         <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none" onchange="handlePhotoInputChange(event)">
