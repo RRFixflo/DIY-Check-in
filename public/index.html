@@ -2639,6 +2639,25 @@ function markEdited(){
   setSubmitUi('idle'); sendUi = { phase: 'idle', msg: '' };
 }
 // Open a finished report again to add or remove photos (or change anything else); finishing again saves the changes.
+// The owner (signed in to /admin on this device) opens any report's online backup to edit it: everything can be changed,
+// and finishing again replaces the stored report in place (same link and payment), as the person's own edit would.
+async function ownerEditBackup(key){
+  if (!/^[a-f0-9]{32}$/.test(String(key || ''))) return;
+  await checkAccessStatus();
+  if (!accessUi.owner) { notice('Only the owner, signed in to the admin page on this device, can open a report to edit it.'); return; }
+  const here = state && Array.isArray(state.rooms) && state.rooms.length && state.draftKey !== key;
+  if (here && !confirm('Open this report to edit it? The report open in the app on this device now stays in its online backup on the admin page.')) return;
+  if (here) { try { await cloudSync(); } catch (e) {} }
+  let s = null;
+  try { s = await restoreFromBackup(key); } catch (e) { s = null; }
+  if (!s) { notice('That report couldn’t be opened from its backup.'); render(); return; }
+  state = normalizeState(s);
+  state.ownerEdit = true;
+  rememberDraftKey(key);
+  if (state.finalizedAt) editReport();
+  else { if (!state.view || state.view === 'setup' || state.view === 'done') state.view = 'capture'; persist(); render(); }
+  notice('Editing ' + (state.meta.address || 'the report') + '. Change anything, then go to Review and finish to replace it.');
+}
 function editReport(){
   if (!state.finalizedAt) return;
   state.editOf = state.finalizedAt;
@@ -2650,7 +2669,7 @@ function editReport(){
 }
 function editBannerHTML(){
   if (!state.editOf) return '';
-  return `<div class="edit-banner"><strong>Editing your finished report.</strong> Add or remove any photos, change details, then go to Review and finish again. It replaces the report already sent, under the same link, at no extra cost.
+  return `<div class="edit-banner"><strong>${state.ownerEdit ? 'Editing this report (owner).' : 'Editing your finished report.'}</strong> ${state.ownerEdit ? 'Change anything: photos, conditions, notes, keys, meters. Then go to Review and finish again. It replaces the stored report, under the same link and payment.' : 'Add or remove any photos, change details, then go to Review and finish again. It replaces the report already sent, under the same link, at no extra cost.'}
     ${state.view === 'review' ? '' : '<br><button type="button" class="btn btn-sm btn-primary" onclick="goToReview()">Done editing: review and finish</button>'}</div>`;
 }
 
@@ -5239,6 +5258,11 @@ track('app_open');
     }
   } catch (err) {
     console.error('Inventory app failed to check for a saved draft:', err);
+  }
+  // The owner editing any report from /admin (/app?ownerEdit=<backup key>): its backup is opened here to change anything.
+  {
+    const oe = new URLSearchParams(location.search).get('ownerEdit');
+    if (oe) { history.replaceState(null, '', location.pathname); await ownerEditBackup(oe); }
   }
   // Back from paying for a floor plan (/app?fp=<token>, ?fp_ref=<ref> when not confirmed yet, ?fp_cancel=1): straight back to it.
   {

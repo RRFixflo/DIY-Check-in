@@ -1062,6 +1062,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           ${notPaid(r) || (!r.sentAt && r.source !== 'uploaded') ? `<form method="post" action="/admin/reports/${r.id}/complete" onsubmit="return confirm('Mark this report as complete${notPaid(r) ? ' and paid' : ''}? Its online link will work and any copies are emailed.')"><button class="btn primary">Mark as complete</button></form>` : ''}
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
+          ${r.source !== 'uploaded' ? `<a class="btn" href="/admin/reports/${r.id}/edit" title="Open it in the app on this device, change anything, finish again: it replaces this report (same link and payment)">✏️ Edit</a>` : ''}
           ${!notPaid(r) ? `<details class="more mail"><summary class="btn">✉ Email</summary><form class="menu mailf" onsubmit="return sendLink(this, '${r.id}')">
             ${known.length ? `<div class="known"><span>Send to:</span>${known.map((k, i) => `<button type="button" class="kchip${i ? '' : ' on'}" data-e="${esc(k.e)}" data-n="${esc(k.name)}" onclick="pickTo(this)"><b>${esc(k.name || k.e)}</b> · ${esc(k.who)}<i>${esc(k.e)}</i></button>`).join('')}</div>` : ''}
             <label>Email address<input type="email" name="to" required placeholder="name@example.com" value="${esc(known[0] ? known[0].e : '')}"></label>
@@ -1318,6 +1319,16 @@ async function uploadPdfs(input){
   });
 
   // Remake a report that was made from the online backup with the current builder (clickable photos, index of photographs).
+  // The owner edits any report in the app (the owner asked: "allow me to edit the report"): its online backup is opened
+  // in the app on the owner's device (/app?ownerEdit=<backup key>), where everything can be changed; finishing replaces
+  // the stored report in place (same id, link and payment), as an edit on the phone does.
+  app.get('/admin/reports/:id/edit', requireAdmin, (req, res) => {
+    const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
+    if (!r) return res.status(404).type('text/plain').send('Report not found.');
+    const b = drafts.findBackup(({ s }) => s._serverReportId === id || (s.finalizedAt && backupKey(s) === r.key));
+    if (!b) return res.status(404).type('html').send('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font-family:system-ui;max-width:560px;margin:40px auto;padding:0 16px;line-height:1.5"><h1 style="font-size:20px">This report can’t be edited</h1><p>Its online backup is no longer on the server (backups are kept for 180 days, or it was uploaded as a PDF), so there is nothing to open in the app.</p><p><a href="/admin#reports">Back to reports</a></p></body>');
+    res.redirect(302, '/app?ownerEdit=' + b.key);
+  });
   app.post('/admin/reports/:id/rebuild', requireAdmin, async (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Rebuild from the reports page.');
     const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);

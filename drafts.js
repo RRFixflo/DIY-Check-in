@@ -157,6 +157,7 @@ function mount(app, ctx){
         <div class="sub">${esc([m.inspectionType, m.inspectorName ? 'by ' + m.inspectorName : '', s._device].filter(Boolean).join(' · '))}</div>
         <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div>${s._access ? `<div class="sub">💳 ${esc(via(s) || 'Access allowed, but how isn’t recorded (backed up before this was tracked)')}</div>` : ''}</div>
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
+        <a class="btn" href="/app?ownerEdit=${key}" title="Open this report in the app on this device to change anything">✏️ Edit in the app</a>
         ${s.submittedId || s._serverReportId ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;
     }).join('');
