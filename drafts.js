@@ -60,6 +60,7 @@ function mount(app, ctx){
     s._device = deviceName(req.headers['user-agent']);
     s._alerted = before._alerted || '';
     s._serverReportId = before._serverReportId || '';
+    s._reminders = before._reminders; s._remindOpened = before._remindOpened; s._liveBuiltAt = before._liveBuiltAt;
     // Whether this phone has a paid link or code (the cookie travels with every backup), for a report made from it.
     if (ctx.hasAccess) s._access = ctx.hasAccess(req) || before._access || false;
     // The link or code itself (kept only here, on the server), so a report made from the backup still reaches the buyer or agent by email.
@@ -155,9 +156,10 @@ function mount(app, ctx){
       const m = s.meta || {}, st = stats(s), [cls, label] = status(s);
       return `<li><div style="flex:1;min-width:0"><strong>${esc(m.address || 'No address yet')}</strong> <span class="pill ${cls}">${label}</span>
         <div class="sub">${esc([m.inspectionType, m.inspectorName ? 'by ' + m.inspectorName : '', s._device].filter(Boolean).join(' · '))}</div>
-        <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div>${s._access ? `<div class="sub">💳 ${esc(via(s) || 'Access allowed, but how isn’t recorded (backed up before this was tracked)')}</div>` : ''}</div>
+        <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div>${(s._reminders || []).length ? `<div class="sub">🔔 Reminded ${s._reminders.length}× · last ${esc(when(s._reminders[s._reminders.length - 1].at))}${s._remindOpened ? ' · 👁 opened ' + esc(when(s._remindOpened)) : ''}</div>` : ''}${s._access ? `<div class="sub">💳 ${esc(via(s) || 'Access allowed, but how isn’t recorded (backed up before this was tracked)')}</div>` : ''}</div>
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
         <a class="btn" href="/app?ownerEdit=${key}" title="Open this report in the app on this device to change anything">✏️ Edit in the app</a>
+        ${s.submittedId || s._serverReportId || s.unpaidId ? '' : `<a class="btn" href="/admin/drafts/${key}/remind">🔔 Remind to finish</a>`}
         ${s.submittedId || s._serverReportId ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;
     }).join('');

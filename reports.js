@@ -694,6 +694,81 @@ function mount(app){
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
     hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
+  // Reminding someone to finish their report (the owner asked): /admin → Reports in progress → 🔔 Remind. The email (or
+  // a WhatsApp / text message the owner sends) carries /continue/<backup key>, which opens that report on any phone or
+  // computer where it was left (the backup brings it back, with its photos), with the link or code they had.
+  const remindLink = (req, key) => (PUBLIC_URL || (req.protocol + '://' + req.get('host'))) + '/continue/' + key;
+  const remindText = (s, name) => {
+    const m = s.meta || {}, type = String(m.inspectionType || 'check-in').toLowerCase();
+    return [name ? 'Hi ' + name.split(' ')[0] + ',' : 'Hi,', '',
+      'Just a reminder that your ' + type + ' report for ' + (m.address || 'the property') + ' isn’t finished yet.',
+      'Everything you’ve done so far is saved. Tap the link below to carry on where you left off, then sign and finish it.', ''].join('\n');
+  };
+  app.get('/continue/:key', (req, res) => {
+    const key = String(req.params.key).toLowerCase();
+    const b = KEY_RE.test(key) && drafts.all().find(d => d.key === key);
+    res.setHeader('X-Robots-Tag', 'noindex'); res.setHeader('Cache-Control', 'private, no-store'); res.setHeader('Referrer-Policy', 'no-referrer');
+    if (!b) return res.status(404).type('html').send('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font-family:system-ui;max-width:560px;margin:40px auto;padding:0 16px;line-height:1.5"><h1 style="font-size:20px">This report can’t be found</h1><p>It may have been finished or removed. Please contact us if you need help.</p><p><a href="/">DIY Inventory</a></p></body>');
+    const cookies = ['diy_draft=' + key + '; Path=/; Max-Age=' + 180 * 86400 + '; SameSite=Lax' + (req.secure || /https/.test(String(req.headers['x-forwarded-proto'] || '')) ? '; Secure' : '')];
+    // The link or code they had on the other device comes with them, so they aren't asked to pay again.
+    if (b.s._token && !accessToken(req) && /^[\w-]{12,40}$/.test(b.s._token)) cookies.push('diy_access=' + b.s._token + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');
+    res.setHeader('Set-Cookie', cookies);
+    try { const now = drafts.all().find(d => d.key === key); if (now) drafts.saveState(key, { _remindOpened: new Date().toISOString() }); } catch (e) {}
+    res.redirect(302, '/app?resume=' + key);
+  });
+  app.get('/admin/drafts/:key/remind', requireAdmin, (req, res) => {
+    const key = String(req.params.key), b = KEY_RE.test(key) && drafts.all().find(d => d.key === key);
+    if (!b) return res.status(404).type('text/plain').send('Unknown backup.');
+    const s = b.s, m = s.meta || {}, link = remindLink(req, key);
+    let buyer = ''; try { buyer = s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
+    const emails = [...new Set([m.copyEmail, buyer].concat((s._reminders || []).map(x => x.to)).filter(e => EMAIL_RE.test(String(e || ''))))];
+    const name = m.inspectorName || '', text = remindText(s, name) + '\n' + link;
+    const sent = (s._reminders || []).slice().reverse().map(x => '<li>' + esc(whenTxt(x.at)) + ' · ' + esc(x.via) + (x.to ? ' to ' + esc(x.to) : '') + '</li>').join('');
+    const msg = { sent: '✓ Reminder emailed.', noemail: 'Enter a valid email address.', off: 'Email isn’t switched on (RESEND_API_KEY isn’t set). Use WhatsApp, a text or Copy instead.', fail: 'The email didn’t go: ' + clip(req.query.e, 200) }[req.query.m] || '';
+    res.type('html').send(`<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Remind to finish</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:620px;margin:0 auto;padding:24px 16px;line-height:1.5;color:#16232E;background:#F5F7FA}h1{font-size:21px;margin:0 0 4px}.card{background:#fff;border:1px solid #E3E7EC;border-radius:12px;padding:16px;margin:14px 0}label{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}input,textarea{width:100%;box-sizing:border-box;font:inherit;padding:10px;border:1px solid #CDD3DA;border-radius:8px}textarea{min-height:150px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.btn{display:inline-block;background:#0B2A45;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:inherit;font-weight:600;text-decoration:none;cursor:pointer}.btn.alt{background:#fff;color:#0B2A45;border:1px solid #0B2A45}.chip{background:#EEF2F6;border:0;border-radius:999px;padding:4px 10px;margin:4px 4px 0 0;font:inherit;font-size:13px;cursor:pointer}.note{padding:10px 12px;border-radius:8px;background:#E8F5EE;margin:10px 0}.sub{color:#5B6670;font-size:13px}code{word-break:break-all}</style></head><body>
+<p><a href="/admin#drafts">← Reports in progress</a></p>
+<h1>🔔 Remind them to finish</h1><div class="sub">${esc([m.inspectionType, m.address || 'No address yet', name ? 'by ' + name : '', s._device].filter(Boolean).join(' · '))} · last saved ${esc(whenTxt(s._savedAt || Date.now()))}</div>
+${msg ? `<div class="note">${esc(msg)}</div>` : ''}
+<div class="card"><form method="post" action="/admin/drafts/${key}/remind">
+<label for="to">Their email</label><input id="to" name="to" type="email" value="${esc(emails[0] || '')}" placeholder="name@example.com" required>
+${emails.length > 1 ? '<div>' + emails.map(e => `<button type="button" class="chip" onclick="document.getElementById('to').value=this.textContent">${esc(e)}</button>`).join('') + '</div>' : ''}
+<label for="msg">Message</label><textarea id="msg" name="msg">${esc(text)}</textarea>
+<div class="sub">The link opens their report where they left off, on any phone or computer, with everything done so far.</div>
+<div class="btns"><button class="btn">✉ Send the email</button>
+<a class="btn alt" id="wa" href="https://wa.me/?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">💬 WhatsApp</a>
+<a class="btn alt" id="sms" href="sms:?&body=${encodeURIComponent(text)}">📱 Text message</a>
+<button type="button" class="btn alt" id="cp">📋 Copy</button></div></form></div>
+<div class="card"><strong>Their link</strong><div><code>${esc(link)}</code></div>${sent ? '<div style="margin-top:10px"><strong>Reminders so far</strong><ul class="sub">' + sent + '</ul></div>' : ''}${s._remindOpened ? '<div class="sub">👁 Last opened from a reminder: ' + esc(whenTxt(s._remindOpened)) + '</div>' : ''}</div>
+<script>(function(){var t=document.getElementById('msg');function upd(){var v=encodeURIComponent(t.value);document.getElementById('wa').href='https://wa.me/?text='+v;document.getElementById('sms').href='sms:?&body='+v;}t.addEventListener('input',upd);
+function rec(via){try{fetch('/admin/drafts/${key}/remind',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'record='+via});}catch(e){}}
+document.getElementById('wa').addEventListener('click',function(){rec('WhatsApp')});document.getElementById('sms').addEventListener('click',function(){rec('Text message')});
+document.getElementById('cp').addEventListener('click',function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).then(function(){b.textContent='✓ Copied';rec('Copied');},function(){t.select();});});})();</script>
+</body></html>`);
+  });
+  app.post('/admin/drafts/:key/remind', requireAdmin, express.urlencoded({ extended: false, limit: '20kb' }), async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Send it from the admin page.');
+    const key = String(req.params.key), b = KEY_RE.test(key) && drafts.all().find(d => d.key === key);
+    if (!b) return res.status(404).type('text/plain').send('Unknown backup.');
+    const body = req.body || {}, add = x => drafts.saveState(key, { _reminders: (b.s._reminders || []).concat([Object.assign({ at: new Date().toISOString() }, x)]).slice(-30) });
+    if (body.record) { add({ via: clip(body.record, 30) }); return res.json({ ok: true }); }
+    const to = String(body.to || '').trim().toLowerCase(), back = '/admin/drafts/' + key + '/remind?m=';
+    if (!EMAIL_RE.test(to)) return res.redirect(303, back + 'noemail');
+    if (!RESEND_API_KEY) return res.redirect(303, back + 'off');
+    const m = b.s.meta || {}, link = remindLink(req, key);
+    let text = String(body.msg || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 3000) || (remindText(b.s, m.inspectorName) + '\n' + link);
+    if (!text.includes(link)) text += '\n\n' + link;
+    try {
+      const resp = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+        headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.assign({ from: REPORT_FROM_EMAIL, to: [to], subject: 'Reminder: finish your ' + String(m.inspectionType || 'check-in').toLowerCase() + ' report' + (m.address ? ' for ' + clip(m.address, 120) : ''), text }, REPORT_TO_EMAIL ? { reply_to: REPORT_TO_EMAIL } : {})) });
+      if (!resp.ok) { const t = (await resp.text().catch(() => '')).slice(0, 300); let e = ''; try { e = JSON.parse(t).message; } catch (x) {} console.error('reminder email failed: HTTP ' + resp.status, t); return res.redirect(303, back + 'fail&e=' + encodeURIComponent(e || 'HTTP ' + resp.status)); }
+    } catch (e) { return res.redirect(303, back + 'fail&e=' + encodeURIComponent(e.message)); }
+    add({ via: 'Email', to });
+    console.log('reminder to finish emailed: ' + key + ' → ' + to);
+    res.redirect(303, back + 'sent');
+  });
+
   // A finished report being edited (on the phone, or by the owner from /admin) is kept up to date by itself: about a
   // minute after the last change reaches its online backup (and once its photos are there), the stored report is
   // rebuilt from the backup with the app's own design and replaced in place: same id, link, payment and copies.

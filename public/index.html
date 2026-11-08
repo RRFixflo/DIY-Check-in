@@ -5305,6 +5305,18 @@ track('app_open');
   try {
     try { addressBook = (await idbGet('addressBook')) || []; reportHistory = (await idbGet('history')) || []; if ((addressBook.length || reportHistory.length) && state.view === 'setup') render(); } catch(e){}
     let saved = await idbGet('current');
+    // A reminder link (/continue/<key> → /app?resume=<key>): that report is opened here from its online backup.
+    {
+      const rk = String(new URLSearchParams(location.search).get('resume') || '');
+      if (/^[a-f0-9]{32}$/.test(rk)) {
+        history.replaceState(null, '', location.pathname);
+        if (!(saved && saved.draftKey === rk)) {
+          let b = null; try { b = await restoreFromBackup(rk); } catch (e) { b = null; }
+          if (b) { saved = b; rememberDraftKey(rk); state.view = 'setup'; setTimeout(() => notice('Welcome back: your report is just as you left it.'), 400); }
+          else notice('That report couldn’t be opened. Please contact us.');
+        }
+      }
+    }
     if (!(saved && Array.isArray(saved.rooms) && saved.rooms.length) && state.view === 'setup') {
       const k = rememberedDraftKey();
       if (k) { try { saved = await restoreFromBackup(k); } catch (e) { saved = null; } if (!saved) render(); }
