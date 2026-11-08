@@ -637,6 +637,11 @@ function mount(app){
   const accessToken = req => { const m = /(?:^|;\s*)diy_access=([\w-]{12,40})/.exec(req.headers.cookie || ''); return m ? m[1] : ''; };
   const hasAccess = req => { if (signedIn(req)) return true; const t = accessToken(req); if (!t) return false; const c = codeAccess(t); if (c) return !!c.valid; try { const p = require('./purchases').access(t); return !!(p && p.valid); } catch (e) { return false; } };
   const backupKey = s => crypto.createHash('sha256').update(clip((s.meta || {}).ref, 40) + '|' + clip(s.finalizedAt, 40)).digest('hex').slice(0, 12);
+  // The online backup of a stored report: the server made it from that backup, the phone that sent it backed it up
+  // (its id, photo key, or reference + finish time, also while it is being edited: `editOf` holds the finish time then).
+  const isBackupOf = (s, r) => !!(s && r) && (s._serverReportId === r.id || s.submittedId === r.id || s.unpaidId === r.id ||
+    (r.photoKey && s.photoKey === r.photoKey) ||
+    ((s.finalizedAt || s.editOf) && backupKey(Object.assign({}, s, { finalizedAt: s.finalizedAt || s.editOf })) === r.key));
   // The full-size photos of a report made from the backup, served at /p/<photoKey>/<n> like the phone's own.
   function attachBackupPhotos(id, key, photos, photoFile){
     try {
@@ -705,7 +710,7 @@ function mount(app){
   let efCache = null;
   function emailsForReport(r){
       if (!efCache || Date.now() - efCache.at > 30000) {
-        const m = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) m.set('id:' + s._serverReportId, s); if (s.finalizedAt) m.set('k:' + backupKey(s), s); }); } catch (e) {}
+        const m = new Map(); try { drafts.all().forEach(({ s }) => { if (s._serverReportId) m.set('id:' + s._serverReportId, s); if (s.submittedId) m.set('id:' + s.submittedId, s); if (s.finalizedAt || s.editOf) m.set('k:' + backupKey(Object.assign({}, s, { finalizedAt: s.finalizedAt || s.editOf })), s); }); } catch (e) {}
         let b = []; try { b = require('./purchases').paidWithEmail(); } catch (e) {}
         efCache = { at: Date.now(), bk: m, agents: readAgents(), buys: b };
       }
@@ -1327,7 +1332,7 @@ async function uploadPdfs(input){
   app.get('/admin/reports/:id/edit', requireAdmin, (req, res) => {
     const id = String(req.params.id), r = ID_RE.test(id) && readMeta(id);
     if (!r) return res.status(404).type('text/plain').send('Report not found.');
-    const b = drafts.findBackup(({ s }) => s._serverReportId === id || (s.finalizedAt && backupKey(s) === r.key));
+    const b = (drafts.all().filter(({ s }) => isBackupOf(s, r)).sort((a, b) => String(b.s._savedAt || '').localeCompare(String(a.s._savedAt || '')))[0] || null);
     if (!b) return res.status(404).type('html').send('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font-family:system-ui;max-width:560px;margin:40px auto;padding:0 16px;line-height:1.5"><h1 style="font-size:20px">This report can’t be edited</h1><p>Its online backup is no longer on the server (backups are kept for 180 days, or it was uploaded as a PDF), so there is nothing to open in the app.</p><p><a href="/admin#reports">Back to reports</a></p></body>');
     res.redirect(302, '/app?ownerEdit=' + b.key);
   });
@@ -1379,7 +1384,7 @@ async function uploadPdfs(input){
     const r = ID_RE.test(id) && readMeta(id);
     if (!r) return { error: 'Report not found.', status: 404 };
     if (!COPY_TYPES.includes(type)) return { error: 'Choose the type for the copy.', status: 400 };
-    const b = drafts.findBackup(({ s }) => s._serverReportId === id || (s.finalizedAt && backupKey(s) === r.key));
+    const b = (drafts.all().filter(({ s }) => isBackupOf(s, r)).sort((a, b) => String(b.s._savedAt || '').localeCompare(String(a.s._savedAt || '')))[0] || null);
     if (!b) return { error: 'This report’s online backup is no longer on the server, so it can’t be copied.', status: 404 };
     const s = JSON.parse(JSON.stringify(b.s));
     ['_serverReportId', '_rescueFailed', '_token', '_access', '_startAlerted', 'submittedId', 'unpaidId', 'sentAt', 'editOf', 'editedAt', 'pendingReplace', 'photosUploaded', 'dataUploaded', 'cloudSent'].forEach(k => delete s[k]);
