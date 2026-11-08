@@ -1185,6 +1185,9 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   .codes ul { list-style:none; margin:0; padding:0; } .codes li { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-top:1px solid var(--line); }
   .codes select { padding:8px 12px; border:0; background:#F1F3F7; border-radius:999px; font:inherit; }
   .codes .msg { white-space:pre-wrap; overflow-wrap:anywhere; margin-top:6px; color:var(--ink); }
+  /* On phones a row's details take the full width and its buttons wrap underneath (they used to squeeze the text into a
+     one-word column beside them). */
+  @media (max-width:760px) { .codes li > div:first-child { flex:1 1 100% !important; } .codes li .actions { white-space:normal; display:flex; flex-wrap:wrap; gap:8px; } .codes li .actions .btn { margin:0; } }
   .codes li.isnew { background:#F7F8FC; margin:0 -18px; padding:10px 18px; }
   .codes code { background:#EEF1F6; color:var(--navy); padding:3px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; user-select:all; } .codes li.new code { background:var(--navy); color:#fff; }
   .news { display:block; background:#FFF6EA; color:#7A4B12; font-weight:650; text-decoration:none; padding:12px 16px; border-radius:12px; margin-bottom:12px; }
