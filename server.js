@@ -102,6 +102,20 @@ const COMPARE_SYSTEM = ASSESS_SYSTEM + '\n' + [
   'Be careful and fair: only report a difference you can actually see in both photos. Differences in light, angle, zoom or photo quality are not changes. Do not judge who is responsible or what anything costs.'
 ].join('\n');
 
+// Photos of the keys handed over (the owner: "for pictures of keys, analyse it yourself"): count every key, fob, card
+// and remote and describe them for the report's keys line. Only what is visible; a guess is said to be one.
+const KEYS_SYSTEM = [
+  'You look at a photograph of keys being handed over at the start or end of a residential tenancy, for an inventory report.',
+  'Reply with a single JSON object and nothing else, with exactly these keys:',
+  '  "is_keys": true if the photo shows keys, fobs, access cards or remotes, false otherwise,',
+  '  "note": if is_keys is false, or the keys overlap so they cannot be counted, one short sentence telling the person what to retake (e.g. "Spread the keys out so each one can be counted"), otherwise an empty string,',
+  '  "total": the total number of separate keys, fobs, cards and remotes you can count (an integer),',
+  '  "items": an array of { "type": short name such as "Yale-type cylinder key", "mortice key", "window key", "post box key", "communal door fob", "access card", "garage remote", "count": integer, "detail": colour, tag or label text if visible, else "" },',
+  '  "description": one line for the report listing them, at most 20 words, e.g. "2 × Yale-type cylinder keys, 1 × mortice key, 1 × blue communal fob on a ring with a paper tag",',
+  '  "uncertain": a short phrase if any count or type is a guess, else "".',
+  'Count carefully: keys on one ring are separate keys; a key ring itself is not a key. Do not guess which door a key opens unless a tag or label says so. Ignore the date and time stamp burned into the corner of the photo.'
+].join('\n');
+
 function parseDataUrl(dataUrl){
   const m = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl || '');
   return m ? { mediaType: m[1], data: m[2] } : null;
@@ -117,9 +131,36 @@ function extractJson(text){
 app.post('/api/assess', async (req, res) => {
   if (!anthropic) return res.status(503).json({ error: 'Condition assessment is not configured on this server.' });
 
-  const { label, room, image, earlier } = req.body || {};
+  const { label, room, image, earlier, kind } = req.body || {};
   const img = parseDataUrl(image);
   if (!img) return res.status(400).json({ error: 'Expected an image data URL.' });
+  if (kind === 'keys') {
+    try {
+      const response = await anthropic.beta.messages.create({
+        model: ANTHROPIC_MODEL, max_tokens: 16000,
+        ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}),
+        ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}),
+        system: KEYS_SYSTEM,
+        messages: [{ role: 'user', content: [{ type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.data } }, { type: 'text', text: 'Count and describe the keys in this photo.' }] }]
+      });
+      if (response.stop_reason === 'refusal') return res.status(422).json({ error: 'The photo could not be assessed.' });
+      const out = extractJson(response.content.filter(b => b.type === 'text').map(b => b.text).join(''));
+      if (!out) return res.status(502).json({ error: 'The assessment could not be read.' });
+      const items = Array.isArray(out.items) ? out.items.slice(0, 20).map(x => ({ type: String(x && x.type || '').slice(0, 60), count: Math.max(0, Math.min(99, parseInt(x && x.count, 10) || 0)), detail: String(x && x.detail || '').slice(0, 80) })).filter(x => x.type && x.count) : [];
+      return res.json({ keys: {
+        isKeys: out.is_keys !== false,
+        note: typeof out.note === 'string' ? out.note.slice(0, 200) : '',
+        total: Math.max(0, Math.min(999, parseInt(out.total, 10) || items.reduce((a, x) => a + x.count, 0))),
+        items,
+        description: typeof out.description === 'string' ? out.description.slice(0, 200) : '',
+        uncertain: typeof out.uncertain === 'string' ? out.uncertain.slice(0, 120) : ''
+      } });
+    } catch (err) {
+      if (err instanceof Anthropic.RateLimitError) return res.status(429).json({ error: 'Too many photos at once. Try again in a moment.' });
+      console.error('assess keys failed', err && err.status, err && err.message);
+      return res.status(502).json({ error: 'Assessment service error.' });
+    }
+  }
   // The earlier photo of the same item (check-out vs check-in), read from the earlier report's own files.
   let then = null;
   if (earlier && /^[a-f0-9]{32}$/i.test(String(earlier.key || '')) && /^\d{1,4}$/.test(String(earlier.n || ''))) {

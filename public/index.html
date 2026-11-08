@@ -663,6 +663,8 @@
 .meter-auto-na { border-left: 4px solid #C49A6C; background: #FBF6EF; }
 .meter-auto-na p { margin: 6px 0 10px; font-size: 14px; color: var(--ink-soft, #4A5568); }
 .meter-auto-msg { color: #8A6A45; }
+.keys-ai { color: var(--ink-soft, #4A5568); margin: 2px 0 10px; } .keys-ai b { color: var(--ink, #13213A); font-weight: 600; }
+.keys-ai.warn { color: #9A5B1E; } .keys-ai-unsure { color: #8A8F99; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -1423,6 +1425,39 @@ function applyAiCondition(item){
   return item;
 }
 
+// Photos of the keys are looked at by the AI (the owner asked): it counts every key, fob and card and writes the keys
+// line ("2 × Yale-type cylinder keys, 1 × mortice key, 1 × communal fob"), filled in unless the person typed their own
+// (k.descAuto remembers what the AI wrote, so a newer photo can update it). k.ai holds the count shown under the row.
+async function assessKeysPhoto(index, photoId){
+  const k = state.property.keys[index]; if (!k) return;
+  const photo = (k.photos || []).find(p => p.id === photoId); if (!photo) return;
+  if (aiEnabled === false) return;
+  k.ai = { status: 'checking', photoId };
+  if (state.view === 'details' && !camera.open) render();
+  try {
+    const res = await fetch('/api/assess', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'keys', image: photo.dataUrl }) });
+    const data = await res.json().catch(() => ({}));
+    const kk = state.property.keys[index];
+    if (!kk || !(kk.photos || []).some(p => p.id === photoId)) return;
+    if (res.status === 402) { aiEnabled = false; kk.ai = null; }
+    else if (!res.ok || !data.keys) kk.ai = null;
+    else {
+      const a = data.keys;
+      kk.ai = { status: a.isKeys && !a.note ? 'ok' : 'warn', photoId, total: a.total, description: a.description, note: a.note, uncertain: a.uncertain, items: a.items, at: Date.now() };
+      const mine = (kk.desc || '').trim() && kk.desc !== kk.descAuto;
+      if (a.isKeys && a.description && !mine) { kk.desc = a.description; kk.descAuto = a.description; }
+    }
+  } catch (e) { const kk = state.property.keys[index]; if (kk) kk.ai = null; }
+  persist();
+  if (state.view === 'details' && !camera.open) render();
+  else if (camera.open) updateCameraUi();
+}
+function keysAiHTML(k){
+  const a = k.ai; if (!a) return '';
+  if (a.status === 'checking') return `<div class="cond-help keys-ai">Counting the keys in the photo…</div>`;
+  if (a.status === 'warn') return `<div class="cond-help keys-ai warn">${escapeHtml(a.note || 'The keys couldn’t be counted from this photo. Spread them out on a plain surface and take it again.')}</div>`;
+  return `<div class="cond-help keys-ai"><b>AI counted ${a.total} item${a.total === 1 ? '' : 's'}:</b> ${escapeHtml(a.description || '')}${a.uncertain ? ' <span class="keys-ai-unsure">(' + escapeHtml(a.uncertain) + ')</span>' : ''}${k.desc === k.descAuto ? ' · added to the keys line, change it if needed' : ''}</div>`;
+}
 async function assessItemPhoto(roomId, itemId, photoId){
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
   const item = room.items.find(i => i.id === itemId); if (!item) return;
@@ -1582,6 +1617,7 @@ function deletePropPhoto(kind, key, photoId){
   const arr = kind === 'exterior' ? state.property.exterior.photos : kind === 'meter' ? state.property.meters[key].photos : state.property.keys[key].photos;
   const i = arr.findIndex(p => p.id === photoId);
   if (i > -1) arr.splice(i, 1);
+  if (kind === 'keys') { const k = state.property.keys[key]; if (k && k.ai && k.ai.photoId === photoId) k.ai = null; }
   persist(); render();
 }
 /* Adds photo files to a target, through the same stamping and checks whichever way they were taken.
@@ -1597,13 +1633,14 @@ function resolveTarget(t){
   const item = t.itemId ? room.items.find(i => i.id === t.itemId) : null;
   if (t.itemId && !item) return null;
   return { arr: item ? item.photos : room.extraPhotos, caption: item ? item.label : 'Additional', place: room.name, title: room.name, label: item ? item.label : 'General views', room, item,
-           tip: item ? photoTipFor(item.label) : 'Any other views of the room: each corner, the ceiling, anything worth recording.' };
+           wide: !item,
+           tip: item ? photoTipFor(item.label) : 'Wide views of the whole room: stand in each corner and take in as much of the room as you can. Use the widest lens (0.5×) if your phone has one.' };
 }
 async function addPhotoFiles(files, t){
   const r = resolveTarget(t); if (!r) return 0;
   if (targetKind(t) === 'exterior') exteriorNudge = false;
   const toAssess = [];
-  let added = 0;
+  let added = 0, keysToAssess = null;
   for (const f of files){
     if (r.room && roomPhotoSpace(r.room, r.item || null) <= 0){ notice(roomFullMessage(r.room, r.item || null)); break; }
     try {
@@ -1614,11 +1651,13 @@ async function addPhotoFiles(files, t){
       if (r.room && roomPhotoSpace(r.room, r.item || null) <= 0){ notice(roomFullMessage(r.room, r.item || null)); break; }
       r.arr.push(photo); added++;
       if (r.item) toAssess.push({ roomId: r.room.id, itemId: r.item.id, photoId: photo.id });
+      if (targetKind(t) === 'keys') keysToAssess = { index: t.index, photoId: photo.id };
     } catch (e) { console.error('photo failed', e); }
   }
   if (added) track('first_photo', 1);
   persist();
   toAssess.forEach(a => assessItemPhoto(a.roomId, a.itemId, a.photoId));
+  if (keysToAssess) assessKeysPhoto(keysToAssess.index, keysToAssess.photoId);
   return added;
 }
 function handlePhotoInputChange(event){
@@ -1655,10 +1694,11 @@ async function openCamera(targets, idx){
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1440 } } });
     if (!camera.open){ stream.getTracks().forEach(tr => tr.stop()); return; }
-    camera.stream = stream;
+    camera.stream = stream; camera.lensWant = null; camera.wideOn = false; camera.wideDevice = false;
     const v = document.getElementById('cameraVideo');
     v.srcObject = stream;
     await v.play().catch(() => {});
+    cameraLens();
   } catch (err) {
     console.error('camera unavailable', err);
     document.getElementById('camError').classList.remove('hidden');
@@ -1674,6 +1714,39 @@ function closeCamera(){
   render();
 }
 function cameraTarget(){ return camera.targets[camera.idx]; }
+/* General views of a room are taken wide angle (the owner asked): the camera zooms out to its widest (0.5× on phones
+   whose camera reports a zoom below 1), or switches to the ultra-wide lens where the browser lists one; back to the
+   normal lens for single items. Where neither is possible the tip asks them to step back into a corner. */
+async function cameraLens(){
+  if (!camera.open || !camera.stream) return;
+  const t = cameraTarget(), r = t && resolveTarget(t), want = !!(r && r.wide);
+  if (camera.lensWant === want) return;
+  camera.lensWant = want; const ticket = camera.lensTicket = (camera.lensTicket || 0) + 1;
+  try {
+    let track = camera.stream.getVideoTracks()[0];
+    const caps = track && track.getCapabilities ? track.getCapabilities() : {};
+    if (caps.zoom && typeof caps.zoom.min === 'number') {
+      const z = want ? caps.zoom.min : Math.max(caps.zoom.min, Math.min(1, caps.zoom.max));
+      await track.applyConstraints({ advanced: [{ zoom: z }] }).catch(() => {});
+      camera.wideOn = want && caps.zoom.min < 1;
+      if (camera.wideOn || !want) { if (!want && camera.wideDevice) await cameraSwap(null, ticket); updateCameraUi(); return; }
+    }
+    if (want) {
+      const devs = await navigator.mediaDevices.enumerateDevices();
+      const uw = devs.find(d => d.kind === 'videoinput' && /ultra ?wide/i.test(d.label) && !/front/i.test(d.label));
+      if (uw) { await cameraSwap(uw.deviceId, ticket); camera.wideOn = camera.wideDevice = true; }
+    } else if (camera.wideDevice) { await cameraSwap(null, ticket); camera.wideDevice = false; camera.wideOn = false; }
+  } catch (e) { console.warn('wide angle not available', e); }
+  if (camera.lensTicket === ticket) updateCameraUi();
+}
+async function cameraSwap(deviceId, ticket){
+  const video = deviceId ? { deviceId: { exact: deviceId }, width: { ideal: 1920 }, height: { ideal: 1440 } } : { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1440 } };
+  if (camera.stream) camera.stream.getTracks().forEach(tr => tr.stop());
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video });
+  if (!camera.open || camera.lensTicket !== ticket) { stream.getTracks().forEach(tr => tr.stop()); return; }
+  camera.stream = stream;
+  const v = document.getElementById('cameraVideo'); v.srcObject = stream; await v.play().catch(() => {});
+}
 function cameraStep(d){
   const n = camera.idx + d;
   if (n >= camera.targets.length){ closeCamera(); return; }
@@ -1713,7 +1786,9 @@ function updateCameraUi(){
   document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
   document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
   const full = r.room && roomPhotoSpace(r.room, r.item || null) - camera.saving <= 0;
-  document.getElementById('camTip').innerHTML = `<span>${escapeHtml(full ? roomFullMessage(r.room, r.item || null) : (r.tip || ''))}</span>`;
+  const wideTip = r.wide && camera.wideOn ? 'Wide angle on. Stand in each corner and take in as much of the room as you can.' : '';
+  document.getElementById('camTip').innerHTML = `<span>${escapeHtml(full ? roomFullMessage(r.room, r.item || null) : (wideTip || r.tip || ''))}</span>`;
+  cameraLens();
   document.getElementById('camShutter').classList.toggle('is-full', !!full);
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
@@ -4783,6 +4858,7 @@ function renderDetails(){
               <button type="button" class="del-btn" onclick="deletePropPhoto('keys', ${i}, '${ph.id}')" aria-label="Delete photo">×</button>
             </div>`).join('')}
         </div>
+        ${keysAiHTML(k)}
       `).join('')}
       <div class="btn-row" style="margin-top:10px;"><button type="button" class="btn btn-sm" onclick="addKeyRow()">Add another set</button></div>
     </div>
