@@ -770,3 +770,20 @@ html:not(.house-on) .house .tag { opacity: 1; animation: none; }
   .house .tag { opacity: 1; }
 }
 .hero h1 em { text-decoration: none !important; animation: none !important; }
+
+/* Calmer (the owner: “too much flashy colours”, “the animation isn't smooth”): headings shift gently between navy and
+   blue only; the house no longer floats or casts a filtered shadow while it builds (both made every frame repaint
+   hundreds of triangles), fewer, larger triangles (site.js), and the photo rises with an ease-out. */
+:root { --bright: linear-gradient(90deg, #1B2E4B 0%, #24406A 30%, #2F5E96 50%, #24406A 70%, #1B2E4B 100%); }
+.hero h1 .hg { animation: wordUp 1.2s cubic-bezier(.2,.8,.2,1) both, hgFlow 14s linear infinite; animation-delay: calc(var(--i) * 120ms + 150ms), 0s; }
+body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shiftHue 16s linear infinite; }
+.page-head::before { opacity: .6; }
+.house { filter: none; animation: none; }
+.house-on .house .parts polygon { will-change: transform, opacity; }
+.house-on .house .solid { animation: houseUp 2.2s cubic-bezier(.22,.61,.36,1) 3.6s forwards; }
+/* The hero's colour clouds were blurred with a filter, which the browser redrew every frame: that is what made the
+   house animation stutter. They are soft radial gradients already, so no filter; they move by transform only. */
+.aurora { filter: none; }
+.aurora i { will-change: transform; }
+.aurora { display: none; }
+.hero { background: radial-gradient(60% 70% at 15% 10%, rgba(201,216,238,.55), transparent 70%), radial-gradient(50% 60% at 85% 20%, rgba(232,224,246,.6), transparent 70%), radial-gradient(50% 60% at 55% 90%, rgba(241,226,200,.35), transparent 70%), #fff; }

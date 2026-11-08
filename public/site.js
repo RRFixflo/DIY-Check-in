@@ -88,15 +88,15 @@
     return roof || (x >= 120 && x <= 500 && y >= 250 && y <= 520) || (x >= 410 && x <= 460 && y >= 80 && y <= 200);
   }
   var cols = ['#13213A', '#1B2E4B', '#1B2E4B', '#2F4F7F', '#2F4F7F', '#C49A6C', '#C49A6C', '#D9B98C', '#8A6A45', '#5B7BA8', '#B8895A'];
-  var many = innerWidth < 700 ? 650 : 1200, html = [], n = 0, tries = 0;
+  var many = innerWidth < 700 ? 280 : 520, html = [], n = 0, tries = 0;
   function tri(x, y, s, amb) {
     var a = rnd() * 6.28, pts = [0, 1, 2].map(function (k) { return (x + s * Math.cos(a + k * 2.094)).toFixed(1) + ',' + (y + s * Math.sin(a + k * 2.094)).toFixed(1); }).join(' ');
     var ang = rnd() * 6.28, r = 120 + rnd() * 200, c = cols[Math.floor(rnd() * cols.length)];
     return '<polygon' + (amb ? ' class="amb"' : '') + ' points="' + pts + '" stroke-opacity="' + (amb ? (.2 + rnd() * .25) : (.6 + rnd() * .4)).toFixed(2) +
       '" style="--c:' + c + ';--dx:' + Math.round(r * Math.cos(ang)) + 'px;--dy:' + Math.round(r * Math.sin(ang)) + 'px;--b:' + (rnd() * .9).toFixed(2) + 's;--d:' + (rnd() * 6).toFixed(2) + 's"/>';
   }
-  while (n < many && tries++ < 20000) { var x = 40 + rnd() * 540, y = 20 + rnd() * 510; if (!inside(x, y)) continue; n++; html.push(tri(x, y, 2.4 + rnd() * 3.4, false)); }
-  for (var i = 0; i < 140; i++) { var ax = rnd() * 620, ay = rnd() * 560; if (!inside(ax, ay)) html.push(tri(ax, ay, 1.8 + rnd() * 2.2, true)); }
+  while (n < many && tries++ < 20000) { var x = 40 + rnd() * 540, y = 20 + rnd() * 510; if (!inside(x, y)) continue; n++; html.push(tri(x, y, 3.6 + rnd() * 4.4, false)); }
+  for (var i = 0; i < (innerWidth < 700 ? 50 : 90); i++) { var ax = rnd() * 620, ay = rnd() * 560; if (!inside(ax, ay)) html.push(tri(ax, ay, 1.8 + rnd() * 2.2, true)); }
   g.innerHTML = html.join('');
   document.documentElement.classList.add('house-on');
   // Once the solid house is up, the triangles inside it are hidden: take them away so phones don't keep animating them.

@@ -282,9 +282,9 @@ function faqLd(body){
 function renderPage(pg, req, notice){
   const key = pg.key;
   // The home page's house photo follows the visitor's country (Cloudflare's header; ?country= to preview): a British brick house
-  // in the UK and Ireland, an American house in the US and Canada, a neutral house elsewhere. No header (robots, local): the UK one.
+  // in the UK, Cobh's houses in Ireland, an American house in the US and Canada, a modern home in Australia / NZ, a villa in the UAE and Gulf, a neutral house elsewhere. No header (robots, local): the UK one.
   const cc = String((req.query && req.query.country) || req.headers['cf-ipcountry'] || 'GB').toUpperCase();
-  const heroImg = /^(GB|UK|IE|JE|GG|IM)$/.test(cc) ? 'uk' : /^(US|CA)$/.test(cc) ? 'us' : 'world';
+  const heroImg = /^(GB|UK|JE|GG|IM)$/.test(cc) ? 'uk' : cc === 'IE' ? 'ie' : /^(US|CA)$/.test(cc) ? 'us' : /^(AU|NZ)$/.test(cc) ? 'au' : /^(AE|SA|QA|KW|BH|OM)$/.test(cc) ? 'ae' : 'world';
   const fill = t => t.split('{{HERO_IMG}}').join('/img/hero-home-' + heroImg + '.webp').replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report').split('{{USD}}').join(fx.usd(29.99));
   // Visitors in the US (Cloudflare's country header) are pointed to the US pages, on every page that isn't already one.
   const usVisitor = !notice && pg.lang !== 'en-US' && String(req.headers['cf-ipcountry'] || '').toUpperCase() === 'US' && !/^\/(account|buy|app)/.test(pg.path || '');
