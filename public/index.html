@@ -674,6 +674,12 @@
 .meter-auto-msg { color: #8A6A45; }
 .keys-ai { color: var(--ink-soft, #4A5568); margin: 2px 0 10px; } .keys-ai b { color: var(--ink, #13213A); font-weight: 600; }
 .keys-ai.warn { color: #9A5B1E; } .keys-ai-unsure { color: #8A8F99; }
+.room-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.room-head h2 { margin: 0; }
+.room-remove { background: none; border: 1px solid #E3C7C0; color: #A23B2A; font: inherit; font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+.room-remove:hover { background: #FBEDEA; }
+.room-add-btn .rn-name { color: var(--accent, #1B2E4B); font-weight: 600; }
+.room-add-btn { border-style: dashed !important; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -1974,6 +1980,33 @@ function openPhotoPreview(dataUrl){ document.getElementById('lightboxImg').src =
 function closeLightbox(e){ if (e) e.stopPropagation(); document.getElementById('lightbox').classList.add('hidden'); }
 
 /* ============================= navigation ============================= */
+// Rooms can be removed and added during the inspection (the owner: “some properties have no living room — allow me to
+// remove it, as well as users”). A removed room and its photos leave the report; at least one room always stays.
+function guessRoomType(name){
+  const n = String(name || '').toLowerCase();
+  return /kitchen/.test(n) ? 'kitchen' : /bath|shower|en-?suite/.test(n) ? 'bathroom' : /bed/.test(n) ? 'bedroom'
+    : /living|lounge|reception|sitting|dining/.test(n) ? 'living' : /hall|landing|entrance|stair/.test(n) ? 'hallway'
+    : /garden|outdoor|yard|balcony|terrace|patio/.test(n) ? 'garden' : /utility|laundry/.test(n) ? 'utility'
+    : /\bwc\b|toilet|cloak/.test(n) ? 'wc' : 'other';
+}
+function removeRoom(id){
+  const i = state.rooms.findIndex(r => r.id === id); if (i < 0) return;
+  if (state.rooms.length <= 1) { notice('A report needs at least one room.'); return; }
+  const r = state.rooms[i], n = roomTotalPhotos(r);
+  if (!confirm('Remove “' + r.name + '” from this report?' + (n ? ' Its ' + n + ' photo' + (n === 1 ? '' : 's') + ' will be deleted too.' : '') + ' Use this when the property doesn’t have this room.')) return;
+  state.rooms.splice(i, 1);
+  state.activeRoomId = (state.rooms[i] || state.rooms[i - 1]).id;
+  persist(); render(); window.scrollTo({ top: 0, behavior: 'instant' });
+  notice('“' + r.name + '” removed from the report.');
+}
+function addRoomNow(){
+  const name = String(prompt('Name of the room to add, e.g. Study, Bedroom 3, Balcony') || '').trim().slice(0, 60);
+  if (!name) return;
+  const room = makeRoom(name, guessRoomType(name));
+  state.rooms.push(room); state.activeRoomId = room.id;
+  persist(); render(); window.scrollTo({ top: 0, behavior: 'instant' });
+  notice('“' + name + '” added.');
+}
 function setActiveRoom(id){ state.activeRoomId = id; render(); window.scrollTo({top:0, behavior:'instant'}); }
 function stepRoom(delta){
   const idx = state.rooms.findIndex(r => r.id === state.activeRoomId);
@@ -4797,9 +4830,10 @@ function renderCapture(){
             <span class="rn-count">${roomTotalPhotos(r)}/${roomRequiredTotal(r)}</span>
           </button>`;
         }).join('')}
+        <button type="button" class="room-nav-item room-add-btn" onclick="addRoomNow()"><span class="rn-name">+ Add a room</span></button>
       </nav>
       <div class="room-panel">
-        <h2>${escapeHtml(room.name)}</h2>
+        <div class="room-head"><h2>${escapeHtml(room.name)}</h2>${state.rooms.length > 1 ? `<button type="button" class="room-remove" onclick="removeRoom('${room.id}')">Not at this property? Remove room</button>` : ''}</div>
         <div class="req-line ${complete ? 'ok' : 'warn'}">${reqMsg}</div>
 
         <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none" onchange="handlePhotoInputChange(event)">
