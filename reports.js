@@ -343,7 +343,9 @@ function mount(app){
     const existing = listReports().find(r => r.key === key);
     // An edited copy of a finished report (photos added or removed, or its type changed on the phone): it replaces the
     // stored one in place, so its id, link, payment and copies stay the same. Only from the phone that made it (its photo key).
-    if (existing && m.editedAt && meta.photoKey && existing.photoKey === meta.photoKey && clip(m.editedAt, 40) !== String(existing.editedAt || '')) {
+    if (existing && m.editedAt && clip(m.editedAt, 40) !== String(existing.editedAt || '') && !((meta.photoKey && existing.photoKey === meta.photoKey) || (opts && opts.owner)))
+      console.log('report edit not applied (photo key differs): ' + existing.id);
+    if (existing && m.editedAt && ((meta.photoKey && existing.photoKey === meta.photoKey) || (opts && opts.owner)) && clip(m.editedAt, 40) !== String(existing.editedAt || '')) {
       try { fs.writeFileSync(path.join(REPORTS_DIR, existing.id + '.pdf'), pdf); } catch (err) { return [500, { error: 'The report could not be saved.' }]; }
       const was = existing.inspectionType;
       ['address', 'inspectionType', 'inspectorName', 'signedBy', 'rooms', 'photos', 'fileName', 'basedOnRef'].forEach(k => { if (meta[k] !== '' && meta[k] !== undefined) existing[k] = meta[k]; });
@@ -466,7 +468,7 @@ function mount(app){
       if (!Buffer.isBuffer(a[0])) return res.status(a[0]).json(a[1]);
       [pdf, up] = a;
     }
-    const [status, body] = storeReport(pdf, meta, 'app', { unpaid });
+    const [status, body] = storeReport(pdf, meta, 'app', { unpaid, owner: signedIn(req) });
     if (status === 201 && meta.origin) { try { require('./analytics').lead(req, 'report', meta.origin); } catch (e) {} }
     if (up && status < 400) fs.rmSync(path.join(CHUNK_DIR, up), { recursive: true, force: true });
     res.status(unpaid && status === 201 ? 202 : status).json(body);

@@ -683,6 +683,7 @@
 .room-head-acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .room-photo-btn { display: inline-flex; align-items: center; gap: 8px; }
 .room-photo-btn svg { width: 18px; height: 18px; }
+.who-line{margin-top:6px;font-size:14px;opacity:.92}.who-line strong{font-weight:600}.who-change{margin-left:6px;background:rgba(255,255,255,.16);color:inherit;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font:inherit;font-size:13px;cursor:pointer}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -2010,7 +2011,7 @@ function removeRoom(id){
   state.rooms.splice(i, 1);
   state.activeRoomId = (state.rooms[i] || state.rooms[i - 1]).id;
   persist(); render(); window.scrollTo({ top: 0, behavior: 'instant' });
-  notice('“' + r.name + '” removed from the report.');
+  notice('“' + r.name + '” removed from the report.' + (state.editOf ? ' Press “Done editing: review and finish” to update the saved report.' : ''));
 }
 function addRoomNow(){
   const name = String(prompt('Name of the room to add, e.g. Study, Bedroom 3, Balcony') || '').trim().slice(0, 60);
@@ -2550,6 +2551,19 @@ function alertDetails(){
 
 function onDeclarationChange(checked){ state.declarationAccepted = checked; persist(); updateFinishButtonState(); }
 function onSignedByChange(value){ state.meta.signedBy = value; persist(); }
+// Change who did the report at any time (also while editing a finished one).
+function changeInspector(){
+  const was = state.meta.inspectorName || '';
+  const name = (prompt('Who did this report? (full name)', was) || '').trim();
+  if (!name || name === was) return;
+  state.meta.inspectorName = name;
+  if (!state.meta.signedBy || state.meta.signedBy === was) state.meta.signedBy = name;
+  persist(); render();
+  notice('This report is now done by ' + name + '.');
+}
+function inspectorLineHTML(){
+  return `<div class="who-line">Done by <strong>${escapeHtml(state.meta.inspectorName || 'not given')}</strong> <button class="who-change" type="button" onclick="changeInspector()">✏️ Change</button></div>`;
+}
 // Where this visit came from (sessionStorage, this tab only; the website's site.js starts it, or this page when someone
 // lands on the app first). Sent with the finished report so the owner sees where each report came from (origin.js).
 function visitInfo(){
@@ -3197,8 +3211,9 @@ async function buildPdfBlob(s, onProgress, out){
   }
 
   /* ---------------------------------------------------------------- cover */
-  const bedrooms = parseInt(s.meta.bedrooms, 10) || s.rooms.filter(r => r.type === 'bedroom').length;
-  const bathrooms = parseInt(s.meta.bathrooms, 10) || s.rooms.filter(r => r.type === 'bathroom').length;
+  // Counted from the rooms in the report, so rooms added or removed later are reflected.
+  const bedrooms = roomCount(s, 'bedroom') || (s.rooms.length ? 0 : parseInt(s.meta.bedrooms, 10) || 0);
+  const bathrooms = roomCount(s, 'bathroom') || (s.rooms.length ? 0 : parseInt(s.meta.bathrooms, 10) || 0);
   const propType = ((s.property && s.property.propertyType) || '').trim();
   const description = [[bedrooms ? bedrooms + ' Bedroom' : '', bathrooms ? bathrooms + ' Bathroom' : ''].filter(Boolean).join(', '), [(s.meta.furnishing || '').trim(), propType || 'Property'].filter(Boolean).join(' ')].filter(Boolean).join(' – ');
   const exteriorPhotos = (s.property && s.property.exterior && s.property.exterior.photos) || [];
@@ -3853,7 +3868,7 @@ async function buildPdfBlob(s, onProgress, out){
     const ly = BOTTOM - 16;
     doc.setFillColor(C.accentSoft[0], C.accentSoft[1], C.accentSoft[2]); doc.rect(M, ly, CW, 13, 'F');
     set('bold', 7, C.accent); doc.text('NEXT REPORT AT THIS PROPERTY', M + 5, ly + 5.2);
-    set('normal', 8.4, C.ink); doc.textWithLink('To start the check-out or an inspection from this report, open ' + later, M + 5, ly + 9.8, { url: later });
+    set('normal', 8.4, C.ink); doc.textWithLink((/check-?out/i.test(s.meta.inspectionType || '') ? 'To start the next check-in at this property from this report, open ' : 'To start the check-out or an inspection from this report, open ') + later, M + 5, ly + 9.8, { url: later });
   }
 
   /* header and footer on every page */
@@ -4007,6 +4022,10 @@ async function setMidReminder(btn){
   btn.disabled = false;
 }
 function keyFromInput(t){ const m = /([a-f0-9]{32})/i.exec(String(t || '')); return m ? m[1].toLowerCase() : ''; }
+function roomCount(s, type){
+  const re = type === 'bedroom' ? /\bbed ?room\b/i : /\bbath ?room\b|\ben[- ]?suite\b|\bshower room\b/i;
+  return (s.rooms || []).filter(r => r.type === type || re.test(r.name || '')).length;
+}
 function laterReportLink(s){ return (location && /^https?:/.test(location.origin || '') ? location.origin : '') + '/app?from=' + ensurePhotoKey(s); }
 async function startFromEarlier(input, wantType){
   const key = keyFromInput(input);
@@ -4825,7 +4844,7 @@ function renderCapture(){
     ${aiBanner}
     ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>${inspectorLineHTML()}
       <h1>${escapeHtml(state.meta.address)}</h1>
       <div class="sub">${roomsComplete()} of ${state.rooms.length} rooms complete · ${totalCaptured()} of ${totalRequired()} photos captured</div>
       <div class="progress-bar-shell"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
@@ -4920,7 +4939,7 @@ function renderDetails(){
   return `
     ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>${inspectorLineHTML()}
       <h1>Keys, meters &amp; sign-off</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
@@ -5058,7 +5077,7 @@ function renderReview(){
   return `
     ${editBannerHTML()}
     <div class="masthead">
-      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>${inspectorLineHTML()}
       <h1>Review &amp; sign</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
@@ -5090,7 +5109,7 @@ function renderReview(){
 
       <div class="field">
         <label for="signedByInput">Signed by</label>
-        <input class="input" id="signedByInput" type="text" value="${escapeHtml(state.meta.inspectorName)}" oninput="onSignedByChange(this.value)">
+        <input class="input" id="signedByInput" type="text" value="${escapeHtml(state.meta.signedBy || state.meta.inspectorName)}" oninput="onSignedByChange(this.value)">
       </div>
 
       <div class="field">
@@ -5122,7 +5141,7 @@ function renderReview(){
 function renderDone(){
   return `
     <div class="masthead">
-      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>
+      <div class="kicker">${typeChipHTML()} · ${escapeHtml(state.meta.date)}</div>${inspectorLineHTML()}
       <h1>Report complete</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
