@@ -2011,7 +2011,7 @@ function removeRoom(id){
   state.rooms.splice(i, 1);
   state.activeRoomId = (state.rooms[i] || state.rooms[i - 1]).id;
   persist(); render(); window.scrollTo({ top: 0, behavior: 'instant' });
-  notice('“' + r.name + '” removed from the report.' + (state.editOf ? ' Press “Done editing: review and finish” to update the saved report.' : ''));
+  notice('“' + r.name + '” removed from the report.' + (state.editOf ? ' The saved report updates by itself in about a minute.' : ''));
 }
 function addRoomNow(){
   const name = String(prompt('Name of the room to add, e.g. Study, Bedroom 3, Balcony') || '').trim().slice(0, 60);
@@ -2729,7 +2729,7 @@ function editReport(){
 }
 function editBannerHTML(){
   if (!state.editOf) return '';
-  return `<div class="edit-banner"><strong>${state.ownerEdit ? 'Editing this report (owner).' : 'Editing your finished report.'}</strong> ${state.ownerEdit ? 'Change anything: photos, conditions, notes, keys, meters. Then go to Review and finish again. It replaces the stored report, under the same link and payment.' : 'Add or remove any photos, change details, then go to Review and finish again. It replaces the report already sent, under the same link, at no extra cost.'}
+  return `<div class="edit-banner"><strong>${state.ownerEdit ? 'Editing this report (owner).' : 'Editing your finished report.'}</strong> ${state.ownerEdit ? 'Change anything: rooms, photos, conditions, notes, keys, meters.' : 'Add or remove any photos, change details.'} Every change updates the saved report by itself, about a minute after you stop (same link${state.ownerEdit ? ' and payment' : ', at no extra cost'}). Finish again when you’re done.
     ${state.view === 'review' ? '' : '<br><button type="button" class="btn btn-sm btn-primary" onclick="goToReview()">Done editing: review and finish</button>'}</div>`;
 }
 

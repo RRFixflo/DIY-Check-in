@@ -296,7 +296,13 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   // Finished on the phone but with no stored report (not paid, or the upload never arrived): listed with the reports.
   const finishedOnly = () => list().filter(({ s }) => s.finalizedAt && !s.submittedId);
   const findBackup = fn => list().find(fn) || null;
-  return { draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list };
+  // How many of a backup's photos haven't arrived on the server yet.
+  function missingPhotos(key, s){
+    const ids = []; (function walk(o){ if (Array.isArray(o)) o.forEach(walk); else if (o && typeof o === 'object') { if (o.id && PID_RE.test(String(o.id)) && 'ts' in o) ids.push(String(o.id)); Object.values(o).forEach(walk); } })([s.rooms, s.property]);
+    return ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
+  }
+  const saveState = (key, patch) => { const now = readJson(path.join(dirOf(key), 'state.json')); if (now) writeJson(path.join(dirOf(key), 'state.json'), Object.assign(now, patch)); };
+  return { missingPhotos, saveState, draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list };
 }
 
 module.exports = { mount };

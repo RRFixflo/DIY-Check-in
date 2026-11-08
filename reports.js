@@ -694,6 +694,43 @@ function mount(app){
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
     hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
 
+  // A finished report being edited (on the phone, or by the owner from /admin) is kept up to date by itself: about a
+  // minute after the last change reaches its online backup (and once its photos are there), the stored report is
+  // rebuilt from the backup with the app's own design and replaced in place: same id, link, payment and copies.
+  // Finishing the edit on the phone still sends the phone's own PDF, which replaces this one.
+  let liveBusy = false;
+  async function liveEditSweep(){
+    if (liveBusy) return; liveBusy = true;
+    try {
+      for (const { key, s } of drafts.all()) {
+        if (!s.editOf || !s._savedAt || s._liveBuiltAt === s._savedAt) continue;
+        const idle = Date.now() - new Date(s._savedAt).getTime();
+        if (idle < 45000) continue;
+        if (drafts.missingPhotos(key, s) && idle < 10 * 60000) continue;
+        const r = listReports().find(x => isBackupOf(s, x));
+        if (!r || r.source === 'uploaded') { drafts.saveState(key, { _liveBuiltAt: s._savedAt }); continue; }
+        try {
+          const s2 = Object.assign({}, s, { finalizedAt: s.editOf, declarationAccepted: true, photoKey: r.photoKey || s.photoKey });
+          const { pdf, photos, photoFile } = await drafts.buildFor(key, s2);
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.pdf'), pdf);
+          // The photo links follow the new numbering: the old full-size copies go, the backup's are put in their place.
+          const dir = photoDir(r.id);
+          try { fs.readdirSync(dir).forEach(f => { if (/^\d+\.jpg$/.test(f)) fs.unlinkSync(path.join(dir, f)); }); fs.writeFileSync(path.join(dir, 'index.json'), '{}'); } catch (e) {}
+          attachBackupPhotos(r.id, s2.photoKey, photos, photoFile);
+          const now = readMeta(r.id), m = s.meta || {}, pr = s.property || {};
+          let n = 0; (s.rooms || []).forEach(x => { (x.items || []).forEach(i => { n += (i.photos || []).length; }); n += (x.extraPhotos || []).length; }); n += ((pr.exterior || {}).photos || []).length;
+          Object.assign(now, { size: pdf.length, rooms: (s.rooms || []).length, photos: n, editedAt: new Date().toISOString(), edits: (now.edits || 0) + (now.liveEditOf === s._createdAt + s.editOf ? 0 : 1), liveEditOf: s._createdAt + s.editOf });
+          ['address', 'inspectionType', 'inspectorName', 'signedBy'].forEach(k => { if (m[k]) now[k] = clip(m[k], 300); });
+          if (now.tenantSignedAt) now.editedAfterSigning = true;
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(now, null, 2));
+          drafts.saveState(key, { _liveBuiltAt: s._savedAt });
+          console.log('report updated from its edit: ' + r.id + ' (' + now.rooms + ' rooms, ' + n + ' photos)');
+        } catch (e) { console.error('report edit update failed: ' + r.id + ': ' + e.message); drafts.saveState(key, { _liveBuiltAt: s._savedAt }); }
+      }
+    } finally { liveBusy = false; }
+  }
+  setInterval(() => liveEditSweep().catch(() => {}), 30000).unref();
+
   // Every email we hold for a report (the person who did it first): the admin Email form and the automatic copies.
   // Every email sent about a report, newest first, with when: the copies after payment, links sent from here, and the owner's own copy.
   const whenTxt = t => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
