@@ -660,6 +660,9 @@
   .type-err { color: #b42318; font-size: 13px; font-weight: 600; margin: 0 0 10px; }
   .edit-banner { background: var(--accent-soft); border: 1.5px solid var(--accent); border-radius: 14px; padding: 12px 14px; margin: 0 0 14px; font-size: 14px; color: var(--ink); }
   .edit-banner .btn { margin-top: 8px; }
+.meter-auto-na { border-left: 4px solid #C49A6C; background: #FBF6EF; }
+.meter-auto-na p { margin: 6px 0 10px; font-size: 14px; color: var(--ink-soft, #4A5568); }
+.meter-auto-msg { color: #8A6A45; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -1881,7 +1884,7 @@ function stepRoom(delta){
   if (next) { state.activeRoomId = next.id; render(); window.scrollTo({top:0, behavior:'instant'}); }
 }
 function goToDetails(){ state.view = 'details'; render(); window.scrollTo({top:0, behavior:'instant'}); }
-function goToReview(){ state.view = 'review'; render(); window.scrollTo({top:0, behavior:'instant'}); }
+function goToReview(){ const auto = autoNaMeters(); state.view = 'review'; render(); window.scrollTo({top:0, behavior:'instant'}); if (auto.length) notice(autoNaNote()); }
 function backToCapture(roomId){ state.view = 'capture'; if (roomId) state.activeRoomId = roomId; render(); window.scrollTo({top:0, behavior:'instant'}); }
 
 function normalizeItem(i){
@@ -2354,13 +2357,32 @@ function setKey(i, field, value){ state.property.keys[i][field] = value; persist
 function addDetectorRow(){ state.property.detectors.push({ category:'Smoke detector', location:'', tested:'Yes' }); persist(); render(); }
 function removeDetectorRow(i){ state.property.detectors.splice(i,1); if (!state.property.detectors.length) addDetectorRow(); persist(); render(); }
 function setDetector(i, field, value){ state.property.detectors[i][field] = value; persist(); }
-function toggleMeterNA(key, checked){ state.property.meters[key].na = checked; persist(); render(); }
+function toggleMeterNA(key, checked){ const m = state.property.meters[key]; m.na = checked; m.autoNa = false; persist(); render(); }
+// A meter left with no reading and no photo is taken as not at the property (the owner asked): it's marked not present,
+// so it's left out of the report, and the person is told, with how to undo it. Returns the meters it marked.
+function autoNaMeters(){
+  const pr = state.property, done = [];
+  Object.keys(pr.meters || {}).forEach(k => {
+    const m = pr.meters[k];
+    if (!m || m.na || (m.reading || '').trim() || (m.photos || []).length) return;
+    m.na = true; m.autoNa = true; done.push(METER_LABELS[k].toLowerCase());
+  });
+  if (done.length) persist();
+  return done;
+}
+function autoNaNote(){
+  const list = Object.keys(state.property.meters || {}).filter(k => state.property.meters[k].autoNa && state.property.meters[k].na).map(k => METER_LABELS[k].toLowerCase());
+  if (!list.length) return '';
+  const names = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1] : list[0];
+  return 'No reading was added for the ' + names + ', so ' + (list.length > 1 ? 'they are' : 'it is') + ' marked as not at the property and left out of the report. If there is one, go back to Keys & meters and untick “not present”.';
+}
 function detailsMissing(){
   const pr = state.property, d = pr.declaration, missing = [];
   if (!d.cleaning) missing.push('the general cleaning condition');
   Object.keys(pr.meters).forEach(k => {
     const m = pr.meters[k];
     if (m.na) return;
+    if (!(m.reading || '').trim() && !(m.photos || []).length) return;   // no reading and no photo: marked not present on continuing
     if (!(m.reading || '').trim()) missing.push('a reading for the ' + METER_LABELS[k].toLowerCase());
     else if (!(m.photos || []).length) missing.push('a photo of the ' + METER_LABELS[k].toLowerCase());
   });
@@ -4776,6 +4798,7 @@ function renderDetails(){
             <input type="checkbox" ${m.na ? 'checked' : ''} onchange="toggleMeterNA('${key}', this.checked)">
             <strong style="font-size:13px;color:var(--ink);">${METER_LABELS[key]}</strong> <span style="font-size:12px;">not present</span>
           </label>
+          ${m.na && m.autoNa ? `<div class="cond-help meter-auto-msg">Marked not present automatically because no reading was added. If there is one, untick this and add the reading.</div>` : ''}
           ${m.na ? '' : `
             <div class="cond-row">
               <input class="input" type="text" inputmode="decimal" placeholder="Reading, e.g. 37033.9 ${METER_UNITS[key] || ''}" value="${escapeHtml(m.reading)}" oninput="setProp('meters.${key}.reading', this.value)">
@@ -4875,6 +4898,7 @@ function renderReview(){
       <h1>Review &amp; sign</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
+    ${autoNaNote() ? `<div class="panel meter-auto-na" role="status"><strong>Meters marked not at the property</strong><p>${escapeHtml(autoNaNote())}</p><button type="button" class="btn btn-sm" onclick="state.view='details';render();window.scrollTo({top:0})">Go back to Keys &amp; meters</button></div>` : ''}
     <div class="panel">
       <table class="summary-table">
         <thead><tr><th>Room</th><th>Photos</th><th>Status</th></tr></thead>
