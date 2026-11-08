@@ -700,3 +700,73 @@ body .hero h1 { font-weight: 400; font-size: clamp(40px, 5vw, 64px); }
 body .nx-copy h2 { font-weight: 400; }
 body h3, body .brand { font-weight: 600; }
 body .stat b, body .area-facts b { font-weight: 500; letter-spacing: -.03em; }
+
+/* The hero headline, bolder and more animated (the owner: “be more bold and animated”): heavy, tight type; each word
+   rises in from a blur in turn (site.js splits the words); the coloured words run navy → blue → camel, each a step behind
+   the last so the colour flows along the line, with a soft glow and a camel underline that draws itself in. */
+body .hero h1 { font-weight: 700; letter-spacing: -.05em; line-height: 1; }
+body .hero h1.split { animation: none; }
+.hero h1 .hw { display: inline-block; animation: wordUp .9s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 70ms + 80ms); }
+@keyframes wordUp { from { opacity: 0; transform: translateY(.6em) rotate(3deg); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
+.hero h1 em { background: none; animation: none; color: inherit; -webkit-background-clip: border-box; background-clip: border-box;
+  text-decoration: underline; text-decoration-thickness: .08em; text-underline-offset: .12em; text-decoration-color: rgba(196,154,108,0); text-decoration-skip-ink: none;
+  animation: lineIn 1.2s ease 1.3s forwards; }
+@keyframes lineIn { to { text-decoration-color: rgba(196,154,108,.85); } }
+.hero h1 .hg { background: linear-gradient(90deg, #1B2E4B, #2F6FB0, #C49A6C, #2F6FB0, #1B2E4B); background-size: 400% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 6px 18px rgba(47,111,176,.18));
+  animation: wordUp .9s cubic-bezier(.2,.8,.2,1) both, hgFlow 4s linear infinite; animation-delay: calc(var(--i) * 70ms + 80ms), calc(var(--i) * -.35s); }
+@keyframes hgFlow { to { background-position: 400% 0; } }
+@media (prefers-reduced-motion: reduce) { .hero h1 .hw, .hero h1 .hg, .hero h1 em { animation: none !important; } .hero h1 .hg { color: #2F6FB0; background: none; } .hero h1 em { text-decoration-color: rgba(196,154,108,.85); } }
+
+/* =====================================================================================================
+   Smarter colour, Nov 2026 (the owner: “too white”, “the header brighter, bold, with animated colours”,
+   “a little bit slower and a real property”). Page heads get a soft moving wash of blue, violet and peach;
+   every main heading is bold with colours flowing through it; kickers, icons, prices and bands pick up
+   colour; the hero house is built slower and ends as a photo of a real building.
+   ===================================================================================================== */
+:root { --soft: #F1F5FC; --bright: linear-gradient(90deg, #1B2E4B 0%, #2F6FB0 22%, #6C5CE7 42%, #E08A3C 62%, #2F6FB0 82%, #1B2E4B 100%); }
+/* page heads: a drifting colour wash instead of white */
+.page-head { background: linear-gradient(180deg, #EEF3FC 0%, #F6F1FB 55%, #fff 100%); overflow: hidden; }
+.page-head::before { content: ""; position: absolute; inset: -40% -10% auto -10%; height: 140%; z-index: -1; pointer-events: none;
+  background: radial-gradient(40% 50% at 20% 30%, rgba(47,111,176,.22), transparent 70%), radial-gradient(35% 45% at 80% 25%, rgba(108,92,231,.18), transparent 70%), radial-gradient(40% 50% at 55% 80%, rgba(224,138,60,.16), transparent 70%);
+  animation: washDrift 18s ease-in-out infinite alternate; }
+@keyframes washDrift { from { transform: translate(-3%, 0) scale(1); } to { transform: translate(3%, 4%) scale(1.08); } }
+/* bold, bright headings with the colour flowing through them */
+body .page-head h1, body .hero h1 { font-weight: 700; letter-spacing: -.045em; }
+body .page-head h1 { background: var(--bright); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shiftHue 12s linear infinite; padding-bottom: .06em; }
+body .page-head h1 em { animation: none; background: none; -webkit-text-fill-color: inherit; }
+body .sec-head h2, body .nx-copy h2, body .final h2, body .instant h2 { font-weight: 600; }
+.hero h1 .hg { background: var(--bright); background-size: 400% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; filter: none; animation: wordUp 1.2s cubic-bezier(.2,.8,.2,1) both, hgFlow 9s linear infinite; animation-delay: calc(var(--i) * 120ms + 150ms), calc(var(--i) * -.6s); }
+.hero h1 .hw { animation-duration: 1.2s; animation-delay: calc(var(--i) * 120ms + 150ms); }
+.hero h1 em { animation-delay: 2.4s; animation-duration: 1.6s; }
+/* kickers as coloured pills */
+.page-head .kicker, .sec-head .kicker { display: inline-block; padding: 6px 14px; border-radius: 999px; background: rgba(47,111,176,.1); color: #2F5E96; box-shadow: inset 0 0 0 1px rgba(47,111,176,.18); }
+/* cards: a coloured top edge and coloured icon chips, in turn blue, violet, amber */
+.card.feature { border-top: 0; background-image: linear-gradient(#fff, #fff), linear-gradient(90deg, #2F6FB0, #6C5CE7, #E08A3C); background-origin: border-box; background-clip: padding-box, border-box; border-top: 3px solid transparent; }
+.feature .ic { background: rgba(47,111,176,.12); color: #2F6FB0; }
+.feature:nth-child(3n+2) .ic { background: rgba(108,92,231,.12); color: #6C5CE7; }
+.feature:nth-child(3n) .ic { background: rgba(224,138,60,.15); color: #C06A1E; }
+.cert-card .cert-price { background: linear-gradient(90deg, #2F6FB0, #6C5CE7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cert-card ul li::before { background: linear-gradient(135deg, #2F6FB0, #6C5CE7); }
+/* bands: pale blue, and the stats band in navy with bright figures */
+.stats-band { background: linear-gradient(120deg, #13213A, #1E3A66 60%, #2B3F7A); color: #E7EDF8; }
+.stats-band .stat b { color: #fff; } .stats-band .stat span { color: #B9C6DE; }
+.stats-band .stat:nth-child(1) b { color: #8EC0FF; } .stats-band .stat:nth-child(2) b { color: #B9AEFF; } .stats-band .stat:nth-child(4) b { color: #FFC48A; }
+.stats-band .stat { background: rgba(255,255,255,.04); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.nx-alt { background: linear-gradient(180deg, #F1F5FC, #F7F3FC); }
+.btn.primary { background: linear-gradient(120deg, #1B2E4B, #2F5E96); }
+
+/* the hero house, slower, ending as a real property photo */
+.house-on .house .parts polygon { animation: triIn 3.8s cubic-bezier(.2,.75,.2,1) both, triOut 1.6s ease 4.2s forwards; animation-delay: calc(var(--b) * 1.5), 4.2s; }
+.house-on .house .parts polygon.amb { animation: triIn 3.8s cubic-bezier(.2,.75,.2,1) both, triDrift 16s ease-in-out infinite; animation-delay: calc(var(--b) * 1.5), var(--d); }
+.house-on .house .solid { clip-path: inset(100% 0 0 0); animation: houseUp 2.4s cubic-bezier(.65,0,.25,1) 3.6s forwards; }
+.house .solid image { filter: saturate(1.05); }
+.house .tag { opacity: 0; animation: tagIn .8s ease 6.2s forwards; }
+@keyframes tagIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+html:not(.house-on) .house .tag { opacity: 1; animation: none; }
+.house { filter: drop-shadow(0 30px 40px rgba(19,33,58,.18)); }
+@media (prefers-reduced-motion: reduce) {
+  .page-head::before, body .page-head h1, .house .tag { animation: none !important; }
+  .house .tag { opacity: 1; }
+}
+.hero h1 em { text-decoration: none !important; animation: none !important; }

@@ -100,5 +100,29 @@
   g.innerHTML = html.join('');
   document.documentElement.classList.add('house-on');
   // Once the solid house is up, the triangles inside it are hidden: take them away so phones don't keep animating them.
-  setTimeout(function () { [].slice.call(g.querySelectorAll('polygon:not(.amb)')).forEach(function (p) { p.remove(); }); }, 4800);
+  setTimeout(function () { [].slice.call(g.querySelectorAll('polygon:not(.amb)')).forEach(function (p) { p.remove(); }); }, 7600);
+})();
+
+// The hero headline: each word rises in from a blur, one after another; the coloured words (<em>) flow through
+// navy, blue and camel, each a little behind the one before, so the colour runs along the line.
+(function () {
+  var h = document.querySelector('.hero h1'); if (!h || h.getAttribute('data-split')) return;
+  h.setAttribute('data-split', '1');
+  var i = 0;
+  function split(node, inEm) {
+    [].slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (w) {
+          if (!w) return;
+          if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+          var sp = document.createElement('span'); sp.className = 'hw' + (inEm ? ' hg' : ''); sp.textContent = w;
+          sp.style.setProperty('--i', i++); frag.appendChild(sp);
+        });
+        node.replaceChild(frag, n);
+      } else if (n.nodeType === 1) split(n, inEm || n.tagName === 'EM');
+    });
+  }
+  split(h, false);
+  h.classList.add('split');
 })();
