@@ -451,7 +451,16 @@
   .cam-top { display: flex; align-items: center; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 14px; background: linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,0)); }
   .cam-round { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,.18); color: #fff; font-size: 17px; }
   .cam-titles { flex: 1 1 auto; min-width: 0; }
-  #camTitle { font-size: 16px; font-weight: 700; }
+  #camTitle { font-size: 20px; font-weight: 700; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  #camTitle .cam-now { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #F2C98F; }
+  .cam-side small { display: block; font-size: 11px; font-weight: 500; opacity: .85; max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cam-announce { position: absolute; z-index: 3; left: 50%; top: 42%; transform: translate(-50%, -50%) scale(.92); width: min(86vw, 420px); padding: 18px 20px; border-radius: 18px; background: rgba(12,20,36,.86); color: #fff; text-align: center; opacity: 0; pointer-events: none; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+  .cam-announce.show { animation: camAnn 2.6s ease forwards; }
+  @keyframes camAnn { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.9); } 12% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 78% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.98); } }
+  .cam-announce .ca-k { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #F2C98F; }
+  .cam-announce .ca-t { font-size: 28px; font-weight: 700; line-height: 1.15; margin: 6px 0 8px; }
+  .cam-announce .ca-tip { font-size: 14px; line-height: 1.45; opacity: .9; }
+  @media (prefers-reduced-motion: reduce) { .cam-announce.show { animation: none; opacity: 1; transform: translate(-50%, -50%); } }
   #camSub { font-size: 13px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cam-step { flex: 0 0 auto; font-size: 12.5px; font-weight: 700; background: rgba(255,255,255,.18); padding: 5px 10px; border-radius: 999px; }
   .cam-step:empty { display: none; }
@@ -688,6 +697,7 @@
     <div class="cam-step" id="camStep"></div>
   </div>
   <div class="cam-tip" id="camTip"></div>
+  <div class="cam-announce" id="camAnnounce" aria-live="polite"></div>
   <div class="cam-error hidden" id="camError">
     <p>The camera couldn't be opened here. Allow camera access for this site, or use the phone's camera instead.</p>
     <button type="button" class="btn btn-primary" onclick="cameraFallback()">Use the phone's camera</button>
@@ -1685,7 +1695,7 @@ function openPhotoTargets(targets, idx){
   openCamera(targets, idx);
 }
 async function openCamera(targets, idx){
-  Object.assign(camera, { open: true, targets, idx });
+  Object.assign(camera, { open: true, targets, idx, announced: null });
   const el = document.getElementById('camera');
   el.classList.remove('hidden');
   document.getElementById('camError').classList.add('hidden');
@@ -1782,8 +1792,9 @@ function updateCameraUi(){
   const t = cameraTarget(), r = resolveTarget(t);
   if (!r){ closeCamera(); return; }
   const n = r.arr.length, multi = camera.targets.length > 1, last = camera.idx === camera.targets.length - 1;
-  document.getElementById('camTitle').textContent = r.title;
-  document.getElementById('camSub').textContent = r.label + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + (camera.saving ? ' · saving…' : '');
+  // What to photograph now, large at the top (the owner: make it obvious, when Next is pressed, what to take a picture of).
+  document.getElementById('camTitle').innerHTML = '<span class="cam-now">Photograph</span> ' + escapeHtml(r.label);
+  document.getElementById('camSub').textContent = r.title + ' · ' + n + ' photo' + (n === 1 ? '' : 's') + ' taken' + (camera.saving ? ' · saving…' : '');
   document.getElementById('camStep').textContent = multi ? (camera.idx + 1) + ' of ' + camera.targets.length : '';
   const full = r.room && roomPhotoSpace(r.room, r.item || null) - camera.saving <= 0;
   const wideTip = r.wide && camera.wideOn ? 'Wide angle on. Stand in each corner and take in as much of the room as you can.' : '';
@@ -1793,7 +1804,18 @@ function updateCameraUi(){
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
   prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
-  next.textContent = last ? 'Done' : 'Next ›';
+  const nr = !last && resolveTarget(camera.targets[camera.idx + 1]);
+  next.innerHTML = last ? 'Done' : 'Next ›' + (nr ? '<small>' + escapeHtml(nr.label) + '</small>' : '');
+  if (camera.announced !== camera.idx) { camera.announced = camera.idx; cameraAnnounce(r, multi); }
+}
+// A big card in the middle of the camera for a moment each time the camera moves to something new: what to photograph
+// now, with its tip, so pressing Next never leaves anyone guessing.
+function cameraAnnounce(r, multi){
+  const el = document.getElementById('camAnnounce'); if (!el) return;
+  el.innerHTML = `<div class="ca-k">${multi ? 'Now photograph · ' + (camera.idx + 1) + ' of ' + camera.targets.length : 'Now photograph'}</div><div class="ca-t">${escapeHtml(r.label)}</div>${r.tip ? `<div class="ca-tip">${escapeHtml(r.tip)}</div>` : ''}`;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  try { if (navigator.vibrate) navigator.vibrate(15); } catch (e) {}
+  clearTimeout(camera.announceTimer); camera.announceTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 function deleteItemPhoto(roomId, itemId, photoId){
   const room = state.rooms.find(r => r.id === roomId); if (!room) return;
