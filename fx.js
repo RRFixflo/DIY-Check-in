@@ -1,5 +1,5 @@
 // Prices in dollars for US customers. Cards are still charged in pounds (SumUp only takes the account's own
-// currency, GBP); the dollar figure is what £30 is worth today, so Americans see a price they understand.
+// currency, GBP); the dollar figure is what £29.99 is worth today, so Americans see a price they understand.
 // The rate (GBP → USD) comes from the European Central Bank's daily reference rates via frankfurter.app,
 // refreshed every 12 hours and kept in REPORTS_DIR/fx.json, so a restart or an outage keeps the last rate.
 const fs = require('fs');
@@ -26,7 +26,7 @@ function start(dir){
   refresh();
   setInterval(refresh, 12 * 3600 * 1000).unref();
 }
-// £30 → "$39" (whole dollars, rounded to the nearest).
+// £29.99 → "$39" (whole dollars, rounded to the nearest).
 const usd = gbp => '$' + Math.round(gbp * rate);
 
 // A person in the US (Cloudflare's country header, or ?cur=usd from a US report in the app); never robots,

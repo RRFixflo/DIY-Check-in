@@ -1,6 +1,6 @@
 # Campaign kit: check-in vs check-out, compared by AI
 
-**The idea in one line:** *"Stop comparing two reports page by page. Our AI compares every check-out photo with the check-in and lists what changed. £30."*
+**The idea in one line:** *"Stop comparing two reports page by page. Our AI compares every check-out photo with the check-in and lists what changed. £29.99."*
 
 Why it wins:
 - **The pain is real.** Comparing a 40-page check-in with a 40-page check-out takes an hour or more, and things get missed.
@@ -43,7 +43,7 @@ What we may **not** say: that the report wins disputes, is "accepted"/"approved"
   - that the AI decides who pays or what to deduct;
   - "guaranteed", "100% accurate", or "accepted by deposit schemes";
   - anything about checking reports made elsewhere. It only compares against a DIY Inventory check-in.
-- **No VAT anywhere.** £30 per report.
+- **No VAT anywhere.** £29.99 per report.
 
 ## 3. Email to past customers who did a check-in
 **Subject:** Your check-out will compare itself
@@ -55,7 +55,7 @@ What we may **not** say: that the report wins disputes, is "accepted"/"approved"
 >
 > {check-out link}
 >
-> £30, only when you download it.
+> £29.99, only when you download it.
 > *Don't want these emails? Reply "stop".*
 
 ## 4. Google Ads (UK)
@@ -68,11 +68,11 @@ What we may **not** say: that the report wins disputes, is "accepted"/"approved"
 - Every Change Found for You
 - Damage vs Wear and Tear
 - Photos Side by Side
-- £30 Check-Out Report
+- £29.99 Check-Out Report
 - No Reading Two Reports
 
 **Descriptions:**
-- AI compares every check-out photo with the check-in and lists what changed. £30.
+- AI compares every check-out photo with the check-in and lists what changed. £29.99.
 - Damage, wear and tear, cleaning and missing items, photos side by side. Free to start.
 
 ## 5. Social

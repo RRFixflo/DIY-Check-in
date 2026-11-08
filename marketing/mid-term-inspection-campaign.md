@@ -1,6 +1,6 @@
 # Mid-term inspection campaign kit
 
-**The idea in one line:** *"Mid-term inspections without the visit. Send your tenant a link, get a dated report compared with the check-in. £30."*
+**The idea in one line:** *"Mid-term inspections without the visit. Send your tenant a link, get a dated report compared with the check-in. £29.99."*
 
 Why it wins:
 - It removes the landlord's biggest pain: the trip, the 24 hours' notice and the tenant's diary.
@@ -48,7 +48,7 @@ Why it wins:
 >
 > The rooms and checklist from your check-in are already there. Every photo is dated and timed, and the report shows exactly what has changed since move-in, photos side by side.
 >
-> It's £30, only when you download the report. Want a reminder every 3 or 6 months? Tap "Remind me" on the finished report.
+> It's £29.99, only when you download the report. Want a reminder every 3 or 6 months? Tap "Remind me" on the finished report.
 >
 > DIY Inventory
 > *Don't want these emails? Reply "stop".*
@@ -60,7 +60,7 @@ Why it wins:
 >
 > How many hours a month does {agency} spend driving to mid-term inspections?
 >
-> With DIY Inventory, the tenant does the inspection from a link: a guided photo checklist, the date and time on every photo, and a PDF compared with the check-in, the same day. £30 per inspection, no subscription.
+> With DIY Inventory, the tenant does the inspection from a link: a guided photo checklist, the date and time on every photo, and a PDF compared with the check-in, the same day. £29.99 per inspection, no subscription.
 >
 > I can set up a named link for {agency} so your tenants use it free and you see every report. Worth a 10-minute call?
 >
@@ -76,7 +76,7 @@ Why it wins:
 **Negatives:** jobs, course, salary, surveyor, homebuyer, mot, car
 
 **Headlines** (≤30 characters each):
-1. Mid-Term Inspections, £30
+1. Mid-Term Inspections, £29.99
 2. No Visit Needed
 3. Your Tenant Does It by Link
 4. Dated Photos, Every Room
@@ -89,7 +89,7 @@ Why it wins:
 
 **Descriptions** (≤90 characters each):
 1. Send your tenant a link. They photograph each room; you get a dated PDF the same day.
-2. Every item compared with the check-in, photos side by side. £30, no subscription.
+2. Every item compared with the check-in, photos side by side. £29.99, no subscription.
 3. Spot damp, leaks and damage early, with a dated record for the end of the tenancy.
 4. Set a reminder every 3 or 6 months. The next inspection is one tap away.
 
@@ -120,7 +120,7 @@ Why it wins:
 > How do you all handle mid-term inspections? I've stopped visiting: I send the tenant a link, they photograph each room on their phone (it walks them through the check-in checklist), and I get a dated report showing what's changed since move-in. Tenants seem to prefer it to me turning up. Happy to share what I use if useful.
 
 **LinkedIn (agents)**
-> Mid-term inspections are a 2-hour round trip for a 20-minute job. We built a way for tenants to do them from a link: a guided checklist, dated photos, and a report compared with the check-in. £30 each, no subscription. → diyinventory.co.uk/mid-term-inspection
+> Mid-term inspections are a 2-hour round trip for a 20-minute job. We built a way for tenants to do them from a link: a guided checklist, dated photos, and a report compared with the check-in. £29.99 each, no subscription. → diyinventory.co.uk/mid-term-inspection
 
 **Instagram / TikTok (short video idea):** a phone screen recording of the camera stepping through a room → "Inspection done. No visit. 20 minutes." → the PDF's "what changed" page.
 

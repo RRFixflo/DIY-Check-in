@@ -285,15 +285,15 @@ const NATION = {
 };
 
 const UK = { uk: true, country: 'United Kingdom', report: 'inventory and check-in reports', thing: 'inventory', checkin: 'check-in', checkout: 'check-out', clerk: 'an inventory clerk', money: 'deposit',
-  price: '£30 per report' };
+  price: '£29.99 per report' };
 ['england', 'wales', 'scotland', 'ni'].forEach(k => { NATION[k] = Object.assign({}, UK, NATION[k]); NATION[k].basics = ['Most lets are a ' + NATION[k].tenancy + '.', NATION[k].deposit, NATION[k].safety]; });
 // Outside the UK: the same app, in each country's own words. Prices are charged in pounds; the card converts.
-const ABROAD = { uk: false, price: '£30 per report (charged in pounds; your card converts it)' };
+const ABROAD = { uk: false, price: '£29.99 per report (charged in pounds; your card converts it)' };
 Object.assign(NATION, {
   ie: Object.assign({}, ABROAD, { label: 'Ireland', country: 'Ireland', report: 'inventory and check-in reports', thing: 'inventory', checkin: 'check-in', checkout: 'check-out', clerk: 'an inventory clerk', money: 'deposit', who: 'tenant',
     disputes: 'Deposit disputes go to the Residential Tenancies Board (RTB), which decides on the evidence, so a dated record of the condition at the start of the tenancy matters.',
     basics: ['Most tenancies must be registered with the Residential Tenancies Board (RTB).', 'Landlords hold the deposit and must return it promptly at the end, less any justified deductions for damage beyond normal wear and tear or rent owed.', 'An inventory with dated photos, signed by both sides, is the best evidence if there is a dispute.'] }),
-  us: Object.assign({}, ABROAD, { price: '{{USD}} per report (charged as £30 by card; your bank converts it)', label: 'the United States', country: 'United States', report: 'move-in and move-out inspection reports', thing: 'move-in inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
+  us: Object.assign({}, ABROAD, { price: '{{USD}} per report (charged as £29.99 by card; your bank converts it)', label: 'the United States', country: 'United States', report: 'move-in and move-out inspection reports', thing: 'move-in inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
     disputes: 'If you disagree about deductions from the security deposit, small claims courts look at the evidence: a move-in checklist with dated photos, signed by both sides, is what settles it.',
     basics: ['Security deposit rules are set by each state: how much can be taken, where it is held, and how many days the landlord has to return it with an itemized list of deductions.', 'Normal wear and tear can’t be deducted; damage beyond it can, so a record of the condition at move-in is essential.'] }),
   ca: Object.assign({}, ABROAD, { label: 'Canada', country: 'Canada', report: 'move-in and move-out condition inspection reports', thing: 'condition inspection', checkin: 'move-in inspection', checkout: 'move-out inspection', clerk: 'an inspection company', money: 'security deposit', who: 'tenant',
@@ -368,7 +368,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
     const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
     const title = (N.uk ? 'DIY inventory and check-in reports' : cap(N.report)) + ' in ' + place;
     // UK: people search for an inventory clerk; the page answers that (do it yourself instead).
-    const seoTitle = N.uk ? 'Inventory clerk in ' + place + '? Do your own inventory for £30' : st ? place + ', ' + st.code.toUpperCase() + ' Move-In & Move-Out Inspection App' : title + ' · £30';
+    const seoTitle = N.uk ? 'Inventory clerk in ' + place + '? Do your own inventory for £29.99' : st ? place + ', ' + st.code.toUpperCase() + ' Move-In & Move-Out Inspection App' : title + ' · £29.99';
     const low = t => t.charAt(0).toLowerCase() + t.slice(1), nd = t => String(t).replace(/\.$/, '');
     const usRule = st && st.returnDays ? 'In ' + st.name + ', the security deposit must be returned within ' + low(nd(st.returnDays).replace(/^within /i, '')) + (st.cap ? (/^No statewide/i.test(st.cap) ? ', and there is no statewide limit on its amount.' : ', and it can’t be more than ' + low(nd(st.cap)) + '.') : '.') : '';
     const stateRule = p.state && STATES[p.state] ? STATES[p.state] : usRule;
@@ -376,7 +376,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
     const basics = LOCAL[p.slug] && stateRule ? [stateRule] : N.basics.concat(stateRule ? [stateRule] : []);
     const faqs = [
       ['How much does ' + (N.uk ? 'an inventory report' : 'a ' + N.thing + ' report') + ' cost in ' + w + '?', 'With DIY Inventory it’s ' + N.price + ', whatever the size of the property: a ' + N.checkin + ', a ' + N.checkout + ' or an inspection during the tenancy. It’s free to start, and you pay when the finished report is downloaded.'],
-      ...(N.uk ? [['How much does an inventory clerk cost in ' + w + '?', 'Inventory clerks in ' + w + ' usually charge for each visit, more for bigger or furnished homes, so a check-in and a check-out together can cost a few hundred pounds. With DIY Inventory each report is £30, whatever the size, and you can do it as soon as you have the keys.']] : []),
+      ...(N.uk ? [['How much does an inventory clerk cost in ' + w + '?', 'Inventory clerks in ' + w + ' usually charge for each visit, more for bigger or furnished homes, so a check-in and a check-out together can cost a few hundred pounds. With DIY Inventory each report is £29.99, whatever the size, and you can do it as soon as you have the keys.']] : []),
       ['Do I need ' + N.clerk + ' in ' + w + '?', 'No. You can do the ' + N.thing + ' yourself on your phone, or send your ' + N.who + ' a link to do it. The app gives every room a photo checklist, stamps the date and time on every photo, and both sides sign the report.'],
       ['Will the report help with a ' + N.money + ' dispute in ' + N.label + '?', N.disputes + ' Your report gives you that evidence: dated photos of every room, the condition of every item, meter readings and keys, signed by both sides.'],
     ].filter((f, i) => !LOCAL[p.slug] || (N.uk && i === 1));   // pages with local research keep only their own questions (UK: and what a clerk costs there)
@@ -433,7 +433,7 @@ function mount(app, { renderPage, escHtml, REPORTS_DIR }){
 <section class="tight"><div class="wrap">
   <div class="two">
     ${LOCAL[p.slug] ? '' : `<div class="card"><h3>Why do it yourself in ${e(place)}?</h3><ul>
-      <li>${e(N.uk ? '£30 a report instead of a clerk’s fee for every visit, ready the moment it’s signed.' : 'A fixed ' + (p.nation === 'us' ? '{{USD}}' : '£30') + ' a report instead of paying ' + N.clerk + ' for every visit, ready the moment it’s signed.')}</li>
+      <li>${e(N.uk ? '£29.99 a report instead of a clerk’s fee for every visit, ready the moment it’s signed.' : 'A fixed ' + (p.nation === 'us' ? '{{USD}}' : '£29.99') + ' a report instead of paying ' + N.clerk + ' for every visit, ready the moment it’s signed.')}</li>
       <li>The ${e(N.checkout)} starts from the ${e(N.checkin)} and shows what changed, photos side by side.${N.uk ? ' Prefer paper? Use our <a href="/inventory-template">free inventory template</a>.' : ''}</li>
     </ul></div>`}
     ${LOCAL[p.slug] && st ? `<div class="card" style="grid-column:1/-1;text-align:center"><a href="/us/${st.slug}">${e(p.region)} security deposit law: the limit, and how fast it must be returned →</a></div>` : `<div class="card"><h3>Renting in ${e(N.label)}: the basics</h3><ul>
@@ -454,11 +454,11 @@ ${localHtml}${numbersHtml}${tipsHtml}${rulesHtml}
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Ready when you have the keys</h2><p>Start your ${e(place)} ${e(N.thing)} today, on your phone. It’s free until you download it.</p><a class="btn" href="/app">Start free</a></div></div></div>`;
     return { key: 'locations', lang: p.nation === 'us' ? 'en-US' : undefined, path: BASE_PATH + '/' + p.slug, title: st ? seoTitle : seoTitle + ' · DIY Inventory', og: N.uk ? seoTitle : title,
-      desc: st ? 'Move-in and move-out inspections in ' + place + ', ' + st.code.toUpperCase() + ', for renters and landlords: dated photos of every room, signed PDF report. Free to start.' : 'Do your own ' + N.thing + ' and ' + N.checkout + ' report in ' + w + ' on your phone: dated photos, every item’s condition, signed by both sides, ready instantly. £30 per report, free to start.', body,
+      desc: st ? 'Move-in and move-out inspections in ' + place + ', ' + st.code.toUpperCase() + ', for renters and landlords: dated photos of every room, signed PDF report. Free to start.' : 'Do your own ' + N.thing + ' and ' + N.checkout + ' report in ' + w + ' on your phone: dated photos, every item’s condition, signed by both sides, ready instantly. £29.99 per report, free to start.', body,
       jsonld: base => [
         { '@type': 'Service', name: cap(N.report) + ' in ' + place, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' },
           areaServed: { '@type': p.kind === 'borough' ? 'AdministrativeArea' : 'City', name: place, containedInPlace: { '@type': 'Country', name: N.country } },
-          offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } },
+          offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } },
         { '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
         { '@type': 'BreadcrumbList', itemListElement: [['Home', '/'], ['Areas', BASE_PATH], [place, BASE_PATH + '/' + p.slug]].map(([name, u], i) => ({ '@type': 'ListItem', position: i + 1, name, item: base + u })) },
       ] };
@@ -468,7 +468,7 @@ ${localHtml}${numbersHtml}${tipsHtml}${rulesHtml}
   function index(){
     const group = (title, list) => !list.length ? '' : `<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 10px">${e(title)}</h3><p style="margin:0;line-height:2.2">${list.map(p => `<a class="btn ghost sm" style="margin:0 6px 0 0" href="${BASE_PATH}/${p.slug}">${e(p.name.replace(/^the /, ''))}</a>`).join('')}</p></div>`;
     const by = k => PLACES.filter(k).sort((a, b) => a.name.replace(/^the /, '').localeCompare(b.name.replace(/^the /, '')));
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Worldwide</span><h1>Inventory and inspection reports, wherever you let</h1><p>DIY Inventory works anywhere in the world: do the check-in (or move-in inspection), inspections and check-out on your phone, for £30 a report. Pick your area for local information.</p></div></div>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Worldwide</span><h1>Inventory and inspection reports, wherever you let</h1><p>DIY Inventory works anywhere in the world: do the check-in (or move-in inspection), inspections and check-out on your phone, for £29.99 a report. Pick your area for local information.</p></div></div>
 <section class="tight"><div class="wrap">
 ${group('London boroughs', by(p => p.kind === 'borough'))}
 ${group('England', by(p => p.nation === 'england' && p.kind !== 'borough' && !hubs.slugs.includes(p.slug)))}
@@ -487,7 +487,7 @@ ${group('South Africa', by(p => p.nation === 'za'))}
 <p class="sub" style="text-align:center">Not listed? It works the same in every country. <a href="/app">Start free</a>.</p>
 </div></section>`;
     return { key: 'locations', path: BASE_PATH, title: 'Inventory, move-in and condition reports worldwide · DIY Inventory', og: 'Inventory and inspection reports worldwide',
-      desc: 'Do your own inventory, check-in, move-in inspection or condition report anywhere in the world, on your phone. £30 per report. UK, USA, Canada, Australia, New Zealand, Ireland, UAE and South Africa.', body,
+      desc: 'Do your own inventory, check-in, move-in inspection or condition report anywhere in the world, on your phone. £29.99 per report. UK, USA, Canada, Australia, New Zealand, Ireland, UAE and South Africa.', body,
       jsonld: base => [{ '@type': 'BreadcrumbList', itemListElement: [['Home', '/'], ['Areas', BASE_PATH]].map(([name, u], i) => ({ '@type': 'ListItem', position: i + 1, name, item: base + u })) }] };
   }
 

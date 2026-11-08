@@ -29,10 +29,10 @@
     .filter(function (el) { return !el.closest('.hero') && !el.closest('.reveal'); });
   els.forEach(function (el) { var sibs = [].slice.call(el.parentNode.children); el.style.setProperty('--i', Math.min(sibs.indexOf(el), 8)); });
   function countUp(el) {
-    var end = parseFloat(el.getAttribute('data-count')), pre = el.getAttribute('data-prefix') || '', suf = el.getAttribute('data-suffix') || '';
-    if (reduce) { el.textContent = pre + end + suf; return; }
+    var dec = (String(el.getAttribute('data-count')).split('.')[1] || '').length, end = parseFloat(el.getAttribute('data-count')), pre = el.getAttribute('data-prefix') || '', suf = el.getAttribute('data-suffix') || '';
+    if (reduce) { el.textContent = pre + (dec ? end.toFixed(dec) : end) + suf; return; }
     var t0 = null;
-    function step(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1400), e = 1 - Math.pow(1 - p, 3); el.textContent = pre + Math.round(end * e) + suf; if (p < 1) requestAnimationFrame(step); }
+    function step(t) { if (!t0) t0 = t; var p = Math.min(1, (t - t0) / 1400), e = 1 - Math.pow(1 - p, 3); el.textContent = pre + (dec ? (end * e).toFixed(dec) : Math.round(end * e)) + suf; if (p < 1) requestAnimationFrame(step); }
     requestAnimationFrame(step);
   }
   var counters = [].slice.call(document.querySelectorAll('[data-count]'));
@@ -74,4 +74,31 @@
   function fit() { box.style.setProperty('--k', (box.clientWidth / 750).toFixed(4)); }
   fit(); addEventListener('resize', fit);
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(box);
+})();
+
+// The hero house: small triangles fly in from every side and gather into the shape of a house, then the solid
+// house builds up from the ground over them (CSS) and a few loose triangles keep drifting. Made here, not in the
+// HTML, so the page stays light; fewer on phones. Under reduced motion only the finished house shows.
+(function () {
+  var g = document.querySelector('.house .parts');
+  if (!g || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  var seed = 11; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function inside(x, y) {
+    var roof = y <= 250 && y >= 40 && Math.abs(x - 310) <= (y - 40) * (240 / 210);
+    return roof || (x >= 120 && x <= 500 && y >= 250 && y <= 520) || (x >= 410 && x <= 460 && y >= 80 && y <= 200);
+  }
+  var cols = ['#13213A', '#1B2E4B', '#1B2E4B', '#2F4F7F', '#2F4F7F', '#C49A6C', '#C49A6C', '#D9B98C', '#8A6A45', '#5B7BA8', '#B8895A'];
+  var many = innerWidth < 700 ? 650 : 1200, html = [], n = 0, tries = 0;
+  function tri(x, y, s, amb) {
+    var a = rnd() * 6.28, pts = [0, 1, 2].map(function (k) { return (x + s * Math.cos(a + k * 2.094)).toFixed(1) + ',' + (y + s * Math.sin(a + k * 2.094)).toFixed(1); }).join(' ');
+    var ang = rnd() * 6.28, r = 120 + rnd() * 200, c = cols[Math.floor(rnd() * cols.length)];
+    return '<polygon' + (amb ? ' class="amb"' : '') + ' points="' + pts + '" stroke-opacity="' + (amb ? (.2 + rnd() * .25) : (.6 + rnd() * .4)).toFixed(2) +
+      '" style="--c:' + c + ';--dx:' + Math.round(r * Math.cos(ang)) + 'px;--dy:' + Math.round(r * Math.sin(ang)) + 'px;--b:' + (rnd() * .9).toFixed(2) + 's;--d:' + (rnd() * 6).toFixed(2) + 's"/>';
+  }
+  while (n < many && tries++ < 20000) { var x = 40 + rnd() * 540, y = 20 + rnd() * 510; if (!inside(x, y)) continue; n++; html.push(tri(x, y, 2.4 + rnd() * 3.4, false)); }
+  for (var i = 0; i < 140; i++) { var ax = rnd() * 620, ay = rnd() * 560; if (!inside(ax, ay)) html.push(tri(ax, ay, 1.8 + rnd() * 2.2, true)); }
+  g.innerHTML = html.join('');
+  document.documentElement.classList.add('house-on');
+  // Once the solid house is up, the triangles inside it are hidden: take them away so phones don't keep animating them.
+  setTimeout(function () { [].slice.call(g.querySelectorAll('polygon:not(.amb)')).forEach(function (p) { p.remove(); }); }, 4800);
 })();

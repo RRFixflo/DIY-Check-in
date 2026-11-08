@@ -8,7 +8,7 @@
   display: flex; flex-direction: column; min-height: 0; height: 100%; position: relative; border-radius: 22px; overflow: hidden;
   -webkit-tap-highlight-color: transparent; text-align: left;
 }
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) and (min-width: 99999px) {
   :root:not([data-theme="light"]) .fp {
     --fp-bg: #0D1626; --fp-panel: #14213A; --fp-soft: #1E2F4E; --fp-ink: #F1EADF; --fp-ink-soft: #B9B2A5; --fp-faint: #857F72;
     --fp-line: #263553; --fp-accent: #D9B98C; --fp-on-accent: #13213A; --fp-camel: #D9B37C; --fp-ok: #4ADE80; --fp-warn: #D9B37C; --fp-danger: #F87171;

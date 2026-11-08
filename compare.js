@@ -29,9 +29,9 @@ ${rows.map(([r, i, t, wear]) => `<tr style="border-top:1px solid rgba(0,0,0,.08)
       ['What if the photos were taken from a different angle?', 'The AI only reports a difference it can see in both photos. Changes in light, angle or zoom aren’t counted as damage; if a fair comparison isn’t possible it says “couldn’t compare”, so you know to look yourself.'],
       ['Does it work if the check-in was done by an inventory clerk?', 'The automatic comparison needs the check-in done with DIY Inventory, so each item has its own dated photo to compare against. If your check-in was on paper or from a clerk, do your next inspection or check-in with DIY Inventory and every report after it is compared for you.'],
       ['Can the tenant do the check-out?', 'Yes. Send them the check-out link: they photograph each room, and the comparison runs as they go. Tenants like seeing that nothing new was found before they hand the keys back.'],
-      ['How much does it cost?', 'The check-out report is £30, the comparison included, whatever the size of the property. No subscription, free until you download it.'],
+      ['How much does it cost?', 'The check-out report is £29.99, the comparison included, whatever the size of the property. No subscription, free until you download it.'],
     ];
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Check-in vs check-out, compared by AI · evidence for deposit disputes</span><h1>Every change since the check-in, found for you</h1><p>No more reading two reports side by side, and no more arguing from memory about the deposit. Start the check-out from the check-in and our AI compares every item, photo against photo, then lists what has changed: damage, wear and tear, cleaning and anything missing, with both photos side by side. £30 a check-out.</p>${cta('Start a check-out', ['See an example report', '/example-report'])}</div></div>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Check-in vs check-out, compared by AI · evidence for deposit disputes</span><h1>Every change since the check-in, found for you</h1><p>No more reading two reports side by side, and no more arguing from memory about the deposit. Start the check-out from the check-in and our AI compares every item, photo against photo, then lists what has changed: damage, wear and tear, cleaning and anything missing, with both photos side by side. £29.99 a check-out.</p>${cta('Start a check-out', ['See an example report', '/example-report'])}</div></div>
 <section class="tight"><div class="wrap"><div class="two">
   <div class="card"><h3>Landlords and agents</h3><ul>
     <li>No hour spent flicking between the check-in and the check-out: the changes are listed for you, the most serious first.</li>
@@ -78,9 +78,9 @@ ${rows.map(([r, i, t, wear]) => `<tr style="border-top:1px solid rgba(0,0,0,.08)
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Let the AI find the changes</h2><p>Start the check-out from your check-in report. Free until you download it.</p><a class="btn" href="/app?start=checkout">Start a check-out</a></div></div></div>`;
     return { key: 'compare', path: '/check-out-comparison', title: 'Check-In vs Check-Out Compared by AI: Deposit Dispute Evidence',
-      og: 'Every change since the check-in, found for you', desc: 'Our AI compares every check-out photo with its check-in photo and lists the changes, damage told apart from wear and tear: the evidence a deposit dispute needs. £30.', body,
+      og: 'Every change since the check-in, found for you', desc: 'Our AI compares every check-out photo with its check-in photo and lists the changes, damage told apart from wear and tear: the evidence a deposit dispute needs. £29.99.', body,
       jsonld: base => [{ '@type': 'Service', name: 'Check-out report with automatic check-in comparison', serviceType: 'Check-out inventory report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'Country', name: 'United Kingdom' },
-        offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['Check-out comparison', '/check-out-comparison']])] };
+        offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['Check-out comparison', '/check-out-comparison']])] };
   }
 
   function usPage(){
@@ -89,7 +89,7 @@ ${rows.map(([r, i, t, wear]) => `<tr style="border-top:1px solid rgba(0,0,0,.08)
       ['Will this help with a security deposit dispute?', 'Yes. Most states require an itemized list of deductions, and disputes usually end in small claims court, where the judge compares move-in with move-out. This report lists every change with dated move-in and move-out photos side by side, separates damage from normal wear and tear, and records what didn’t change. It is evidence, not a ruling. General information, not legal advice.'],
       ['Does it decide what comes out of the security deposit?', 'No. It says what the photos show, and whether a difference looks like damage or normal wear and tear (which most states don’t allow landlords to deduct for). What is deducted is for the landlord and tenant, or a small claims court if they disagree.'],
       ['What if the photos were taken from a different angle?', 'Only differences visible in both photos are reported. Light, angle and zoom aren’t counted as damage; if a fair comparison isn’t possible it says “couldn’t compare.”'],
-      ['How much does it cost?', 'The move-out report is {{USD}} (charged as £30 by card; your bank converts it), the comparison included. No subscription.'],
+      ['How much does it cost?', 'The move-out report is {{USD}} (charged as £29.99 by card; your bank converts it), the comparison included. No subscription.'],
     ];
     const body = `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="/us">← United States</a></p><span class="kicker">Move-in vs move-out, compared by AI · security deposit evidence</span><h1>Every change since move-in, found for you</h1><p>Start the move-out inspection from the move-in report and our AI compares every item, photo against photo, then lists what changed: damage, normal wear and tear, cleaning and anything missing, with both photos side by side. {{USD}} a move-out report.</p>${cta('Start a move-out inspection', ['Move-in inspection checklist', '/us/move-in-checklist'])}</div></div>
 <section class="tight"><div class="wrap"><div class="two">
@@ -117,7 +117,7 @@ ${rows.map(([r, i, t, wear]) => `<tr style="border-top:1px solid rgba(0,0,0,.08)
     return { key: 'compare', lang: 'en-US', path: '/us/move-out-comparison', title: 'Move-In vs Move-Out Compared by AI: Security Deposit Evidence',
       og: 'Every change since move-in, found for you', desc: 'Our AI compares every move-out photo with the move-in photo of the same item and lists the changes: damage, normal wear and tear, cleaning, missing.', body,
       jsonld: base => [{ '@type': 'Service', name: 'Move-out inspection with automatic move-in comparison', serviceType: 'Move-out inspection report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'Country', name: 'United States' },
-        offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['United States', '/us'], ['Move-out comparison', '/us/move-out-comparison']])] };
+        offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['United States', '/us'], ['Move-out comparison', '/us/move-out-comparison']])] };
   }
 
   const pages = [ukPage(), usPage()];

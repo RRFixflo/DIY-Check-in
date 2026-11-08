@@ -12,7 +12,7 @@ const crypto = require('crypto');
 const express = require('express');
 
 const KEEP_DAYS = 400;
-const REPORT_PRICE = 30;   // £, per paid report
+const REPORT_PRICE = 29.99;   // £, per paid report
 // Funnel steps the app may send to POST /api/event (anything else is ignored).
 const CLIENT_EVENTS = ['app_open', 'report_started', 'first_photo', 'report_finished', 'pay_click', 'unlocked', 'downloaded', 'midterm_link', 'midterm_reminder'];
 // Recorded by the server itself.
@@ -273,7 +273,7 @@ function mountAdmin(app, a){
       ['Started a report', people(s, 'report_started')],
       ['Took the first photo', people(s, 'first_photo')],
       ['Finished (signed and declared)', people(s, 'report_finished')],
-      ['Clicked Pay £30', people(s, 'pay_click')],
+      ['Clicked Pay £29.99', people(s, 'pay_click')],
       ['Unlocked the report', people(s, 'unlocked')],
       ['Report sold', sold],
     ];

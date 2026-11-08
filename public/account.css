@@ -299,7 +299,7 @@ details.edit.more { margin-top: 12px; }
 /* ------------------------------ The signed-in dashboard: its own header, hero, cards and tabs ------------------------------ */
 :root { --chip-ok: #E7F6EC; --chip-ok-ink: #15803D; --chip-warn: #FEF3E2; --chip-warn-ink: #B45309; --chip-bad: #FDECEA; --chip-bad-ink: #B42318; --chip-grey: #EFE6D7; --chip-grey-ink: #6B675E;
   --bar-ok: #22A55A; --bar-warn: #E59A1A; --bar-bad: #D9473B; --hero-a: #13213A; --hero-b: #1B2E4B; --hero-c: #2F4F7F; --bar-h: 64px; }
-@media (prefers-color-scheme: dark) { :root { --chip-ok: #12301F; --chip-ok-ink: #6EE7A0; --chip-warn: #33270F; --chip-warn-ink: #F2C77C; --chip-bad: #3A1715; --chip-bad-ink: #FF9C92; --chip-grey: #1E2F4E; --chip-grey-ink: #B9B2A5;
+@media (prefers-color-scheme: dark) and (min-width: 99999px) { :root { --chip-ok: #12301F; --chip-ok-ink: #6EE7A0; --chip-warn: #33270F; --chip-warn-ink: #F2C77C; --chip-bad: #3A1715; --chip-bad-ink: #FF9C92; --chip-grey: #1E2F4E; --chip-grey-ink: #B9B2A5;
   --hero-a: #0A1220; --hero-b: #1B2E4B; --hero-c: #2A4470; } }
 [hidden] { display: none !important; }
 body.lapp { overflow-x: clip; }

@@ -144,7 +144,7 @@ function mount(app, ctx){
   // Paid = the phone's paid copy arrived (submittedId), or the phone had a paid link, code or agent link (or the owner was
   // signed in) when it last backed up (_access): that's what pays, even if the phone's own upload then failed.
   const paidS = s => !!(s.submittedId || s._access);
-  // What unlocked it, in words (a £30 purchase and who, an agent's tenant link, the access code, the owner).
+  // What unlocked it, in words (a £29.99 purchase and who, an agent's tenant link, the access code, the owner).
   const via = s => ctx.accessLabel ? ctx.accessLabel(s._token, s._byOwner) : '';
   const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
 

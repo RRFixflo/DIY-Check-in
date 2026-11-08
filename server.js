@@ -12,7 +12,7 @@ const express = require('express');
 const compression = require('compression');
 const Anthropic = require('@anthropic-ai/sdk');
 const reports = require('./reports');
-// Dollar prices for US customers (cards are still charged £30 in pounds): fx.js.
+// Dollar prices for US customers (cards are still charged £29.99 in pounds): fx.js.
 const fx = require('./fx'); fx.start(reports.REPORTS_DIR);
 const certs = require('./certs');
 const address = require('./address');
@@ -57,7 +57,7 @@ app.get('/api/status', (req, res) => {
     model: anthropic ? ANTHROPIC_MODEL : '',
     reason: anthropic ? '' : 'ANTHROPIC_API_KEY is not set on the server',
     address: address.configured(),
-    usd: fx.usd(30)   // what £30 is in dollars today, shown to US customers (the card is charged in pounds)
+    usd: fx.usd(29.99)   // what £29.99 is in dollars today, shown to US customers (the card is charged in pounds)
   });
 });
 
@@ -246,11 +246,11 @@ function markLegacyUsed(token){
 const VIEWS = path.join(__dirname, 'views');
 const LAYOUT = fs.readFileSync(path.join(VIEWS, 'layout.html'), 'utf8');
 const CSS_V = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, 'public', 'site.css'))).update(fs.readFileSync(path.join(__dirname, 'public', 'site.js'))).digest('hex').slice(0, 10);
-const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone, with the PDF report ready instantly. Dated photos, tenant sign-off, side-by-side comparison. Free to start, £30 per report.';
+const DESC = 'Property inventories, check-in and check-out reports and inspections on your phone, with the PDF report ready instantly. Dated photos, tenant sign-off, side-by-side comparison. Free to start, £29.99 per report.';
 const SITE = {
   home: { path: '/', title: 'DIY Inventory · Property inventories and inspections', og: 'DIY Inventory', desc: DESC },
   how: { path: '/how-it-works', file: 'how-it-works', title: 'How it works · DIY Inventory', desc: 'How to do check-ins, inspections and check-outs on your phone with DIY Inventory, step by step.' },
-  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One report for £30: a check-in, check-out or inspection, done on your phone, with a professional PDF report.' },
+  pricing: { path: '/pricing', file: 'pricing', title: 'Pricing · DIY Inventory', desc: 'One report for £29.99: a check-in, check-out or inspection, done on your phone, with a professional PDF report.' },
   faq: { path: '/faq', file: 'faq', title: 'FAQ · DIY Inventory', desc: 'Answers to common questions about doing your own inventory report with DIY Inventory.' },
   contact: { path: '/contact', file: 'contact', title: 'Contact · DIY Inventory', desc: 'Get in touch with DIY Inventory.' },
   privacy: { path: '/privacy', file: 'privacy', title: 'Privacy · DIY Inventory', desc: 'What DIY Inventory keeps about you and why.' },
@@ -259,7 +259,7 @@ for (const [key, pg] of Object.entries(SITE)) pg.body = fs.readFileSync(path.joi
 const aiText = t => anthropic ? t.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : t.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
 SITE.faq.jsonld = () => faqLd(aiText(SITE.faq.body));
 SITE.home.jsonld = base => [{ '@type': 'SoftwareApplication', name: 'DIY Inventory', url: base + '/', applicationCategory: 'BusinessApplication', operatingSystem: 'Any (works in the phone’s web browser)',
-  description: DESC, offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP', description: 'One report: £30, paid when the finished report is downloaded. Free to start.' }, publisher: { '@id': base + '/#org' } }].concat(faqLd(aiText(SITE.home.body)));
+  description: DESC, offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP', description: 'One report: £29.99, paid when the finished report is downloaded. Free to start.' }, publisher: { '@id': base + '/#org' } }].concat(faqLd(aiText(SITE.home.body)));
 const siteBase = req => { const host = String(req.headers.host || ''); return (/^(localhost|127\.|\[::1\])/.test(host) ? 'http://' : 'https://') + host; };
 const escHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 // The site's public address: PUBLIC_URL (e.g. your own domain), else Railway's, else this request's host.
@@ -281,11 +281,11 @@ function faqLd(body){
 }
 function renderPage(pg, req, notice){
   const key = pg.key;
-  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report').split('{{USD}}').join(fx.usd(30));
+  const fill = t => t.replace(/\{\{PRICE_(gas|eicr|epc)\}\}/g, (m, g) => certs.priceText(g)).split('{{BUY_URL}}').join(escHtml(BUY_URL)).split('{{EXAMPLE_URL}}').join('/example-report').split('{{USD}}').join(fx.usd(29.99));
   // Visitors in the US (Cloudflare's country header) are pointed to the US pages, on every page that isn't already one.
   const usVisitor = !notice && pg.lang !== 'en-US' && String(req.headers['cf-ipcountry'] || '').toUpperCase() === 'US' && !/^\/(account|buy|app)/.test(pg.path || '');
-  // People in the US see the price in dollars too (“$39 (£30)”); the card is still charged £30. Not robots, so pages are indexed in pounds.
-  const body = !pg.noUsd && pg.lang !== 'en-US' && fx.usVisitor(req) ? pg.body.replace(/£30(?![\d.,])/g, fx.usd(30) + ' (£30)') : pg.body;
+  // People in the US see the price in dollars too (“$39 (£29.99)”); the card is still charged £29.99. Not robots, so pages are indexed in pounds.
+  const body = !pg.noUsd && pg.lang !== 'en-US' && fx.usVisitor(req) ? pg.body.replace(/£29\.99(?![\d])/g, fx.usd(29.99) + ' (£29.99)') : pg.body;
   let html = LAYOUT.replace('{{CONTENT}}', () => body)
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
       : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
@@ -299,7 +299,7 @@ function renderPage(pg, req, notice){
   return fill(html).replace('{{TITLE}}', () => escHtml(pg.title)).replace('{{OG_TITLE}}', () => escHtml(pg.og || pg.title))
     .replace('{{HEAD_EXTRA}}', () => VERIFY + '\n' + jsonLd(pg, base) + (pg.head ? '\n' + pg.head : ''))
     .split('{{ACCOUNT_LINK_TEXT}}').join(inAcc ? 'My dashboard' : 'Sign in').split('{{ACCOUNT_MENU_TEXT}}').join(inAcc ? 'My landlord dashboard' : 'Sign in (landlords)')
-    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).split('{{CSS_V}}').join(CSS_V).split('{{USD}}').join(fx.usd(30));
+    .split('{{DESCRIPTION}}').join(escHtml(pg.desc)).split('{{BASE}}').join(escHtml(base)).split('{{PATH}}').join(pg.path).split('{{CSS_V}}').join(CSS_V).split('{{USD}}').join(fx.usd(29.99));
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
@@ -324,7 +324,7 @@ const certPaths = certs.mountPublic(app, { REPORTS_DIR: reports.REPORTS_DIR, ren
 const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter,
   notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE }).paths;
 // Floor plans (£9.55): /floor-plan, the drawing tool /floor-plan/create, and paying by card (SumUp or Stripe): payments.js.
-// Buying a report (£30) on our own page, /buy, with the same card checkout: purchases.js.
+// Buying a report (£29.99) on our own page, /buy, with the same card checkout: purchases.js.
 const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
   track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,

@@ -7,7 +7,7 @@
   --shadow: 0 1px 2px rgba(19,33,58,.04), 0 12px 40px -12px rgba(19,33,58,.18);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) and (min-width: 99999px) {
   :root {
     --bg: #0D1626; --panel: #14213A; --soft: #1E2F4E; --ink: #F1EADF; --ink-soft: #B9B2A5; --ink-faint: #857F72;
     --line: #263553; --accent: #D9B98C; --accent-ink: #E8D5B5; --good: #4ADE80; --good-soft: #12301F;
@@ -278,7 +278,7 @@ article.prose h2 { margin-top: 26px; }
 .aurora i:nth-child(1) { width: 46%; height: 60%; left: 48%; top: 6%; background: radial-gradient(circle, rgba(196,154,108,.42), transparent 65%); animation: drift1 18s ease-in-out infinite; }
 .aurora i:nth-child(2) { width: 42%; height: 55%; left: 4%; top: 0; background: radial-gradient(circle, rgba(27,46,75,.35), transparent 65%); animation: drift2 22s ease-in-out infinite; }
 .aurora i:nth-child(3) { width: 34%; height: 46%; left: 32%; top: 30%; background: radial-gradient(circle, rgba(212,180,138,.28), transparent 65%); animation: drift3 16s ease-in-out infinite; }
-@media (prefers-color-scheme: dark) { .aurora i { mix-blend-mode: screen; } }
+@media (prefers-color-scheme: dark) and (min-width: 99999px) { .aurora i { mix-blend-mode: screen; } }
 .grid-bg { position: absolute; inset: 0 0 -40px; z-index: -1; pointer-events: none; background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 44px 44px; -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%); }
 .hero h1 { font-size: clamp(40px, 6.6vw, 74px); letter-spacing: -.045em; line-height: .98; }
 .hero h1 em { background: linear-gradient(90deg, #1B2E4B, #2F4F7F, #C49A6C, #2F4F7F, #1B2E4B); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: textShine 6s linear infinite; }
@@ -444,7 +444,7 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 
 /* Shared pieces used by the landlord area (/landlords, /account) and landlord services */
 :root { --serif: 'Plus Jakarta Sans', Inter, sans-serif; --sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; --radius: 18px; --ease: cubic-bezier(.2,.7,.2,1); --line-strong: #D6C8B0; --accent-soft: var(--soft); --warm: #C49A6C; --on-accent: #fff; --accent-hover: #14233B; }
-@media (prefers-color-scheme: dark) { :root { --line-strong: #34466A; --warm: #E2C49B; --on-accent: #fff; --accent-hover: #E6CBA2; } }
+@media (prefers-color-scheme: dark) and (min-width: 99999px) { :root { --line-strong: #34466A; --warm: #E2C49B; --on-accent: #fff; --accent-hover: #E6CBA2; } }
 .arrow { font-weight: 700; text-decoration: none; color: var(--accent); display: inline-flex; gap: 6px; align-items: center; min-height: 44px; }
 .arrow::after { content: "→"; transition: transform .2s var(--ease); }
 .arrow:hover::after { transform: translateX(3px); }
@@ -516,10 +516,10 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 .pdf .ph::after { display: none; }
 
 /* Beige and navy: in dark mode the buttons use a lighter navy so they stand out from the background */
-@media (prefers-color-scheme: dark) { :root { --grad: linear-gradient(135deg, #2F4F7F 0%, #46699E 100%); } .btn.primary { background-image: linear-gradient(120deg, #2F4F7F, #46699E, #C49A6C, #2F4F7F); } }
+@media (prefers-color-scheme: dark) and (min-width: 99999px) { :root { --grad: linear-gradient(135deg, #2F4F7F 0%, #46699E 100%); } .btn.primary { background-image: linear-gradient(120deg, #2F4F7F, #46699E, #C49A6C, #2F4F7F); } }
 /* Navy panels and dark mode: camel buttons and a light headline so nothing navy sits on navy */
 .instant .btn.primary { background-image: linear-gradient(120deg, #C49A6C, #D9B37C, #E2C49B, #C49A6C); color: #13213A; }
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) and (min-width: 99999px) {
   .hero h1 em { background-image: linear-gradient(90deg, #D9B37C, #F1E3CB, #C49A6C, #D9B37C); }
 }
 /* Buy first, for a tenant to do the report */
@@ -560,7 +560,7 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 a.card.fp-home-art { display: block; padding: 14px; color: inherit; text-decoration: none; max-width: 500px; justify-self: center; width: 100%; animation: floatC 9s ease-in-out infinite; }
 .fp-home-art img { width: 100%; height: auto; display: block; border-radius: 14px; box-shadow: 0 0 0 1px var(--line); }
 .fp-home-area { display: table; margin: 12px auto 2px; background: var(--panel); color: var(--ink); font-weight: 700; font-size: 13.5px; border-radius: 999px; padding: 6px 12px; box-shadow: var(--shadow), 0 0 0 1px var(--line); }
-@media (prefers-color-scheme: dark) { .fp-home h2 em { background-image: linear-gradient(90deg, #D9B37C, #F1E3CB); } }
+@media (prefers-color-scheme: dark) and (min-width: 99999px) { .fp-home h2 em { background-image: linear-gradient(90deg, #D9B37C, #F1E3CB); } }
 @media (max-width: 900px) { .fp-home-wrap { grid-template-columns: 1fr; gap: 28px; } }
 /* One more link in the header (Floor plans): switch to the menu button a little earlier */
 @media (max-width: 1240px) { .top nav a.link, .top nav > .btn { display: none; } .menu { display: block; } }
@@ -580,3 +580,123 @@ a.card.fp-home-art { display: block; padding: 14px; color: inherit; text-decorat
 .area-facts b { display: block; font: 800 30px/1.15 'Plus Jakarta Sans', Inter, sans-serif; color: var(--ink); margin: 6px 0 4px; }
 .area-facts .t { display: block; font-size: 14px; color: var(--ink-soft); }
 .area-facts .src, .prose .src { font-size: 12.5px; color: var(--ink-faint); }
+
+
+/* =====================================================================================================
+   2026 light look (the owner chose it, Nov 2026): white pages with pale grey bands (no cream), navy text,
+   camel accents, the Geist font with light, tightly spaced headlines, key words that slowly shift colour
+   (navy → blue → camel), and on the home page a house built from flying triangles. Always light: the old
+   dark-mode rules above only apply at an impossible width (min-width: 99999px), so they are switched off.
+   ===================================================================================================== */
+:root {
+  --bg: #FFFFFF; --panel: #FFFFFF; --soft: #F6F7F9; --ink: #13213A; --ink-soft: #4A5568; --ink-faint: #8A8F99;
+  --line: #E6E9EE; --line-strong: #CDD4DF; --accent: #1B2E4B; --accent-2: #2F6FB0; --accent-ink: #14233B; --camel: #C49A6C; --camel-d: #9A6F3E;
+  --grad: linear-gradient(135deg, #1B2E4B 0%, #2F4F7F 100%);
+  --shift: linear-gradient(90deg, #1B2E4B, #2F6FB0, #C49A6C, #8A6A45, #2F4F7F, #1B2E4B);
+  --shadow: 0 1px 2px rgba(19,33,58,.04), 0 16px 40px -18px rgba(19,33,58,.18);
+  color-scheme: light;
+}
+body { background: #fff; font-family: Geist, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: -.005em; }
+h1, h2, h3, .brand, .area-facts b { font-family: Geist, Inter, sans-serif; }
+h1 { font-weight: 400; letter-spacing: -.045em; }
+h2 { font-weight: 400; letter-spacing: -.035em; }
+h3 { font-weight: 600; letter-spacing: -.02em; }
+.brand { font-weight: 600; letter-spacing: -.02em; }
+header.top { background: rgba(255,255,255,.82); }
+.btn { font-weight: 600; }
+.btn.primary { background: #1B2E4B; background-image: none; color: #fff; }
+.btn.ghost { background: #fff; }
+.card, .area-facts .af { box-shadow: 0 0 0 1px var(--line), var(--shadow); }
+.stats-band, .marquee { background: var(--soft); }
+.page-head { background: linear-gradient(180deg, #F6F8FB, #fff); }
+/* words that shift colour: the hero headline's <em> and any .shift */
+.hero h1 em, .shift, .fp-home h2 em, .page-head h1 em { font-style: normal; background: var(--shift); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shiftHue 8s linear infinite; }
+@keyframes shiftHue { to { background-position: 300% 0; } }
+.hero h1 { font-weight: 400; font-size: clamp(40px, 6vw, 76px); line-height: 1.02; letter-spacing: -.045em; animation: riseIn 1s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes riseIn { from { opacity: 0; transform: translateY(.35em); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
+.hero .lead { font-weight: 300; }
+/* the hero's background: pale blue, lavender and light camel clouds; no grid */
+.grid-bg { display: none; }
+.aurora i { mix-blend-mode: normal; }
+.aurora i:nth-child(1) { background: radial-gradient(circle, rgba(201,216,238,.75), transparent 65%); }
+.aurora i:nth-child(2) { background: radial-gradient(circle, rgba(232,224,246,.8), transparent 65%); }
+.aurora i:nth-child(3) { background: radial-gradient(circle, rgba(241,226,200,.6), transparent 65%); }
+
+/* the house */
+.house-wrap { display: flex; justify-content: center; }
+.house { width: min(100%, 560px); height: auto; overflow: visible; animation: houseFloat 9s ease-in-out infinite; }
+@keyframes houseFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.house polygon { stroke: var(--c); transform-box: fill-box; transform-origin: center; }
+.house-on .house .parts polygon { animation: triIn 2.6s cubic-bezier(.2,.75,.2,1) both, triOut 1.2s ease 2.6s forwards; animation-delay: var(--b), 2.6s; }
+.house-on .house .parts polygon.amb { animation: triIn 2.6s cubic-bezier(.2,.75,.2,1) both, triDrift 12s ease-in-out infinite; animation-delay: var(--b), var(--d); }
+@keyframes triIn { from { transform: translate(var(--dx), var(--dy)) rotate(90deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes triOut { to { opacity: 0; } }
+@keyframes triDrift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(8px, -10px); } }
+.house-on .house .solid { clip-path: inset(100% 0 0 0); animation: houseUp 1.4s cubic-bezier(.65,0,.25,1) 2.3s forwards; }
+@keyframes houseUp { to { clip-path: inset(-10% 0 0 0); } }
+.house .win rect { animation: winGlow 5s ease-in-out 4s infinite; }
+.house .w2 rect { animation-delay: 5.2s; }
+@keyframes winGlow { 0%, 100% { fill: #DCE7F5; } 50% { fill: #F6E7C8; } }
+
+/* home page sections from the new design: the report on a phone, and the AI deposit section */
+.nx-row { padding: 96px 0; }
+.nx-alt { background: var(--soft); }
+.nx-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; align-items: center; }
+.nx-vis { display: flex; justify-content: center; }
+.nx-label { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--camel-d); }
+.nx-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--camel); animation: ping 2.4s ease-out infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(196,154,108,.55); } 80%, 100% { box-shadow: 0 0 0 10px rgba(196,154,108,0); } }
+.nx-copy h2 { font-size: clamp(34px, 4.6vw, 60px); line-height: 1.04; margin: 18px 0 18px; }
+.nx-copy .shift { font-style: normal; }
+.nx-body { font-size: 19px; line-height: 1.55; font-weight: 300; color: var(--ink); max-width: 520px; margin: 0; }
+.nx-body b { font-weight: 500; }
+.nx-facts { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 32px; }
+.nx-facts div { font-size: 14px; font-weight: 300; color: var(--ink-soft); }
+.nx-facts b { display: block; font-size: 44px; font-weight: 400; letter-spacing: -.04em; color: var(--ink); line-height: 1.05; }
+.nx-copy .cta { margin-top: 28px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.nx-link { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding-bottom: 4px; background: linear-gradient(90deg, #C49A6C, #2F6FB0, #C49A6C) 0 100% / 200% 1px no-repeat; animation: lineMove 5s linear infinite; }
+@keyframes lineMove { to { background-position: 200% 100%; } }
+.nx-changes { list-style: none; margin: 18px 0 0; padding: 0; }
+.nx-changes li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-top: 1px solid var(--line); }
+.nx-changes li:last-child { border-bottom: 1px solid var(--line); }
+.nx-changes .what { font-size: 22px; letter-spacing: -.02em; }
+.nx-changes .k { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--camel-d); margin-bottom: 5px; }
+.nx-changes .d { font-size: 16px; font-weight: 300; line-height: 1.5; }
+.nx-small { font-size: 13px; font-weight: 300; color: var(--ink-faint); margin: 16px 0 0; }
+.rd .mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+@media (max-width: 900px) {
+  .nx-row { padding: 64px 0; }
+  .nx-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .nx-facts { gap: 24px; } .nx-facts b { font-size: 34px; }
+  .nx-changes li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .rdwrap { transform: scale(.88); transform-origin: top center; height: 530px; }
+}
+.rd-finger{animation:rdFinger 12s ease-in-out infinite}
+.rd-photo{animation:rdZoom 12s ease-in-out infinite}
+.rd-back{animation:rdBack 12s ease-in-out infinite}
+.rd-note{animation:rdNote 12s ease-in-out infinite}
+.rd-below{animation:rdBelow 12s ease-in-out infinite}
+.rd-type{animation:rdType 12s steps(40,end) infinite;width:0}
+.rd-caret{animation:rdCaret 12s linear infinite}
+.rd-saved{animation:rdSaved 12s ease-in-out infinite;opacity:0}
+.rd-addnote{animation:rdAdd 12s ease-in-out infinite}
+@keyframes rdFinger{0%{transform:translate(182px,500px);opacity:0}6%{transform:translate(182px,500px);opacity:1}14%{transform:translate(36px,114px) scale(1)}16%{transform:translate(36px,114px) scale(.8)}18%{transform:translate(36px,114px) scale(1)}28%{transform:translate(122px,258px) scale(1)}38%{transform:translate(122px,258px) scale(1)}40%{transform:translate(122px,258px) scale(.8)}42%{transform:translate(122px,258px) scale(1)}52%{transform:translate(198px,133px) scale(1)}54%{transform:translate(198px,133px) scale(.8)}56%{transform:translate(198px,133px) scale(1)}76%{transform:translate(198px,150px) scale(1)}82%{transform:translate(214px,216px) scale(1)}84%{transform:translate(214px,216px) scale(.8)}86%{transform:translate(214px,216px) scale(1);opacity:1}96%{transform:translate(182px,500px);opacity:0}100%{transform:translate(182px,500px);opacity:0}}
+@keyframes rdZoom{0%,17%{transform:translate(12px,-46px) scale(.2222);opacity:0}18%{transform:translate(12px,-46px) scale(.2222);opacity:1}26%,40%{transform:translate(0,0) scale(1);opacity:1}48%{transform:translate(12px,-46px) scale(.2222);opacity:1}49%,100%{transform:translate(12px,-46px) scale(.2222);opacity:0}}
+@keyframes rdBack{0%,18%{opacity:0}26%,40%{opacity:.6}48%,100%{opacity:0}}
+@keyframes rdNote{0%,56%{height:0;opacity:0}60%,92%{height:72px;opacity:1}97%,100%{height:0;opacity:0}}
+@keyframes rdBelow{0%,56%{transform:translateY(0)}60%,92%{transform:translateY(78px)}97%,100%{transform:translateY(0)}}
+@keyframes rdType{0%,61%{width:0}78%,92%{width:232px}97%,100%{width:0}}
+@keyframes rdCaret{0%,60%{opacity:0}61%,79%{opacity:1}80%,100%{opacity:0}}
+@keyframes rdSaved{0%,85%{opacity:0}87%,94%{opacity:1}97%,100%{opacity:0}}
+@keyframes rdAdd{0%,53%{background:#fff}54%,58%{background:rgba(196,154,108,.35)}60%,100%{background:#fff}}
+@media (prefers-reduced-motion: reduce){.rd *{animation:none !important}.rd-finger,.rd-photo,.rd-back{opacity:0 !important}}
+@media (prefers-reduced-motion: reduce) {
+  .hero h1, .hero h1 em, .shift, .house, .house .win rect, .nx-label::before, .nx-link { animation: none !important; }
+  .hero h1 em, .shift { color: var(--accent); background: none; }
+}
+/* Light headings everywhere (the older rules above set many of them to 800) */
+body h1, body h2, body .sec-head h2, body .page-head h1, body .instant h2, body .fp-home h2, body .final h2 { font-weight: 500; letter-spacing: -.035em; }
+body .hero h1 { font-weight: 400; font-size: clamp(40px, 5vw, 64px); }
+body .nx-copy h2 { font-weight: 400; }
+body h3, body .brand { font-weight: 600; }
+body .stat b, body .area-facts b { font-weight: 500; letter-spacing: -.03em; }

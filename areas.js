@@ -96,7 +96,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
   function hub(p){
     const d = D[p.slug], s = SALES[p.slug], w = place(p), P = Place(p);
     const qs = [
-      ['How much does an inventory clerk cost in ' + P + '?', 'Clerks usually charge per visit, more for bigger or furnished homes, so a check-in and a check-out together often come to a few hundred pounds. With DIY Inventory each report is £30, whatever the size, and you can do it as soon as you have the keys.'],
+      ['How much does an inventory clerk cost in ' + P + '?', 'Clerks usually charge per visit, more for bigger or furnished homes, so a check-in and a check-out together often come to a few hundred pounds. With DIY Inventory each report is £29.99, whatever the size, and you can do it as soon as you have the keys.'],
       d.rent && d.rent.text ? ['What is the average rent in ' + P + '?', d.rent.text + '. Rents vary a lot by street and type of home; the free property report shows sold prices, the EPC and more for any ' + P + ' postcode.'] : null,
       licText(d).length ? ['Do landlords need a licence in ' + P + '?', licText(d).map(x => x[0] + ': ' + x[1]).join(' ') + ' Check the council’s own page before letting, as schemes change.'] : null,
       ['Can I do my own check-in inventory in ' + P + '?', 'Yes. Landlords, agents and tenants can do it on a phone: a photo checklist for every room, the date and time stamped on every photo, every item’s condition, and both sides sign. The PDF is ready the moment it’s signed.'],
@@ -108,7 +108,7 @@ SELECT ?ptype (COUNT(?tx) AS ?n) (AVG(?amount) AS ?avg) WHERE {
   ${tips(p, d)}
   <div class="card"><h3>Do it yourself in ${e(P)}</h3><ul>
     <li>No clerk to book: do it whenever you have the keys, before the tenant moves in or with them there.</li>
-    <li>£30 a report instead of a clerk’s fee for every check-in, inspection and check-out.</li>
+    <li>£29.99 a report instead of a clerk’s fee for every check-in, inspection and check-out.</li>
     <li>The check-out starts from the check-in and shows what has changed, photos side by side.</li>
     <li>Prefer paper? Use the <a href="/inventory-template">free inventory template</a>.</li>
   </ul><p style="margin:14px 0 0"><a class="btn primary sm" href="/app">Start free</a> <a class="btn ghost sm" href="/example-report">Example report</a></p></div>
@@ -120,8 +120,8 @@ ${d.neighbourhoods && d.neighbourhoods.length ? `<section style="padding-top:0">
   <a class="card feature" style="text-decoration:none;color:inherit" href="/property-report"><h3>Free property report</h3><p>EPC, sold prices, crime, flood risk and rental yield for any ${e(P)} postcode.</p></a>
 </div></div></section>
 ${faqHtml('Inventories in ' + P + ': questions', qs)}${near(p, d, '')}${final(p, 'Start your ' + P + ' inventory today, on your phone. It’s free until you download it.')}`;
-    return pg(p, '', 'Inventory clerk in ' + P + '? Do your own inventory for £30', 'Inventories, check-ins and check-outs in ' + w + ', done on your phone for £30. Local rents, sold prices, landlord licensing and what to check in ' + P + ' homes.', body,
-      ld(p, '', '', qs, base => [{ '@type': 'Service', name: 'Inventory and check-in reports in ' + P, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'AdministrativeArea', name: p.official.replace(/^the /, ''), containedInPlace: p.london ? { '@type': 'City', name: 'London' } : { '@type': 'AdministrativeArea', name: p.county || p.region } }, offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }]));
+    return pg(p, '', 'Inventory clerk in ' + P + '? Do your own inventory for £29.99', 'Inventories, check-ins and check-outs in ' + w + ', done on your phone for £29.99. Local rents, sold prices, landlord licensing and what to check in ' + P + ' homes.', body,
+      ld(p, '', '', qs, base => [{ '@type': 'Service', name: 'Inventory and check-in reports in ' + P, serviceType: 'Property inventory and inspection report', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'AdministrativeArea', name: p.official.replace(/^the /, ''), containedInPlace: p.london ? { '@type': 'City', name: 'London' } : { '@type': 'AdministrativeArea', name: p.county || p.region } }, offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }]));
   }
 
   /* --------------------------------- for landlords --------------------------------- */
@@ -131,7 +131,7 @@ ${faqHtml('Inventories in ' + P + ': questions', qs)}${near(p, d, '')}${final(p,
       lt.length ? ['Is there selective licensing in ' + P + '?', (d.licensing.selective || 'Check with the council.') + ' Check the council’s page before letting: schemes are renewed and changed every few years.'] : null,
       ['What certificates does a landlord need in ' + P + '?', 'A Gas Safety certificate every 12 months (where there is gas), an electrical safety report (EICR) at least every 5 years, and a valid EPC rated E or above, plus working smoke alarms on every storey and carbon monoxide alarms by fixed combustion appliances.'],
       ['How long do I have to protect a deposit?', '30 days from receiving it, in the DPS, TDS or mydeposits, with the prescribed information given to the tenant in the same 30 days.'],
-      ['Do I need an inventory as a landlord in ' + P + '?', 'It isn’t a legal requirement, but without a signed check-in record it is very hard to claim anything from the deposit at the end. With DIY Inventory you can do it yourself for £30, or send your tenant a link to do it.'],
+      ['Do I need an inventory as a landlord in ' + P + '?', 'It isn’t a legal requirement, but without a signed check-in record it is very hard to claim anything from the deposit at the end. With DIY Inventory you can do it yourself for £29.99, or send your tenant a link to do it.'],
     ].filter(Boolean);
     const body = head(p, 'For landlords', 'Letting a property in ' + P + ': a landlord’s guide', 'Licensing, certificates, deposits and the local figures for landlords letting in ' + e(place(p)) + '.', 'landlords') + `
 <section class="tight"><div class="wrap">${facts(p, d, s)}</div></section>
@@ -149,7 +149,7 @@ ${faqHtml('Inventories in ' + P + ': questions', qs)}${near(p, d, '')}${final(p,
   ${d.checkinTips && d.checkinTips.length ? `<h2>What to record in ${e(P)} homes</h2><ul>${d.checkinTips.map(t => `<li>${e(t)}</li>`).join('')}</ul>` : ''}
   <p><a class="btn primary" href="/app">Start your inventory free</a></p>
 </div>${salesTable(p, s)}</div></section>
-${faqHtml('Letting in ' + P + ': questions', qs)}${near(p, d, 'landlords')}${final(p, 'Do your ' + P + ' check-in yourself, on your phone, for £30.')}`;
+${faqHtml('Letting in ' + P + ': questions', qs)}${near(p, d, 'landlords')}${final(p, 'Do your ' + P + ' check-in yourself, on your phone, for £29.99.')}`;
     return pg(p, 'landlords', 'Letting in ' + P + ': licensing, certificates and inventories', 'A landlord’s guide to letting in ' + place(p) + ': selective and HMO licensing, safety certificates, deposits, local rents and prices, and doing your own inventory.', body, ld(p, 'landlords', 'Landlords', qs));
   }
 

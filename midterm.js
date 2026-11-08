@@ -31,10 +31,10 @@ function mount(app, ctx){
       ['Do I have to give the tenant notice?', 'In England, a landlord must give at least 24 hours’ written notice to inspect, at a reasonable time, and the tenant can ask for another time. When the tenant does the inspection themselves from a link, there is no visit to arrange: they do it when it suits them.'],
       ['Can the tenant do the mid-term inspection?', 'Yes. Send them a link: they photograph each room on their phone as the app walks them through it, every photo has the date and time burned in, and you get the PDF report, compared with the check-in. Many tenants prefer it to a visit.'],
       ['What should a mid-term inspection check?', 'Every room’s condition against the check-in, signs of damp, mould or leaks, the boiler and any visible pipework, smoke and carbon monoxide alarms (press the test button), windows and locks, appliances, the garden, and the meter readings. Our mid-tenancy inspection checklist lists the lot.'],
-      ['How much does it cost?', 'Each inspection is £30 with DIY Inventory, whatever the size of the property. An inventory clerk or agent usually charges much more for every visit.'],
+      ['How much does it cost?', 'Each inspection is £29.99 with DIY Inventory, whatever the size of the property. An inventory clerk or agent usually charges much more for every visit.'],
       ['Does it help at check-out?', 'Yes. Each inspection is a dated record part-way through the tenancy. If damage is found at check-out, the inspections show when it appeared and whether it was reported, which is the evidence a deposit scheme’s adjudicator weighs.'],
     ];
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Mid-term inspections</span><h1>Mid-term property inspections, without the visit</h1><p>Send your tenant a link. They photograph every room on their phone, the date and time burned into each photo, and you get a PDF report compared with the check-in, the same day. £30 an inspection, no clerk and no appointment.</p>${cta('Start a mid-term inspection', ['See an example report', '/example-report'])}</div></div>
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Mid-term inspections</span><h1>Mid-term property inspections, without the visit</h1><p>Send your tenant a link. They photograph every room on their phone, the date and time burned into each photo, and you get a PDF report compared with the check-in, the same day. £29.99 an inspection, no clerk and no appointment.</p>${cta('Start a mid-term inspection', ['See an example report', '/example-report'])}</div></div>
 <section class="tight"><div class="wrap"><div class="two">
   <div class="card"><h3>Landlords and agents</h3><ul>
     <li>No trip to the property and no 24 hours’ notice to arrange: the tenant does it when it suits them.</li>
@@ -62,10 +62,10 @@ function mount(app, ctx){
   ${faqHtml(faqs)}
 </div></section>
 <div class="final"><div class="wrap"><div class="card"><h2>Inspect this month</h2><p>Start from your check-in report, or send your tenant the link. It’s free until you download the report.</p><a class="btn" href="/app?start=inspection">Start a mid-term inspection</a></div></div></div>`;
-    return { key: 'midterm', path: '/mid-term-inspection', title: 'Mid-Term Property Inspection: Tenant Does It From a Link · £30',
-      og: 'Mid-term property inspections, without the visit', desc: 'Mid-term (mid-tenancy) inspections for £30: send your tenant a link, they photograph every room, and you get a dated PDF compared with the check-in.', body,
+    return { key: 'midterm', path: '/mid-term-inspection', title: 'Mid-Term Property Inspection: Tenant Does It From a Link · £29.99',
+      og: 'Mid-term property inspections, without the visit', desc: 'Mid-term (mid-tenancy) inspections for £29.99: send your tenant a link, they photograph every room, and you get a dated PDF compared with the check-in.', body,
       jsonld: base => [{ '@type': 'Service', name: 'Mid-term property inspection report', serviceType: 'Mid-tenancy property inspection', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'Country', name: 'United Kingdom' },
-        offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['Mid-term inspections', '/mid-term-inspection']])] };
+        offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['Mid-term inspections', '/mid-term-inspection']])] };
   }
 
   /* ---------------------------------------------------------------- US page */
@@ -75,7 +75,7 @@ function mount(app, ctx){
       ['How often can a landlord inspect a rental?', 'Most landlords and property managers inspect every 3 to 6 months. Most states require reasonable notice before a landlord enters, often 24 hours (some states set 48 hours or more), so check your state’s rules and your lease.'],
       ['Can the tenant do the inspection themselves?', 'Yes. Send them a link: they photograph each room on their phone as the app walks them through it, the date and time are burned into every photo, and you get a PDF report compared with the move-in inspection. No visit and no entry notice needed.'],
       ['What should a mid-lease inspection check?', 'Every room against the move-in report, leaks under sinks and around toilets, signs of mold, the water heater and furnace area, the HVAC filter, smoke and CO detectors (press test), windows, doors and locks, appliances, the yard and gutters, and the meter readings.'],
-      ['How much does it cost?', 'Each inspection is {{USD}} (charged as £30 by card; your bank converts it), whatever the size of the home. No subscription.'],
+      ['How much does it cost?', 'Each inspection is {{USD}} (charged as £29.99 by card; your bank converts it), whatever the size of the home. No subscription.'],
       ['Does it help with the security deposit at move-out?', 'Yes. Dated inspections during the lease show when damage appeared and whether it was reported, the evidence a small claims court looks at if deductions are disputed.'],
     ];
     const body = `<div class="page-head"><div class="wrap"><p style="margin:0 0 6px"><a href="/us">← United States</a></p><span class="kicker">Routine inspections</span><h1>Routine rental inspections, without the visit</h1><p>Send your tenant a link. They photograph every room on their phone, the date and time burned into each photo, and you get a PDF report compared with the move-in inspection. {{USD}} an inspection, no inspector and no entry notice.</p>${cta('Start a routine inspection', ['Move-in inspection checklist', '/us/move-in-checklist'])}</div></div>
@@ -109,7 +109,7 @@ function mount(app, ctx){
     return { key: 'midterm', lang: 'en-US', path: '/us/routine-inspection', title: 'Routine Rental Inspection App: Tenant Does It From a Link',
       og: 'Routine rental inspections, without the visit', desc: 'Routine (mid-lease) rental inspections: send your tenant a link, they photograph every room, and you get a dated PDF compared with move-in. Free to start.', body,
       jsonld: base => [{ '@type': 'Service', name: 'Routine rental inspection report', serviceType: 'Mid-lease rental inspection', provider: { '@id': base + '/#org' }, areaServed: { '@type': 'Country', name: 'United States' },
-        offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['United States', '/us'], ['Routine inspections', '/us/routine-inspection']])] };
+        offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }, faqLd(faqs), crumbs(base, [['Home', '/'], ['United States', '/us'], ['Routine inspections', '/us/routine-inspection']])] };
   }
 
   const pages = [ukPage(), usPage()];

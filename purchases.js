@@ -1,4 +1,4 @@
-// Buying a report, £30 (GBP, no VAT), on DIY Inventory's own page. The card payment itself is the shared checkout
+// Buying a report, £29.99 (GBP, no VAT), on DIY Inventory's own page. The card payment itself is the shared checkout
 // in payments.js (SumUp hosted checkout, or Stripe Checkout). A paid purchase gives a personal link /?access=RPT-…:
 // a local token, checked here (never by any other system), good for one report.
 //
@@ -17,7 +17,7 @@ const crypto = require('crypto');
 const express = require('express');
 const payments = require('./payments');
 
-const PRICE = 30, PENCE = 3000, PRICE_TEXT = '£30';
+const PRICE = 29.99, PENCE = 2999, PRICE_TEXT = '£29.99';
 const REF_RE = /^[a-f0-9]{24}$/, TOKEN_RE = /^RPT-[A-Za-z0-9_-]{24}$/;
 const env = k => String(process.env[k] || '').trim();
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -44,7 +44,7 @@ function access(token){
 }
 // The buyer's email for a paid purchase token ('' if none was given), so their finished report can be emailed to them.
 function emailFor(token){ if (!isToken(token)) return ''; const r = find('token', token); return r && r.status === 'paid' ? String(r.email || '') : ''; }
-// Who paid, for /admin: '£30 paid on 6 Nov by Chloe Bartlett (chloe@…)' for a paid purchase token, '' otherwise.
+// Who paid, for /admin: '£29.99 paid on 6 Nov by Chloe Bartlett (chloe@…)' for a paid purchase token, '' otherwise.
 function describe(token){
   if (!isToken(token)) return '';
   const r = find('token', token); if (!r || r.status !== 'paid') return '';
@@ -107,7 +107,7 @@ function mount(app, ctx){
     if (!rec || rec.status === 'paid') return rec;
     const last = lastCheck.get(rec.ref) || 0; if (Date.now() - last < 3000) return rec;
     lastCheck.set(rec.ref, Date.now()); if (lastCheck.size > 2000) lastCheck.clear();
-    let v; try { v = await payments.verify({ provider: rec.provider, providerId: rec.providerId, ref: rec.ref, amountPence: PENCE, tag: 'report' }); }
+    let v; try { v = await payments.verify({ provider: rec.provider, providerId: rec.providerId, ref: rec.ref, amountPence: Math.round((Number(rec.amount) || PRICE) * 100), tag: 'report' }); }
     catch (e) { console.error('report: checking ' + rec.ref + ' failed: ' + e.message); return rec; }
     if (!v.paid) return update(rec.ref, r => { r.providerStatus = v.status; }) || rec;
     let first = false;
@@ -128,7 +128,7 @@ function mount(app, ctx){
   const head = '<style>' + CSS + '</style>';
   function buyPage(req, o){
     const forTenant = o.for === 'tenant', fromApp = o.from === 'app', on = !!payments.provider();
-    // People in the US see dollars (today's rate); the card is still charged £30 by SumUp or Stripe, in pounds.
+    // People in the US see dollars (today's rate); the card is still charged £29.99 by SumUp or Stripe, in pounds.
     const fx = require('./fx'), us = fx.usVisitor(req), usd = fx.usd(PRICE);
     const amt = us ? usd : PRICE_TEXT;
     const lead = fromApp ? 'Pay once to download your finished report, send it, and get it signed. Your report is saved on your phone and waiting for you.'
@@ -146,17 +146,17 @@ function mount(app, ctx){
       <li>${tick}<span>Tenant sign-off on their phone, added to the report as a signed page</span></li>
       <li>${tick}<span>${forTenant ? 'Your tenant opens the link and does the report: they never see a price' : 'Use it yourself, or send the link to your tenant: they never see a price'}</span></li>
     </ul>
-    <p class="buy-small">${us ? `No subscription and no monthly fee. The price is £30.00 in British pounds, about ${usd} today. Your card is charged £30.00 and your bank converts it to dollars; some US cards add a small foreign transaction fee.` : 'No subscription and no monthly fee. Prices are in pounds sterling (GBP); if your card is in another currency, your bank converts it.'}</p>
+    <p class="buy-small">${us ? `No subscription and no monthly fee. The price is £29.99 in British pounds, about ${usd} today. Your card is charged £29.99 and your bank converts it to dollars; some US cards add a small foreign transaction fee.` : 'No subscription and no monthly fee. Prices are in pounds sterling (GBP); if your card is in another currency, your bank converts it.'}</p>
   </div>
   <div class="card buy-pay">
     <div class="buy-amt">${amt}</div>
-    <div class="buy-amt-sub">${us ? 'One report · paid once · charged as £30.00' : 'One report · paid once'}</div>
+    <div class="buy-amt-sub">${us ? 'One report · paid once · charged as £29.99' : 'One report · paid once'}</div>
     ${on ? `<form class="form" method="post" action="/buy">
       <input type="hidden" name="for" value="${forTenant ? 'tenant' : ''}"><input type="hidden" name="from" value="${fromApp ? 'app' : ''}">
       <label><b>Your name <span>optional</span></b><input name="name" autocomplete="name" maxlength="80" value="${esc(o.name || '')}"></label>
       <label><b>Your email <span>optional, for your receipt and your link</span></b><input name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" value="${esc(o.email || '')}"></label>
-      <button class="btn primary buy-btn" type="submit">Pay ${us ? usd + ' (£30)' : PRICE_TEXT}</button>
-      <p class="buy-small">You pay by card on our payment provider’s secure page${payments.provider() === 'sumup' ? ' (SumUp)' : ' (Stripe)'}, then come straight back here for your link.${us ? ' That page shows the price in pounds, £30.00: it’s the same ' + usd + '.' : ''}</p>
+      <button class="btn primary buy-btn" type="submit">Pay ${us ? usd + ' (£29.99)' : PRICE_TEXT}</button>
+      <p class="buy-small">You pay by card on our payment provider’s secure page${payments.provider() === 'sumup' ? ' (SumUp)' : ' (Stripe)'}, then come straight back here for your link.${us ? ' That page shows the price in pounds, £29.99: it’s the same ' + usd + '.' : ''}</p>
     </form>` : `<div class="buy-off"><b>Card payments are being switched on.</b><p>You can’t pay online just yet. <a href="/contact">Contact us</a> and we’ll set you up with a report straight away. Been given an access code? Enter it below.</p><a class="btn primary buy-btn" href="/contact">Contact us</a></div>`}
     <details class="buy-code"${on ? '' : ' open'}><summary>Have a link or an access code?</summary>
       <form method="get" action="/"><input name="access" placeholder="Link or access code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Access code" required><button class="btn ghost">Go</button></form>

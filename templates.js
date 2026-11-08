@@ -3,7 +3,7 @@
 //   printable PDF (pdf-lib, A4 portrait) and an editable Word version (HTML saved as .doc, which Word opens),
 //   made from the app's own room checklists, so they follow the app. Each ends with a line about doing it on
 //   a phone instead.
-// - /inventory-clerk: what an inventory clerk does, what it costs, and doing it yourself for £30.
+// - /inventory-clerk: what an inventory clerk does, what it costs, and doing it yourself for £29.99.
 // Mounted from seo.js, which adds the pages to the sitemap and llms.txt.
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 
@@ -127,7 +127,7 @@ ${tbl(['', 'Name', 'Signature', 'Date'], [['Landlord / agent', '', '', ''], ['Te
 
   /* ------------------------------------------------------------------ the pages */
   const dl = kind => { const K = KINDS[kind]; return `<div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0"><a class="btn primary" href="/templates/${K.file}.pdf?download=1">⬇ Download PDF (printable)</a><a class="btn ghost" href="/templates/${K.file}.doc">⬇ Download Word (editable)</a><a class="btn ghost" href="/templates/${K.file}.pdf" target="_blank" rel="noopener">Preview</a></div>`; };
-  const vsApp = `<div class="card" style="margin-top:18px"><h2 style="margin-top:0">Quicker: do it on your phone instead</h2><p>A paper template works, but photos and notes end up in different places. DIY Inventory does the same job on your phone: every room gets its own checklist, the camera steps through each item and stamps the date and time on every photo, and the finished PDF report (with every photo in it) is ready the moment it’s signed. The tenant can check and sign it from a link.</p><p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn primary" href="/app">Start free</a><a class="btn ghost" href="/example-report">See an example report</a></p><p class="sub" style="margin:0">Free to start, £30 when you download the finished report. No subscription.</p></div>`;
+  const vsApp = `<div class="card" style="margin-top:18px"><h2 style="margin-top:0">Quicker: do it on your phone instead</h2><p>A paper template works, but photos and notes end up in different places. DIY Inventory does the same job on your phone: every room gets its own checklist, the camera steps through each item and stamps the date and time on every photo, and the finished PDF report (with every photo in it) is ready the moment it’s signed. The tenant can check and sign it from a link.</p><p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn primary" href="/app">Start free</a><a class="btn ghost" href="/example-report">See an example report</a></p><p class="sub" style="margin:0">Free to start, £29.99 when you download the finished report. No subscription.</p></div>`;
   const roomList = `<h2>What’s in it</h2><ul><li>Property and tenancy details, meter readings, keys, and smoke and carbon monoxide alarms.</li><li>Outside and the front of the property.</li>${ROOMS.filter(([t]) => items(t).length).map(([t, label]) => `<li><a href="/checklists/${t === 'living' ? 'living-room' : t === 'utility' ? 'utility-room' : t}">${e(label)}</a>: ${e(items(t).slice(0, 5).join(', '))} and ${Math.max(0, items(t).length - 5)} more.</li>`).join('')}<li>A declaration and signatures for both sides.</li></ul>`;
   const others = kind => `<h2>Other free templates</h2><p>${Object.keys(KINDS).filter(k => k !== kind).map(k => `<a href="${KINDS[k].page}">${e(KINDS[k].short)}</a>`).join(' · ')} · <a href="/checklists">Room-by-room checklists</a> · <a href="/inventory-clerk">Inventory clerk or do it yourself?</a></p>`;
   const faqBlock = faqs => `<h2>Questions</h2><div class="faq">${faqs.map(([q, a]) => `<details><summary>${e(q)}</summary><p>${e(a)}</p></details>`).join('')}</div>`;
@@ -188,20 +188,20 @@ ${tbl(['', 'Name', 'Signature', 'Date'], [['Landlord / agent', '', '', ''], ['Te
   {
     const faqs = [
       ['What does an inventory clerk do?', 'An inventory clerk visits the property and records its condition and contents room by room, with photos, at check-in, at check-out and sometimes during the tenancy. They then write it up as a report for the landlord or agent.'],
-      ['How much does an inventory clerk cost?', 'Clerks usually charge for each visit, with the price going up with the size of the property and whether it is furnished, so a check-in and a check-out for a family home can cost a few hundred pounds together. With DIY Inventory each report is £30, whatever the size of the property.'],
+      ['How much does an inventory clerk cost?', 'Clerks usually charge for each visit, with the price going up with the size of the property and whether it is furnished, so a check-in and a check-out for a family home can cost a few hundred pounds together. With DIY Inventory each report is £29.99, whatever the size of the property.'],
       ['Do I need an inventory clerk, or can I do the inventory myself?', 'There is no rule that it must be done by a clerk. A landlord, agent or tenant can do it, as long as it is thorough, photographed, dated and signed by both sides, which is what the app is built for.'],
       ['Is a DIY inventory accepted for deposit disputes?', 'Deposit schemes look at the evidence: a detailed, signed check-in report with clear, dated photos, compared with the check-out. A DIY report made with the app gives you exactly that. General information, not legal advice.'],
       ['Can my tenant do the check-in for me?', 'Yes. Send them a link and they do the check-in on their phone; you get the finished report, and each side can check and sign it.'],
       ['I still want an inventory clerk near me. Can you help?', 'We don’t send clerks. If you would rather not do it yourself, the app lets you send the tenant or a contractor a link to do it for you, and you still get a full report.'],
     ];
-    const title = 'Inventory clerk: what they do, what it costs, and the £30 alternative';
-    const desc = 'Looking for an inventory clerk? What a clerk does, what it usually costs, and how landlords, agents and tenants now do the check-in, check-out and inspection themselves on a phone for £30 a report.';
-    pages.push({ key: 'templates', path: '/inventory-clerk', title: 'Inventory clerk? Do your own inventory for £30 · DIY Inventory', og: title, desc,
-      body: head('Inventory clerk', 'Looking for an inventory clerk?', 'Do the check-in, check-out or inspection yourself on your phone instead, for £30 a report, or send your tenant a link to do it. Same thorough report, ready the moment it’s signed.') +
+    const title = 'Inventory clerk: what they do, what it costs, and the £29.99 alternative';
+    const desc = 'Looking for an inventory clerk? What a clerk does, what it usually costs, and how landlords, agents and tenants now do the check-in, check-out and inspection themselves on a phone for £29.99 a report.';
+    pages.push({ key: 'templates', path: '/inventory-clerk', title: 'Inventory clerk? Do your own inventory for £29.99 · DIY Inventory', og: title, desc,
+      body: head('Inventory clerk', 'Looking for an inventory clerk?', 'Do the check-in, check-out or inspection yourself on your phone instead, for £29.99 a report, or send your tenant a link to do it. Same thorough report, ready the moment it’s signed.') +
         `<section class="tight"><div class="wrap"><div class="card prose">
         <h2>Inventory clerk or DIY Inventory?</h2>
         <table class="cmp"><tr><th></th><th>Inventory clerk</th><th>DIY Inventory</th></tr>
-        <tr><td>Price</td><td>Per visit, more for bigger or furnished homes</td><td><b>£30 a report</b>, any size</td></tr>
+        <tr><td>Price</td><td>Per visit, more for bigger or furnished homes</td><td><b>£29.99 a report</b>, any size</td></tr>
         <tr><td>When</td><td>When a clerk is free to visit</td><td><b>Whenever you have the keys</b>, today</td></tr>
         <tr><td>Report ready</td><td>Usually days later</td><td><b>The moment it’s signed</b></td></tr>
         <tr><td>Photos</td><td>Taken by the clerk</td><td>Every item, <b>date and time stamped</b>, at least 8 per room</td></tr>
@@ -213,7 +213,7 @@ ${tbl(['', 'Name', 'Signature', 'Date'], [['Landlord / agent', '', '', ''], ['Te
         <h2>In your area</h2><p>Inventory reports in <a href="/inventory-reports/london">London</a>, <a href="/inventory-reports/manchester">Manchester</a>, <a href="/inventory-reports/birmingham">Birmingham</a>, <a href="/inventory-reports/leeds">Leeds</a>, <a href="/inventory-reports/bristol">Bristol</a> and <a href="/inventory-reports">every other area</a>.</p>
         </div></div></section>`,
       jsonld: b => [crumbs(b, [['Home', '/'], ['Inventory clerk', '/inventory-clerk']]), faqLd(faqs),
-        { '@type': 'Service', name: 'Do-it-yourself property inventory (instead of an inventory clerk)', serviceType: 'Property inventory, check-in and check-out reports', provider: { '@id': b + '/#org' }, areaServed: 'Worldwide', offers: { '@type': 'Offer', price: '30.00', priceCurrency: 'GBP' } }] });
+        { '@type': 'Service', name: 'Do-it-yourself property inventory (instead of an inventory clerk)', serviceType: 'Property inventory, check-in and check-out reports', provider: { '@id': b + '/#org' }, areaServed: 'Worldwide', offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'GBP' } }] });
   }
 
   const css = '<style>.cmp{width:100%;border-collapse:collapse;margin:8px 0 16px}.cmp th,.cmp td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line,#E4D9C6);vertical-align:top}.cmp th{font-size:14px}.cmp td:first-child{font-weight:700;width:22%}@media(max-width:560px){.cmp td,.cmp th{padding:8px 6px;font-size:14px}}</style>';
