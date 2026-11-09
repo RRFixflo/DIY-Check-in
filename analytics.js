@@ -92,6 +92,8 @@ function countryOf(req){
   if (req.headers['cf-ray']) return '?';
   const m = /^[a-z]{2,3}(?:-[A-Za-z]{4})?-([A-Za-z]{2})\b/.exec(String(req.headers['accept-language'] || '').trim()); return m ? '~' + m[1].toUpperCase() : '?';
 }
+// Towns of the big data centres (cloud servers, crawlers): visits from them are almost never people.
+const DC_TOWNS = /^(Ashburn|Boydton|Lauterbourg|Council Bluffs|The Dalles|Quincy|Prineville|Forest City|Lenoir|Santa Clara|San Jose|Dublin|Hillsboro|Columbus|Des Moines|Moses Lake|Boardman|North Charleston|Gravelines|Roubaix|Strasbourg|Falkenstein|Nuremberg|Helsinki|Eemshaven|Middenmeer|Zhangjiakou)\b/i;
 function cityOf(req){ const p = placeOf(req); return p.city ? p.city + (p.region && p.region !== p.city ? ', ' + p.region : '') + (p.country && p.country !== 'GB' ? ' (' + p.country + ')' : '') : ''; }
 const bump = (o, k, n = 1) => { o[k] = (o[k] || 0) + n; };
 const cap = (o, k, max) => (k in o || Object.keys(o).length < max) ? k : '(other)';
@@ -118,6 +120,16 @@ function pageView(req, pathName){
   const ref = referrerOf(req); if (ref && (ref !== 'direct' || first)) bump(d.referrers, cap(d.referrers, ref, 200));
   const q = req.query || {}, u = k => String(q['utm_' + k] || '').trim().toLowerCase().replace(/[^\w .+-]/g, '').slice(0, 40);
   if (u('source') || u('medium') || u('campaign')) bump(d.utm, cap(d.utm, [u('source') || '-', u('medium') || '-', u('campaign') || '-'].join(' / '), 200));
+  save();
+}
+// A real person: the page's script reports once a tab has been scrolled, tapped or on screen for a few seconds.
+// Robots that only fetch pages (most data-centre traffic) never do, so these figures are people only.
+function human(req){
+  const d = current();
+  if (!firstToday(d, 'h', visitorOf(req))) return;
+  d.humans = (d.humans || 0) + 1;
+  d.hcountries = d.hcountries || {}; bump(d.hcountries, cap(d.hcountries, countryOf(req), 120));
+  const town = cityOf(req); if (town) { d.hcities = d.hcities || {}; bump(d.hcities, cap(d.hcities, town, 400)); }
   save();
 }
 // One funnel step. `value` is money (£) for sales and bookings; `kind` says how a report was paid for.
@@ -192,6 +204,7 @@ function mount(app, c){
   app.post('/api/event', express.text({ type: ['text/plain', 'application/octet-stream'], limit: '2kb' }), (req, res) => {
     let b = req.body; if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = {}; } }
     const name = String((b || {}).name || '');
+    if (name === 'human') { if (allowed(ipOf(req)) && !skip(req)) human(req); return res.status(204).end(); }
     if (!CLIENT_EVENTS.includes(name)) return res.status(400).json({ error: 'Unknown event.' });
     if (allowed(ipOf(req))) track(req, name);
     res.status(204).end();
@@ -207,6 +220,8 @@ function sum(days){
     s.views += d.views || 0; s.visitors += d.visitors || 0; s.revenue += d.revenue || 0;
     (d.hours || []).forEach((h, i) => s.hours[i] += h || 0);
     for (const [k, v] of Object.entries(d.paths || {})) { bump(s.paths, k, v.views); bump(s.pathsV, k, v.visitors); }
+    s.humans = (s.humans || 0) + (d.humans || 0); if (d.humans != null) s.hdays = (s.hdays || 0) + 1;
+    for (const f of ['hcities', 'hcountries']) { s[f] = s[f] || {}; for (const [k, v] of Object.entries(d[f] || {})) bump(s[f], k, v); }
     for (const f of ['referrers', 'utm', 'devices', 'cities']) for (const [k, v] of Object.entries(d[f] || {})) bump(s[f], k, v);
     // Days counted before Cloudflare's location was used only have the browser-language guess: shown as guessed.
     for (const [k, v] of Object.entries(d.countries || {})) bump(s.countries, d.cf || k === '?' || k[0] === '~' ? k : '~' + k, v);
@@ -335,7 +350,8 @@ ${(() => {
   <div class="card"><h2>Campaigns (UTM)</h2>${list(s.utm, 0)}<p class="sub">Source / medium / campaign, from links tagged with utm_… .</p></div>
   <div class="card"><h2>Devices</h2>${list(s.devices, s.visitors, k => ({ phone: '📱 Phone', tablet: '📲 Tablet', desktop: '🖥️ Computer' }[k] || esc(k)))}</div>
   <div class="card"><h2>Countries</h2>${list(s.countries, s.visitors, k => esc(k === '?' ? 'Not known' : k === 'Tor' ? 'Tor network (hidden)' : k[0] === '~' ? regionName(k.slice(1)) + ' (guessed)' : regionName(k)))}<p class="sub">From each visitor’s internet address, looked up by Cloudflare. “(guessed)”: an older day, or a visit that didn’t come through Cloudflare, counted from the browser’s language.</p></div>
-  <div class="card"><h2>Towns and cities</h2>${Object.keys(s.cities || {}).length ? list(s.cities, s.visitors, k => esc(k)) : '<p class="sub">Not switched on yet. In Cloudflare, open diyinventory.co.uk → Rules → Transform Rules → Managed Transforms, and turn on <b>Add visitor location headers</b>. Towns appear here from then on.</p>'}<p class="sub">Where the visitor’s internet connection is, so about right for home broadband and less exact on mobile data.</p></div>
+  <div class="card"><h2>Towns and cities: real people</h2>${s.hdays ? (Object.keys(s.hcities || {}).length ? list(s.hcities, s.humans, k => esc(k)) : '<p class="sub">No people counted yet in these days.</p>') + '<p class="sub">' + (s.humans || 0) + ' people (they scrolled, tapped or stayed a few seconds) out of ' + s.visitors + ' visitors. Counted from 9 Nov 2026.</p>' : '<p class="sub">Counted from 9 Nov 2026: people who scroll, tap or stay a few seconds. Robots don’t.</p>'}</div>
+  <div class="card"><h2>Towns and cities: every visit, robots included</h2>${Object.keys(s.cities || {}).length ? list(s.cities, s.visitors, k => esc(k) + (DC_TOWNS.test(k) ? ' <span class="sub">· data centre, robots</span>' : '')) : '<p class="sub">Not switched on yet. In Cloudflare, open diyinventory.co.uk → Rules → Transform Rules → Managed Transforms, and turn on <b>Add visitor location headers</b>. Towns appear here from then on.</p>'}<p class="sub">Where the visitor’s internet connection is, so about right for home broadband and less exact on mobile data.</p></div>
   <div class="card"><h2>Other actions</h2><ul class="top plain">${others}</ul></div>
 </div>
 </main></div></body></html>`);

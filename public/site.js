@@ -1,6 +1,14 @@
 // The website's motion: the header firms up on scroll, sections glide in as they come into view, numbers
 // count up, and cards and the hero phone follow the cursor. Nothing here is needed to read the site.
 (function () {
+  // A real person (not a robot): once per tab, after a scroll, tap, key or 4 s on screen; counts towns of real visitors.
+  try {
+    if (!sessionStorage.getItem('diy-human')) {
+      var hs = false, hum = function () { if (hs) return; hs = true; try { sessionStorage.setItem('diy-human', '1'); var b = JSON.stringify({ name: 'human' }); if (!(navigator.sendBeacon && navigator.sendBeacon('/api/event', new Blob([b], { type: 'text/plain' })))) fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: b, keepalive: true }); } catch (e) {} };
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (t) { addEventListener(t, hum, { once: true, passive: true }); });
+      setTimeout(function () { if (document.visibilityState === 'visible') hum(); }, 4000);
+    }
+  } catch (e) {}
   // Where this visit came from (this tab only, sessionStorage, no cookie): the first page (with its campaign tags and
   // ad click id), the site that sent the visitor, when they arrived, how many pages they've seen and the last few.
   // Every form posted on the site carries it as a hidden src_visit field (origin.js on the server), so each lead says

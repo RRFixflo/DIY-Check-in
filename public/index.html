@@ -5311,6 +5311,7 @@ if (state.view === 'setup') restoreSetupDraft();
 if (!pendingSetup.country) pendingSetup.country = defaultCountry();
 render(); // paint instantly with no dependency on storage or network
 track('app_open');
+try { if (!sessionStorage.getItem('diy-human')) { let hs = false; const hum = () => { if (hs) return; hs = true; try { sessionStorage.setItem('diy-human', '1'); } catch (e) {} track('human'); }; ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(t => addEventListener(t, hum, { once: true, passive: true })); setTimeout(() => { if (document.visibilityState === 'visible') hum(); }, 4000); } } catch (e) {}
 (async () => {
   try {
     try { addressBook = (await idbGet('addressBook')) || []; reportHistory = (await idbGet('history')) || []; if ((addressBook.length || reportHistory.length) && state.view === 'setup') render(); } catch(e){}
