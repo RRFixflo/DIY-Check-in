@@ -119,6 +119,12 @@ const ADDRESS_UI = String.raw`<style>
   });
 })();
 </script>`;
+// London boroughs (and the City of London) from the council area list, with their researched local facts
+// (content/areas/<slug>.json, the same files as the inventory hubs): each gets its own certificates page.
+function londonBoroughs(){
+  let list = []; try { list = JSON.parse(fs.readFileSync(path.join(__dirname, 'content', 'area-list.json'), 'utf8')).filter(a => a.region === 'London'); } catch (e) {}
+  return list.map(a => { let d = null; try { d = JSON.parse(fs.readFileSync(path.join(__dirname, 'content', 'areas', a.slug + '.json'), 'utf8')); } catch (e) {} return d ? Object.assign({}, a, { d, place: a.slug === 'city-of-london' ? 'the City of London' : a.name }) : null; }).filter(Boolean).sort((x, y) => x.name.localeCompare(y.name));
+}
 function mountPublic(app, ctx){
   DIR = ctx.REPORTS_DIR;
   const { renderPage, esc, clip, clientIp, limiter, notify, PUBLIC_BASE } = ctx;
@@ -127,7 +133,44 @@ function mountPublic(app, ctx){
   const ic = p => `<div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${p}</svg></div>`;
   const ICON = { gas: '<path d="M12 2c1 3 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/>', eicr: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', epc: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M9 20v-5h6v5"/>' };
 
-  function page(req, notice){
+  const BOROUGHS = londonBoroughs(), bySlug = Object.fromEntries(BOROUGHS.map(b => [b.slug, b]));
+  const firstSentence = t => { const m = String(t || '').match(/^.*?[.!?](\s|$)/); return (m ? m[0] : String(t || '')).trim(); };
+  // The local part of a borough's page: postcodes, licensing (as researched, with the council's page), the homes, rents.
+  function local(a){
+    const d = a.d, P = a.place, Pc = P.replace(/^the /, 'The '), lic = d.licensing || {};
+    const pcs = (d.postcodes || []).slice(0, 30);
+    const hoods = (d.neighbourhoods || []).slice(0, 10);
+    const facts = [d.rent && ['Average rent', d.rent.text, d.rent.source], d.privateRentedShare && ['Renting privately', d.privateRentedShare.text, d.privateRentedShare.source], d.price && ['Average house price', d.price.text, d.price.source]].filter(Boolean);
+    const near = (d.nearby || []).map(x => bySlug[x]).filter(Boolean);
+    return `<section style="padding-top:8px"><div class="wrap">
+  <div class="sec-head"><span class="kicker">${esc(Pc)}</span><h2>Letting in ${esc(P)}: what your certificates are for.</h2></div>
+  <div class="card" style="max-width:860px;margin:0 auto">
+    ${d.housing ? `<p>${esc(d.housing)}</p>` : ''}
+    <p>Every rented home in ${esc(P)} needs a Gas Safety certificate each year (where there’s gas), an EICR at least every five years, and an EPC rated E or above before it’s let.${lic.selective || lic.additional ? ' If the property needs a council licence, the council will usually ask for all three with the application.' : ''}</p>
+    ${lic.selective || lic.additional ? `<h3 id="licensing">Landlord licensing in ${esc(P)}</h3>${lic.selective ? `<p><b>Selective licensing:</b> ${esc(lic.selective)}</p>` : ''}${lic.additional ? `<p><b>HMOs:</b> ${esc(lic.additional)}</p>` : ''}${lic.fee ? `<p><b>Fee:</b> ${esc(lic.fee)}</p>` : ''}<p class="sub">As checked ${esc(lic.checked || 'in 2026')}${lic.source ? `: <a href="${esc(lic.source)}" rel="noopener" target="_blank">the council’s page</a>` : ''}. Schemes change, so check with ${esc(d.council && d.council.name || 'the council')} before you let.</p>` : ''}
+    ${facts.length ? `<h3>${esc(Pc)} in figures</h3><ul>${facts.map(f => `<li><b>${esc(f[0])}:</b> ${esc(f[1])} <a class="sub" href="${esc(f[2])}" rel="noopener" target="_blank">source</a></li>`).join('')}</ul>` : ''}
+    ${pcs.length ? `<h3>Postcodes we cover in ${esc(P)}</h3><p>${pcs.map(x => esc(x)).join(', ')}, and every other postcode in London.</p>` : ''}
+    ${hoods.length ? `<h3>Areas of ${esc(P)}</h3><ul>${hoods.map(h => `<li><b>${esc(h.name)}</b>${h.postcodes ? ' (' + esc(h.postcodes) + ')' : ''}${h.housing ? ': ' + esc(h.housing) : ''}</li>`).join('')}</ul>` : ''}
+    <p><a class="arrow" href="/inventory-reports/${a.slug}/landlords">Landlords in ${esc(P)}: licensing, deposits and inventories</a></p>
+  </div>
+  ${near.length ? `<p style="text-align:center;line-height:2.2;margin-top:22px">${near.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="/certificates/${q.slug}">Certificates in ${esc(q.place.replace(/^the /, ''))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="/certificates#boroughs">All London boroughs</a></p>` : ''}
+</div></section>`;
+  }
+  function faqs(a){
+    const P = a.place, d = a.d, lic = d.licensing || {}, pcs = (d.postcodes || []).slice(0, 12).join(', ');
+    return [
+      ['How much is a Gas Safety certificate in ' + P + '?', 'A Gas Safety certificate (CP12) is ' + money(priceOf('gas')) + ' per property, including the engineer’s visit. An EICR is from ' + priceText('eicr') + ' and an EPC ' + money(priceOf('epc')) + '. Nothing is paid online: we confirm the date with you first.'],
+      ['Do you cover all of ' + P + '?', 'Yes. We cover every postcode in ' + P + (pcs ? ' (' + pcs + ')' : '') + ', and the rest of London.'],
+      lic.selective || lic.additional ? ['Do I need a landlord licence in ' + P + '?', firstSentence(lic.selective || lic.additional) + ' Check the exact address with ' + (d.council && d.council.name || 'the council') + '.'] : null,
+      ['How often does a rented home in ' + P + ' need each certificate?', 'Gas Safety every 12 months, an EICR at least every 5 years (sooner if the last report says so), and an EPC every 10 years, rated E or above to let it.'],
+      ['Who lets the engineer in?', 'You, your tenant, your agent, or a key safe: tell us when you book and we arrange it with them.']
+    ].filter(Boolean);
+  }
+  function boroughIndex(){
+    return `<section id="boroughs" style="padding-top:8px"><div class="wrap"><div class="sec-head"><span class="kicker">Across London</span><h2>Certificates in every London borough.</h2></div><p style="text-align:center;line-height:2.2">${BOROUGHS.map(b => `<a class="btn ghost sm" style="margin:0 4px" href="/certificates/${b.slug}">${esc(b.place.replace(/^the /, ''))}</a>`).join('')}</p></div></section>`;
+  }
+
+  function page(req, notice, area){
     const lookup = address.configured();
     const list = services(), gas = list.find(s => s.id === 'gas'), epc = list.find(s => s.id === 'epc'), eicrs = list.filter(s => s.group === 'eicr');
     const eLow = Math.min.apply(null, eicrs.map(s => s.price));
@@ -136,18 +179,24 @@ function mountPublic(app, ctx){
       ['eicr', 'Electrical safety (EICR)', 'Electrical Installation Condition Report', 'From ' + money(eLow), eicrs[0].desc, eicrs.map(s => s.name.replace('Electrical safety (EICR), ', '').replace(/^./, c => c.toUpperCase()) + ': ' + money(s.price)).concat(['Required at least every 5 years for rented homes in England'])],
       ['epc', 'EPC', 'Energy Performance Certificate', money(epc.price), epc.desc, ['Assessor visit and energy rating', 'Valid for 10 years', 'Needed before you advertise to rent or sell']],
     ].map(([k, t, sub, price, desc, pts]) => `<div class="card feature cert-card">${ic(ICON[k])}<h3>${t}</h3><p class="cert-sub">${sub}</p><div class="cert-price">${price}</div><p>${esc(desc)}</p><ul>${pts.map(x => '<li>' + esc(x) + '</li>').join('')}</ul><a class="btn ghost sm" href="#book" data-pick="${k}">Book ${k === 'eicr' ? 'an EICR' : 'a ' + (k === 'gas' ? 'Gas Safety check' : 'EPC')}</a></div>`).join('');
-    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates in London, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor, anywhere in London. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>
+    const AP = area ? area.place : '', self = area ? '/certificates/' + area.slug : '/certificates';
+    const head = area
+      ? `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services · ${esc(AP.replace(/^the /, 'The '))}</span><h1>Gas Safety, EICR and EPC certificates in ${esc(AP)}.</h1><p>Letting a home in ${esc(AP)}? We book a Gas Safe engineer, a qualified electrician or an energy assessor at the property, anywhere in ${esc(AP)}${(area.d.postcodes || []).length ? ' (' + esc(area.d.postcodes.slice(0, 8).join(', ')) + ')' : ''}. Gas Safety ${money(gas.price)}, EICR from ${money(eLow)}, EPC ${money(epc.price)}. You get the certificate by email. Nothing to pay online.</p></div></div>`
+      : `<div class="page-head"><div class="wrap"><span class="kicker">Landlord services</span><h1>Gas Safety, EICR and EPC certificates in London, arranged for you.</h1><p>As well as inventory reports, DIY Inventory arranges the safety certificates every rented home needs. Choose what you need, tell us about the property, and we book a qualified Gas Safe engineer, electrician or energy assessor, anywhere in London. You get the certificate by email. Fixed prices, nothing to pay online.</p></div></div>`;
+    const qs = area ? faqs(area) : null;
+    const body = `${head}
 <section class="tight"><div class="wrap"><div class="cert-intro">${cards}</div><p style="margin:28px 0 0"><a class="arrow" href="/landlords">Keep every certificate in one place, with reminders before they expire: the free landlord dashboard</a></p></div></section>
+${area ? local(area) : ''}
 <section id="book" style="padding-top:8px"><div class="wrap">
   <div class="sec-head"><span class="kicker">Book</span><h2>Book your certificates.</h2><p>Nothing to pay now. We’ll confirm the date with you, and send payment details.</p></div>
-  <form class="card form cert-form" method="post" action="/certificates#book">
+  <form class="card form cert-form" method="post" action="${self}#book">
     <fieldset class="cert-pick"><legend>What do you need?</legend>
       <label class="pick"><input type="checkbox" name="svc" value="gas"><span><b>Gas Safety (CP12)</b><em>${money(gas.price)}</em></span></label>
       <label class="pick"><input type="checkbox" name="svc" value="eicr"><span><b>Electrical safety (EICR)</b><em>from ${money(eLow)}</em></span></label>
       <label class="pick"><input type="checkbox" name="svc" value="epc"><span><b>EPC</b><em>${money(epc.price)}</em></span></label>
     </fieldset>
     <div class="cert-addr">
-      <div class="cert-pc-row"><label>Postcode<input name="postcode" id="certPc" required maxlength="12" autocapitalize="characters" ${lookup ? 'autocomplete="off" spellcheck="false" aria-describedby="certAddrMsg"' : 'autocomplete="postal-code"'} placeholder="e.g. SE16 4JU"></label>${lookup ? '<button type="button" class="btn ghost sm" id="certFind" hidden>Find address</button>' : ''}</div>
+      <div class="cert-pc-row"><label>Postcode<input name="postcode" id="certPc" required maxlength="12" autocapitalize="characters" ${lookup ? 'autocomplete="off" spellcheck="false" aria-describedby="certAddrMsg"' : 'autocomplete="postal-code"'} placeholder="e.g. ${area && (area.d.postcodes || [])[0] ? esc(area.d.postcodes[0]) + ' 1AA' : 'SE16 4JU'}"></label>${lookup ? '<button type="button" class="btn ghost sm" id="certFind" hidden>Find address</button>' : ''}</div>
       ${lookup ? '<label id="certPickWrap" hidden>Choose the address<select id="certPick"></select></label><p class="cert-addr-msg" id="certAddrMsg" aria-live="polite" hidden></p>' : ''}
       <label>Property address<input name="address" id="certAddr" required maxlength="200" autocomplete="${lookup ? 'off' : 'street-address'}"></label>
     </div>
@@ -192,14 +241,23 @@ function mountPublic(app, ctx){
   pcEl.addEventListener('input', function(){ var m = pcEl.value.toUpperCase().match(/^\\s*([A-Z]{1,2})\\d/); warn.hidden = !m || LON.indexOf(m[1]) >= 0; });
   document.querySelectorAll('[data-pick]').forEach(function(a){ a.addEventListener('click', function(){ var c = f.querySelector('[name=svc][value=' + a.getAttribute('data-pick') + ']'); if (c) { c.checked = true; total(); } }); });
 })();
-</script>${lookup ? ADDRESS_UI : ''}`;
-    return renderPage({ key: 'certificates', path: '/certificates', title: 'Gas Safety, EICR & EPC certificates in London for landlords · DIY Inventory', og: 'Landlord services: Gas Safety, EICR and EPC certificates',
-      desc: 'London landlords: book a Gas Safety certificate (' + money(gas.price) + '), electrical safety EICR (from ' + money(eLow) + ') or EPC (' + money(epc.price) + ') for your rental property.', body,
-      jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name, description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: { '@type': 'City', name: 'London' },
-        offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP' } } })) }, req, notice);
+</script>${lookup ? ADDRESS_UI : ''}
+${qs ? `<section style="padding-top:8px"><div class="wrap"><div class="sec-head"><span class="kicker">Questions</span><h2>Certificates in ${esc(AP)}: your questions.</h2></div><div class="faq" style="max-width:860px;margin:0 auto">${qs.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>` : ''}
+${boroughIndex()}`;
+    const AN = area ? AP.replace(/^the /, '') : '';
+    return renderPage({ key: 'certificates', path: self, title: area ? 'Gas Safety Certificate, EICR & EPC in ' + AN + ' · DIY Inventory' : 'Gas Safety, EICR & EPC certificates in London for landlords · DIY Inventory', og: area ? 'Gas Safety, EICR and EPC certificates in ' + AN : 'Landlord services: Gas Safety, EICR and EPC certificates',
+      desc: area ? AN + ' landlords: Gas Safety certificate ' + money(gas.price) + ', EICR from ' + money(eLow) + ', EPC ' + money(epc.price) + '. A qualified engineer at your rental in ' + AN + ', certificate by email, nothing to pay online.'
+        : 'London landlords: book a Gas Safety certificate (' + money(gas.price) + '), electrical safety EICR (from ' + money(eLow) + ') or EPC (' + money(epc.price) + ') for your rental property.', body,
+      jsonld: base => list.filter(s => s.id !== 'eicr_m' && s.id !== 'eicr_l').map(s => ({ '@type': 'Service', name: (s.group === 'eicr' ? 'Electrical safety certificate (EICR)' : s.name) + (area ? ' in ' + AN : ''), description: s.desc, serviceType: s.short, provider: { '@id': base + '/#org' }, areaServed: area ? { '@type': 'AdministrativeArea', name: area.slug === 'city-of-london' ? 'City of London' : 'London Borough of ' + area.name, containedInPlace: { '@type': 'City', name: 'London' } } : { '@type': 'City', name: 'London' },
+        offers: { '@type': 'Offer', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP', priceSpecification: { '@type': 'UnitPriceSpecification', price: (s.group === 'eicr' ? eLow : s.price).toFixed(2), priceCurrency: 'GBP' } } })).concat(area ? [
+        { '@type': 'FAQPage', mainEntity: qs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
+        { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: base + '/' }, { '@type': 'ListItem', position: 2, name: 'Certificates', item: base + '/certificates' }, { '@type': 'ListItem', position: 3, name: AN, item: base + self }] }] : []) }, req, notice);
   }
 
-  app.get(['/certificates', '/certificates/'], (req, res) => res.type('html').send(page(req, req.query.booked ? { ok: true, text: 'Thanks, your booking request has been sent. We’ll be in touch to confirm the date.' } : null)));
+  const thanks = req => req.query.booked ? { ok: true, text: 'Thanks, your booking request has been sent. We’ll be in touch to confirm the date.' } : null;
+  app.get(['/certificates', '/certificates/'], (req, res) => res.type('html').send(page(req, thanks(req))));
+  // A page per London borough (and the City of London): /certificates/croydon, /certificates/westminster …
+  app.get(['/certificates/:slug', '/certificates/:slug/'], (req, res, next) => { const a = bySlug[String(req.params.slug).toLowerCase()]; if (!a) return next(); res.type('html').send(page(req, thanks(req), a)); });
   // One booking from the website's form or a microsite (source = the microsite's domain). Returns { error, code } or { booking }.
   async function book(b, ip, req, source, origin){
     const picks = [].concat(b.svc || []).filter(x => ['gas', 'eicr', 'epc'].includes(x));
@@ -222,12 +280,15 @@ function mountPublic(app, ctx){
     return { booking };
   }
 
-  app.post('/certificates', express.urlencoded({ extended: false, limit: '16kb' }), async (req, res) => {
+  app.post(['/certificates', '/certificates/:slug'], express.urlencoded({ extended: false, limit: '16kb' }), async (req, res, next) => {
+    const a = req.params.slug ? bySlug[String(req.params.slug).toLowerCase()] : null;
+    if (req.params.slug && !a) return next();
+    const self = a ? '/certificates/' + a.slug : '/certificates';
     const b = req.body || {};
-    if (clip(b.website, 200)) return res.redirect(303, '/certificates?booked=1#book');   // robots
+    if (clip(b.website, 200)) return res.redirect(303, self + '?booked=1#book');   // robots
     const r = await book(b, clientIp(req), req, '', require('./origin').of(req, b));
-    if (r.error) return res.status(r.code || 400).type('html').send(page(req, { text: r.error }));
-    res.redirect(303, '/certificates?booked=1#book');
+    if (r.error) return res.status(r.code || 400).type('html').send(page(req, { text: r.error }, a));
+    res.redirect(303, self + '?booked=1#book');
   });
 
   // Bookings from the microsites (the landlord-microsites repo): each site's Cloudflare Pages Function forwards its
@@ -246,7 +307,7 @@ function mountPublic(app, ctx){
     if (r.error) return res.status(r.code || 400).json({ ok: false, error: r.error });
     res.status(201).json({ ok: true, id: r.booking.id, total: r.booking.total });
   });
-  return { paths: ['/certificates'] };
+  return { paths: ['/certificates'].concat(BOROUGHS.map(b => '/certificates/' + b.slug)), boroughs: BOROUGHS.map(b => b.slug) };
 }
 
 /* ------------------------------- owner's side ------------------------------- */

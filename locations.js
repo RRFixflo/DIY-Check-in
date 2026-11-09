@@ -447,6 +447,8 @@ ${localHtml}${numbersHtml}${tipsHtml}${rulesHtml}
   <div class="sec-head"><span class="kicker">Questions</span><h2>${e(cap(N.thing))}s in ${e(place)}: questions and answers</h2></div>
   <div class="faq">${faqs.map(([q, a]) => `<details><summary>${e(q)}</summary><p>${e(a)}</p></details>`).join('')}</div>
 </div></section>
+${p.slug === 'london' ? `<section id="boroughs" style="padding-top:8px"><div class="wrap"><div class="sec-head"><span class="kicker">Every borough</span><h2>Inventory reports and certificates in every London borough.</h2><p>Local rents, landlord licensing, neighbourhoods and what to check at move-in, borough by borough.</p></div>
+  <div class="lon-boroughs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px">${hubs.areas.filter(a => a.london).sort((x, y) => x.name.localeCompare(y.name)).map(a => `<div class="card" style="padding:10px 12px"><a href="${BASE_PATH}/${a.slug}"><b>${e(a.slug === 'city-of-london' ? 'City of London' : a.name)}</b></a><div class="sub" style="font-size:13px;margin-top:4px"><a href="${BASE_PATH}/${a.slug}/landlords">Landlords</a> · <a href="${BASE_PATH}/${a.slug}/tenants">Tenants</a> · <a href="/certificates/${a.slug}">Certificates</a></div></div>`).join('')}</div></div></section>` : ''}
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="kicker">Nearby</span><h2>Also covering</h2></div>
   <p style="text-align:center;line-height:2.2">${near.map(q => `<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}/${q.slug}">${e(q.name.replace(/^the /, ''))}</a>`).join('')}<a class="btn ghost sm" style="margin:0 4px" href="${BASE_PATH}">All areas</a></p>
