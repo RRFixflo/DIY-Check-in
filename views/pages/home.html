@@ -18,17 +18,26 @@
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Works anywhere in the world</li>
         </ul>
       </div>
-      <div class="visual house-wrap" aria-hidden="true">
-        <svg class="house" viewBox="0 0 620 600" fill="none" stroke-width="1.1" stroke-linejoin="round" role="img" aria-label="Small triangles fly together into the shape of a house, which becomes a photo of a real property">
-          <g class="parts"></g>
-          <defs><clipPath id="houseClip"><path d="M310 30 L572 258 L500 258 L500 526 L120 526 L120 258 L48 258 Z"/></clipPath></defs>
-          <g class="solid">
-            <image href="{{HERO_IMG}}" x="20" y="30" width="660" height="496" preserveAspectRatio="xMidYMid slice" clip-path="url(#houseClip)"/>
-            <path d="M310 30 L572 258 L500 258 L500 526 L120 526 L120 258 L48 258 Z" fill="none" stroke="#1B2E4B" stroke-width="6" stroke-linejoin="round"/>
-            <path d="M60 530 H560" stroke="#1B2E4B" stroke-width="5" stroke-linecap="round"/>
-            <g class="tag"><rect x="150" y="544" width="320" height="38" rx="19" fill="#1B2E4B"/><circle cx="174" cy="563" r="5" fill="#E9B97F"/><text x="188" y="568.5" font-family="Geist, Inter, sans-serif" font-size="15" font-weight="600" fill="#fff">Front of the property · photo 1</text></g>
-          </g>
-        </svg>
+      <div class="visual dq" aria-hidden="true">
+        <!-- Someone doing their own inventory: the room, and their hand holding the phone that photographs it item by item (site.js drives it). -->
+        <div class="dq-room">
+          <img src="/img/kitchen.webp" alt="" width="1600" height="1063">
+          <div class="dq-frame"><i></i><i></i><i></i><i></i></div>
+          <div class="dq-pins"></div>
+          <div class="dq-tag"><span></span>Kitchen · check-in in progress</div>
+        </div>
+        <div class="dq-hand">
+          <svg class="dq-back" viewBox="0 0 300 480"><g fill="#E2A985"><path d="M30 290 C 10 360 20 430 70 480 L 260 480 C 270 420 262 330 230 280 Z"/><rect x="196" y="150" width="58" height="34" rx="17"/><rect x="200" y="192" width="62" height="34" rx="17"/><rect x="198" y="234" width="60" height="34" rx="17"/><rect x="192" y="276" width="52" height="32" rx="16"/></g></svg>
+          <div class="dq-phone"><div class="dq-screen">
+            <div class="dq-view"></div>
+            <div class="dq-vf"><i></i><i></i><i></i><i></i></div>
+            <div class="dq-top"><small>PHOTOGRAPH</small><b class="dq-item">Fridge</b><span class="dq-count">Kitchen · 0 of 10</span></div>
+            <div class="dq-flash"></div>
+            <div class="dq-cond"><span class="dq-ai"><!--AI-->AI suggests<!--/AI--><!--NOAI-->Condition<!--/NOAI--></span><span class="c">New</span><span class="c g">Good</span><span class="c">Fair</span><span class="c">Poor</span></div>
+            <div class="dq-bot"><div class="dq-thumbs"></div><button class="dq-shut" tabindex="-1"></button></div>
+          </div></div>
+          <svg class="dq-thumb" viewBox="0 0 300 480"><path fill="#E2A985" d="M18 300 C 30 270 52 250 74 236 C 86 228 100 236 96 250 C 90 270 70 300 58 330 Z"/><path fill="#D9967A" opacity=".55" d="M74 236 C 86 228 100 236 96 250 C 93 258 86 262 80 258 Z"/></svg>
+        </div>
       </div>
     </div>
   </div>

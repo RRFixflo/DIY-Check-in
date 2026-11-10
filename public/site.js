@@ -84,31 +84,63 @@
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(box);
 })();
 
-// The hero house: small triangles fly in from every side and gather into the shape of a house, then the solid
-// house builds up from the ground over them (CSS) and a few loose triangles keep drifting. Made here, not in the
-// HTML, so the page stays light; fewer on phones. Under reduced motion only the finished house shows.
+// The hero: someone doing their own inventory. The phone in their hand frames each item of the room in turn,
+// takes the photo (shutter, flash, a dated thumbnail), a condition is chosen and the item is pinned as done on the
+// room; then the next item, and round again. Under reduced motion one finished step shows, still.
 (function () {
-  var g = document.querySelector('.house .parts');
-  if (!g || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-  var seed = 11; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-  function inside(x, y) {
-    var roof = y <= 250 && y >= 40 && Math.abs(x - 310) <= (y - 40) * (240 / 210);
-    return roof || (x >= 120 && x <= 500 && y >= 250 && y <= 520) || (x >= 410 && x <= 460 && y >= 80 && y <= 200);
+  var root = document.querySelector('.dq');
+  if (!root) return;
+  var items = [['Fridge', .12, .55], ['Oven', .53, .7], ['Worktops', .8, .62], ['Ceiling lights', .73, .2], ['Flooring', .42, .92]];
+  var q = function (s) { return root.querySelector(s); };
+  var frame = q('.dq-frame'), pins = q('.dq-pins'), hand = q('.dq-hand'), view = q('.dq-view'), name = q('.dq-item'), count = q('.dq-count'),
+    flash = q('.dq-flash'), cond = q('.dq-cond'), thumbs = q('.dq-thumbs'), shut = q('.dq-shut');
+  var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
+  // The phone's camera shows the room zoomed in (380% wide), centred on the item.
+  function pos(tx, ty) { return (clamp((3.8 * tx - .5) / 2.8) * 100).toFixed(1) + '% ' + (clamp((2.525 * ty - 1.025) / .475) * 100).toFixed(1) + '%'; }
+  function stamp() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+  var done = 0;
+  function aim(i) {
+    var it = items[i];
+    frame.style.left = it[1] * 100 + '%'; frame.style.top = it[2] * 100 + '%';
+    view.style.backgroundPosition = pos(it[1], it[2]);
+    hand.style.setProperty('--hx', Math.max(-40, Math.min(8, (it[1] - .72) * 55)).toFixed(1) + '%');
+    hand.style.setProperty('--hy', ((it[2] - .62) * 14).toFixed(1) + '%');
+    hand.style.setProperty('--hr', ((it[1] - .6) * 10 - 4).toFixed(1) + 'deg');
+    name.style.opacity = 0; setTimeout(function () { name.textContent = it[0]; name.style.opacity = 1; }, 250);
+    cond.classList.remove('on');
   }
-  var cols = ['#13213A', '#1B2E4B', '#1B2E4B', '#2F4F7F', '#2F4F7F', '#C49A6C', '#C49A6C', '#D9B98C', '#8A6A45', '#5B7BA8', '#B8895A'];
-  var many = innerWidth < 700 ? 280 : 520, html = [], n = 0, tries = 0;
-  function tri(x, y, s, amb) {
-    var a = rnd() * 6.28, pts = [0, 1, 2].map(function (k) { return (x + s * Math.cos(a + k * 2.094)).toFixed(1) + ',' + (y + s * Math.sin(a + k * 2.094)).toFixed(1); }).join(' ');
-    var ang = rnd() * 6.28, r = 120 + rnd() * 200, c = cols[Math.floor(rnd() * cols.length)];
-    return '<polygon' + (amb ? ' class="amb"' : '') + ' points="' + pts + '" stroke-opacity="' + (amb ? (.2 + rnd() * .25) : (.6 + rnd() * .4)).toFixed(2) +
-      '" style="--c:' + c + ';--dx:' + Math.round(r * Math.cos(ang)) + 'px;--dy:' + Math.round(r * Math.sin(ang)) + 'px;--b:' + (rnd() * .9).toFixed(2) + 's;--d:' + (rnd() * 6).toFixed(2) + 's"/>';
+  function snap(i) {
+    var it = items[i];
+    shut.classList.add('tap'); setTimeout(function () { shut.classList.remove('tap'); }, 160);
+    flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
+    var t = document.createElement('span'); t.style.backgroundPosition = pos(it[1], it[2]); t.setAttribute('data-t', stamp());
+    thumbs.appendChild(t); while (thumbs.children.length > 3) thumbs.removeChild(thumbs.firstChild);
+    done++; count.textContent = 'Kitchen · ' + done + ' of 10';
   }
-  while (n < many && tries++ < 20000) { var x = 40 + rnd() * 540, y = 20 + rnd() * 510; if (!inside(x, y)) continue; n++; html.push(tri(x, y, 3.6 + rnd() * 4.4, false)); }
-  for (var i = 0; i < (innerWidth < 700 ? 50 : 90); i++) { var ax = rnd() * 620, ay = rnd() * 560; if (!inside(ax, ay)) html.push(tri(ax, ay, 1.8 + rnd() * 2.2, true)); }
-  g.innerHTML = html.join('');
-  document.documentElement.classList.add('house-on');
-  // Once the solid house is up, the triangles inside it are hidden: take them away so phones don't keep animating them.
-  setTimeout(function () { [].slice.call(g.querySelectorAll('polygon:not(.amb)')).forEach(function (p) { p.remove(); }); }, 7600);
+  function pin(i) {
+    var it = items[i], p = document.createElement('span');
+    p.textContent = it[0] + ' · Good'; p.style.left = it[1] * 100 + '%'; p.style.top = it[2] * 100 + '%';
+    pins.appendChild(p); requestAnimationFrame(function () { requestAnimationFrame(function () { p.classList.add('on'); }); });
+  }
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    aim(1); snap(0); snap(1); cond.classList.add('on'); pin(0); pin(1); name.textContent = items[1][0]; name.style.opacity = 1; return;
+  }
+  var step = 0;
+  function run() {
+    if (document.hidden) { setTimeout(run, 1000); return; }
+    if (step === items.length) {   // round again: clear the room and start the next walk round
+      [].slice.call(pins.children).forEach(function (p) { p.classList.remove('on'); });
+      setTimeout(function () { pins.innerHTML = ''; thumbs.innerHTML = ''; done = 0; count.textContent = 'Kitchen · 0 of 10'; step = 0; run(); }, 700);
+      return;
+    }
+    var i = step++;
+    aim(i);
+    setTimeout(function () { snap(i); }, 1300);
+    setTimeout(function () { cond.classList.add('on'); }, 1700);
+    setTimeout(function () { pin(i); }, 2500);
+    setTimeout(run, i === items.length - 1 ? 4800 : 3600);
+  }
+  aim(0); setTimeout(run, 700);
 })();
 
 // The hero headline: each word rises in from a blur, one after another; the coloured words (<em>) flow through
