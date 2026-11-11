@@ -861,3 +861,8 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 .dq-screen::before { content: ""; position: absolute; z-index: 6; left: 50%; top: 0; width: 46%; height: 3.4%; transform: translateX(-50%); background: #0b0d10; border-radius: 0 0 16cqw 16cqw / 0 0 7cqw 7cqw; pointer-events: none; }
 .dq-screen::after { content: ""; position: absolute; z-index: 6; inset: 0; pointer-events: none; border-radius: inherit;
   background: linear-gradient(115deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 28%, rgba(255,255,255,0) 42%); }
+/* The phone's frame is drawn around the screen (not taken from the photo), so the screen and its frame
+   always match exactly: a black bezel, a thin graphite rim and a soft shadow, all scaled with --hw. */
+.dq-screen { left: 44.71%; top: 2.23%; width: 40.71%; height: 73.79%; border-radius: 15% / 6.9%;
+  box-shadow: 0 0 0 calc(var(--hw) * 10 / 700) #0c0e11, 0 0 0 calc(var(--hw) * 13 / 700) #3b4048,
+              0 0 0 calc(var(--hw) * 14 / 700) #1a1d22, 0 calc(var(--hw) * 18 / 700) calc(var(--hw) * 40 / 700) rgba(19,33,58,.35); }
