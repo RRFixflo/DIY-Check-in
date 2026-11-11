@@ -789,7 +789,7 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 .hero { background: radial-gradient(60% 70% at 15% 10%, rgba(201,216,238,.55), transparent 70%), radial-gradient(50% 60% at 85% 20%, rgba(232,224,246,.6), transparent 70%), radial-gradient(50% 60% at 55% 90%, rgba(241,226,200,.35), transparent 70%), #fff; }
 
 /* ===== Hero: someone doing their own inventory (Nov 2026, replaces the triangle house) =====
-   A real kitchen photo and a real hand holding a real phone (hero-hand-v2.webp: cut out of hand.jpg, Unsplash licence) in
+   A real kitchen photo and a real hand holding a real phone (hero-hand-v3.webp: cut out of hand.jpg, Unsplash licence) in
    front of it. The phone's own screen is replaced by the app's camera, mapped onto it with a perspective transform
    (the photo was straightened so its glass is an upright rectangle: left 45.4%, top 3.25%, 40% × 71.2% of the picture): it shows the item being photographed, the shutter
    flashes, the dated photo drops into the strip, a condition is chosen and the item gets a pin on the room.
@@ -813,7 +813,7 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 .dq-hand { position: absolute; right: -4%; bottom: 0; width: var(--hw); height: calc(var(--hw) * 851 / 700); transform-origin: 30% 100%; transform: translate(var(--hx, 0), var(--hy, 0)) rotate(var(--hr, 0deg)); transition: transform 1.1s cubic-bezier(.65,0,.25,1); }
 .dq-hin { position: absolute; inset: 0; }
 .dq-photo { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 30px 40px rgba(19,33,58,.32)); }
-.dq-screen { position: absolute; left: 45.4%; top: 3.25%; width: 40%; height: 71.2%;
+.dq-screen { position: absolute; left: 44.15%; top: 1.75%; width: 40.7%; height: 73.8%;
   border-radius: 13% / 6%; overflow: hidden; background: #111; font-family: Geist, Inter, sans-serif; color: #fff; container-type: inline-size; }
 .dq-view { position: absolute; inset: 0; background: url(/img/kitchen.webp) no-repeat; background-size: 380% auto; background-position: 0 50%; transition: background-position 1.1s cubic-bezier(.65,0,.25,1); }
 .dq-vf { position: absolute; left: 18%; right: 18%; top: 34%; bottom: 36%; }
@@ -852,3 +852,6 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 @media (max-width: 900px) { .dq { padding-bottom: 30%; } }
 /* Always tall enough for the whole hand and phone, so the top of the phone is never cut off. */
 .dq { min-height: calc(var(--hw) * 851 / 700 + 8px); }
+/* The kitchen photo always fills its card (iPhone Safari left a grey gap under it). */
+.dq-room { aspect-ratio: 1600 / 1063; }
+.dq-room img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
