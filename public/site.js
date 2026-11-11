@@ -96,16 +96,16 @@
     flash = q('.dq-flash'), cond = q('.dq-cond'), thumbs = q('.dq-thumbs'), shut = q('.dq-shut');
   var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
   // The phone's camera shows the room zoomed in (380% wide), centred on the item.
-  function pos(tx, ty) { return (clamp((3.8 * tx - .5) / 2.8) * 100).toFixed(1) + '% ' + (clamp((2.525 * ty - 1.025) / .475) * 100).toFixed(1) + '%'; }
+  function pos(tx, ty) { return (clamp((3.8 * tx - .5) / 2.8) * 100).toFixed(1) + '% ' + (clamp((2.525 * ty - 1.082) / .361) * 100).toFixed(1) + '%'; }
   function stamp() { var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
   var done = 0;
   function aim(i) {
     var it = items[i];
     frame.style.left = it[1] * 100 + '%'; frame.style.top = it[2] * 100 + '%';
     view.style.backgroundPosition = pos(it[1], it[2]);
-    hand.style.setProperty('--hx', Math.max(-40, Math.min(8, (it[1] - .72) * 55)).toFixed(1) + '%');
-    hand.style.setProperty('--hy', ((it[2] - .62) * 14).toFixed(1) + '%');
-    hand.style.setProperty('--hr', ((it[1] - .6) * 10 - 4).toFixed(1) + 'deg');
+    hand.style.setProperty('--hx', Math.max(-30, Math.min(6, (it[1] - .7) * 40)).toFixed(1) + '%');
+    hand.style.setProperty('--hy', ((it[2] - .6) * 10).toFixed(1) + '%');
+    hand.style.setProperty('--hr', ((it[1] - .6) * 6).toFixed(1) + 'deg');
     name.style.opacity = 0; setTimeout(function () { name.textContent = it[0]; name.style.opacity = 1; }, 250);
     cond.classList.remove('on');
   }
