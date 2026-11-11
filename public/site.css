@@ -529,7 +529,7 @@ a.card.ex-page { padding: 10px; color: inherit; text-decoration: none; display: 
 
 /* Someone taking the photos: a real hand holding a phone, with the app's camera on its screen. The photo
    is 1400×933; .hand-stage keeps that coordinate space (cropped to x 330–1080) and site.js scales it to
-   the box (--k). The screen is mapped onto the phone's glass with matrix3d (corners measured on the photo). */
+   the box (--k). The phone photo is straightened so its screen is an upright rectangle; the app sits on it in % (no 3D transforms). */
 .visual { min-height: 0; }
 .hand-shot { position: relative; width: min(100%, 470px); aspect-ratio: 750 / 933; border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px -30px rgba(20,35,59,.55); background: #9da3a8; animation: fadeIn 1s .1s backwards; }
 .hand-stage { position: absolute; left: 0; top: 0; width: 1400px; height: 933px; transform-origin: 0 0; transform: scale(var(--k, .62)) translateX(-330px); }
@@ -791,7 +791,7 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 /* ===== Hero: someone doing their own inventory (Nov 2026, replaces the triangle house) =====
    A real kitchen photo and a real hand holding a real phone (hero-hand.webp: cut out of hand.jpg, Unsplash licence) in
    front of it. The phone's own screen is replaced by the app's camera, mapped onto it with a perspective transform
-   (matrix3d, worked out from the screen's four corners in the photo): it shows the item being photographed, the shutter
+   (the photo was straightened so its glass is an upright rectangle: left 45.4%, top 3.25%, 40% × 71.2% of the picture): it shows the item being photographed, the shutter
    flashes, the dated photo drops into the strip, a condition is chosen and the item gets a pin on the room.
    site.js steps through the items; without JavaScript or under reduced motion one finished step shows. */
 .dq { --hw: 330px; --hsc: calc(330 / 700); position: relative; width: min(100%, 680px); margin: 0 auto; padding: 0 0 22% 0; }
@@ -809,12 +809,12 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 .dq-tag { position: absolute; left: 14px; top: 14px; background: rgba(19,33,58,.86); color: #fff; font: 600 13px/1 Geist, Inter, sans-serif; padding: 9px 13px; border-radius: 999px; display: flex; align-items: center; gap: 8px; }
 .dq-tag span { width: 8px; height: 8px; border-radius: 50%; background: #ff5a4f; box-shadow: 0 0 0 0 rgba(255,90,79,.6); animation: dqRec 1.6s ease-out infinite; }
 @keyframes dqRec { to { box-shadow: 0 0 0 8px rgba(255,90,79,0); } }
-/* The hand and phone: a 700 × 622 design box, scaled to --hw wide. */
-.dq-hand { position: absolute; right: -4%; bottom: 0; width: var(--hw); height: calc(var(--hw) * 622 / 700); transform-origin: 30% 100%; transform: translate(var(--hx, 0), var(--hy, 0)) rotate(var(--hr, 0deg)); transition: transform 1.1s cubic-bezier(.65,0,.25,1); }
-.dq-hin { position: absolute; left: 0; top: 0; width: 700px; height: 622px; transform-origin: 0 0; transform: scale(var(--hsc)); }
-.dq-photo { position: absolute; inset: 0; width: 700px; height: 622px; filter: drop-shadow(0 30px 40px rgba(19,33,58,.32)); }
-.dq-screen { position: absolute; left: 0; top: 0; width: 330px; height: 714px; transform-origin: 0 0; transform: matrix3d(0.664553,0.130002,0,0.000010,-0.176497,0.624437,0,-0.000048,0,0,1,0,410.666667,32,0,1);
-  border-radius: 40px; overflow: hidden; background: #111; font-family: Geist, Inter, sans-serif; color: #fff; container-type: inline-size; }
+/* The hand and phone: a 700 × 851 picture, shown --hw wide. */
+.dq-hand { position: absolute; right: -4%; bottom: 0; width: var(--hw); height: calc(var(--hw) * 851 / 700); transform-origin: 30% 100%; transform: translate(var(--hx, 0), var(--hy, 0)) rotate(var(--hr, 0deg)); transition: transform 1.1s cubic-bezier(.65,0,.25,1); }
+.dq-hin { position: absolute; inset: 0; }
+.dq-photo { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 30px 40px rgba(19,33,58,.32)); }
+.dq-screen { position: absolute; left: 45.4%; top: 3.25%; width: 40%; height: 71.2%;
+  border-radius: 13% / 6%; overflow: hidden; background: #111; font-family: Geist, Inter, sans-serif; color: #fff; container-type: inline-size; }
 .dq-view { position: absolute; inset: 0; background: url(/img/kitchen.webp) no-repeat; background-size: 380% auto; background-position: 0 50%; transition: background-position 1.1s cubic-bezier(.65,0,.25,1); }
 .dq-vf { position: absolute; left: 18%; right: 18%; top: 34%; bottom: 36%; }
 .dq-vf i { position: absolute; width: 18%; height: 18%; border: 1.6cqw solid rgba(255,255,255,.9); }
@@ -845,8 +845,10 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 @media (prefers-reduced-motion: reduce) { .dq-hand, .dq-frame, .dq-view { transition: none; } .dq-tag span { animation: none; } }
 .dq { --hw: 420px; --hsc: calc(420 / 700); padding-bottom: 26%; }
 .dq-room { width: 80%; }
-.dq-hand { right: -10%; bottom: -2%; }
+.dq-hand { right: -6%; bottom: -2%; }
 @media (max-width: 1100px) { .dq { --hw: 340px; --hsc: calc(340 / 700); } }
-@media (max-width: 900px) { .dq { --hw: 290px; --hsc: calc(290 / 700); padding-bottom: 38%; } .dq-hand { right: -6%; } }
-@media (max-width: 420px) { .dq { --hw: 250px; --hsc: calc(250 / 700); } }
+@media (max-width: 900px) { .dq { --hw: 290px; --hsc: calc(290 / 700); padding-bottom: 54%; } .dq-hand { right: 0; } }
+@media (max-width: 420px) { .dq { --hw: 240px; padding-bottom: 64%; } }
 @media (max-width: 900px) { .dq { padding-bottom: 30%; } }
+/* Always tall enough for the whole hand and phone, so the top of the phone is never cut off. */
+.dq { min-height: calc(var(--hw) * 851 / 700 + 8px); }

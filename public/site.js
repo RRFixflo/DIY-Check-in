@@ -103,7 +103,7 @@
     var it = items[i];
     frame.style.left = it[1] * 100 + '%'; frame.style.top = it[2] * 100 + '%';
     view.style.backgroundPosition = pos(it[1], it[2]);
-    hand.style.setProperty('--hx', Math.max(-30, Math.min(6, (it[1] - .7) * 40)).toFixed(1) + '%');
+    hand.style.setProperty('--hx', Math.max(-30, Math.min(0, (it[1] - .7) * 40)).toFixed(1) + '%');
     hand.style.setProperty('--hy', ((it[2] - .6) * 10).toFixed(1) + '%');
     hand.style.setProperty('--hr', ((it[1] - .6) * 6).toFixed(1) + 'deg');
     name.style.opacity = 0; setTimeout(function () { name.textContent = it[0]; name.style.opacity = 1; }, 250);
