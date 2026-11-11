@@ -789,7 +789,7 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 .hero { background: radial-gradient(60% 70% at 15% 10%, rgba(201,216,238,.55), transparent 70%), radial-gradient(50% 60% at 85% 20%, rgba(232,224,246,.6), transparent 70%), radial-gradient(50% 60% at 55% 90%, rgba(241,226,200,.35), transparent 70%), #fff; }
 
 /* ===== Hero: someone doing their own inventory (Nov 2026, replaces the triangle house) =====
-   A real kitchen photo and a real hand holding a real phone (hero-hand-v3.webp: cut out of hand.jpg, Unsplash licence) in
+   A real kitchen photo and a real hand holding a real phone (hero-hand-v4.webp: cut out of hand.jpg, Unsplash licence) in
    front of it. The phone's own screen is replaced by the app's camera, mapped onto it with a perspective transform
    (the photo was straightened so its glass is an upright rectangle: left 45.4%, top 3.25%, 40% × 71.2% of the picture): it shows the item being photographed, the shutter
    flashes, the dated photo drops into the strip, a condition is chosen and the item gets a pin on the room.
@@ -855,3 +855,9 @@ body .page-head h1 { animation: rise .9s cubic-bezier(.2,.7,.2,1) backwards, shi
 /* The kitchen photo always fills its card (iPhone Safari left a grey gap under it). */
 .dq-room { aspect-ratio: 1600 / 1063; }
 .dq-room img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+/* Finishing touches: the screen sits a hair inside the phone's frame with the same rounded corners,
+   the iPhone's notch at the top, and a faint reflection across the glass. */
+.dq-screen { border-radius: 15% / 6.9%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+.dq-screen::before { content: ""; position: absolute; z-index: 6; left: 50%; top: 0; width: 46%; height: 3.4%; transform: translateX(-50%); background: #0b0d10; border-radius: 0 0 16cqw 16cqw / 0 0 7cqw 7cqw; pointer-events: none; }
+.dq-screen::after { content: ""; position: absolute; z-index: 6; inset: 0; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 28%, rgba(255,255,255,0) 42%); }
