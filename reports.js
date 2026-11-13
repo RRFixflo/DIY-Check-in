@@ -79,8 +79,10 @@ function canonicalCode(raw){
   const codes = readCodes();
   return [(m[1] || 'DIY') + '-' + m[2] + '-' + m[3]].concat(m[1] ? [] : ['FREE-' + m[2] + '-' + m[3]]).find(k => codes.some(c => c.code === k)) || '';
 }
+// A prepaid link (bought as a pack on /agents) has credits; the others (made on /admin) are unlimited (credits null).
+const agentLeft = a => a && a.credits != null ? Math.max(0, Number(a.credits) - (a.uses || 0)) : null;
 function codeAccess(code){
-  if (/^AGT-/.test(code)) return agentFor(code) ? { valid: true, reason: '' } : { valid: false, reason: 'removed' };
+  if (/^AGT-/.test(code)) { const a = agentFor(code); return !a ? { valid: false, reason: 'removed' } : agentLeft(a) === 0 ? { valid: false, reason: 'spent' } : { valid: true, reason: '' }; }
   if (/^SHARED-/.test(code)) return code === sharedToken(readShared()) ? { valid: true, reason: '' } : { valid: false, reason: 'changed' };
   const c = readCodes().find(c => c.code === code);
   if (!c) return null;
@@ -109,6 +111,33 @@ function logCode(req, kind, code, address){
 // Someone has just got in with an access code (called by server.js when the code is accepted).
 function codeLogin(req, code){ logCode(req, 'in', code); console.log('access code login: ' + deviceName(req.headers['user-agent'])); }
 
+// A prepaid link is running low (2 left) or has run out: the owner gets a phone alert and the agent an email to top up.
+function lowCredits(a, left){
+  const base = (process.env.PUBLIC_URL || '').replace(/\/+$/, '');
+  notifyOwner({ title: left ? 'Agent pack running low: ' + a.name : 'Agent pack used up: ' + a.name, message: (left ? left + ' of ' + a.credits + ' reports left' : 'All ' + a.credits + ' reports used. The link now asks tenants to come back later.') + (a.email ? '\n' + a.email : ''), tags: ['office'], click: base ? base + '/admin#agents' : '' });
+  const key = process.env.RESEND_API_KEY; if (!key || !a.email) return;
+  const text = [(a.contact ? 'Hello ' + a.contact + ',' : 'Hello,'), '',
+    left ? 'You have ' + left + ' prepaid report' + (left === 1 ? '' : 's') + ' left on your DIY Inventory tenant link (' + a.name + ').' : 'All ' + a.credits + ' prepaid reports on your DIY Inventory tenant link (' + a.name + ') have now been used. Tenants who open the link will be asked to come back later until it is topped up.', '',
+    'Top up with another pack here (use this same email address and the reports are added to the same link, so nothing changes for your tenants):', (base || '') + '/agents#packs', '',
+    'Or just reply to this email and we’ll sort it out.', '', 'DIY Inventory'].join('\n');
+  fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+    headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: process.env.REPORT_FROM_EMAIL || 'DIY Inventory <onboarding@resend.dev>', to: [a.email], ...(process.env.REPORT_TO_EMAIL ? { reply_to: process.env.REPORT_TO_EMAIL } : {}), subject: left ? 'Your DIY Inventory reports are running low' : 'Your DIY Inventory reports have all been used', text }) })
+    .then(r => { if (!r.ok) console.error('agent low-credit email failed: HTTP ' + r.status); }).catch(e => console.error('agent low-credit email failed:', e.message));
+}
+// A pack bought on /agents: added to the buyer's existing prepaid link (same email), else a new prepaid link.
+// Returns the link record.
+function addAgentCredits({ name, contact, email, credits, ref }){
+  const list = readAgents(), em = String(email || '').toLowerCase();
+  let a = em && list.find(x => x.credits != null && String(x.email || '').toLowerCase() === em);
+  if (a) { if ((a.packs || []).some(p => p.ref === ref)) return a; a.credits = Number(a.credits) + credits; }
+  else { a = { id: crypto.randomBytes(6).toString('hex'), name: clip(name || contact || em || 'Prepaid pack', 80), contact: clip(contact, 80), email: clip(em, 120), token: 'AGT-' + crypto.randomBytes(18).toString('base64url'), createdAt: new Date().toISOString(), uses: 0, credits }; list.push(a); }
+  a.packs = (a.packs || []).concat([{ ref, credits, at: new Date().toISOString() }]);
+  writeAgents(list); console.log('agent pack: ' + credits + ' reports for ' + a.name + ' (' + agentLeft(a) + ' left)');
+  return a;
+}
+const agentByToken = t => { const a = agentFor(t); return a ? { name: a.name, email: a.email, credits: a.credits, uses: a.uses || 0, left: agentLeft(a), token: a.token } : null; };
+
 function useCode(code, address, req){
   if (req) logCode(req, 'report', code, address);
   if (/^SHARED-/.test(code)) {
@@ -118,7 +147,10 @@ function useCode(code, address, req){
   if (/^AGT-/.test(code)) {
     const list = readAgents(), a = list.find(a => a.token === code); if (!a) return;
     a.uses = (a.uses || 0) + 1; a.lastUsedAt = new Date().toISOString(); a.lastUsedFor = clip(address, 200);
-    writeAgents(list); console.log('agent link used: ' + a.name); return;
+    writeAgents(list); console.log('agent link used: ' + a.name + (a.credits != null ? ' (' + agentLeft(a) + ' of ' + a.credits + ' left)' : ''));
+    const left = agentLeft(a);
+    if (left === 2 || left === 0) lowCredits(a, left);
+    return;
   }
   const list = readCodes(), c = list.find(c => c.code === code);
   if (!c || c.usedAt) return;
@@ -1119,6 +1151,8 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
     const day = d => new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/London' });
     const list = readAgents().slice().reverse();
     const rows = list.map(a => `<li><div style="flex:1;min-width:0"><strong>${esc(a.name)}</strong>
+      ${a.credits != null ? `<div class="sub"><span class="pill ${agentLeft(a) ? 'sent' : ''}">Prepaid: ${agentLeft(a)} of ${a.credits} left</span> ${(a.packs || []).map(p => esc(p.credits + ' bought ' + day(p.at))).join(' · ')}${a.contact ? ' · ' + esc(a.contact) : ''}</div>
+      <form method="post" action="/admin/agents/${esc(a.id)}/credits" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input name="add" type="number" min="-500" max="500" required placeholder="Add reports (e.g. 10, or -1)" style="width:200px"><button class="btn">Add</button></form>` : ''}
       <div class="sub">Made ${esc(day(a.createdAt))} · ${a.uses ? 'used for ' + a.uses + ' report' + (a.uses === 1 ? '' : 's') + ', last ' + esc(day(a.lastUsedAt)) + (a.lastUsedFor ? ' (' + esc(a.lastUsedFor) + ')' : '') : 'not used yet'}</div>
       <input readonly value="${esc(base + a.token + end)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace">
       <form method="post" action="/admin/agents/${esc(a.id)}/email" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input name="email" type="email" maxlength="120" value="${esc(a.email || '')}" placeholder="Email finished reports to… (optional)" style="flex:1;min-width:180px"><button class="btn">Save</button></form>
@@ -1148,6 +1182,15 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     if (!a) return res.status(404).type('text/plain').send('That link has been removed.');
     a.email = clip(email, 120); writeAgents(list);
     res.redirect(303, '/admin#agents');
+  });
+  app.post('/admin/agents/:id/credits', requireAdmin, express.urlencoded({ extended: false, limit: '4kb' }), (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Change links from the reports page.');
+    const add = parseInt(req.body && req.body.add, 10);
+    const list = readAgents(), a = list.find(a => a.id === String(req.params.id));
+    if (!a) return res.status(404).type('text/plain').send('That link has been removed.');
+    if (!add || Math.abs(add) > 500) return res.status(400).type('text/plain').send('Type how many reports to add (or a minus number to take some off).');
+    a.credits = Math.max(a.uses || 0, Number(a.credits || 0) + add); a.packs = (a.packs || []).concat([{ ref: 'admin', credits: add, at: new Date().toISOString() }]);
+    writeAgents(list); res.redirect(303, '/admin#agents');
   });
   app.post('/admin/agents/:id/delete', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Remove links from the reports page.');
@@ -1223,7 +1266,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     addSec(safe(() => certs.adminHTML()));
     adminSections.forEach(f => addSec(safe(() => f(req))));
     addSec(safe(messagesHTML)); addSec(safe(() => drafts.draftsHTML())); addSec(safe(activityHTML)); addSec(safe(() => codesHTML(req))); addSec(safe(() => agentsHTML(req)));
-    const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans']], ['enquiries', 'Enquiries', '✉️', ['messages', 'bookings', 'prleads']],
+    const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans']], ['enquiries', 'Enquiries', '✉️', ['agentleads', 'messages', 'bookings', 'prleads']],
       ['work', 'In progress', '📝', ['drafts', 'inspections', 'midterm']], ['landlords', 'Landlords', '🏠', ['landlords']], ['access', 'Access & links', '🔑', ['agents', 'codes', 'activity']]];
     const known = new Set(GROUPS.flatMap(g => g[3]));
     const groups = GROUPS.map(([k, label, icon, ids]) => ({ k, label, icon, secs: ids.map(id => secs.find(x => x.id === id)).filter(Boolean) }))
@@ -1612,4 +1655,4 @@ function editAllowed(m){
   return !!(r && r.photoKey === m.photoKey && !(r.unpaid && !r.paidAt));
 }
 
-module.exports = { photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+module.exports = { addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

@@ -18,6 +18,9 @@ const express = require('express');
 const payments = require('./payments');
 
 const PRICE = 29.99, PENCE = 2999, PRICE_TEXT = '£29.99';
+// Packs for agents and landlords with several properties (bought on /agents): a prepaid tenant link with this many reports.
+const PACKS = { 10: 249, 25: 549, 50: 999 };
+const packOf = v => PACKS[parseInt(v, 10)] ? parseInt(v, 10) : 0;
 const REF_RE = /^[a-f0-9]{24}$/, TOKEN_RE = /^RPT-[A-Za-z0-9_-]{24}$/;
 const env = k => String(process.env[k] || '').trim();
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -39,7 +42,7 @@ const isToken = t => TOKEN_RE.test(String(t || ''));
 function access(token){
   if (!/^RPT-/.test(String(token || ''))) return null;
   const r = isToken(token) && find('token', token);
-  if (!r || r.status !== 'paid') return { valid: false, reason: 'unknown' };
+  if (!r || r.status !== 'paid' || r.pack) return { valid: false, reason: 'unknown' };   // a pack's access is its tenant link (AGT-), not this token
   return r.usedAt ? { valid: false, reason: 'used' } : { valid: true, reason: '' };
 }
 // The buyer's email for a paid purchase token ('' if none was given), so their finished report can be emailed to them.
@@ -49,7 +52,7 @@ function describe(token){
   if (!isToken(token)) return '';
   const r = find('token', token); if (!r || r.status !== 'paid') return '';
   const who = [r.name, r.email].filter(Boolean).join(', ');
-  return '£' + Number(r.amount || 30).toFixed(2) + ' paid' + (r.paidAt ? ' on ' + new Date(r.paidAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' }) : '') + (who ? ' by ' + who : '') + (r.for === 'tenant' ? ' (bought for a tenant)' : '');
+  return (r.pack ? r.pack + '-report pack, ' : '') + '£' + Number(r.amount || 30).toFixed(2) + ' paid' + (r.paidAt ? ' on ' + new Date(r.paidAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' }) : '') + (who ? ' by ' + who : '') + (r.for === 'tenant' ? ' (bought for a tenant)' : '');
 }
 // A report has been stored with this token: it's spent (the same browser still sees and sends that report).
 function markUsed(token, address){
@@ -68,7 +71,20 @@ async function emailBuyer(rec, link){
   if (!key || !rec.email) return false;
   const from = env('REPORT_FROM_EMAIL') || 'DIY Inventory <onboarding@resend.dev>';
   const when = new Date(rec.paidAt || Date.now()).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' });
-  const text = [
+  const text = rec.pack ? [
+    (rec.contact || rec.name ? 'Hello ' + (rec.contact || rec.name) + ',' : 'Hello,'), '',
+    'Thank you for buying ' + rec.pack + ' DIY Inventory reports. They are ready to use.', '',
+    'Your tenant link (send the same link to every tenant):', link, '',
+    'Each tenant opens it on their phone and does their own check-in, check-out or inspection. They never see a price, and every finished report is emailed to you here.',
+    'Reports left: ' + (rec.left != null ? rec.left : rec.pack) + '. We’ll email you when you have 2 left. Buy another pack with this same email address and the reports are added to the same link.', '',
+    'Receipt', '-------',
+    'DIY Inventory: ' + rec.pack + '-report pack' + (rec.name ? ' for ' + rec.name : ''),
+    'Amount paid: £' + Number(rec.amount).toFixed(2) + ' (GBP)',
+    'Paid: ' + when,
+    'Paid by card' + (rec.providerRef ? ', payment reference ' + rec.providerRef : ''),
+    'Order reference: ' + rec.ref, '',
+    'DIY Inventory'
+  ].join('\n') : [
     (rec.name ? 'Hello ' + rec.name + ',' : 'Hello,'), '',
     'Thank you for buying a DIY Inventory report. Your report is ready to start.', '',
     'Your personal link:', link, '',
@@ -86,7 +102,7 @@ async function emailBuyer(rec, link){
     const res = await fetch((env('RESEND_API_BASE') || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', {   // the base can point at a mock, for tests only
       method: 'POST', signal: AbortSignal.timeout(20000),
       headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to: [rec.email], subject: 'Your DIY Inventory report link and receipt', text })
+      body: JSON.stringify({ from, to: [rec.email], subject: rec.pack ? 'Your ' + rec.pack + ' DIY Inventory reports: your tenant link and receipt' : 'Your DIY Inventory report link and receipt', text })
     });
     if (!res.ok) { console.error('report purchase email failed: HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return false; }
     return true;
@@ -97,7 +113,7 @@ function mount(app, ctx){
   FILE = path.join(ctx.REPORTS_DIR, 'report-purchases.json');
   const { renderPage, clientIp, limiter, notify, track, PUBLIC_BASE } = ctx;
   const baseOf = req => (PUBLIC_BASE || ctx.canonicalBase(req)).replace(/\/+$/, '');
-  const linkOf = (rec, req) => baseOf(req) + '/?access=' + rec.token;
+  const linkOf = (rec, req) => baseOf(req) + '/?access=' + (rec.agentToken ? rec.agentToken + '&start=checkin' : rec.token);
   const checkoutLimit = limiter(10, 60 * 60 * 1000), doneLimit = limiter(300, 60 * 60 * 1000);
   const lastCheck = new Map();
 
@@ -112,7 +128,18 @@ function mount(app, ctx){
     if (!v.paid) return update(rec.ref, r => { r.providerStatus = v.status; }) || rec;
     let first = false;
     const out = update(rec.ref, r => { if (r.status !== 'paid') { first = true; r.status = 'paid'; r.paidAt = new Date().toISOString(); r.providerRef = v.providerRef || r.providerRef || ''; r.providerStatus = v.status; } });
-    if (first) {
+    if (first && out.pack && ctx.addAgentCredits) {
+      const a = ctx.addAgentCredits({ name: out.name, contact: out.contact, email: out.email, credits: out.pack, ref: out.ref });
+      update(rec.ref, r => { r.agentToken = a.token; }); out.agentToken = a.token; out.left = a.credits - (a.uses || 0);
+    }
+    if (first && out.pack) {
+      console.log('report pack: paid ' + rec.ref + ' (' + out.pack + ' reports, ' + rec.provider + ')');
+      if (track) track(req, 'report_purchase', Number(out.amount));
+      try { require('./analytics').lead(req, 'purchase', rec.origin); } catch (e) {}
+      if (notify) notify({ title: 'Agent pack sold: ' + out.pack + ' reports, £' + Number(out.amount).toFixed(0), message: [out.name, out.contact, out.email].filter(Boolean).join(' · ') + '\nPaid by ' + (rec.provider === 'sumup' ? 'SumUp' : 'Stripe'), tags: ['moneybag'], click: PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') + '/admin#agents' : '' });
+      const link = PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') + '/?access=' + out.agentToken + '&start=checkin' : req ? linkOf(out, req) : '';
+      if (out.email && link) emailBuyer(out, link).then(ok => { if (ok) update(rec.ref, r => { r.emailedAt = new Date().toISOString(); }); });
+    } else if (first) {
       console.log('report: paid ' + rec.ref + ' (' + rec.provider + ')');
       if (track) track(req, 'report_purchase', PRICE);
       try { require('./analytics').lead(req, 'purchase', rec.origin); } catch (e) {}
@@ -169,7 +196,49 @@ function mount(app, ctx){
       jsonld: base => [{ '@type': 'Product', name: 'DIY Inventory report', description: 'One property inventory report: a check-in, check-out or inspection, done on your phone, with a PDF report.', brand: { '@id': base + '/#org' },
         offers: { '@type': 'Offer', price: PRICE.toFixed(2), priceCurrency: 'GBP', availability: 'https://schema.org/InStock', url: base + '/buy', seller: { '@id': base + '/#org' } } }] }, req, o.notice);
   }
+  function packDonePage(req, rec){
+    const link = linkOf(rec, req), info = ctx.agentByToken ? ctx.agentByToken(rec.agentToken) : null;
+    const left = info && info.left != null ? info.left : rec.pack;
+    const msg = 'Here’s the link to do your property inventory report (check-in or check-out) on your phone with DIY Inventory. It’s already paid for: open it on the phone you’ll take the photos with.';
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(msg + '\n' + link);
+    const mail = 'mailto:?subject=' + encodeURIComponent('Your inventory report link') + '&body=' + encodeURIComponent(msg + '\n\n' + link + '\n');
+    const when = new Date(rec.paidAt || rec.createdAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' });
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Payment received</span><h1>Paid. ${rec.pack} reports are ready</h1>
+<p>Send your tenant link to every tenant moving in or out. Each one does their report on their phone, never sees a price, and the finished report comes to you.</p></div></div>
+<section class="tight"><div class="wrap buy-done">
+  <div class="card buy-link">
+    <h2>Your tenant link</h2>
+    <p class="buy-small"><b>${left} report${left === 1 ? '' : 's'} left</b> on this link. The same link works for every tenant: keep it somewhere safe.</p>
+    <div class="buy-copy"><input id="buyLink" readonly value="${esc(link)}" aria-label="Your tenant link" onclick="this.select()"><button type="button" class="btn primary" id="copyBtn">Copy</button></div>
+    <h3>Send it to a tenant</h3>
+    <div class="buy-share">
+      <button type="button" class="btn primary" id="shareBtn" hidden>Share…</button>
+      <a class="btn ghost" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost" href="${esc(mail)}">Email</a>
+    </div>
+    <p class="buy-small" style="margin-top:14px">We’ll email ${rec.email ? esc(rec.email) : 'you'} when you have 2 reports left. Buy another pack with the same email and the reports are added to this same link.</p>
+  </div>
+  <div class="card buy-receipt">
+    <h2>Receipt</h2>
+    <dl>
+      <dt>Item</dt><dd>${rec.pack}-report pack${rec.name ? ' for ' + esc(rec.name) : ''}</dd>
+      <dt>Amount paid</dt><dd>£${Number(rec.amount).toFixed(2)}</dd>
+      <dt>Paid</dt><dd>${esc(when)} · by card</dd>
+      ${rec.providerRef ? `<dt>Payment reference</dt><dd>${esc(rec.providerRef)}</dd>` : ''}
+      <dt>Order reference</dt><dd>${esc(rec.ref)}</dd>
+    </dl>
+    <p class="buy-small">${rec.email && env('RESEND_API_KEY') ? 'We’ve emailed your link and this receipt to ' + esc(rec.email) + '.' : 'Save or screenshot this page for your records: it’s your receipt.'}</p>
+  </div>
+</div></section>
+<script>(function(){var i=document.getElementById('buyLink'),c=document.getElementById('copyBtn'),s=document.getElementById('shareBtn');
+c.addEventListener('click',function(){var done=function(){c.textContent='Copied';setTimeout(function(){c.textContent='Copy'},2000)};
+if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(i.value).then(done,function(){i.select();document.execCommand('copy');done()});else{i.select();document.execCommand('copy');done()}});
+if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navigator.share({title:'Your inventory report link',text:${JSON.stringify(msg).replace(/</g, '\\u003c')},url:i.value}).catch(function(){})})}})();</script>`;
+    return renderPage({ key: 'agents', path: '/buy/done', title: 'Paid · ' + rec.pack + ' reports ready · DIY Inventory', desc: 'Your DIY Inventory reports are paid for and ready.', body,
+      head: head + '<meta name="robots" content="noindex, nofollow">', jsonld: [] }, req);
+  }
   function donePage(req, rec){
+    if (rec.pack) return packDonePage(req, rec);
     const link = linkOf(rec, req), fromApp = rec.from === 'app';
     const msg = 'Here’s your link to do the property inventory report on your phone with DIY Inventory. It’s already paid for: open it on the phone you’ll take the photos with.';
     const wa = 'https://wa.me/?text=' + encodeURIComponent(msg + '\n' + link);
@@ -231,8 +300,27 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     res.set('Cache-Control', 'no-store').type('html').send(buyPage(req, o));
   });
   app.post(['/buy', '/buy/'], express.urlencoded({ extended: false, limit: '8kb' }), async (req, res) => {
-    const b = req.body || {}, o = optsOf(b);
+    const b = req.body || {}, o = optsOf(b), pack = packOf(b.pack);
     o.name = clip(b.name, 80); o.email = clip(b.email, 120).toLowerCase();
+    if (pack) {   // a pack for an agent or landlord, from /agents: their errors go back there
+      const back = e => res.redirect(303, '/agents?err=' + e + '&pack=' + pack + '#packs');
+      const contact = clip(b.contact, 80);
+      if (!o.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.email)) return back('details');
+      const prov = payments.provider(); if (!prov) return back('off');
+      if (!checkoutLimit(clientIp(req))) return back('busy');
+      const amount = PACKS[pack];
+      const rec = { ref: crypto.randomBytes(12).toString('hex'), token: 'RPT-' + crypto.randomBytes(18).toString('base64url'), provider: prov, providerId: '', providerRef: '', amount, currency: 'GBP', status: 'pending',
+        pack, name: o.name, contact, email: o.email, for: 'agent', from: '', createdAt: new Date().toISOString(), paidAt: '', usedAt: '', origin: require('./origin').of(req, b) };
+      const base = ctx.canonicalBase(req);
+      try {
+        const c = await payments.createCheckout({ provider: prov, ref: rec.ref, amountPence: amount * 100, name: 'DIY Inventory: ' + pack + ' reports', detail: pack + ' check-ins, check-outs or inspections', email: rec.email,
+          returnUrl: base + '/buy/done?ref=' + rec.ref, cancelUrl: base + '/buy/cancel?ref=' + rec.ref, hookUrl: base + '/api/buy/webhook', tag: 'report' });
+        rec.providerId = c.id;
+        const d = readAll(); d.list.push(rec); writeAll(d);
+        console.log('report pack: checkout ' + rec.ref + ' created (' + pack + ' reports, ' + prov + ')');
+        return res.redirect(303, c.url);
+      } catch (e) { if (e.message !== 'provider') console.error('report pack: checkout failed: ' + e.message); return back('provider'); }
+    }
     if (o.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.email)) return res.status(400).type('html').send(buyPage(req, Object.assign(o, { notice: { text: 'Please check your email address, or leave it blank.' } })));
     const prov = payments.provider();
     if (!prov) return res.status(503).type('html').send(buyPage(req, o));
@@ -262,15 +350,17 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     const rec = await settle(rec0, req);
     if (!rec || rec.status !== 'paid') {
       const st = String((rec || rec0).providerStatus || '');
-      if (/failed|expired|cancel/.test(st)) { const q = qs(rec0); return res.redirect(302, '/buy' + (q ? q + '&' : '?') + 'failed=1'); }
+      if (/failed|expired|cancel/.test(st)) { if (rec0.pack) return res.redirect(302, '/agents?err=failed&pack=' + rec0.pack + '#packs'); const q = qs(rec0); return res.redirect(302, '/buy' + (q ? q + '&' : '?') + 'failed=1'); }
       return res.status(202).type('html').send(waitPage(req, ref, n));
     }
     // The buyer's browser gets the token straight away, as /?access= does, so the app is unlocked here.
-    if (!rec.usedAt) res.setHeader('Set-Cookie', 'diy_access=' + rec.token + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');
+    if (rec.pack && !rec.agentToken) return res.status(202).type('html').send(waitPage(req, ref, n));
+    if (!rec.usedAt) res.setHeader('Set-Cookie', 'diy_access=' + (rec.agentToken || rec.token) + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');
     res.type('html').send(donePage(req, rec));
   });
   app.get('/buy/cancel', (req, res) => {
     const ref = String(req.query.ref || ''), rec = REF_RE.test(ref) ? find('ref', ref) : null;
+    if (rec && rec.pack) return res.redirect(302, '/agents?err=cancelled&pack=' + rec.pack + '#packs');
     const q = qs(rec || {});
     res.redirect(302, '/buy' + (q ? q + '&' : '?') + 'cancelled=1');
   });
@@ -297,7 +387,7 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     const all = readAll().list, paid = all.filter(r => r.status === 'paid').reverse(), pending = all.filter(r => r.status !== 'paid').length;
     const revenue = Math.round(paid.reduce((a, r) => a + (Number(r.amount) || 0), 0) * 100) / 100, unused = paid.filter(r => !r.usedAt).length, prov = payments.provider();
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
-    const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.usedAt ? '<span class="pill">Used' + (r.usedFor ? ' for ' + esc(r.usedFor) : '') + ', ' + esc(when(r.usedAt)) + '</span>' : '<span class="pill sent">Not used yet</span>'}
+    const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.pack ? '<span class="pill">' + r.pack + '-report pack · see Tenant links</span>' : r.usedAt ? '<span class="pill">Used' + (r.usedFor ? ' for ' + esc(r.usedFor) : '') + ', ' + esc(when(r.usedAt)) + '</span>' : '<span class="pill sent">Not used yet</span>'}
       <div class="sub">${esc(when(r.paidAt || r.createdAt))}${r.email ? ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : ''}${r.for === 'tenant' ? ' · for a tenant' : ''} · ${r.provider === 'sumup' ? 'SumUp' : 'Stripe'}${r.providerRef ? ' · ' + esc(r.providerRef) : ''} · ref ${esc(r.ref)}${r.usedAt ? ' · used ' + esc(when(r.usedAt)) + (r.usedFor ? ' for ' + esc(r.usedFor) : '') : ''}${r.emailedAt ? ' · link emailed' : ''}</div>
       <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit">${r.usedAt ? '' : `<form method="post" action="/admin/purchases/${esc(r.ref)}/used" style="margin-top:6px" onsubmit="return confirm('Mark this purchase as used? Its link will stop working for new reports.')"><button class="btn">Mark as used</button> <span class="sub" style="display:inline">if their report arrived another way (e.g. made from the backup)</span></form>`}${require('./origin').html(r.origin, esc)}</div></li>`).join('');
     return `<details class="codes" id="purchases"><summary>💷 Report purchases <span class="sub" style="display:inline">— ${paid.length ? paid.length + ' sold, £' + revenue.toFixed(2) + ' · ' + unused + ' not used yet' : 'none sold yet'}${pending ? ' · ' + pending + ' started, not paid' : ''}</span></summary>
@@ -338,4 +428,4 @@ const CSS = `.buy-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 
 
 // Every paid purchase with an email (for /admin's Email form: matched to a report by its buyer's name or the address it was used for).
 function paidWithEmail(){ return readAll().list.filter(r => r.status === 'paid' && r.email).map(r => ({ name: r.name || '', email: r.email, usedFor: r.usedFor || '', token: r.token })); }
-module.exports = { describe, emailFor, paidWithEmail, mount, access, markUsed, isToken, PRICE, PRICE_TEXT };
+module.exports = { PACKS, describe, emailFor, paidWithEmail, mount, access, markUsed, isToken, PRICE, PRICE_TEXT };

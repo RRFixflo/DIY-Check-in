@@ -335,7 +335,7 @@ function renderPage(pg, req, notice){
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
       : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report', 'agents', 'buy'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req), inAcc = require('./landlords').signedIn(req);   // signed-in landlords see "My dashboard"
@@ -348,7 +348,7 @@ function renderPage(pg, req, notice){
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
-  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : reason === 'removed' ? 'This link is no longer active. Please ask for a new one.' : '';
+  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : reason === 'removed' ? 'This link is no longer active. Please ask for a new one.' : reason === 'spent' ? 'All the prepaid reports on this link have been used. Please ask whoever sent it to top it up.' : '';
   return sitePage('home', req, msg ? { text: msg } : null);
 }
 for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.path, pg.path + '/'], (req, res) => {
@@ -371,7 +371,10 @@ const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.R
 // Floor plans (£9.55): /floor-plan, the drawing tool /floor-plan/create, and paying by card (SumUp or Stripe): payments.js.
 // Buying a report (£29.99) on our own page, /buy, with the same card checkout: purchases.js.
 const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
-  track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+  track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection, addAgentCredits: reports.addAgentCredits, agentByToken: reports.agentByToken }).paths;
+// For letting agents and landlords with several properties: /agents (packs, calculator, enquiry form): agents.js.
+const agentPaths = require('./agents').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
+  isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Free landlord property report (EPC, sold prices, crime, flood, council, checklist; leads for the owner): propreport.js.
@@ -388,7 +391,7 @@ const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPO
 const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
@@ -485,7 +488,7 @@ app.post('/api/access', async (req, res) => {
   const a = await checkAccess(q);
   if (!a.valid) {
     if (a.reason !== 'used') codeTries.wrong(req);
-    return res.status(402).json({ error: a.reason === 'used' ? 'That link has already been used for another report.' : a.reason === 'expired' ? 'That link has expired.' : a.reason === 'changed' ? 'That access code has changed.' : a.reason === 'removed' ? 'That link is no longer active.' : 'We don’t recognise that link or code. Check it and try again.' });
+    return res.status(402).json({ error: a.reason === 'used' ? 'That link has already been used for another report.' : a.reason === 'expired' ? 'That link has expired.' : a.reason === 'changed' ? 'That access code has changed.' : a.reason === 'removed' ? 'That link is no longer active.' : a.reason === 'spent' ? 'All the prepaid reports on that link have been used.' : 'We don’t recognise that link or code. Check it and try again.' });
   }
   if (reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);
   res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax');
