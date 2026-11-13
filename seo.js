@@ -17,7 +17,7 @@ const GUIDES = [
   { slug: 'mid-tenancy-inspection-checklist', cat: 'Inventories', title: 'Mid-tenancy inspection checklist for landlords', desc: 'What to check during a routine inspection: damp, leaks, safety alarms, appliances and wear, room by room.', date: '2026-10-22' },
   { slug: 'fair-wear-and-tear-vs-damage', cat: 'Deposits and moving', title: 'Fair wear and tear vs damage: what’s the difference?', desc: 'How inventories usually tell normal wear from damage, with examples for carpets, walls, furniture and appliances. General information, not legal advice.', date: '2026-10-22' },
 ].concat(require('./views/guides/guides.json'));
-const CATS = ['Inventories', 'Deposits and moving', 'Landlord rules'];
+const CATS = ['Inventories', 'Deposits and moving', 'Landlord rules', 'For letting agents and landlords'];
 const ROOM_NAMES = { bedroom: 'Bedroom', bathroom: 'Bathroom', kitchen: 'Kitchen', living: 'Living room', hallway: 'Hallway and entrance', garden: 'Garden and outdoor space', utility: 'Utility room', wc: 'Separate WC', other: 'Any other room' };
 const ROOM_SLUGS = { bedroom: 'bedroom', bathroom: 'bathroom', kitchen: 'kitchen', living: 'living-room', hallway: 'hallway', garden: 'garden', utility: 'utility-room', wc: 'wc', other: 'other-rooms' };
 
@@ -38,6 +38,8 @@ function mount(app, ctx){
 
   const crumbs = (base, list) => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: base + p })) });
   const cta = `<div class="final" style="padding-top:28px"><div class="wrap"><div class="card"><h2>Do it on your phone</h2><p>DIY Inventory gives every room its own photo checklist, stamps the date and time on every photo, and turns it into a professional PDF report. Free to start.</p><a class="btn" href="/app">Start free</a></div></div></div>`;
+  const BULK = 'For letting agents and landlords';
+  const bulkCta = `<div class="final" style="padding-top:28px"><div class="wrap"><div class="card"><h2>Several properties? Pay less per report</h2><p>Letting agents and landlords with several properties buy prepaid packs: 10 reports for £249, 25 for £549 or 50 for £999, from £19.98 a report against £29.99 for one. One tenant link for every tenant, your own dashboard of every report, and the reports never expire.</p><a class="btn" href="/agents#packs">See the packs</a> <a class="btn ghost" href="/agents#talk">Talk to us</a></div></div></div>`;
   const head = (kicker, title, lead, back) => `<div class="page-head"><div class="wrap">${back ? `<p style="margin:0 0 6px"><a href="${back[1]}">← ${back[0]}</a></p>` : ''}<span class="kicker">${kicker}</span><h1>${escHtml(title)}</h1><p>${lead}</p></div></div>`;
 
   /* ---------------------------- room checklists ---------------------------- */
@@ -69,13 +71,13 @@ function mount(app, ctx){
   const related = g => GUIDES.filter(x => x !== g && x.cat === g.cat).concat(GUIDES.filter(x => x !== g && x.cat !== g.cat)).slice(0, 5);
   const guidePage = g => ({ key: 'guides', path: '/guides/' + g.slug, title: g.title + ' · DIY Inventory', og: g.title, desc: g.desc,
     body: head('Guide · ' + escHtml(g.cat), g.title, escHtml(g.desc), ['All guides', '/guides']) + `<section class="tight"><div class="wrap"><article class="card prose">${g.body}<p class="updated">Updated ${new Date(g.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p></article>
-      <div class="card prose" style="margin-top:18px"><h2>Related guides</h2><ul>${related(g).map(x => `<li><a href="/guides/${x.slug}">${escHtml(x.title)}</a></li>`).join('')}<li><a href="/inventory-template">Free inventory template (PDF and Word)</a></li></ul></div></div></section>` + cta,
+      <div class="card prose" style="margin-top:18px"><h2>Related guides</h2><ul>${related(g).map(x => `<li><a href="/guides/${x.slug}">${escHtml(x.title)}</a></li>`).join('')}<li><a href="/inventory-template">Free inventory template (PDF and Word)</a></li></ul></div></div></section>` + (g.cat === BULK ? bulkCta : cta),
     jsonld: base => [crumbs(base, [['Home', '/'], ['Guides', '/guides'], [g.title, '/guides/' + g.slug]]),
       { '@type': 'Article', headline: g.title, description: g.desc, datePublished: g.date, dateModified: g.updated || g.date, inLanguage: 'en-GB', articleSection: g.cat, mainEntityOfPage: base + '/guides/' + g.slug, author: { '@id': base + '/#org' }, publisher: { '@id': base + '/#org' }, image: base + '/img/og.jpg' }]
       .concat(faqOf(g.body).length ? [{ '@type': 'FAQPage', mainEntity: faqOf(g.body).map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) }] : []) });
   const guideIndex = () => ({ key: 'guides', path: '/guides', title: 'Landlord and tenant guides: inventories, deposits, rules · DIY Inventory', og: 'Landlord and tenant guides', desc: 'Free guides for landlords and tenants: inventories, check-ins and check-outs, deposit deductions and disputes, safety certificates, EPCs and the Renters’ Rights Act.',
     body: head('Guides', 'Guides for landlords and tenants', 'Practical help for tenants, landlords and agents: inventories, deposits, moving in and out, and the rules landlords must follow.') +
-      CATS.map(c => `<section class="tight"><div class="wrap"><h2 style="margin:0 0 14px">${escHtml(c)}</h2><div class="timeline">${GUIDES.filter(g => g.cat === c).map(g => `<a class="card" style="display:block;text-decoration:none;color:inherit" href="/guides/${g.slug}"><h3 style="margin:0 0 6px">${escHtml(g.title)}</h3><p style="margin:0;color:var(--ink-soft)">${escHtml(g.desc)}</p></a>`).join('')}</div></div></section>`).join('') +
+      CATS.filter(c => GUIDES.some(g => g.cat === c)).map(c => `<section class="tight"><div class="wrap"><h2 style="margin:0 0 14px">${escHtml(c)}</h2><div class="timeline">${GUIDES.filter(g => g.cat === c).map(g => `<a class="card" style="display:block;text-decoration:none;color:inherit" href="/guides/${g.slug}"><h3 style="margin:0 0 6px">${escHtml(g.title)}</h3><p style="margin:0;color:var(--ink-soft)">${escHtml(g.desc)}</p></a>`).join('')}</div></div></section>`).join('') +
       `<section class="tight"><div class="wrap"><h2 style="margin:0 0 14px">Templates and checklists</h2><div class="timeline">
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-template"><h3 style="margin:0 0 6px">Free inventory template (PDF and Word)</h3><p style="margin:0;color:var(--ink-soft)">A room-by-room check-in inventory to print or edit, plus check-out and inspection templates.</p></a>
       <a class="card" style="display:block;text-decoration:none;color:inherit" href="/inventory-clerk"><h3 style="margin:0 0 6px">Inventory clerk, or do it yourself?</h3><p style="margin:0;color:var(--ink-soft)">What a clerk does and costs, and doing the inventory yourself for £29.99.</p></a>
@@ -87,25 +89,28 @@ function mount(app, ctx){
   const send = pg => (req, res) => res.type('html').send(renderPage(pg, req));
   app.get(['/checklists', '/checklists/'], send(checklistIndex()));
   types.forEach(t => app.get(['/checklists/' + ROOM_SLUGS[t], '/checklists/' + ROOM_SLUGS[t] + '/'], send(checklistPage(t))));
-  app.get(['/guides', '/guides/'], send(guideIndex()));
-  GUIDES.forEach(g => app.get(['/guides/' + g.slug, '/guides/' + g.slug + '/'], send(guidePage(g))));
+  app.get(['/guides', '/guides/'], (req, res) => res.type('html').send(renderPage(guideIndex(), req)));
+  // One route for every guide, so guides published while the server runs (seoauto.js) work at once.
+  app.get(['/guides/:slug', '/guides/:slug/'], (req, res, next) => { const g = GUIDES.find(x => x.slug === req.params.slug); if (!g) return next(); res.type('html').send(renderPage(guidePage(g), req)); });
 
   /* ------------------------- sitemap, robots, IndexNow ------------------------- */
   const sitePaths = ctx.sitePaths.concat(['/guides'], GUIDES.map(g => '/guides/' + g.slug), ['/checklists'], types.map(t => '/checklists/' + ROOM_SLUGS[t]), TPL.paths);
   // A fingerprint of everything the pages are made from: it changes when a deploy changes them.
-  const version = crypto.createHash('sha1').update(sitePaths.join('|')).update(fs.readFileSync(path.join(ROOT, 'views', 'layout.html')))
+  const layoutSrc = fs.readFileSync(path.join(ROOT, 'views', 'layout.html'));
+  const versionOf = () => crypto.createHash('sha1').update(sitePaths.join('|')).update(layoutSrc)
     .update(ctx.siteBodies.join('|')).update(TPL.bodies.join('|')).update(GUIDES.map(g => g.body).join('|')).update(JSON.stringify(C.ROOM_TYPE_ITEMS)).digest('hex');
+  let version = versionOf();
   const seoFile = path.join(REPORTS_DIR, 'seo.json');
   const readSeo = () => { try { return JSON.parse(fs.readFileSync(seoFile, 'utf8')); } catch (e) { return {}; } };
   const seo = readSeo();
   if (!/^[a-f0-9]{32}$/.test(seo.indexNowKey || '')) { seo.indexNowKey = crypto.randomBytes(16).toString('hex'); try { fs.writeFileSync(seoFile, JSON.stringify(seo)); } catch (e) {} }
-  if (seo.version !== version) { seo.version = version; seo.modified = new Date().toISOString().slice(0, 10); try { fs.writeFileSync(seoFile, JSON.stringify(seo)); } catch (e) {} }
-  const lastmod = seo.modified || new Date().toISOString().slice(0, 10);
+  const stamp = () => { if (seo.version !== version) { seo.version = version; seo.modified = new Date().toISOString().slice(0, 10); try { fs.writeFileSync(seoFile, JSON.stringify(Object.assign(readSeo(), { version: seo.version, modified: seo.modified }))); } catch (e) {} } };
+  stamp();
 
   app.get('/sitemap.xml', (req, res) => {
     const base = canonicalBase(req);
     res.type('application/xml').send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-      sitePaths.map(p => `  <url><loc>${escHtml(base + p)}</loc><lastmod>${lastmod}</lastmod><changefreq>${p === '/' ? 'weekly' : 'monthly'}</changefreq><priority>${p === '/' ? '1.0' : p.split('/').length > 2 ? '0.6' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
+      sitePaths.map(p => `  <url><loc>${escHtml(base + p)}</loc><lastmod>${seo.modified || new Date().toISOString().slice(0, 10)}</lastmod><changefreq>${p === '/' ? 'weekly' : 'monthly'}</changefreq><priority>${p === '/' ? '1.0' : p.split('/').length > 2 ? '0.6' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
   });
   // Search engines and AI assistants (ChatGPT, Claude, Perplexity, Gemini, Copilot…) are all welcome on the
   // public pages; private ones stay out. /llms.txt is a plain summary of the site for AI tools.
@@ -151,7 +156,17 @@ function mount(app, ctx){
   setTimeout(indexNow, 90 * 1000).unref();
   setInterval(indexNow, 24 * 3600 * 1000).unref();   // tries again daily if it didn't go through
 
-  return { paths: sitePaths };
+  // Guides added or taken down while the server runs (seoauto.js): sitemap, llms.txt, version and IndexNow follow.
+  const refresh = () => { version = versionOf(); stamp(); setTimeout(indexNow, 5000).unref(); };
+  function addGuide(g, quiet){
+    if (!g || !/^[a-z0-9-]{3,90}$/.test(g.slug) || GUIDES.some(x => x.slug === g.slug)) return false;
+    GUIDES.push(g); sitePaths.push('/guides/' + g.slug); if (!quiet) refresh(); return true;
+  }
+  function removeGuide(slug){
+    const i = GUIDES.findIndex(x => x.slug === slug && x.auto); if (i < 0) return false;
+    GUIDES.splice(i, 1); const j = sitePaths.indexOf('/guides/' + slug); if (j >= 0) sitePaths.splice(j, 1); refresh(); return true;
+  }
+  return { paths: sitePaths, addGuide, removeGuide, refresh, guides: () => GUIDES };
 }
 
 module.exports = { mount, GUIDES };

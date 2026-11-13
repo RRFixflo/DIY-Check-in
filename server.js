@@ -320,7 +320,9 @@ function faqLd(body){
   const qs = [...body.matchAll(/<details><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)].map(m => ({ q: m[1].replace(/<[^>]+>/g, '').trim(), a: m[2].replace(/<[^>]+>/g, '').trim() }));
   return qs.length ? [{ '@type': 'FAQPage', mainEntity: qs.map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) }] : [];
 }
+let seoOverride = pg => pg;   // seoauto.js: titles tuned from Search Console
 function renderPage(pg, req, notice){
+  pg = seoOverride(pg);
   const key = pg.key;
   // The home page's house photo follows the visitor's country (Cloudflare's header; ?country= to preview): a British brick house
   // in the UK, Cobh's houses in Ireland, an American house in the US and Canada, a modern home in Australia / NZ, a villa in the UAE and Gulf, a neutral house elsewhere. No header (robots, local): the UK one.
@@ -394,9 +396,13 @@ const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPO
 // Check-in vs check-out compared by AI (campaign pages /check-out-comparison, /us/move-out-comparison): compare.js.
 const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
-require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
+const seoMount = require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
   sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
+// SEO autopilot: a weekly guide for letting agents and landlords with several properties, and titles tuned from Search Console.
+const seoAuto = require('./seoauto').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, seo: seoMount, notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE,
+  ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, extractJson, extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
+seoOverride = seoAuto.override;
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
   const r = reports.saveMessage(req, req.body || {});

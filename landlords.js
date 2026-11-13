@@ -452,6 +452,12 @@ function mount(app, ctx){
     <div class="step"><div class="n">03</div><h3>Reminders by email</h3><p>60, 30, 14 and 7 days before anything expires, with a link to book the renewal if you’d like us to arrange it.</p></div>
   </div>
 </div></section>
+<section class="tight" id="reports-discount"><div class="wrap">
+  <div class="card code buy-card">
+    <div><b>Inventories for all your properties, for less</b><p>Landlords with several properties get a discount on check-in, check-out and inspection reports: prepaid packs of 10, 25 or 50 reports from £19.98 a report instead of £29.99. One link for all your tenants, a dashboard of every report, and the reports never expire.</p></div>
+    <a class="btn primary" href="/agents#packs">See the discount</a>
+  </div>
+</div></section>
 <section><div class="wrap">
   <div class="sec-head"><span class="kicker">Questions</span><h2>About the landlord dashboard.</h2><p>Anything else? <a href="/contact">Send us a message</a>.</p></div>
   <div class="faq">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>

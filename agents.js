@@ -60,6 +60,7 @@ function mount(app, ctx){
     const body = `<div class="page-head"><div class="wrap"><span class="kicker">For letting agents and landlords</span>
 <h1>Inventories for every tenancy, at a fraction of a clerk’s price</h1>
 <p>Send one link to all your tenants. Each one does their own check-in or check-out on their phone, with dated photos and a signature, and you get a professional report for every tenancy. From £${per(sizes[sizes.length - 1])} a report.</p>
+<p class="ag-disc"><b>Landlords with several properties get the same discount as agents:</b> up to a third off every report.</p>
 <div class="cta"><a class="btn primary" href="#packs">See the packs</a><a class="btn ghost" href="#talk">Talk to us</a></div></div></div>
 
 <section class="tight"><div class="wrap">
@@ -199,6 +200,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
 const CSS = `.buy-small { color: var(--ink-faint); font-size: 14px; margin: 0; }
 .buy-btn { width: 100%; font-size: 17px; padding: 16px 24px; }
 .buy-off b { display: block; font-size: 16px; } .buy-off p { color: var(--ink-soft); font-size: 15px; margin: 6px 0 14px; }
+.ag-disc { display: inline-block; background: var(--soft); border-radius: 16px; padding: 8px 16px; font-size: 15px; margin: 4px auto 14px; }
 .page-head .cta { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .ag-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .ag-steps .card b { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--grad); color: #fff; font-size: 15px; }
