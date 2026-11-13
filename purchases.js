@@ -77,6 +77,7 @@ async function emailBuyer(rec, link){
     'Your tenant link (send the same link to every tenant):', link, '',
     'Each tenant opens it on their phone and does their own check-in, check-out or inspection. They never see a price, and every finished report is emailed to you here.',
     'Reports left: ' + (rec.left != null ? rec.left : rec.pack) + '. We’ll email you when you have 2 left. Buy another pack with this same email address and the reports are added to the same link.', '',
+    rec.dash ? 'Your dashboard (every report from your link, reports left, downloads; bookmark it): ' + rec.dash : '', '',
     'Receipt', '-------',
     'DIY Inventory: ' + rec.pack + '-report pack' + (rec.name ? ' for ' + rec.name : ''),
     'Amount paid: £' + Number(rec.amount).toFixed(2) + ' (GBP)',
@@ -131,6 +132,7 @@ function mount(app, ctx){
     if (first && out.pack && ctx.addAgentCredits) {
       const a = ctx.addAgentCredits({ name: out.name, contact: out.contact, email: out.email, credits: out.pack, ref: out.ref });
       update(rec.ref, r => { r.agentToken = a.token; }); out.agentToken = a.token; out.left = a.credits - (a.uses || 0);
+      if (ctx.agentDashKey) out.dash = (PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') : req ? baseOf(req) : '') + '/agent/' + ctx.agentDashKey(a.id);
     }
     if (first && out.pack) {
       console.log('report pack: paid ' + rec.ref + ' (' + out.pack + ' reports, ' + rec.provider + ')');
@@ -198,6 +200,7 @@ function mount(app, ctx){
   }
   function packDonePage(req, rec){
     const link = linkOf(rec, req), info = ctx.agentByToken ? ctx.agentByToken(rec.agentToken) : null;
+    if (info && ctx.agentDashKey) { const a = (ctx.agentsAll ? ctx.agentsAll() : []).find(x => x.token === rec.agentToken); if (a) info.dash = '/agent/' + ctx.agentDashKey(a.id); }
     const left = info && info.left != null ? info.left : rec.pack;
     const msg = 'Here’s the link to do your property inventory report (check-in or check-out) on your phone with DIY Inventory. It’s already paid for: open it on the phone you’ll take the photos with.';
     const wa = 'https://wa.me/?text=' + encodeURIComponent(msg + '\n' + link);
@@ -216,6 +219,7 @@ function mount(app, ctx){
       <a class="btn ghost" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
       <a class="btn ghost" href="${esc(mail)}">Email</a>
     </div>
+    ${info && info.dash ? `<div class="card" style="margin-top:16px;background:var(--soft);box-shadow:none"><h3 style="margin-top:0">📊 Your agent dashboard</h3><p class="buy-small">Every report from your link in one place: who did it, signed or not, download the PDFs, and how many reports you have left. Bookmark it.</p><a class="btn primary" href="${esc(info.dash)}">Open my dashboard</a></div>` : ''}
     <p class="buy-small" style="margin-top:14px">We’ll email ${rec.email ? esc(rec.email) : 'you'} when you have 2 reports left. Buy another pack with the same email and the reports are added to this same link.</p>
   </div>
   <div class="card buy-receipt">

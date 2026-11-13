@@ -371,10 +371,14 @@ const landlordPaths = require('./landlords').mount(app, { REPORTS_DIR: reports.R
 // Floor plans (£9.55): /floor-plan, the drawing tool /floor-plan/create, and paying by card (SumUp or Stripe): payments.js.
 // Buying a report (£29.99) on our own page, /buy, with the same card checkout: purchases.js.
 const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
-  track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection, addAgentCredits: reports.addAgentCredits, agentByToken: reports.agentByToken }).paths;
+  track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection, addAgentCredits: reports.addAgentCredits, agentByToken: reports.agentByToken, agentDashKey: reports.agentDashKey, agentsAll: reports.agentsAll }).paths;
 // For letting agents and landlords with several properties: /agents (packs, calculator, enquiry form): agents.js.
 const agentPaths = require('./agents').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
   isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// Search pages for bulk buyers (inventory software for letting agents, landlords' app, tenant self check-in): agentseo.js.
+const agentSeo = require('./agentseo').mount(app, { renderPage });
+// Each tenant link's private dashboard, /agent/<key>: agentdash.js.
+require('./agentdash').mount(app, { reports, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE, canonicalBase: siteBase });
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
   limiter: reports.limiter, notify: reports.notifyOwner, track: analytics.track, canonicalBase: siteBase, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Free landlord property report (EPC, sold prices, crime, flood, council, checklist; leads for the owner): propreport.js.
@@ -391,7 +395,7 @@ const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPO
 const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {

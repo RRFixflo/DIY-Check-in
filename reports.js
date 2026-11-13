@@ -119,6 +119,7 @@ function lowCredits(a, left){
   const text = [(a.contact ? 'Hello ' + a.contact + ',' : 'Hello,'), '',
     left ? 'You have ' + left + ' prepaid report' + (left === 1 ? '' : 's') + ' left on your DIY Inventory tenant link (' + a.name + ').' : 'All ' + a.credits + ' prepaid reports on your DIY Inventory tenant link (' + a.name + ') have now been used. Tenants who open the link will be asked to come back later until it is topped up.', '',
     'Top up with another pack here (use this same email address and the reports are added to the same link, so nothing changes for your tenants):', (base || '') + '/agents#packs', '',
+    'See every report from your link on your dashboard: ' + (base || '') + '/agent/' + agentDashKey(a.id), '',
     'Or just reply to this email and we’ll sort it out.', '', 'DIY Inventory'].join('\n');
   fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
     headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
@@ -135,6 +136,29 @@ function addAgentCredits({ name, contact, email, credits, ref }){
   a.packs = (a.packs || []).concat([{ ref, credits, at: new Date().toISOString() }]);
   writeAgents(list); console.log('agent pack: ' + credits + ' reports for ' + a.name + ' (' + agentLeft(a) + ' left)');
   return a;
+}
+// Each tenant link has a private dashboard at /agent/<dashKey> (agentdash.js), made the first time it's needed.
+function agentDashKey(id){
+  const list = readAgents(), a = list.find(x => x.id === id); if (!a) return '';
+  if (!a.dashKey) { a.dashKey = crypto.randomBytes(18).toString('base64url'); writeAgents(list); }
+  return a.dashKey;
+}
+const agentTokenHash = t => t ? crypto.createHash('sha256').update('diy-report|' + t).digest('hex').slice(0, 20) : '';
+// Every report made with a tenant link: tagged with its id, stored by a browser holding its token, or made from a backup that held it.
+function agentReports(a){
+  const th = agentTokenHash(a.token), fromBackup = new Set();
+  try { (shared.drafts ? shared.drafts.all() : []).forEach(({ s }) => { if (s._token === a.token && s._serverReportId && s._serverReportId !== 'stored') fromBackup.add(s._serverReportId); }); } catch (e) {}
+  return listReports().filter(r => r.agentId === a.id || (th && r.tokenHash === th) || fromBackup.has(r.id));
+}
+// Reports still being done with a tenant link (backed up, not stored yet).
+function agentDrafts(a){
+  try { return (shared.drafts ? shared.drafts.all() : []).filter(({ s }) => s._token === a.token && !s.submittedId && !s._serverReportId && !s.unpaidId); } catch (e) { return []; }
+}
+// The file to hand out for a report: the tenant's signed copy once there is one. null while it isn't paid for.
+function reportFileOf(r){
+  if (!r || (r.unpaid && !r.paidAt)) return null;
+  const signed = path.join(REPORTS_DIR, r.id + '.signed.pdf'), pdf = path.join(REPORTS_DIR, r.id + '.pdf');
+  return fs.existsSync(signed) ? { file: signed, signed: true } : fs.existsSync(pdf) ? { file: pdf, signed: false } : null;
 }
 const agentByToken = t => { const a = agentFor(t); return a ? { name: a.name, email: a.email, credits: a.credits, uses: a.uses || 0, left: agentLeft(a), token: a.token } : null; };
 
@@ -188,9 +212,10 @@ const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/;
 // once (r.copies), never before it's paid for, and never without Resend. Failures are logged and tried again on the next send.
 let knownTargets = () => [];
 async function deliverCopies(r, token){
-  if (!RESEND_API_KEY || !r || (r.unpaid && !r.paidAt)) return;
+  if (!r) return;
   const agent = agentFor(token);
-  if (agent && !r.agentId) { r.agentId = agent.id; r.agentName = agent.name; }
+  if (agent && !r.agentId) { r.agentId = agent.id; r.agentName = agent.name; try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } catch (e) {} }
+  if (!RESEND_API_KEY || (r.unpaid && !r.paidAt)) return;
   let buyer = ''; try { buyer = require('./purchases').emailFor(token); } catch (e) {}
   const wanted = [];
   [r.copyEmail, buyer].forEach(e => { e = String(e || '').trim().toLowerCase(); if (EMAIL_RE.test(e) && !wanted.some(w => w.to === e)) wanted.push({ to: e, kind: 'self' }); });
@@ -215,7 +240,8 @@ async function emailCopy(r, to, kind){
     'A tenant has finished a ' + type.toLowerCase() + ' report using your DIY Inventory link.', '',
     'Property: ' + (r.address || '—'), 'Completed by: ' + (r.signedBy || r.inspectorName || '—'), when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
     attach ? 'The report is attached as a PDF.' : 'The report is too large to attach.', link ? 'View and download it online: ' + link : '',
-    sign ? 'To have it checked and signed, send this link: ' + sign : ''
+    sign ? 'To have it checked and signed, send this link: ' + sign : '',
+    (() => { const a = r.agentId && readAgents().find(x => x.id === r.agentId); return a && PUBLIC_URL ? '\nEvery report from your link is on your dashboard: ' + PUBLIC_URL + '/agent/' + agentDashKey(a.id) : ''; })()
   ] : [
     'Here is your ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + '.', '',
     when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
@@ -725,6 +751,7 @@ function mount(app){
   const reportsAccessFree = () => /^(off|false|0|no)$/i.test(String(process.env.DIY_PAYWALL || ''));
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
     hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
+  shared.drafts = drafts;
 
   // Reminding someone to finish their report (the owner asked): /admin → Reports in progress → 🔔 Remind. The email (or
   // a WhatsApp / text message the owner sends) carries /continue/<backup key>, which opens that report on any phone or
@@ -1155,6 +1182,7 @@ ${rows ? '<p class="sub" style="margin-top:12px">One-off codes made before:</p><
       <form method="post" action="/admin/agents/${esc(a.id)}/credits" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input name="add" type="number" min="-500" max="500" required placeholder="Add reports (e.g. 10, or -1)" style="width:200px"><button class="btn">Add</button></form>` : ''}
       <div class="sub">Made ${esc(day(a.createdAt))} · ${a.uses ? 'used for ' + a.uses + ' report' + (a.uses === 1 ? '' : 's') + ', last ' + esc(day(a.lastUsedAt)) + (a.lastUsedFor ? ' (' + esc(a.lastUsedFor) + ')' : '') : 'not used yet'}</div>
       <input readonly value="${esc(base + a.token + end)}" onclick="this.select()" style="width:100%;margin-top:6px;font:13px monospace">
+      <div class="sub" style="margin-top:6px">📊 Their dashboard (every report from this link): <a href="${esc((PUBLIC_URL || '') + '/agent/' + agentDashKey(a.id))}" target="_blank" rel="noopener">open</a> · <button class="btn" type="button" style="padding:2px 10px" onclick="copyLink(this,'${esc((PUBLIC_URL || (req.protocol + '://' + req.headers.host)) + '/agent/' + agentDashKey(a.id))}')">Copy dashboard link</button></div>
       <form method="post" action="/admin/agents/${esc(a.id)}/email" style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input name="email" type="email" maxlength="120" value="${esc(a.email || '')}" placeholder="Email finished reports to… (optional)" style="flex:1;min-width:180px"><button class="btn">Save</button></form>
       <div class="sub">${a.email ? '📧 Each finished report from this link is emailed to ' + esc(a.email) + (RESEND_API_KEY ? '' : ' (once email is set up: RESEND_API_KEY)') : 'No email: finished reports from this link only come to you.'}</div></div>
       <div class="actions"><button class="btn" type="button" onclick="copyLink(this,'${esc(base + a.token + end)}')">Copy link</button><form method="post" action="/admin/agents/${esc(a.id)}/delete" onsubmit="return confirm('Remove the link for ${esc(String(a.name).replace(/'/g, ''))}? It will stop working straight away.')"><button class="btn danger">Remove</button></form></div></li>`).join('');
@@ -1655,4 +1683,4 @@ function editAllowed(m){
   return !!(r && r.photoKey === m.photoKey && !(r.unpaid && !r.paidAt));
 }
 
-module.exports = { addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+module.exports = { agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

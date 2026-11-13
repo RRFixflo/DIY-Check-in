@@ -54,7 +54,8 @@ function mount(app, ctx){
       ['Do the reports expire?', 'No. Your prepaid reports stay on your link until you use them.'],
       ['Can I do the reports myself instead of the tenant?', 'Yes. Open the same link on your own phone and do the walk-round yourself. Each finished report uses one from your pack.'],
       ['We need more than 50 a year, or several branches.', 'Use the form on this page. We’ll set you up with a price per report for your volume, a link per branch if you like, and a monthly invoice instead of paying upfront.'],
-      ['Who sees the reports?', 'You, and the tenant who made it. Each report is also kept safely online, so it can’t be lost if a phone is.'],
+      ['Is there a dashboard for my reports?', 'Yes. Every pack comes with your own agent dashboard: every report made with your link (address, type, who did it, whether the other party has signed), PDFs to download, reports still in progress, how many reports you have left, and a list you can download for a spreadsheet. The link to it is in your pack email and in every report email.'],
+      ['Who sees the reports?', 'You (on your dashboard and by email), and the tenant who made it. Each report is also kept safely online, so it can’t be lost if a phone is.'],
     ];
     const body = `<div class="page-head"><div class="wrap"><span class="kicker">For letting agents and landlords</span>
 <h1>Inventories for every tenancy, at a fraction of a clerk’s price</h1>
@@ -66,6 +67,20 @@ function mount(app, ctx){
     <div class="card"><b>1</b><h3>One link for every tenant</h3><p>Buy a pack and you get a tenant link straight away. Send it by email, WhatsApp or text.</p></div>
     <div class="card"><b>2</b><h3>The tenant does the walk-round</h3><p>A guided checklist for every room, date and time burned into every photo, meters, keys and a signature.</p></div>
     <div class="card"><b>3</b><h3>You get the report</h3><p>A professional PDF in your inbox, made to be used as evidence at the end of the tenancy. No visit, no clerk.</p></div>
+  </div>
+</div></section>
+
+<section class="tight"><div class="wrap ag-dash">
+  <div><span class="kicker">Your agent dashboard</span><h2>Every tenancy’s report, in one place</h2>
+    <p>Each pack comes with a private dashboard. See which tenants have finished, which are still going, and which reports have been signed by the other party, then download any PDF in a tap.</p>
+    <ul class="buy-list"><li>✓<span>Every report from your link: address, check-in or check-out, who did it, date</span></li><li>✓<span>Signed or not by the other party, and a sign-off link to send</span></li><li>✓<span>Reports still in progress, so you can chase them</span></li><li>✓<span>Reports left on your pack, with a one-tap top-up</span></li><li>✓<span>Download the whole list for your spreadsheet</span></li></ul>
+    <p class="buy-small">Already have one? <a href="/agent/lost">Get your dashboard link</a>.</p></div>
+  <div class="card ad-demo" aria-hidden="true">
+    <div class="ad-demo-t"><div><span>Reports left</span><b>18</b></div><div><span>Made</span><b>32</b></div><div><span>In progress</span><b>2</b></div></div>
+    <div class="ad-demo-r"><b>Flat 4, 12 High Street</b><span><i>Check-Out</i> 11 Nov · signed ✍️</span></div>
+    <div class="ad-demo-r"><b>7 Mill Lane</b><span><i>Check-In</i> 9 Nov · awaiting signature</span></div>
+    <div class="ad-demo-r"><b>22 Park Road</b><span><i>Inspection</i> 3 Nov · signed ✍️</span></div>
+    <p class="buy-small" style="margin:10px 0 0">Example only</p>
   </div>
 </div></section>
 
@@ -136,7 +151,7 @@ if(b)b.textContent='Pay £'+P[r.value].toLocaleString('en-GB')+' for '+r.value+'
 
   app.get(['/agents', '/agents/'], (req, res) => {
     const err = String(req.query.err || '');
-    res.set('Cache-Control', 'no-store').type('html').send(page(req, { sent: !!req.query.sent, err: ERR[err] ? err : '', pack: req.query.pack }));
+    res.set('Cache-Control', 'no-store').type('html').send(page(req, { sent: !!req.query.sent, err: ERR[err] ? err : '', pack: req.query.pack, form: { name: clip(req.query.name, 80), email: clip(req.query.email, 120) } }));
   });
   app.post(['/agents', '/agents/'], express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
     const b = req.body || {};
@@ -181,7 +196,10 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   return { paths: ['/agents'] };
 }
 
-const CSS = `.page-head .cta { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+const CSS = `.buy-small { color: var(--ink-faint); font-size: 14px; margin: 0; }
+.buy-btn { width: 100%; font-size: 17px; padding: 16px 24px; }
+.buy-off b { display: block; font-size: 16px; } .buy-off p { color: var(--ink-soft); font-size: 15px; margin: 6px 0 14px; }
+.page-head .cta { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .ag-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .ag-steps .card b { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--grad); color: #fff; font-size: 15px; }
 .ag-steps h3 { margin: 12px 0 6px; font-size: 18px; } .ag-steps p { margin: 0; color: var(--ink-soft); }
@@ -207,7 +225,15 @@ const CSS = `.page-head .cta { display: flex; justify-content: center; gap: 10px
 .ag-talk h2 { font-size: clamp(26px, 3.2vw, 36px); line-height: 1.15; margin: 8px 0 12px; } .ag-talk > div > p { color: var(--ink-soft); }
 .ag-talk .kicker { color: var(--accent); font-weight: 700; font-size: 13.5px; text-transform: uppercase; letter-spacing: .08em; }
 .ag-talk .buy-list { list-style: none; padding: 0; display: grid; gap: 8px; } .ag-talk .buy-list li { display: flex; gap: 10px; }
-@media (max-width: 860px) { .ag-steps, .ag-talk { grid-template-columns: 1fr; } .ag-packs { grid-template-columns: 1fr 1fr; } }
+.ag-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; max-width: 1040px; }
+.ag-dash h2 { font-size: clamp(26px, 3.2vw, 36px); line-height: 1.15; margin: 8px 0 12px; } .ag-dash > div > p { color: var(--ink-soft); }
+.ag-dash .kicker { color: var(--accent); font-weight: 700; font-size: 13.5px; text-transform: uppercase; letter-spacing: .08em; }
+.ag-dash .buy-list { list-style: none; padding: 0; display: grid; gap: 8px; } .ag-dash .buy-list li { display: flex; gap: 10px; }
+.ad-demo-t { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.ad-demo-t div { background: var(--bg); border-radius: 12px; padding: 10px 12px; box-shadow: inset 0 0 0 1px var(--line); } .ad-demo-t span { display: block; font-size: 12px; color: var(--ink-faint); font-weight: 600; } .ad-demo-t b { font-size: 24px; }
+.ad-demo-r { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--line); } .ad-demo-r span { font-size: 13px; color: var(--ink-soft); }
+.ad-demo-r i { font-style: normal; background: var(--soft); color: var(--accent); font-weight: 700; font-size: 11.5px; padding: 1px 8px; border-radius: 999px; margin-right: 4px; }
+@media (max-width: 860px) { .ag-dash, .ag-steps, .ag-talk { grid-template-columns: 1fr; } .ag-packs { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .ag-calc-in, .ag-calc-out { grid-template-columns: 1fr; } .form .row { grid-template-columns: 1fr; } }`;
 
 module.exports = { mount };
