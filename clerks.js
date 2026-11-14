@@ -105,6 +105,9 @@ function mount(app, ctx){
   </form>`}
 </div></section>
 
+<section class="tight"><div class="wrap"><div class="sec-head"><span class="kicker">More for inventory companies</span><h2>Find out more</h2></div>
+<div class="cl-links">${require('./clerkseo').PAGES.map(p => `<a class="card" href="${p.path}"><b>${esc(p.short)}</b><span>${esc(p.desc)}</span></a>`).join('')}</div></div></section>
+
 <section class="tight"><div class="wrap"><div class="sec-head"><h2>Questions</h2></div><div class="faq">
 ${FAQS.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}
 </div></div></section>
@@ -183,11 +186,12 @@ const CSS = `
 .cl-ph { flex: 1; color: rgba(255,255,255,.75); font-size: 9px; letter-spacing: .12em; padding: 12px 10px; background: linear-gradient(160deg, #3b4350, #1d232b); } .cl-ph b { display: block; color: #fff; font-size: 16px; letter-spacing: 0; margin-top: 2px; }
 .cl-btn { margin: 10px; background: var(--brand); color: #fff; text-align: center; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 8px; transition: background .3s; }
 .cl-grid { grid-template-columns: repeat(4, 1fr); }
+.cl-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } .cl-links a { text-decoration: none; color: inherit; display: grid; gap: 6px; } .cl-links span { color: var(--ink-soft); font-size: 14.5px; }
 .cl-incl { display: flex; gap: 24px; align-items: center; justify-content: space-between; max-width: 860px; margin: 0 auto; flex-wrap: wrap; }
 .cl-incl .buy-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; margin: 10px 0 0; } .cl-incl .buy-list li { display: flex; gap: 10px; }
-@media (max-width: 960px) { .cl-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 960px) { .cl-grid, .cl-links { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 860px) { .cl-brand { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { .cl-grid, .cl-incl .buy-list { grid-template-columns: 1fr; } .cl-cover { width: 88%; padding: 16px; } .cl-mock { min-height: 300px; } }
+@media (max-width: 560px) { .cl-grid, .cl-links, .cl-incl .buy-list { grid-template-columns: 1fr; } .cl-cover { width: 88%; padding: 16px; } .cl-mock { min-height: 300px; } }
 @media (prefers-reduced-motion: reduce) { .cl-logo, .cl-logo span, .cl-title, .cl-bar, .cl-btn { transition: none; } }`;
 
 module.exports = { mount };

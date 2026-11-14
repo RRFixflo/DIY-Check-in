@@ -16,7 +16,23 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const CAT = 'For letting agents and landlords';
+const CAT = 'For letting agents and landlords', CLERK_CAT = 'For inventory companies';
+// Guides for inventory companies (third element 'clerks'): they link to /inventory-companies instead of /agents.
+const CLERK_TOPICS = [
+  ['how-inventory-clerks-can-do-more-reports-a-day', 'How an inventory clerk can fit more reports into a day without cutting corners', 'clerks'],
+  ['inventory-clerk-pricing-guide', 'How inventory clerks price check-ins, check-outs and inspections (typical £100–£250), and how to set your own prices', 'clerks'],
+  ['winning-letting-agent-clients-for-inventory-clerks', 'How an inventory company wins and keeps letting agent clients', 'clerks'],
+  ['branded-inventory-reports-for-clerk-firms', 'Why a clerk firm’s own branding on its reports matters to agents and landlords', 'clerks'],
+  ['inventory-clerk-photo-standards', 'Photo standards for inventory clerks: what every room and item needs so the report stands up later', 'clerks'],
+  ['check-out-process-for-inventory-clerks', 'A clerk’s check-out process: comparing with the check-in, recording changes fairly, wording', 'clerks'],
+  ['selling-tenant-self-check-ins-as-a-clerk', 'Offering tenant self check-ins and self-inspections as a lower-priced service from an inventory company', 'clerks'],
+  ['inventory-clerk-report-wording', 'Clear, neutral condition wording for inventory reports: describing items, marks and cleanliness', 'clerks'],
+  ['growing-an-inventory-clerk-business', 'Growing an inventory clerk business from one clerk to a team: process, consistency, quality checks', 'clerks'],
+  ['switching-inventory-software-for-clerk-firms', 'What to look for when an inventory company changes its inventory software', 'clerks'],
+  ['inventory-clerk-hmo-and-student-lets', 'How inventory clerks handle HMOs and student lets: many rooms, shared areas, quick changeovers', 'clerks'],
+  ['mid-term-inspection-service-for-clerks', 'Building a mid-term inspection service as an inventory company', 'clerks'],
+];
+const audOf = t => t[2] === 'clerks' ? 'clerks' : 'agents';
 const TOPICS = [
   ['inventory-costs-for-portfolio-landlords', 'What inventories cost a landlord with several properties over a year, and how to plan for them'],
   ['tenant-self-check-in-for-letting-agents', 'How a letting agency runs tenant self check-ins: sending the link, chasing, checking the report, storing it'],
@@ -42,7 +58,7 @@ const TOPICS = [
   ['prepaid-inventory-packs-explained', 'How prepaid inventory packs work for agents and landlords, and when they make sense'],
   ['inventory-clerk-or-self-check-in-cost-comparison', 'Clerk visits versus tenant self check-in for a portfolio: time, cost, evidence quality'],
   ['september-rush-inventories-for-agents', 'Peak-season moves (summer and September): getting every check-in done on time'],
-];
+].concat(CLERK_TOPICS);
 
 const ALLOWED_TAGS = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'details', 'summary', 'br']);
 const UNIT_PRICES = [29.99, 19.98, 21.96, 24.90, 249, 549, 999, 100, 120, 150, 180, 200, 250];
@@ -73,16 +89,16 @@ function mount(app, ctx){
   /* ------------------------------- guides ------------------------------- */
   const autoGuides = () => fs.readdirSync(GDIR).filter(f => f.endsWith('.json')).map(f => readJ(path.join(GDIR, f), null)).filter(Boolean)
     .sort((a, b) => String(a.publishedAt).localeCompare(String(b.publishedAt)));
-  const asGuide = g => ({ slug: g.slug, cat: CAT, title: g.title, desc: g.desc, date: g.date, body: g.body, auto: true });
+  const asGuide = g => ({ slug: g.slug, cat: g.aud === 'clerks' ? CLERK_CAT : CAT, title: g.title, desc: g.desc, date: g.date, body: g.body, auto: true });
   autoGuides().filter(g => !g.hidden).forEach(g => seo.addGuide(asGuide(g), true));
   seo.refresh();
 
   const textOf = h => String(h).replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
   const shingles = t => { const w = textOf(t).toLowerCase().replace(/[^a-z0-9£ ]/g, ' ').split(/\s+/).filter(Boolean), s = new Set(); for (let i = 0; i + 5 <= w.length; i++) s.add(w.slice(i, i + 5).join(' ')); return s; };
-  const known = () => new Set(seo.paths.concat(['/', '/app', '/agents#packs', '/agents#talk', '/pricing', '/example-report', '/how-it-works', '/faq', '/contact']));
+  const known = () => new Set(seo.paths.concat(['/', '/app', '/agents#packs', '/agents#talk', '/inventory-companies#talk', '/pricing', '/example-report', '/how-it-works', '/faq', '/contact']));
   const priceOk = v => UNIT_PRICES.some(p => { const n = v / p; return Math.abs(n - Math.round(n)) < 0.005 && Math.round(n) >= 1 && Math.round(n) <= 500; });
 
-  function check(o){
+  function check(o, aud){
     const why = [];
     if (!o || typeof o !== 'object') return ['no JSON'];
     const title = String(o.title || '').trim(), desc = String(o.desc || '').trim(), body = String(o.body || '').trim();
@@ -95,7 +111,7 @@ function mount(app, ctx){
     }
     const links = [...body.matchAll(/<a href="([^"]+)"/g)].map(m => m[1]), ok = known();
     links.forEach(h => { if (!ok.has(h)) why.push('link ' + h + ' is not a page on the site'); });
-    if (!links.some(h => /^\/agents/.test(h))) why.push('must link to /agents');
+    if (aud === 'clerks' ? !links.some(h => /^\/inventory-companies/.test(h)) : !links.some(h => /^\/agents/.test(h))) why.push(aud === 'clerks' ? 'must link to /inventory-companies' : 'must link to /agents');
     const words = textOf(body).split(' ').length;
     if (words < 700 || words > 1800) why.push('body must be 700–1,800 words (was ' + words + ')');
     if (!/<h2>Questions<\/h2>/.test(body)) why.push('must end with <h2>Questions</h2>');
@@ -124,13 +140,15 @@ function mount(app, ctx){
 - For letting agents and landlords with several properties: prepaid packs — 10 reports for £249 (£24.90 each), 25 for £549 (£21.96 each), 50 for £999 (£19.98 each, a third less than £29.99, about 33% off). Bigger volumes by arrangement (Talk to us on /agents). Reports never expire. Topping up with the same email adds to the same link.
 - A pack comes with one tenant link to send to every tenant (by email, WhatsApp or text): each tenant does their own check-in or check-out, at no charge to them. The agent or landlord gets each report by email.
 - Every pack has a private agent dashboard: reports left, every report made with the link (download the PDF, view online, copy the sign-off link), reports still in progress, a CSV download.
+- For inventory companies (clerk firms): the app can be set up in their own brand (logo, colours, company name on the app, the PDF reports and the emails; their own web address such as reports.theircompany.co.uk) for one monthly fee for the team, with no charge per report; no published price, each company is quoted (/inventory-companies, "Get a price and a free trial"). Clerks can send tenants self check-in or inspection links in their brand. Search pages: /inventory-software-for-inventory-clerks, /white-label-inventory-app, /property-inventory-software, /check-out-report-software, /property-inspection-app, /start-an-inventory-clerk-business.
 - Typical inventory clerk prices are £100–£250 a report, more for bigger or furnished homes (say "typically").
 - Reports are made to be used as evidence, for example in a deposit dispute; never say they win disputes or are accepted or approved by any scheme, court or body.
 - Free templates (PDF and Word) at /inventory-template, /check-out-report-template, /inspection-report-template; room checklists at /checklists; an example report at /example-report.`;
 
   async function write(topic, feedback){
+    const aud = audOf(topic);
     const pages = known(), guides = seo.guides().map(g => '/guides/' + g.slug + ' — ' + g.title);
-    const system = `You write practical guides for the website of DIY Inventory, a UK service for property inventories done on a phone. Readers are letting agents and landlords with several properties. Write in plain British English, warm and direct, short paragraphs, specific and useful, never salesy filler. Today is ${new Date().toISOString().slice(0, 10)}.
+    const system = `You write practical guides for the website of DIY Inventory, a UK service for property inventories done on a phone. ${aud === 'clerks' ? 'Readers are inventory clerks and inventory companies (clerk firms), and people starting one.' : 'Readers are letting agents and landlords with several properties.'} Write in plain British English, warm and direct, short paragraphs, specific and useful, never salesy filler. Today is ${new Date().toISOString().slice(0, 10)}.
 
 Facts you may use (use no other facts about the product, and invent no statistics, studies, quotes, prices, laws or company names):
 ${FACTS}
@@ -140,8 +158,8 @@ Rules:
 - title: 30–70 characters, a natural search phrase; no brand name needed. desc: 110–165 characters.
 - body: HTML using only p, h2, h3, ul, ol, li, strong, em, a, table/thead/tbody/tr/th/td, details, summary. No attributes except href on a. No h1, no images, no classes, no inline styles.
 - 900–1,500 words. Open with a short paragraph that answers the question straight away. Use h2 sections. Include a practical checklist or table where it helps.
-- Link to 3–8 of these pages with relative links (exact paths only): ${[...pages].filter(p => /^\/($|guides|checklists|agents|inventory-(template|clerk|software|app)|check-out-report-template|inspection-report-template|tenant-self-check-in|mid-term-inspection|check-out-comparison|how-it-works|pricing|faq|example-report|landlords$|app$)/.test(p)).join(', ')}.
-- Link to /agents (or /agents#packs) at least once, naturally, where the packs or the tenant link help the reader. Mention once that landlords with several properties pay less per report with a pack.
+- Link to 3–8 of these pages with relative links (exact paths only): ${[...pages].filter(p => /^\/($|guides|checklists|agents|inventory-companies|white-label-inventory-app|property-inventory-software|check-out-report-software|property-inspection-app|start-an-inventory-clerk-business|inventory-(template|clerk|software|app)|check-out-report-template|inspection-report-template|tenant-self-check-in|mid-term-inspection|check-out-comparison|how-it-works|pricing|faq|example-report|landlords$|app$)/.test(p)).join(', ')}.
+${aud === 'clerks' ? '- Link to /inventory-companies (or /inventory-companies#talk) at least once, naturally, where your own branded app for a monthly fee helps the reader. Never give a monthly price.' : '- Link to /agents (or /agents#packs) at least once, naturally, where the packs or the tenant link help the reader. Mention once that landlords with several properties pay less per report with a pack.'}
 - Pounds: only £29.99, £249, £549, £999, £24.90, £21.96, £19.98, the typical clerk range £100–£250, or a count times one of those (e.g. 12 reports × £29.99 = £359.88). Percentages: only "about 33%" for the 50-pack saving. Never mention VAT.
 - Never mention AI or automation. Never say guarantee, approved/accepted by, wins disputes, proves, best, cheapest. Never name another company, product or website (deposit schemes may be called "the deposit scheme").
 - If you mention law, say it is general information for England as at ${new Date().toLocaleString('en-GB', { month: 'long', year: 'numeric' })}, not legal advice, and keep to well-established rules.
@@ -161,16 +179,19 @@ Rules:
     const s = state();
     try {
       const done = new Set(autoGuides().map(g => g.slug).concat(seo.guides().map(g => g.slug)));
-      const topic = TOPICS.find(t => !done.has(t[0]) && (s.tried[t[0]] || 0) < 2);
+      const open = t => !done.has(t[0]) && (s.tried[t[0]] || 0) < 2, by = Object.assign({ agents: s.lastPublishAt }, s.lastByAud || {});
+      const order = ['agents', 'clerks'].filter(a => force || Date.now() - Date.parse(by[a] || 0) >= 7 * 864e5).sort((a, b) => String(by[a] || '').localeCompare(String(by[b] || '')));
+      const topic = order.map(a => TOPICS.find(t => audOf(t) === a && open(t))).find(Boolean);
       if (!topic) { logLine(s, 'every topic has been written'); return { ok: false, why: 'no topics left' }; }
       s.tried[topic[0]] = (s.tried[topic[0]] || 0) + 1;
-      let out = await write(topic), why = check(out);
-      if (why.length) { logLine(s, topic[0] + ': first draft rejected — ' + why.slice(0, 4).join('; ')); out = await write(topic, why); why = check(out); }
+      const aud = audOf(topic);
+      let out = await write(topic), why = check(out, aud);
+      if (why.length) { logLine(s, topic[0] + ': first draft rejected — ' + why.slice(0, 4).join('; ')); out = await write(topic, why); why = check(out, aud); }
       if (why.length) { logLine(s, topic[0] + ': not published — ' + why.slice(0, 4).join('; ')); s.lastTryAt = new Date().toISOString(); return { ok: false, why: why.join('; ') }; }
-      const g = { slug: topic[0], topic: topic[1], title: out.title.trim(), desc: out.desc.trim(), body: out.body.trim(), date: new Date().toISOString().slice(0, 10), publishedAt: new Date().toISOString(), model: ai.model };
+      const g = { slug: topic[0], aud, topic: topic[1], title: out.title.trim(), desc: out.desc.trim(), body: out.body.trim(), date: new Date().toISOString().slice(0, 10), publishedAt: new Date().toISOString(), model: ai.model };
       writeJ(path.join(GDIR, g.slug + '.json'), g);
       seo.addGuide(asGuide(g));
-      s.lastPublishAt = g.publishedAt; logLine(s, 'published /guides/' + g.slug + ' — ' + g.title + (force ? ' (by hand)' : ''));
+      s.lastPublishAt = g.publishedAt; (s.lastByAud = s.lastByAud || {})[aud] = g.publishedAt; logLine(s, 'published /guides/' + g.slug + ' — ' + g.title + (force ? ' (by hand)' : ''));
       if (notify) notify({ title: 'New guide published', message: g.title + '\n' + (PUBLIC_BASE || '') + '/guides/' + g.slug, tags: ['memo'], click: (PUBLIC_BASE || '') + '/guides/' + g.slug });
       return { ok: true, slug: g.slug };
     } catch (e) { logLine(s, 'writing failed: ' + e.message); return { ok: false, why: e.message }; }
@@ -179,7 +200,8 @@ Rules:
   async function guideTick(){
     if (off() || !ai) return;
     const s = state(), last = Date.parse(s.lastPublishAt || 0), lastTry = Date.parse(s.lastTryAt || 0);
-    if (Date.now() - last < 7 * 864e5 || Date.now() - lastTry < 3 * 864e5 || londonHour() < 9) return;
+    const by = Object.assign({ agents: s.lastPublishAt }, s.lastByAud || {}); void last;
+    if (!['agents', 'clerks'].some(x => Date.now() - Date.parse(by[x] || 0) >= 7 * 864e5) || Date.now() - lastTry < 3 * 864e5 || londonHour() < 9) return;
     await publishNext(false);
   }
 
@@ -304,7 +326,7 @@ Rules:
   if (addAdminSection) addAdminSection(req => {
     const s = state(), gs = autoGuides().slice().reverse(), T = titles().pages, fmt = t => t ? new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
     const left = TOPICS.filter(t => !gs.some(g => g.slug === t[0]) && (s.tried[t[0]] || 0) < 2).length;
-    const next = s.lastPublishAt ? fmt(Date.parse(s.lastPublishAt) + 7 * 864e5) : 'within a few hours';
+    const byA = Object.assign({ agents: s.lastPublishAt }, s.lastByAud || {}), next = ['agents', 'clerks'].map(x => (x === 'agents' ? 'agents & landlords ' : 'inventory companies ') + (byA[x] ? fmt(Date.parse(byA[x]) + 7 * 864e5) : 'within a few hours')).join(', ');
     const rows = gs.map(g => `<li><div style="flex:1;min-width:0"><a href="/guides/${esc(g.slug)}" target="_blank" rel="noopener"><strong>${esc(g.title)}</strong></a> ${g.hidden ? '<span class="pill">Taken down</span>' : ''}<div class="sub">${esc(fmt(g.publishedAt))} · /guides/${esc(g.slug)}</div></div>
       <form method="post" action="/admin/seo-auto/guide/${esc(g.slug)}"><button class="btn" name="action" value="${g.hidden ? 'show' : 'hide'}">${g.hidden ? 'Put back' : 'Take down'}</button></form></li>`).join('');
     const trows = Object.entries(T).reverse().map(([p, t]) => `<li><div style="flex:1;min-width:0"><strong>${esc(p)}</strong> <span class="pill">${esc({ live: 'Live, judged after 28 days', kept: 'Kept', reverted: 'Old wording back', undone: 'Undone', unsupported: 'Page not supported' }[t.status] || t.status)}</span>
@@ -312,7 +334,7 @@ Rules:
       ${t.status === 'live' || t.status === 'kept' ? `<form method="post" action="/admin/seo-auto/title"><input type="hidden" name="path" value="${esc(p)}"><button class="btn">Undo</button></form>` : ''}</li>`).join('');
     const gsc = gscKey();
     return `<details class="codes" id="seoauto"><summary>🚀 SEO autopilot <span class="sub" style="display:inline">— ${gs.filter(g => !g.hidden).length} guide${gs.length === 1 ? '' : 's'} published${off() ? ' · switched off (SEO_AUTO)' : ''}</span></summary>
-<p class="sub" style="margin-top:12px">${ai ? '' : '<strong>AI is off (no ANTHROPIC_API_KEY), so no guides are written.</strong> '}A new guide for letting agents and landlords with several properties is written and published each week, checked before it goes live (prices, links, no VAT, no claims), and sent to the search engines. Next one: ${esc(next)}. Topics left: ${left}. ${req.query && req.query.seo === 'working' ? '<strong>Working on it — refresh in a minute or two.</strong>' : ''}</p>
+<p class="sub" style="margin-top:12px">${ai ? '' : '<strong>AI is off (no ANTHROPIC_API_KEY), so no guides are written.</strong> '}Each week a new guide for letting agents and landlords with several properties, and one for inventory companies, is written and published, checked before it goes live (prices, links, no VAT, no claims), and sent to the search engines. Next one: ${esc(next)}. Topics left: ${left}. ${req.query && req.query.seo === 'working' ? '<strong>Working on it — refresh in a minute or two.</strong>' : ''}</p>
 <form method="post" action="/admin/seo-auto/run" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" name="what" value="guide"${ai ? '' : ' disabled'}>Write the next guide now</button>${gsc ? '<button class="btn" name="what" value="titles">Tune titles from Search Console now</button>' : ''}</form>
 ${rows ? '<ul>' + rows + '</ul>' : ''}
 <h3 style="margin:18px 0 6px">Titles tuned from Google Search Console</h3>

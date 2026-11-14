@@ -96,4 +96,4 @@ const CSS = `.as-wrap { max-width: 880px; display: grid; grid-template-columns: 
 .as-note { font-size: 13px; color: var(--ink-faint) !important; margin: 8px 0 0; }
 .as-cta { background: var(--soft); box-shadow: none; } .as-rel ul { list-style: none; padding: 0; } .as-rel a { font-weight: 600; }`;
 
-module.exports = { mount, PAGES };
+module.exports = { mount, PAGES, CSS };
