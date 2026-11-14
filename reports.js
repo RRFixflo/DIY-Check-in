@@ -1294,7 +1294,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     addSec(safe(() => certs.adminHTML()));
     adminSections.forEach(f => addSec(safe(() => f(req))));
     addSec(safe(messagesHTML)); addSec(safe(() => drafts.draftsHTML())); addSec(safe(activityHTML)); addSec(safe(() => codesHTML(req))); addSec(safe(() => agentsHTML(req)));
-    const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans', 'seoauto']], ['enquiries', 'Enquiries', '✉️', ['agentleads', 'messages', 'bookings', 'prleads']],
+    const GROUPS = [['sales', 'Sales', '💷', ['purchases', 'floorplans', 'seoauto']], ['enquiries', 'Enquiries', '✉️', ['agentleads', 'clerkleads', 'messages', 'bookings', 'prleads']],
       ['work', 'In progress', '📝', ['drafts', 'inspections', 'midterm']], ['landlords', 'Landlords', '🏠', ['landlords']], ['access', 'Access & links', '🔑', ['agents', 'codes', 'activity']]];
     const known = new Set(GROUPS.flatMap(g => g[3]));
     const groups = GROUPS.map(([k, label, icon, ids]) => ({ k, label, icon, secs: ids.map(id => secs.find(x => x.id === id)).filter(Boolean) }))

@@ -238,4 +238,4 @@ const CSS = `.buy-small { color: var(--ink-faint); font-size: 14px; margin: 0; }
 @media (max-width: 860px) { .ag-dash, .ag-steps, .ag-talk { grid-template-columns: 1fr; } .ag-packs { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .ag-calc-in, .ag-calc-out { grid-template-columns: 1fr; } .form .row { grid-template-columns: 1fr; } }`;
 
-module.exports = { mount };
+module.exports = { mount, CSS };

@@ -337,7 +337,7 @@ function renderPage(pg, req, notice){
     .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
       : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
-  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report', 'agents', 'buy'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
+  for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report', 'agents', 'buy', 'clerks'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
   // AI wording only while the AI is switched on (ANTHROPIC_API_KEY), so the site never claims it otherwise.
   html = anthropic ? html.replace(/<!--NOAI-->[\s\S]*?<!--\/NOAI-->/g, '').replace(/<!--\/?AI-->/g, '') : html.replace(/<!--AI-->[\s\S]*?<!--\/AI-->/g, '').replace(/<!--\/?NOAI-->/g, '');
   const base = canonicalBase(req), inAcc = require('./landlords').signedIn(req);   // signed-in landlords see "My dashboard"
@@ -379,6 +379,9 @@ const agentPaths = require('./agents').mount(app, { REPORTS_DIR: reports.REPORTS
   isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Search pages for bulk buyers (inventory software for letting agents, landlords' app, tenant self check-in): agentseo.js.
 const agentSeo = require('./agentseo').mount(app, { renderPage });
+// For inventory companies: the app in their own brand for a monthly fee (enquiries only).
+const clerkPaths = require('./clerks').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
+  isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 // Each tenant link's private dashboard, /agent/<key>: agentdash.js.
 require('./agentdash').mount(app, { reports, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE, canonicalBase: siteBase });
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
@@ -397,7 +400,7 @@ const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPO
 const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 const seoMount = require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, clerkPaths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 // SEO autopilot: a weekly guide for letting agents and landlords with several properties, and titles tuned from Search Console.
 const seoAuto = require('./seoauto').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, seo: seoMount, notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE,

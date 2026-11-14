@@ -148,7 +148,7 @@ function track(req, name, value, kind){
   save();
 }
 // A lead with where it came from (origin.js): counted per day by source and kind, for “Where leads come from”.
-const LEAD_KINDS = { booking: 'Certificate booking', message: 'Contact message', property_report: 'Property report', purchase: 'Report bought', signup: 'Landlord sign-up', report: 'Report finished', agent: 'Agent enquiry' };
+const LEAD_KINDS = { booking: 'Certificate booking', message: 'Contact message', property_report: 'Property report', purchase: 'Report bought', signup: 'Landlord sign-up', report: 'Report finished', agent: 'Agent enquiry', clerk: 'Inventory company enquiry' };
 function lead(req, kind, o){
   if (!DIR || !LEAD_KINDS[kind]) return;
   if (req && skip(req)) return;
