@@ -939,6 +939,33 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     const line = x => '<li><b>' + esc(whenTxt(x.at)) + '</b> ' + esc(x.to) + ' <span class="what">' + esc(x.what) + '</span></li>';
     return ` <details class="sub sentlog"><summary>✉ Emailed ${L.length === 1 ? 'once' : L.length + ' times'} · last ${esc(whenTxt(L[0].at))}</summary><ul>${L.map(line).join('')}</ul></details>`;
   }
+  // A landlord account's inventory reports (landlords.js; the owner: "if a landlord creates a landlord account, match it to the
+  // inventory and always give them access"): every paid report linked to the account's (verified) email, plus every paid report
+  // at one of the account's properties: same postcode, the same door/flat numbers and a street or building word in common.
+  shared.reportsForLandlord = (email, props) => {
+    email = String(email || '').trim().toLowerCase();
+    const pcOf = t => { const m = /\b([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})\b/.exec(String(t || '').toUpperCase()); return m ? m[1] + m[2] : ''; };
+    const nums = t => (String(t || '').toUpperCase().match(/\b\d+[A-Z]?\b/g) || []);
+    const STOP = /^(ROAD|STREET|AVENUE|LANE|CLOSE|DRIVE|COURT|HOUSE|PLACE|WAY|FLAT|APARTMENT|LONDON|THE|AND)$/;
+    const words = t => (String(t || '').toUpperCase().match(/[A-Z]{4,}/g) || []).filter(w => !STOP.test(w));
+    const wanted = (props || []).map(p => { const a = p.address || {}; const pc = pcOf(a.postcode); if (!pc) return null;
+      const line = [a.houseNo, a.building, a.road].filter(Boolean).join(' '); return { id: p.id, pc, nums: nums([a.houseNo, a.building].join(' ')), words: words([a.building, a.road].join(' ')) }; }).filter(Boolean);
+    const out = [];
+    for (const r of listReports()) {
+      if (notPaid(r) || r.source === 'uploaded' && !r.address) continue;
+      let why = '', propId = '';
+      if (EMAIL_RE.test(email) && emailsForReport(r).some(k => k.e === email)) why = 'email';
+      const ra = String(r.address || ''), rpc = pcOf(ra);
+      if (rpc) { const before = ra.toUpperCase().split(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/)[0], rn = nums(before), rw = new Set(words(before));
+        const hit = wanted.find(w => w.pc === rpc && w.nums.length && w.nums.every(n => rn.includes(n)) && (!w.words.length || w.words.some(x => rw.has(x))));
+        if (hit) { propId = hit.id; why = why ? why + '+property' : 'property'; } }
+      if (!why) continue;
+      if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, r.id); try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } catch (e) {} }
+      out.push({ id: r.id, address: r.address || '', type: r.inspectionType || 'Report', at: r.finalizedAt || r.receivedAt, key: r.photoKey, why, propId,
+        doneBy: r.signedBy || r.inspectorName || '', tenantSigned: r.tenantSignedAt ? (r.tenantSignedBy || 'yes') : '' });
+    }
+    return out.sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 300);
+  };
   // "Get my report by email" (/my-report): every paid report this address is linked to (did it, paid for it, agent, copies).
   shared.reportsForEmail = email => { email = String(email || '').trim().toLowerCase(); if (!EMAIL_RE.test(email)) return [];
     return listReports().filter(r => !notPaid(r) && r.source !== 'uploaded' && emailsForReport(r).some(k => k.e === email)).slice(0, 20).map(r => {
@@ -1824,4 +1851,4 @@ async function emailMyReports(email, base){
   } catch (e) { console.error('my report email failed: ' + e.message); }
   return L.length;
 }
-module.exports = { emailMyReports, reportForToken, agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+module.exports = { reportsForLandlord: (e, p) => shared.reportsForLandlord ? shared.reportsForLandlord(e, p) : [], emailMyReports, reportForToken, agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

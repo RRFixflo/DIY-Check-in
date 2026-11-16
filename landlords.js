@@ -128,7 +128,7 @@ async function sendEmail(m){
   if (!key) return { ok: false, reason: 'not-configured' };
   const from = (process.env.REPORT_FROM_EMAIL || '').trim() || 'DIY Inventory <onboarding@resend.dev>';
   try {
-    const res = await fetch('https://api.resend.com/emails', { method: 'POST', signal: AbortSignal.timeout(30000), headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+    const res = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(30000), headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.assign({ from: m.fromName ? `"${m.fromName.replace(/["<>\r\n\\]/g, '')}" <${(/<([^>]+)>/.exec(from) || [, from])[1].trim()}>` : from, to: m.to, subject: m.subject, html: m.html, text: m.text },
         m.replyTo ? { reply_to: m.replyTo } : {}, m.attachments ? { attachments: m.attachments } : {})) });
     if (!res.ok) { console.error('landlords: email failed: HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return { ok: false, reason: 'send-failed' }; }
@@ -392,7 +392,7 @@ function mount(app, ctx){
 
   /* ------------------------------ pages ------------------------------ */
   const NOTES = { welcome: 'Your account is ready. Add your first property.', added: 'Property added.', saved: 'Saved.', deleted: 'Property deleted.', out: 'You’ve signed out.',
-    pw: 'Your password has been changed.', 'added-epc': 'Property added. We found its EPC on the register and saved it.', 'epc-auto': 'We found the EPC on the register and saved it.', licence: 'Licence saved.', settings: 'Settings saved.', epc: 'EPC saved.', cleared: 'Removed.', gone: 'Your account has been deleted.', sent: 'If there’s an account for that email, we’ve sent a link to reset the password. It works for one hour.' };
+    pw: 'Your password has been changed.', verified: 'Thank you: your email is confirmed. Your inventory reports are below.', vsent: 'We’ve sent you an email: tap the link in it to confirm.', vfail: 'The email couldn’t be sent just now. Please try again later.', vlimit: 'You’ve asked for a few already: please check your inbox (and junk folder).', 'added-epc': 'Property added. We found its EPC on the register and saved it.', 'epc-auto': 'We found the EPC on the register and saved it.', licence: 'Licence saved.', settings: 'Settings saved.', epc: 'EPC saved.', cleared: 'Removed.', gone: 'Your account has been deleted.', sent: 'If there’s an account for that email, we’ve sent a link to reset the password. It works for one hour.' };
   function send(req, res, o){
     const notice = o.notice || (NOTES[req.query.m] ? { ok: true, text: NOTES[req.query.m] } : null);
     let html = renderPage({ key: o.key || 'account', path: o.path, title: o.title + ' · DIY Inventory', og: o.title, desc: o.desc || 'Your properties, certificates and tenancies on DIY Inventory.', body: o.body,
@@ -524,6 +524,7 @@ function mount(app, ctx){
     console.log('landlords: new account ' + acc.id);
     notify({ title: 'New landlord account', message: acc.name + ' · ' + acc.email, tags: ['house'], click: PUBLIC_BASE ? PUBLIC_BASE + '/admin#landlords' : '' });
     setSession(req, res, acc);
+    sendVerify(req, acc).catch(() => {});
     res.redirect(303, '/account?m=welcome');
   });
   app.post('/account/sign-in', urlenc, async (req, res) => {
@@ -583,7 +584,7 @@ function mount(app, ctx){
     if (!resetAccount(req.params.token)) return newPasswordPage(req, res);
     const h = await hashPassword(pw), acc = resetAccount(req.params.token);
     if (!acc) return newPasswordPage(req, res);
-    Object.assign(acc, { salt: h.salt, hash: h.hash, sessionVer: (acc.sessionVer || 0) + 1, reset: null }); writeAcc(acc);
+    Object.assign(acc, { salt: h.salt, hash: h.hash, sessionVer: (acc.sessionVer || 0) + 1, reset: null }); if (!acc.emailVerifiedAt) acc.emailVerifiedAt = new Date().toISOString(); writeAcc(acc);   // the emailed reset link proves the email
     setSession(req, res, acc); res.redirect(303, '/account?m=pw');
   });
 
@@ -690,6 +691,46 @@ function mount(app, ctx){
     return tiles + panels;
   }
 
+  /* --------------------- inventory reports linked to the account --------------------- */
+  // Every paid inventory report done for this landlord (the email they used, or bought a link with) or at one of their
+  // properties (reports.reportsForLandlord). Shown only once the account's email is confirmed, so nobody can sign up with
+  // someone else's email, or add someone else's address, to see their reports. A password reset by email confirms it too.
+  const vtoken = acc => crypto.createHmac('sha256', SECRET).update('verify:' + acc.id + ':' + acc.email).digest('hex').slice(0, 32);
+  const verifyLimit = limiter(5, 60 * 60 * 1000);
+  async function sendVerify(req, acc){
+    const link = (PUBLIC_BASE || ((secure(req) ? 'https://' : 'http://') + req.headers.host)) + '/account/verify/' + acc.id + '-' + vtoken(acc);
+    return sendEmail({ to: [acc.email], subject: 'Confirm your email for DIY Inventory',
+      text: 'Hi ' + (acc.name || '') + ',\n\nConfirm your email to see your inventory reports in your landlord dashboard:\n' + link + '\n\nIf you didn’t create this account, ignore this email.\n\nDIY Inventory',
+      html: emailHTML(['Hi ' + esc(acc.name || '') + ',', 'Confirm your email so we can show your inventory reports (check-ins, check-outs and inspections) in your landlord dashboard.'], ['Confirm my email', link], 'If you didn’t create this account, ignore this email.') });
+  }
+  app.get('/account/verify/:tok', (req, res) => {
+    const m = /^([a-f0-9]{16})-([a-f0-9]{32})$/.exec(String(req.params.tok)); const acc = m && readAcc(m[1]);
+    if (!acc || !crypto.timingSafeEqual(Buffer.from(m[2]), Buffer.from(vtoken(acc)))) return res.status(404).type('text/plain').send('This link isn’t valid any more. Sign in and send a new one from your dashboard.');
+    if (!acc.emailVerifiedAt) { acc.emailVerifiedAt = new Date().toISOString(); writeAcc(acc); console.log('landlords: email confirmed for ' + acc.id); }
+    res.redirect(303, current(req) ? '/account?m=verified#reports' : '/account/sign-in?next=%2Faccount');
+  });
+  app.post('/account/verify/send', need, async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).end();
+    if (!verifyLimit(req.acc.id)) return res.redirect(303, '/account?m=vlimit#reports');
+    const r = await sendVerify(req, req.acc); res.redirect(303, '/account?m=' + (r && r.ok ? 'vsent' : 'vfail') + '#reports');
+  });
+  function reportsBlock(req, propId){
+    const acc = req.acc, owner = isOwner(req);
+    if (!acc.emailVerifiedAt && !owner) {
+      if (propId) return '';
+      return `<div class="card" id="reports" style="margin-top:18px"><h2>📄 Your inventory reports</h2><p>Check-ins, check-outs and inspections done for you or at your properties show here once you’ve confirmed your email (${esc(acc.email)}).</p>
+${emailOn() ? `<form method="post" action="/account/verify/send"><button class="btn primary">Send me the confirmation email</button></form>` : '<p class="acc-note">Email isn’t switched on for this site yet: <a href="/contact">contact us</a> to confirm it.</p>'}</div>`;
+    }
+    let list = []; try { list = require('./reports').reportsForLandlord(acc.email, acc.properties); } catch (e) {}
+    if (propId) list = list.filter(r => r.propId === propId);
+    const when = t => t ? new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/London' }) : '';
+    const rows = list.map(r => `<li style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line, #E6E9F0)"><div style="min-width:0;flex:1 1 240px"><b>${esc(r.type)}</b> · ${esc(when(r.at))}<div style="overflow-wrap:anywhere">${esc(r.address)}</div><div class="acc-note" style="margin:2px 0 0">${r.doneBy ? 'Done by ' + esc(r.doneBy) : ''}${r.tenantSigned ? ' · signed by the other party' : ''}</div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" href="/report/${esc(r.key)}" target="_blank" rel="noopener">View</a><a class="btn ghost" href="/report/${esc(r.key)}.pdf?download=1">⬇ PDF</a></div></li>`).join('');
+    if (propId && !list.length) return '';
+    return `<div class="card" id="reports" style="margin-top:18px"><h2>📄 ${propId ? 'Inventory reports for this property' : 'Your inventory reports'}</h2>
+${list.length ? `<ul style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p>None yet. Reports done with your email, or at one of your properties (same postcode and door number), appear here by themselves. <a href="/app">Start a report</a> or <a href="/buy?for=tenant">buy one for your tenant</a>.</p>`}</div>`;
+  }
+
   app.get(['/account', '/account/'], need, (req, res) => {
     const acc = req.acc, t = todayLondon(), list = acc.properties.slice().sort((a, b) => streetLine(a.address).localeCompare(streetLine(b.address), 'en', { numeric: true }));
     const mailNote = !emailOn() ? `<p class="acc-note">Email reminders aren’t switched on for this site yet, so none will be sent for now. Your dates are still tracked here.</p>`
@@ -706,6 +747,7 @@ ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</d
   : `<div class="card acc-empty"><h2>Add your first property</h2><p>Start with the postcode and pick the address: we’ll find its EPC on the government register by ourselves. Then add the Gas Safety and EICR dates, any licence, and the tenancy if it’s let. We’ll email you before anything expires.</p>
      <ul class="ruled"><li><b>Gas Safety</b>every 12 months</li><li><b>EICR</b>at least every 5 years</li><li><b>EPC</b>valid for 10 years, found for you</li></ul>
      <a class="btn primary" href="/account/properties/new">Add a property</a></div>`}
+${reportsBlock(req)}
 </div></section>${UI.DT_UI}`;
     send(req, res, { path: '/account', title: 'Your properties', body });
   });
@@ -889,6 +931,7 @@ ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</d
     <div class="ov-wrap">${dashCard(p, t, { local: true, noacts: true })}
       <div class="ov-side"><ul class="ov">${[['rent', 'Rent', rent.st], ['epc', 'EPC', certStatus('epc', p, t)], ['gas', 'Gas Safety', certStatus('gas', p, t)], ['eicr', 'EICR', certStatus('eicr', p, t)], ['licence', 'Licence', certStatus('licence', p, t)], ['tenancy', 'Tenancy', tenancyStatus(p, t)], ['tenancy', 'Deposit', ds]]
         .map(([id, l, s]) => `<li><a href="#${id}"><b>${l}</b>${stHTML(s)}</a></li>`).join('')}</ul></div></div>
+    ${reportsBlock(req, p.id)}
     <div class="acc-sec" id="details"><div class="acc-sec-h"><h2>Property details</h2><p>The address, type and bedrooms. Changing the address looks for its EPC again.</p></div>
       <div class="acc-sec-b"><div class="acc-box"><details class="edit"${sec === 'details' ? ' open' : ''}><summary>Edit the address and details</summary><form class="form" method="post" action="/account/p/${p.id}/details">${detailsFields(Object.assign({}, a, { type: p.type, beds: p.beds, notes: p.notes, notesSave: '/account/p/' + p.id + '/notes/property' }, sec === 'details' ? ov : {}))}<button class="btn primary sm">Save details</button></form></details>
       ${p.notes ? `<p class="pre muted">${esc(p.notes)}</p>` : ''}
