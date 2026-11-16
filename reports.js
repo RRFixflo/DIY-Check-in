@@ -869,13 +869,16 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   // 16 Nov 2026, every /p/ link said "isn't available"). The online backup holds every photo, so after 10 minutes
   // the server numbers them exactly as the phone's PDF did (the app's own builder, run on the backup) and puts in the
   // ones missing. The phone's PDF itself is left as it is.
-  let fillBusy = false;
+  let fillBusy = false; const fillSeen = new Set();
   async function photoFillSweep(){
     if (fillBusy) return; fillBusy = true;
     try {
       const since = Date.now() - 14 * 864e5;
       for (const r of listReports()) {
-        if (!r.photoKey || !r.photos || notPaid(r) || (r.photoFillAt && (r.photoFillV === 2 || !/no backup/.test(r.photoFill || ''))) || r.source === 'uploaded') continue;
+        if (!r.photos || notPaid(r) || (r.photoFillAt && (r.photoFillV === 2 || !/no backup/.test(r.photoFill || ''))) || r.source === 'uploaded') {
+          if (Date.now() - Date.parse(r.receivedAt || 0) < 3 * 864e5 && !fillSeen.has(r.id)) { fillSeen.add(r.id); console.log('photo fill: skipped ' + r.id + ' (photos ' + r.photos + ', unpaid ' + notPaid(r) + ', done ' + (r.photoFill || '—') + ', source ' + r.source + ')'); }
+          continue;
+        }
         const at = Date.parse(r.receivedAt || r.storedAt || r.createdAt || 0) || 0;
         if (at && (at < since || Date.now() - at < 10 * 60000)) continue;
         let have = 0; try { have = fs.readdirSync(photoDir(r.id)).filter(f => /^\d+\.jpg$/.test(f)).length; } catch (e) {}
@@ -889,11 +892,13 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; meta.photoFillV = 2; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
         if (drafts.missingPhotos(b.key, b.s) && Date.now() - at < 60 * 60000) continue;   // photos still arriving
         try {
-          const s2 = Object.assign({}, b.s, { photoKey: r.photoKey, declarationAccepted: true });
+          const useKey = r.photoKey || b.s.photoKey;
+          if (!useKey) throw new Error('no photo key on the report or its backup');
+          const s2 = Object.assign({}, b.s, { photoKey: useKey, declarationAccepted: true });
           const built = await drafts.buildFor(b.key, s2);
           const dir = photoDir(r.id); fs.mkdirSync(dir, { recursive: true });
           const missing = (built.photos || []).filter(ph => !fs.existsSync(path.join(dir, ph.n + '.jpg')));
-          attachBackupPhotos(r.id, r.photoKey, missing, built.photoFile);
+          attachBackupPhotos(r.id, useKey, missing, built.photoFile);
           if (built.data && !fs.existsSync(path.join(dir, 'data.json'))) fs.writeFileSync(path.join(dir, 'data.json'), JSON.stringify(built.data));
           const now = readMeta(r.id); now.photoFillAt = new Date().toISOString(); now.photoFill = missing.length + ' photos from the backup';
           fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(now, null, 2));
@@ -1166,19 +1171,60 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
   const analytics = require('./analytics'); analytics.mountAdmin(app, { esc, requireAdmin, shell: { css: SHELL_CSS, aside: shellAside } });
 
   // Contact form messages for the admin page; opening the page marks them as seen.
-  function messagesHTML(){
+  // A purchase made with the same email (or the same name) as a message: the owner can see straight away what they bought
+  // and resend their link.
+  function msgPurchases(m){
+    let list = []; try { list = require('./purchases').paidWithEmail(); } catch (e) { return ''; }
+    const em = String(m.email || '').toLowerCase(), nm = String(m.name || '').toLowerCase().trim();
+    const hits = list.filter(p => p.email.toLowerCase() === em || (nm && p.name && p.name.toLowerCase().trim() === nm));
+    if (!hits.length) return '';
+    const base = PUBLIC_URL || '';
+    return hits.slice(0, 5).map(p => `<div class="sub" style="margin-top:6px">💳 Bought a report as ${esc(p.name || p.email)} (${esc(p.email)})${p.usedFor ? ' · used for ' + esc(p.usedFor) : ' · not used yet'} · their link: <input readonly value="${esc(base + '/?access=' + p.token)}" style="width:min(100%,360px);font-size:12px" onclick="this.select()"></div>`).join('');
+  }
+  function messagesHTML(req){
     const d = readMessages(), seen = d.seenAt, list = d.list.slice().reverse();
     const isNew = m => !seen || m.at > seen, fresh = list.filter(isNew).length;
     if (list.length) { d.seenAt = new Date().toISOString(); writeMessages(d); }
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const rows = list.slice(0, 200).map(m => `<li${isNew(m) ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong>${esc(m.name)}</strong>${isNew(m) ? ' <span class="pill new">New</span>' : ''}${m.topic ? ' <span class="pill">' + esc(m.topic) + '</span>' : ''}
       <div class="sub"><a href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: your message to DIY Inventory')}">${esc(m.email)}</a>${m.phone ? ' · <a href="tel:' + esc(m.phone.replace(/[^\d+]/g, '')) + '">' + esc(m.phone) + '</a>' : ''} · ${esc(when(m.at))}</div>
-      <div class="msg">${esc(m.message)}</div>${Origin.html(m.origin, esc)}</div>
+      <div class="msg">${esc(m.message)}</div>${Origin.html(m.origin, esc)}${msgPurchases(m)}
+      ${(m.replies || []).map(rp => `<div class="sub" style="margin-top:6px">↩ Replied ${esc(when(rp.at))} to ${esc(rp.to)}: <span style="white-space:pre-wrap">${esc(rp.text.slice(0, 300))}${rp.text.length > 300 ? '…' : ''}</span></div>`).join('')}
+      <details class="reply" style="margin-top:8px"${req && req.query && req.query.replied === m.id ? '' : ''}><summary class="btn" style="display:inline-block">✉ Reply by email</summary>
+        ${RESEND_API_KEY ? `<form method="post" action="/admin/messages/${esc(m.id)}/reply" style="display:grid;gap:8px;margin-top:8px;max-width:640px">
+          <input name="subject" value="Re: your message to DIY Inventory" maxlength="150" style="padding:9px 10px;border:1px solid #ccd;border-radius:10px;font:inherit">
+          <textarea name="text" rows="8" required maxlength="5000" style="padding:10px;border:1px solid #ccd;border-radius:10px;font:inherit">Hi ${esc(String(m.name || '').split(/\s+/)[0] || 'there')},
+
+</textarea>
+          <div class="sub">Sent to ${esc(m.email)}; their reply comes back to ${esc(REPORT_TO_EMAIL || 'the sender address')}.</div>
+          <div><button class="btn primary">Send</button></div></form>` : '<p class="sub">Email isn’t switched on (RESEND_API_KEY). Use the email address above.</p>'}
+      </details></div>
       <div class="actions"><form method="post" action="/admin/messages/${esc(m.id)}/delete" onsubmit="return confirm('Delete this message?')"><button class="btn danger">Delete</button></form></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#messages" onclick="document.getElementById('messages').open=true">✉️ ${fresh} new message${fresh === 1 ? '' : 's'} from the website</a>` : '';
     return banner + `<details class="codes" id="messages"${fresh ? ' open' : ''}><summary>✉️ Messages <span class="sub" style="display:inline">— ${list.length ? list.length + ' from the contact form' : 'none yet'}</span></summary>
 ${rows ? '<ul>' + rows + '</ul>' : '<p class="sub">Messages sent from the website’s Contact page appear here.</p>'}</details>`;
   }
+  app.post('/admin/messages/:id/reply', requireAdmin, express.urlencoded({ extended: false, limit: '32kb' }), async (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Reply from the admin page.');
+    const d = readMessages(), m = d.list.find(x => x.id === String(req.params.id));
+    if (!m) return res.redirect(303, '/admin#messages');
+    const text = String((req.body || {}).text || '').replace(/\r/g, '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 5000);
+    const subject = clip((req.body || {}).subject, 150) || 'Re: your message to DIY Inventory';
+    const fail = msg => res.status(502).type('html').send(`<!doctype html><meta name="viewport" content="width=device-width"><body style="font:16px system-ui;padding:24px"><p>The reply didn’t go: ${esc(msg)}</p><p><a href="/admin#messages">Back</a></p>`);
+    if (!RESEND_API_KEY) return fail('email isn’t switched on (RESEND_API_KEY).');
+    if (!text || !EMAIL_RE.test(String(m.email || ''))) return fail('the message is empty or their email address isn’t valid.');
+    const quoted = '\n\n— On ' + new Date(m.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }) + ', ' + m.name + ' wrote:\n' + String(m.message || '').split('\n').map(l => '> ' + l).join('\n');
+    try {
+      const resp = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+        headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.assign({ from: REPORT_FROM_EMAIL, to: [m.email], subject, text: text + quoted }, REPORT_TO_EMAIL ? { reply_to: REPORT_TO_EMAIL } : {})) });
+      if (!resp.ok) { const t = (await resp.text().catch(() => '')).slice(0, 300); console.error('message reply failed: HTTP ' + resp.status, t); let msg = ''; try { msg = JSON.parse(t).message; } catch (e) {} return fail(msg || ('HTTP ' + resp.status)); }
+    } catch (e) { return fail(e.message); }
+    const d2 = readMessages(), m2 = d2.list.find(x => x.id === m.id);
+    if (m2) { m2.replies = (m2.replies || []).concat([{ at: new Date().toISOString(), to: m.email, subject, text }]).slice(-20); writeMessages(d2); }
+    console.log('message replied to: ' + m.email);
+    res.redirect(303, '/admin#messages');
+  });
   app.post('/admin/messages/:id/delete', requireAdmin, (req, res) => {
     if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Delete messages from the reports page.');
     const d = readMessages(); d.list = d.list.filter(m => m.id !== String(req.params.id)); writeMessages(d);
