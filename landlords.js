@@ -1448,7 +1448,9 @@ function signedIn(req){ try { return !!(currentFn && currentFn(req)); } catch (e
 const afrCache = new Map();
 function accountsForReport(r, emails){
   const out = [], seen = new Set(emails || []);
-  const add = (acc) => { const e = String(acc.email || '').toLowerCase(); if (e && !out.some(x => x.email === e)) out.push({ email: e, name: acc.name || '', exact: seen.has(e) }); };
+  // The account's email and its extra address from Settings (e.g. Danny Bell: two spellings of his email, the owner
+  // didn't know which was right, so both get everything).
+  const add = (acc) => [acc.email, (acc.settings || {}).extraEmail].forEach(x => { const e = String(x || '').trim().toLowerCase(); if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && !out.some(y => y.email === e)) out.push({ email: e, name: acc.name || '', exact: seen.has(e) }); });
   for (const id of accountIds()) {
     const acc = readAcc(id); if (!acc || !acc.email) continue;
     if (seen.has(String(acc.email).toLowerCase())) { add(acc); continue; }
