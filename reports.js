@@ -875,7 +875,7 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     try {
       const since = Date.now() - 14 * 864e5;
       for (const r of listReports()) {
-        if (!r.photoKey || !r.photos || notPaid(r) || r.photoFillAt || r.source === 'uploaded') continue;
+        if (!r.photoKey || !r.photos || notPaid(r) || (r.photoFillAt && (r.photoFillV === 2 || !/no backup/.test(r.photoFill || ''))) || r.source === 'uploaded') continue;
         const at = Date.parse(r.receivedAt || r.storedAt || r.createdAt || 0) || 0;
         if (at && (at < since || Date.now() - at < 10 * 60000)) continue;
         let have = 0; try { have = fs.readdirSync(photoDir(r.id)).filter(f => /^\d+\.jpg$/.test(f)).length; } catch (e) {}
@@ -886,7 +886,7 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (!b) b = all.filter(({ s }) => (s.meta || {}).ref && (s.meta || {}).ref === r.ref && (s.finalizedAt || s.editOf)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
         const meta = readMeta(r.id); if (!meta) continue;
         console.log('photo fill: ' + r.id + ' has ' + have + ' of ' + r.photos + ' photos; backup ' + (b ? b.key : 'not found') + ' (ref ' + (r.ref || '—') + ', key ' + String(r.photoKey).slice(0, 8) + ')');
-        if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
+        if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; meta.photoFillV = 2; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
         if (drafts.missingPhotos(b.key, b.s) && Date.now() - at < 60 * 60000) continue;   // photos still arriving
         try {
           const s2 = Object.assign({}, b.s, { photoKey: r.photoKey, declarationAccepted: true });
