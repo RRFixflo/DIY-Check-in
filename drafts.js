@@ -147,7 +147,7 @@ function mount(app, ctx){
   const paidS = s => !!(s.submittedId || s._access);
   // What unlocked it, in words (a £29.99 purchase and who, an agent's tenant link, the access code, the owner).
   const via = s => ctx.accessLabel ? ctx.accessLabel(s._token, s._byOwner) : '';
-  const status = s => s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
+  const status = s => !s.finalizedAt && signedNotFinished(s) ? ['wait', 'Signed · finishing by itself' + (SIGNED_IDLE_MS > Date.now() - new Date(s._savedAt || 0).getTime() ? ' once the phone has been quiet for ' + Math.round(SIGNED_IDLE_MS / 60000) + ' minutes' : '')] : s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
 
   // The list on /admin.
   function draftsHTML(){
@@ -247,12 +247,22 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   const backupFor = reportId => list().find(({ s }) => s._serverReportId === reportId) || null;
   async function rebuild(reportId){ const b = backupFor(reportId); if (!b) return null; return Object.assign({ key: b.key, s: b.s }, await buildFor(b.key, b.s)); }
   const WAIT_MS = 5 * 60 * 1000, GIVE_UP_MS = 30 * 60 * 1000;
+  // Signed but the last "Finish" tap never came (the owner: "once someone signs, it is done"; Flat 5 Windsor Court, 16 Nov 2026,
+  // 50/50 items, 153 photos, signed, left "In progress"): once the phone has been quiet for SIGNED_IDLE_MS, the backup is
+  // treated as finished at its last save and the report is made from it below like any other. Not an edit in progress.
+  const SIGNED_IDLE_MS = 20 * 60 * 1000;
+  function signedNotFinished(s){ return !!(s && !s.finalizedAt && !s.editOf && !s.ownerEdit && !s.submittedId && !s._serverReportId && typeof s.signatureDataUrl === 'string' && /^data:image\//.test(s.signatureDataUrl)); }
   let building = false;
   async function rescue(){
     if (building || !ctx.fromBackup) return;
     building = true;
     try {
       for (const { key, s } of list()) {
+        if (signedNotFinished(s) && Date.now() - new Date(s._savedAt || 0).getTime() > SIGNED_IDLE_MS && Date.now() - new Date(s._savedAt || 0).getTime() < 14 * 86400000) {
+          s.finalizedAt = s._savedAt; s.declarationAccepted = true; s._autoFinished = new Date().toISOString();
+          writeJson(path.join(dirOf(key), 'state.json'), s);
+          console.log('report signed but not finished on the phone: finished from its backup: ' + key + ' (' + ((s.meta || {}).address || '') + ')');
+        }
         if (!s.finalizedAt || s.submittedId || s._serverReportId || s._rescueFailed) continue;
         const age = Date.now() - new Date(s.finalizedAt).getTime();
         if (!(age > WAIT_MS) || age > 14 * 86400000) continue;

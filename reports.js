@@ -409,7 +409,9 @@ function mount(app){
     // The same report is only ever stored once: by reference + finish time from the app, by file contents when uploaded.
     const basis = meta.finalizedAt ? meta.ref + '|' + meta.finalizedAt : 'file|' + crypto.createHash('sha256').update(pdf).digest('hex');
     const key = crypto.createHash('sha256').update(basis).digest('hex').slice(0, 12);
-    const existing = listReports().find(r => r.key === key);
+    // A report the server finished from a signed backup (drafts.js) has the backup's last-save time as its finish time; the
+    // phone's own PDF, if it is finished later, has another one, so it's found by reference + photo key and replaces it in place.
+    const existing = listReports().find(r => r.key === key) || (source === 'app' && meta.ref && meta.photoKey ? listReports().find(r => r.source === 'backup' && r.ref === meta.ref && r.photoKey === meta.photoKey) : null);
     // An edited copy of a finished report (photos added or removed, or its type changed on the phone): it replaces the
     // stored one in place, so its id, link, payment and copies stay the same. Only from the phone that made it (its photo key).
     if (existing && m.editedAt && clip(m.editedAt, 40) !== String(existing.editedAt || '') && !((meta.photoKey && existing.photoKey === meta.photoKey) || (opts && opts.owner)))
