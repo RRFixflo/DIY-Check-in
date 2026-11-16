@@ -285,6 +285,10 @@
   .item-title.na-label { color: var(--ink-faint); text-decoration: line-through; }
   .na-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; color: var(--ink-soft); white-space: nowrap; cursor: pointer; }
   .na-toggle input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+  .not-here { flex: 0 0 auto; border: 1.5px solid var(--line-strong); background: var(--panel); color: var(--ink-soft); font: inherit; font-size: 13px; font-weight: 600; padding: 8px 12px; min-height: 38px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+  .not-here:active { transform: scale(.97); }
+  .not-here.on { background: var(--surface-2, #EEF1F5); border-color: transparent; color: var(--ink); }
+  .not-here.on span { margin-left: 6px; text-decoration: underline; color: var(--ink-soft); font-weight: 500; }
   .na-reason { margin-top: 12px; }
   .na-reason input { width: 100%; border: 1px solid var(--line-strong); background: var(--panel); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 15px; min-height: 44px; }
   .na-reason input:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
@@ -477,6 +481,9 @@
   .cam-side:disabled { opacity: .35; }
   .cam-shutter { width: 76px; height: 76px; border-radius: 50%; border: 5px solid #fff; background: rgba(255,255,255,.92); box-shadow: 0 0 0 3px rgba(0,0,0,.25); }
   .cam-shutter:active { transform: scale(.93); background: #fff; }
+  .cam-links { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .cam-nothere { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.5); color: #fff; font-size: 13.5px; font-weight: 600; padding: 8px 14px; border-radius: 999px; }
+  .cam-nothere[hidden] { display: none; }
   .cam-gallery { background: none; border: none; color: #fff; opacity: .85; font-size: 13.5px; font-weight: 600; text-decoration: underline; padding: 4px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
@@ -719,7 +726,7 @@
       <button type="button" class="cam-shutter" id="camShutter" onclick="cameraShutter()" aria-label="Take photo"></button>
       <button type="button" class="cam-side" id="camNext" onclick="cameraStep(1)">Next ›</button>
     </div>
-    <button type="button" class="cam-gallery" onclick="cameraGallery()">Choose from gallery</button>
+    <div class="cam-links"><button type="button" class="cam-gallery" onclick="cameraGallery()">Choose from gallery</button><button type="button" class="cam-nothere" id="camNotHere" onclick="cameraNotHere()">Not in this property</button></div>
   </div>
   <input type="file" id="cameraGalleryInput" accept="image/*" multiple style="display:none" onchange="handlePhotoInputChange(event)">
 </div>
@@ -1799,6 +1806,18 @@ function cameraShutter(){
     finally { camera.saving--; if (camera.open) updateCameraUi(); }
   }, 'image/jpeg', 0.92);
 }
+// The item in front of the camera isn't at the property (no sofa, no wardrobe…): one tap marks it not in this
+// property, takes it off the camera's list and moves on to the next thing to photograph.
+function cameraNotHere(){
+  const t = cameraTarget(), r = t && resolveTarget(t);
+  if (!r || !r.item || r.item.mandatory) return;
+  if (r.item.photos.length && !confirm(`Mark “${r.item.label}” as not in this property? Its ${r.item.photos.length} photo${r.item.photos.length === 1 ? '' : 's'} won't go in the report.`)) return;
+  r.item.notApplicable = true; persist();
+  camera.targets.splice(camera.idx, 1);
+  notice(`“${r.item.label}” marked as not in this property. Untick it on the room's list if it is there after all.`);
+  if (camera.idx >= camera.targets.length){ closeCamera(); return; }
+  camera.announced = null; pendingPhotoTarget = cameraTarget(); updateCameraUi();
+}
 function cameraGallery(){ pendingPhotoTarget = cameraTarget(); document.getElementById('cameraGalleryInput').click(); }
 function cameraFallback(){
   const t = cameraTarget();
@@ -1822,6 +1841,7 @@ function updateCameraUi(){
   cameraLens();
   document.getElementById('camShutter').classList.toggle('is-full', !!full);
   document.getElementById('camThumbs').innerHTML = r.arr.slice(-4).map(p => `<img src="${p.dataUrl}" alt="">`).join('');
+  { const nh = document.getElementById('camNotHere'); if (nh) nh.hidden = !(r.item && !r.item.mandatory); }
   const prev = document.getElementById('camPrev'), next = document.getElementById('camNext');
   prev.disabled = camera.idx === 0; prev.style.visibility = multi ? 'visible' : 'hidden';
   const nr = !last && resolveTarget(camera.targets[camera.idx + 1]);
@@ -4754,15 +4774,14 @@ function itemCardHTML(room, item){
           <span class="item-check ${checkClass}">${checkMark}</span>
           <span class="item-title ${item.notApplicable ? 'na-label' : ''}">${escapeHtml(item.label)}</span>
         </div>
-        ${item.mandatory ? `<span class="na-toggle required-tag">Required</span>` : `<label class="na-toggle">
-          <input type="checkbox" ${item.notApplicable ? 'checked' : ''} onchange="toggleNA('${room.id}','${item.id}', this.checked)">
-          Not applicable
-        </label>`}
+        ${item.mandatory ? `<span class="na-toggle required-tag">Required</span>` : item.notApplicable
+          ? `<button type="button" class="not-here on" onclick="toggleNA('${room.id}','${item.id}', false)" aria-pressed="true">✓ Not in this property <span>Undo</span></button>`
+          : `<button type="button" class="not-here" onclick="toggleNA('${room.id}','${item.id}', true)" aria-pressed="false">Not in this property</button>`}
       </div>
       ${earlierItemHTML(room, item)}
       ${item.notApplicable ? `
         <div class="na-reason">
-          <input type="text" placeholder="Why doesn't this apply? e.g. 'No desk in this room'" value="${escapeHtml(item.naReason)}" oninput="updateNAReason('${room.id}','${item.id}', this.value)">
+          <input type="text" placeholder="Anything to add? (optional) e.g. 'Unfurnished, no sofa'" value="${escapeHtml(item.naReason)}" oninput="updateNAReason('${room.id}','${item.id}', this.value)">
         </div>
       ` : `
         <div class="item-photo-row">
@@ -4775,7 +4794,7 @@ function itemCardHTML(room, item){
             </div>
           `).join('')}
         </div>
-        ${warnPhoto ? `<div class="ai-warn-note">⚠ ${escapeHtml(warnPhoto.aiCheck.note || 'This photo may not clearly show ' + item.label + '.')} Worth a quick check.</div>` : ''}
+        ${warnPhoto ? `<div class="ai-warn-note">⚠ ${escapeHtml(warnPhoto.aiCheck.note || 'This photo looks too dark or blurred to make out.')} You may want to retake it.</div>` : ''}
         <div class="photo-tip">${exampleThumbHTML(item.label, photoTipFor(item.label))}<span><span class="tip-kicker">How to photograph it</span>${escapeHtml(photoTipFor(item.label))}</span></div>
         ${(() => {
           // With automatic assessment off the tenant sets every condition, so the choice is shown from the start.

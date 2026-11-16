@@ -237,7 +237,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     try {
       const r = await require('./render-backup').renderInChild(s, path.join(dirOf(key), 'photos'), ctx.PUBLIC_URL || 'http://localhost', path.join(ctx.REPORTS_DIR, 'render-tmp'));
       console.log('report built from its backup with the app’s own design: ' + key + ' (' + r.photos.length + ' photos)');
-      return { pdf: r.pdf, photos: r.photos.filter(p => p.id), photoFile, design: 'app' };
+      return { pdf: r.pdf, photos: r.photos.filter(p => p.id), photoFile, design: 'app', data: r.data || null };
     } catch (e) { console.error('the app’s design could not be used for backup ' + key + ', using the simple one: ' + e.message); }
     const out = { base: (ctx.PUBLIC_URL || '') + '/p/' + s.photoKey + '/' };
     const pdf = await buildFromBackup(s, photoFile, out);

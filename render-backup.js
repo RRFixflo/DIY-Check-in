@@ -62,6 +62,8 @@ async function render(job){
   if (buf.slice(0, 5).toString() !== '%PDF-') throw new Error('not a PDF');
   fs.writeFileSync(job.out, buf);
   fs.writeFileSync(job.out + '.photos.json', JSON.stringify((out.photos || []).map(p => ({ n: p.n, id: byUrl.get(p.dataUrl) || '', title: p.title, ts: p.ts }))));
+  // The report's details (rooms, items, conditions, photo numbers) for sign-off and later comparisons, as the phone sends.
+  try { if (typeof w.reportData === 'function') fs.writeFileSync(job.out + '.data.json', JSON.stringify(w.reportData(s, out.photos))); } catch (e) {}
   w.close();
 }
 
@@ -82,9 +84,10 @@ function renderInChild(state, photosDir, base, tmpDir){
     execFile(process.execPath, ['--max-old-space-size=3072', __filename, jobFile], { timeout: 10 * 60 * 1000, maxBuffer: 4 * 1024 * 1024 }, (err, so, se) => {
       try {
         if (err) return reject(new Error((String(se || '').split('\n').find(Boolean) || err.message).slice(0, 300)));
-        resolve({ pdf: fs.readFileSync(out), photos: JSON.parse(fs.readFileSync(out + '.photos.json', 'utf8')) });
+        let data = null; try { data = JSON.parse(fs.readFileSync(out + '.data.json', 'utf8')); } catch (e) {}
+        resolve({ pdf: fs.readFileSync(out), photos: JSON.parse(fs.readFileSync(out + '.photos.json', 'utf8')), data });
       } catch (e) { reject(e); }
-      finally { for (const f of [jobFile, out, out + '.photos.json']) try { fs.unlinkSync(f); } catch (e) {} }
+      finally { for (const f of [jobFile, out, out + '.photos.json', out + '.data.json']) try { fs.unlinkSync(f); } catch (e) {} }
     });
   });
 }

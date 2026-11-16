@@ -865,6 +865,42 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   }
   setInterval(() => liveEditSweep().catch(() => {}), 30000).unref();
 
+  // Full-size photos the phone never sent (the tenant left the page straight after finishing: 37 Galsworthy Avenue,
+  // 16 Nov 2026, every /p/ link said "isn't available"). The online backup holds every photo, so after 10 minutes
+  // the server numbers them exactly as the phone's PDF did (the app's own builder, run on the backup) and puts in the
+  // ones missing. The phone's PDF itself is left as it is.
+  let fillBusy = false;
+  async function photoFillSweep(){
+    if (fillBusy) return; fillBusy = true;
+    try {
+      const since = Date.now() - 14 * 864e5;
+      for (const r of listReports()) {
+        if (!r.photoKey || !r.photos || notPaid(r) || r.photoFillAt || r.source === 'uploaded') continue;
+        const at = Date.parse(r.receivedAt || r.storedAt || r.createdAt || 0) || 0;
+        if (at && (at < since || Date.now() - at < 10 * 60000)) continue;
+        let have = 0; try { have = fs.readdirSync(photoDir(r.id)).filter(f => /^\d+\.jpg$/.test(f)).length; } catch (e) {}
+        if (have >= r.photos) continue;
+        const b = drafts.all().filter(({ s }) => isBackupOf(s, r)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
+        const meta = readMeta(r.id); if (!meta) continue;
+        if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
+        if (drafts.missingPhotos(b.key, b.s) && Date.now() - at < 60 * 60000) continue;   // photos still arriving
+        try {
+          const s2 = Object.assign({}, b.s, { photoKey: r.photoKey, declarationAccepted: true });
+          const built = await drafts.buildFor(b.key, s2);
+          const dir = photoDir(r.id); fs.mkdirSync(dir, { recursive: true });
+          const missing = (built.photos || []).filter(ph => !fs.existsSync(path.join(dir, ph.n + '.jpg')));
+          attachBackupPhotos(r.id, r.photoKey, missing, built.photoFile);
+          if (built.data && !fs.existsSync(path.join(dir, 'data.json'))) fs.writeFileSync(path.join(dir, 'data.json'), JSON.stringify(built.data));
+          const now = readMeta(r.id); now.photoFillAt = new Date().toISOString(); now.photoFill = missing.length + ' photos from the backup';
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(now, null, 2));
+          console.log('full-size photos filled in from the backup: ' + r.id + ' (' + missing.length + ' of ' + r.photos + ')');
+        } catch (e) { console.error('photos not filled in from the backup: ' + r.id + ': ' + e.message); meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'failed: ' + e.message.slice(0, 120); fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); }
+      }
+    } finally { fillBusy = false; }
+  }
+  setTimeout(() => photoFillSweep().catch(() => {}), 2 * 60000).unref();
+  setInterval(() => photoFillSweep().catch(() => {}), 5 * 60000).unref();
+
   // Every email we hold for a report (the person who did it first): the admin Email form and the automatic copies.
   // Every email sent about a report, newest first, with when: the copies after payment, links sent from here, and the owner's own copy.
   const whenTxt = t => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
