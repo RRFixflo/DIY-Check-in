@@ -334,7 +334,7 @@ function renderPage(pg, req, notice){
   // People in the US see the price in dollars too (“$39 (£29.99)”); the card is still charged £29.99. Not robots, so pages are indexed in pounds.
   const body = !pg.noUsd && pg.lang !== 'en-US' && fx.usVisitor(req) ? pg.body.replace(/£29\.99(?![\d])/g, fx.usd(29.99) + ' (£29.99)') : pg.body;
   let html = LAYOUT.replace('{{CONTENT}}', () => body)
-    .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + '</div></div>'
+    .replace('{{NOTICE}}', () => notice ? '<div class="wrap"><div class="notice' + (notice.ok ? ' ok' : '') + '" role="' + (notice.ok ? 'status' : 'alert') + '">' + escHtml(notice.text) + (notice.link ? ' <a href="' + escHtml(notice.link.href) + '"><strong>' + escHtml(notice.link.label) + ' →</strong></a>' : '') + '</div></div>'
       : usVisitor ? '<div class="wrap"><div class="notice ok" role="status">In the US? <a href="/us">Move-in and move-out inspections in all 50 states</a>, with your state’s security deposit law.</div></div>' : '')
     .replace('{{AI_NOTE}}', () => anthropic ? '<p>While you take photos, each one may be sent to an AI service to suggest the item’s condition. It isn’t kept there.</p>' : '');
   for (const k of Object.keys(SITE).concat(['guides', 'checklists', 'certificates', 'landlords', 'account', 'floorplan', 'locations', 'templates', 'report', 'agents', 'buy', 'clerks'])) html = html.split('{{ON_' + k + '}}').join(k === key ? ' on' : '');
@@ -350,7 +350,7 @@ function renderPage(pg, req, notice){
 }
 function sitePage(key, req, notice){ return renderPage(Object.assign({ key }, SITE[key]), req, notice); }
 function paywallPage(reason, req){
-  const msg = reason === 'used' ? 'This link has already been used for a report.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : reason === 'removed' ? 'This link is no longer active. Please ask for a new one.' : reason === 'spent' ? 'All the prepaid reports on this link have been used. Please ask whoever sent it to top it up.' : '';
+  const msg = reason === 'used' ? 'This link has already been used for a report. Looking for that report? Go to diyinventory.co.uk/my-report and type your email.' : reason === 'expired' ? 'This link has expired.' : reason === 'changed' ? 'The access code has changed. Please enter the new one.' : reason === 'tries' ? 'Too many wrong codes. Please wait 15 minutes and try again.' : reason === 'unknown' ? 'We don’t recognise that link or code.' : reason === 'removed' ? 'This link is no longer active. Please ask for a new one.' : reason === 'spent' ? 'All the prepaid reports on this link have been used. Please ask whoever sent it to top it up.' : '';
   return sitePage('home', req, msg ? { text: msg } : null);
 }
 for (const [key, pg] of Object.entries(SITE)) if (key !== 'home') app.get([pg.path, pg.path + '/'], (req, res) => {
@@ -383,6 +383,24 @@ const agentSeo = require('./agentseo').mount(app, { renderPage });
 // For inventory companies: the app in their own brand for a monthly fee (enquiries only).
 const clerkPaths = require('./clerks').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
   isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// "Get my report" (/my-report): anyone types their email and is emailed the link to every paid report linked to it
+// (the email they gave in the app, the buyer's email, an agent link's email, copies sent). Same answer whether or not it matched.
+{
+  const myLimit = reports.limiter(6, 60 * 60 * 1000);
+  const myPage = (req, o) => { o = o || {};
+    const body = `<div class="page-head"><div class="wrap"><span class="kicker">Your report</span><h1>Get your report by email</h1><p>Type the email address you gave when you did the report (or paid for it) and we’ll email you the link to view and download it.</p></div></div>
+<section class="tight"><div class="wrap" style="max-width:560px">${o.sent ? '<div class="card"><h2>Check your inbox</h2><p>If that email address is linked to a report, the link is on its way (check your junk folder too). Nothing arrived? <a href="/contact">Contact us</a> with the property address.</p></div>' : `<form class="card form" method="post" action="/my-report"><label><b>Email address</b><input name="email" type="email" required maxlength="120" autocomplete="email" inputmode="email"></label><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><button class="btn primary">Email me my report</button></form>`}</div></section>`;
+    return renderPage({ key: 'my-report', path: '/my-report', title: 'Get your report by email · DIY Inventory', desc: 'Get the link to your DIY Inventory report by email.', body, head: '<meta name="robots" content="noindex, follow">', jsonld: [] }, req, o.notice); };
+  app.get(['/my-report', '/my-reports', '/get-my-report'], (req, res) => res.set('Cache-Control', 'no-store').type('html').send(myPage(req, { sent: !!req.query.sent })));
+  app.post('/my-report', express.urlencoded({ extended: false, limit: '4kb' }), async (req, res) => {
+    const b = req.body || {}, email = String(b.email || '').trim().toLowerCase().slice(0, 120);
+    if (b.website) return res.redirect(303, '/my-report?sent=1');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).type('html').send(myPage(req, { notice: { text: 'Please check the email address.' } }));
+    if (!myLimit(reports.clientIp(req))) return res.status(429).type('html').send(myPage(req, { notice: { text: 'Too many tries from here. Please try again later.' } }));
+    reports.emailMyReports(email, PUBLIC_BASE || siteBase(req)).catch(() => {});
+    res.redirect(303, '/my-report?sent=1');
+  });
+}
 // Each tenant link's private dashboard, /agent/<key>: agentdash.js.
 require('./agentdash').mount(app, { reports, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, PUBLIC_BASE, canonicalBase: siteBase });
 const floorplanPaths = payments.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, isOwner: reports.isOwner, codeAccess: reports.codeAccess, clientIp: reports.clientIp,
@@ -475,7 +493,12 @@ if (PAYWALL) {
     const a = await checkAccess(token);
     if (!(a.valid || (a.reason === 'used' && token === cookieToken(req)))) {
       if (!q && isApp) return next();
-      const why = q || token ? a.reason : 'none'; return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
+      const why = q || token ? a.reason : 'none';
+      if (why === 'used' && /^RPT-/.test(token)) {
+        const used = reports.reportForToken(token);
+        if (used) return res.status(200).type('html').send(sitePage('home', req, { ok: true, text: 'This link has already been used for the ' + used.type.toLowerCase() + ' at ' + (used.address || 'the property') + (used.at ? ', finished on ' + new Date(used.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/London' }) : '') + '.', link: { href: used.link, label: 'View and download the report' } }));
+      }
+      return res.status(why === 'none' ? 200 : 402).type('html').send(paywallPage(why, req)); }
     if (q && reports.codeAccess(q) && q !== cookieToken(req)) reports.codeLogin(req, q);   // tell the owner on /admin
     if (q) { res.setHeader('Set-Cookie', 'diy_access=' + q + '; Path=/; Max-Age=' + 200 * 86400 + '; HttpOnly; Secure; SameSite=Lax'); return res.redirect(302, isRoot ? '/app' + startQ : req.path); }
     if (isRoot) return res.type('html').send(sitePage('home', req));

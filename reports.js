@@ -145,6 +145,17 @@ function agentDashKey(id){
 }
 const agentTokenHash = t => t ? crypto.createHash('sha256').update('diy-report|' + t).digest('hex').slice(0, 20) : '';
 // Every report made with a tenant link: tagged with its id, stored by a browser holding its token, or made from a backup that held it.
+// The report a single-use purchase link (RPT-…) was used for: stored by a browser holding it, or made from a backup that held it.
+// Opening a used link then shows that report instead of only "already been used" (the owner: a buyer couldn't find theirs).
+function reportForToken(token){
+  if (!token) return null;
+  const th = agentTokenHash(token), ids = new Set();
+  try { (shared.drafts ? shared.drafts.all() : []).forEach(({ s }) => { if (s._token === token && s._serverReportId && s._serverReportId !== 'stored') ids.add(s._serverReportId); }); } catch (e) {}
+  const r = listReports().find(x => (th && x.tokenHash === th) || ids.has(x.id));
+  if (!r || (r.unpaid && !r.paidAt)) return null;
+  if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); if (shared.keyToId) shared.keyToId.set(r.photoKey, r.id); } catch (e) {} }
+  return { id: r.id, address: r.address || '', type: r.inspectionType || 'Report', at: r.finalizedAt || r.receivedAt, link: '/report/' + r.photoKey };
+}
 function agentReports(a){
   const th = agentTokenHash(a.token), fromBackup = new Set();
   try { (shared.drafts ? shared.drafts.all() : []).forEach(({ s }) => { if (s._token === a.token && s._serverReportId && s._serverReportId !== 'stored') fromBackup.add(s._serverReportId); }); } catch (e) {}
@@ -680,7 +691,7 @@ function mount(app){
   // Uploaded after the report, a few at a time, with the report's photo key. A report sent before photo
   // links existed takes the key the first time its photos arrive.
   const photoUploads = limiter(600, 60 * 60 * 1000);
-  const keyToId = new Map();
+  const keyToId = new Map(); shared.keyToId = keyToId;
   // A report sent before it was paid for (stored so the owner has it): nothing of it is served by its key until it's paid.
   const notPaid = r => !!(r && r.unpaid && !r.paidAt);
   function findByKey(key){
@@ -923,6 +934,11 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     const line = x => '<li><b>' + esc(whenTxt(x.at)) + '</b> ' + esc(x.to) + ' <span class="what">' + esc(x.what) + '</span></li>';
     return ` <details class="sub sentlog"><summary>✉ Emailed ${L.length === 1 ? 'once' : L.length + ' times'} · last ${esc(whenTxt(L[0].at))}</summary><ul>${L.map(line).join('')}</ul></details>`;
   }
+  // "Get my report by email" (/my-report): every paid report this address is linked to (did it, paid for it, agent, copies).
+  shared.reportsForEmail = email => { email = String(email || '').trim().toLowerCase(); if (!EMAIL_RE.test(email)) return [];
+    return listReports().filter(r => !notPaid(r) && r.source !== 'uploaded' && emailsForReport(r).some(k => k.e === email)).slice(0, 20).map(r => {
+      if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, r.id); try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } catch (e) {} }
+      return { id: r.id, address: r.address || '', type: r.inspectionType || 'Report', at: r.finalizedAt || r.receivedAt, key: r.photoKey }; }); };
   let efCache = null;
   function emailsForReport(r){
       if (!efCache || Date.now() - efCache.at > 30000) {
@@ -1179,7 +1195,18 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
     const hits = list.filter(p => p.email.toLowerCase() === em || (nm && p.name && p.name.toLowerCase().trim() === nm));
     if (!hits.length) return '';
     const base = PUBLIC_URL || '';
-    return hits.slice(0, 5).map(p => `<div class="sub" style="margin-top:6px">💳 Bought a report as ${esc(p.name || p.email)} (${esc(p.email)})${p.usedFor ? ' · used for ' + esc(p.usedFor) : ' · not used yet'} · their link: <input readonly value="${esc(base + '/?access=' + p.token)}" style="width:min(100%,360px);font-size:12px" onclick="this.select()"></div>`).join('');
+    return hits.slice(0, 5).map(p => { const r = p.usedFor ? reportForToken(p.token) : null;
+      return `<div class="sub" style="margin-top:6px">💳 Bought a report as ${esc(p.name || p.email)} (${esc(p.email)})${p.usedFor ? ' · used for ' + esc(p.usedFor) : ' · not used yet'} · their link: <input readonly value="${esc(base + '/?access=' + p.token)}" style="width:min(100%,360px);font-size:12px" onclick="this.select()"></div>`
+      + (r ? `<div class="sub" style="margin-top:4px">📄 The report: <b>${esc(r.type)} – ${esc(r.address)}</b> · <a href="${esc(r.link)}" target="_blank" rel="noopener">Open</a> · <input readonly value="${esc(base + r.link)}" style="width:min(100%,320px);font-size:12px" onclick="this.select()"> <button class="btn" type="button" onclick="copyLink(this,'${esc(base + r.link)}')">🔗 Copy link</button></div>` : ''); }).join('');
+  }
+  // The reports a message's sender is linked to (purchases by email/name, or reports linked to their email): offered ready to send in the reply.
+  function msgReports(m){
+    const out = [], add = r => { if (r && !out.some(x => x.link === r.link)) out.push(r); };
+    try { const em = String(m.email || '').toLowerCase(), nm = String(m.name || '').toLowerCase().trim();
+      require('./purchases').paidWithEmail().filter(p => p.usedFor && (p.email.toLowerCase() === em || (nm && p.name && p.name.toLowerCase().trim() === nm))).forEach(p => add(reportForToken(p.token)));
+      (shared.reportsForEmail ? shared.reportsForEmail(em) : []).forEach(x => add({ type: x.type, address: x.address, link: '/report/' + x.key }));
+    } catch (e) {}
+    return out.slice(0, 5);
   }
   function messagesHTML(req){
     const d = readMessages(), seen = d.seenAt, list = d.list.slice().reverse();
@@ -1193,9 +1220,9 @@ ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${
       <details class="reply" style="margin-top:8px"${req && req.query && req.query.replied === m.id ? '' : ''}><summary class="btn" style="display:inline-block">✉ Reply by email</summary>
         ${RESEND_API_KEY ? `<form method="post" action="/admin/messages/${esc(m.id)}/reply" style="display:grid;gap:8px;margin-top:8px;max-width:640px">
           <input name="subject" value="Re: your message to DIY Inventory" maxlength="150" style="padding:9px 10px;border:1px solid #ccd;border-radius:10px;font:inherit">
-          <textarea name="text" rows="8" required maxlength="5000" style="padding:10px;border:1px solid #ccd;border-radius:10px;font:inherit">Hi ${esc(String(m.name || '').split(/\s+/)[0] || 'there')},
+          <textarea name="text" rows="${msgReports(m).length ? 12 : 8}" required maxlength="5000" style="padding:10px;border:1px solid #ccd;border-radius:10px;font:inherit">Hi ${esc(String(m.name || '').split(/\s+/)[0] || 'there')},
 
-</textarea>
+${(() => { const L = msgReports(m); if (!L.length) return ''; return esc('Thank you for your message. Your ' + (L.length === 1 ? 'report is ready' : 'reports are ready') + ': open the link to view it and download the PDF.\n\n' + L.map(r => r.type + ' – ' + r.address + '\n' + (PUBLIC_URL || '') + r.link).join('\n\n') + '\n\nKeep this email: the link is your access to the report. You can also get it again at any time at ' + (PUBLIC_URL || '') + '/my-report by typing your email address.\n\nKind regards,\nDIY Inventory'); })()}</textarea>
           <div class="sub">Sent to ${esc(m.email)}; their reply comes back to ${esc(REPORT_TO_EMAIL || 'the sender address')}.</div>
           <div><button class="btn primary">Send</button></div></form>` : '<p class="sub">Email isn’t switched on (RESEND_API_KEY). Use the email address above.</p>'}
       </details></div>
@@ -1339,6 +1366,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <a class="btn" href="/admin/reports/${r.id}.pdf" target="_blank" rel="noopener">View</a>
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${r.source !== 'uploaded' ? `<a class="btn" href="/admin/reports/${r.id}/edit" title="Open it in the app on this device, change anything, finish again: it replaces this report (same link and payment)">✏️ Edit</a>` : ''}
+          ${!notPaid(r) && r.photoKey ? `<button class="btn" type="button" title="Copy the report's online link to send by WhatsApp, text or email" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">🔗 Copy link</button>` : ''}
           ${!notPaid(r) ? `<details class="more mail"><summary class="btn">✉ Email</summary><form class="menu mailf" onsubmit="return sendLink(this, '${r.id}')">
             ${known.length ? `<div class="known"><span>Send to:</span>${known.map((k, i) => `<button type="button" class="kchip${i ? '' : ' on'}" data-e="${esc(k.e)}" data-n="${esc(k.name)}" onclick="pickTo(this)"><b>${esc(k.name || k.e)}</b> · ${esc(k.who)}<i>${esc(k.e)}</i></button>`).join('')}</div>` : ''}
             <label>Email address<input type="email" name="to" required placeholder="name@example.com" value="${esc(known[0] ? known[0].e : '')}"></label>
@@ -1435,6 +1463,8 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   td.actions { width:330px; min-width:330px; } .act { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; align-items:flex-start; } .act .btn { margin:0; white-space:nowrap; padding:6px 11px; }
   details.more > summary { list-style:none; } details.more > summary::-webkit-details-marker { display:none; } details.more[open] > summary { background:#F1F3F7; }
   @media (max-width:760px) { .act { justify-content:flex-start; max-width:none; margin-left:0; } td.actions { width:auto; min-width:0; } }
+  /* Under ~1200px the 5 columns didn't fit beside the sidebar: the buttons ran off the card and the other columns became one word wide (the owner: "why is it coming up like this?"). Each report becomes a card, buttons underneath. */
+  @media (max-width:1250px) { table.rtab, table.rtab tbody, table.rtab tr, table.rtab td { display:block; width:auto; } table.rtab thead { display:none; } table.rtab tr { border-bottom:1px solid var(--line); padding:6px 0; } table.rtab td { border:0; padding:6px 16px; } table.rtab td.actions { width:auto; min-width:0; white-space:normal; } table.rtab .act { justify-content:flex-start; } }
   details.more { flex-basis:auto; } details.more[open] { flex-basis:100%; }
   .menu { margin-top:8px; background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:6px; display:grid; gap:2px; white-space:normal; text-align:left; }
   .actions form.mailf { display:grid; gap:2px; }
@@ -1510,7 +1540,7 @@ ${PERSISTENT ? '' : '<div class="warn">No storage volume is attached, so reports
   <div class="tools">${reports.length || orphanRows ? `<input type="search" placeholder="Search by address, reference or name" oninput="const q=this.value.toLowerCase();document.querySelectorAll('#p-reports tbody tr').forEach(r=>r.style.display=r.dataset.q.includes(q)?'':'none')">` : ''}
   <a class="btn" href="/admin/opened">👁 Who viewed and downloaded</a>
   <label class="btn">Upload report PDFs<input type="file" accept="application/pdf,.pdf" multiple onchange="uploadPdfs(this)" hidden></label><span id="upStatus"></span></div>
-  ${reports.length || orphanRows ? `<div class="card"><table><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
+  ${reports.length || orphanRows ? `<div class="card"><table class="rtab"><thead><tr><th>Received</th><th>Property</th><th>Signed by / sent</th><th>Contents</th><th></th></tr></thead><tbody>${orphanRows}${rows}</tbody></table></div>`
       : '<div class="card"><div class="empty">No reports yet. They appear here as soon as a tenant finishes one.</div></div>'}
 </section>
 ${groups.map(g => `<section class="pane" id="p-${g.k}">
@@ -1769,4 +1799,21 @@ function editAllowed(m){
   return !!(r && r.photoKey === m.photoKey && !(r.unpaid && !r.paidAt));
 }
 
-module.exports = { agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+// Emails the person their report links (same answer whether or not anything matched).
+async function emailMyReports(email, base){
+  const L = shared.reportsForEmail ? shared.reportsForEmail(email) : [];
+  console.log('my report: ' + (L.length ? L.length + ' report(s) emailed to ' : 'nothing found for ') + String(email).replace(/^(.).*@/, '$1…@'));
+  if (!L.length || !RESEND_API_KEY) return L.length;
+  const d = t => new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/London' });
+  const text = ['Hello,', '', L.length === 1 ? 'Here is the link to your report:' : 'Here are the links to your reports:', '',
+    ...L.map(x => x.type + ' – ' + (x.address || 'your property') + (x.at ? ' (' + d(x.at) + ')' : '') + '\n' + base + '/report/' + x.key + '\n'),
+    'Open the link to view the report and download the PDF. Every photograph is date and time stamped; tap one to see it full size.', '', 'Keep this email: the link is your access to the report.', '', 'DIY Inventory'].join('\n');
+  try {
+    const resp = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+      headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ from: REPORT_FROM_EMAIL, to: [email], subject: L.length === 1 ? 'Your report: ' + (L[0].address || 'your property') : 'Your DIY Inventory reports', text }, REPORT_TO_EMAIL ? { reply_to: REPORT_TO_EMAIL } : {})) });
+    if (!resp.ok) console.error('my report email failed: HTTP ' + resp.status, (await resp.text().catch(() => '')).slice(0, 200));
+  } catch (e) { console.error('my report email failed: ' + e.message); }
+  return L.length;
+}
+module.exports = { emailMyReports, reportForToken, agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
