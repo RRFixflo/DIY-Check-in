@@ -80,7 +80,9 @@ function deviceOf(ua){ return /iPad|Tablet|PlayBook|Silk|Kindle/i.test(ua) || (/
 // CF-IPCountry always; town, region and postcode district too once “Add visitor location headers” is switched on in
 // Cloudflare (Rules → Transform Rules → Managed Transforms). Only when Cloudflare isn't in the way (the bare Railway
 // address) is the country guessed from the browser's language, marked with '~'.
-const hdr = (req, k) => { const v = req.headers[k]; try { return decodeURIComponent(String(v || '')).trim(); } catch (e) { return String(v || '').trim(); } };
+// Cloudflare sends towns in UTF-8, which Node reads as Latin-1 ("MontrÃ©al"): turn those bytes back into the right letters.
+const fixUtf8 = v => { if (!/[\u00c2-\u00f4][\u0080-\u00bf]/.test(v)) return v; try { const t = Buffer.from(v, 'latin1').toString('utf8'); return t.includes('\ufffd') ? v : t; } catch (e) { return v; } };
+const hdr = (req, k) => { const v = fixUtf8(String(req.headers[k] || '')); try { return decodeURIComponent(v).trim(); } catch (e) { return v.trim(); } };
 function placeOf(req){
   const c = hdr(req, 'cf-ipcountry').toUpperCase();
   const p = { country: /^[A-Z]{2}$/.test(c) && c !== 'XX' ? c : c === 'T1' ? 'Tor' : '', city: hdr(req, 'cf-ipcity').slice(0, 60), region: hdr(req, 'cf-region').slice(0, 60), postcode: hdr(req, 'cf-postal-code').slice(0, 12) };

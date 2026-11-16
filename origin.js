@@ -91,7 +91,8 @@ function html(o, esc){
   if (o.pages) bits.push(o.pages + ' page' + (o.pages === 1 ? '' : 's'));
   if (o.secs) bits.push(dur(o.secs) + ' after arriving');
   if (o.device) bits.push(esc(o.device));
-  if (o.place) bits.push(esc([o.place.city, o.place.region, o.place.postcode, o.place.country].filter(Boolean).join(', ')));
+  if (o.place) { const fx = v => { v = String(v || ''); if (!/[\u00c2-\u00f4][\u0080-\u00bf]/.test(v)) return v; const t = Buffer.from(v, 'latin1').toString('utf8'); return t.includes('\ufffd') ? v : t; };   // towns saved before the fix ('MontrÃ©al')
+    bits.push(esc([o.place.city, o.place.region, o.place.postcode, o.place.country].filter(Boolean).map(fx).join(', '))); }
   const trail = (o.trail || []).length > 1 ? ' title="Pages: ' + esc(o.trail.map(path).join(' → ')) + '"' : '';
   return '<div class="sub origin"' + trail + '>📍 ' + bits.join(' · ') + '</div>';
 }

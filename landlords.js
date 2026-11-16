@@ -399,6 +399,8 @@ function mount(app, ctx){
       head: HEAD + (o.index ? '' : '\n<meta name="robots" content="noindex, nofollow">'), jsonld: o.jsonld }, req, notice);
     // Signed-in pages are the dashboard: its own header and footer, not the website's, and every form keeps a draft.
     if (req.acc && !o.index) html = UI.appChrome(html, req.acc, o.path).replace('</body>', () => UI.DRAFT_UI + '\n</body>');
+    // The owner looking at a landlord's dashboard from /admin: a bar saying whose it is, with the way back.
+    if (req.acc && !o.index && isOwner(req)) html = html.replace(/<body([^>]*)>/, (m0) => m0 + `<div style="background:#B45309;color:#fff;padding:9px 16px;font:600 14px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;text-align:center">👁 You’re in <span style="overflow-wrap:anywhere">${esc(req.acc.name)}’s dashboard (${esc(req.acc.email)})</span> as the owner. Anything you change is saved to their account. <form method="post" action="/admin/landlords/leave" style="display:inline;margin:0"><button style="font:inherit;background:#fff;color:#B45309;border:0;border-radius:999px;padding:5px 12px;cursor:pointer">Leave and go back to admin</button></form></div>`);
     if (!o.index) res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'same-origin', 'X-Frame-Options': 'DENY' });
     res.status(o.status || 200).type('html').send(html);
   }
@@ -1258,7 +1260,7 @@ ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</d
       <div class="sub">${esc(p.type)} · ${esc(bedsText(p.beds))} · ${esc(a.name)} · <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></div></div></li>`).join('');
     const accRows = accs.slice(0, 300).map(a => `<li${a.createdAt > seen ? ' class="isnew"' : ''}><div style="flex:1;min-width:0"><strong><a href="/admin/landlords/${esc(a.id)}">${esc(a.name)}</a></strong>${a.createdAt > seen ? ' <span class="pill new">New</span>' : ''}
       <div class="sub"><a href="mailto:${esc(a.email)}">${esc(a.email)}</a> · joined ${esc(day(a.createdAt))} · ${plural(a.properties.length, 'property').replace('propertys', 'properties')}${a.properties.length ? ': ' + esc(a.properties.slice(0, 3).map(p => streetLine(p.address) + ', ' + p.address.postcode).join('; ')) + (a.properties.length > 3 ? '…' : '') : ''} · reminders ${a.settings && a.settings.reminders === false ? 'off' : 'on'}</div>${require('./origin').html(a.origin, esc)}</div>
-      <div class="actions"><a class="btn" href="/admin/landlords/${esc(a.id)}">View all details</a><form method="post" action="/admin/landlords/${esc(a.id)}/delete" onsubmit="return confirm('Delete the account of ${esc(a.name.replace(/'/g, ''))} with all its properties and files? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
+      <div class="actions"><form method="post" action="/admin/landlords/${esc(a.id)}/open"><button class="btn primary">Open their dashboard</button></form><a class="btn" href="/admin/landlords/${esc(a.id)}">View all details</a><form method="post" action="/admin/landlords/${esc(a.id)}/delete" onsubmit="return confirm('Delete the account of ${esc(a.name.replace(/'/g, ''))} with all its properties and files? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`).join('');
     const banner = fresh ? `<a class="news" href="#landlords" onclick="document.getElementById('landlords').open=true">🏠 ${plural(fresh, 'new landlord sign-up')} since your last visit</a>` : '';
     return banner + `<details class="codes" id="landlords"${fresh ? ' open' : ''}><summary>🏠 Landlord accounts <span class="sub" style="display:inline">— ${accs.length ? plural(accs.length, 'account') + ', ' + nProps + ' propert' + (nProps === 1 ? 'y' : 'ies') + (up.length ? ', ' + up.length + ' certificate' + (up.length === 1 ? '' : 's') + ' due within 90 days' : '') : 'none yet'}</span></summary>
 ${accs.length ? `<p class="sub" style="margin-top:12px">Certificates expired or due in the next 90 days (leads for bookings). Not added yet: ${missing.gas} Gas Safety, ${missing.eicr} EICR, ${missing.epc} EPC.${emailOn() ? '' : ' Reminder emails are off until RESEND_API_KEY is set.'}${epcOn() ? '' : ' The automatic EPC search is off until EPC_API_EMAIL and EPC_API_KEY are set.'}</p>
@@ -1266,6 +1268,21 @@ ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 9
 <p class="sub" style="margin-top:14px">Rent and expenses (counts only): ${(mc.rentProps + ' propert' + (mc.rentProps === 1 ? 'y' : 'ies'))} with rent set up, ${plural(mc.payments, 'rent payment')} recorded, ${plural(mc.receipts, 'receipt')} emailed, ${plural(mc.expenses, 'expense')} recorded.</p>
 <p class="sub" style="margin-top:14px">Accounts, newest first:</p><ul>${accRows}</ul>` : '<p class="sub">Landlords who create a free account on the Landlords page appear here, with their properties’ certificate dates.</p>'}</details>`;
   }
+  // The owner goes into any landlord's dashboard (the owner: "I should be able to go into any landlord account anytime"):
+  // signs this browser in as them (the same session cookie, no password needed, nothing changed on their account), with a
+  // bar on every page; "Leave" signs this browser out of it and goes back to /admin. Their own devices stay signed in.
+  app.post('/admin/landlords/:id/open', (req, res) => {
+    if (!isOwner(req)) return res.redirect(303, '/admin');
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Please open it from the admin page.');
+    const a = readAcc(String(req.params.id)); if (!a) return res.status(404).type('text/plain').send('Account not found.');
+    setSession(req, res, a);
+    console.log('landlords: the owner opened the dashboard of account ' + a.id);
+    res.redirect(303, '/account');
+  });
+  app.post('/admin/landlords/leave', (req, res) => {
+    if (!sameOrigin(req)) return res.status(403).end();
+    setSession(req, res, null); res.redirect(303, '/admin#landlords');
+  });
   // The owner's read-only view of one landlord account: every property with its address, certificates, licence, tenancy, rent and expenses.
   app.get('/admin/landlords/:id', (req, res) => {
     res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' });
