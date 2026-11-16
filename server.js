@@ -383,6 +383,8 @@ const agentSeo = require('./agentseo').mount(app, { renderPage });
 // For inventory companies: the app in their own brand for a monthly fee (enquiries only).
 const clerkPaths = require('./clerks').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
   isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
+// The owner's inbox for every email to @diyinventory.co.uk (Cloudflare Email Routing → cloudflare/inbox-worker.js → /api/inbound-email): inbox.js.
+require('./inbox').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, notify: reports.notifyOwner, addAdminSection: reports.addAdminSection, PUBLIC_URL: PUBLIC_BASE });
 // "Get my report" (/my-report): anyone types their email and is emailed the link to every paid report linked to it
 // (the email they gave in the app, the buyer's email, an agent link's email, copies sent). Same answer whether or not it matched.
 {
