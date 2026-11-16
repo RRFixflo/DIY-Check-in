@@ -886,7 +886,7 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     try {
       const since = Date.now() - 14 * 864e5;
       for (const r of listReports()) {
-        if (!r.photos || notPaid(r) || (r.photoFillAt && (r.photoFillV === 2 || !/no backup/.test(r.photoFill || ''))) || r.source === 'uploaded') {
+        if (!r.photos || notPaid(r) || (r.photoFillAt && (r.photoFillV === 3 || !/no backup|no photo key/.test(r.photoFill || ''))) || r.source === 'uploaded') {
           if (Date.now() - Date.parse(r.receivedAt || 0) < 3 * 864e5 && !fillSeen.has(r.id)) { fillSeen.add(r.id); console.log('photo fill: skipped ' + r.id + ' (photos ' + r.photos + ', unpaid ' + notPaid(r) + ', done ' + (r.photoFill || '—') + ', source ' + r.source + ')'); }
           continue;
         }
@@ -903,8 +903,11 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; meta.photoFillV = 2; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
         if (drafts.missingPhotos(b.key, b.s) && Date.now() - at < 60 * 60000) continue;   // photos still arriving
         try {
-          const useKey = r.photoKey || b.s.photoKey;
+          let useKey = r.photoKey || b.s.photoKey;
+          // Neither recorded the key (seen 16 Nov: 37 Galsworthy Avenue): the phone's PDF itself links every photo to /p/<key>/<n>, so read it from there.
+          if (!useKey) { try { const m = /\/p\/([a-f0-9]{32})\//.exec(fs.readFileSync(path.join(REPORTS_DIR, r.id + '.pdf')).toString('latin1')); if (m) useKey = m[1]; } catch (e) {} }
           if (!useKey) throw new Error('no photo key on the report or its backup');
+          if (!r.photoKey) { const m0 = readMeta(r.id); m0.photoKey = useKey; m0.photoFillV = 3; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(m0, null, 2)); keyToId.set(useKey, r.id); console.log('photo fill: ' + r.id + ' photo key taken from its PDF'); }
           const s2 = Object.assign({}, b.s, { photoKey: useKey, declarationAccepted: true });
           const built = await drafts.buildFor(b.key, s2);
           const dir = photoDir(r.id); fs.mkdirSync(dir, { recursive: true });
