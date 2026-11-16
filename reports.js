@@ -1467,6 +1467,9 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   details.more > summary { list-style:none; } details.more > summary::-webkit-details-marker { display:none; } details.more[open] > summary { background:#F1F3F7; }
   @media (max-width:760px) { .act { justify-content:flex-start; max-width:none; margin-left:0; } td.actions { width:auto; min-width:0; } }
   /* Under ~1200px the 5 columns didn't fit beside the sidebar: the buttons ran off the card and the other columns became one word wide (the owner: "why is it coming up like this?"). Each report becomes a card, buttons underneath. */
+  /* Long addresses, emails and web links used to make the table wider than its card at every screen size (seen live, 16 Nov): fixed column widths, and long text wraps inside its column. */
+  table.rtab { table-layout:fixed; } table.rtab th:nth-child(1) { width:118px; } table.rtab th:nth-child(3) { width:24%; } table.rtab th:nth-child(4) { width:128px; } table.rtab th:nth-child(5) { width:300px; }
+  table.rtab td { overflow-wrap:anywhere; word-break:normal; min-width:0; } table.rtab td.actions { width:auto; min-width:0; white-space:normal; }
   @media (max-width:1250px) { table.rtab, table.rtab tbody, table.rtab tr, table.rtab td { display:block; width:auto; } table.rtab thead { display:none; } table.rtab tr { border-bottom:1px solid var(--line); padding:6px 0; } table.rtab td { border:0; padding:6px 16px; } table.rtab td.actions { width:auto; min-width:0; white-space:normal; } table.rtab .act { justify-content:flex-start; } }
   details.more { flex-basis:auto; } details.more[open] { flex-basis:100%; }
   .menu { margin-top:8px; background:#FAFBFD; border:1px solid var(--line); border-radius:12px; padding:6px; display:grid; gap:2px; white-space:normal; text-align:left; }

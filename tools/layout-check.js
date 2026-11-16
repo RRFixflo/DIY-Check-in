@@ -33,6 +33,15 @@ function inspect(){
     }
     if (r.right > W + 2 && !el.closest('[style*="-9999"]')) out.push({ kind: 'off screen', detail: name(el) });
   });
+  // A box that hides overflow while real content (text, links, buttons, cells) sticks out of it: that part can't be seen
+  // (the /admin Reports table, 16 Nov). Decorative layers (background glows, empty shapes) are clipped on purpose and ignored.
+  document.querySelectorAll('body *').forEach(el => { const st = getComputedStyle(el); if (!/(hidden|clip)/.test(st.overflowX) || /(auto|scroll)/.test(st.overflowX) || !vis(el) || el.closest('.hp, [aria-hidden="true"]')) return;
+    if (el.scrollWidth <= el.clientWidth + 4) return;
+    const box = el.getBoundingClientRect(); let bad = null;
+    for (const d of el.querySelectorAll('a, button, input, select, textarea, td, th, p, li, h1, h2, h3, b, strong, span, label')) {
+      if (bad) break; if (!vis(d) || !(d.innerText || d.value || '').trim() || d.closest('details:not([open]) > :not(summary)')) continue;
+      const r = d.getBoundingClientRect(); if (r.right > box.right + 4 && r.left < box.right - 1 + 9999) bad = d; }
+    if (bad && !/(marquee|track|ticker|carousel)/i.test(el.className + ' ' + (bad.parentElement ? bad.parentElement.className : ''))) out.push({ kind: 'content cut off', detail: name(bad) + ' runs past the edge of ' + name(el) }); });
   // Table cells squeezed so text breaks a word per line.
   document.querySelectorAll('td, th').forEach(td => {
     if (!vis(td)) return; const r = td.getBoundingClientRect(), t = (td.innerText || '').trim();
