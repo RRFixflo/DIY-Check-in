@@ -1441,4 +1441,23 @@ ${props || '<p class="sub">No properties added yet.</p>'}</main></body></html>`)
 
 // Is this request from a signed-in landlord? (the website's header then says "My dashboard")
 function signedIn(req){ try { return !!(currentFn && currentFn(req)); } catch (e) { return false; } }
-module.exports = { mount, signedIn, setMailer: fn => { mailer = fn; }, _test: { epcClear, legacyTenants, splitNames, certStatus, tenancyStatus, depositStatus, dueItems, stageFor, addMonths, normPostcode, streetLine, parseMultipart, epcRow, days } };
+// Landlord accounts a finished report belongs to (reports.js deliverCopies: "the landlord who purchased it should also
+// get a notification once the report is completed, with the link"): the account whose email is one already linked to
+// the report, or, for a confirmed account, any whose dashboard lists it (near-identical email with their surname, or one
+// of their properties). Returns [{ email, name }].
+const afrCache = new Map();
+function accountsForReport(r, emails){
+  const out = [], seen = new Set(emails || []);
+  const add = (acc) => { const e = String(acc.email || '').toLowerCase(); if (e && !out.some(x => x.email === e)) out.push({ email: e, name: acc.name || '', exact: seen.has(e) }); };
+  for (const id of accountIds()) {
+    const acc = readAcc(id); if (!acc || !acc.email) continue;
+    if (seen.has(String(acc.email).toLowerCase())) { add(acc); continue; }
+    if (!acc.emailVerifiedAt) continue;
+    const ck = acc.email + '|' + acc.name + '|' + (acc.properties || []).map(p => JSON.stringify(p.address)).join(';'), c = afrCache.get(acc.id);
+    let ids = c && c.k === ck && Date.now() - c.at < 10 * 60000 ? c.ids : null;
+    if (!ids) { let list = []; try { list = require('./reports').reportsForLandlord(acc.email, acc.properties, acc.name); } catch (e) {} ids = new Set(list.map(x => x.id)); afrCache.set(acc.id, { k: ck, at: Date.now(), ids }); }
+    if (ids.has(r.id)) add(acc);
+  }
+  return out;
+}
+module.exports = { mount, signedIn, accountsForReport, setMailer: fn => { mailer = fn; }, _test: { epcClear, legacyTenants, splitNames, certStatus, tenancyStatus, depositStatus, dueItems, stageFor, addMonths, normPostcode, streetLine, parseMultipart, epcRow, days } };

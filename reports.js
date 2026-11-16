@@ -233,16 +233,23 @@ async function deliverCopies(r, token){
   const ae = String((agent && agent.email) || '').trim().toLowerCase();
   if (EMAIL_RE.test(ae)) { const w = wanted.find(w => w.to === ae); if (w) w.kind = 'agent'; else wanted.push({ to: ae, kind: 'agent' }); }
   // Also whoever did it or paid for it when the report wasn't linked to them (made from the backup, a code, …).
-  try { knownTargets(r).forEach(k => { if (/did the report|paid for it/.test(k.who) && !wanted.some(w => w.to === k.e)) wanted.push({ to: k.e, kind: 'self' }); }); } catch (e) {}
+  try { knownTargets(r).forEach(k => { if (/did the report|paid for it/.test(k.who) && !wanted.some(w => w.to === k.e)) wanted.push({ to: k.e, kind: /paid for it/.test(k.who) ? 'buyer' : 'self' }); }); } catch (e) {}
+  // Whoever paid, when it isn't the person who did it (a landlord buying a report for their tenant), gets "your tenant has
+  // finished" with the link, and so does the landlord account the report belongs to (its dashboard lists it).
+  const doer = String(r.copyEmail || '').trim().toLowerCase();
+  wanted.forEach(w => { if (w.kind === 'self' && w.to === buyer && buyer !== doer) w.kind = 'buyer'; });
+  try { require('./landlords').accountsForReport(r, wanted.map(w => w.to).concat(doer)).forEach(a => {
+    const w = wanted.find(x => x.to === a.email); if (w) { if (w.kind !== 'agent' && a.email !== doer) w.kind = 'buyer'; w.account = true; }
+    else wanted.push({ to: a.email, kind: a.email === doer ? 'self' : 'buyer', account: true }); }); } catch (e) {}
   r.copies = r.copies || {};
   for (const w of wanted) {
     if (r.copies[w.to]) continue;
-    const ok = await emailCopy(r, w.to, w.kind);
+    const ok = await emailCopy(r, w.to, w.kind, w.account);
     if (ok) r.copies[w.to] = new Date().toISOString();
   }
   try { fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(r, null, 2)); } catch (e) {}
 }
-async function emailCopy(r, to, kind){
+async function emailCopy(r, to, kind, account){
   const attach = r.size <= MAX_ATTACH;
   const type = r.inspectionType || 'Check-in', when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' }) : '';
   const link = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/report/' + r.photoKey : '';   // view and download online
@@ -253,6 +260,13 @@ async function emailCopy(r, to, kind){
     attach ? 'The report is attached as a PDF.' : 'The report is too large to attach.', link ? 'View and download it online: ' + link : '',
     sign ? 'To have it checked and signed, send this link: ' + sign : '',
     (() => { const a = r.agentId && readAgents().find(x => x.id === r.agentId); return a && PUBLIC_URL ? '\nEvery report from your link is on your dashboard: ' + PUBLIC_URL + '/agent/' + agentDashKey(a.id) : ''; })()
+  ] : kind === 'buyer' ? [
+    (r.signedBy || r.inspectorName || 'Your tenant') + ' has finished the ' + type.toLowerCase() + ' report for ' + (r.address || 'your property') + '.', '',
+    when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
+    link ? 'View and download the report: ' + link : '', attach ? 'It is also attached as a PDF.' : '',
+    sign ? 'To check and sign it, or send it to your tenant to sign: ' + sign : '', '',
+    PUBLIC_URL ? (account ? 'It is also in your landlord dashboard, with the property: ' + PUBLIC_URL + '/account#reports' : 'Keep it with the property in a free landlord account (certificate reminders, rent and receipts): ' + PUBLIC_URL + '/account/sign-up') : '', '',
+    'DIY Inventory'
   ] : [
     'Here is your ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + '.', '',
     when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
@@ -264,7 +278,7 @@ async function emailCopy(r, to, kind){
     const res = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', {   // the base can point at a mock, for tests only
       method: 'POST', signal: AbortSignal.timeout(60000),
       headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: REPORT_FROM_EMAIL, to: [to], subject: (kind === 'agent' ? type + ' report: ' : 'Your ' + type.toLowerCase() + ' report: ') + (r.address || 'property'), text,
+      body: JSON.stringify({ from: REPORT_FROM_EMAIL, to: [to], subject: (kind === 'agent' ? type + ' report: ' : kind === 'buyer' ? type + ' report finished: ' : 'Your ' + type.toLowerCase() + ' report: ') + (r.address || 'property'), text,
         attachments: attach ? [{ filename: r.fileName || (r.id + '.pdf'), content: fs.readFileSync(path.join(REPORTS_DIR, r.id + '.pdf')).toString('base64') }] : undefined })
     });
     if (!res.ok) { console.error('report copy email failed (' + kind + '): HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return false; }
@@ -1020,7 +1034,8 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (r.unpaid && !r.paidAt) continue;
         if (r.source === 'uploaded' || r.source === 'copy') continue;
         if (Date.now() - new Date(r.paidAt || r.receivedAt || 0).getTime() > 30 * 86400000) continue;
-        const want = emailsForReport(r).filter(k => /did the report|paid for it/.test(k.who) && !(r.copies || {})[k.e]);
+        let want = emailsForReport(r).filter(k => /did the report|paid for it/.test(k.who) && !(r.copies || {})[k.e]);
+        if (!want.length) { try { want = require('./landlords').accountsForReport(r, emailsForReport(r).map(k => k.e)).filter(a => !(r.copies || {})[a.email]); } catch (e) {} }
         if (!want.length) continue;
         if (!r.photoKey) { r.photoKey = crypto.randomBytes(16).toString('hex'); keyToId.set(r.photoKey, r.id); }
         await deliverCopies(r, '').catch(e => console.error('automatic copy failed:', e.message));
