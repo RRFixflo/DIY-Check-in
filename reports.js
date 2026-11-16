@@ -942,8 +942,18 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   // A landlord account's inventory reports (landlords.js; the owner: "if a landlord creates a landlord account, match it to the
   // inventory and always give them access"): every paid report linked to the account's (verified) email, plus every paid report
   // at one of the account's properties: same postcode, the same door/flat numbers and a street or building word in common.
-  shared.reportsForLandlord = (email, props) => {
+  shared.reportsForLandlord = (email, props, accName) => {
     email = String(email || '').trim().toLowerCase();
+    // A purchase or report email typed with one letter wrong (danuel.c.bell@ for daniel.c.bell@) still counts when the
+    // domain is the same and the name on it agrees with the account's name (the surname at least).
+    const lev1 = (a, b) => { if (a === b) return true; if (Math.abs(a.length - b.length) > 1 || Math.min(a.length, b.length) < 5) return false;
+      let i = 0; while (i < a.length && a[i] === b[i]) i++; return a.slice(i + 1) === b.slice(i + 1) || a.slice(i) === b.slice(i + 1) || a.slice(i + 1) === b.slice(i)
+        || (a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2)); };
+    const nw = t => String(t || '').toLowerCase().replace(/[^a-z ]+/g, ' ').split(/\s+/).filter(w => w.length >= 2 && !/^(mr|mrs|ms|miss|dr)$/.test(w));
+    const accW = nw(accName), accSur = accW[accW.length - 1] || '';
+    const [eLocal, eDom] = email.split('@');
+    const nearEmail = (k, r) => { const [l, d] = String(k.e || '').split('@'); if (!eDom || d !== eDom || l === eLocal || !lev1(l, eLocal)) return false;
+      const names = nw((k.name || '') + ' ' + (r.signedBy || r.inspectorName || '')); return !!accSur && names.includes(accSur); };
     const pcOf = t => { const m = /\b([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})\b/.exec(String(t || '').toUpperCase()); return m ? m[1] + m[2] : ''; };
     const nums = t => (String(t || '').toUpperCase().match(/\b\d+[A-Z]?\b/g) || []);
     const STOP = /^(ROAD|STREET|AVENUE|LANE|CLOSE|DRIVE|COURT|HOUSE|PLACE|WAY|FLAT|APARTMENT|LONDON|THE|AND)$/;
@@ -954,7 +964,7 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     for (const r of listReports()) {
       if (notPaid(r) || r.source === 'uploaded' && !r.address) continue;
       let why = '', propId = '';
-      if (EMAIL_RE.test(email) && emailsForReport(r).some(k => k.e === email)) why = 'email';
+      if (EMAIL_RE.test(email)) { const ks = emailsForReport(r); if (ks.some(k => k.e === email)) why = 'email'; else if (ks.some(k => nearEmail(k, r))) why = 'email'; }
       const ra = String(r.address || ''), rpc = pcOf(ra);
       if (rpc) { const before = ra.toUpperCase().split(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/)[0], rn = nums(before), rw = new Set(words(before));
         const hit = wanted.find(w => w.pc === rpc && w.nums.length && w.nums.every(n => rn.includes(n)) && (!w.words.length || w.words.some(x => rw.has(x))));
@@ -1851,4 +1861,4 @@ async function emailMyReports(email, base){
   } catch (e) { console.error('my report email failed: ' + e.message); }
   return L.length;
 }
-module.exports = { reportsForLandlord: (e, p) => shared.reportsForLandlord ? shared.reportsForLandlord(e, p) : [], emailMyReports, reportForToken, agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };
+module.exports = { reportsForLandlord: (e, p, n) => shared.reportsForLandlord ? shared.reportsForLandlord(e, p, n) : [], emailMyReports, reportForToken, agentsAll: () => readAgents(), agentDashKey, agentReports, agentDrafts, reportFileOf, addAgentCredits, agentByToken, photoFile: (key, n) => shared.photoFile ? shared.photoFile(key, n) : null, mount, editAllowed, deviceName, REPORTS_DIR, isOwner: signedIn, canonicalCode, codeAccess, useCode, codeLogin, saveMessage, clip, clientIp, limiter, notifyOwner, addAdminSection };

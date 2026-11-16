@@ -718,20 +718,61 @@ function mount(app, ctx){
     const acc = req.acc, owner = isOwner(req);
     if (!acc.emailVerifiedAt && !owner) {
       if (propId) return '';
-      return `<div class="card" id="reports" style="margin-top:18px"><h2>📄 Your inventory reports</h2><p>Check-ins, check-outs and inspections done for you or at your properties show here once you’ve confirmed your email (${esc(acc.email)}).</p>
+      return `<div class="card" id="reports" style="margin:0 0 18px"><h2>📄 Your inventory reports</h2><p>Check-ins, check-outs and inspections done for you or at your properties show here once you’ve confirmed your email (${esc(acc.email)}).</p>
 ${emailOn() ? `<form method="post" action="/account/verify/send"><button class="btn primary">Send me the confirmation email</button></form>` : '<p class="acc-note">Email isn’t switched on for this site yet: <a href="/contact">contact us</a> to confirm it.</p>'}</div>`;
     }
-    let list = []; try { list = require('./reports').reportsForLandlord(acc.email, acc.properties); } catch (e) {}
+    const ownerNote = owner && !acc.emailVerifiedAt ? `<div class="acc-note" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 10px">${esc(acc.name || 'They')} hasn’t confirmed ${esc(acc.email)} yet, so they can’t see these reports. You can see them because you’re the owner.<form method="post" action="/admin/landlords/${esc(acc.id)}/verify" style="margin:0"><button class="btn primary">Confirm their email for them</button></form></div>` : '';
+    let list = []; try { list = require('./reports').reportsForLandlord(acc.email, acc.properties, acc.name); } catch (e) {}
     if (propId) list = list.filter(r => r.propId === propId);
     const when = t => t ? new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/London' }) : '';
     const rows = list.map(r => `<li style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line, #E6E9F0)"><div style="min-width:0;flex:1 1 240px"><b>${esc(r.type)}</b> · ${esc(when(r.at))}<div style="overflow-wrap:anywhere">${esc(r.address)}</div><div class="acc-note" style="margin:2px 0 0">${r.doneBy ? 'Done by ' + esc(r.doneBy) : ''}${r.tenantSigned ? ' · signed by the other party' : ''}</div></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" href="/report/${esc(r.key)}" target="_blank" rel="noopener">View</a><a class="btn ghost" href="/report/${esc(r.key)}.pdf?download=1">⬇ PDF</a></div></li>`).join('');
     if (propId && !list.length) return '';
-    return `<div class="card" id="reports" style="margin-top:18px"><h2>📄 ${propId ? 'Inventory reports for this property' : 'Your inventory reports'}</h2>
+    return `<div class="card" id="reports" style="${propId ? 'margin-top:18px' : 'margin:0 0 18px'}"><h2>📄 ${propId ? 'Inventory reports for this property' : 'Your inventory reports'}</h2>${propId ? '' : ownerNote}
 ${list.length ? `<ul style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p>None yet. Reports done with your email, or at one of your properties (same postcode and door number), appear here by themselves. <a href="/app">Start a report</a> or <a href="/buy?for=tenant">buy one for your tenant</a>.</p>`}</div>`;
   }
 
+  // The property of each inventory report done with this landlord's email is added to the account by itself (the owner:
+  // "the property in question should automatically be added as their property"), once per report (acc.fromReports), so a
+  // property the landlord deletes isn't added again. Only once the email is confirmed, or when the owner opens the account.
+  function addrFromReport(t){
+    const raw = String(t || '').replace(/,?\s*(united kingdom|uk|england|scotland|wales)\s*$/i, '');
+    const m = /\b([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})\b/i.exec(raw); if (!m) return null;
+    const postcode = normPostcode(m[1] + m[2]); if (!postcode) return null;
+    const parts = raw.slice(0, m.index).split(',').map(x => x.trim()).filter(Boolean); if (!parts.length) return null;
+    const a = { houseNo: '', building: '', road: '', town: '', postcode };
+    if (parts.length > 1) a.town = parts.pop();
+    let first = parts.shift();
+    if (/^(flat|apartment|apt|unit|room)\s*\S+$/i.test(first)) { a.houseNo = first; first = parts.shift() || ''; }
+    const lead = /^(\d+[a-z]?)\s+(.+)$/i.exec(first);
+    if (lead && !a.houseNo) { a.houseNo = lead[1]; first = lead[2]; }
+    if (parts.length) { a.building = first; a.road = parts.join(', '); }
+    else if (/\b(house|court|mansions|lodge|tower|apartments|point|building|cottage|farm)$/i.test(first)) a.building = first; else a.road = first;
+    if (!a.road && !a.building) return null;
+    return { houseNo: a.houseNo.slice(0, 40), building: a.building.slice(0, 80), road: a.road.slice(0, 100), town: a.town.slice(0, 60), postcode };
+  }
+  function addFromReports(req){
+    const owner = isOwner(req); if (!req.acc.emailVerifiedAt && !owner) return;
+    let list = []; try { list = require('./reports').reportsForLandlord(req.acc.email, req.acc.properties, req.acc.name); } catch (e) { return; }
+    const todo = list.filter(r => /email/.test(r.why) && !r.propId && !(req.acc.fromReports || {})[r.id]); if (!todo.length) return;
+    const acc = readAcc(req.acc.id); acc.fromReports = acc.fromReports || {}; let n = 0;
+    for (const r of todo.reverse()) {
+      if (acc.fromReports[r.id] || acc.properties.length >= 200) continue;
+      const a = addrFromReport(r.address); if (!a) { acc.fromReports[r.id] = 'no-address'; continue; }
+      const same = acc.properties.find(p => p.address && p.address.postcode === a.postcode && String(p.address.houseNo || '').toLowerCase() === a.houseNo.toLowerCase()
+        && (p.address.road || p.address.building || '').toLowerCase().split(/\W+/)[0] === (a.road || a.building).toLowerCase().split(/\W+/)[0]);
+      if (same) { acc.fromReports[r.id] = same.id; continue; }
+      const when = r.at ? new Date(r.at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/London' }) : '';
+      const p = { id: rid(6), createdAt: new Date().toISOString(), address: a, type: 'Other', beds: 0, fromReport: r.id,
+        notes: 'Added automatically from your ' + r.type + ' report' + (when ? ' of ' + when : '') + '. Check the property type and bedrooms.' };
+      acc.properties.push(p); acc.fromReports[r.id] = p.id; n++;
+    }
+    writeAcc(acc); req.acc = acc;
+    if (n) console.log('landlords: added ' + n + ' propert' + (n === 1 ? 'y' : 'ies') + ' from inventory reports to account ' + acc.id + (owner ? ' (owner view)' : ''));
+  }
+
   app.get(['/account', '/account/'], need, (req, res) => {
+    addFromReports(req);
     const acc = req.acc, t = todayLondon(), list = acc.properties.slice().sort((a, b) => streetLine(a.address).localeCompare(streetLine(b.address), 'en', { numeric: true }));
     const mailNote = !emailOn() ? `<p class="acc-note">Email reminders aren’t switched on for this site yet, so none will be sent for now. Your dates are still tracked here.</p>`
       : acc.settings.reminders === false ? `<p class="acc-note">Email reminders are off. <a href="/account/settings">Turn them on in Settings</a>.</p>` : '';
@@ -743,11 +784,11 @@ ${list.length ? `<ul style="list-style:none;margin:0;padding:0">${rows}</ul>` : 
   <div class="acc-actions"><a class="btn primary" href="/account/properties/new">+ Add a property</a>${list.length ? '<a class="btn ghost" href="/account/rent">Rent</a><a class="btn ghost" href="/account/expenses/new">Add an expense</a>' : ''}</div>
 </div></section>
 <section class="tight"><div class="wrap">${mailNote}
+${reportsBlock(req)}
 ${list.length ? `<div class="dgrid">${list.map(p => dashCard(p, t)).join('')}</div>`
   : `<div class="card acc-empty"><h2>Add your first property</h2><p>Start with the postcode and pick the address: we’ll find its EPC on the government register by ourselves. Then add the Gas Safety and EICR dates, any licence, and the tenancy if it’s let. We’ll email you before anything expires.</p>
      <ul class="ruled"><li><b>Gas Safety</b>every 12 months</li><li><b>EICR</b>at least every 5 years</li><li><b>EPC</b>valid for 10 years, found for you</li></ul>
      <a class="btn primary" href="/account/properties/new">Add a property</a></div>`}
-${reportsBlock(req)}
 </div></section>${UI.DT_UI}`;
     send(req, res, { path: '/account', title: 'Your properties', body });
   });
@@ -1321,6 +1362,14 @@ ${upRows ? '<ul>' + upRows + '</ul>' : '<p class="sub">Nothing due in the next 9
     setSession(req, res, a);
     console.log('landlords: the owner opened the dashboard of account ' + a.id);
     res.redirect(303, '/account');
+  });
+  // The owner confirms a landlord's email for them (they know it's theirs), so their inventory reports show at once.
+  app.post('/admin/landlords/:id/verify', (req, res) => {
+    if (!isOwner(req)) return res.redirect(303, '/admin');
+    if (!sameOrigin(req)) return res.status(403).type('text/plain').send('Please do this from the dashboard.');
+    const a = readAcc(String(req.params.id)); if (!a) return res.status(404).type('text/plain').send('Account not found.');
+    if (!a.emailVerifiedAt) { a.emailVerifiedAt = new Date().toISOString(); a.verifiedByOwner = true; writeAcc(a); console.log('landlords: the owner confirmed the email of account ' + a.id); }
+    res.redirect(303, '/account?m=verified#reports');
   });
   app.post('/admin/landlords/leave', (req, res) => {
     if (!sameOrigin(req)) return res.status(403).end();
