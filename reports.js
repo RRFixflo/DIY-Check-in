@@ -880,8 +880,12 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (at && (at < since || Date.now() - at < 10 * 60000)) continue;
         let have = 0; try { have = fs.readdirSync(photoDir(r.id)).filter(f => /^\d+\.jpg$/.test(f)).length; } catch (e) {}
         if (have >= r.photos) continue;
-        const b = drafts.all().filter(({ s }) => isBackupOf(s, r)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
+        const all = drafts.all();
+        let b = all.filter(({ s }) => isBackupOf(s, r)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
+        // Wider match: the same reference (or address and finish time) as the stored report.
+        if (!b) b = all.filter(({ s }) => (s.meta || {}).ref && (s.meta || {}).ref === r.ref && (s.finalizedAt || s.editOf)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
         const meta = readMeta(r.id); if (!meta) continue;
+        console.log('photo fill: ' + r.id + ' has ' + have + ' of ' + r.photos + ' photos; backup ' + (b ? b.key : 'not found') + ' (ref ' + (r.ref || '—') + ', key ' + String(r.photoKey).slice(0, 8) + ')');
         if (!b) { meta.photoFillAt = new Date().toISOString(); meta.photoFill = 'no backup'; fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(meta, null, 2)); continue; }
         if (drafts.missingPhotos(b.key, b.s) && Date.now() - at < 60 * 60000) continue;   // photos still arriving
         try {
