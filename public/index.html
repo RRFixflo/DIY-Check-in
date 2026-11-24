@@ -2128,15 +2128,20 @@ function computeMoveInStatus(){
     return { status: 'neutral', message: 'Shown on the report for reference.' };
   }
   if (!pendingSetup.moveInDateTime) {
-    return { status: 'warn', message: 'Required for check-in reports — must be completed within 7 days of move-in.' };
+    return { status: 'warn', message: 'Required for check-in reports — the tenancy move-in date.' };
   }
   const moveIn = new Date(pendingSetup.moveInDateTime);
   if (isNaN(moveIn.getTime())) return { status: 'warn', message: 'Enter a valid move-in date and time.' };
-  const diffMs = new Date() - moveIn;
-  const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
-  if (diffMs < 0) return { status: 'warn', message: 'This move-in date is in the future — start the check-in on or after the move-in date.' };
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const diffMs = new Date() - moveIn;               // positive = move-in has passed, negative = still to come
+  const sevenDaysMs = 7 * DAY_MS, sixtyDaysMs = 60 * DAY_MS;
   if (diffMs > sevenDaysMs) return { status: 'warn', message: 'More than 7 days have passed since move-in — a check-in report can no longer be started for this move-in date.' };
-  const daysLeft = Math.max(0, Math.ceil((sevenDaysMs - diffMs) / (24 * 60 * 60 * 1000)));
+  if (diffMs < -sixtyDaysMs) return { status: 'warn', message: 'That move-in date is more than 60 days away — start the check-in nearer the move-in date.' };
+  if (diffMs < 0) {
+    const daysAhead = Math.max(1, Math.ceil(-diffMs / DAY_MS));
+    return { status: 'ok', message: `Preparing ahead of move-in (${daysAhead} day${daysAhead===1?'':'s'} to go) — the report is dated for move-in.` };
+  }
+  const daysLeft = Math.max(0, Math.ceil((sevenDaysMs - diffMs) / DAY_MS));
   return { status: 'ok', message: `Within the 7-day check-in window (${daysLeft} day${daysLeft===1?'':'s'} remaining).` };
 }
 function updateMoveInHint(){
@@ -2461,12 +2466,12 @@ function submitSetup(){
   if (!pendingSetup.inspectionType) { showSetupError('Choose the inspection type: check-out, or an inspection during the tenancy.'); return; }
 
   if (pendingSetup.inspectionType === 'Check-In') {
-    if (!pendingSetup.moveInDateTime) { showSetupError('Enter the tenancy move-in date and time — check-in reports must be completed within 7 days of move-in.'); return; }
+    if (!pendingSetup.moveInDateTime) { showSetupError('Enter the tenancy move-in date and time for a check-in report.'); return; }
     const moveIn = new Date(pendingSetup.moveInDateTime);
     if (isNaN(moveIn.getTime())) { showSetupError('Enter a valid move-in date and time.'); return; }
-    const diffMs = new Date() - moveIn;
-    if (diffMs < 0) { showSetupError('The move-in date is in the future. Start the check-in on or after the move-in date.'); return; }
+    const diffMs = new Date() - moveIn;               // positive = move-in has passed, negative = still to come
     if (diffMs > 7 * 24 * 60 * 60 * 1000) { showSetupError('More than 7 days have passed since the move-in date. A check-in report can no longer be started for this move-in date.'); return; }
+    if (diffMs < -60 * 24 * 60 * 60 * 1000) { showSetupError('That move-in date is more than 60 days away. Start the check-in nearer the move-in date.'); return; }
   }
 
   const basedOn = pendingSetup.basedOn || null;
@@ -2687,13 +2692,13 @@ function applyTypeChange(){
   const t = typePick;
   if (!REPORT_TYPES.includes(t)) return;
   if (t === state.meta.inspectionType) { closeTypeChange(); return; }
-  if (t === 'Check-In' && !state.finalizedAt) {   // the same rule as starting a check-in: within 7 days of the move-in (counted from when this report was started)
+  if (t === 'Check-In' && !state.finalizedAt) {   // the same rule as starting a check-in: up to 60 days before, or 7 days after, the move-in (counted from when this report was started)
     const v = (document.getElementById('typeMoveIn') || {}).value || '';
     const moveIn = new Date(v), started = new Date(state.meta.createdAt || Date.now());
-    if (!v || isNaN(moveIn.getTime())) { drawTypeChange('Enter the tenancy move-in date and time. A check-in must be done within 7 days of move-in.'); return; }
-    const diff = started - moveIn;
-    if (diff < 0) { drawTypeChange('The move-in date is after this report was started. A check-in is done on or after the move-in date.'); return; }
+    if (!v || isNaN(moveIn.getTime())) { drawTypeChange('Enter the tenancy move-in date and time for a check-in.'); return; }
+    const diff = started - moveIn;                 // positive = started after move-in, negative = started before move-in
     if (diff > 7 * 86400000) { drawTypeChange('This report was started more than 7 days after that move-in date, so it can’t be a check-in.'); return; }
+    if (diff < -60 * 86400000) { drawTypeChange('That move-in date is more than 60 days after this report was started.'); return; }
     state.meta.moveInDateTime = v;
   }
   if (state.finalizedAt) { copyFinishedAs(t); return; }   // a finished report is never changed: a separate copy is made
@@ -4663,7 +4668,7 @@ function renderSetup(){
         ${aiEnabled ? `<li><span class="intro-ic">✨</span><span><strong>AI suggests the condition</strong>After each photo, our AI suggests the item's condition, a short description and any marks it can see. Check it and change anything you disagree with.</span></li>` : ''}
         <li><span class="intro-ic">☁️</span><span><strong>Saved as you go</strong>Everything saves automatically, on this phone and backed up online with your photos, so nothing is lost if you close the page or lose signal.</span></li>
         <li><span class="intro-ic">${ICONS.clock}</span><span><strong>Timestamped automatically</strong>Every photo, from the camera or gallery, is stamped with the date and time the moment it's added, and checked to help confirm it shows the right item.</span></li>
-        <li><span class="intro-ic">${ICONS.calendar}</span><span><strong>Within 7 days of move-in</strong>Check-in reports must be started within 7 days of the tenancy move-in date or they can't be created.</span></li>
+        <li><span class="intro-ic">${ICONS.calendar}</span><span><strong>Prepare ahead, or on move-in</strong>Start a check-in up to 60 days before the tenancy move-in date — ready for the tenant arriving — or within 7 days after it.</span></li>
         <li><span class="intro-ic">${ICONS.pen}</span><span><strong>Signed by you</strong>The finished report is signed off by the person carrying out the inspection.</span></li>
       </ul>
     </div>
