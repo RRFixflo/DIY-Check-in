@@ -135,7 +135,7 @@ function mount(app, ctx){
 - The person signs and confirms a declaration; the PDF report is ready the moment it is signed, with every photo linked at full size.
 - Either side can send the other a link to check, comment and sign the report.
 - Check-outs and mid-tenancy inspections can start from the earlier report, so each item shows how it was then and what changed; the report lists the changes.
-- A check-in must be done within 7 days of moving in.
+- A check-in can be started up to 60 days before the move-in date (so it can be prepared ahead of the tenant moving in) or within 7 days after it.
 - Price: £29.99 per report, paid when the finished report is downloaded; free to start; no subscription.
 - For letting agents and landlords with several properties: prepaid packs — 10 reports for £249 (£24.90 each), 25 for £549 (£21.96 each), 50 for £999 (£19.98 each, a third less than £29.99, about 33% off). Bigger volumes by arrangement (Talk to us on /agents). Reports never expire. Topping up with the same email adds to the same link.
 - A pack comes with one tenant link to send to every tenant (by email, WhatsApp or text): each tenant does their own check-in or check-out, at no charge to them. The agent or landlord gets each report by email.
