@@ -1131,6 +1131,18 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     try { info = JSON.parse(fs.readFileSync(path.join(photoDir(id), 'index.json'), 'utf8'))[n] || {}; } catch (e) {}
     return { id, n, file, info, meta: readMeta(id) };
   }
+  // How many photos the report has, so the viewer can step Previous/Next and stop at the ends.
+  // Photos are numbered 1..N in the order drawn in the PDF; the highest numbered entry in index.json is N.
+  function photoTotal(f){
+    if (!f) return 0;
+    try {
+      const dir = f.id === 'example' ? EXAMPLE_DIR : photoDir(f.id);
+      const idx = JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8'));
+      let max = 0;
+      for (const k of Object.keys(idx)) { const v = parseInt(k, 10); if (v >= 1 && v <= 5000 && v > max) max = v; }
+      return max;
+    } catch (e) { return 0; }
+  }
   const photoHeaders = res => res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' });
   app.get('/p/:key/:n.jpg', (req, res) => {
     photoHeaders(res);
@@ -1145,6 +1157,27 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     const ok = f && fs.existsSync(f.file);
     const when = f && f.info.ts ? new Date(f.info.ts) : null;
     const taken = when && !isNaN(when) ? when.toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    const key = String(req.params.key);
+    const total = ok ? photoTotal(f) : 0;
+    const n = f ? f.n : 0;
+    const base = '/p/' + esc(key) + '/';
+    const hasPrev = ok && n > 1, hasNext = ok && total > 0 && n < total;
+    const prevUrl = base + (n - 1), nextUrl = base + (n + 1);
+    // Previous/Next so you can step straight through every photo (links, plus arrow keys and swipe).
+    const nav = ok && total > 1 ? `<nav class="pv">
+  <a class="prev${hasPrev ? '' : ' disabled'}"${hasPrev ? ` href="${prevUrl}"` : ' aria-disabled="true"'} rel="prev">‹ Previous</a>
+  <span class="count">${n} of ${total}</span>
+  <a class="next${hasNext ? '' : ' disabled'}"${hasNext ? ` href="${nextUrl}"` : ' aria-disabled="true"'} rel="next">Next ›</a>
+</nav>
+${hasPrev ? `<link rel="prefetch" href="${prevUrl}.jpg">` : ''}${hasNext ? `<link rel="prefetch" href="${nextUrl}.jpg">` : ''}
+<script>(function(){
+  var prev=${hasPrev ? `'${prevUrl}'` : 'null'}, next=${hasNext ? `'${nextUrl}'` : 'null'};
+  document.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'&&next){location.href=next;} else if(e.key==='ArrowLeft'&&prev){location.href=prev;} });
+  var x0=null,y0=null;
+  document.addEventListener('touchstart',function(e){ if(e.touches.length===1){ x0=e.touches[0].clientX; y0=e.touches[0].clientY; } },{passive:true});
+  document.addEventListener('touchend',function(e){ if(x0===null)return; var t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ if(dx<0&&next){location.href=next;} else if(dx>0&&prev){location.href=prev;} } },{passive:true});
+})();</script>` : '';
     res.status(ok ? 200 : 404).type('html').send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>${ok ? esc(f.info.title || 'Photograph') : 'Photo not available'}</title><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
 <style>
@@ -1152,9 +1185,16 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   header { padding:14px 16px 10px; } h1 { font-size:15px; margin:0 0 3px; font-weight:650; } .sub { color:#9AA4B5; font-size:13px; }
   main { padding:0 8px 16px; display:flex; justify-content:center; } img { max-width:100%; height:auto; display:block; border-radius:6px; }
   .none { padding:40px 16px; text-align:center; color:#9AA4B5; }
+  nav.pv { position:sticky; bottom:0; display:flex; gap:10px; align-items:center; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(to top, #0B0F19 72%, rgba(11,15,25,0)); }
+  nav.pv a { flex:1 1 0; text-align:center; padding:14px 8px; border-radius:12px; text-decoration:none; font-weight:650; font-size:15px; border:1px solid #273048; background:#1A2234; color:#E5E9F0; -webkit-tap-highlight-color:transparent; }
+  nav.pv a.next { background:#3257C8; border-color:#3257C8; color:#fff; }
+  nav.pv a:active { filter:brightness(1.25); }
+  nav.pv a.disabled { opacity:.32; pointer-events:none; }
+  nav.pv .count { flex:0 0 auto; text-align:center; color:#9AA4B5; font-size:13px; font-weight:600; min-width:70px; }
 </style></head><body>
 ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${esc([f.meta && f.meta.address, taken ? 'Taken ' + taken : ''].filter(Boolean).join(' · '))}</div></header>
-<main><img src="/p/${esc(req.params.key)}/${f.n}.jpg" alt="${esc(f.info.title || 'Photograph')}"></main>`
+<main><img src="/p/${esc(key)}/${f.n}.jpg" alt="${esc(f.info.title || 'Photograph')}"></main>
+${nav}`
       : '<div class="none">This photo isn’t available. It may not have finished uploading yet, or the report has been removed.</div>'}
 </body></html>`);
   });
