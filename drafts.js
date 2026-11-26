@@ -176,8 +176,9 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     if (!s) return res.status(404).type('text/plain').send('Not found.');
     const m = s.meta || {}, pr = s.property || {}, st = stats(s), [, label] = status(s);
     // Each photo with ↺ ↻ to turn it the right way round (saved at once; ?v= is the file's time, so the new turn shows).
+    const om = readJson(path.join(dirOf(key), 'orient.json')) || {};
     const ver = id => { try { return Math.round(fs.statSync(path.join(dirOf(key), 'photos', id + '.jpg')).mtimeMs); } catch (e) { return 0; } };
-    const img = (list, alt) => (list || []).map(p => p && PID_RE.test(String(p.id)) ? `<figure class="rp"><a href="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" target="_blank"><img loading="lazy" src="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" alt="${esc(alt)}"></a><span class="turn"><button type="button" title="Turn anticlockwise" onclick="turnPhoto(this,'${p.id}',-1)">↺</button><button type="button" title="Turn clockwise" onclick="turnPhoto(this,'${p.id}',1)">↻</button></span></figure>` : '').join('');
+    const img = (list, alt) => (list || []).map(p => p && PID_RE.test(String(p.id)) ? `<figure class="rp"><a href="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" target="_blank"><img loading="lazy" src="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" alt="${esc(alt)}"></a>${om[p.id] > 0 ? '<small class="auto">↻ turned upright automatically</small>' : ''}<span class="turn"><button type="button" title="Turn anticlockwise" onclick="turnPhoto(this,'${p.id}',-1)">↺</button><button type="button" title="Turn clockwise" onclick="turnPhoto(this,'${p.id}',1)">↻</button></span></figure>` : '').join('');
     const itemText = i => i.notApplicable ? 'Not applicable' + (i.naReason ? ': ' + i.naReason : '') : [CONDITION[i.condition] || 'Condition not set', (i.defects || []).filter(d => d !== 'None').join(', ').toLowerCase(), i.clean ? ({ clean: 'clean', needs: 'needs a clean', dirty: 'dirty' }[i.clean] || '') : '', i.working === 'no' ? 'not working' : '', i.desc || '', i.conditionNote ? 'note: ' + i.conditionNote : '', i.aiObservation ? 'AI: ' + i.aiObservation : ''].filter(Boolean).join(' · ');
     const rooms = (s.rooms || []).map(r => `<section><h2>${esc(r.name)}</h2>
       ${(r.items || []).map(i => `<div class="it"><b>${esc(i.label)}</b><span>${esc(itemText(i))}</span><div class="ph">${img(i.photos, i.label)}</div></div>`).join('')}
@@ -193,7 +194,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   section, .head { background: #fff; border-radius: 16px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
   .it { display: grid; grid-template-columns: 180px 1fr; gap: 4px 14px; padding: 10px 0; border-top: 1px solid #E4E8EF; } .it:first-of-type { border-top: 0; }
   .it span { color: #475569; } .ph { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; } .ph img { width: 120px; height: 90px; object-fit: cover; border-radius: 8px; background: #E4E8EF; }
-  figure.rp { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; } figure.rp .turn { display: flex; gap: 4px; }
+  figure.rp { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; } figure.rp .turn { display: flex; gap: 4px; } figure.rp small.auto { font-size: 10px; color: #5B6B82; }
   figure.rp .turn button { font-size: 15px; line-height: 1; padding: 4px 10px; } @media print { figure.rp .turn { display: none; } }
   .note { color: #475569; } button { font: inherit; font-weight: 600; padding: 9px 16px; border-radius: 999px; border: 1px solid #CDD4DF; background: #fff; cursor: pointer; }
   .sig { max-width: 260px; background: #fff; border: 1px solid #E4E8EF; border-radius: 8px; }
@@ -264,6 +265,58 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
   // The backup a stored report was made from (for Rebuild on /admin).
   const backupFor = reportId => list().find(({ s }) => s._serverReportId === reportId) || null;
   async function rebuild(reportId){ const b = backupFor(reportId); if (!b) return null; return Object.assign({ key: b.key, s: b.s }, await buildFor(b.key, b.s)); }
+  // Every backed-up photo is checked once for which way is up, and a sideways or upside-down one is turned upright
+  // in place (EXIF orientation, no re-compression; orient-ai.js asks Claude, 8 photos at a time). Results are kept
+  // in orient.json beside the photos: id → degrees turned (0 = upright already), or 'owner' when the owner had
+  // already turned it by hand on /admin. Backups saved in the last 30 days, newest first; a report made from the
+  // backup (rescue below) waits for the check, 15 minutes at most.
+  const orient = require('./orient-ai'), JO = require('./jpeg-orient');
+  let orienting = false, orientPauseUntil = 0;
+  const photoIds = s => { const ids = []; (function walk(o){ if (Array.isArray(o)) o.forEach(walk); else if (o && typeof o === 'object') { if (o.id && PID_RE.test(String(o.id)) && 'ts' in o) ids.push(String(o.id)); Object.values(o).forEach(walk); } })([s.rooms, s.property]); return ids; };
+  async function orientSweep(){
+    if (orienting || !orient.enabled() || Date.now() < orientPauseUntil) return;
+    orienting = true;
+    try {
+      let calls = 0;
+      const recent = list().filter(({ s }) => Date.now() - new Date(s._savedAt || s.finalizedAt || 0).getTime() < 30 * 86400000)
+        .sort((a, b) => String(b.s._savedAt || '').localeCompare(String(a.s._savedAt || '')));
+      for (const { key } of recent) {
+        const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {};
+        let files = []; try { files = fs.readdirSync(path.join(dirOf(key), 'photos')).filter(f => /^[A-Za-z0-9_-]{1,48}\.jpg$/.test(f)).map(f => f.slice(0, -4)); } catch (e) {}
+        const todo = files.filter(id => !(id in om));
+        let turned = 0;
+        for (let i = 0; i < todo.length; i += 8) {
+          if (calls >= 6) break;
+          const batch = todo.slice(i, i + 8), bufs = [];
+          for (const id of batch) { try { bufs.push(fs.readFileSync(path.join(dirOf(key), 'photos', id + '.jpg'))); } catch (e) { bufs.push(null); } }
+          const ask = batch.map((id, n) => bufs[n] && JO.getOrientation(bufs[n]) === 1 ? n : -1).filter(n => n >= 0);
+          batch.forEach((id, n) => { if (bufs[n] && JO.getOrientation(bufs[n]) !== 1) om[id] = 'owner'; });
+          let turns = [];
+          if (ask.length) {
+            calls++;
+            try { turns = await orient.turnsFor(ask.map(n => bufs[n])); }
+            catch (e) { console.error('photo orientation check failed: ' + (e && e.status || '') + ' ' + (e && e.message || e)); orientPauseUntil = Date.now() + 10 * 60 * 1000; writeJson(of, om); return; }
+          }
+          ask.forEach((n, j) => {
+            const id = batch[n], t = turns[j];
+            if (t > 0) {
+              const file = path.join(dirOf(key), 'photos', id + '.jpg');
+              // Not if the owner turned it by hand meanwhile.
+              try { const now = fs.readFileSync(file); if (JO.getOrientation(now) === 1) { fs.writeFileSync(file + '.tmp', JO.setOrientation(now, JO.BY_TURN[t])); fs.renameSync(file + '.tmp', file); turned++; } } catch (e) {}
+            }
+            om[id] = t > 0 ? t : 0;
+          });
+          writeJson(of, om);
+        }
+        if (turned) console.log('photos turned upright automatically: ' + turned + ' in backup ' + key);
+        if (calls >= 6) break;
+      }
+    } finally { orienting = false; }
+  }
+  setTimeout(() => orientSweep().catch(() => {}), 40 * 1000).unref();
+  setInterval(() => orientSweep().catch(() => {}), 90 * 1000).unref();
+  const orientPending = (key, ids) => { if (!orient.enabled()) return 0; const om = readJson(path.join(dirOf(key), 'orient.json')) || {}; return ids.filter(id => !(id in om) && fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length; };
+
   const WAIT_MS = 5 * 60 * 1000, GIVE_UP_MS = 30 * 60 * 1000;
   // Signed but the last "Finish" tap never came (the owner: "once someone signs, it is done"; Flat 5 Windsor Court, 16 Nov 2026,
   // 50/50 items, 153 photos, signed, left "In progress"): once the phone has been quiet for SIGNED_IDLE_MS, the backup is
@@ -288,6 +341,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
         const ids = []; (function walk(o){ if (Array.isArray(o)) o.forEach(walk); else if (o && typeof o === 'object') { if (o.id && PID_RE.test(String(o.id)) && 'ts' in o) ids.push(String(o.id)); Object.values(o).forEach(walk); } })([s.rooms, s.property]);
         const missing = ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
         if (missing && age < GIVE_UP_MS) continue;
+        if (orientPending(key, ids) && age < 15 * 60 * 1000) continue;   // photos still being checked for which way is up
         try {
           const { pdf, photos, photoFile } = await buildFor(key, s);
           const id = await ctx.fromBackup(pdf, s, { missing, photos, photoFile });
@@ -332,7 +386,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     return ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
   }
   const saveState = (key, patch) => { const now = readJson(path.join(dirOf(key), 'state.json')); if (now) writeJson(path.join(dirOf(key), 'state.json'), Object.assign(now, patch)); };
-  return { missingPhotos, saveState, draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list };
+  return { missingPhotos, saveState, draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list, orientSweep };
 }
 
 module.exports = { mount };

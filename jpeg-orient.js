@@ -74,4 +74,4 @@ function upright(buf){
   } catch (e) { return buf; }
 }
 
-module.exports = { getOrientation, setOrientation, turn, upright, TURN };
+module.exports = { getOrientation, setOrientation, turn, upright, TURN, BY_TURN };
