@@ -706,6 +706,8 @@
 .hf-share .btn{text-decoration:none}
 .hf-link{margin:12px 0 0;font-size:12px;color:var(--ink-faint)}
 .hf-link code{word-break:break-all}
+.sign-send{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.sign-send .btn{text-decoration:none}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -4693,9 +4695,27 @@ async function shareSignLink(btn){
     try { await navigator.share({ title: 'Please check and sign this report', text: 'Please check and sign the ' + inspectionKind(state.meta.inspectionType).toLowerCase() + ' report for ' + state.meta.address + ':', url }); return; }
     catch (e) { if (e && e.name === 'AbortError') return; }
   }
-  const done = () => { btn.textContent = 'Link copied ✓'; setTimeout(() => { btn.textContent = navigator.share ? 'Send the sign-off link' : 'Copy the sign-off link'; }, 2200); };
+  const done = () => { btn.textContent = 'Link copied ✓'; setTimeout(() => { btn.textContent = '📲 Share'; }, 2200); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link:', url));
   else window.prompt('Copy this link:', url);
+}
+// The message a landlord sends their tenant with the sign-off link, and the channels to send it by.
+function signMsg(){ return 'Please check and sign the ' + inspectionKind(state.meta.inspectionType).toLowerCase() + ' report for ' + (state.meta.address || 'the property') + ':\n\n' + signLink(state); }
+function signSubject(){ return 'Please check and sign the ' + inspectionKind(state.meta.inspectionType).toLowerCase() + ' report' + (state.meta.address ? ' — ' + state.meta.address : ''); }
+function signReady(){ if (state.dataUploaded) return true; notice('Your report is still sending — the tenant’s link works in a moment, once it says Report sent.'); if (!(state.submittedId && state.photosUploaded && state.dataUploaded)) submitReport(); return false; }
+function copySignLink(btn){
+  if (!signReady()) return;
+  const url = signLink(state);
+  const done = () => { btn.textContent = 'Copied ✓'; setTimeout(() => { btn.textContent = '📋 Copy link'; }, 2200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link:', url));
+  else window.prompt('Copy this link:', url);
+}
+function signChannel(kind){
+  if (!signReady()) return;
+  const msg = signMsg();
+  if (kind === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  else if (kind === 'sms') location.href = 'sms:?&body=' + encodeURIComponent(msg);
+  else if (kind === 'email') location.href = 'mailto:?subject=' + encodeURIComponent(signSubject()) + '&body=' + encodeURIComponent(msg);
 }
 function copyLaterLink(btn){
   const url = laterReportLink(state);
@@ -5343,12 +5363,17 @@ function renderDone(){
       <div class="room-count-hint" id="onlineHint">${state.submittedId ? '' : 'The link works as soon as your report has finished sending.'}</div>
     </div>` : ''}
 
-    ${reportUnlocked() ? `<div class="panel next-card">
-      <div class="section-title" style="margin-top:0">Get it signed by the tenant</div>
-      <p>Send the tenant (or landlord) a link. They check the report room by room, can comment on anything, and sign on their phone. A signed page is then added to the report.</p>
-      <div class="btn-row">
-        <button type="button" class="btn btn-primary" onclick="shareSignLink(this)">${navigator.share ? 'Send the sign-off link' : 'Copy the sign-off link'}</button>
+    ${reportUnlocked() ? `<div class="panel next-card" id="signCard">
+      <div class="section-title" style="margin-top:0">Send it to your tenant to sign online</div>
+      <p>Send your tenant (or landlord) the link below. They open it on their phone, check the report room by room, add any comments, and sign — no app to install. Their signed page is then added to your report.</p>
+      <div class="btn-row sign-send">
+        ${navigator.share ? `<button type="button" class="btn btn-primary" onclick="shareSignLink(this)">📲 Share</button>` : ''}
+        <button type="button" class="btn${navigator.share ? '' : ' btn-primary'}" onclick="copySignLink(this)">📋 Copy link</button>
+        <button type="button" class="btn" onclick="signChannel('wa')">💬 WhatsApp</button>
+        <button type="button" class="btn" onclick="signChannel('sms')">📱 Text</button>
+        <button type="button" class="btn" onclick="signChannel('email')">✉ Email</button>
       </div>
+      <p class="hf-link"><code>${escapeHtml(signLink(state))}</code></p>
       <div class="sign-status" id="signStatus"></div>
     </div>
 
