@@ -74,4 +74,69 @@ function upright(buf){
   } catch (e) { return buf; }
 }
 
-module.exports = { getOrientation, setOrientation, turn, upright, TURN, BY_TURN };
+// The app burns the date and time into every photo as a dark box in the bottom-right corner (stampPhoto() in
+// public/index.html). Turning a photo would leave that stamp running up one side, so turnWithStamp() turns the pixels
+// and moves the stamp: the box is found, cut out, the strip it sat in is trimmed off, the picture is turned, and the
+// same box (same text, still the right way up) goes back in the new bottom-right corner, as the app places it.
+// No EXIF in the result. A photo with no stamp found is just turned.
+const dark = (d, i) => d[i] < 70 && d[i + 1] < 70 && d[i + 2] < 70;
+function findStamp(d, W, H){
+  const font = Math.max(11, Math.round(H * 0.030)), boxH = font + 2 * Math.round(font * 0.34);
+  const right = W - 1 - Math.round(W * 0.012), bottom = H - 1 - Math.round(H * 0.015);
+  // A row just inside the top of the box (padding, no text), found by trying rows near where the app puts it.
+  for (let dy = -Math.round(boxH * 0.4); dy <= Math.round(boxH * 0.4); dy++) {
+    const yTop = bottom - boxH + 1 + dy, y = yTop + 3;
+    if (y < 0 || y >= H) continue;
+    let x = right - 2; if (!dark(d, (y * W + x) * 4)) continue;
+    let miss = 0, left = x;
+    for (; x >= 0; x--) { if (dark(d, (y * W + x) * 4)) { left = x; miss = 0; } else if (++miss > 4) break; }
+    const bw = right - left + 1;
+    if (bw < font * 4 || bw > W * 0.9) continue;
+    // Its top and bottom, down the left padding (no text there).
+    const cx = left + 2; let top = y, bot = y;
+    while (top > 0 && dark(d, ((top - 1) * W + cx) * 4)) top--;
+    while (bot < H - 1 && dark(d, ((bot + 1) * W + cx) * 4)) bot++;
+    const bh = bot - top + 1;
+    if (bh < boxH * 0.6 || bh > boxH * 1.6) continue;
+    // Most of the box must be dark (the text is a small part of it).
+    let n = 0, k = 0; for (let yy = top; yy <= bot; yy += 2) for (let xx = left; xx <= right; xx += 3) { n++; if (dark(d, (yy * W + xx) * 4)) k++; }
+    if (k / n < 0.6) continue;
+    return { x: left, y: top, w: right - left + 1, h: bh };
+  }
+  return null;
+}
+function turnWithStamp(buf, deg){
+  deg = ((deg % 360) + 360) % 360;
+  try {
+    const jpeg = require('jpeg-js');
+    const src = jpeg.decode(buf, { useTArray: true, maxMemoryUsageInMB: 1024 }); let W = src.width, H = src.height; const d = src.data;
+    const box = findStamp(d, W, H);
+    let patch = null;
+    if (box) {
+      patch = Buffer.alloc(box.w * box.h * 4);
+      for (let y = 0; y < box.h; y++) patch.set(d.subarray(((box.y + y) * W + box.x) * 4, ((box.y + y) * W + box.x + box.w) * 4), y * box.w * 4);
+      H = Math.max(1, box.y - 1);   // trim the strip the stamp sat in
+    }
+    const side = deg === 90 || deg === 270, w = side ? H : W, h = side ? W : H, out = Buffer.alloc(w * h * 4);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      let nx = x, ny = y;
+      if (deg === 90) { nx = H - 1 - y; ny = x; } else if (deg === 180) { nx = W - 1 - x; ny = H - 1 - y; } else if (deg === 270) { nx = y; ny = W - 1 - x; }
+      const a = (y * W + x) * 4, b = (ny * w + nx) * 4;
+      out[b] = d[a]; out[b + 1] = d[a + 1]; out[b + 2] = d[a + 2]; out[b + 3] = 255;
+    }
+    if (patch && box.w < w && box.h < h) {
+      const px = w - box.w - Math.round(w * 0.012), py = h - box.h - Math.round(h * 0.015);
+      for (let y = 0; y < box.h; y++) patch.copy(out, ((py + y) * w + px) * 4, y * box.w * 4, (y + 1) * box.w * 4);
+    }
+    return jpeg.encode({ data: out, width: w, height: h }, 90).data;
+  } catch (e) { return null; }
+}
+// The photo upright with its stamp at the bottom: an EXIF turn (from an earlier version) is applied to the pixels,
+// plus `extra` degrees clockwise. Returns null when nothing needs doing or it can't be read.
+function makeUpright(buf, extra){
+  const total = ((TURN[getOrientation(buf)] || 0) + (extra || 0)) % 360;
+  if (!total) return getOrientation(buf) === 1 ? null : setOrientation(buf, 1);
+  return turnWithStamp(buf, total);
+}
+
+module.exports = { getOrientation, setOrientation, turn, upright, turnWithStamp, makeUpright, findStamp, TURN, BY_TURN };

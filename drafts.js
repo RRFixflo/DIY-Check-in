@@ -221,8 +221,11 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     if (!KEY_RE.test(key) || !PID_RE.test(id)) return res.status(404).json({ error: 'Not found.' });
     const file = path.join(dirOf(key), 'photos', id + '.jpg');
     let buf; try { buf = fs.readFileSync(file); } catch (e) { return res.status(404).json({ error: 'This photo hasn’t been backed up yet.' }); }
-    const out = require('./jpeg-orient').turn(buf, Number((req.body || {}).dir) < 0 ? -1 : 1);
+    // The pixels are turned and the date and time stamp moved back to the bottom right (jpeg-orient.js).
+    const out = require('./jpeg-orient').makeUpright(buf, Number((req.body || {}).dir) < 0 ? 270 : 90);
+    if (!out) return res.status(422).json({ error: 'That photo could not be turned.' });
     fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file);
+    { const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {}; om[id] = 'owner'; writeJson(of, om); }
     res.json({ ok: true, v: Math.round(fs.statSync(file).mtimeMs) });
   });
   app.get('/admin/drafts/:key/photo/:id', requireAdmin, (req, res) => {
@@ -283,6 +286,15 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
       for (const { key } of recent) {
         const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {};
         let files = []; try { files = fs.readdirSync(path.join(dirOf(key), 'photos')).filter(f => /^[A-Za-z0-9_-]{1,48}\.jpg$/.test(f)).map(f => f.slice(0, -4)); } catch (e) {}
+        // Photos turned before by setting EXIF (an earlier version): turned in the pixels now, stamp at the bottom.
+        const norm = om['#norm'] || (om['#norm'] = {});
+        for (const id of files) {
+          if (norm[id] || !(id in om) || om[id] === 0) continue;
+          const file = path.join(dirOf(key), 'photos', id + '.jpg');
+          try { const b = fs.readFileSync(file), out = JO.getOrientation(b) !== 1 ? JO.makeUpright(b, 0) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); } } catch (e) {}
+          norm[id] = 1; await new Promise(r => setImmediate(r));
+        }
+        writeJson(of, om);
         const todo = files.filter(id => !(id in om));
         let turned = 0;
         for (let i = 0; i < todo.length; i += 8) {
@@ -290,7 +302,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
           const batch = todo.slice(i, i + 8), bufs = [];
           for (const id of batch) { try { bufs.push(fs.readFileSync(path.join(dirOf(key), 'photos', id + '.jpg'))); } catch (e) { bufs.push(null); } }
           const ask = batch.map((id, n) => bufs[n] && JO.getOrientation(bufs[n]) === 1 ? n : -1).filter(n => n >= 0);
-          batch.forEach((id, n) => { if (bufs[n] && JO.getOrientation(bufs[n]) !== 1) om[id] = 'owner'; });
+          batch.forEach((id, n) => { if (bufs[n] && JO.getOrientation(bufs[n]) !== 1) { const out = JO.makeUpright(bufs[n], 0); if (out) { const f = path.join(dirOf(key), 'photos', id + '.jpg'); fs.writeFileSync(f + '.tmp', out); fs.renameSync(f + '.tmp', f); } om[id] = 'owner'; norm[id] = 1; } });
           let turns = [];
           if (ask.length) {
             calls++;
@@ -302,7 +314,8 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
             if (t > 0) {
               const file = path.join(dirOf(key), 'photos', id + '.jpg');
               // Not if the owner turned it by hand meanwhile.
-              try { const now = fs.readFileSync(file); if (JO.getOrientation(now) === 1) { fs.writeFileSync(file + '.tmp', JO.setOrientation(now, JO.BY_TURN[t])); fs.renameSync(file + '.tmp', file); turned++; } } catch (e) {}
+              try { const now = fs.readFileSync(file), out = JO.getOrientation(now) === 1 ? JO.makeUpright(now, t) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); turned++; } } catch (e) {}
+              norm[id] = 1;
             }
             om[id] = t > 0 ? t : 0;
           });
