@@ -1274,6 +1274,15 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
       return max;
     } catch (e) { return 0; }
   }
+  // The photo numbers that have actually arrived (a file on disk), sorted. Previous/Next step through
+  // these, so a photo that never finished uploading is skipped over instead of dead-ending the viewer.
+  function photoNums(f){
+    if (!f) return [];
+    try {
+      const dir = f.id === 'example' ? EXAMPLE_DIR : photoDir(f.id);
+      return fs.readdirSync(dir).map(x => /^(\d+)\.jpg$/.exec(x)).filter(Boolean).map(m => parseInt(m[1], 10)).filter(v => v >= 1 && v <= 5000).sort((a, b) => a - b);
+    } catch (e) { return []; }
+  }
   const photoHeaders = res => res.set({ 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' });
   app.get('/p/:key/:n.jpg', (req, res) => {
     photoHeaders(res);
@@ -1289,15 +1298,21 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     const when = f && f.info.ts ? new Date(f.info.ts) : null;
     const taken = when && !isNaN(when) ? when.toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
     const key = String(req.params.key);
-    const total = ok ? photoTotal(f) : 0;
-    const n = f ? f.n : 0;
+    // The report's intended photo count (the "of" number), and the photos that have actually arrived.
+    const total = f ? ((f.meta && f.meta.photos) || photoTotal(f)) : 0;
+    const nums = f ? photoNums(f) : [];
+    const n = f ? f.n : (parseInt(req.params.n, 10) || 0);
     const base = '/p/' + esc(key) + '/';
-    const hasPrev = ok && n > 1, hasNext = ok && total > 0 && n < total;
-    const prevUrl = base + (n - 1), nextUrl = base + (n + 1);
+    // Step to the nearest photo that's actually there, in either direction, so a missing one is skipped,
+    // not a wall. Works whether this photo loaded or not, as long as the report (paid) was found.
+    const prevN = nums.filter(x => x < n).pop();
+    const nextN = nums.filter(x => x > n)[0];
+    const hasPrev = prevN != null, hasNext = nextN != null;
+    const prevUrl = base + prevN, nextUrl = base + nextN;
     // Previous/Next so you can step straight through every photo (links, plus arrow keys and swipe).
-    const nav = ok && total > 1 ? `<nav class="pv">
+    const nav = (hasPrev || hasNext) ? `<nav class="pv">
   <a class="prev${hasPrev ? '' : ' disabled'}"${hasPrev ? ` href="${prevUrl}"` : ' aria-disabled="true"'} rel="prev">‹ Previous</a>
-  <span class="count">${n} of ${total}</span>
+  <span class="count">${total ? n + ' of ' + total : ''}</span>
   <a class="next${hasNext ? '' : ' disabled'}"${hasNext ? ` href="${nextUrl}"` : ' aria-disabled="true"'} rel="next">Next ›</a>
 </nav>
 ${hasPrev ? `<link rel="prefetch" href="${prevUrl}.jpg">` : ''}${hasNext ? `<link rel="prefetch" href="${nextUrl}.jpg">` : ''}
@@ -1326,7 +1341,9 @@ ${hasPrev ? `<link rel="prefetch" href="${prevUrl}.jpg">` : ''}${hasNext ? `<lin
 ${ok ? `<header><h1>${esc(f.info.title || 'Photograph')}</h1><div class="sub">${esc([f.meta && f.meta.address, taken ? 'Taken ' + taken : ''].filter(Boolean).join(' · '))}</div></header>
 <main><img src="/p/${esc(key)}/${f.n}.jpg" alt="${esc(f.info.title || 'Photograph')}"></main>
 ${nav}`
-      : '<div class="none">This photo isn’t available. It may not have finished uploading yet, or the report has been removed.</div>'}
+      : `<header><h1>Photo not available${total ? ' (' + n + ' of ' + total + ')' : ''}</h1><div class="sub">${esc((f && f.meta && f.meta.address) || '')}</div></header>
+<div class="none">This photo hasn’t finished uploading yet.${hasNext ? ' The rest are fine — tap <b>Next</b> to carry on.' : hasPrev ? ' Tap <b>Previous</b> to go back.' : ' It may still be uploading, or the report has been removed.'}</div>
+${nav}`}
 </body></html>`);
   });
 
