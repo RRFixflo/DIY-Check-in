@@ -25,7 +25,7 @@ const PAGES = [
     ],
     faqs: [
       ['Does it work offline?', 'The report is built and saved on the phone as the clerk works, so a weak signal doesn’t stop the walk-round. It is backed up online as soon as there is a connection.'],
-      ['How many photos can a room have?', 'At least 8 per room and up to 25, with at least one photo of every item. Each photo in the PDF links to the full-size picture.'],
+      ['How many photos can a room have?', 'At least 8 per room, and as many more as you like, with at least one photo of every item. Each photo in the PDF links to the full-size picture.'],
       ['Can clerks change the checklist?', 'Yes. Rooms and items can be added, removed or renamed on site, and items that aren’t at the property are left out of the report.'],
       ['How is it priced?', 'One monthly fee for your company, based on your team and how many reports you do. Ask for a price and a trial on the inventory companies page.'],
     ],
