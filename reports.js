@@ -802,6 +802,23 @@ function mount(app){
     try { const now = drafts.all().find(d => d.key === key); if (now) drafts.saveState(key, { _remindOpened: new Date().toISOString() }); } catch (e) {}
     res.redirect(302, '/app?resume=' + key);
   });
+  // QR code for the "continue on your phone" hand-off (a report started on a computer, finished on the phone where the
+  // camera is). It only ever encodes this site's own /continue/<key> link, so scanning it opens that backup where it was
+  // left. No sign-in: the random key is the access, like the photo links.
+  app.get('/api/qr', (req, res) => {
+    const key = String(req.query.key || '').toLowerCase();
+    if (!/^[a-f0-9]{32}$/.test(key)) return res.status(400).type('text/plain').send('bad key');
+    const base = (PUBLIC_URL || (req.protocol + '://' + req.get('host'))).replace(/\/$/, '');
+    const url = base + '/continue/' + key;
+    res.setHeader('X-Robots-Tag', 'noindex');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    try {
+      require('qrcode').toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#0B2A45', light: '#ffffff' } }, (err, svg) => {
+        if (err || !svg) return res.status(500).type('text/plain').send('qr error');
+        res.type('image/svg+xml').send(svg);
+      });
+    } catch (e) { res.status(500).type('text/plain').send('qr error'); }
+  });
   app.get('/admin/drafts/:key/remind', requireAdmin, (req, res) => {
     const key = String(req.params.key), b = KEY_RE.test(key) && drafts.all().find(d => d.key === key);
     if (!b) return res.status(404).type('text/plain').send('Unknown backup.');
