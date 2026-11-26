@@ -631,6 +631,9 @@ function mount(app){
 
   /* ---------- the report online: /report/<key>, to view and download (paid reports only) ---------- */
   const onlineLink = r => r && r.photoKey ? (PUBLIC_URL || '') + '/report/' + r.photoKey : '';
+  const signShareLink = r => r && r.photoKey ? (PUBLIC_URL || '') + '/sign/' + r.photoKey : '';   // the tenant sign-off link
+  // Only hand out a sign-off link that will actually open: a paid, finished report with its room-by-room data, not yet signed.
+  const signableReport = r => !!(r && r.photoKey && !notPaid(r) && !r.tenantSignedAt && fs.existsSync(path.join(photoDir(r.id), 'data.json')));
   function onlineReport(key){
     key = String(key || '').toLowerCase();
     if (!KEY_RE.test(key)) return null;
@@ -669,6 +672,7 @@ function mount(app){
   .viewer{margin-top:16px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#525659;height:80vh}
   .viewer iframe{width:100%;height:100%;border:0;display:block}
   .note{font-size:13px;color:var(--muted);margin-top:14px}
+  .signbox{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.signbox h2{font:600 20px/1.2 Georgia,serif;margin:4px 0 6px}.signbox code{word-break:break-all;font-size:12px;color:var(--muted)}
   @media(max-width:700px){.viewer{display:none}.btn{flex:1 1 100%}}
 </style></head><body><header><img src="/icons/icon-192.png" alt="" width="30" height="30">DIY Inventory</header><main>${body}</main></body></html>`;
     if (!o) return res.status(404).type('html').send(shell('Report not found', '<div class="card"><h1>Report not found</h1><p>Check the link you were sent. If it still doesn’t work, ask whoever sent it for a new one.</p></div>'));
@@ -682,10 +686,32 @@ function mount(app){
   <div class="facts">${when ? `<span>Finished ${esc(when)}</span>` : ''}${r.signedBy || r.inspectorName ? `<span>By ${esc(r.signedBy || r.inspectorName)}</span>` : ''}${r.rooms ? `<span>${r.rooms} rooms · ${r.photos} photos</span>` : ''}${r.ref ? `<span>Ref ${esc(r.ref)}</span>` : ''}</div>
   <div class="btns"><a class="btn primary" href="${pdf}?download=1">Download PDF</a><a class="btn" href="${pdf}" target="_blank" rel="noopener">Open full screen</a>${o.canSign && !r.tenantSignedAt ? `<a class="btn" href="/sign/${o.key}">Check and sign it</a>` : ''}<button class="btn" type="button" id="share">Share this link</button></div>
   ${r.tenantSignedAt ? `<div class="ok">✓ Signed by ${esc(r.tenantSignedBy || 'the tenant')}${r.tenantAgree === 'comments' ? ', with comments' : ''}: this is the signed copy.</div>` : ''}
+  ${o.canSign && !r.tenantSignedAt ? `<div class="signbox">
+    <div class="k">Get it signed by your tenant</div>
+    <h2>Send your tenant this link to sign online</h2>
+    <p class="note" style="margin:0 0 12px">They open it on their phone, check the report room by room, add any comments and sign — no app to install. Their signed page is added to this report, and you’ll see it here.</p>
+    <div class="btns">
+      <button class="btn primary" type="button" id="signshare">Send the sign-off link</button>
+      <button class="btn" type="button" id="signwa">💬 WhatsApp</button>
+      <button class="btn" type="button" id="signsms">📱 Text</button>
+      <button class="btn" type="button" id="signemail">✉ Email</button>
+    </div>
+    <p class="note"><code>${esc(signShareLink(r) || '/sign/' + o.key)}</code></p>
+  </div>` : ''}
   <div class="viewer"><iframe src="${pdf}#view=FitH" title="The report"></iframe></div>
   <p class="note">Anyone with this link can view and download the report. Photos in the PDF open full size when tapped.</p>
 </div>
-<script>document.getElementById('share').onclick=async function(){var u=location.href;try{if(navigator.share){await navigator.share({title:document.title,url:u});return;}await navigator.clipboard.writeText(u);this.textContent='Link copied';}catch(e){}};</script>`));
+<script>
+var SIGNU=${JSON.stringify(signShareLink(r) || ('/sign/' + o.key))};
+var SIGNMSG=${JSON.stringify('Please check and sign the ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + ':\n\n')}+SIGNU;
+var SIGNSUB=${JSON.stringify('Please check and sign the ' + type.toLowerCase() + ' report' + (r.address ? ' — ' + r.address : ''))};
+function _g(id){return document.getElementById(id);}
+var sh=_g('share');if(sh)sh.onclick=async function(){var u=location.href;try{if(navigator.share){await navigator.share({title:document.title,url:u});return;}await navigator.clipboard.writeText(u);this.textContent='Link copied';}catch(e){}};
+var ss=_g('signshare');if(ss)ss.onclick=async function(){try{if(navigator.share){await navigator.share({title:'Please check and sign this report',text:SIGNMSG});return;}await navigator.clipboard.writeText(SIGNU);this.textContent='Sign-off link copied';}catch(e){}};
+var sw=_g('signwa');if(sw)sw.onclick=function(){window.open('https://wa.me/?text='+encodeURIComponent(SIGNMSG),'_blank','noopener');};
+var sm=_g('signsms');if(sm)sm.onclick=function(){location.href='sms:?&body='+encodeURIComponent(SIGNMSG);};
+var se=_g('signemail');if(se)se.onclick=function(){location.href='mailto:?subject='+encodeURIComponent(SIGNSUB)+'&body='+encodeURIComponent(SIGNMSG);};
+</script>`));
   });
 
   // One-off, for the owner: LOG_ONLINE_LINK=<ref>[,<ref>…] (a Railway variable) makes sure those paid reports have an
@@ -993,6 +1019,49 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   }
   setTimeout(() => photoFillSweep().catch(() => {}), 2 * 60000).unref();
   setInterval(() => photoFillSweep().catch(() => {}), 5 * 60000).unref();
+
+  // The tenant sign-off page needs the report's room-by-room data (data.json). A report can finish and its PDF and
+  // photos arrive, but the final data upload never land (the page was closed straight after finishing) — then /sign/<key>
+  // says "Report not found" even though it is paid. photoFillSweep only fills data when photos are also missing, so a paid
+  // report with all its photos but no data would never get it. This fills just the data from the online backup, so the
+  // tenant can sign. Once data.json exists the report is signable and the Sign-off link buttons appear.
+  let dataBusy = false; const dataSeen = new Set();
+  async function dataFillSweep(){
+    if (dataBusy) return; dataBusy = true;
+    try {
+      for (const r of listReports()) {
+        if (notPaid(r) || !r.photoKey || r.source === 'uploaded' || r.tenantSignedAt) continue;
+        if (fs.existsSync(path.join(photoDir(r.id), 'data.json'))) continue;       // already signable
+        if (/no data in backup/.test(r.dataFill || '')) continue;                  // the backup genuinely has no data
+        const at = Date.parse(r.receivedAt || r.storedAt || r.createdAt || 0) || 0;
+        if (at && Date.now() - at < 5 * 60000) continue;                           // give the phone time to send the data itself
+        const meta = readMeta(r.id); if (!meta) continue;
+        const all = drafts.all();
+        let b = all.filter(({ s }) => isBackupOf(s, r)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
+        if (!b) b = all.filter(({ s }) => (s.meta || {}).ref && (s.meta || {}).ref === r.ref && (s.finalizedAt || s.editOf)).sort((x, y) => String(y.s._savedAt || '').localeCompare(String(x.s._savedAt || '')))[0];
+        if (!b) {
+          if (!dataSeen.has(r.id)) { dataSeen.add(r.id); console.log('sign-off data: no backup for ' + r.id + ' (ref ' + (r.ref || '—') + ', key ' + String(r.photoKey).slice(0, 8) + ')'); }
+          continue;   // the backup may still turn up, so try again next time
+        }
+        try {
+          const s2 = Object.assign({}, b.s, { photoKey: r.photoKey, declarationAccepted: true });
+          const built = await drafts.buildFor(b.key, s2);
+          const now = readMeta(r.id); now.dataFillAt = new Date().toISOString();
+          if (built && built.data) {
+            fs.mkdirSync(photoDir(r.id), { recursive: true });
+            fs.writeFileSync(path.join(photoDir(r.id), 'data.json'), JSON.stringify(built.data));
+            now.dataFill = 'filled';
+            console.log('sign-off data filled from the backup: ' + r.id + ' (ref ' + (r.ref || '—') + ') — the tenant can sign now');
+          } else { now.dataFill = 'no data in backup'; }
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(now, null, 2));
+        } catch (e) {
+          console.error('sign-off data not filled for ' + r.id + ': ' + e.message);
+        }
+      }
+    } finally { dataBusy = false; }
+  }
+  setTimeout(() => dataFillSweep().catch(() => {}), 45000).unref();
+  setInterval(() => dataFillSweep().catch(() => {}), 5 * 60000).unref();
 
   // Every email we hold for a report (the person who did it first): the admin Email form and the automatic copies.
   // Every email sent about a report, newest first, with when: the copies after payment, links sent from here, and the owner's own copy.
@@ -1518,7 +1587,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
           <a class="btn" href="/admin/reports/${r.id}.pdf?download=1">Download</a>
           ${r.source !== 'uploaded' ? `<a class="btn" href="/admin/reports/${r.id}/edit" title="Open it in the app on this device, change anything, finish again: it replaces this report (same link and payment)">✏️ Edit</a>` : ''}
           ${!notPaid(r) && r.photoKey ? `<button class="btn" type="button" title="Copy the report's online link to send by WhatsApp, text or email" onclick="copyLink(this,'${esc(onlineLink(r) || '/report/' + r.photoKey)}')">🔗 Copy link</button>` : ''}
-          ${!notPaid(r) && r.photoKey ? `<button class="btn" type="button" title="Copy the link to send the tenant so they check the report and sign it online — their signed page is added to this report" onclick="copyLink(this,'${esc((onlineLink(r) || '/report/' + r.photoKey).replace('/report/', '/sign/'))}')">✍️ Sign-off link</button>` : ''}
+          ${signableReport(r) ? `<button class="btn" type="button" title="Copy the link to send the tenant so they check the report and sign it online — their signed page is added to this report" onclick="copyLink(this,'${esc(signShareLink(r) || '/sign/' + r.photoKey)}')">✍️ Sign-off link</button>` : ''}
           ${!notPaid(r) ? `<details class="more mail"><summary class="btn">✉ Email</summary><form class="menu mailf" onsubmit="return sendLink(this, '${r.id}')">
             ${known.length ? `<div class="known"><span>Send to:</span>${known.map((k, i) => `<button type="button" class="kchip${i ? '' : ' on'}" data-e="${esc(k.e)}" data-n="${esc(k.name)}" onclick="pickTo(this)"><b>${esc(k.name || k.e)}</b> · ${esc(k.who)}<i>${esc(k.e)}</i></button>`).join('')}</div>` : ''}
             <label>Email address<input type="email" name="to" required placeholder="name@example.com" value="${esc(known[0] ? known[0].e : '')}"></label>
