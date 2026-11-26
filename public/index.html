@@ -1807,7 +1807,33 @@ function openPhotoTargets(targets, idx){
   if (!cameraSupported()){ document.getElementById('photoInput').click(); return; }
   openCamera(targets, idx);
 }
+/* Photos the right way round: with the phone's rotation lock on, the page stays portrait while the phone is held
+   sideways, so the camera's frames come out sideways. The phone's tilt (gravity) says which way is up, and
+   cameraShutter() turns the picture upright before it is stamped. iOS asks once for motion access (from the tap
+   that opens the camera) and reports gravity with the opposite sign to Android. */
+const tilt = { up: 0, on: false };
+function tiltListen(){
+  if (tilt.on || typeof DeviceMotionEvent === 'undefined') return;
+  const start = () => { if (tilt.on) return; tilt.on = true; window.addEventListener('devicemotion', onTilt); };
+  try {
+    if (typeof DeviceMotionEvent.requestPermission === 'function') DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') start(); }).catch(() => {});
+    else start();
+  } catch (e) {}
+}
+function onTilt(e){
+  const g = e.accelerationIncludingGravity; if (!g || g.x == null || g.y == null) return;
+  const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const x = ios ? -g.x : g.x, y = ios ? -g.y : g.y, m = Math.hypot(x, y);
+  if (m < 4) return;                                        // lying flat: keep the last clear reading
+  if (Math.abs(y) > 0.75 * m) tilt.up = y > 0 ? 0 : 180;
+  else if (Math.abs(x) > 0.75 * m) tilt.up = x > 0 ? 270 : 90;   // degrees clockwise to turn the picture upright
+}
+function screenAngle(){
+  try { if (screen.orientation && typeof screen.orientation.angle === 'number') return screen.orientation.angle; } catch (e) {}
+  return typeof window.orientation === 'number' ? (window.orientation + 360) % 360 : 0;
+}
 async function openCamera(targets, idx){
+  tiltListen();
   Object.assign(camera, { open: true, targets, idx, announced: null });
   const el = document.getElementById('camera');
   el.classList.remove('hidden');
@@ -1881,9 +1907,14 @@ function cameraShutter(){
   if (!camera.stream || !v.videoWidth) return;
   const t = cameraTarget();
   { const r = resolveTarget(t); if (r && r.room && roomPhotoSpace(r.room, r.item || null) - camera.saving <= 0){ notice(roomFullMessage(r.room, r.item || null)); return; } }
-  const c = document.createElement('canvas');
-  c.width = v.videoWidth; c.height = v.videoHeight;
-  c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+  const c = document.createElement('canvas'), W = v.videoWidth, H = v.videoHeight;
+  // Turned upright only while the page itself is upright (portrait, rotation lock on): when the page turns with
+  // the phone, the camera's frames already do.
+  const turn = (tilt.on && screenAngle() === 0 && H >= W) ? tilt.up : 0, side = turn === 90 || turn === 270;
+  c.width = side ? H : W; c.height = side ? W : H;
+  const cx = c.getContext('2d');
+  cx.translate(c.width / 2, c.height / 2); cx.rotate(turn * Math.PI / 180);
+  cx.drawImage(v, -W / 2, -H / 2, W, H);
   const flash = document.getElementById('camFlash');
   flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
   camera.saving++; updateCameraUi();

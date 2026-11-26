@@ -175,7 +175,9 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
     const s = KEY_RE.test(key) && readJson(path.join(dirOf(key), 'state.json'));
     if (!s) return res.status(404).type('text/plain').send('Not found.');
     const m = s.meta || {}, pr = s.property || {}, st = stats(s), [, label] = status(s);
-    const img = (list, alt) => (list || []).map(p => p && PID_RE.test(String(p.id)) ? `<a href="/admin/drafts/${key}/photo/${p.id}" target="_blank"><img loading="lazy" src="/admin/drafts/${key}/photo/${p.id}" alt="${esc(alt)}"></a>` : '').join('');
+    // Each photo with ↺ ↻ to turn it the right way round (saved at once; ?v= is the file's time, so the new turn shows).
+    const ver = id => { try { return Math.round(fs.statSync(path.join(dirOf(key), 'photos', id + '.jpg')).mtimeMs); } catch (e) { return 0; } };
+    const img = (list, alt) => (list || []).map(p => p && PID_RE.test(String(p.id)) ? `<figure class="rp"><a href="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" target="_blank"><img loading="lazy" src="/admin/drafts/${key}/photo/${p.id}?v=${ver(p.id)}" alt="${esc(alt)}"></a><span class="turn"><button type="button" title="Turn anticlockwise" onclick="turnPhoto(this,'${p.id}',-1)">↺</button><button type="button" title="Turn clockwise" onclick="turnPhoto(this,'${p.id}',1)">↻</button></span></figure>` : '').join('');
     const itemText = i => i.notApplicable ? 'Not applicable' + (i.naReason ? ': ' + i.naReason : '') : [CONDITION[i.condition] || 'Condition not set', (i.defects || []).filter(d => d !== 'None').join(', ').toLowerCase(), i.clean ? ({ clean: 'clean', needs: 'needs a clean', dirty: 'dirty' }[i.clean] || '') : '', i.working === 'no' ? 'not working' : '', i.desc || '', i.conditionNote ? 'note: ' + i.conditionNote : '', i.aiObservation ? 'AI: ' + i.aiObservation : ''].filter(Boolean).join(' · ');
     const rooms = (s.rooms || []).map(r => `<section><h2>${esc(r.name)}</h2>
       ${(r.items || []).map(i => `<div class="it"><b>${esc(i.label)}</b><span>${esc(itemText(i))}</span><div class="ph">${img(i.photos, i.label)}</div></div>`).join('')}
@@ -191,6 +193,8 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   section, .head { background: #fff; border-radius: 16px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
   .it { display: grid; grid-template-columns: 180px 1fr; gap: 4px 14px; padding: 10px 0; border-top: 1px solid #E4E8EF; } .it:first-of-type { border-top: 0; }
   .it span { color: #475569; } .ph { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; } .ph img { width: 120px; height: 90px; object-fit: cover; border-radius: 8px; background: #E4E8EF; }
+  figure.rp { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; } figure.rp .turn { display: flex; gap: 4px; }
+  figure.rp .turn button { font-size: 15px; line-height: 1; padding: 4px 10px; } @media print { figure.rp .turn { display: none; } }
   .note { color: #475569; } button { font: inherit; font-weight: 600; padding: 9px 16px; border-radius: 999px; border: 1px solid #CDD4DF; background: #fff; cursor: pointer; }
   .sig { max-width: 260px; background: #fff; border: 1px solid #E4E8EF; border-radius: 8px; }
   @media (max-width: 640px) { .it { grid-template-columns: 1fr; } }
@@ -204,7 +208,21 @@ ${(pr.exterior && pr.exterior.photos || []).length ? `<section><h2>Front of the 
 ${rooms}
 ${meters || keys ? `<section><h2>Meters and keys</h2>${meters}${keys}</section>` : ''}
 ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUrl) ? `<section><h2>Signature</h2><img class="sig" src="${esc(s.signatureDataUrl)}" alt="Signature"><p class="sub">${esc(m.signedBy || m.inspectorName || '')}${s.finalizedAt ? ' · finished ' + esc(when(s.finalizedAt)) : ''}</p></section>` : ''}
-</main></body></html>`);
+</main>
+<script>function turnPhoto(b,id,dir){b.disabled=true;fetch(location.pathname+'/photo/'+id+'/turn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dir:dir})}).then(function(r){return r.json()}).then(function(d){if(!d.ok)throw 0;var f=b.closest('figure');f.querySelectorAll('img,a').forEach(function(e){var k=e.tagName==='A'?'href':'src';e[k]=e.getAttribute(k).replace(/v=\d*/,'v='+d.v)})}).catch(function(){alert('That photo could not be turned. Reload the page and try again.')}).then(function(){b.disabled=false})}</script>
+</body></html>`);
+  });
+  // Turn a photo a quarter, saved in the photo itself (EXIF orientation, no re-compression; jpeg-orient.js), so it
+  // shows the right way round here, in its full-size view and in any report the server makes from this backup.
+  app.post('/admin/drafts/:key/photo/:id/turn', requireAdmin, (req, res) => {
+    const key = String(req.params.key), id = String(req.params.id);
+    if (!sameOrigin(req)) return res.status(403).json({ error: 'Turn photos from the report page.' });
+    if (!KEY_RE.test(key) || !PID_RE.test(id)) return res.status(404).json({ error: 'Not found.' });
+    const file = path.join(dirOf(key), 'photos', id + '.jpg');
+    let buf; try { buf = fs.readFileSync(file); } catch (e) { return res.status(404).json({ error: 'This photo hasn’t been backed up yet.' }); }
+    const out = require('./jpeg-orient').turn(buf, Number((req.body || {}).dir) < 0 ? -1 : 1);
+    fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file);
+    res.json({ ok: true, v: Math.round(fs.statSync(file).mtimeMs) });
   });
   app.get('/admin/drafts/:key/photo/:id', requireAdmin, (req, res) => {
     const key = String(req.params.key), id = String(req.params.id);

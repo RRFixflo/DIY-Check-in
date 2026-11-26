@@ -51,7 +51,7 @@ async function render(job){
     if (!o || typeof o !== 'object') return;
     if (o.id && /^[\w-]{1,80}$/.test(String(o.id)) && 'ts' in o && !o.dataUrl) {
       const f = path.join(job.photosDir, String(o.id) + '.jpg');
-      if (fs.existsSync(f)) { o.dataUrl = 'data:image/jpeg;base64,' + fs.readFileSync(f).toString('base64'); byUrl.set(o.dataUrl, String(o.id)); }
+      if (fs.existsSync(f)) { o.dataUrl = 'data:image/jpeg;base64,' + require('./jpeg-orient').upright(fs.readFileSync(f)).toString('base64'); /* upright: a photo turned on /admin */ byUrl.set(o.dataUrl, String(o.id)); }
     }
     Object.values(o).forEach(walk);
   })(s);

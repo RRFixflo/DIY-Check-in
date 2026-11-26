@@ -4,7 +4,8 @@
 // and photos (the date and time are already burned into each photo), meters, keys, notes and the signature.
 // A4 landscape, pdf-lib, standard fonts (text is kept to characters they can show).
 const fs = require('fs');
-const { PDFDocument, StandardFonts, rgb, PDFString, PDFName } = require('pdf-lib');
+const { PDFDocument, StandardFonts, rgb, PDFString, PDFName, degrees } = require('pdf-lib');
+const { getOrientation, TURN } = require('./jpeg-orient');
 
 const W = 841.89, H = 595.28, M = 36;
 const NAVY = rgb(0.106, 0.18, 0.294), SOFT = rgb(0.35, 0.39, 0.45), LINE = rgb(0.85, 0.82, 0.76), PAPER = rgb(0.98, 0.965, 0.94);
@@ -26,7 +27,7 @@ async function buildFromBackup(s, photoFile, out){
   const cache = new Map();
   const photo = async p => {
     const id = p && p.id; if (!id) return null;
-    if (!cache.has(id)) { let img = null; try { const f = photoFile(id); if (f && fs.existsSync(f)) img = await doc.embedJpg(fs.readFileSync(f)); } catch (e) {} cache.set(id, img); }
+    if (!cache.has(id)) { let img = null; try { const f = photoFile(id); if (f && fs.existsSync(f)) { const buf = fs.readFileSync(f); img = await doc.embedJpg(buf); img._turn = TURN[getOrientation(buf)] || 0; } } catch (e) {} cache.set(id, img); }
     return cache.get(id);
   };
   let page, y;
@@ -39,7 +40,18 @@ async function buildFromBackup(s, photoFile, out){
     if (line) lines.push(line); return lines;
   };
   const text = (t, x, size, font, color, width) => { for (const l of wrap(t, font, size, width || W - 2 * M)) { if (y < M + size) newPage(); page.drawText(l, { x, y: y - size, size, font, color: color || NAVY }); y -= size + 3; } };
-  const fit = (img, x, top, bw, bh) => { const r = Math.min(bw / img.width, bh / img.height), w = img.width * r, h = img.height * r; page.drawImage(img, { x: x + (bw - w) / 2, y: top - bh + (bh - h) / 2, width: w, height: h }); };
+  // Draws a photo as large as fits in the box, turned upright when it was rotated on /admin (img._turn, degrees
+  // clockwise, from its EXIF orientation). Returns where it landed, for the photo's link.
+  const drawTurned = (img, x, top, bw, bh) => {
+    const t = img._turn || 0, side = t % 180 !== 0, dW = side ? img.height : img.width, dH = side ? img.width : img.height;
+    const r = Math.min(bw / dW, bh / dH), DW = dW * r, DH = dH * r, bx = x + (bw - DW) / 2, by = top - bh + (bh - DH) / 2;
+    if (t === 90) page.drawImage(img, { x: bx, y: by + DH, width: DH, height: DW, rotate: degrees(-90) });
+    else if (t === 180) page.drawImage(img, { x: bx + DW, y: by + DH, width: DW, height: DH, rotate: degrees(180) });
+    else if (t === 270) page.drawImage(img, { x: bx + DW, y: by, width: DH, height: DW, rotate: degrees(90) });
+    else page.drawImage(img, { x: bx, y: by, width: DW, height: DH });
+    return { px: bx, py: by, w: DW, h: DH };
+  };
+  const fit = (img, x, top, bw, bh) => { drawTurned(img, x, top, bw, bh); };
   // Each photo is numbered once, in the order drawn, and tapping it opens it full size online.
   const link = (x, yb, w, h, url) => {
     const annot = doc.context.obj({ Type: 'Annot', Subtype: 'Link', Rect: [x, yb, x + w, yb + h], Border: [0, 0, 0],
@@ -55,8 +67,7 @@ async function buildFromBackup(s, photoFile, out){
   };
   const place = async (p, title, x, top, bw, bh) => {
     const img = await photo(p); if (!img) return false;
-    const r = Math.min(bw / img.width, bh / img.height), w = img.width * r, h = img.height * r, px = x + (bw - w) / 2, py = top - bh + (bh - h) / 2;
-    page.drawImage(img, { x: px, y: py, width: w, height: h });
+    const { px, py, w, h } = drawTurned(img, x, top, bw, bh);
     const n = numberOf(p, title);
     if (out.base && n) link(px, py, w, h, out.base + n);
     return true;
