@@ -144,10 +144,14 @@ function mount(app, ctx){
   }
   // Paid = the phone's paid copy arrived (submittedId), or the phone had a paid link, code or agent link (or the owner was
   // signed in) when it last backed up (_access): that's what pays, even if the phone's own upload then failed.
-  const paidS = s => !!(s.submittedId || s._access);
+  // A report finished on the phone can be stored "not paid yet", then paid for a moment later: the paid copy upgrades
+  // the stored report in place, but this backup last synced before the payment, so its own flags still look unpaid.
+  // Ask the stored report itself (ctx.reportPaidFor) so the list shows the real state, not the backup's stale one.
+  const reportPaid = s => !!(ctx.reportPaidFor && ctx.reportPaidFor(s));
+  const paidS = s => !!(s.submittedId || s._access || reportPaid(s));
   // What unlocked it, in words (a £29.99 purchase and who, an agent's tenant link, the access code, the owner).
   const via = s => ctx.accessLabel ? ctx.accessLabel(s._token, s._byOwner) : '';
-  const status = s => !s.finalizedAt && signedNotFinished(s) ? ['wait', 'Signed · finishing by itself' + (SIGNED_IDLE_MS > Date.now() - new Date(s._savedAt || 0).getTime() ? ' once the phone has been quiet for ' + Math.round(SIGNED_IDLE_MS / 60000) + ' minutes' : '')] : s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
+  const status = s => !s.finalizedAt && signedNotFinished(s) ? ['wait', 'Signed · finishing by itself' + (SIGNED_IDLE_MS > Date.now() - new Date(s._savedAt || 0).getTime() ? ' once the phone has been quiet for ' + Math.round(SIGNED_IDLE_MS / 60000) + ' minutes' : '')] : s.submittedId ? ['sent', 'Finished and paid'] : s.finalizedAt && s._access ? ['sent', (/paid/.test(via(s)) ? 'Finished and paid' : 'Finished · access allowed') + (s._serverReportId ? ' · report made from the backup' : ' · PDF still arriving')] : s.finalizedAt && reportPaid(s) ? ['sent', 'Finished and paid'] : s.finalizedAt ? ['wait', 'Finished, not paid yet'] : ['', 'In progress'];
 
   // The list on /admin.
   function draftsHTML(){
@@ -159,8 +163,8 @@ function mount(app, ctx){
         <div class="sub">${(s.rooms || []).length} rooms · ${st.done}/${st.items} items photographed · ${st.photos} photos · last saved ${esc(when(s._savedAt))}</div>${(s._reminders || []).length ? `<div class="sub">🔔 Reminded ${s._reminders.length}× · last ${esc(when(s._reminders[s._reminders.length - 1].at))}${s._remindOpened ? ' · 👁 opened ' + esc(when(s._remindOpened)) : ''}</div>` : ''}${s._access ? `<div class="sub">💳 ${esc(via(s) || 'Access allowed, but how isn’t recorded (backed up before this was tracked)')}</div>` : ''}</div>
         <div class="actions"><a class="btn" href="/admin/drafts/${key}" target="_blank" rel="noopener">View</a>
         <a class="btn" href="/app?ownerEdit=${key}" title="Open this report in the app on this device to change anything">✏️ Edit in the app</a>
-        ${s.submittedId || s._serverReportId || s.unpaidId ? '' : `<a class="btn" href="/admin/drafts/${key}/remind">🔔 Remind to finish</a>`}
-        ${s.submittedId || s._serverReportId ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
+        ${s.submittedId || s._serverReportId || s.unpaidId || reportPaid(s) ? '' : `<a class="btn" href="/admin/drafts/${key}/remind">🔔 Remind to finish</a>`}
+        ${s.submittedId || s._serverReportId || reportPaid(s) ? '' : `<form method="post" action="/admin/drafts/${key}/make" onsubmit="this.querySelector('button').textContent='Making it…';return confirm('Make the report from this backup now and mark it as complete and paid?${s.finalizedAt ? '' : ' It hasn’t been finished on the phone yet: it will have what has been done so far.'}')"><button class="btn">Make the report now</button></form>`}
         <form method="post" action="/admin/drafts/${key}/delete" onsubmit="return confirm('Delete this backup? This cannot be undone.')"><button class="btn danger">Delete</button></form></div></li>`;
     }).join('');
     const waiting = all.filter(d => d.s.finalizedAt && !paidS(d.s)).length;

@@ -802,8 +802,16 @@ var se=_g('signemail');if(se)se.onclick=function(){location.href='mailto:?subjec
     return body.id;
   }
   const reportsAccessFree = () => /^(off|false|0|no)$/i.test(String(process.env.DIY_PAYWALL || ''));
+  // Whether a backup's own stored report has been paid for. The phone can finish and store a report "not paid yet"
+  // (sendUnpaidCopy), then the person pays — the paid copy upgrades the stored report in place (paidAt), but the
+  // backup, which last synced before paying, still looks unpaid on its own. So the "Reports in progress" list asks
+  // the stored report, not just the backup's own flags, whether it was paid. Memoised briefly: draftsHTML asks it
+  // once per row, and listReports() scans the folder.
+  let _paidRepAt = 0, _paidReps = [];
+  const paidReports = () => { const n = Date.now(); if (n - _paidRepAt > 4000) { try { _paidReps = listReports().filter(r => !notPaid(r)); } catch (e) { _paidReps = []; } _paidRepAt = n; } return _paidReps; };
   const drafts = require('./drafts').mount(app, { REPORTS_DIR, esc, clip, clientIp, limiter, deviceName, notify: notifyOwner, requireAdmin, sameOrigin, PUBLIC_URL,
-    hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)) });
+    hasAccess, accessToken, isOwnerReq: req => signedIn(req), accessLabel, fromBackup, alreadyStored: s => listReports().some(r => r.key === backupKey(s)),
+    reportPaidFor: s => { try { return paidReports().some(r => isBackupOf(s, r)); } catch (e) { return false; } } });
   shared.drafts = drafts;
 
   // Reminding someone to finish their report (the owner asked): /admin → Reports in progress → 🔔 Remind. The email (or
