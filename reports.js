@@ -909,6 +909,40 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   }
   setInterval(() => liveEditSweep().catch(() => {}), 30000).unref();
 
+  // Photos turned upright in a backup (automatically or with ↺ ↻ on /admin; drafts.js orientSweep) put right in the
+  // stored report too (the owner: "rebuild the reports that had sideways photos"): two minutes after the last turn,
+  // the report made from that backup is rebuilt with the app's own design and replaced in place (same id, link,
+  // payment and copies), its full-size photos replaced. A signed copy stays the version that was signed.
+  let uprightBusy = false;
+  async function uprightSweep(){
+    if (uprightBusy) return; uprightBusy = true;
+    try {
+      for (const { key, s, om } of drafts.turnedSince()) {
+        const turnedAt = om['#turnedAt'];
+        if (Date.now() - Date.parse(turnedAt) < 2 * 60000) continue;
+        if (s.editOf) continue;   // an edit in progress rebuilds it itself (liveEditSweep)
+        const r = (s.finalizedAt || s._serverReportId) ? listReports().find(x => isBackupOf(s, x)) : null;
+        // Not stored yet: wait for it (the phone's own PDF still has the photos as taken), for 30 days at most.
+        if (!r) { if (Date.now() - Date.parse(s._savedAt || turnedAt) > 30 * 864e5) drafts.markUprightBuilt(key, turnedAt); continue; }
+        if (r.source === 'uploaded') { drafts.markUprightBuilt(key, turnedAt); continue; }
+        try {
+          const s2 = Object.assign({}, s, { declarationAccepted: true, photoKey: r.photoKey || s.photoKey, finalizedAt: s.finalizedAt || r.finalizedAt });
+          const { pdf, photos, photoFile } = await drafts.buildFor(key, s2);
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.pdf'), pdf);
+          const dir = photoDir(r.id);
+          try { fs.readdirSync(dir).forEach(f => { if (/^\d+\.jpg$/.test(f)) fs.unlinkSync(path.join(dir, f)); }); fs.writeFileSync(path.join(dir, 'index.json'), '{}'); } catch (e) {}
+          attachBackupPhotos(r.id, s2.photoKey, photos, photoFile);
+          const now = readMeta(r.id); now.size = pdf.length; now.uprightRebuiltAt = new Date().toISOString();
+          fs.writeFileSync(path.join(REPORTS_DIR, r.id + '.json'), JSON.stringify(now, null, 2));
+          console.log('report rebuilt with its photos turned upright: ' + r.id + ' (' + (now.address || '') + ', ' + photos.length + ' photos)');
+        } catch (e) { console.error('report not rebuilt after turning photos: ' + r.id + ': ' + e.message); }
+        drafts.markUprightBuilt(key, turnedAt);
+      }
+    } finally { uprightBusy = false; }
+  }
+  setTimeout(() => uprightSweep().catch(() => {}), 3 * 60000).unref();
+  setInterval(() => uprightSweep().catch(() => {}), 60000).unref();
+
   // Full-size photos the phone never sent (the tenant left the page straight after finishing: 37 Galsworthy Avenue,
   // 16 Nov 2026, every /p/ link said "isn't available"). The online backup holds every photo, so after 10 minutes
   // the server numbers them exactly as the phone's PDF did (the app's own builder, run on the backup) and puts in the

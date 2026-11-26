@@ -225,7 +225,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     const out = require('./jpeg-orient').makeUpright(buf, Number((req.body || {}).dir) < 0 ? 270 : 90);
     if (!out) return res.status(422).json({ error: 'That photo could not be turned.' });
     fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file);
-    { const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {}; om[id] = 'owner'; writeJson(of, om); }
+    { const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {}; om[id] = 'owner'; om['#turnedAt'] = new Date().toISOString(); writeJson(of, om); }
     res.json({ ok: true, v: Math.round(fs.statSync(file).mtimeMs) });
   });
   app.get('/admin/drafts/:key/photo/:id', requireAdmin, (req, res) => {
@@ -291,7 +291,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
         for (const id of files) {
           if (norm[id] || !(id in om) || om[id] === 0) continue;
           const file = path.join(dirOf(key), 'photos', id + '.jpg');
-          try { const b = fs.readFileSync(file), out = JO.getOrientation(b) !== 1 ? JO.makeUpright(b, 0) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); } } catch (e) {}
+          try { const b = fs.readFileSync(file), out = JO.getOrientation(b) !== 1 ? JO.makeUpright(b, 0) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); om['#turnedAt'] = new Date().toISOString(); } } catch (e) {}
           norm[id] = 1; await new Promise(r => setImmediate(r));
         }
         writeJson(of, om);
@@ -302,7 +302,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
           const batch = todo.slice(i, i + 8), bufs = [];
           for (const id of batch) { try { bufs.push(fs.readFileSync(path.join(dirOf(key), 'photos', id + '.jpg'))); } catch (e) { bufs.push(null); } }
           const ask = batch.map((id, n) => bufs[n] && JO.getOrientation(bufs[n]) === 1 ? n : -1).filter(n => n >= 0);
-          batch.forEach((id, n) => { if (bufs[n] && JO.getOrientation(bufs[n]) !== 1) { const out = JO.makeUpright(bufs[n], 0); if (out) { const f = path.join(dirOf(key), 'photos', id + '.jpg'); fs.writeFileSync(f + '.tmp', out); fs.renameSync(f + '.tmp', f); } om[id] = 'owner'; norm[id] = 1; } });
+          batch.forEach((id, n) => { if (bufs[n] && JO.getOrientation(bufs[n]) !== 1) { const out = JO.makeUpright(bufs[n], 0); if (out) { const f = path.join(dirOf(key), 'photos', id + '.jpg'); fs.writeFileSync(f + '.tmp', out); fs.renameSync(f + '.tmp', f); om['#turnedAt'] = new Date().toISOString(); } om[id] = 'owner'; norm[id] = 1; } });
           let turns = [];
           if (ask.length) {
             calls++;
@@ -314,7 +314,7 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
             if (t > 0) {
               const file = path.join(dirOf(key), 'photos', id + '.jpg');
               // Not if the owner turned it by hand meanwhile.
-              try { const now = fs.readFileSync(file), out = JO.getOrientation(now) === 1 ? JO.makeUpright(now, t) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); turned++; } } catch (e) {}
+              try { const now = fs.readFileSync(file), out = JO.getOrientation(now) === 1 ? JO.makeUpright(now, t) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); turned++; om['#turnedAt'] = new Date().toISOString(); } } catch (e) {}
               norm[id] = 1;
             }
             om[id] = t > 0 ? t : 0;
@@ -399,7 +399,11 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
     return ids.filter(id => !fs.existsSync(path.join(dirOf(key), 'photos', id + '.jpg'))).length;
   }
   const saveState = (key, patch) => { const now = readJson(path.join(dirOf(key), 'state.json')); if (now) writeJson(path.join(dirOf(key), 'state.json'), Object.assign(now, patch)); };
-  return { missingPhotos, saveState, draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list, orientSweep };
+  // Backups with photos turned since their report was last rebuilt for it (reports.js uprightSweep).
+  const turnedSince = () => list().map(({ key, s }) => ({ key, s, om: readJson(path.join(dirOf(key), 'orient.json')) || {} }))
+    .filter(({ om }) => om['#turnedAt'] && !(om['#rebuiltAt'] >= om['#turnedAt']));
+  const markUprightBuilt = (key, at) => { const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {}; om['#rebuiltAt'] = at; writeJson(of, om); };
+  return { missingPhotos, saveState, draftsHTML, finishedOnly, rebuild, backupFor, makeNow, buildFor, findBackup, all: list, orientSweep, turnedSince, markUprightBuilt };
 }
 
 module.exports = { mount };
