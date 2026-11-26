@@ -691,6 +691,21 @@
 .room-photo-btn { display: inline-flex; align-items: center; gap: 8px; }
 .room-photo-btn svg { width: 18px; height: 18px; }
 .who-line{margin-top:6px;font-size:14px;opacity:.92}.who-line strong{font-weight:600}.who-change{margin-left:6px;background:rgba(255,255,255,.16);color:inherit;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font:inherit;font-size:13px;cursor:pointer}
+/* Continue-on-your-phone hand-off (shown only on a computer, where there's no good camera) */
+.handoff-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:860px;margin:0 auto;padding:10px 16px;background:var(--accent-soft);border-bottom:1px solid var(--line);color:var(--ink);font-size:14px;line-height:1.4}
+.handoff-bar[hidden]{display:none}
+.handoff-bar .hb-txt{min-width:0}
+.handoff-bar .hb-acts{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.handoff-bar .hb-x{appearance:none;background:transparent;border:none;color:var(--ink-faint);font-size:15px;line-height:1;padding:8px;cursor:pointer;border-radius:8px;min-height:auto}
+.handoff-bar .hb-x:hover{color:var(--accent)}
+.handoff-qr{display:block;width:220px;max-width:70vw;height:auto;margin:4px auto 2px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;box-sizing:border-box}
+.hf-lead{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0 0 4px}
+.hf-qrwrap{text-align:center}
+.hf-or{font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 8px}
+.hf-share{display:flex;flex-wrap:wrap;gap:8px}
+.hf-share .btn{text-decoration:none}
+.hf-link{margin:12px 0 0;font-size:12px;color:var(--ink-faint)}
+.hf-link code{word-break:break-all}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/floorplan.css">
@@ -704,6 +719,13 @@
     <button type="button" class="restart-btn" id="restartBtn" onclick="startAgain()" title="Start again" aria-label="Start again" hidden><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Start again</span></button>
   </div>
 </header>
+<div id="handoffBar" class="handoff-bar" hidden>
+  <span class="hb-txt">📱 <strong>Finish faster on your phone</strong> — the camera’s right there, so you can photograph each room.</span>
+  <span class="hb-acts">
+    <button type="button" class="btn btn-sm btn-primary" onclick="openHandoff()">Continue on my phone →</button>
+    <button type="button" class="hb-x" onclick="dismissHandoff()" aria-label="Hide this">✕</button>
+  </span>
+</div>
 <div id="app"><p style="padding:40px 20px;color:#8A96A8;font-family:'Inter',sans-serif;text-align:center;">Loading DIY Inventory…</p></div>
 <div id="camera" class="camera hidden" role="dialog" aria-modal="true" aria-label="Camera">
   <video id="cameraVideo" playsinline muted autoplay></video>
@@ -741,6 +763,12 @@
   <div class="example-card">
     <div class="example-head"><strong id="typeTitle">Change the report type</strong><button type="button" class="btn-ghost" onclick="closeTypeChange()" aria-label="Close">✕</button></div>
     <div id="typeBody"></div>
+  </div>
+</div>
+<div id="handoffBox" class="example-box hidden" onclick="if (event.target === this) closeHandoff(event)" role="dialog" aria-modal="true" aria-labelledby="handoffTitle">
+  <div class="example-card">
+    <div class="example-head"><strong id="handoffTitle">📱 Continue on your phone</strong><button type="button" class="btn-ghost" onclick="closeHandoff(event)" aria-label="Close">✕</button></div>
+    <div id="handoffBody"></div>
   </div>
 </div>
 <div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
@@ -1405,6 +1433,64 @@ function showExample(label, tip){
   document.getElementById('exampleBox').classList.remove('hidden');
 }
 function closeExample(e){ if (e) e.stopPropagation(); document.getElementById('exampleBox').classList.add('hidden'); }
+
+/* ===== Continue on your phone (desktop → phone hand-off) =====
+   The whole report is done with the phone's camera, room by room. People who open it on a computer get all the way
+   through setup and then stop at the first photo (there's no good camera on a laptop). On a computer we offer to carry
+   on from the phone: the backup already syncs to the server, so /continue/<draftKey> reopens it there, exactly where
+   they are, with their rooms and photos. Shown only on a computer, only once a report is under way, and dismissible. */
+function onComputer(){
+  try {
+    var mm = window.matchMedia;
+    if (mm && mm('(pointer: coarse)').matches) return false;           // touch is the main pointer → phone/tablet
+    if (/Mobi|Android|iPhone|iPod/i.test(navigator.userAgent)) return false;
+    return !!(mm && mm('(pointer: fine)').matches);                     // a mouse/trackpad → a computer
+  } catch (e) { return false; }
+}
+function handoffLink(){ return location.origin + '/continue/' + ((state && state.draftKey) || ''); }
+function updateHandoff(){
+  var bar = document.getElementById('handoffBar'); if (!bar) return;
+  var ok = onComputer()
+    && state && !state.finalizedAt
+    && ['capture', 'details', 'review'].indexOf(state.view) !== -1
+    && Array.isArray(state.rooms) && state.rooms.length
+    && !(typeof accessUi !== 'undefined' && accessUi && accessUi.owner);
+  if (ok) { try { ensureDraftKey(state); } catch (e) {} if (!/^[a-f0-9]{32}$/.test(state.draftKey || '')) ok = false; } // need a backup key for the /continue link
+  if (ok) { try { if (localStorage.getItem('diyHandoffX:' + state.draftKey)) ok = false; } catch (e) {} }
+  bar.hidden = !ok;
+  if (ok && !bar._synced) { bar._synced = true; try { scheduleCloud(0); } catch (e) {} } // pre-sync so the link works the moment they scan
+}
+function dismissHandoff(){
+  try { if (state && state.draftKey) localStorage.setItem('diyHandoffX:' + state.draftKey, '1'); } catch (e) {}
+  var b = document.getElementById('handoffBar'); if (b) b.hidden = true;
+}
+function openHandoff(){
+  if (!(state && /^[a-f0-9]{32}$/.test(state.draftKey || ''))) return;
+  try { scheduleCloud(0); } catch (e) {}   // make sure the backup is on the server before they scan
+  var box = document.getElementById('handoffBox'); if (!box) return;
+  var link = handoffLink();
+  var msg = 'Carry on my DIY Inventory report on my phone: ' + link;
+  var safe = link.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  document.getElementById('handoffBody').innerHTML =
+    '<p class="hf-lead">Your report is saved. Point your phone’s camera at this code to carry on exactly where you are — your rooms and photos come with you.</p>'
+    + '<div class="hf-qrwrap"><img class="handoff-qr" alt="Scan with your phone to continue" src="/api/qr?key=' + encodeURIComponent(state.draftKey) + '"></div>'
+    + '<p class="hf-or">Or send yourself the link:</p>'
+    + '<div class="hf-share">'
+    + '<button type="button" class="btn btn-sm" id="hfCopy">📋 Copy link</button>'
+    + '<a class="btn btn-sm" href="https://wa.me/?text=' + encodeURIComponent(msg) + '" target="_blank" rel="noopener">💬 WhatsApp</a>'
+    + '<a class="btn btn-sm" href="sms:?&body=' + encodeURIComponent(msg) + '">📱 Text</a>'
+    + '<a class="btn btn-sm" href="mailto:?subject=' + encodeURIComponent('Continue my DIY Inventory report') + '&body=' + encodeURIComponent('Open this on your phone to carry on where you left off:\n\n' + link) + '">✉ Email</a>'
+    + '</div>'
+    + '<p class="hf-link"><code>' + safe + '</code></p>';
+  box.classList.remove('hidden');
+  var cp = document.getElementById('hfCopy');
+  if (cp) cp.addEventListener('click', function(){
+    (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(
+      function(){ cp.textContent = '✓ Copied'; },
+      function(){ try { prompt('Copy this link', link); } catch (e) {} });
+  });
+}
+function closeHandoff(e){ if (e) e.stopPropagation(); var b = document.getElementById('handoffBox'); if (b) b.classList.add('hidden'); }
 function exampleThumbHTML(label, tip){
   return `<button type="button" class="ex-link" onclick="showExample(${escapeHtml(JSON.stringify(String(label)))}, ${escapeHtml(JSON.stringify(String(tip || '')))})" aria-label="See an example of how to photograph ${escapeHtml(label)}">See example</button>`;
 }
@@ -5313,6 +5399,7 @@ function renderDone(){
 function render(){
   const app = document.getElementById('app');
   try { renderStepper(); renderInner(app); } finally { usPage(); }
+  try { updateHandoff(); } catch (e) {}
 }
 function renderInner(app){
   try {
