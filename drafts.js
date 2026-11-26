@@ -283,18 +283,23 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
       let calls = 0;
       const recent = list().filter(({ s }) => Date.now() - new Date(s._savedAt || s.finalizedAt || 0).getTime() < 30 * 86400000)
         .sort((a, b) => String(b.s._savedAt || '').localeCompare(String(a.s._savedAt || '')));
+      const filesOf = key => { try { return fs.readdirSync(path.join(dirOf(key), 'photos')).filter(f => /^[A-Za-z0-9_-]{1,48}\.jpg$/.test(f)).map(f => f.slice(0, -4)); } catch (e) { return []; } };
+      // First, for every backup: photos turned before by setting EXIF (an earlier version) are turned in the pixels
+      // now, stamp at the bottom (cheap, no AI), so their reports can be rebuilt without waiting for the AI check below.
       for (const { key } of recent) {
-        const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {};
-        let files = []; try { files = fs.readdirSync(path.join(dirOf(key), 'photos')).filter(f => /^[A-Za-z0-9_-]{1,48}\.jpg$/.test(f)).map(f => f.slice(0, -4)); } catch (e) {}
-        // Photos turned before by setting EXIF (an earlier version): turned in the pixels now, stamp at the bottom.
-        const norm = om['#norm'] || (om['#norm'] = {});
-        for (const id of files) {
+        const of = path.join(dirOf(key), 'orient.json'), om = readJson(of); if (!om) continue;
+        const norm = om['#norm'] || (om['#norm'] = {}); let changed = false;
+        for (const id of filesOf(key)) {
           if (norm[id] || !(id in om) || om[id] === 0) continue;
           const file = path.join(dirOf(key), 'photos', id + '.jpg');
-          try { const b = fs.readFileSync(file), out = JO.getOrientation(b) !== 1 ? JO.makeUpright(b, 0) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); om['#turnedAt'] = new Date().toISOString(); } } catch (e) {}
-          norm[id] = 1; await new Promise(r => setImmediate(r));
+          try { const b = fs.readFileSync(file), out = JO.getOrientation(b) !== 1 ? JO.makeUpright(b, 0) : null; if (out) { fs.writeFileSync(file + '.tmp', out); fs.renameSync(file + '.tmp', file); om['#turnedAt'] = new Date().toISOString(); console.log('photo stamp moved to the bottom: ' + id + ' in backup ' + key); } } catch (e) {}
+          norm[id] = 1; changed = true; await new Promise(r => setImmediate(r));
         }
-        writeJson(of, om);
+        if (changed) writeJson(of, om);
+      }
+      for (const { key } of recent) {
+        const of = path.join(dirOf(key), 'orient.json'), om = readJson(of) || {};
+        const files = filesOf(key), norm = om['#norm'] || (om['#norm'] = {});
         const todo = files.filter(id => !(id in om));
         let turned = 0;
         for (let i = 0; i < todo.length; i += 8) {

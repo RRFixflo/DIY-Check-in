@@ -913,7 +913,7 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
   // stored report too (the owner: "rebuild the reports that had sideways photos"): two minutes after the last turn,
   // the report made from that backup is rebuilt with the app's own design and replaced in place (same id, link,
   // payment and copies), its full-size photos replaced. A signed copy stays the version that was signed.
-  let uprightBusy = false;
+  let uprightBusy = false; const uprightWaitLogged = new Set();
   async function uprightSweep(){
     if (uprightBusy) return; uprightBusy = true;
     try {
@@ -923,7 +923,10 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
         if (s.editOf) continue;   // an edit in progress rebuilds it itself (liveEditSweep)
         const r = (s.finalizedAt || s._serverReportId) ? listReports().find(x => isBackupOf(s, x)) : null;
         // Not stored yet: wait for it (the phone's own PDF still has the photos as taken), for 30 days at most.
-        if (!r) { if (Date.now() - Date.parse(s._savedAt || turnedAt) > 30 * 864e5) drafts.markUprightBuilt(key, turnedAt); continue; }
+        if (!r) {
+          if (!uprightWaitLogged.has(key)) { uprightWaitLogged.add(key); console.log('photos turned upright in backup ' + key + ' (' + ((s.meta || {}).address || '') + '): no stored report yet, it will be rebuilt when one arrives'); }
+          if (Date.now() - Date.parse(s._savedAt || turnedAt) > 30 * 864e5) drafts.markUprightBuilt(key, turnedAt); continue;
+        }
         if (r.source === 'uploaded') { drafts.markUprightBuilt(key, turnedAt); continue; }
         try {
           const s2 = Object.assign({}, s, { declarationAccepted: true, photoKey: r.photoKey || s.photoKey, finalizedAt: s.finalizedAt || r.finalizedAt });
