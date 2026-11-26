@@ -289,6 +289,8 @@ ${s.signatureDataUrl && /^data:image\/(png|jpeg);base64,/.test(s.signatureDataUr
       for (const { key } of recent) {
         const of = path.join(dirOf(key), 'orient.json'), om = readJson(of); if (!om) continue;
         const norm = om['#norm'] || (om['#norm'] = {}); let changed = false;
+        // Turned by a version before the rebuild existed (26 Nov, before 13:55): flag it, so its report is rebuilt too.
+        if (!om['#turnedAt'] && Object.keys(om).some(k => k[0] !== '#' && (om[k] === 'owner' || om[k] > 0))) { om['#turnedAt'] = new Date().toISOString(); changed = true; console.log('photos turned earlier in backup ' + key + ': its report will be rebuilt'); }
         for (const id of filesOf(key)) {
           if (norm[id] || !(id in om) || om[id] === 0) continue;
           const file = path.join(dirOf(key), 'photos', id + '.jpg');
