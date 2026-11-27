@@ -378,6 +378,8 @@ const buyPaths = purchases.mount(app, { REPORTS_DIR: reports.REPORTS_DIR, render
 const agentPaths = require('./agents').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, renderPage, clientIp: reports.clientIp, limiter: reports.limiter, notify: reports.notifyOwner,
   isOwner: reports.isOwner, PUBLIC_BASE, addAdminSection: reports.addAdminSection }).paths;
 const clerkSeo = require('./clerkseo').mount(app, { renderPage });
+// A focused landing page for paid search (/inventory-app): noindex, not in the sitemap — for ads, not organic.
+require('./adland').mount(app, { renderPage });
 // Search pages for bulk buyers (inventory software for letting agents, landlords' app, tenant self check-in): agentseo.js.
 const agentSeo = require('./agentseo').mount(app, { renderPage });
 // For inventory companies: the app in their own brand for a monthly fee (enquiries only).
