@@ -110,6 +110,38 @@ async function emailBuyer(rec, link){
   } catch (e) { console.error('report purchase email failed:', e.message); return false; }
 }
 
+// A gentle nudge to a buyer whose paid report link still hasn't been used: the inventory was never finished, so they've
+// had nothing back and may not realise the walk-round has to be done (Danny Bell paid, sent the link to his tenants,
+// and waited two weeks for a report that was never completed — 27 Nov 2026). Reply-to is the owner where set, so they
+// can actually reach a person.
+async function remindUnused(rec, link, replyTo){
+  const key = env('RESEND_API_KEY');
+  if (!key || !rec.email || !link) return false;
+  const from = env('REPORT_FROM_EMAIL') || 'DIY Inventory <onboarding@resend.dev>';
+  const when = new Date(rec.paidAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/London' });
+  const text = [
+    (rec.name ? 'Hello ' + rec.name + ',' : 'Hello,'), '',
+    'You bought a DIY Inventory report on ' + when + ', but it looks like the inventory hasn’t been finished yet — so there’s been nothing to send you.', '',
+    'Nothing is lost: your report is paid for and your link is still active and ready to use.', '',
+    'Your link:', link, '',
+    'Open it on the phone you’ll take the photos with, or send it to your tenant — they do the walk-round on their phone, never see a price, and the finished PDF comes straight to you. A report is only created once that walk-round is completed, which is why you haven’t had one yet.', '',
+    'Already finished it? You can safely ignore this email.',
+    'Need a hand, or would you like a refund instead? Just reply to this email.', '',
+    'DIY Inventory'
+  ].join('\n');
+  try {
+    const body = { from, to: [rec.email], subject: 'Your DIY Inventory report is paid for and waiting', text };
+    if (replyTo && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(replyTo)) body.reply_to = replyTo;
+    const res = await fetch((env('RESEND_API_BASE') || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', {   // the base can point at a mock, for tests only
+      method: 'POST', signal: AbortSignal.timeout(20000),
+      headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { console.error('unused-link reminder failed: HTTP ' + res.status, (await res.text().catch(() => '')).slice(0, 300)); return false; }
+    return true;
+  } catch (e) { console.error('unused-link reminder failed:', e.message); return false; }
+}
+
 function mount(app, ctx){
   FILE = path.join(ctx.REPORTS_DIR, 'report-purchases.json');
   const { renderPage, clientIp, limiter, notify, track, PUBLIC_BASE } = ctx;
@@ -151,6 +183,36 @@ function mount(app, ctx){
     }
     return out;
   }
+
+  // A few days after someone pays, if their single report link still hasn't been used, remind them it's ready and that
+  // the walk-round has to be completed before there's a report. At most twice (about 3 and 7 days after paying), then
+  // we leave it, so a paid-for report is never quietly abandoned. Needs Resend; packs (ongoing agent links) are left out.
+  const REMIND_AFTER_DAYS = 3, REMIND_GAP_DAYS = 4, REMIND_MAX = 2;
+  let reminding = false;
+  async function unusedReminderSweep(){
+    if (reminding || !env('RESEND_API_KEY')) return; reminding = true;
+    try {
+      const now = Date.now(), replyTo = env('REPORT_TO_EMAIL') || '', base = PUBLIC_BASE ? PUBLIC_BASE.replace(/\/+$/, '') : '';
+      if (!base) return;
+      for (const r of readAll().list) {
+        if (r.status !== 'paid' || r.pack || r.usedAt) continue;
+        if (!r.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email)) continue;
+        if ((r.reminders || 0) >= REMIND_MAX) continue;
+        const paid = Date.parse(r.paidAt || r.createdAt || 0) || 0;
+        if (!paid || now - paid < REMIND_AFTER_DAYS * 86400000) continue;
+        const last = Date.parse(r.remindedAt || 0) || 0;
+        if (last && now - last < REMIND_GAP_DAYS * 86400000) continue;
+        const ok = await remindUnused(r, base + '/?access=' + r.token, replyTo);
+        if (ok) {
+          const applied = update(r.ref, x => { if (x.status === 'paid' && !x.usedAt) { x.remindedAt = new Date().toISOString(); x.reminders = (x.reminders || 0) + 1; } });
+          console.log('unused-link reminder sent: ' + r.ref + ' → ' + r.email + ' (reminder ' + ((applied && applied.reminders) || '?') + ')');
+        }
+      }
+    } catch (e) { console.error('unused-link reminder sweep failed:', e.message); }
+    finally { reminding = false; }
+  }
+  setTimeout(() => unusedReminderSweep().catch(() => {}), 2 * 60 * 1000).unref();
+  setInterval(() => unusedReminderSweep().catch(() => {}), 6 * 60 * 60 * 1000).unref();
 
   /* ------------------------------------------------------------ pages */
   const tick = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -392,7 +454,7 @@ if(s&&navigator.share){s.hidden=false;s.addEventListener('click',function(){navi
     const revenue = Math.round(paid.reduce((a, r) => a + (Number(r.amount) || 0), 0) * 100) / 100, unused = paid.filter(r => !r.usedAt).length, prov = payments.provider();
     const when = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
     const rows = paid.slice(0, 300).map(r => `<li><div style="flex:1;min-width:0"><strong>${esc(r.name || r.email || 'No name given')}</strong> <span class="pill sent">£${Number(r.amount).toFixed(2)}</span> ${r.pack ? '<span class="pill">' + r.pack + '-report pack · see Tenant links</span>' : r.usedAt ? '<span class="pill">Used' + (r.usedFor ? ' for ' + esc(r.usedFor) : '') + ', ' + esc(when(r.usedAt)) + '</span>' : '<span class="pill sent">Not used yet</span>'}
-      <div class="sub">${esc(when(r.paidAt || r.createdAt))}${r.email ? ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : ''}${r.for === 'tenant' ? ' · for a tenant' : ''} · ${r.provider === 'sumup' ? 'SumUp' : 'Stripe'}${r.providerRef ? ' · ' + esc(r.providerRef) : ''} · ref ${esc(r.ref)}${r.usedAt ? ' · used ' + esc(when(r.usedAt)) + (r.usedFor ? ' for ' + esc(r.usedFor) : '') : ''}${r.emailedAt ? ' · link emailed' : ''}</div>
+      <div class="sub">${esc(when(r.paidAt || r.createdAt))}${r.email ? ' · <a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : ''}${r.for === 'tenant' ? ' · for a tenant' : ''} · ${r.provider === 'sumup' ? 'SumUp' : 'Stripe'}${r.providerRef ? ' · ' + esc(r.providerRef) : ''} · ref ${esc(r.ref)}${r.usedAt ? ' · used ' + esc(when(r.usedAt)) + (r.usedFor ? ' for ' + esc(r.usedFor) : '') : ''}${r.emailedAt ? ' · link emailed' : ''}${!r.usedAt && r.reminders ? ' · 🔔 reminded to use it ' + r.reminders + '×' + (r.remindedAt ? ', last ' + esc(when(r.remindedAt)) : '') : ''}</div>
       <input readonly value="${esc(linkOf(r, req))}" onclick="this.select()" aria-label="Link to resend" style="width:100%;margin-top:6px;font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit">${r.usedAt ? '' : `<form method="post" action="/admin/purchases/${esc(r.ref)}/used" style="margin-top:6px" onsubmit="return confirm('Mark this purchase as used? Its link will stop working for new reports.')"><button class="btn">Mark as used</button> <span class="sub" style="display:inline">if their report arrived another way (e.g. made from the backup)</span></form>`}${require('./origin').html(r.origin, esc)}</div></li>`).join('');
     return `<details class="codes" id="purchases"><summary>💷 Report purchases <span class="sub" style="display:inline">— ${paid.length ? paid.length + ' sold, £' + revenue.toFixed(2) + ' · ' + unused + ' not used yet' : 'none sold yet'}${pending ? ' · ' + pending + ' started, not paid' : ''}</span></summary>
 <p class="sub" style="margin-top:12px">${PRICE_TEXT} each, on <a href="/buy" target="_blank" rel="noopener">/buy</a>. Card payments: ${prov ? '<b>' + (prov === 'sumup' ? 'SumUp' : 'Stripe') + '</b>' : '<b>not set up</b> (set SUMUP_API_KEY and SUMUP_MERCHANT_CODE, or STRIPE_SECRET_KEY, in Railway). Until then /buy asks people to contact you'}. Copy a link below to send it to the buyer again.</p>
@@ -400,7 +462,7 @@ ${rows ? '<ul>' + rows + '</ul>' : ''}</details>`;
   });
 
   console.log('report purchases: card payments ' + (payments.provider() || 'off (set SUMUP_API_KEY + SUMUP_MERCHANT_CODE, or STRIPE_SECRET_KEY)'));
-  return { paths: ['/buy'] };
+  return { paths: ['/buy'], _unusedReminderSweep: unusedReminderSweep };   // the sweep is exposed only so tests can run it on demand
 }
 
 const CSS = `.buy-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; max-width: 980px; margin: 0 auto; align-items: start; }
