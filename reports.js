@@ -254,6 +254,7 @@ async function emailCopy(r, to, kind, account){
   const type = r.inspectionType || 'Check-in', when = r.finalizedAt ? new Date(r.finalizedAt).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'medium', timeStyle: 'short' }) : '';
   const link = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/report/' + r.photoKey : '';   // view and download online
   const sign = PUBLIC_URL && r.photoKey ? PUBLIC_URL + '/sign/' + r.photoKey : '';
+  const buy = PUBLIC_URL ? PUBLIC_URL + '/buy' : '', agents = PUBLIC_URL ? PUBLIC_URL + '/agents' : '';   // repeat business
   const text = (kind === 'agent' ? [
     'A tenant has finished a ' + type.toLowerCase() + ' report using your DIY Inventory link.', '',
     'Property: ' + (r.address || '—'), 'Completed by: ' + (r.signedBy || r.inspectorName || '—'), when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
@@ -266,12 +267,14 @@ async function emailCopy(r, to, kind, account){
     link ? 'View and download the report: ' + link : '', attach ? 'It is also attached as a PDF.' : '',
     sign ? 'To check and sign it, or send it to your tenant to sign: ' + sign : '', '',
     PUBLIC_URL ? (account ? 'It is also in your landlord dashboard, with the property: ' + PUBLIC_URL + '/account#reports' : 'Keep it with the property in a free landlord account (certificate reminders, rent and receipts): ' + PUBLIC_URL + '/account/sign-up') : '', '',
+    buy ? 'Another property to do? Buy a report at ' + buy + ' — or, for several, a prepaid pack works out cheaper: ' + agents + '.' : '', '',
     'DIY Inventory'
   ] : [
     'Here is your ' + type.toLowerCase() + ' report for ' + (r.address || 'the property') + '.', '',
     when ? 'Finished: ' + when : '', r.rooms ? 'Contents: ' + r.rooms + ' rooms, ' + r.photos + ' photos' : '', '',
     attach ? 'The report is attached as a PDF. Keep this email: it is your copy.' : 'The report is too large to attach.', link ? 'View and download it online at any time: ' + link : '',
     sign ? 'To have it checked and signed by the other party (tenant or landlord), send them this link: ' + sign : '', '',
+    buy ? 'Need another? Do your own check-in, check-out or inspection for £29.99: ' + buy : '', '',
     'DIY Inventory'
   ]).join('\n').replace(/\n{3,}/g, '\n\n').trim();
   try {
@@ -905,6 +908,49 @@ document.getElementById('cp').addEventListener('click',function(){var b=this;(na
     console.log('reminder to finish emailed: ' + key + ' → ' + to);
     res.redirect(303, back + 'sent');
   });
+
+  // Recover near-sales automatically (the owner: get more sales): someone who started a report but drifted off without
+  // finishing gets a friendly "pick up where you left off" email with their /continue/<key> link, at most twice (about a
+  // day and a few days after starting), and only once they've been quiet a while so we don't nag someone mid-report.
+  // Needs Resend; owner's own drafts, signed/edited ones and any the owner already reminded by hand are left alone.
+  const FR_AFTER = 20 * 3600 * 1000, FR_QUIET = 3 * 3600 * 1000, FR_GAP = 2.5 * 86400000, FR_MAX = 2;
+  let finishReminding = false;
+  async function finishReminderSweep(){
+    if (finishReminding || !RESEND_API_KEY || !REPORT_FROM_EMAIL || !PUBLIC_URL) return; finishReminding = true;
+    try {
+      const now = Date.now();
+      for (const { key, s } of drafts.all()) {
+        const m = s.meta || {};
+        if (s.finalizedAt || s._byOwner || s.submittedId || s._serverReportId || s.unpaidId || s.editOf || s.ownerEdit) continue;
+        if (typeof s.signatureDataUrl === 'string' && /^data:image\//.test(s.signatureDataUrl)) continue;   // signed → finishes by itself
+        if (!(s.rooms || []).length || !m.address) continue;                        // a real start: setup done, rooms present
+        if ((s._finishReminders || 0) >= FR_MAX) continue;
+        if ((s._reminders || []).some(x => !/auto/i.test(x.via || ''))) continue;   // the owner already reminded by hand
+        const created = Date.parse(s._createdAt || s._startAlerted || 0) || 0, saved = Date.parse(s._savedAt || 0) || 0;
+        if (!created || now - created < FR_AFTER) continue;                         // give them time to come back on their own
+        if (saved && now - saved < FR_QUIET) continue;                             // still working — leave them be
+        const last = Date.parse(s._finishRemindedAt || 0) || 0;
+        if (last && now - last < FR_GAP) continue;
+        let buyer = ''; try { buyer = s._token ? require('./purchases').emailFor(s._token) : ''; } catch (e) {}
+        const to = [m.copyEmail, buyer].map(e => String(e || '').trim().toLowerCase()).find(e => EMAIL_RE.test(e));
+        if (!to) continue;
+        const link = PUBLIC_URL.replace(/\/+$/, '') + '/continue/' + key;
+        const text = remindText(s, m.inspectorName) + '\n' + link;
+        try {
+          const resp = await fetch((process.env.RESEND_API_BASE || 'https://api.resend.com').replace(/\/+$/, '') + '/emails', { method: 'POST', signal: AbortSignal.timeout(20000),
+            headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.assign({ from: REPORT_FROM_EMAIL, to: [to], subject: 'Finish your ' + String(m.inspectionType || 'check-in').toLowerCase() + ' report' + (m.address ? ' for ' + clip(m.address, 120) : ''), text }, REPORT_TO_EMAIL ? { reply_to: REPORT_TO_EMAIL } : {})) });
+          if (!resp.ok) { console.error('finish reminder failed: HTTP ' + resp.status, (await resp.text().catch(() => '')).slice(0, 200)); continue; }
+        } catch (e) { console.error('finish reminder failed:', e.message); continue; }
+        drafts.saveState(key, { _finishReminders: (s._finishReminders || 0) + 1, _finishRemindedAt: new Date().toISOString(),
+          _reminders: (s._reminders || []).concat([{ at: new Date().toISOString(), via: 'Auto email', to }]).slice(-30) });
+        console.log('finish reminder emailed (automatic): ' + key + ' → ' + to + ' (reminder ' + ((s._finishReminders || 0) + 1) + ')');
+      }
+    } catch (e) { console.error('finish reminder sweep failed:', e.message); }
+    finally { finishReminding = false; }
+  }
+  setTimeout(() => finishReminderSweep().catch(() => {}), 3 * 60 * 1000).unref();
+  setInterval(() => finishReminderSweep().catch(() => {}), 3 * 3600 * 1000).unref();
 
   // A finished report being edited (on the phone, or by the owner from /admin) is kept up to date by itself: about a
   // minute after the last change reaches its online backup (and once its photos are there), the stored report is
