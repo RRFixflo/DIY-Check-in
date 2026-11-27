@@ -679,6 +679,10 @@
 .meter-auto-na { border-left: 4px solid #C49A6C; background: #FBF6EF; }
 .meter-auto-na p { margin: 6px 0 10px; font-size: 14px; color: var(--ink-soft, #4A5568); }
 .meter-auto-msg { color: #8A6A45; }
+.meter-prompt { border-left: 4px solid #C49A6C; background: #FBF6EF; border-radius: 10px; padding: 11px 14px; margin: 4px 0 14px; }
+.meter-prompt strong { display: block; font-size: 14.5px; color: var(--ink); }
+.meter-prompt p { margin: 5px 0 0; font-size: 13.5px; line-height: 1.45; color: var(--ink-soft, #4A5568); }
+.meter-prompt.done { border-left-color: #2E7D5B; background: #F0F7F2; }
 .keys-ai { color: var(--ink-soft, #4A5568); margin: 2px 0 10px; } .keys-ai b { color: var(--ink, #13213A); font-weight: 600; }
 .keys-ai.warn { color: #9A5B1E; } .keys-ai-unsure { color: #8A8F99; }
 .room-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
@@ -2668,6 +2672,23 @@ function autoNaNote(){
   if (!list.length) return '';
   const names = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1] : list[0];
   return 'No reading was added for the ' + names + ', so ' + (list.length > 1 ? 'they are' : 'it is') + ' marked as not at the property and left out of the report. If there is one, go back to Keys & meters and untick “not present”.';
+}
+// A short, live status/reminder at the top of the Utility meters section so the readings aren't skipped (the owner:
+// people were missing the meters step entirely — Danny Bell, 27 Nov 2026). Updates as the readings are filled in.
+function meterPromptHTML(){
+  const pr = state.property, keys = Object.keys(pr.meters || {});
+  const present = keys.filter(k => !pr.meters[k].na);
+  const recorded = present.filter(k => { const m = pr.meters[k]; return (m.reading || '').trim() || (m.photos || []).length; });
+  if (!present.length) return `<div class="meter-prompt done"><strong>All meters marked not at this property</strong></div>`;
+  if (!recorded.length) return `<div class="meter-prompt"><strong>📊 Don’t forget the meter readings</strong><p>Take the electricity, gas and water readings now, with a photo of each meter face — readings on the day are strong protection against later billing disputes. Not at this property? Tick “not present”.</p></div>`;
+  if (recorded.length < present.length) { const left = present.filter(k => !recorded.includes(k)).map(k => METER_LABELS[k].toLowerCase()); return `<div class="meter-prompt"><strong>${recorded.length} of ${present.length} meter readings added</strong><p>Still to add: ${escapeHtml(left.join(', '))}.</p></div>`; }
+  return `<div class="meter-prompt done"><strong>✓ All meter readings added</strong></div>`;
+}
+// True only when the person reached Review without touching the meters at all (every one auto-marked not present):
+// the "skipped the whole step" case, worth a firm nudge.
+function metersAllSkipped(){
+  const keys = Object.keys(state.property.meters || {});
+  return keys.length > 0 && keys.every(k => state.property.meters[k].autoNa && state.property.meters[k].na);
 }
 function detailsMissing(){
   const pr = state.property, d = pr.declaration, missing = [];
@@ -5158,6 +5179,7 @@ function renderDetails(){
     <div class="panel">
       <span class="sec-label">Utility meters</span>
       <div class="photo-tip">${exampleThumbHTML('Electricity meter', 'Straight on and close enough that every digit of the reading is readable.')}<span>Readings taken on the day protect against later billing disputes. Photograph each meter face so every digit is readable.</span></div>
+      ${meterPromptHTML()}
       ${Object.keys(pr.meters).map(key => {
         const m = pr.meters[key];
         return `
@@ -5266,7 +5288,7 @@ function renderReview(){
       <h1>Review &amp; sign</h1>
       <div class="sub">${escapeHtml(state.meta.address)}</div>
     </div>
-    ${autoNaNote() ? `<div class="panel meter-auto-na" role="status"><strong>Meters marked not at the property</strong><p>${escapeHtml(autoNaNote())}</p><button type="button" class="btn btn-sm" onclick="state.view='details';render();window.scrollTo({top:0})">Go back to Keys &amp; meters</button></div>` : ''}
+    ${autoNaNote() ? `<div class="panel meter-auto-na" role="status"><strong>${metersAllSkipped() ? 'No meter readings recorded' : 'Meters marked not at the property'}</strong><p>${metersAllSkipped() ? 'You haven’t added any gas, electricity or water readings. Readings taken on the day are strong protection against later billing disputes — add them now, or carry on if there are no meters at this property.' : escapeHtml(autoNaNote())}</p><button type="button" class="btn${metersAllSkipped() ? '' : ' btn-sm'}" onclick="state.view='details';render();window.scrollTo({top:0})">${metersAllSkipped() ? '📊 Add meter readings' : 'Go back to Keys &amp; meters'}</button></div>` : ''}
     <div class="panel">
       <table class="summary-table">
         <thead><tr><th>Room</th><th>Photos</th><th>Status</th></tr></thead>
