@@ -443,6 +443,10 @@ const seoMount = require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: rep
 const seoAuto = require('./seoauto').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, seo: seoMount, notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE,
   ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, extractJson, extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
 seoOverride = seoAuto.override;
+// AI content factory: writes social posts and short-video scripts into a review queue on /admin (the owner posts
+// them; it never posts by itself). marketing.js.
+require('./marketing').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, isOwner: reports.isOwner, notify: reports.notifyOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE, esc: escHtml, aiEnabled: !!anthropic,
+  ai: anthropic ? { client: anthropic, model: ANTHROPIC_MODEL, extractJson, extra: { ...(AI_EFFORT ? { output_config: { effort: 'low' } } : {}), ...(AI_FALLBACK ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}) } } : null });
 
 app.post('/contact', express.urlencoded({ extended: false, limit: '16kb' }), (req, res) => {
   const r = reports.saveMessage(req, req.body || {});
