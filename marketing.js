@@ -67,12 +67,12 @@ function mount(app, ctx){
     return why;
   }
 
-  async function generate(n, hint){
+  async function generate(n, hint, rules){
     if (!ai) return [];
     const system = `You are the social-media content writer for DIY Inventory, a UK service for doing your own property inventory, check-in, check-out or inspection on a phone. You write short content that gets renters and landlords to the website. Plain, punchy British English, a strong scroll-stopping hook. Today is ${new Date().toISOString().slice(0, 10)}.
 
 Facts (use only these; invent no statistics, studies, prices, laws or company names):
-${FACTS}
+${FACTS}${rules ? '\n\nThe owner’s notes on voice and what to emphasise right now — follow these as long as they don’t break the fixed rules below:\n' + rules : ''}
 
 Angles to draw from (vary them): the deposit is decided on evidence (dated check-in vs check-out); cost vs an inventory clerk (£100–£250 vs £29.99); how-to (what to photograph at check-in); the tenant's side (protect your deposit); the landlord's side (a defensible check-in, or send the tenant the link); myth vs fact; a quick checklist.
 
@@ -111,7 +111,7 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
     busy = true;
     const q = readQ();
     try {
-      const made = await generate(n || TARGET);
+      const made = await generate(n || TARGET, '', q.rules);
       if (!made.length) { logLine(q, 'wrote nothing that passed the checks'); return { ok: false, why: 'nothing passed the checks' }; }
       const now = Date.now();
       made.forEach((m, i) => q.items.unshift(Object.assign({ id: crypto.randomBytes(8).toString('hex'), at: new Date(now + i).toISOString(), status: 'todo' }, m)));
@@ -135,14 +135,31 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
   setTimeout(() => tick().catch(() => {}), 5 * 60 * 1000).unref();
   setInterval(() => tick().catch(() => {}), 6 * 3600 * 1000).unref();
 
+  // "What you see every morning": one phone alert a day (after 07:00 London) with what's waiting for you to post.
+  const londonDay = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+  const londonHour = () => parseInt(new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', hour12: false, hour: '2-digit' }), 10) || 0;
+  function briefTick(){
+    if (process.env.MARKETING_AUTO === 'off' || !notify || londonHour() < 7) return;
+    const q = readQ();
+    if (q.lastBriefDay === londonDay()) return;
+    q.lastBriefDay = londonDay(); writeQ(q);
+    const ready = q.items.filter(x => x.status !== 'posted').length;
+    if (!ready) return;
+    const postedWeek = q.items.filter(x => x.status === 'posted' && Date.parse(x.postedAt || 0) > Date.now() - 7 * 864e5).length;
+    notify({ title: '☕ Marketing brief — ' + ready + ' post' + (ready === 1 ? '' : 's') + ' ready to share', message: ['Waiting on you: ' + ready + ' to post', 'Posted this week: ' + postedWeek, 'Open /admin → Marketing to share today’s.'].join('\n'), tags: ['coffee'], click: (PUBLIC_BASE || '') + '/admin#marketing' });
+  }
+  setTimeout(() => briefTick(), 6 * 60 * 1000).unref();
+  setInterval(() => briefTick(), 60 * 60 * 1000).unref();
+
   const form = require('express').urlencoded({ extended: false, limit: '8kb' });
   app.post('/admin/marketing/write', form, async (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); await writeBatch(TARGET); res.redirect(303, '/admin#marketing'); });
+  app.post('/admin/marketing/rules', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); q.rules = String((req.body || {}).rules || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 1500); writeQ(q); res.redirect(303, '/admin#marketing'); });
   app.post('/admin/marketing/:id/posted', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); const it = q.items.find(x => x.id === req.params.id); if (it){ it.status = it.status === 'posted' ? 'todo' : 'posted'; it.postedAt = it.status === 'posted' ? new Date().toISOString() : ''; writeQ(q); } res.redirect(303, '/admin#marketing'); });
   app.post('/admin/marketing/:id/delete', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); q.items = q.items.filter(x => x.id !== req.params.id); writeQ(q); res.redirect(303, '/admin#marketing'); });
   app.post('/admin/marketing/:id/rewrite', form, async (req, res) => {
     if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.');
     const q = readQ(), it = q.items.find(x => x.id === req.params.id);
-    if (it && ai){ try { const made = await generate(1, 'Write exactly one ' + it.kind + ' for ' + PLATFORMS[it.platform].name + ', on a fresh angle.'); if (made[0]){ Object.assign(it, made[0], { status: 'todo', postedAt: '' }); const q2 = readQ(); const i2 = q2.items.find(x => x.id === it.id); if (i2) Object.assign(i2, it); writeQ(q2); } } catch (e) {} }
+    if (it && ai){ try { const made = await generate(1, 'Write exactly one ' + it.kind + ' for ' + PLATFORMS[it.platform].name + ', on a fresh angle.', q.rules); if (made[0]){ Object.assign(it, made[0], { status: 'todo', postedAt: '' }); const q2 = readQ(); const i2 = q2.items.find(x => x.id === it.id); if (i2) Object.assign(i2, it); writeQ(q2); } } catch (e) {} }
     res.redirect(303, '/admin#marketing');
   });
 
@@ -170,6 +187,9 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
       <p class="sub">An AI writer makes social posts and short-video scripts for you every week. Read them, tap <b>Copy</b>, open the app and post. It never posts by itself — you stay in control.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">${tile(q.items.length, 'Written')}${tile(todo.length, 'Ready to post')}${tile(postedWeek, 'Posted this week')}${tile(TARGET + '/wk', 'Written automatically')}</div>
       <form method="post" action="/admin/marketing/write" style="margin:6px 0 10px"><button class="btn primary" ${ai ? '' : 'disabled'}>✍️ Write ${TARGET} more now</button>${ai ? '' : ' <span class="sub">Set ANTHROPIC_API_KEY in Railway to switch the writer on.</span>'}</form>
+      <details${q.rules ? '' : ''} style="margin:0 0 12px"><summary class="btn" style="display:inline-block">✏️ Your voice &amp; rules${q.rules ? ' ✓' : ''}</summary>
+        <p class="sub" style="margin:8px 0 6px">Set this once. The writer follows it on top of the fixed rules (always £29.99, no VAT, honest claims, no company named). Say your tone, what to push right now, and anything to avoid — e.g. “Friendly and plain. Lead with deposit worries. Push the £29.99 vs a clerk. Mention tenants can do it from a link.”</p>
+        <form method="post" action="/admin/marketing/rules"><textarea name="rules" rows="5" maxlength="1500" style="width:100%;font:inherit;padding:10px;border-radius:10px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:var(--bg);color:var(--ink);resize:vertical" placeholder="Your tone, what to emphasise, what to avoid…">${esc(q.rules || '')}</textarea><div style="margin-top:6px"><button class="btn primary">Save</button></div></form></details>
       ${todo.length ? '<h3 style="margin:14px 0 6px">Ready to post</h3>' + todo.map(card).join('') : '<p class="sub">Nothing waiting. The writer adds a fresh batch each week, or press “Write 5 more now”.</p>'}
       ${posted.length ? `<details style="margin-top:12px"><summary class="btn" style="display:inline-block">✓ Posted (${posted.length})</summary>${posted.slice(0, 40).map(card).join('')}</details>` : ''}
       ${(q.log || []).length ? '<h3 style="margin:16px 0 6px">Recent activity</h3><ul>' + q.log.slice(-8).reverse().map(l => `<li><div class="sub">${esc(fmt(l.at))} · ${esc(l.text)}</div></li>`).join('') + '</ul>' : ''}</details>`;
