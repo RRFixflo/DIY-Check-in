@@ -96,7 +96,12 @@ function mount(app, ctx){
         ${sign.comments && sign.comments.length ? `<div class="card" style="margin-top:14px"><b>Comments</b>${sign.comments.map(c => `<div class="it"><b>${esc(c.room)} · ${esc(c.item)}</b><div class="t">${esc(c.text)}</div></div>`).join('')}</div>` : ''}
         ${sign.general ? `<div class="card" style="margin-top:14px"><b>General comments</b><div class="t">${esc(sign.general)}</div></div>` : ''}
         <p style="margin-top:14px"><a class="btn primary" href="/sign/${key}/signed.pdf" target="_blank" rel="noopener">Download the signed report</a></p>
-        <div class="card" style="margin-top:18px">${facts}</div>`));
+        <div class="card" style="margin-top:18px">${facts}</div>
+        <div class="card" style="margin-top:14px;border-left:4px solid var(--accent)">
+          <b style="font-size:17px">Need to do your own next time?</b>
+          <p class="muted" style="margin:6px 0 12px;font-size:15px;color:var(--ink-soft)">You’ve just seen how this works. You can make your own check-in, check-out or inspection for any property on your phone — a guided photo for every item, each one with the date and time inside the image, tenant sign-off, and a professional PDF. Free to start, £29.99 to download. No subscription, no VAT.</p>
+          <a class="btn primary" href="/">Do your own report</a> <a class="btn ghost" href="/how-it-works" style="margin-left:8px">See how it works</a>
+        </div>`));
     }
     res.type('html').send(page('Check and sign this report', `<span class="kicker" style="color:var(--accent);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.08em">${esc(kind)} report · please check and sign</span>
       <h1>${esc(data.address || r.address)}</h1>

@@ -380,6 +380,8 @@ const agentPaths = require('./agents').mount(app, { REPORTS_DIR: reports.REPORTS
 const clerkSeo = require('./clerkseo').mount(app, { renderPage });
 // A focused landing page for paid search (/inventory-app): noindex, not in the sitemap — for ads, not organic.
 require('./adland').mount(app, { renderPage });
+// A free interactive "what does an inventory clerk cost?" calculator (/inventory-cost-calculator): a link magnet, indexed.
+const costPaths = require('./costcalc').mount(app, { renderPage }).paths;
 // Search pages for bulk buyers (inventory software for letting agents, landlords' app, tenant self check-in): agentseo.js.
 const agentSeo = require('./agentseo').mount(app, { renderPage });
 // For inventory companies: the app in their own brand for a monthly fee (enquiries only).
@@ -423,7 +425,7 @@ const midtermPaths = require('./midterm').mount(app, { REPORTS_DIR: reports.REPO
 const comparePaths = require('./compare').mount(app, { renderPage, esc: escHtml, aiOn: () => !!anthropic }).paths;
 // Guides, room checklists (made from the app's own checklists), sitemap, robots.txt and IndexNow: seo.js.
 const seoMount = require('./seo').mount(app, { ROOT: __dirname, REPORTS_DIR: reports.REPORTS_DIR, renderPage, canonicalBase, PUBLIC_BASE, escHtml,
-  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, clerkPaths, clerkSeo.paths, floorplanPaths, locationPaths, reportPaths, midtermPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
+  sitePaths: Object.values(SITE).map(pg => pg.path).concat(certPaths, landlordPaths, buyPaths, agentPaths, agentSeo.paths, clerkPaths, clerkSeo.paths, floorplanPaths, locationPaths, reportPaths, midtermPaths, costPaths, anthropic ? comparePaths : []), siteBodies: Object.values(SITE).map(pg => pg.body).concat(locMount.bodies),
   faqBody: () => aiText(SITE.faq.body), aiOn: () => !!anthropic });
 // SEO autopilot: a weekly guide for letting agents and landlords with several properties, and titles tuned from Search Console.
 const seoAuto = require('./seoauto').mount(app, { REPORTS_DIR: reports.REPORTS_DIR, seo: seoMount, notify: reports.notifyOwner, isOwner: reports.isOwner, addAdminSection: reports.addAdminSection, PUBLIC_BASE,
