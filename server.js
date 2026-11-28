@@ -36,6 +36,18 @@ app.disable('x-powered-by');
 app.use(compression({ filter: (req, res) => !/^\/(p|ip)\//.test(req.path) && compression.filter(req, res) }));
 app.use(express.json({ limit: '15mb' }));
 
+// Baseline security headers on every response. Per-route handlers can still tighten these (the admin and
+// account pages set Referrer-Policy: no-referrer / same-origin and X-Frame-Options: DENY afterwards, which win).
+// No Content-Security-Policy: the single-file app, the website pages and jsPDF loaded from cdnjs all rely on
+// inline scripts and styles, which a strict CSP would break — so it is deliberately left off.
+app.use((req, res, next) => {
+  res.set('X-Content-Type-Options', 'nosniff');       // don't let a browser guess a type and run an upload as HTML/JS
+  res.set('X-Frame-Options', 'SAMEORIGIN');            // can't be framed by another site (clickjacking)
+  res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.set('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');   // keep visitors on HTTPS
+  next();
+});
+
 app.get(['/health', '/healthz'], (req, res) => res.json({ ok: true }));
 // One address for search engines: with PUBLIC_URL set (e.g. https://diyinventory.co.uk), the www. form of it
 // (or the bare form, if PUBLIC_URL is the www. one) redirects there permanently.
@@ -566,6 +578,14 @@ app.use((req, res) => {
   if (req.path === '/' || /^\/app(\/|$)/.test(req.path)) { res.set('X-Robots-Tag', 'noindex'); return res.sendFile(path.join(PUBLIC, 'index.html')); }
   if ((req.method === 'GET' || req.method === 'HEAD') && req.accepts('html')) return res.status(404).type('html').send(renderPage(NOT_FOUND, req));
   res.status(404).type('text').send('Not found');
+});
+
+// Last line of defence: log any unhandled error for the Railway logs, and send the browser a plain message —
+// never a stack trace (Express's default handler leaks one when NODE_ENV isn't "production").
+app.use((err, req, res, next) => {
+  console.error('unhandled error:', (err && err.stack) || err);
+  if (res.headersSent) return next(err);
+  res.status(500).type('text/plain').send('Something went wrong. Please try again.');
 });
 
 app.listen(PORT, '0.0.0.0', () => {

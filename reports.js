@@ -37,7 +37,12 @@ fs.mkdirSync(REPORTS_DIR, { recursive: true });
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const COPY_TYPES = ['Check-In', 'Check-Out', 'Interim Inspection', 'Renewal Inspection'];
 const clip = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
-const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+// The visitor's IP, for rate limiting and the privacy-preserving analytics hash. Behind Cloudflare the only
+// trustworthy source is CF-Connecting-IP: a client can forge X-Forwarded-For (Cloudflare appends the real IP
+// after whatever the client sends), so trusting the first XFF entry would let someone rotate it to slip past
+// every per-IP limit — the admin-password and access-code brute-force limiters included. Fall back to XFF or
+// the socket only when there is no Cloudflare header (local, or a direct hit on the bare Railway address).
+const clientIp = req => String(req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
 
 // One-off access codes (DIY-XXXX-XXXX / FREE-XXXX-XXXX) made on /admin before the shared code: each is
 // good for one report. New ones are no longer made. Kept in REPORTS_DIR/access-codes.json.
