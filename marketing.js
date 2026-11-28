@@ -51,6 +51,31 @@ function mount(app, ctx){
   const fmt = t => { try { return new Date(t).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }); } catch (e) { return ''; } };
   const ownerOk = req => isOwner(req) && (() => { const o = String(req.get('origin') || req.get('referer') || ''); try { return !o || new URL(o).host === req.get('host'); } catch (x) { return false; } })();
 
+  // Voiceover with ElevenLabs (the reel's Creative Studio → Voiceover). Needs ELEVENLABS_API_KEY in Railway;
+  // ELEVENLABS_VOICE_ID / ELEVENLABS_MODEL optionally pick a voice / model. Turns a reel's narration into an MP3.
+  const VDIR = path.join(DIR, 'voice'), voiceFile = id => path.join(VDIR, id + '.mp3');
+  const elevenKey = () => (process.env.ELEVENLABS_API_KEY || '').trim();
+  // The spoken words only: drop on-screen-caption labels and bracketed stage directions from a script.
+  const narrationOf = it => (it.voiceover || '').trim() ||
+    String(it.script || '').split('\n').map(l => l.replace(/^\s*(hook|beat\s*\d*|scene\s*\d*|step\s*\d*|on[- ]?screen|text|caption|cta|close|outro|visual)\s*[:\-–—]\s*/i, '').replace(/\[[^\]]*\]|\([^)]*\)/g, '').trim()).filter(Boolean).join(' ').slice(0, 1200) ||
+    (it.caption || '');
+  async function tts(text){
+    const key = elevenKey();
+    if (!key) return { ok: false, why: 'no-key' };
+    const voice = (process.env.ELEVENLABS_VOICE_ID || '').trim() || '21m00Tcm4TlvDq8ikWAM';   // "Rachel", a clear public voice
+    const model = (process.env.ELEVENLABS_MODEL || '').trim() || 'eleven_multilingual_v2';
+    const base = (process.env.ELEVENLABS_API_BASE || 'https://api.elevenlabs.io').replace(/\/+$/, '');
+    try {
+      const r = await fetch(base + '/v1/text-to-speech/' + encodeURIComponent(voice), { method: 'POST', signal: AbortSignal.timeout(30000),
+        headers: { 'xi-api-key': key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
+        body: JSON.stringify({ text: String(text || '').slice(0, 2500), model_id: model, voice_settings: { stability: 0.5, similarity_boost: 0.75 } }) });
+      if (!r.ok) { const msg = (await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200); console.error('elevenlabs tts: HTTP ' + r.status + ' ' + msg); return { ok: false, why: r.status === 401 ? 'the API key was refused' : 'HTTP ' + r.status }; }
+      const buf = Buffer.from(await r.arrayBuffer());
+      if (buf.length < 500) return { ok: false, why: 'empty audio' };
+      return { ok: true, buf };
+    } catch (e) { console.error('elevenlabs tts error:', e.message); return { ok: false, why: e.message }; }
+  }
+
   // Reject anything that breaks the site's honesty rules before it reaches the queue.
   function check(it){
     const why = [];
@@ -58,7 +83,7 @@ function mount(app, ctx){
     if (!['post', 'reel'].includes(it.kind)) why.push('bad kind');
     if (!PLATS.includes(it.platform)) why.push('bad platform');
     if (!it.caption || String(it.caption).trim().length < 10) why.push('empty caption');
-    const text = [it.hook, it.caption, (it.hashtags || []).join(' '), it.script].filter(Boolean).join('  ');
+    const text = [it.hook, it.caption, (it.hashtags || []).join(' '), it.script, it.voiceover].filter(Boolean).join('  ');
     BANNED.forEach(([re, w]) => { if (re.test(text)) why.push(w); });
     if (!aiEnabled && AI_WORDS.test(text)) why.push('mentions AI while AI is off');
     const badPrice = [...text.matchAll(/£\s?\d[\d,]*(?:\.\d+)?/g)].map(m => m[0].replace(/\s/g, '')).find(x => !['£29.99', '£100', '£250'].includes(x));
@@ -77,7 +102,7 @@ ${FACTS}${rules ? '\n\nThe owner’s notes on voice and what to emphasise right 
 Angles to draw from (vary them): the deposit is decided on evidence (dated check-in vs check-out); cost vs an inventory clerk (£100–£250 vs £29.99); how-to (what to photograph at check-in); the tenant's side (protect your deposit); the landlord's side (a defensible check-in, or send the tenant the link); myth vs fact; a quick checklist.
 
 Output only a JSON object: {"items":[ ITEM, ... ]} with exactly ${n} items. Each ITEM:
-{"kind":"post" or "reel","platform":"tiktok"/"instagram"/"youtube"/"linkedin","hook":"the first line that stops the scroll","caption":"the caption or video description, 25–60 words, no hashtag list inside it","hashtags":["uklandlord","renting", up to 6, lowercase, no # sign],"script":"ONLY for kind reel: a 25–45 second script — HOOK line, then 3–5 quick beats each with a short on-screen caption, then a close naming diyinventory.co.uk; plain text, one beat per line"}
+{"kind":"post" or "reel","platform":"tiktok"/"instagram"/"youtube"/"linkedin","hook":"the first line that stops the scroll","caption":"the caption or video description, 25–60 words, no hashtag list inside it","hashtags":["uklandlord","renting", up to 6, lowercase, no # sign],"script":"ONLY for kind reel: a 25–45 second script — HOOK line, then 3–5 quick beats each with a short on-screen caption, then a close naming diyinventory.co.uk; plain text, one beat per line","voiceover":"ONLY for kind reel: the spoken narration a voice reads aloud — 40–70 words of natural flowing sentences, no on-screen-caption labels or scene markers, names diyinventory.co.uk once"}
 
 Rules:
 - About half "reel", half "post". Vary platform and angle across the items; make them clearly different from each other.
@@ -97,6 +122,7 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
       const item = { kind: it.kind === 'reel' ? 'reel' : 'post', platform: PLATS.includes(it.platform) ? it.platform : 'instagram',
         hook: String(it.hook || '').trim().slice(0, 200), caption: String(it.caption || '').trim().slice(0, 600),
         script: it.script ? String(it.script).trim().slice(0, 1600) : '',
+        voiceover: it.voiceover ? String(it.voiceover).trim().slice(0, 700) : '',
         hashtags: (Array.isArray(it.hashtags) ? it.hashtags : []).map(h => String(h).replace(/[^a-z0-9]/gi, '').toLowerCase()).filter(Boolean).slice(0, 6) };
       if (item.kind === 'reel' && !item.script) continue;
       if (!check(item).length) out.push(item);
@@ -154,17 +180,35 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
   const form = require('express').urlencoded({ extended: false, limit: '8kb' });
   app.post('/admin/marketing/write', form, async (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); await writeBatch(TARGET); res.redirect(303, '/admin#marketing'); });
   app.post('/admin/marketing/rules', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); q.rules = String((req.body || {}).rules || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, '').trim().slice(0, 1500); writeQ(q); res.redirect(303, '/admin#marketing'); });
+  app.post('/admin/marketing/:id/voice', form, async (req, res) => {
+    if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.');
+    const q = readQ(), it = q.items.find(x => x.id === req.params.id);
+    if (it){ const out = await tts(narrationOf(it));
+      if (out.ok){ try { fs.mkdirSync(VDIR, { recursive: true }); fs.writeFileSync(voiceFile(it.id), out.buf); it.voice = true; it.voiceErr = ''; } catch (e) { it.voiceErr = 'could not save the audio'; } }
+      else it.voiceErr = out.why === 'no-key' ? 'Add ELEVENLABS_API_KEY in Railway → Variables to switch voiceovers on.' : 'Voiceover failed: ' + out.why;
+      writeQ(q); }
+    res.redirect(303, '/admin#marketing');
+  });
+  app.get('/admin/marketing/:id/voice.mp3', (req, res) => {
+    if (!isOwner(req)) return res.status(403).type('text/plain').send('Not allowed.');
+    const id = String(req.params.id);
+    if (!/^[a-f0-9]{16}$/.test(id) || !fs.existsSync(voiceFile(id))) return res.status(404).type('text/plain').send('No voiceover.');
+    res.set('Cache-Control', 'private, no-store').type('audio/mpeg');
+    if (req.query.dl) res.set('Content-Disposition', 'attachment; filename="voiceover-' + id + '.mp3"');
+    fs.createReadStream(voiceFile(id)).pipe(res);
+  });
   app.post('/admin/marketing/:id/posted', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); const it = q.items.find(x => x.id === req.params.id); if (it){ it.status = it.status === 'posted' ? 'todo' : 'posted'; it.postedAt = it.status === 'posted' ? new Date().toISOString() : ''; writeQ(q); } res.redirect(303, '/admin#marketing'); });
-  app.post('/admin/marketing/:id/delete', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); q.items = q.items.filter(x => x.id !== req.params.id); writeQ(q); res.redirect(303, '/admin#marketing'); });
+  app.post('/admin/marketing/:id/delete', form, (req, res) => { if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.'); const q = readQ(); q.items = q.items.filter(x => x.id !== req.params.id); if (/^[a-f0-9]{16}$/.test(req.params.id)) { try { fs.unlinkSync(voiceFile(req.params.id)); } catch (e) {} } writeQ(q); res.redirect(303, '/admin#marketing'); });
   app.post('/admin/marketing/:id/rewrite', form, async (req, res) => {
     if (!ownerOk(req)) return res.status(403).type('text/plain').send('Not allowed.');
     const q = readQ(), it = q.items.find(x => x.id === req.params.id);
-    if (it && ai){ try { const made = await generate(1, 'Write exactly one ' + it.kind + ' for ' + PLATFORMS[it.platform].name + ', on a fresh angle.', q.rules); if (made[0]){ Object.assign(it, made[0], { status: 'todo', postedAt: '' }); const q2 = readQ(); const i2 = q2.items.find(x => x.id === it.id); if (i2) Object.assign(i2, it); writeQ(q2); } } catch (e) {} }
+    if (it && ai){ try { const made = await generate(1, 'Write exactly one ' + it.kind + ' for ' + PLATFORMS[it.platform].name + ', on a fresh angle.', q.rules); if (made[0]){ Object.assign(it, made[0], { status: 'todo', postedAt: '', voice: false, voiceErr: '' }); if (/^[a-f0-9]{16}$/.test(it.id)) { try { fs.unlinkSync(voiceFile(it.id)); } catch (e) {} } const q2 = readQ(); const i2 = q2.items.find(x => x.id === it.id); if (i2) Object.assign(i2, it); writeQ(q2); } } catch (e) {} }
     res.redirect(303, '/admin#marketing');
   });
 
   if (addAdminSection) addAdminSection(req => {
     const q = readQ();
+    const elevenOn = !!elevenKey();
     const todo = q.items.filter(x => x.status !== 'posted'), posted = q.items.filter(x => x.status === 'posted');
     const weekAgo = Date.now() - 7 * 864e5, postedWeek = posted.filter(x => Date.parse(x.postedAt || 0) > weekAgo).length;
     const tile = (n, l) => `<div style="flex:1;min-width:120px;background:var(--bg);border-radius:12px;padding:10px 12px"><div style="font-size:22px;font-weight:800">${n}</div><div class="sub">${l}</div></div>`;
@@ -181,10 +225,11 @@ ${aiEnabled ? '- You may say it can find the changes between the check-in and ch
           <form method="post" action="/admin/marketing/${esc(it.id)}/posted" style="display:inline"><button class="btn">${it.status === 'posted' ? '↩ Not posted' : '✓ Mark posted'}</button></form>
           <form method="post" action="/admin/marketing/${esc(it.id)}/rewrite" style="display:inline"><button class="btn"${ai ? '' : ' disabled'}>↻ Rewrite</button></form>
           <form method="post" action="/admin/marketing/${esc(it.id)}/delete" style="display:inline" onsubmit="return confirm('Delete this one?')"><button class="btn danger">✕</button></form>
-        </div></div>`; };
+        </div>${it.kind === 'reel' && elevenOn ? `<div style="margin-top:8px">${it.voice ? `<audio controls preload="none" src="/admin/marketing/${esc(it.id)}/voice.mp3" style="max-width:100%;vertical-align:middle"></audio> <a class="btn" href="/admin/marketing/${esc(it.id)}/voice.mp3?dl=1">⬇ Download voiceover</a> <form method="post" action="/admin/marketing/${esc(it.id)}/voice" style="display:inline"><button class="btn">🔊 Remake</button></form>` : `<form method="post" action="/admin/marketing/${esc(it.id)}/voice" style="display:inline"><button class="btn">🔊 Make AI voiceover</button></form>`}${it.voiceErr ? ` <span class="sub" style="color:#B42318">${esc(it.voiceErr)}</span>` : ''}</div>` : ''}</div>`; };
     const fresh = todo.length ? ' open' : '';
     return `<details id="marketing"${fresh}><summary>📣 Marketing — your AI content team ${todo.length ? '(' + todo.length + ' ready to post)' : ''}</summary>
       <p class="sub">An AI writer makes social posts and short-video scripts for you every week. Read them, tap <b>Copy</b>, open the app and post. It never posts by itself — you stay in control.</p>
+      <p class="sub">🔊 Voiceover: ${elevenOn ? 'ElevenLabs is on ✓ — tap <b>Make AI voiceover</b> under any short-video script to get an MP3.' : 'off — add <code>ELEVENLABS_API_KEY</code> in Railway → Variables to turn reel scripts into AI voiceovers.'}</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">${tile(q.items.length, 'Written')}${tile(todo.length, 'Ready to post')}${tile(postedWeek, 'Posted this week')}${tile(TARGET + '/wk', 'Written automatically')}</div>
       <form method="post" action="/admin/marketing/write" style="margin:6px 0 10px"><button class="btn primary" ${ai ? '' : 'disabled'}>✍️ Write ${TARGET} more now</button>${ai ? '' : ' <span class="sub">Set ANTHROPIC_API_KEY in Railway to switch the writer on.</span>'}</form>
       <details${q.rules ? '' : ''} style="margin:0 0 12px"><summary class="btn" style="display:inline-block">✏️ Your voice &amp; rules${q.rules ? ' ✓' : ''}</summary>
